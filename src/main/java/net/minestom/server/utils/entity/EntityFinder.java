@@ -224,12 +224,12 @@ public class EntityFinder {
                         case ARBITRARY, RANDOM ->
                             // RANDOM is handled below
                                 1;
-                        case FURTHEST -> pos.distanceSquared(ent1.getPosition()) >
-                                pos.distanceSquared(ent2.getPosition()) ?
-                                1 : 0;
-                        case NEAREST -> pos.distanceSquared(ent1.getPosition()) <
-                                pos.distanceSquared(ent2.getPosition()) ?
-                                1 : 0;
+                        case FURTHEST -> Double.compare(
+                                pos.distanceSquared(ent2.getPosition()),
+                                pos.distanceSquared(ent1.getPosition()));
+                        case NEAREST -> Double.compare(
+                                pos.distanceSquared(ent1.getPosition()),
+                                pos.distanceSquared(ent2.getPosition()));
                     })
                     .limit(limit != null ? limit : Integer.MAX_VALUE)
                     .toList();
