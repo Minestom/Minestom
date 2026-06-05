@@ -426,11 +426,8 @@ final class NetworkBufferImpl implements NetworkBuffer {
         return segment.get(DOUBLE_LAYOUT, index);
     }
 
-    static NetworkBuffer wrap(byte[] bytes, long readIndex, long writeIndex, @Nullable Registries registries) {
-        var buffer = new Builder(bytes.length).registry(registries).build();
-        buffer.writeAt(0, NetworkBuffer.RAW_BYTES, bytes);
-        buffer.index(readIndex, writeIndex);
-        return buffer;
+    static NetworkBuffer wrap(MemorySegment segment, long readIndex, long writeIndex, @Nullable Registries registries) {
+        return new NetworkBufferImpl(segment, readIndex, writeIndex, null, registries);
     }
 
     static void copy(NetworkBuffer srcBuffer, long srcOffset,
