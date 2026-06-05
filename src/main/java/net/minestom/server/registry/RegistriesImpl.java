@@ -2,9 +2,11 @@ package net.minestom.server.registry;
 
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.common.TagsPacket;
+import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 final class RegistriesImpl {
     private RegistriesImpl() {
@@ -24,6 +26,21 @@ final class RegistriesImpl {
             entries.add(registry.tagRegistry());
         }
         return new TagsPacket(entries);
+    }
+
+    static void applyRegistryDataPacket(Registries registries, RegistryDataPacket packet) {
+        Objects.requireNonNull(packet, "Packet cannot be null");
+        ((DynamicRegistryImpl<?>) configurationRegistry(registries, packet.registryId()))
+                .applyRegistryDataPacket(registries,
+                        configurationRegistry(VanillaHolder.REGISTRIES, packet.registryId()), packet);
+    }
+
+    static DynamicRegistry<?> configurationRegistry(Registries registries, String registryId) {
+        for (DynamicRegistry<?> registry : configurationRegistries(registries)) {
+            if (registry.key().asString().equals(registryId))
+                return registry;
+        }
+        throw new IllegalArgumentException("Unknown registry data packet registry: " + registryId);
     }
 
     private static List<DynamicRegistry<?>> configurationRegistries(Registries registries) {
@@ -68,5 +85,9 @@ final class RegistriesImpl {
         entries.add(registries.material());
         entries.addAll(configurationRegistries(registries));
         return entries;
+    }
+
+    private static final class VanillaHolder {
+        private static final Registries REGISTRIES = Registries.vanilla();
     }
 }
