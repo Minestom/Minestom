@@ -249,6 +249,11 @@ final class CommandParserImpl implements CommandParser {
                     if (!(childResult.chain.size() == 2 && childResult.argumentResult instanceof ArgumentResult.IncompatibleType<?>)) {
                         // If the last successful result is null, throw an exception instead of having unintended behaviour
                         error = Objects.requireNonNull(childResult.chain().lastSuccessfulResult());
+                        // Propagate suggestion callback from the failed child's chain so tab-complete
+                        // works even when the argument hasn't been successfully parsed yet.
+                        if (childResult.chain().suggestionCallback != null) {
+                            chain.suggestionCallback = childResult.chain().suggestionCallback;
+                        }
                     }
                 }
                 reader.cursor(start);
