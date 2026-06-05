@@ -292,6 +292,9 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     static NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex, @Nullable Registries registries) {
+        /* TODO(next) remove me for zero copy. The old behavior didnt actually modify the underlying array.
+            quite unfortunate and will require until waiting for the next release to change this behavior. */
+        bytes = bytes.clone();
         return wrap(MemorySegment.ofArray(bytes), readIndex, writeIndex, registries);
     }
 
