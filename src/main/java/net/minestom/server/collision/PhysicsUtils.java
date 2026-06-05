@@ -4,7 +4,6 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
-import org.jetbrains.annotations.Nullable;
 
 public final class PhysicsUtils {
     /**
@@ -24,14 +23,13 @@ public final class PhysicsUtils {
      * @param entityHasPhysics whether the entity has physics
      * @param entityOnGround whether the entity is on the ground
      * @param entityFlying whether the entity is flying
-     * @param previousPhysicsResult the physics result from the previous simulation or null
      * @return a {@link PhysicsResult} containing the resulting physics state of this simulation
      */
     public static PhysicsResult simulateMovement(Pos entityPosition, Vec entityVelocityPerTick, BoundingBox entityBoundingBox,
                                                           WorldBorder worldBorder, Block.Getter blockGetter, Aerodynamics aerodynamics, boolean entityNoGravity,
-                                                          boolean entityHasPhysics, boolean entityOnGround, boolean entityFlying, @Nullable PhysicsResult previousPhysicsResult) {
+                                                          boolean entityHasPhysics, boolean entityOnGround, boolean entityFlying) {
         final PhysicsResult physicsResult = entityHasPhysics ?
-                CollisionUtils.handlePhysics(blockGetter, entityBoundingBox, entityPosition, entityVelocityPerTick, previousPhysicsResult, false) :
+                CollisionUtils.handlePhysics(blockGetter, entityBoundingBox, entityPosition, entityVelocityPerTick, false) :
                 CollisionUtils.blocklessCollision(entityPosition, entityVelocityPerTick);
 
         Pos newPosition = physicsResult.newPosition();
@@ -40,10 +38,8 @@ public final class PhysicsUtils {
         Pos positionWithinBorder = CollisionUtils.applyWorldBorder(worldBorder, entityPosition, newPosition);
         newVelocity = updateVelocity(positionWithinBorder, newVelocity, blockGetter, aerodynamics, !positionWithinBorder.samePoint(entityPosition), entityFlying, entityOnGround, entityNoGravity);
 
-        final boolean stillCached = physicsResult.cached() && newVelocity.samePoint(physicsResult.newVelocity()) && positionWithinBorder.samePoint(physicsResult.newPosition());
-
         return new PhysicsResult(positionWithinBorder, newVelocity, physicsResult.isOnGround(), physicsResult.collisionX(), physicsResult.collisionY(), physicsResult.collisionZ(),
-                physicsResult.originalDelta(), physicsResult.collisionPoints(), physicsResult.collisionShapes(), physicsResult.collisionShapePositions(), physicsResult.hasCollision(), physicsResult.res(), stillCached);
+                physicsResult.originalDelta(), physicsResult.collisionPoints(), physicsResult.collisionShapes(), physicsResult.collisionShapePositions(), physicsResult.hasCollision(), physicsResult.res());
     }
 
     /**
