@@ -219,24 +219,19 @@ public class EntityFinder {
 
         // Sort & limit
         if (entitySort != EntitySort.ARBITRARY || limit != null) {
-            result = result.stream()
-                    .sorted((ent1, ent2) -> switch (entitySort) {
-                        case ARBITRARY, RANDOM ->
-                            // RANDOM is handled below
-                                1;
-                        case FURTHEST -> Double.compare(
-                                pos.distanceSquared(ent2.getPosition()),
-                                pos.distanceSquared(ent1.getPosition()));
-                        case NEAREST -> Double.compare(
-                                pos.distanceSquared(ent1.getPosition()),
-                                pos.distanceSquared(ent2.getPosition()));
-                    })
-                    .limit(limit != null ? limit : Integer.MAX_VALUE)
-                    .toList();
+            List<Entity> sorted = new ArrayList<>(result);
 
-            if (entitySort == EntitySort.RANDOM) {
-                Collections.shuffle(result);
+            switch (entitySort) {
+                case NEAREST -> sorted.sort(Comparator.comparingDouble(ent -> pos.distanceSquared(ent.getPosition())));
+                case FURTHEST -> sorted.sort(Comparator.<Entity>comparingDouble(ent -> pos.distanceSquared(ent.getPosition())).reversed());
+                case RANDOM -> Collections.shuffle(sorted);
+                case ARBITRARY -> {}
             }
+
+            if (limit != null && limit < sorted.size())
+                sorted = sorted.subList(0, limit);
+
+            result = List.copyOf(sorted);
         }
 
         return result;
