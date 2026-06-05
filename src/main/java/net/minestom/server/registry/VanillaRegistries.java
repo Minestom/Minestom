@@ -90,6 +90,12 @@ final class VanillaRegistries implements Registries {
         this.worldClock = WorldClock.createDefaultRegistry();
         this.timeline = Timeline.createDefaultRegistry(this);
         this.dimensionType = DimensionType.createDefaultRegistry(this); // depends on timelines
+
+        // Quite a hack because materials are a static registry, and can be loaded before but are cyclic on components.
+        // So we break the loop and bind them here
+        for (var entry: material().values()) {
+            entry.registry().bindComponents(this);
+        }
     }
 
     @Override
