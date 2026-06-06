@@ -11,6 +11,9 @@ import net.minestom.server.utils.block.BlockIterator;
 import org.jetbrains.annotations.Nullable;
 
 final class BlockCollision {
+    static final Point[] NO_COLLISION_POINTS = new Point[3];
+    static final Shape[] NO_COLLISION_SHAPES = new Shape[3];
+    static final Point[] NO_COLLISION_SHAPE_POSITIONS = new Point[3];
     /**
      * Moves an entity with physics applied (ie checking against blocks)
      * <p>
@@ -23,9 +26,8 @@ final class BlockCollision {
                                        @Nullable PhysicsResult lastPhysicsResult,
                                        boolean singleCollision) {
         if (velocity.isZero()) {
-            // TODO should return a constant
             return new PhysicsResult(entityPosition, Vec.ZERO, false, false, false, false,
-                    velocity, new Point[3], new Shape[3], new Point[3], false, SweepResult.NO_COLLISION);
+                    velocity, NO_COLLISION_POINTS, NO_COLLISION_SHAPES, NO_COLLISION_SHAPE_POSITIONS, false, SweepResult.NO_COLLISION);
         }
         // Fast-exit using cache
         final PhysicsResult cachedResult = cachedPhysics(velocity, entityPosition, getter, lastPhysicsResult);
@@ -161,7 +163,7 @@ final class BlockCollision {
         // If the movement is small we don't need to run the expensive ray casting.
         // Positions of move less than one can have hardcoded blocks to check for every direction
         // Diagonals are a special case which will work with fast physics
-        if (velocity.length() <= 1 || isDiagonal(velocity)) {
+        if (velocity.lengthSquared() <= 1 || isDiagonal(velocity)) {
             fastPhysics(boundingBox, velocity, entityPosition, getter, allFaces, finalResult);
         } else {
             slowPhysics(boundingBox, velocity, entityPosition, getter, allFaces, finalResult);
