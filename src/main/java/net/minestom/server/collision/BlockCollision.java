@@ -94,9 +94,10 @@ final class BlockCollision {
 
         boolean foundCollisionX = false, foundCollisionY = false, foundCollisionZ = false;
 
-        Point[] collidedPoints = new Point[3];
-        Shape[] collisionShapes = new Shape[3];
-        Point[] collisionShapePositions = new Point[3];
+        // Start as the shared (all-null) arrays; only allocate real ones on the first collision.
+        Point[] collidedPoints = NO_COLLISION_POINTS;
+        Shape[] collisionShapes = NO_COLLISION_SHAPES;
+        Point[] collisionShapePositions = NO_COLLISION_SHAPE_POSITIONS;
 
         boolean hasCollided = false;
 
@@ -111,6 +112,12 @@ final class BlockCollision {
             finalResult.normalX = 0;
             finalResult.normalY = 0;
             finalResult.normalZ = 0;
+
+            if (collisionShapes == NO_COLLISION_SHAPES) {
+                collidedPoints = new Point[3];
+                collisionShapes = new Shape[3];
+                collisionShapePositions = new Point[3];
+            }
 
             if (result.collisionX()) {
                 foundCollisionX = true;
@@ -226,7 +233,7 @@ final class BlockCollision {
                                     SweepResult finalResult) {
         for (Vec point : allFaces) {
             final Vec pointBefore = point.add(entityPosition);
-            final Vec pointAfter = point.add(entityPosition).add(velocity);
+            final Vec pointAfter = pointBefore.add(velocity);
             // Entity can pass through up to 4 blocks. Starting block, Two intermediate blocks, and a final block.
             // This means we must check every combination of block movements when an entity moves over an axis.
             // 000, 001, 010, 011, etc.
