@@ -533,10 +533,11 @@ public class AnvilLoader implements ChunkLoader {
     private static CompoundBinaryTag blockStateNbtCompute(final Block block) {
         final CompoundBinaryTag.Builder tag = CompoundBinaryTag.builder();
         tag.putString("Name", block.name());
-        if (!block.properties().isEmpty()) {
+        final Map<String, String> blockProperties = block.properties();
+        if (!blockProperties.isEmpty()) {
             final Map<String, String> defaultProperties = block.defaultState().properties();
             final CompoundBinaryTag.Builder propertiesTag = CompoundBinaryTag.builder();
-            for (Map.Entry<String, String> entry : block.properties().entrySet()) {
+            for (Map.Entry<String, String> entry : blockProperties.entrySet()) {
                 final String key = entry.getKey(), value = entry.getValue();
                 if (defaultProperties.get(key).equals(value))
                     continue; // Skip default values

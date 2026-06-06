@@ -60,6 +60,8 @@ public class BlockTest {
         assertEquals(Block.CHEST, Block.fromState("minecraft:chest"));
         assertEquals(Block.CHEST, Block.fromState("minecraft:chest[]"));
         assertEquals(Block.CHEST.withProperty("facing", "north"), Block.fromState("minecraft:chest[facing=north]"));
+        assertNull(Block.fromState("invalid namespace:dirt"));
+        assertNull(Block.fromState("invalid namespace:chest[facing=north]"));
     }
 
     @Test

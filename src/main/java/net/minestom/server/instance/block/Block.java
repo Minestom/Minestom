@@ -1,5 +1,6 @@
 package net.minestom.server.instance.block;
 
+import net.kyori.adventure.key.InvalidKeyException;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
@@ -278,7 +279,11 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
     }
 
     static @Nullable Block fromKey(@KeyPattern String key) {
-        return fromKey(Key.key(key));
+        try {
+            return fromKey(Key.key(key));
+        } catch (InvalidKeyException e) {
+            return null;
+        }
     }
 
     static @Nullable Block fromKey(Key key) {
