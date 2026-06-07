@@ -176,8 +176,6 @@ final class BlockCollision {
         // Positions of move less than one can have hardcoded blocks to check for every direction
         // Diagonals are a special case which will work with fast physics
         if (velocity.lengthSquared() <= 1 || isDiagonal(velocity)) {
-            // Fast path: the face-point enumeration revisits the same blocks heavily, so deduplicate
-            // candidates and test them once each, nearest-first. Big win for the common per-tick move.
             final CandidateBlocks candidates = CANDIDATES.get();
             candidates.reset(entityPosition.x() + boundingBox.minX() + boundingBox.width() / 2,
                     entityPosition.y() + boundingBox.minY() + boundingBox.height() / 2,
@@ -185,8 +183,6 @@ final class BlockCollision {
             fastPhysics(boundingBox, velocity, entityPosition, candidates, allFaces);
             candidates.testNearestFirst(velocity, entityPosition, boundingBox, getter, finalResult);
         } else {
-            // Slow path (large moves > 1 block/tick): the ray-cast has little duplication and its
-            // timer-based early-out already prunes well, so dedup only adds overhead here.
             slowPhysics(boundingBox, velocity, entityPosition, getter, allFaces, finalResult);
         }
 
