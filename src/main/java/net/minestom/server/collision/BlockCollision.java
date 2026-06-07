@@ -299,9 +299,9 @@ final class BlockCollision {
      * candidates are rejected cheaply by the SweepResult distance gate (which never overwrites a nearer hit).
      */
     private static final class CandidateBlocks {
-        // Each candidate is one packed long (x/y/z) plus its squared distance to the entity centre,
-        // which is both the dedup key and the sort key. No separate x/y/z arrays: unpacked at the test site.
-        private long[] packed = new long[64];
+        private int[] xs = new int[64];
+        private int[] ys = new int[64];
+        private int[] zs = new int[64];
         private double[] dist = new double[64];
         private int size;
         private double centerX, centerY, centerZ;
@@ -314,13 +314,14 @@ final class BlockCollision {
         }
 
         void add(int x, int y, int z) {
-            final long key = pack(x, y, z);
             final int size = this.size;
-            final long[] packed = this.packed;
-            for (int i = 0; i < size; i++) if (packed[i] == key) return; // already a candidate
-            if (size == packed.length) grow();
+            final int[] xs = this.xs, ys = this.ys, zs = this.zs;
+            for (int i = 0; i < size; i++) if (xs[i] == x && ys[i] == y && zs[i] == z) return; // already a candidate
+            if (size == xs.length) grow(); // grow() replaces the arrays, so write to the fields below
             final double dx = (x + 0.5) - centerX, dy = (y + 0.5) - centerY, dz = (z + 0.5) - centerZ;
-            packed[size] = key;
+            this.xs[size] = x;
+            this.ys[size] = y;
+            this.zs[size] = z;
             this.dist[size] = dx * dx + dy * dy + dz * dz;
             this.size = size + 1;
         }
@@ -328,48 +329,36 @@ final class BlockCollision {
         void testNearestFirst(Vec velocity, Pos entityPosition, BoundingBox boundingBox,
                               Block.Getter getter, SweepResult finalResult) {
             final int size = this.size;
-            final long[] packed = this.packed;
+            final int[] xs = this.xs, ys = this.ys, zs = this.zs;
             final double[] dist = this.dist;
             // Insertion sort by squared distance to the entity centre (size is small).
             for (int i = 1; i < size; i++) {
                 final double d = dist[i];
-                final long p = packed[i];
+                final int x = xs[i], y = ys[i], z = zs[i];
                 int j = i - 1;
                 while (j >= 0 && dist[j] > d) {
                     dist[j + 1] = dist[j];
-                    packed[j + 1] = packed[j];
+                    xs[j + 1] = xs[j];
+                    ys[j + 1] = ys[j];
+                    zs[j + 1] = zs[j];
                     j--;
                 }
                 dist[j + 1] = d;
-                packed[j + 1] = p;
+                xs[j + 1] = x;
+                ys[j + 1] = y;
+                zs[j + 1] = z;
             }
             for (int i = 0; i < size; i++) {
-                final long p = packed[i];
-                checkBoundingBox(unpackX(p), unpackY(p), unpackZ(p), velocity, entityPosition, boundingBox, getter, finalResult);
+                checkBoundingBox(xs[i], ys[i], zs[i], velocity, entityPosition, boundingBox, getter, finalResult);
             }
         }
 
         private void grow() {
-            final int n = packed.length * 2;
-            packed = Arrays.copyOf(packed, n);
+            final int n = xs.length * 2;
+            xs = Arrays.copyOf(xs, n);
+            ys = Arrays.copyOf(ys, n);
+            zs = Arrays.copyOf(zs, n);
             dist = Arrays.copyOf(dist, n);
-        }
-
-        // Pack x/y/z into a long (26 bits x, 26 bits z, 12 bits y - covers the world); used as dedup key.
-        private static long pack(int x, int y, int z) {
-            return ((x & 0x3FFFFFFL) << 38) | ((z & 0x3FFFFFFL) << 12) | (y & 0xFFFL);
-        }
-
-        private static int unpackX(long p) {
-            return (int) (p >> 38);
-        }
-
-        private static int unpackY(long p) {
-            return (int) (p << 52 >> 52);
-        }
-
-        private static int unpackZ(long p) {
-            return (int) (p << 26 >> 38);
         }
     }
 
