@@ -316,8 +316,8 @@ final class BlockCollision {
         void add(int x, int y, int z) {
             final int size = this.size;
             final int[] xs = this.xs, ys = this.ys, zs = this.zs;
-            for (int i = 0; i < size; i++) if (xs[i] == x && ys[i] == y && zs[i] == z) return; // already a candidate
-            if (size == xs.length) grow(); // grow() replaces the arrays, so write to the fields below
+            for (int i = 0; i < size; i++) if (xs[i] == x && ys[i] == y && zs[i] == z) return; // already a candidate, dedup
+            if (size == xs.length) grow();
             final double dx = (x + 0.5) - centerX, dy = (y + 0.5) - centerY, dz = (z + 0.5) - centerZ;
             this.xs[size] = x;
             this.ys[size] = y;
