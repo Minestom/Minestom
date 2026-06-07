@@ -62,6 +62,13 @@ public class BlockPhysicsBenchmark {
         return Block.AIR;
     });
 
+    // Getters that take a read lock per block lookup, mimicking the real ChunkCache cost (which the
+    // plain lambda getters above do not capture). Used to measure the benefit of fewer/deduplicated
+    // block lookups in the physics paths.
+    private static final Block.Getter LOCKING_FLOOR_GETTER = lockingGetter((x, y, z) -> y <= 63 ? Block.STONE : Block.AIR);
+    private static final Block.Getter LOCKING_DENSE_GETTER = lockingGetter((x, y, z) -> Block.STONE);
+    private static final Block.Getter LOCKING_AIR_GETTER = lockingGetter((x, y, z) -> Block.AIR);
+
     // Cached "standing on the ground" physics result, primed in setup.
     private Pos restPos;
     private Vec restVelocity;
@@ -142,6 +149,32 @@ public class BlockPhysicsBenchmark {
                 new Vec(0.3, -0.3, 0.3), null, false);
     }
 
+    // --- locking-getter variants: measure block-lookup cost (dedup benefit) ---
+
+    @Benchmark
+    public PhysicsResult walkOnFloorLocking() {
+        return CollisionUtils.handlePhysics(LOCKING_FLOOR_GETTER, PLAYER_BB, new Pos(0.5, 64.0, 0.5),
+                new Vec(0.2, -0.08, 0.15), null, false);
+    }
+
+    @Benchmark
+    public PhysicsResult denseCollisionLocking() {
+        return CollisionUtils.handlePhysics(LOCKING_DENSE_GETTER, PLAYER_BB, new Pos(0.5, 64.5, 0.5),
+                new Vec(0.3, -0.3, 0.3), null, false);
+    }
+
+    @Benchmark
+    public PhysicsResult fallThroughAirLocking() {
+        return CollisionUtils.handlePhysics(LOCKING_AIR_GETTER, PLAYER_BB, new Pos(0.5, 100.0, 0.5),
+                new Vec(0, -0.4, 0), null, false);
+    }
+
+    @Benchmark
+    public PhysicsResult largeMoveSlowLocking() {
+        return CollisionUtils.handlePhysics(LOCKING_FLOOR_GETTER, PLAYER_BB, new Pos(0.5, 67.0, 0.5),
+                new Vec(1.5, -2.5, 1.5), null, false);
+    }
+
     // --- simulateMovement paths (handlePhysics + world border + velocity update) ---
 
     @Benchmark
@@ -165,5 +198,17 @@ public class BlockPhysicsBenchmark {
 
     private static Block.Getter condGetter(BlockAt fn) {
         return (x, y, z, condition) -> fn.get(x, y, z);
+    }
+
+    private static Block.Getter lockingGetter(BlockAt fn) {
+        final java.util.concurrent.locks.ReentrantReadWriteLock lock = new java.util.concurrent.locks.ReentrantReadWriteLock();
+        return (x, y, z, condition) -> {
+            lock.readLock().lock();
+            try {
+                return fn.get(x, y, z);
+            } finally {
+                lock.readLock().unlock();
+            }
+        };
     }
 }

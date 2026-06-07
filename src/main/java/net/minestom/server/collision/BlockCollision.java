@@ -10,10 +10,15 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.block.BlockIterator;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+
 final class BlockCollision {
     static final Point[] NO_COLLISION_POINTS = new Point[3];
     static final Shape[] NO_COLLISION_SHAPES = new Shape[3];
     static final Point[] NO_COLLISION_SHAPE_POSITIONS = new Point[3];
+
+    // Reused candidate-dedup scratch; ThreadLocal because entities tick on multiple threads.
+    private static final ThreadLocal<CandidateBlocks> CANDIDATES = ThreadLocal.withInitial(CandidateBlocks::new);
     /**
      * Moves an entity with physics applied (ie checking against blocks)
      * <p>
@@ -171,8 +176,17 @@ final class BlockCollision {
         // Positions of move less than one can have hardcoded blocks to check for every direction
         // Diagonals are a special case which will work with fast physics
         if (velocity.lengthSquared() <= 1 || isDiagonal(velocity)) {
-            fastPhysics(boundingBox, velocity, entityPosition, getter, allFaces, finalResult);
+            // Fast path: the face-point enumeration revisits the same blocks heavily, so deduplicate
+            // candidates and test them once each, nearest-first. Big win for the common per-tick move.
+            final CandidateBlocks candidates = CANDIDATES.get();
+            candidates.reset(entityPosition.x() + boundingBox.minX() + boundingBox.width() / 2,
+                    entityPosition.y() + boundingBox.minY() + boundingBox.height() / 2,
+                    entityPosition.z() + boundingBox.minZ() + boundingBox.depth() / 2);
+            fastPhysics(boundingBox, velocity, entityPosition, candidates, allFaces);
+            candidates.testNearestFirst(velocity, entityPosition, boundingBox, getter, finalResult);
         } else {
+            // Slow path (large moves > 1 block/tick): the ray-cast has little duplication and its
+            // timer-based early-out already prunes well, so dedup only adds overhead here.
             slowPhysics(boundingBox, velocity, entityPosition, getter, allFaces, finalResult);
         }
 
@@ -228,9 +242,7 @@ final class BlockCollision {
 
     private static void fastPhysics(BoundingBox boundingBox,
                                     Vec velocity, Pos entityPosition,
-                                    Block.Getter getter,
-                                    Vec[] allFaces,
-                                    SweepResult finalResult) {
+                                    CandidateBlocks candidates, Vec[] allFaces) {
         for (Vec point : allFaces) {
             final Vec pointBefore = point.add(entityPosition);
             final Vec pointAfter = pointBefore.add(velocity);
@@ -244,40 +256,120 @@ final class BlockCollision {
             boolean needsY = pointBefore.y() != pointAfter.y();
             boolean needsZ = pointBefore.z() != pointAfter.z();
 
-            checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+            candidates.add(pointBefore.blockX(), pointBefore.blockY(), pointBefore.blockZ());
 
             if (needsX && needsY && needsZ) {
-                checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+                candidates.add(pointAfter.blockX(), pointAfter.blockY(), pointAfter.blockZ());
 
-                checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-                checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-                checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+                candidates.add(pointAfter.blockX(), pointAfter.blockY(), pointBefore.blockZ());
+                candidates.add(pointAfter.blockX(), pointBefore.blockY(), pointAfter.blockZ());
+                candidates.add(pointBefore.blockX(), pointAfter.blockY(), pointAfter.blockZ());
 
-                checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-                checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-                checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+                candidates.add(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ());
+                candidates.add(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ());
+                candidates.add(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ());
             } else if (needsX && needsY) {
-                checkBoundingBox(pointAfter.blockX(), pointAfter.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+                candidates.add(pointAfter.blockX(), pointAfter.blockY(), pointBefore.blockZ());
 
-                checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-                checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+                candidates.add(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ());
+                candidates.add(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ());
             } else if (needsX && needsZ) {
-                checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+                candidates.add(pointAfter.blockX(), pointBefore.blockY(), pointAfter.blockZ());
 
-                checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-                checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+                candidates.add(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ());
+                candidates.add(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ());
             } else if (needsY && needsZ) {
-                checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+                candidates.add(pointBefore.blockX(), pointAfter.blockY(), pointAfter.blockZ());
 
-                checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
-                checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+                candidates.add(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ());
+                candidates.add(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ());
             } else if (needsX) {
-                checkBoundingBox(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+                candidates.add(pointAfter.blockX(), pointBefore.blockY(), pointBefore.blockZ());
             } else if (needsY) {
-                checkBoundingBox(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+                candidates.add(pointBefore.blockX(), pointAfter.blockY(), pointBefore.blockZ());
             } else if (needsZ) {
-                checkBoundingBox(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ(), velocity, entityPosition, boundingBox, getter, finalResult);
+                candidates.add(pointBefore.blockX(), pointBefore.blockY(), pointAfter.blockZ());
             }
+        }
+    }
+
+    /**
+     * Reusable, deduplicating collection of candidate block coordinates for a single physics step.
+     * Blocks are tested nearest-to-the-entity first so the closest collision is found early and farther
+     * candidates are rejected cheaply by the SweepResult distance gate (which never overwrites a nearer hit).
+     */
+    private static final class CandidateBlocks {
+        // Each candidate is one packed long (x/y/z) plus its squared distance to the entity centre,
+        // which is both the dedup key and the sort key. No separate x/y/z arrays: unpacked at the test site.
+        private long[] packed = new long[64];
+        private double[] dist = new double[64];
+        private int size;
+        private double centerX, centerY, centerZ;
+
+        void reset(double centerX, double centerY, double centerZ) {
+            this.size = 0;
+            this.centerX = centerX;
+            this.centerY = centerY;
+            this.centerZ = centerZ;
+        }
+
+        void add(int x, int y, int z) {
+            final long key = pack(x, y, z);
+            final int size = this.size;
+            final long[] packed = this.packed;
+            for (int i = 0; i < size; i++) if (packed[i] == key) return; // already a candidate
+            if (size == packed.length) grow();
+            final double dx = (x + 0.5) - centerX, dy = (y + 0.5) - centerY, dz = (z + 0.5) - centerZ;
+            packed[size] = key;
+            this.dist[size] = dx * dx + dy * dy + dz * dz;
+            this.size = size + 1;
+        }
+
+        void testNearestFirst(Vec velocity, Pos entityPosition, BoundingBox boundingBox,
+                              Block.Getter getter, SweepResult finalResult) {
+            final int size = this.size;
+            final long[] packed = this.packed;
+            final double[] dist = this.dist;
+            // Insertion sort by squared distance to the entity centre (size is small).
+            for (int i = 1; i < size; i++) {
+                final double d = dist[i];
+                final long p = packed[i];
+                int j = i - 1;
+                while (j >= 0 && dist[j] > d) {
+                    dist[j + 1] = dist[j];
+                    packed[j + 1] = packed[j];
+                    j--;
+                }
+                dist[j + 1] = d;
+                packed[j + 1] = p;
+            }
+            for (int i = 0; i < size; i++) {
+                final long p = packed[i];
+                checkBoundingBox(unpackX(p), unpackY(p), unpackZ(p), velocity, entityPosition, boundingBox, getter, finalResult);
+            }
+        }
+
+        private void grow() {
+            final int n = packed.length * 2;
+            packed = Arrays.copyOf(packed, n);
+            dist = Arrays.copyOf(dist, n);
+        }
+
+        // Pack x/y/z into a long (26 bits x, 26 bits z, 12 bits y - covers the world); used as dedup key.
+        private static long pack(int x, int y, int z) {
+            return ((x & 0x3FFFFFFL) << 38) | ((z & 0x3FFFFFFL) << 12) | (y & 0xFFFL);
+        }
+
+        private static int unpackX(long p) {
+            return (int) (p >> 38);
+        }
+
+        private static int unpackY(long p) {
+            return (int) (p << 52 >> 52);
+        }
+
+        private static int unpackZ(long p) {
+            return (int) (p << 26 >> 38);
         }
     }
 
