@@ -158,15 +158,25 @@ public class DynamicChunk extends Chunk {
         // Update block handlers
         if (lastCachedBlock != null && lastCachedBlock.handler() != null) {
             // Previous destroy
-            lastCachedBlock.handler().onDestroy(Objects.requireNonNullElseGet(destroy,
-                    () -> new BlockHandler.Destroy(lastCachedBlock, block, instance, CoordConversion.chunkBlockRelativeGetGlobal(sectionRelativeX, y, sectionRelativeZ, chunkX, chunkZ))));
+            try {
+                lastCachedBlock.handler().onDestroy(Objects.requireNonNullElseGet(destroy,
+                        () -> new BlockHandler.Destroy(lastCachedBlock, block, instance, CoordConversion.chunkBlockRelativeGetGlobal(sectionRelativeX, y, sectionRelativeZ, chunkX, chunkZ))));
+            } catch (Exception e) {
+                LOGGER.error("error when trying to destroy block", e);
+                return;
+            }
         }
         if (handler != null) {
             // New placement
             final Block finalBlock = block;
             final Point placePoint = CoordConversion.chunkBlockRelativeGetGlobal(sectionRelativeX, y, sectionRelativeZ, chunkX, chunkZ);
-            handler.onPlace(Objects.requireNonNullElseGet(placement,
-                    () -> new BlockHandler.Placement(finalBlock, Objects.requireNonNullElseGet(lastCachedBlock, () -> this.getBlock(placePoint, Condition.TYPE)), instance, placePoint)));
+            try {
+                handler.onPlace(Objects.requireNonNullElseGet(placement,
+                        () -> new BlockHandler.Placement(finalBlock, Objects.requireNonNullElseGet(lastCachedBlock, () -> this.getBlock(placePoint, Condition.TYPE)), instance, placePoint)));
+            } catch (Exception e) {
+                LOGGER.error("error when trying to place block", e);
+                return;
+            }
         }
 
         // UpdateHeightMaps
