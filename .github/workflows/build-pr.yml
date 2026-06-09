@@ -67,7 +67,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v6
         with:
           cache-read-only: ${{ github.event_name != 'pull_request' || github.repository_owner != github.event.pull_request.head.repo.owner.login }}
-      - id: native-run
+      - id: native-run # Small optimization to assume that metadata doesn't need to be updated.
         name: Run Tests in Native Image
         continue-on-error: true
         run: ./gradlew nativeTest
@@ -147,6 +147,10 @@ jobs:
         uses: gradle/actions/setup-gradle@v6
         with:
           cache-read-only: false
+      - name: Run Tracing Agent # Sign quite annoying but if we need updated metadata we need it for publishing.
+        run: ./gradlew -Pagent test
+      - name: Copy Reachability Metadata
+        run: ./gradlew metadataCopy
       - name: Publish Artifacts
         env:
           MINESTOM_VERSION: ${{ github.head_ref }}-SNAPSHOT
