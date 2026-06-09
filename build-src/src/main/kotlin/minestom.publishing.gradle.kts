@@ -66,3 +66,21 @@ signing {
 
     sign(publishing.publications)
 }
+
+tasks.register<CheckAbiTask>("checkBinaryCompatibility") {
+    group = "verification"
+    description = "Checks binary compatibility against the baseline released version."
+
+    onlyIf { // Requires to be running in CI, as we check out the target branch for ABI breaks.
+        System.getenv("CI") == "true"
+    }
+
+    oldJar = layout.file(provider {
+        project.findProperty("baselineJarDir")?.toString()
+                ?.let { dir -> project.rootProject.file("$dir/${project.name}.jar") }
+                ?.takeIf { it.exists() }
+    })
+
+    newJar = tasks.named<Jar>("jar").flatMap { it.archiveFile }
+}
+

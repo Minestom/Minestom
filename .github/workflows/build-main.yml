@@ -1,10 +1,19 @@
-name: Build PR
+name: Build & Test Main
+
 on:
   push:
     branches: [ master ]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-main-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
-    name: Build & Test Main
+    name: JVM Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -14,12 +23,104 @@ jobs:
         with:
           distribution: graalvm
           java-version: 25
-
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6
         with:
-          # Allow caching for all branches in our repo;
-          # this is so we don't get evicted, see Cache Optimization in action docs for more info
           cache-read-only: false
-      - name: Build
-        run: ./gradlew test javadoc
+      - name: Run JVM Tests
+        run: ./gradlew test
+
+  javadoc:
+    name: Javadoc Compilation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: graalvm
+          java-version: 25
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: false
+      - name: Build Javadoc
+        run: ./gradlew javadoc
+
+  native-test:
+    name: Native Test
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: graalvm
+          java-version: 25
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: false
+      - id: native-run
+        name: Run Tests in Native Image
+        continue-on-error: true
+        run: ./gradlew nativeTest
+      - name: Run Tracing Agent (Fallback)
+        if: steps.native-run.outcome == 'failure'
+        run: ./gradlew -Pagent test
+      - name: Copy Native Metadata (Fallback)
+        if: steps.native-run.outcome == 'failure'
+        run: ./gradlew metadataCopy
+      - name: Run Tests in Native Image (Fallback)
+        if: steps.native-run.outcome == 'failure'
+        run: ./gradlew nativeTest
+
+  publish-snapshot:
+    name: Publish Snapshot
+    needs: [ build, javadoc, native-test ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: graalvm
+          java-version: 25
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: false
+
+      - name: Run Tracing Agent
+        run: ./gradlew -Pagent test
+
+      - name: Copy Reachability Metadata
+        run: ./gradlew metadataCopy
+
+      - name: Commit and Push Updated Metadata
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/main/resources/META-INF/native-image
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: update GraalVM reachability metadata [skip ci]"
+            git push
+          else
+            echo "Metadata is already up-to-date."
+          fi
+
+      - name: Publish Snapshot
+        if: github.repository == 'Minestom/Minestom'
+        env:
+          MINESTOM_VERSION: master-SNAPSHOT
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSWORD }}
+        run: |
+          ./gradlew nmcpPublishAggregationToCentralPortalSnapshots
+          echo "Version: ${MINESTOM_VERSION}" >> $GITHUB_STEP_SUMMARY

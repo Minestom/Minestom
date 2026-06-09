@@ -1,6 +1,7 @@
 package net.minestom.server.timer;
 
 import net.minestom.server.MinecraftServer;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.CompletableFuture;
@@ -114,6 +115,7 @@ public class TestScheduler {
     @Test
     public void exceptionTask() {
         MinecraftServer.init();
+        MinecraftServer.getExceptionManager().setExceptionHandler(Assertions::assertNotNull);
         Scheduler scheduler = Scheduler.newScheduler();
         scheduler.scheduleNextTick(() -> {
             throw new RuntimeException("Test exception");
