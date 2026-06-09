@@ -55,6 +55,8 @@ jobs:
     name: Native Test
     needs: build
     runs-on: ubuntu-latest
+    outputs:
+      metadata-updated: ${{ steps.native-run.outcome == 'failure' }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v6
@@ -147,9 +149,11 @@ jobs:
         uses: gradle/actions/setup-gradle@v6
         with:
           cache-read-only: false
-      - name: Run Tracing Agent # Sign quite annoying but if we need updated metadata we need it for publishing.
+      - name: Run Tracing Agent # Skip unless metadata was updated during the native test fallback
+        if: needs.native-test.outputs.metadata-updated == 'true'
         run: ./gradlew -Pagent test
       - name: Copy Reachability Metadata
+        if: needs.native-test.outputs.metadata-updated == 'true'
         run: ./gradlew metadataCopy
       - name: Publish Artifacts
         env:

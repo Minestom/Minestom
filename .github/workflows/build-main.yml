@@ -52,6 +52,8 @@ jobs:
     name: Native Test
     needs: build
     runs-on: ubuntu-latest
+    outputs:
+      metadata-updated: ${{ steps.native-run.outcome == 'failure' }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v6
@@ -96,12 +98,15 @@ jobs:
           cache-read-only: false
 
       - name: Run Tracing Agent
+        if: needs.native-test.outputs.metadata-updated == 'true'
         run: ./gradlew -Pagent test
 
       - name: Copy Reachability Metadata
+        if: needs.native-test.outputs.metadata-updated == 'true'
         run: ./gradlew metadataCopy
 
       - name: Commit and Push Updated Metadata
+        if: needs.native-test.outputs.metadata-updated == 'true'
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
