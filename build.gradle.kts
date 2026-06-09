@@ -75,6 +75,8 @@ graalvmNative {
     }
     binaries {
         named("test") {
+            buildArgs.add("-Ob")
+
             systemProperties.put("minestom.viewable-packet", "false")
             systemProperties.put("minestom.inside-test", "true")
             systemProperties.put("minestom.acquirable-strict", "true")
