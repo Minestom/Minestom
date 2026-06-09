@@ -145,16 +145,14 @@ final class BlockCollision {
         final boolean foundY = collisionShapes[1] != null;
         final boolean foundZ = collisionShapes[2] != null;
         final boolean anyCollision = foundX || foundY || foundZ;
-        final double ndx = foundX ? 0 : velocity.x();
-        final double ndy = foundY ? 0 : velocity.y();
-        final double ndz = foundZ ? 0 : velocity.z();
+        final boolean allCollision = foundX && foundY && foundZ;
         final Vec newDelta;
         if (!anyCollision) {
             newDelta = velocity;
-        } else if (ndx == 0 && ndy == 0 && ndz == 0) {
+        } else if (allCollision) {
             newDelta = Vec.ZERO;
         } else {
-            newDelta = new Vec(ndx, ndy, ndz);
+            newDelta = new Vec(foundX ? 0 : velocity.x(), foundY ? 0 : velocity.y(), foundZ ? 0 : velocity.z());
         }
         return new PhysicsResult(position, newDelta,
                 foundY && velocity.y() < 0,
