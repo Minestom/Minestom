@@ -14,6 +14,8 @@ import net.minestom.server.utils.collection.ObjectArray;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jetbrains.annotations.Unmodifiable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -21,10 +23,19 @@ record BlockImpl(RegistryData.BlockEntry registry,
                  long propertiesArray,
                  @Nullable CompoundBinaryTag nbt,
                  @Nullable BlockHandler handler) implements Block {
+    private final static Logger LOGGER = LoggerFactory.getLogger(BlockImpl.class);
 
     @Override
     public @Nullable BlockHandler handler() {
         if (handler != null) return handler;
+
+        var tagHandlerKey = nbt.getString(BlockManager.TAG_HANDLER_ID_KEY, null);
+        if (tagHandlerKey != null) {
+            var tagHandler = MinecraftServer.getBlockManager().getTagHandler(registry.key().toString(), tagHandlerKey);
+            if (tagHandler != null) return tagHandler;
+            LOGGER.warn("У блока {} есть тег обработчика, но обработчик с ключом {} для этого тега не зарегистрирован!", name(), tagHandlerKey);
+        }
+
         return MinecraftServer.getBlockManager().getDefaultHandler(registry.key().toString());
     }
 

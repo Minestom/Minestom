@@ -8,6 +8,7 @@ import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -20,16 +21,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * Implementations are expected to be thread safe.
  */
 public interface BlockHandler {
-    /**
-     * Вызывается при регистрации хендлера.
-     * Если возвращается true, то этот обработчик
-     * будет применяться к блокам даже без прямой
-     * его установки в случае если у блока нет своего обработчика.
-     * @return true будет применён к блоку по умолчанию
-     */
-    default boolean isDefaultHandler() {
-        return false;
-    }
 
     /**
      * Called when a block has been placed.
@@ -100,6 +91,30 @@ public interface BlockHandler {
      * @return the key of this handler
      */
     Key getKey();
+
+    /**
+     * Вызывается при регистрации хендлера.
+     * Если возвращается true, то этот обработчик
+     * будет применяться к блокам даже без прямой
+     * его установки в случае если у блока нет своего обработчика.
+     * @return true будет применён к блоку по умолчанию
+     */
+    default boolean isDefaultHandler() {
+        return false;
+    }
+
+    /**
+     * Если не null, то этот обработчик будет применяться
+     * ко всем блокам у которых {@link Key} == {@link #getKey()},
+     * есть тег {@link BlockManager#TAG_HANDLER_ID_TAG} и его
+     * значение равно возвращаемому значению.
+     * Фактически работает как {@link #isDefaultHandler}, но
+     * только для блоков со специальным тегом.
+     */
+    @Nullable
+    default String specificTagKey() {
+        return null;
+    }
 
     /**
      * Represents an object forwarded to {@link #onPlace(Placement)}.

@@ -4,12 +4,14 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
+import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,6 +22,10 @@ public final class BlockManager {
     // Namespace -> handler supplier
     private final Map<String, Supplier<? extends BlockHandler>> blockHandlerMap = new ConcurrentHashMap<>();
     private final Map<String, Supplier<? extends BlockHandler>> defaultBlockHandlerMap = new ConcurrentHashMap<>();
+    private final Map<String, Map<String, Supplier<? extends BlockHandler>>> tagBlockHandlerMap = new ConcurrentHashMap<>();
+
+    public static final String TAG_HANDLER_ID_KEY = "tag_handler";
+    public static final Tag<String> TAG_HANDLER_ID_TAG = Tag.String(TAG_HANDLER_ID_KEY);
     // block id -> block placement rule
     private final Int2ObjectMap<BlockPlacementRule> placementRuleMap = new Int2ObjectOpenHashMap<>();
 
@@ -27,8 +33,18 @@ public final class BlockManager {
 
     public void registerHandler(String namespace, Supplier<? extends BlockHandler> handlerSupplier) {
         blockHandlerMap.put(namespace, handlerSupplier);
-        if (!handlerSupplier.get().isDefaultHandler()) return;
-        defaultBlockHandlerMap.put(namespace, handlerSupplier);
+
+        final var handler = handlerSupplier.get();
+        if (handler.isDefaultHandler()) {
+            defaultBlockHandlerMap.put(namespace, handlerSupplier);
+        }
+
+        final var specificTagKey = handler.specificTagKey();
+        if (specificTagKey != null) {
+            tagBlockHandlerMap
+                    .computeIfAbsent(namespace, name -> new HashMap<>())
+                    .put(specificTagKey, handlerSupplier);
+        }
     }
 
     public void registerHandler(Key key, Supplier<? extends BlockHandler> handlerSupplier) {
@@ -42,6 +58,11 @@ public final class BlockManager {
 
     public @Nullable BlockHandler getDefaultHandler(String namespace) {
         final var handler = defaultBlockHandlerMap.get(namespace);
+        return handler != null ? handler.get() : null;
+    }
+
+    public @Nullable BlockHandler getTagHandler(String blockNamespace, String tagContent) {
+        final var handler = tagBlockHandlerMap.get(blockNamespace).get(tagContent);
         return handler != null ? handler.get() : null;
     }
 
