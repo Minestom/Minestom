@@ -99,6 +99,18 @@ final class NetworkBufferImpl implements NetworkBuffer {
         MemorySegment.copy(segment, srcOffset, MemorySegment.ofArray(dest), destOffset, length);
     }
 
+    @Override
+    public void copyTo(long srcOffset, byte[] dest, int destOffset, int length) {
+        assertDummy();
+        MemorySegment.copy(segment, ValueLayout.JAVA_BYTE, srcOffset, dest, destOffset, length);
+    }
+
+    @Override
+    public void copyTo(long srcOffset, MemorySegment dest, long destOffset, long length) {
+        assertDummy();
+        MemorySegment.copy(segment, srcOffset, dest, destOffset, length);
+    }
+
     public byte[] extractBytes(Consumer<NetworkBuffer> extractor) {
         assertDummy();
         final long startingPosition = readIndex();
@@ -352,12 +364,12 @@ final class NetworkBufferImpl implements NetworkBuffer {
     void _putBytes(long index, byte[] value) {
         if (isDummy()) return;
         assertReadOnly();
-        MemorySegment.copy(MemorySegment.ofArray(value), 0, segment, index, value.length);
+        MemorySegment.copy(value, 0, segment, ValueLayout.JAVA_BYTE, index, value.length);
     }
 
     void _getBytes(long index, byte[] value) {
         assertDummy();
-        MemorySegment.copy(segment, index, MemorySegment.ofArray(value), 0, value.length);
+        MemorySegment.copy(segment, ValueLayout.JAVA_BYTE, index, value, 0, value.length);
     }
 
     void _putByte(long index, byte value) {
@@ -426,11 +438,8 @@ final class NetworkBufferImpl implements NetworkBuffer {
         return segment.get(DOUBLE_LAYOUT, index);
     }
 
-    static NetworkBuffer wrap(byte[] bytes, long readIndex, long writeIndex, @Nullable Registries registries) {
-        var buffer = new Builder(bytes.length).registry(registries).build();
-        buffer.writeAt(0, NetworkBuffer.RAW_BYTES, bytes);
-        buffer.index(readIndex, writeIndex);
-        return buffer;
+    static NetworkBuffer wrap(MemorySegment segment, long readIndex, long writeIndex, @Nullable Registries registries) {
+        return new NetworkBufferImpl(segment, readIndex, writeIndex, null, registries);
     }
 
     static void copy(NetworkBuffer srcBuffer, long srcOffset,

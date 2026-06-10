@@ -132,7 +132,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     // Velocity
     protected Vec velocity = Vec.ZERO; // Movement in block per second
-    protected boolean lastVelocityWasZero = true;
     protected boolean hasPhysics = true;
     protected boolean collidesWithEntities = true;
     protected boolean preventBlockPlacement = true;
@@ -640,7 +639,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             if (vehicle == null) {
                 synchronizePosition();
                 sendPacketToViewers(getVelocityPacket());
-            } else synchronizeView();
+            } else {
+                synchronizeView();
+                nextSynchronizationTick = ticks + synchronizationTicks;
+            }
         }
         // End of tick scheduled tasks
         this.scheduler.processTickEnd();
@@ -1327,6 +1329,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     public void refreshPosition(final Pos newPosition, boolean ignoreView, boolean sendPackets) {
         final var previousPosition = this.position;
         final Pos position = ignoreView ? previousPosition.withCoord(newPosition) : newPosition;
+        final Pos lastSyncedPosition = this.lastSyncedPosition;
         if (position.equals(lastSyncedPosition)) return;
         setPositionInternal(position, ignoreView ? headRotation : position.yaw());
         this.previousPosition = previousPosition;
@@ -1678,7 +1681,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.lastSyncedPosition = posCache;
     }
 
-    private void synchronizeView() {
+    /**
+     * Used to synchronize the head position and rotation of the entity
+     */
+    @ApiStatus.Internal
+    protected void synchronizeView() {
+        final Pos position = this.position;
         sendPacketToViewers(new EntityHeadLookPacket(getEntityId(), headRotation));
         sendPacketToViewers(new EntityRotationPacket(getEntityId(), position.yaw(), position.pitch(), onGround));
     }

@@ -516,26 +516,37 @@ public final class RegistryData {
         }
 
         public DataComponentMap prototype() {
-            if (prototype instanceof Either.Left(var components)) {
-                final Transcoder<Object> coder = new RegistryTranscoder<>(Transcoder.JAVA, MinecraftServer.process());
-                DataComponentMap.Builder builder = DataComponentMap.builder();
-                for (Map.Entry<String, Object> entry : components) {
-                    //noinspection unchecked
-                    DataComponent<Object> component = (DataComponent<Object>) DataComponent.fromKey(entry.getKey());
-                    Check.notNull(component, "Unknown component {0} in {1}", entry.getKey(), key);
+            return switch (prototype) {
+                case Either.Left(_) -> throw new IllegalStateException("Should have been bound");
+                case Either.Right(var dataComponentMap) -> dataComponentMap;
+                case null -> DataComponentMap.EMPTY;
+            };
+        }
 
-                    final Result<Object> result = component.decode(coder, entry.getValue());
-                    switch (result) {
-                        case Result.Ok(Object ok) -> builder.set(component, ok);
-                        case Result.Error(String message) ->
-                                throw new IllegalStateException("Failed to decode component " + entry.getKey() + " in " + key + ": " + message);
-                    }
+        /**
+         * Attempts the bind the current prototype using the registries provided.
+         *
+         * @param registries the registries used during decode
+         */
+        @ApiStatus.Internal
+        void bindComponents(Registries registries) {
+            if (!(prototype instanceof Either.Left(var components))) return;
+            final Transcoder<Object> coder = new RegistryTranscoder<>(Transcoder.JAVA, registries);
+            DataComponentMap.Builder builder = DataComponentMap.builder();
+            for (Map.Entry<String, Object> entry : components) {
+                //noinspection unchecked
+                DataComponent<Object> component = (DataComponent<Object>) DataComponent.fromKey(entry.getKey());
+                Check.notNull(component, "Unknown component {0} in {1}", entry.getKey(), key);
+
+                final Result<Object> result = component.decode(coder, entry.getValue());
+                switch (result) {
+                    case Result.Ok(Object ok) -> builder.set(component, ok);
+                    case Result.Error(String message) ->
+                            throw new IllegalStateException("Failed to decode component " + entry.getKey() + " in " + key + ": " + message);
                 }
-                final DataComponentMap prototype = builder.build();
-                this.prototype = !prototype.isEmpty() ? Either.right(prototype) : null;
             }
-
-            return prototype instanceof Either.Right(var dataComponentMap) ? dataComponentMap : DataComponentMap.EMPTY;
+            final DataComponentMap prototype = builder.build();
+            this.prototype = prototype.isEmpty() ? null : Either.right(prototype); // null is essential for EMPTY
         }
 
         public boolean isArmor() {

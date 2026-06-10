@@ -7,6 +7,7 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Result;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.codec.Transcoder;
+import net.kyori.adventure.translation.Translatable;
 import net.minestom.server.coordinate.Area;
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
@@ -35,7 +36,7 @@ import java.util.function.BiPredicate;
  * <p>
  * Implementations are expected to be immutable.
  */
-public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, Blocks permits BlockImpl {
+public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, Blocks, Translatable permits BlockImpl {
 
     NetworkBuffer.Type<Block> ID_NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Block::fromBlockId, Block::id);
     NetworkBuffer.Type<Block> STATE_NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Block::fromStateId, Block::stateId);
@@ -257,6 +258,11 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
 
     default boolean isLiquid() {
         return registry().isLiquid();
+    }
+
+    @Override
+    default String translationKey() {
+        return registry().translationKey();
     }
 
     default boolean compare(Block block, Comparator comparator) {

@@ -11,6 +11,9 @@ import org.jetbrains.annotations.UnknownNullability;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.lang.foreign.Arena;
+import java.lang.foreign.MemorySegment;
+import java.lang.foreign.ValueLayout;
 import java.lang.ref.WeakReference;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -235,6 +238,60 @@ public class NetworkBufferTest {
     }
 
     @Test
+    public void segmentWrap() {
+        try (var arena = Arena.ofConfined()) {
+            final MemorySegment segment = arena.allocate(512);
+            var buffer = NetworkBuffer.wrap(segment, 0L, 0L);
+            assertEquals(0, buffer.writeIndex());
+            assertEquals(0, buffer.readIndex());
+            assertEquals(512,  buffer.capacity());
+            assertFalse(buffer.isReadOnly());
+
+            buffer.write(BYTE, (byte) 1);
+            buffer.write(LONG, 50L);
+            buffer.write(FLOAT, 3.5f);
+
+            assertEquals(0, buffer.readIndex());
+            assertEquals(13, buffer.writeIndex());
+
+            assertEquals((byte) 1, buffer.read(BYTE));
+            assertEquals(50L, buffer.read(LONG));
+            assertEquals(3.5f, buffer.read(FLOAT));
+
+            assertEquals(13, buffer.readIndex());
+            assertEquals(13, buffer.writeIndex());
+
+            // Rewrapping shouldn't carry anything except the data
+            var buffer2 = NetworkBuffer.wrap(segment.asReadOnly(), 0L, 0L);
+            assertEquals(0, buffer2.writeIndex());
+            assertEquals(0, buffer2.readIndex());
+            assertTrue(buffer2.isReadOnly());
+
+            assertFalse(buffer.isReadOnly(), "OG buffer should still be writeable");
+
+            buffer2.writeIndex(buffer.writeIndex());
+            assertEquals(13,  buffer2.writeIndex());
+
+            assertEquals((byte) 1, buffer2.read(BYTE));
+            assertEquals(50L, buffer2.read(LONG));
+            assertEquals(3.5f, buffer2.read(FLOAT));
+
+            assertEquals(13, buffer2.readIndex());
+        }
+    }
+
+    @Test
+    public void segmentWrapScope() {
+        NetworkBuffer buffer;
+        try (var arena = Arena.ofConfined()) {
+            final MemorySegment segment = arena.allocate(512);
+            buffer = NetworkBuffer.wrap(segment, 0L, 0L);
+            buffer.write(BYTE, (byte) 1);
+        }
+        assertThrows(Exception.class, () -> buffer.read(BYTE));
+    }
+
+    @Test
     public void sizeOfPrimitives() {
         assertEquals(1, BYTE.sizeOf((byte) 1));
         assertEquals(2, SHORT.sizeOf((short) 1));
@@ -421,6 +478,43 @@ public class NetworkBufferTest {
     }
 
     @Test
+    public void copyTo() {
+        var array = new byte[]{0x01, 0x02, 0x03, 0x04, 0x05};
+        var buffer = NetworkBuffer.wrap(array, 0, 5);
+        assertEquals(0, buffer.readIndex());
+        assertEquals(array.length, buffer.writeIndex());
+
+        byte[] dest = new byte[6];
+        buffer.copyTo(1, dest, 2, 3);
+
+        assertArrayEquals(new byte[]{0, 0, 0x02, 0x03, 0x04, 0}, dest);
+
+        assertEquals(0, buffer.readIndex());
+        assertEquals(array.length, buffer.writeIndex());
+    }
+
+    @Test
+    public void copyToSegment() {
+        var array = new byte[]{0x01, 0x02, 0x03, 0x04, 0x05};
+        var buffer = NetworkBuffer.wrap(array, 0, 5);
+        assertEquals(0, buffer.readIndex());
+        assertEquals(array.length, buffer.writeIndex());
+
+        try (var arena = Arena.ofConfined()) {
+            MemorySegment dest = arena.allocate(6);
+            buffer.copyTo(1, dest, 2, 3);
+
+            assertEquals(0, buffer.readIndex());
+            assertEquals((byte) 0x02, dest.get(ValueLayout.JAVA_BYTE, 2));
+            assertEquals((byte) 0x03, dest.get(ValueLayout.JAVA_BYTE, 3));
+            assertEquals((byte) 0x04, dest.get(ValueLayout.JAVA_BYTE, 4));
+        }
+
+        assertEquals(0, buffer.readIndex());
+        assertEquals(array.length, buffer.writeIndex());
+    }
+
+    @Test
     public void string() {
         assertBufferType(STRING, "Hello World", new byte[]{0x0B, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64});
     }
@@ -526,7 +620,6 @@ public class NetworkBufferTest {
 
         assertBufferType(STRING_IO_UTF8, "Hello", stream.toByteArray());
     }
-
 
     @Test
     public void testStringUtf8ModifiedRead() throws IOException {
