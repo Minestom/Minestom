@@ -174,7 +174,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private boolean isActive; // False if entity has only been instanced without being added somewhere
     protected boolean removed;
 
-    private final Set<Entity> passengers = new CopyOnWriteArraySet<>();
+    private final List<Entity> passengers = new CopyOnWriteArrayList<>();
 
     private final Set<Entity> leashedEntities = new CopyOnWriteArraySet<>();
     private Entity leashHolder;
@@ -1038,7 +1038,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.passengers.add(entity);
         entity.vehicle = this;
         sendPacketToViewersAndSelf(getPassengersPacket());
-        updatePassengerPosition(position, entity);
+        updatePassengerPosition(position, entity, this.passengers.size() - 1);
         entity.synchronizePosition();
     }
 
@@ -1072,8 +1072,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      *
      * @return an unmodifiable list containing all the entity passengers
      */
-    public Set<Entity> getPassengers() {
-        return Collections.unmodifiableSet(passengers);
+    public List<Entity> getPassengers() {
+        return Collections.unmodifiableList(passengers);
     }
 
     protected SetPassengersPacket getPassengersPacket() {
@@ -1378,16 +1378,14 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
-     * Sets the coordinates of the passenger to the coordinates of this vehicle + {@link EntityUtils#getPassengerHeightOffset(Entity, Entity)}
+     * Sets the coordinates of the passenger to the coordinates of this vehicle + {@link EntityUtils#getPassengerPositionOffset(Entity, Entity, int)}
      *
      * @param newPosition the new position of this vehicle
      * @param passenger   the passenger to be moved
      */
-    private void updatePassengerPosition(Point newPosition, Entity passenger) {
+    private void updatePassengerPosition(Point newPosition, Entity passenger, int passengerIndex) {
         final Pos oldPassengerPos = passenger.position;
-        final Pos newPassengerPos = oldPassengerPos.withCoord(newPosition.x(),
-                newPosition.y() + EntityUtils.getPassengerHeightOffset(this, passenger),
-                newPosition.z());
+        final Pos newPassengerPos = newPosition.add(EntityUtils.getPassengerPositionOffset(this, passenger, passengerIndex)).asPos();
         passenger.setPositionInternal(newPassengerPos, newPassengerPos.yaw());
         passenger.previousPosition = oldPassengerPos;
         passenger.refreshCoordinate(newPassengerPos);
@@ -1406,10 +1404,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     @ApiStatus.Internal
     protected void refreshCoordinate(Point newPosition) {
         // Passengers update
-        final Set<Entity> passengers = getPassengers();
+        final List<Entity> passengers = getPassengers();
         if (!passengers.isEmpty()) {
-            for (Entity passenger : passengers) {
-                updatePassengerPosition(newPosition, passenger);
+            for (int i = 0; i < passengers.size(); i++) {
+                updatePassengerPosition(newPosition, passengers.get(i), i);
             }
         }
         // Handle chunk switch
@@ -1567,7 +1565,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
 
         // Remove passengers if any (also done with LivingEntity#kill)
-        Set<Entity> passengers = getPassengers();
+        Collection<Entity> passengers = getPassengers();
         if (!passengers.isEmpty()) passengers.forEach(this::removePassenger);
         final Entity vehicle = this.vehicle;
         if (vehicle != null) vehicle.removePassenger(this);
