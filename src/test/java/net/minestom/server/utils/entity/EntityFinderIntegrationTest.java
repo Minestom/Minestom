@@ -1,5 +1,7 @@
 package net.minestom.server.utils.entity;
 
+import net.minestom.server.command.ServerSender;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
@@ -36,16 +38,30 @@ public class EntityFinderIntegrationTest {
     }
 
     @Test
-    public void randomPlayerWithoutMatchReturnsEmpty(Env env) {
+    public void randomPlayerAppliesFiltersBeforeSelection(Env env) {
         var instance = env.createFlatInstance();
-        var player = env.createPlayer(instance, ORIGIN);
-        player.setGameMode(GameMode.SURVIVAL);
+
+        var creative = env.createPlayer(instance, ORIGIN);
+        var survivalOne = env.createPlayer(instance, ORIGIN);
+        var survivalTwo = env.createPlayer(instance, ORIGIN);
+        var survivalThree = env.createPlayer(instance, ORIGIN);
+
+        creative.setGameMode(GameMode.SURVIVAL);
+        survivalOne.setGameMode(GameMode.SURVIVAL);
+        survivalTwo.setGameMode(GameMode.SURVIVAL);
+        survivalThree.setGameMode(GameMode.SURVIVAL);
 
         var finder = new EntityFinder()
                 .setTargetSelector(EntityFinder.TargetSelector.RANDOM_PLAYER)
                 .setGameMode(GameMode.CREATIVE, EntityFinder.ToggleableType.INCLUDE);
 
         assertTrue(finder.find(instance, null).isEmpty());
+
+        creative.setGameMode(GameMode.CREATIVE);
+
+        for (int attempt = 0; attempt < 20; attempt++) {
+            assertEquals(List.of(creative), finder.find(instance, null));
+        }
     }
 
     @Test
@@ -86,10 +102,26 @@ public class EntityFinderIntegrationTest {
         near.setInstance(instance, ORIGIN.add(1, 0, 0)).join();
         far.setInstance(instance, ORIGIN.add(50, 0, 0)).join();
 
+        var finder = new ArgumentEntity("selector").parse(new ServerSender(), "@e[distance=..1.5]");
+        finder.setStartPosition(ORIGIN);
+
+        assertEquals(List.of(near), finder.find(instance, null));
+    }
+
+    @Test
+    public void negativeMinDistanceClamped(Env env) {
+        var instance = env.createFlatInstance();
+
+        var near = new Entity(EntityType.ZOMBIE);
+        var far = new Entity(EntityType.ZOMBIE);
+
+        near.setInstance(instance, ORIGIN.add(1, 0, 0)).join();
+        far.setInstance(instance, ORIGIN.add(50, 0, 0)).join();
+
         var finder = new EntityFinder()
                 .setTargetSelector(EntityFinder.TargetSelector.ALL_ENTITIES)
                 .setStartPosition(ORIGIN)
-                .setDistance(new Range.Double(-Float.MAX_VALUE, 5));
+                .setDistance(new Range.Double(-10, 5));
 
         assertEquals(List.of(near), finder.find(instance, null));
     }
