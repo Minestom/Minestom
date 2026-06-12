@@ -217,26 +217,20 @@ public class EntityFinder {
         }
 
 
-        // Sort & limit
-        if (entitySort != EntitySort.ARBITRARY || limit != null) {
-            result = result.stream()
-                    .sorted((ent1, ent2) -> switch (entitySort) {
-                        case ARBITRARY, RANDOM ->
-                            // RANDOM is handled below
-                                1;
-                        case FURTHEST -> pos.distanceSquared(ent1.getPosition()) >
-                                pos.distanceSquared(ent2.getPosition()) ?
-                                1 : 0;
-                        case NEAREST -> pos.distanceSquared(ent1.getPosition()) <
-                                pos.distanceSquared(ent2.getPosition()) ?
-                                1 : 0;
-                    })
-                    .limit(limit != null ? limit : Integer.MAX_VALUE)
-                    .toList();
+        // Sort
+        if (entitySort != EntitySort.ARBITRARY) {
+            result = new ArrayList<>(result);  // mutable
 
-            if (entitySort == EntitySort.RANDOM) {
-                Collections.shuffle(result);
+            switch (entitySort) {
+                case NEAREST -> result.sort(Comparator.comparingDouble(ent -> pos.distanceSquared(ent.getPosition())));
+                case FURTHEST -> result.sort(Comparator.<Entity>comparingDouble(ent -> pos.distanceSquared(ent.getPosition())).reversed());
+                case RANDOM -> Collections.shuffle(result);
             }
+        }
+
+        // Limit
+        if (limit != null && limit < result.size()) {
+            result = List.copyOf(result.subList(0, limit));
         }
 
         return result;
