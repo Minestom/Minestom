@@ -30,12 +30,12 @@ public class EntityFinder {
 
     private TargetSelector targetSelector;
 
-    private EntitySort entitySort = EntitySort.ARBITRARY;
+    private EntitySort entitySort;
 
     // Position
     private Point startPosition;
     private Float dx, dy, dz;
-    private Range.Int distance;
+    private Range.Double distance;
 
     // By traits
     private Integer limit;
@@ -65,7 +65,7 @@ public class EntityFinder {
         return this;
     }
 
-    public EntityFinder setDistance(Range.Int distance) {
+    public EntityFinder setDistance(Range.Double distance) {
         this.distance = distance;
         return this;
     }
@@ -139,17 +139,18 @@ public class EntityFinder {
 
         final Point pos = startPosition != null ? startPosition : (self != null ? self.getPosition() : Vec.ZERO);
 
-        List<Entity> result = findTarget(instance, targetSelector, pos, self);
+        List<Entity> result = findTarget(instance, targetSelector, self);
         // Fast exit if there is nothing to process
         if (result.isEmpty())
             return result;
 
         // Distance argument
         if (distance != null) {
-            final int minDistance = distance.min();
-            final int maxDistance = distance.max();
+            final double minDistanceSquared = MathUtils.square(Math.max(distance.min(), 0));
+            final double maxDistanceSquared = MathUtils.square(distance.max());
+
             result = result.stream()
-                    .filter(entity -> MathUtils.isBetween(entity.getPosition().distanceSquared(pos), minDistance * minDistance, maxDistance * maxDistance))
+                    .filter(entity -> MathUtils.isBetween(entity.getDistanceSquared(pos), minDistanceSquared, maxDistanceSquared))
                     .toList();
         }
 
@@ -217,26 +218,49 @@ public class EntityFinder {
         }
 
 
-        // Sort & limit
-        if (entitySort != EntitySort.ARBITRARY || limit != null) {
-            result = result.stream()
-                    .sorted((ent1, ent2) -> switch (entitySort) {
-                        case ARBITRARY, RANDOM ->
-                            // RANDOM is handled below
-                                1;
-                        case FURTHEST -> pos.distanceSquared(ent1.getPosition()) >
-                                pos.distanceSquared(ent2.getPosition()) ?
-                                1 : 0;
-                        case NEAREST -> pos.distanceSquared(ent1.getPosition()) <
-                                pos.distanceSquared(ent2.getPosition()) ?
-                                1 : 0;
-                    })
-                    .limit(limit != null ? limit : Integer.MAX_VALUE)
-                    .toList();
+        // @p/@r/@n are shorthands for a default sort and limit, both overridable
+        EntitySort effectiveSort = entitySort;
+        Integer effectiveLimit = limit;
 
-            if (entitySort == EntitySort.RANDOM) {
-                Collections.shuffle(result);
+        if (targetSelector == TargetSelector.NEAREST_PLAYER || targetSelector == TargetSelector.NEAREST_ENTITY) {
+            if (effectiveSort == null) effectiveSort = EntitySort.NEAREST;
+            if (effectiveLimit == null) effectiveLimit = 1;
+        } else if (targetSelector == TargetSelector.RANDOM_PLAYER) {
+            if (effectiveSort == null) effectiveSort = EntitySort.RANDOM;
+            if (effectiveLimit == null) effectiveLimit = 1;
+        }
+
+        if (effectiveSort == null) {
+            effectiveSort = EntitySort.ARBITRARY;
+        }
+
+        // Sort & limit
+        final Comparator<Entity> nearestFirst = Comparator.comparingDouble(entity -> entity.getDistanceSquared(pos));
+
+        if (effectiveLimit != null && effectiveLimit == 1) {
+            result = switch (effectiveSort) {
+                case ARBITRARY -> List.copyOf(result.subList(0, Math.min(1, result.size())));
+                case RANDOM -> result.isEmpty() ? List.of()
+                        : List.of(result.get(ThreadLocalRandom.current().nextInt(result.size())));
+                case NEAREST -> result.stream().min(nearestFirst).map(List::<Entity>of).orElse(List.of());
+                case FURTHEST -> result.stream().max(nearestFirst).map(List::<Entity>of).orElse(List.of());
+            };
+        } else if (effectiveSort == EntitySort.ARBITRARY) {
+            if (effectiveLimit != null && result.size() > effectiveLimit) {
+                result = List.copyOf(result.subList(0, effectiveLimit));
             }
+        } else {
+            final List<Entity> sorted = new ArrayList<>(result);
+
+            if (effectiveSort == EntitySort.RANDOM) {
+                Collections.shuffle(sorted);
+            } else {
+                sorted.sort(effectiveSort == EntitySort.NEAREST ? nearestFirst : nearestFirst.reversed());
+            }
+
+            result = effectiveLimit != null && sorted.size() > effectiveLimit
+                    ? List.copyOf(sorted.subList(0, effectiveLimit))
+                    : sorted;
         }
 
         return result;
@@ -306,26 +330,12 @@ public class EntityFinder {
     }
 
     private static List<Entity> findTarget(@Nullable Instance instance,
-                                                             TargetSelector targetSelector,
-                                                             Point startPosition, @Nullable Entity self) {
+                                           TargetSelector targetSelector,
+                                           @Nullable Entity self) {
         final var players = instance != null ? instance.getPlayers() : CONNECTION_MANAGER.getOnlinePlayers();
-        if (targetSelector == TargetSelector.NEAREST_PLAYER) {
-            return players.stream()
-                    .min(Comparator.comparingDouble(p -> p.getPosition().distanceSquared(startPosition)))
-                    .<List<Entity>>map(Collections::singletonList).orElse(List.of());
-        } else if (targetSelector == TargetSelector.NEAREST_ENTITY) {
-            List<Entity> entities = findTarget(instance, TargetSelector.ALL_ENTITIES, startPosition, self);
-
-            return entities.stream()
-                    .min(Comparator.comparingDouble(p -> p.getPosition().distanceSquared(startPosition)))
-                    .map(Collections::singletonList).orElse(List.of());
-        } else if (targetSelector == TargetSelector.RANDOM_PLAYER) {
-            final int index = ThreadLocalRandom.current().nextInt(players.size());
-            final Player player = players.stream().skip(index).findFirst().orElseThrow();
-            return List.of(player);
-        } else if (targetSelector == TargetSelector.ALL_PLAYERS) {
+        if (targetSelector == TargetSelector.NEAREST_PLAYER || targetSelector == TargetSelector.RANDOM_PLAYER || targetSelector == TargetSelector.ALL_PLAYERS) {
             return List.copyOf(players);
-        } else if (targetSelector == TargetSelector.ALL_ENTITIES) {
+        } else if (targetSelector == TargetSelector.NEAREST_ENTITY || targetSelector == TargetSelector.ALL_ENTITIES) {
             if (instance != null) {
                 return List.copyOf(instance.getEntities());
             }
