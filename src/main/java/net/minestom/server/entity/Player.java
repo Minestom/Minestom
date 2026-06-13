@@ -836,13 +836,12 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             Pos pos = getPosition();
             boolean shouldSwim;
             if (meta.isSwimming()) {
-                Block feetBlock = getBlockSafe(pos.blockX(), pos.blockY(), pos.blockZ());
-                shouldSwim = isBlockInWater(feetBlock, 0.0) && isSprinting() && getVehicle() == null;
+                shouldSwim = isInWater() && isSprinting() && getVehicle() == null;
             } else {
                 double eyeY = pos.y() + getEyeHeight();
                 int eyeBlockY = (int) Math.floor(eyeY);
                 Block eyeBlock = getBlockSafe(pos.blockX(), eyeBlockY, pos.blockZ());
-                shouldSwim = isBlockInWater(eyeBlock, eyeY - eyeBlockY) && isSprinting() && getVehicle() == null;
+                shouldSwim = isBlockInWater(eyeBlock, eyeY - eyeBlockY) && isInWater() && isSprinting() && getVehicle() == null;
             }
             meta.setSwimming(shouldSwim);
         }
@@ -889,9 +888,35 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         if (block == null) return false;
         if (block.compare(Block.WATER)) {
             int level = Integer.parseInt(block.getProperty("level"));
-            return localY < (9 - (level & 7)) / 9.0;
+            return localY <= (9 - (level & 7)) / 9.0;
         }
-        return "true".equals(block.getProperty("waterlogged"));
+        if ("true".equals(block.getProperty("waterlogged"))) {
+            return localY <= 8.0 / 9.0;
+        }
+        return false;
+    }
+
+    private boolean isInWater() {
+        Pos pos = getPosition();
+        double absMinY = pos.y() + boundingBox.minY();
+        var iter = boundingBox.getBlocks(pos);
+        while (iter.hasNext()) {
+            var blockPos = iter.next();
+            int by = blockPos.blockY();
+            Block block = getBlockSafe(blockPos.blockX(), by, blockPos.blockZ());
+            if (block == null) continue;
+            double fluidHeight;
+            if (block.compare(Block.WATER)) {
+                int level = Integer.parseInt(block.getProperty("level"));
+                fluidHeight = (9 - (level & 7)) / 9.0;
+            } else if ("true".equals(block.getProperty("waterlogged"))) {
+                fluidHeight = 8.0 / 9.0;
+            } else {
+                continue;
+            }
+            if (by + fluidHeight >= absMinY) return true;
+        }
+        return false;
     }
 
     /**

@@ -116,4 +116,19 @@ public class PlayerSwimmingPoseTest {
 
         assertNotEquals(EntityPose.SWIMMING, player.getPose(), "Player should not swim when eyes are above flowing water surface");
     }
+
+    @Test
+    public void noSwimWhenFeetAboveShallowWaterSurface(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 40, 0, Block.WATER.withProperty("level", "7"));
+        instance.setBlock(0, 41, 0, Block.WATER.withProperty("level", "7"));
+
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0.5, 40.2, 0.5));
+
+        player.setSprinting(true);
+        env.tick();
+
+        assertNotEquals(EntityPose.SWIMMING, player.getPose(), "Player should not be in water when feet are above the shallow fluid surface");
+    }
 }
