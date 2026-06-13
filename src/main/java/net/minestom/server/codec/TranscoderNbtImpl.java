@@ -104,6 +104,13 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     }
 
     @Override
+    public Result<Number> getNumber(BinaryTag value) {
+        return value instanceof NumberBinaryTag number
+                ? new Result.Ok<>(number.numberValue())
+                : new Result.Error<>("Not a number: " + value);
+    }
+
+    @Override
     public Result<String> getString(BinaryTag value) {
         return value instanceof StringBinaryTag string
                 ? new Result.Ok<>(string.value())
@@ -218,7 +225,7 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     public Result<byte[]> getByteArray(BinaryTag value) {
         return value instanceof ByteArrayBinaryTag byteArray
                 ? new Result.Ok<>(byteArray.value())
-                : new Result.Error<>("Not a byte array: " + value);
+                : Transcoder.super.getByteArray(value);
     }
 
     @Override
@@ -230,7 +237,7 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     public Result<int[]> getIntArray(BinaryTag value) {
         return value instanceof IntArrayBinaryTag intArray
                 ? new Result.Ok<>(intArray.value())
-                : new Result.Error<>("Not an int array: " + value);
+                : Transcoder.super.getIntArray(value);
     }
 
     @Override
@@ -242,7 +249,7 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     public Result<long[]> getLongArray(BinaryTag value) {
         return value instanceof LongArrayBinaryTag longArray
                 ? new Result.Ok<>(longArray.value())
-                : new Result.Error<>("Not a long array: " + value);
+                : Transcoder.super.getLongArray(value);
     }
 
     @Override

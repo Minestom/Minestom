@@ -206,6 +206,11 @@ final class TranscoderCrc32Impl implements Transcoder<Integer> {
     }
 
     @Override
+    public Result<Number> getNumber(Integer value) {
+        return writeOnly();
+    }
+
+    @Override
     public Result<String> getString(Integer value) {
         return writeOnly();
     }
