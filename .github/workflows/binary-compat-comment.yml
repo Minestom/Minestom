@@ -57,7 +57,7 @@ jobs:
 
           **What should you do?**
           - If unintentional, please restore the compatibility.
-          - If intentional, a maintainer will review them and label your PR as \`breaking\`, which will bypass this check. Please refer to [CONTRIBUTING.md](CONTRIBUTING.md) for requirements regarding breaking changes.
+          - If intentional, a maintainer will review them and label your PR as \`breaking\`, which will bypass this check. Please refer to [CONTRIBUTING.md](../../blob/master/.github/CONTRIBUTING.md) for requirements regarding breaking changes.
 
           <details>
           <summary><b>View offending signatures</b></summary>
