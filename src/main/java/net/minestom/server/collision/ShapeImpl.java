@@ -106,17 +106,18 @@ public record ShapeImpl(ShapeData shapeData, OcclusionData occlusionData) implem
     @Override
     public boolean intersectBoxSwept(Point rayStart, Point rayDirection,
                                      Point shapePos, BoundingBox moving, SweepResult finalResult) {
+        return intersectBoxSwept(rayStart, rayDirection,
+                shapePos.x(), shapePos.y(), shapePos.z(), moving, finalResult);
+    }
+
+    @Override
+    public boolean intersectBoxSwept(Point rayStart, Point rayDirection,
+                                     double shapeX, double shapeY, double shapeZ,
+                                     BoundingBox moving, SweepResult finalResult) {
         boolean hitBlock = false;
         for (BoundingBox blockSection : shapeData.boundingBoxes) {
-            // Update final result if the temp result collision is sooner than the current final result
-            if (RayUtils.BoundingBoxIntersectionCheck(moving, rayStart, rayDirection, blockSection, shapePos, finalResult)) {
-                finalResult.collidedPositionX = rayStart.x() + rayDirection.x() * finalResult.res;
-                finalResult.collidedPositionY = rayStart.y() + rayDirection.y() * finalResult.res;
-                finalResult.collidedPositionZ = rayStart.z() + rayDirection.z() * finalResult.res;
-                finalResult.collidedShapeX = shapePos.x();
-                finalResult.collidedShapeY = shapePos.y();
-                finalResult.collidedShapeZ = shapePos.z();
-                finalResult.collidedShape = this;
+            if (RayUtils.BoundingBoxIntersectionCheck(this, moving, rayStart, rayDirection, blockSection,
+                    shapeX, shapeY, shapeZ, finalResult)) {
                 hitBlock = true;
             }
         }

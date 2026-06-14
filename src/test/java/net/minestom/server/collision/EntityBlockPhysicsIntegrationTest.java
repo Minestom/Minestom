@@ -963,7 +963,7 @@ public class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    public void entityPhysicsCheckNoMoveCache(Env env) {
+    public void entityPhysicsCheckNoMoveRepeat(Env env) {
         var instance = env.createFlatInstance();
         var entity = new Entity(EntityType.ZOMBIE);
 
@@ -972,7 +972,7 @@ public class EntityBlockPhysicsIntegrationTest {
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, Vec.ZERO);
         entity.teleport(res.newPosition());
-        res = CollisionUtils.handlePhysics(entity, Vec.ZERO, res);
+        res = CollisionUtils.handlePhysics(entity, Vec.ZERO);
         assertEqualsPoint(new Pos(5, 42, 5), res.newPosition());
     }
 
@@ -991,7 +991,7 @@ public class EntityBlockPhysicsIntegrationTest {
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, Vec.ZERO);
         entity.teleport(res.newPosition());
-        res = CollisionUtils.handlePhysics(entity, new Vec((distance - 1) * 16, 0, 0), res);
+        res = CollisionUtils.handlePhysics(entity, new Vec((distance - 1) * 16, 0, 0));
         assertEqualsPoint(new Pos(distance * 8 - 0.3, 42, 5), res.newPosition());
     }
 
@@ -1010,7 +1010,7 @@ public class EntityBlockPhysicsIntegrationTest {
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec((distance - 1) * 16, 0, 0));
         entity.teleport(res.newPosition());
-        res = CollisionUtils.handlePhysics(entity, Vec.ZERO, res);
+        res = CollisionUtils.handlePhysics(entity, Vec.ZERO);
         assertEqualsPoint(new Pos(distance * 8 - 0.3, 42, 5), res.newPosition());
     }
 
@@ -1027,13 +1027,13 @@ public class EntityBlockPhysicsIntegrationTest {
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, -0.4));
         entity.teleport(res.newPosition());
-        res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, -0.4), res);
+        res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, -0.4));
 
         assertEqualsPoint(new Pos(0.5, 42.5, 0.487), res.newPosition());
     }
 
     @Test
-    public void entityPhysicsCheckCollisionDownCache(Env env) {
+    public void entityPhysicsCheckCollisionDownRepeat(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 43, 1, Block.STONE);
 
@@ -1047,13 +1047,13 @@ public class EntityBlockPhysicsIntegrationTest {
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, 10));
         entity.teleport(res.newPosition());
-        res = CollisionUtils.handlePhysics(entity, new Vec(0, -10, 0), res);
+        res = CollisionUtils.handlePhysics(entity, new Vec(0, -10, 0));
 
         assertEqualsPoint(new Pos(0, 40, 0.7), res.newPosition());
     }
 
     @Test
-    public void entityPhysicsCheckGravityCached(Env env) {
+    public void entityPhysicsCheckRepeatedGravityCollision(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 43, 1, Block.STONE);
 
@@ -1067,17 +1067,12 @@ public class EntityBlockPhysicsIntegrationTest {
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, 10));
         entity.teleport(res.newPosition());
-        res = CollisionUtils.handlePhysics(entity, new Vec(0, -10, 0), res);
+        res = CollisionUtils.handlePhysics(entity, new Vec(0, -10, 0));
         entity.teleport(res.newPosition());
 
-        PhysicsResult lastPhysicsResult;
-
         for (int x = 0; x < 50; ++x) {
-            lastPhysicsResult = res;
-            res = CollisionUtils.handlePhysics(entity, new Vec(0, -1.7, 0), res);
+            res = CollisionUtils.handlePhysics(entity, new Vec(0, -1.7, 0));
             entity.teleport(res.newPosition());
-
-            if (x > 10) assertSame(lastPhysicsResult, res, "Physics result not cached");
         }
 
         assertEqualsPoint(new Pos(0, 40, 0.7), res.newPosition());
@@ -1092,7 +1087,7 @@ public class EntityBlockPhysicsIntegrationTest {
         entity.setInstance(instance, new Pos(0, 43.00001, 0));
 
         var deltaPos = new Vec(0.0, -10, 0.0);
-        var physicsResult = CollisionUtils.handlePhysics(entity, deltaPos, null);
+        var physicsResult = CollisionUtils.handlePhysics(entity, deltaPos);
 
         var newPos = physicsResult.newPosition();
         assertEquals(43, newPos.blockY());
@@ -1107,36 +1102,10 @@ public class EntityBlockPhysicsIntegrationTest {
         entity.setInstance(instance, new Pos(0, 43.5, 0));
 
         var deltaPos = new Vec(0.0, -10, 0.0);
-        var physicsResult = CollisionUtils.handlePhysics(entity, deltaPos, null);
+        var physicsResult = CollisionUtils.handlePhysics(entity, deltaPos);
 
         var newPos = physicsResult.newPosition();
         assertEquals(43, newPos.blockY());
     }
 
-    @Test
-    public void entityPhysicsCacheTest(Env env) {
-        var instance = env.createFlatInstance();
-        instance.setBlock(0, 42, 0, Block.STONE);
-
-        var entity = new Entity(EntityType.ZOMBIE);
-        entity.setInstance(instance, new Pos(0, 43.5, 0));
-
-        var deltaPos = new Vec(0.0, -10, 0.0);
-        var physicsResult = CollisionUtils.handlePhysics(entity, deltaPos, null);
-
-        var newPos = physicsResult.newPosition();
-        assertEquals(43, newPos.blockY());
-        assertEqualsPoint(new Vec(0, 0, 0), physicsResult.newVelocity());
-        assertEqualsPoint(deltaPos, physicsResult.originalDelta());
-
-        // Create a new instance of the physics result to simulate gravity or we will never cache because velocity would be zero.
-        var velocityFixedResult = new PhysicsResult(physicsResult.newPosition(), physicsResult.newVelocity().add(deltaPos), physicsResult.isOnGround(), physicsResult.collisionX(), physicsResult.collisionY(), physicsResult.collisionZ(), physicsResult.originalDelta(), physicsResult.collisionPoints(), physicsResult.collisionShapes(), physicsResult.collisionShapePositions(), physicsResult.hasCollision(), physicsResult.res(), false);
-
-        var physicsResult2 = CollisionUtils.handlePhysics(instance, entity.getChunk(),
-                entity.getBoundingBox(),
-                physicsResult.newPosition(), deltaPos,
-                velocityFixedResult, false);
-
-        assertTrue(physicsResult2.cached());
-    }
 }
