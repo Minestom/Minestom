@@ -1,0 +1,85 @@
+name: Binary Compatibility Comment
+
+on:
+  workflow_run:
+    workflows: ["Build PR"]
+
+permissions:
+  actions: read
+  contents: read
+  pull-requests: write
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    if: |
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'failure'
+    steps:
+      - name: Sync PR Comment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          JOB_ID=$(gh api repos/$GH_REPO/actions/runs/${{ github.event.workflow_run.id }}/jobs --paginate | jq -r '
+            .jobs[] | 
+            select(.name == "Binary Compatibility" and .conclusion == "failure") | 
+            .id
+          ')"
+
+          if [ -z "$JOB_ID" ]; then
+            exit 0
+          fi
+
+          read -r PR_NUMBER BASE_REF <<< "$(gh api repos/$GH_REPO/commits/${{ github.event.workflow_run.head_sha }}/pulls --jq '
+            .[0] | 
+            "\(.number) \(.base.ref)"
+          ')"
+
+          if [ "$PR_NUMBER" = "null" ] || [ -z "$PR_NUMBER" ]; then
+            exit 0
+          fi
+
+          VIOLATIONS=$(gh run view "${{ github.event.workflow_run.id }}" --job "$JOB_ID" --log | grep -E "removed|changed|marked as internal/experimental" | sed -E 's/^([0-9:T.-]+Z\s+)?(>\s+)?//g' || true)
+
+          if [ -z "$VIOLATIONS" ]; then
+            exit 0
+          fi
+
+          cat << EOF > new_comment.md
+          ### Binary Compatibility
+
+          This PR has introduced binary incompatible changes compared to the \`$BASE_REF\` branch.
+
+          **What is Binary Compatibility?**
+          Binary compatibility ensures that libraries compiled against Minestom can upgrade between version without needing recompilation.
+
+          **What should you do?**
+          - If unintentional, please restore the compatibility.
+          - If intentional, a maintainer will review them and label your PR as \`breaking\`, which will bypass this check. Please refer to [CONTRIBUTING.md](CONTRIBUTING.md) for requirements regarding breaking changes.
+
+          <details>
+          <summary><b>View offending signatures</b></summary>
+
+          \`\`\`
+          $VIOLATIONS
+          \`\`\`
+          </details>
+          EOF
+
+          read -r COMMENT_ID COMMENT_BODY_BASE64 <<< "$(gh pr view "$PR_NUMBER" --json comments --jq '
+            .comments[] | 
+            select(.author.login | contains("github-actions")) | 
+            select(.body | contains("Binary Compatibility")) | 
+            "\(.id) \(.body | @base64)"
+          ' | head -n 1)"
+
+          if [ -n "$COMMENT_ID" ] && [ "$COMMENT_ID" != "null" ]; then
+            echo "$COMMENT_BODY_BASE64" | base64 --decode > old_comment.md
+            
+            if ! diff -q --strip-trailing-cr old_comment.md new_comment.md >/dev/null; then
+              gh api -X PATCH "repos/$GH_REPO/issues/comments/$COMMENT_ID" -F body=@new_comment.md
+            fi
+          else
+            gh pr comment "$PR_NUMBER" --body-file new_comment.md
+          fi
