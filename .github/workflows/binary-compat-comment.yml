@@ -25,16 +25,17 @@ jobs:
             .jobs[] | 
             select(.name == "Binary Compatibility" and .conclusion == "failure") | 
             .id
-          ')"
+          ')
 
           if [ -z "$JOB_ID" ]; then
             exit 0
           fi
 
-          read -r PR_NUMBER BASE_REF <<< "$(gh api repos/$GH_REPO/commits/${{ github.event.workflow_run.head_sha }}/pulls --jq '
+          PR_DATA=$(gh api repos/$GH_REPO/commits/${{ github.event.workflow_run.head_sha }}/pulls --jq '
             .[0] | 
             "\(.number) \(.base.ref)"
-          ')"
+          ')
+          read -r PR_NUMBER BASE_REF <<< "$PR_DATA"
 
           if [ "$PR_NUMBER" = "null" ] || [ -z "$PR_NUMBER" ]; then
             exit 0
@@ -67,12 +68,13 @@ jobs:
           </details>
           EOF
 
-          read -r COMMENT_ID COMMENT_BODY_BASE64 <<< "$(gh pr view "$PR_NUMBER" --json comments --jq '
+          COMMENT_DATA=$(gh pr view "$PR_NUMBER" --json comments --jq '
             .comments[] | 
             select(.author.login | contains("github-actions")) | 
             select(.body | contains("Binary Compatibility")) | 
             "\(.id) \(.body | @base64)"
-          ' | head -n 1)"
+          ' | head -n 1)
+          read -r COMMENT_ID COMMENT_BODY_BASE64 <<< "$COMMENT_DATA"
 
           if [ -n "$COMMENT_ID" ] && [ "$COMMENT_ID" != "null" ]; then
             echo "$COMMENT_BODY_BASE64" | base64 --decode > old_comment.md
