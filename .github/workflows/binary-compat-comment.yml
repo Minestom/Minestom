@@ -68,9 +68,9 @@ jobs:
           </details>
           EOF
 
-          COMMENT_DATA=$(gh pr view "$PR_NUMBER" --json comments --jq '
-            .comments[] | 
-            select(.author.login | contains("github-actions")) | 
+          COMMENT_DATA=$(gh api repos/$GH_REPO/issues/$PR_NUMBER/comments --paginate | jq -r '
+            .[] | 
+            select(.user.login | contains("github-actions")) | 
             select(.body | contains("Binary Compatibility")) | 
             "\(.id) \(.body | @base64)"
           ' | head -n 1)
