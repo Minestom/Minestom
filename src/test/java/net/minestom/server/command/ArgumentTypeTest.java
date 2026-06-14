@@ -11,6 +11,7 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.color.TeamColor;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
@@ -72,7 +73,7 @@ public class ArgumentTypeTest {
     public void testArgumentTeamColor() {
         var arg = ArgumentType.TeamColor("color");
         assertInvalidArg(arg, "invalid_color");
-        assertArg(arg, Style.style(NamedTextColor.DARK_PURPLE), "dark_purple");
+        assertArg(arg, TeamColor.DARK_PURPLE, "dark_purple");
     }
 
     @Test
