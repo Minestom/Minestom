@@ -50,14 +50,14 @@ jobs:
           cat << EOF > new_comment.md
           ### Binary Compatibility
 
-          This PR has introduced binary incompatible changes compared to the \`$BASE_REF\` branch.
+          This Pull Request has introduced binary incompatible changes compared to the \`$BASE_REF\` branch.
 
           **What is Binary Compatibility?**
           Binary compatibility ensures that libraries compiled against Minestom can upgrade between version without needing recompilation.
 
           **What should you do?**
-          - If unintentional, please restore the compatibility.
-          - If intentional, a maintainer will review them and label your PR as \`breaking\`, which will bypass this check. Please refer to [CONTRIBUTING.md](../../blob/master/.github/CONTRIBUTING.md) for requirements regarding breaking changes.
+          - If unintentional, please restore the compatibility. Feel free to ask for help if you are unsure how to proceed.
+          - If intentional, a maintainer will review them and label your PR as \`breaking\`, which will bypass this check. Please refer to [CONTRIBUTING.md](../blob/master/.github/CONTRIBUTING.md) for requirements regarding breaking changes.
 
           <details>
           <summary><b>View offending signatures</b></summary>
