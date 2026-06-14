@@ -24,9 +24,9 @@ sealed interface Particles permits Particle {
 
     Particle.GeyserBase GEYSER_BASE = ParticleImpl.get("minecraft:geyser_base");
 
-    Particle.GeyserBase GEYSER_POOF = ParticleImpl.get("minecraft:geyser_poof");
+    Particle.GeyserPoof GEYSER_POOF = ParticleImpl.get("minecraft:geyser_poof");
 
-    Particle.Geyser GEYSER_PLUME = ParticleImpl.get("minecraft:geyser_plume");
+    Particle.GeyserPlume GEYSER_PLUME = ParticleImpl.get("minecraft:geyser_plume");
 
     Particle CLOUD = ParticleImpl.get("minecraft:cloud");
 

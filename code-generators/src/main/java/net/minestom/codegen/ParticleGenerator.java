@@ -67,12 +67,6 @@ public record ParticleGenerator(InputStream particleFile,
     }
 
     private static ClassName getDataImplementation(String namespacedName) {
-        //TODO(26.2) remove this hack, as two use another implementation
-        if (namespacedName.startsWith("geyser")) {
-            namespacedName = namespacedName
-                    .replace("geyser_plume", "geyser")
-                    .replace("geyser_poof", "geyser_base");
-        }
         return ClassName.get("net.minestom.server.particle", "Particle", toPascalCase(namespacedName));
     }
 

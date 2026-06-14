@@ -293,8 +293,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                 new PlayerSpawnInfo(dimensionTypeId, spawnInstance.getDimensionName(), 0,
                         gameMode, null, false, levelFlat,
                         deathLocation, portalCooldown, DEFAULT_SEA_LEVEL),
-                true, //TODO(26.2): Should this be set correctly?
-                true);
+                // Always leave online mode & chat secure chat enabled
+                // so the client makes a chat session and shows tablist heads.
+                true, true);
         sendPacket(joinGamePacket);
 
         // Start sending inventory updates

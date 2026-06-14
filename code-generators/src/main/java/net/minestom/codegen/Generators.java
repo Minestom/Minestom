@@ -81,6 +81,7 @@ public final class Generators {
         generator.generateKeys(resource("timeline.json"), "net.minestom.server.world.timeline", "Timeline");
         generator.generateKeys(resource("world_clock.json"), "net.minestom.server.world.clock", "WorldClock");
         generator.generateKeys(resource("clock_time_marker.json"), "net.minestom.server.world.clock", "ClockTimeMarker");
+        generator.generateKeys(resource("sulfur_cube_archetype.json"), "net.minestom.server.entity.metadata.cube", "SulfurCubeArchetype");
 
         System.out.println("Finished generating code");
     }

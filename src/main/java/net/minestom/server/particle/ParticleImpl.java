@@ -46,8 +46,10 @@ final class ParticleImpl {
             case "effect" -> new Particle.Effect(key, id, Color.WHITE, 1);
             case "flash" -> new Particle.Flash(key, id, AlphaColor.WHITE);
             case "instant_effect" -> new Particle.InstantEffect(key, id, Color.WHITE, 1);
-            case "geyser", "geyser_plume" -> new Particle.Geyser(key, id, 1);
-            case "geyser_base", "geyser_poof" -> new Particle.GeyserBase(key, id, 1, 0);
+            case "geyser" -> new Particle.Geyser(key, id, 1);
+            case "geyser_base" -> new Particle.GeyserBase(key, id, 1, 0);
+            case "geyser_plume" -> new Particle.GeyserPlume(key, id, 1);
+            case "geyser_poof" -> new Particle.GeyserPoof(key, id, 1, 0);
             default -> new Particle.Simple(key, id);
         };
     }
