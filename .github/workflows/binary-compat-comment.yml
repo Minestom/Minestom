@@ -41,7 +41,7 @@ jobs:
             exit 0
           fi
 
-          VIOLATIONS=$(gh run view "${{ github.event.workflow_run.id }}" --job "$JOB_ID" --log | grep -E "removed|changed|marked as internal/experimental" | sed -E 's/^([0-9:T.-]+Z\s+)?(>\s+)?//g' || true)
+          VIOLATIONS=$(gh run view "${{ github.event.workflow_run.id }}" --job "$JOB_ID" --log | grep -E "removed|changed|marked as internal/experimental" | sed -E 's/^.*[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]+Z[[:space:]]+//g' || true)
 
           if [ -z "$VIOLATIONS" ]; then
             exit 0
