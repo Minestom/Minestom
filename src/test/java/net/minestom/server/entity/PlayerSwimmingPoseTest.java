@@ -1,6 +1,7 @@
 package net.minestom.server.entity;
 
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.GameMode;
 import net.minestom.server.instance.block.Block;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
@@ -115,6 +116,76 @@ public class PlayerSwimmingPoseTest {
         env.tick();
 
         assertNotEquals(EntityPose.SWIMMING, player.getPose(), "Player should not swim when eyes are above flowing water surface");
+    }
+
+    @Test
+    public void stopSwimmingWhenFlying(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 40, 0, Block.WATER);
+        instance.setBlock(0, 41, 0, Block.WATER);
+
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0.5, 40, 0.5));
+
+        player.setSprinting(true);
+        env.tick();
+        assertEquals(EntityPose.SWIMMING, player.getPose());
+
+        player.setFlying(true);
+        env.tick();
+
+        assertNotEquals(EntityPose.SWIMMING, player.getPose(), "Player should be forced out of swimming when flying");
+    }
+
+    @Test
+    public void stopSwimmingInSpectator(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 40, 0, Block.WATER);
+        instance.setBlock(0, 41, 0, Block.WATER);
+
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0.5, 40, 0.5));
+
+        player.setSprinting(true);
+        env.tick();
+        assertEquals(EntityPose.SWIMMING, player.getPose());
+
+        player.setGameMode(GameMode.SPECTATOR);
+        env.tick();
+
+        assertNotEquals(EntityPose.SWIMMING, player.getPose(), "Player should be forced out of swimming in spectator mode");
+    }
+
+    @Test
+    public void noSwimWhenFlying(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 40, 0, Block.WATER);
+        instance.setBlock(0, 41, 0, Block.WATER);
+
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0.5, 40, 0.5));
+
+        player.setSprinting(true);
+        player.setFlying(true);
+        env.tick();
+
+        assertNotEquals(EntityPose.SWIMMING, player.getPose(), "Player should not swim when flying");
+    }
+
+    @Test
+    public void noSwimInSpectator(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 40, 0, Block.WATER);
+        instance.setBlock(0, 41, 0, Block.WATER);
+
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0.5, 40, 0.5));
+
+        player.setSprinting(true);
+        player.setGameMode(GameMode.SPECTATOR);
+        env.tick();
+
+        assertNotEquals(EntityPose.SWIMMING, player.getPose(), "Player should not swim in spectator mode");
     }
 
     @Test

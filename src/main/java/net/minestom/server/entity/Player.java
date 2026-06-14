@@ -834,14 +834,16 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
         if (instance != null) {
             Pos pos = getPosition();
-            boolean shouldSwim;
-            if (meta.isSwimming()) {
-                shouldSwim = isInWater() && isSprinting() && getVehicle() == null;
-            } else {
-                double eyeY = pos.y() + getEyeHeight();
-                int eyeBlockY = (int) Math.floor(eyeY);
-                Block eyeBlock = getBlockSafe(pos.blockX(), eyeBlockY, pos.blockZ());
-                shouldSwim = isBlockInWater(eyeBlock, eyeY - eyeBlockY) && isInWater() && isSprinting() && getVehicle() == null;
+            boolean shouldSwim = false;
+            if (isSprinting() && getVehicle() == null && !isFlying() && getGameMode() != GameMode.SPECTATOR) {
+                if (meta.isSwimming()) {
+                    shouldSwim = isInWater();
+                } else {
+                    double eyeY = pos.y() + getEyeHeight();
+                    int eyeBlockY = (int) Math.floor(eyeY);
+                    Block eyeBlock = getBlockSafe(pos.blockX(), eyeBlockY, pos.blockZ());
+                    shouldSwim = isBlockInWater(eyeBlock, pos.blockX(), eyeBlockY, pos.blockZ(), eyeY - eyeBlockY) && isInWater();
+                }
             }
             meta.setSwimming(shouldSwim);
         }
@@ -884,39 +886,39 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         }
     }
 
-    private boolean isBlockInWater(@Nullable Block block, double localY) {
+    private boolean isBlockInWater(@Nullable Block block, int x, int y, int z, double localY) {
         if (block == null) return false;
-        if (block.compare(Block.WATER)) {
-            int level = Integer.parseInt(block.getProperty("level"));
-            return localY <= (9 - (level & 7)) / 9.0;
-        }
-        if ("true".equals(block.getProperty("waterlogged"))) {
-            return localY <= 8.0 / 9.0;
-        }
-        return false;
+        return localY <= getFluidHeight(block, x, y, z);
     }
 
     private boolean isInWater() {
         Pos pos = getPosition();
-        double absMinY = pos.y() + boundingBox.minY();
-        var iter = boundingBox.getBlocks(pos);
+        BoundingBox box = getBoundingBox();
+        double absMinY = pos.y() + box.minY();
+        var iter = box.getBlocks(pos);
         while (iter.hasNext()) {
             var blockPos = iter.next();
-            int by = blockPos.blockY();
-            Block block = getBlockSafe(blockPos.blockX(), by, blockPos.blockZ());
+            int bx = blockPos.blockX(), by = blockPos.blockY(), bz = blockPos.blockZ();
+            Block block = getBlockSafe(bx, by, bz);
             if (block == null) continue;
-            double fluidHeight;
-            if (block.compare(Block.WATER)) {
-                int level = Integer.parseInt(block.getProperty("level"));
-                fluidHeight = (9 - (level & 7)) / 9.0;
-            } else if ("true".equals(block.getProperty("waterlogged"))) {
-                fluidHeight = 8.0 / 9.0;
-            } else {
-                continue;
-            }
-            if (by + fluidHeight >= absMinY) return true;
+            double h = getFluidHeight(block, bx, by, bz);
+            if (h >= 0 && by + h >= absMinY) return true;
         }
         return false;
+    }
+
+    private double getFluidHeight(@Nullable Block block, int x, int y, int z) {
+        if (block == null) return -1;
+        boolean isWater = block.compare(Block.WATER);
+        boolean isWaterlogged = !isWater && "true".equals(block.getProperty("waterlogged"));
+        if (!isWater && !isWaterlogged) return -1;
+        Block above = getBlockSafe(x, y + 1, z);
+        if (above != null && (above.compare(Block.WATER) || "true".equals(above.getProperty("waterlogged")))) return 1.0;
+        if (isWater) {
+            int level = Integer.parseInt(block.getProperty("level"));
+            return (8 - (level & 7)) / 9.0;
+        }
+        return 8.0 / 9.0;
     }
 
     /**
