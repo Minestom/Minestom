@@ -114,7 +114,7 @@ public class DataComponents {
     public static final DataComponent<List<ItemStack>> CONTAINER = register("container", ItemStackTemplate.NETWORK_TYPE.list(256), ItemStackTemplate.CODEC.list(256), List::copyOf);
     public static final DataComponent<ItemBlockState> BLOCK_STATE = register("block_state", ItemBlockState.NETWORK_TYPE, ItemBlockState.CODEC);
     public static final DataComponent<List<Bee>> BEES = register("bees", Bee.NETWORK_TYPE.list(Short.MAX_VALUE), Bee.CODEC.list(), List::copyOf);
-    public static final DataComponent<ItemStack> SULFUR_CUBE_CONTENTS = register("sulfur_cube_contents", ItemStackTemplate.NETWORK_TYPE, ItemStackTemplate.CODEC);
+    public static final DataComponent<ItemStack> SULFUR_CUBE_CONTENT = register("sulfur_cube_content", ItemStackTemplate.NETWORK_TYPE, ItemStackTemplate.CODEC);
     // Lock is an item predicate which we do not support, but can be user-represented as a compound tag (an empty tag would match everything).
     public static final DataComponent<CustomData> LOCK = register("lock", null, CustomData.CODEC);
     public static final DataComponent<SeededContainerLoot> CONTAINER_LOOT = register("container_loot", null, SeededContainerLoot.CODEC);
