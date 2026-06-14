@@ -11,11 +11,15 @@ import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -79,6 +83,20 @@ public class ChunkBatch implements Batch<ChunkCallback> {
         } catch (InterruptedException e) {
             throw new RuntimeException("#awaitReady interrupted!", e);
         }
+    }
+
+    /**
+     * Gets the set of chunk indices that will be affected by applying this batch at the origin (0, 0, 0) of the instance.
+     * <p>
+     * Each chunk index is a {@code long} value representing the unique identifier of a chunk,
+     * computed using {@link CoordConversion#chunkIndex(int, int)}.
+     *
+     * @return A set of chunk indices affected by this batch
+     */
+    @Override
+    @Contract(pure = true)
+    public Set<Long> getAffectedChunks() {
+        return Set.of(CoordConversion.chunkIndex(0, 0));
     }
 
     /**
