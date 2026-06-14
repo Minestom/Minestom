@@ -129,7 +129,6 @@ jobs:
     if: |
       always() &&
       github.event_name == 'pull_request' &&
-      github.repository == 'Minestom/Minestom' &&
       github.event.pull_request.head.repo.full_name == github.repository &&
       contains(github.event.pull_request.labels.*.name, 'Publish Pull Request') &&
       needs.build.result == 'success' &&
@@ -156,6 +155,7 @@ jobs:
         if: needs.native-test.outputs.metadata-updated == 'true'
         run: ./gradlew metadataCopy
       - name: Publish Artifacts
+        if: github.repository == 'Minestom/Minestom'
         env:
           MINESTOM_VERSION: ${{ github.head_ref }}-SNAPSHOT
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
