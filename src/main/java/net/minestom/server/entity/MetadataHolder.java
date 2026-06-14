@@ -182,7 +182,7 @@ public final class MetadataHolder {
         return ENTITY_META_SUPPLIER.get(entityType.name()).apply(entity, metadata);
     }
 
-    private static Map<String, BiFunction<@Nullable Entity, MetadataHolder, EntityMeta>> createMetaMap() {
+    private static Map<String, BiFunction<@Nullable Entity, MetadataHolder, ? extends EntityMeta>> createMetaMap() {
         final Map<String, BiFunction<Entity, MetadataHolder, EntityMeta>> map = new HashMap<>();
         map.put("minecraft:acacia_boat", BoatMeta::new);
         map.put("minecraft:acacia_chest_boat", BoatMeta::new);
