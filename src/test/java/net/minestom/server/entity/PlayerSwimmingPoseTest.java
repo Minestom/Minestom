@@ -93,6 +93,7 @@ public class PlayerSwimmingPoseTest {
     @Test
     public void swimInWaterloggedBlock(Env env) {
         var instance = env.createFlatInstance();
+        instance.setBlock(0, 40, 0, Block.WATER);
         instance.setBlock(0, 41, 0, Block.OAK_SLAB.withProperty("waterlogged", "true"));
 
         var connection = env.createConnection();
@@ -186,6 +187,20 @@ public class PlayerSwimmingPoseTest {
         env.tick();
 
         assertNotEquals(EntityPose.SWIMMING, player.getPose(), "Player should not swim in spectator mode");
+    }
+
+    @Test
+    public void noSwimWhenFeetNotInWater(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 41, 0, Block.WATER);
+
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0.5, 40, 0.5));
+
+        player.setSprinting(true);
+        env.tick();
+
+        assertNotEquals(EntityPose.SWIMMING, player.getPose(), "Player should not swim when feet block has no water");
     }
 
     @Test

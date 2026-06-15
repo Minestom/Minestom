@@ -842,7 +842,10 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                     double eyeY = pos.y() + getEyeHeight();
                     int eyeBlockY = (int) Math.floor(eyeY);
                     Block eyeBlock = getBlockSafe(pos.blockX(), eyeBlockY, pos.blockZ());
-                    shouldSwim = isBlockInWater(eyeBlock, pos.blockX(), eyeBlockY, pos.blockZ(), eyeY - eyeBlockY) && isInWater();
+                    Block feetBlock = getBlockSafe(pos.blockX(), pos.blockY(), pos.blockZ());
+                    shouldSwim = isBlockInWater(eyeBlock, pos.blockX(), eyeBlockY, pos.blockZ(), eyeY - eyeBlockY)
+                            && isInWater()
+                            && getFluidHeight(feetBlock, pos.blockX(), pos.blockY(), pos.blockZ()) >= 0;
                 }
             }
             meta.setSwimming(shouldSwim);
@@ -888,7 +891,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     private boolean isBlockInWater(@Nullable Block block, int x, int y, int z, double localY) {
         if (block == null) return false;
-        return localY <= getFluidHeight(block, x, y, z);
+        return localY < getFluidHeight(block, x, y, z);
     }
 
     private boolean isInWater() {
@@ -916,7 +919,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         if (above != null && (above.compare(Block.WATER) || "true".equals(above.getProperty("waterlogged")))) return 1.0;
         if (isWater) {
             int level = Integer.parseInt(block.getProperty("level"));
-            return (8 - (level & 7)) / 9.0;
+            if (level >= 8) return 1.0;
+            return (8 - level) / 9.0;
         }
         return 8.0 / 9.0;
     }
