@@ -21,15 +21,19 @@ jobs:
       - name: Close Invalid Pull Requests
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          HEAD_REF: ${{ github.head_ref }}
+          OWNER_TYPE: ${{ github.event.pull_request.head.repo.owner.type }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           COMMENT=""
-          if [ "${{ github.head_ref }}" = "master" ]; then
+          if [ "$HEAD_REF" = "master" ]; then
             COMMENT="Please do not open pull requests from the \`master\` branch, create a new branch instead."
           fi
-          if [ "${{ github.event.pull_request.head.repo.owner.type }}" != "User" ]; then
+          if [ "$OWNER_TYPE" != "User" ]; then
             if [ -n "$COMMENT" ]; then
               COMMENT="$COMMENT"$'\n\n'
             fi
             COMMENT="${COMMENT}Please do not open pull requests from non-user accounts like organisations. Create a fork on a user account instead."
           fi
-          gh pr close ${{ github.event.pull_request.number }} -c "$COMMENT"
+          gh pr close "$PR_NUMBER" -c "$COMMENT"
