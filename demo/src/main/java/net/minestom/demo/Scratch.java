@@ -120,7 +120,7 @@ public final class Scratch {
                                         connection.send(new PingResponsePacket(ping.number()));
                                 case ClientLoginStartPacket login -> connection.send(new LoginSuccessPacket(
                                         new GameProfile(login.profileId(), login.username()),
-                                        UUID.randomUUID()));
+                                        new UUID(0L, 0L)));
                                 case ClientLoginAcknowledgedPacket _ -> sendConfigurationStart(connection);
                                 case ClientSelectKnownPacksPacket _ -> sendConfigurationData(connection, registries);
                                 case ClientFinishConfigurationPacket _ ->
