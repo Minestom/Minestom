@@ -130,6 +130,7 @@ public class BlockPlacementListener {
             // after rapid invalid block placements
             final Block block = instance.getBlock(placementPosition);
             player.sendPacket(new BlockChangePacket(placementPosition, block));
+            player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
             return;
         }
 
@@ -137,7 +138,7 @@ public class BlockPlacementListener {
         Check.stateCondition(!ChunkUtils.isLoaded(chunk),
                 "A player tried to place a block in the border of a loaded chunk {0}", placementPosition);
         if (chunk.isReadOnly()) {
-            refresh(player, chunk);
+            rollback(player, instance, placementPosition, packet.sequence());
             return;
         }
 
@@ -149,10 +150,12 @@ public class BlockPlacementListener {
             // If a player is trying to place a block on themselves, the client will send a block change but will not set the block on the client
             // For this reason, the block doesn't need to be updated for the client
 
-            // Client also doesn't predict placement of blocks on entities, but we need to refresh for cases where bounding boxes on the server don't match the client
-            if (collisionEntity != player)
-                refresh(player, chunk);
-
+            // Otherwise correct the block where the server and client bounding boxes differ, with a targeted block change instead of a chunk resend.
+            if (collisionEntity != player) {
+                player.getInventory().update();
+                player.sendPacket(new BlockChangePacket(placementPosition, instance.getBlock(placementPosition)));
+            }
+            player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
             return;
         }
 
@@ -162,7 +165,7 @@ public class BlockPlacementListener {
         playerBlockPlaceEvent.setDoBlockUpdates(blockState.equals(useMaterial.prototype().get(DataComponents.BLOCK_STATE, ItemBlockState.EMPTY)));
         EventDispatcher.call(playerBlockPlaceEvent);
         if (playerBlockPlaceEvent.isCancelled()) {
-            refresh(player, chunk);
+            rollback(player, instance, placementPosition, packet.sequence());
             return;
         }
 
@@ -182,8 +185,10 @@ public class BlockPlacementListener {
         }
     }
 
-    private static void refresh(Player player, Chunk chunk) {
+    // Corrects a cancelled placement with a targeted block change instead of resending the whole chunk.
+    private static void rollback(Player player, Instance instance, Point placementPosition, int sequence) {
         player.getInventory().update();
-        chunk.sendChunk(player);
+        player.sendPacket(new BlockChangePacket(placementPosition, instance.getBlock(placementPosition)));
+        player.sendPacket(new AcknowledgeBlockChangePacket(sequence));
     }
 }
