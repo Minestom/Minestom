@@ -51,7 +51,7 @@ public record ParticleGenerator(InputStream particleFile,
             final String namespacedName = namespaceShort(key);
 
             final ClassName fieldCN = value.get("hasData").getAsBoolean()
-                    ? getDataImplementation(namespacedName)
+                    ? ClassName.get("net.minestom.server.particle", "Particle", toPascalCase(namespacedName))
                     : particleCN;
 
             particlesInterface.addField(FieldSpec.builder(fieldCN, toConstant(key))
@@ -64,10 +64,6 @@ public record ParticleGenerator(InputStream particleFile,
                 .indent("    ")
                 .skipJavaLangImports(true)
                 .build());
-    }
-
-    private static ClassName getDataImplementation(String namespacedName) {
-        return ClassName.get("net.minestom.server.particle", "Particle", toPascalCase(namespacedName));
     }
 
     private static String toPascalCase(String input) {
