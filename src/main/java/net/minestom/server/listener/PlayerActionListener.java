@@ -2,7 +2,6 @@ package net.minestom.server.listener;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.component.DataComponents;
-import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
@@ -71,7 +70,7 @@ public final class PlayerActionListener {
 
         // Prevent spectators and check players in adventure mode
         if (shouldPreventBreaking(player, block)) {
-            var playerTryStartDiggingEvent = new PlayerTryStartDiggingEvent(player, block, new BlockVec(blockPosition), blockFace);
+            var playerTryStartDiggingEvent = new PlayerTryStartDiggingEvent(player, block, blockPosition.asBlockVec(), blockFace);
             EventDispatcher.call(playerTryStartDiggingEvent);
             return new DiggingResult(block, false);
         }
