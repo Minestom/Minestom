@@ -28,6 +28,7 @@ public final class BlockManager {
     public static final Tag<String> TAG_HANDLER_ID_TAG = Tag.String(TAG_HANDLER_ID_KEY);
     // block id -> block placement rule
     private final Int2ObjectMap<BlockPlacementRule> placementRuleMap = new Int2ObjectOpenHashMap<>();
+    private final Int2ObjectMap<Map<String, BlockPlacementRule>> tagPlacementRuleMap = new Int2ObjectOpenHashMap<>();
 
     private final Set<String> dummyWarning = ConcurrentHashMap.newKeySet(); // Prevent warning spam
 
@@ -41,8 +42,7 @@ public final class BlockManager {
 
         final var specificTagKey = handler.specificTagKey();
         if (specificTagKey != null) {
-            tagBlockHandlerMap
-                    .computeIfAbsent(namespace, name -> new HashMap<>())
+            tagBlockHandlerMap.computeIfAbsent(namespace, name -> new HashMap<>())
                     .put(specificTagKey, handlerSupplier);
         }
     }
@@ -89,7 +89,13 @@ public final class BlockManager {
     public synchronized void registerBlockPlacementRule(BlockPlacementRule blockPlacementRule) {
         final int id = blockPlacementRule.getBlock().id();
         Check.argCondition(id < 0, "Block ID must be >= 0, got: " + id);
-        placementRuleMap.put(id, blockPlacementRule);
+        final var specificTagKey = blockPlacementRule.specificTagKey();
+        if (specificTagKey != null) {
+            tagPlacementRuleMap.computeIfAbsent(id, nameId -> new HashMap<>())
+                    .put(specificTagKey, blockPlacementRule);
+        } else {
+            placementRuleMap.put(id, blockPlacementRule);
+        }
     }
 
     public void registerBlockPlacementRules(final BlockPlacementRule... blockPlacementRules) {

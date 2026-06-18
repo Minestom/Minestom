@@ -4,12 +4,24 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class BlockPlacementRule {
     public static final int DEFAULT_UPDATE_RANGE = 10;
+
+    /**
+     * Если не null, то этот обработчик будет применяться
+     * ко всем блокам {@link #getBlock()} у которых
+     * есть тег {@link BlockManager#TAG_HANDLER_ID_TAG} и его
+     * значение равно возвращаемому значению.
+     */
+    @Nullable
+    public String specificTagKey() {
+        return null;
+    }
 
     protected final Block block;
 
