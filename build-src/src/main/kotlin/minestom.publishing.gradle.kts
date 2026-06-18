@@ -15,8 +15,6 @@ publishing.publications.create<MavenPublication>("maven") {
 
     from(project.components["java"])
 
-    // artifact(tasks.named("sourcesJar"))
-
     pom {
         name.set(this@create.artifactId)
         description.set("$mcVersion Lightweight Minecraft server")
@@ -60,13 +58,11 @@ publishing.publications.create<MavenPublication>("maven") {
 }
 
 signing {
-    val isJitPack = System.getenv("JITPACK") == "true"
-    isRequired = System.getenv("CI") != null && !isJitPack
+    isRequired = System.getenv("CI") != null
 
-    if (isRequired) {
-        val privateKey = System.getenv("GPG_PRIVATE_KEY")
-        val keyPassphrase = System.getenv("GPG_PASSPHRASE")
-        useInMemoryPgpKeys(privateKey, keyPassphrase)
-        sign(publishing.publications)
-    }
+    val privateKey = System.getenv("GPG_PRIVATE_KEY")
+    val keyPassphrase = System.getenv()["GPG_PASSPHRASE"]
+    useInMemoryPgpKeys(privateKey, keyPassphrase)
+
+    sign(publishing.publications)
 }

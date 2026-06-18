@@ -1,10 +1,19 @@
-name: Build PR
+name: Build & Test Main
+
 on:
   push:
     branches: [ master ]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-main-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
-    name: Build & Test Main
+    name: JVM Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -14,12 +23,118 @@ jobs:
         with:
           distribution: graalvm
           java-version: 25
-
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6
         with:
-          # Allow caching for all branches in our repo;
-          # this is so we don't get evicted, see Cache Optimization in action docs for more info
           cache-read-only: false
-      - name: Build
-        run: ./gradlew test javadoc
+      - name: Run JVM Tests
+        run: ./gradlew test
+
+  javadoc:
+    name: Javadoc Compilation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: graalvm
+          java-version: 25
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: false
+      - name: Build Javadoc
+        run: ./gradlew javadoc
+
+  native-test:
+    name: Native Test
+    needs: build
+    runs-on: ubuntu-latest
+    outputs:
+      metadata-updated: ${{ steps.native-run.outcome == 'failure' }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: graalvm
+          java-version: 25
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: false
+      - id: native-run
+        name: Run Tests in Native Image
+        continue-on-error: true
+        run: ./gradlew nativeTest
+      - name: Run Tracing Agent (Fallback)
+        if: steps.native-run.outcome == 'failure'
+        run: ./gradlew -Pagent test
+      - name: Copy Native Metadata (Fallback)
+        if: steps.native-run.outcome == 'failure'
+        run: ./gradlew metadataCopy
+      - name: Run Tests in Native Image (Fallback)
+        if: steps.native-run.outcome == 'failure'
+        run: ./gradlew nativeTest
+
+  publish-snapshot:
+    name: Publish Snapshot
+    needs: [ build, javadoc, native-test ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate Bot Token
+        if: needs.native-test.outputs.metadata-updated == 'true'
+        id: get-bot-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ secrets.APP_CLIENT_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+        with:
+          token: ${{ needs.native-test.outputs.metadata-updated == 'true' && steps.get-bot-token.outputs.token || github.token }}
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: graalvm
+          java-version: 25
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: false
+
+      - name: Run Tracing Agent
+        if: needs.native-test.outputs.metadata-updated == 'true'
+        run: ./gradlew -Pagent test
+
+      - name: Copy Reachability Metadata
+        if: needs.native-test.outputs.metadata-updated == 'true'
+        run: ./gradlew metadataCopy
+
+      - name: Commit and Push Updated Metadata
+        if: needs.native-test.outputs.metadata-updated == 'true'
+        run: |
+          git config --global user.name "minestom-ci[bot]"
+          git config --global user.email "294309606+minestom-ci[bot]@users.noreply.github.com"
+          git add src/main/resources/META-INF/native-image
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: update GraalVM reachability metadata [skip ci]"
+            git push origin master
+          else
+            echo "Metadata is already up-to-date."
+          fi
+
+      - name: Publish Snapshot
+        if: github.repository == 'Minestom/Minestom'
+        env:
+          MINESTOM_VERSION: master-SNAPSHOT
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSWORD }}
+        run: |
+          ./gradlew nmcpPublishAggregationToCentralPortalSnapshots
+          echo "Version: ${MINESTOM_VERSION}" >> $GITHUB_STEP_SUMMARY
