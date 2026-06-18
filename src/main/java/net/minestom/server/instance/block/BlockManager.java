@@ -111,6 +111,13 @@ public final class BlockManager {
      * @return the block placement rule associated with the block, null if not any
      */
     public synchronized @Nullable BlockPlacementRule getBlockPlacementRule(Block block) {
+        var tagHandlerMap = tagPlacementRuleMap.get(block.id());
+        if (tagHandlerMap != null) {
+            var tagHandler = block.getTag(TAG_HANDLER_ID_TAG);
+            if (tagHandler != null) {
+                return tagHandlerMap.get(tagHandler);
+            }
+        }
         return placementRuleMap.get(block.id());
     }
 }
