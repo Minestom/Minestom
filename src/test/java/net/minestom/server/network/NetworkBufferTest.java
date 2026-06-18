@@ -235,6 +235,12 @@ public class NetworkBufferTest {
         assertEquals(50L, buffer.read(LONG));
 
         assertEquals(9, buffer.readIndex());
+
+        // Ensure that the backing array gets modified
+        buffer.writeIndex(0);
+        buffer.write(LONG, 0L);
+        buffer.write(BYTE, (byte) 0);
+        assertArrayEquals(new byte[]{0, 0, 0, 0, 0, 0, 0, 0, 0}, array);
     }
 
     @Test
