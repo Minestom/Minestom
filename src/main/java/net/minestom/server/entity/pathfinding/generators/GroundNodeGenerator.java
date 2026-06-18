@@ -4,7 +4,9 @@ import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.pathfinding.PNode;
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.utils.chunk.ChunkUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,6 +35,11 @@ public class GroundNodeGenerator implements NodeGenerator {
                 double floorPointY = current.blockY();
                 double floorPointZ = current.blockZ() + 0.5 + z;
 
+                final Block blockAtFloor = getter.getBlock((int) floorPointX, (int) floorPointY, (int) floorPointZ);
+                if (blockAtFloor == null) {
+                    continue; // blockAtFloor is null if the block doesn't exist or unloaded.
+                }
+
                 var optionalFloorPointY = gravitySnap(getter, floorPointX, floorPointY, floorPointZ, boundingBox, MAX_FALL_DISTANCE);
                 if (optionalFloorPointY.isEmpty()) continue;
                 floorPointY = optionalFloorPointY.getAsDouble();
@@ -44,6 +51,12 @@ public class GroundNodeGenerator implements NodeGenerator {
 
                 for (int i = 1; i <= 1; ++i) {
                     Point jumpPoint = new Vec(current.blockX() + 0.5 + x, current.blockY() + i, current.blockZ() + 0.5 + z);
+
+                    Block blockAtJump = getter.getBlock((int) jumpPoint.x(), (int) jumpPoint.y(), (int) jumpPoint.z());
+                    if (blockAtJump == null) {
+                        continue; // Same than line 38
+                    }
+
                     OptionalDouble jumpPointY = gravitySnap(getter, jumpPoint.x(), jumpPoint.y(), jumpPoint.z(), boundingBox, MAX_FALL_DISTANCE);
                     if (jumpPointY.isEmpty()) continue;
                     jumpPoint = jumpPoint.withY(jumpPointY.getAsDouble());
