@@ -115,7 +115,7 @@ import java.util.function.UnaryOperator;
  * <p>
  * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
-public class Player extends LivingEntity implements CommandSender, HoverEventSource<ShowEntity>, NamedAndIdentified {
+public class Player extends LivingEntity implements OfflinePlayer, CommandSender, HoverEventSource<ShowEntity>, NamedAndIdentified {
     private static final DynamicRegistry<DimensionType> DIMENSION_TYPE_REGISTRY = MinecraftServer.getDimensionTypeRegistry();
 
     protected static Component REMOVE_MESSAGE = Component.text("You have been removed from the server without reason.", NamedTextColor.RED);
@@ -145,12 +145,13 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     private Component displayName;
     private boolean listed = true;
     private int listOrder;
-    private PlayerSkin skin;
+    protected PlayerProfile playerProfile;
 
     private Instance pendingInstance = null;
     private int dimensionTypeId;
     private GameMode gameMode;
     protected GameMode previousGameMode;
+    @Nullable
     private WorldPos deathLocation;
 
     /**
@@ -322,7 +323,10 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         }
         PlayerSkinInitEvent skinInitEvent = new PlayerSkinInitEvent(this, profileSkin);
         EventDispatcher.call(skinInitEvent);
-        this.skin = skinInitEvent.getSkin();
+        var newSkin = skinInitEvent.getSkin();
+        if (newSkin != null) {
+            setPlayerProfile(new PlayerProfile(this.getUuid(), this.getUsername(), newSkin));
+        }
         // FIXME: when using Geyser, this line remove the skin of the client
         PacketSendingUtils.broadcastPlayPacket(getAddPlayerToList());
 
@@ -1243,7 +1247,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * null means that the player has his {@link #getUuid()} default skin
      */
     public @Nullable PlayerSkin getSkin() {
-        return skin;
+        return this.playerProfile.skin();
     }
 
     /**
@@ -1254,8 +1258,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * @param skin the player skin, null to reset it to his {@link #getUuid()} default skin
      * @see PlayerSkinInitEvent if you want to apply the skin at connection
      */
-    public synchronized void setSkin(@Nullable PlayerSkin skin) {
-        this.skin = skin;
+    public synchronized void setSkin(@Nullable PlayerSkin skin, boolean updateProfile) {
+        if (updateProfile) this.playerProfile = this.playerProfile.withSkin(skin);
         if (instance == null)
             return;
 
@@ -1287,6 +1291,18 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
         getInventory().update();
         teleport(getPosition());
+    }
+
+    @Override
+    public PlayerProfile getPlayerProfile() {
+        return this.playerProfile;
+    }
+
+    @Override
+    public synchronized void setPlayerProfile(PlayerProfile playerProfile) {
+        this.playerProfile = playerProfile;
+
+        setSkin(playerProfile.skin(), false);
     }
 
     public void setDeathLocation(Pos position) {
@@ -1336,8 +1352,14 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      *
      * @return the player's username
      */
+    @Override
     public String getUsername() {
         return username;
+    }
+
+    @Override
+    public UUID getUuid() {
+        return super.getUuid();
     }
 
     /**
@@ -1589,6 +1611,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      *
      * @return true if the player is online, false otherwise
      */
+    @Override
     public boolean isOnline() {
         return playerConnection.isOnline();
     }
@@ -2309,7 +2332,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     }
 
     protected PlayerInfoUpdatePacket.Entry infoEntry() {
-        final PlayerSkin skin = this.skin;
+        final PlayerSkin skin = this.playerProfile.skin();
         List<PlayerInfoUpdatePacket.Property> prop = skin != null ?
                 List.of(new PlayerInfoUpdatePacket.Property("textures", skin.textures(), skin.signature())) :
                 List.of();
