@@ -62,7 +62,9 @@ public final class BlockManager {
     }
 
     public @Nullable BlockHandler getTagHandler(String blockNamespace, String tagContent) {
-        final var handler = tagBlockHandlerMap.get(blockNamespace).get(tagContent);
+        final var handlersMap = tagBlockHandlerMap.get(blockNamespace);
+        if (handlersMap == null) return null;
+        final var handler = handlersMap.get(tagContent);
         return handler != null ? handler.get() : null;
     }
 
