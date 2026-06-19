@@ -1247,6 +1247,7 @@ public class Player extends LivingEntity implements OfflinePlayer, CommandSender
      * null means that the player has his {@link #getUuid()} default skin
      */
     public @Nullable PlayerSkin getSkin() {
+        if (playerProfile == null) return null;
         return this.playerProfile.skin();
     }
 
