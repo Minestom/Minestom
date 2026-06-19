@@ -84,18 +84,6 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     @Override
-    public void copyTo(long srcOffset, byte[] dest, long destOffset, long length) {
-        assertDummy();
-        assertOverflow(srcOffset + length);
-        assertOverflow(destOffset + length);
-        if (length == 0) return;
-        if (dest.length < destOffset + length) {
-            throw new IndexOutOfBoundsException("Destination array is too small: " + dest.length + " < " + (destOffset + length));
-        }
-        MemorySegment.copy(segment, srcOffset, MemorySegment.ofArray(dest), destOffset, length);
-    }
-
-    @Override
     public void copyTo(long srcOffset, byte[] dest, int destOffset, int length) {
         assertDummy();
         MemorySegment.copy(segment, ValueLayout.JAVA_BYTE, srcOffset, dest, destOffset, length);
