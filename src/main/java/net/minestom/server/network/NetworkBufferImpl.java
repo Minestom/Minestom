@@ -166,9 +166,8 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     @Override
-    public void readOnly() {
-        final MemorySegment segment = this.segment;
-        if (segment != null) this.segment = segment.asReadOnly();
+    public NetworkBuffer readOnly() {
+        return new NetworkBufferImpl(this.segment.asReadOnly(), this.readIndex, this.writeIndex, null, this.registries);
     }
 
     @Override
