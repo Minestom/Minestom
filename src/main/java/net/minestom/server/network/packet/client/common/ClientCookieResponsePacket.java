@@ -22,6 +22,7 @@ public record ClientCookieResponsePacket(
             ClientCookieResponsePacket::new);
 
     public ClientCookieResponsePacket {
+        Check.argCondition(key.length() > Short.MAX_VALUE, "Key length cannot be greater than Short.MAX_VALUE");
         Check.argCondition(value != null && value.length > CookieStorePacket.MAX_VALUE_LENGTH,
                 "Value is too long: {0} > {1}", value != null ? value.length : 0, CookieStorePacket.MAX_VALUE_LENGTH);
         value = value != null ? value.clone() : null;

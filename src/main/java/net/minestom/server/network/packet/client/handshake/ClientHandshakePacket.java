@@ -3,6 +3,7 @@ package net.minestom.server.network.packet.client.handshake;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
+import net.minestom.server.utils.validate.Check;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
@@ -14,6 +15,11 @@ public record ClientHandshakePacket(int protocolVersion, String serverAddress,
             UNSIGNED_SHORT, ClientHandshakePacket::serverPort,
             VAR_INT.transform(Intent::fromId, Intent::id), ClientHandshakePacket::intent,
             ClientHandshakePacket::new);
+
+    public ClientHandshakePacket {
+        //TODO, while this is dependent on Auth the max default is 255, bungee guard could be up to MAX_VALUE (we do check in the listener)
+        Check.argCondition(serverAddress.length() > Short.MAX_VALUE, "Server address length cannot be greater than {0}", Short.MAX_VALUE);
+    }
 
     public enum Intent {
         STATUS,
