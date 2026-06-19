@@ -31,10 +31,11 @@ jobs:
             exit 0
           fi
 
-          PR_DATA=$(gh api repos/$GH_REPO/commits/${{ github.event.workflow_run.head_sha }}/pulls --jq '
-            .[0] | 
-            "\(.number) \(.base.ref)"
-          ')
+          HEAD_REPO="${{ github.event.workflow_run.head_repository.full_name }}"
+          HEAD_OWNER="${HEAD_REPO%%/*}"
+          HEAD_BRANCH="${{ github.event.workflow_run.head_branch }}"
+
+          PR_DATA=$(gh api "repos/$GH_REPO/pulls?head=${HEAD_OWNER}:${HEAD_BRANCH}" --jq 'first(.[]) | "\(.number) \(.base.ref)"')
           read -r PR_NUMBER BASE_REF <<< "$PR_DATA"
 
           if [ "$PR_NUMBER" = "null" ] || [ -z "$PR_NUMBER" ]; then
@@ -53,7 +54,7 @@ jobs:
           This Pull Request has introduced binary incompatible changes compared to the \`$BASE_REF\` branch.
 
           **What is Binary Compatibility?**
-          Binary compatibility ensures that libraries compiled against Minestom can upgrade between version without needing recompilation.
+          Binary compatibility ensures that libraries compiled against Minestom can upgrade between versions without needing recompilation.
 
           **What should you do?**
           - If unintentional, please restore the compatibility. Feel free to ask for help if you are unsure how to proceed.
