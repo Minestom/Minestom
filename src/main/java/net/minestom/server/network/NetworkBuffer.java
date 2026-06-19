@@ -14,6 +14,7 @@ import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.crypto.KeyUtils;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
@@ -166,7 +167,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     long capacity();
 
-    void readOnly();
+    @Contract(pure = true, value = "-> new")
+    NetworkBuffer readOnly();
 
     boolean isReadOnly();
 

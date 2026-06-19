@@ -15,6 +15,7 @@ import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
 import java.lang.ref.WeakReference;
+import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Consumer;
@@ -295,6 +296,86 @@ public class NetworkBufferTest {
             buffer.write(BYTE, (byte) 1);
         }
         assertThrows(Exception.class, () -> buffer.read(BYTE));
+    }
+
+    @Test
+    public void readOnlyResizable() {
+        var buffer = NetworkBuffer.resizableBuffer(16);
+        buffer.write(INT, 42);
+
+        var readOnly = buffer.readOnly();
+        assertNotSame(buffer, readOnly);
+        assertTrue(readOnly.isReadOnly());
+        assertFalse(buffer.isReadOnly());
+
+        // Check that data is readable and identical
+        assertEquals(42, readOnly.read(INT));
+
+        // Mutating operations on read-only buffer should fail
+        assertThrows(UnsupportedOperationException.class, () -> readOnly.write(INT, 24));
+        assertThrows(UnsupportedOperationException.class, () -> readOnly.writeAt(0, INT, 24));
+        assertThrows(UnsupportedOperationException.class, () -> readOnly.ensureWritable(4));
+        assertThrows(UnsupportedOperationException.class, () -> readOnly.resize(32));
+        assertThrows(UnsupportedOperationException.class, readOnly::compact);
+
+        // Verify that the original buffer's indices/content are unaffected by readOnly read
+        assertEquals(4, buffer.writeIndex());
+        assertEquals(0, buffer.readIndex());
+        assertEquals(42, buffer.read(INT));
+    }
+
+    @Test
+    public void readOnlyStatic() {
+        var buffer = NetworkBuffer.staticBuffer(16);
+        buffer.write(INT, 100);
+
+        var readOnly = buffer.readOnly();
+        assertTrue(readOnly.isReadOnly());
+        assertEquals(100, readOnly.read(INT));
+
+        assertThrows(UnsupportedOperationException.class, () -> readOnly.write(INT, 200));
+    }
+
+    @Test
+    public void readOnlyWrappedWritableSegment() {
+        try (var arena = Arena.ofConfined()) {
+            final MemorySegment segment = arena.allocate(16);
+            var buffer = NetworkBuffer.wrap(segment, 0L, 0L);
+            buffer.write(INT, 500);
+
+            var readOnly = buffer.readOnly();
+            assertTrue(readOnly.isReadOnly());
+            assertEquals(500, readOnly.read(INT));
+
+            // Verify mutating backing segment through readOnly throws
+            assertThrows(UnsupportedOperationException.class, () -> readOnly.write(INT, 600));
+            assertThrows(UnsupportedOperationException.class, () -> readOnly.writeAt(0, INT, 600));
+
+            // Verify the backing segment was not modified by the failed writes
+            assertEquals(500, buffer.readAt(0, INT));
+
+            // Verify original writeable buffer is still modifiable and modifies backing segment
+            buffer.writeAt(0, INT, 600);
+            assertEquals(600, buffer.readAt(0, INT));
+        }
+    }
+
+    @Test
+    public void readOnlyWrappedReadOnlySegment() {
+        try (var arena = Arena.ofConfined()) {
+            final MemorySegment segment = arena.allocate(16);
+            segment.set(ValueLayout.JAVA_INT_UNALIGNED.withOrder(ByteOrder.BIG_ENDIAN), 0, 777);
+
+            final MemorySegment readOnlySegment = segment.asReadOnly();
+            var buffer = NetworkBuffer.wrap(readOnlySegment, 0L, 4L);
+            assertTrue(buffer.isReadOnly());
+
+            var readOnly = buffer.readOnly();
+            assertTrue(readOnly.isReadOnly());
+            assertEquals(777, readOnly.read(INT));
+
+            assertThrows(UnsupportedOperationException.class, () -> readOnly.write(INT, 888));
+        }
     }
 
     @Test
