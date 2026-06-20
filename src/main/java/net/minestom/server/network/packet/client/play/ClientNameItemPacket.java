@@ -3,6 +3,7 @@ package net.minestom.server.network.packet.client.play;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
+import net.minestom.server.utils.validate.Check;
 
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
@@ -12,8 +13,6 @@ public record ClientNameItemPacket(String itemName) implements ClientPacket.Play
             ClientNameItemPacket::new);
 
     public ClientNameItemPacket {
-        if (itemName.length() > Short.MAX_VALUE) {
-            throw new IllegalArgumentException("ItemStack name cannot be longer than Short.MAX_VALUE characters!");
-        }
+        Check.argCondition(itemName.length() > Short.MAX_VALUE, "Item name cannot be longer than Short.MAX_SIZE");
     }
 }

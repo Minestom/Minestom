@@ -261,6 +261,9 @@ public final class RegistryData {
         private final float jumpFactor;
         private final int mapColorId;
         private final byte packedFlags;
+        // standalone field rather than a packedFlags bit: that byte is already full (8 flags; SIGNAL_SOURCE uses bit 7).
+        // fold into a wider flags field if the flag set ever grows - changed here if needed.
+        private final boolean blocksMotion;
         private final byte lightEmission;
         private final byte lightBlocked;
         private final @Nullable BlockEntityType blockEntityType;
@@ -283,6 +286,7 @@ public final class RegistryData {
             this.mapColorId = fromParent(parent, BlockEntry::mapColorId, main, "mapColorId", Properties::getInt, 0);
             var air = fromParent(parent, BlockEntry::isAir, main, "air", Properties::getBoolean, false);
             var solid = fromParent(parent, BlockEntry::isSolid, main, "solid", Properties::getBoolean, null);
+            this.blocksMotion = fromParent(parent, BlockEntry::blocksMotion, main, "blocksMotion", Properties::getBoolean, false);
             var liquid = fromParent(parent, BlockEntry::isLiquid, main, "liquid", Properties::getBoolean, false);
             var occludes = fromParent(parent, BlockEntry::occludes, main, "occludes", Properties::getBoolean, true);
             var requiresTool = fromParent(parent, BlockEntry::requiresTool, main, "requiresTool", Properties::getBoolean, true);
@@ -406,6 +410,10 @@ public final class RegistryData {
 
         public boolean isSolid() {
             return (packedFlags & SOLID_OFFSET) != 0;
+        }
+
+        public boolean blocksMotion() {
+            return blocksMotion;
         }
 
         public boolean isLiquid() {
