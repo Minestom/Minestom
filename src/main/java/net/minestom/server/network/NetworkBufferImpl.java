@@ -35,9 +35,6 @@ final class NetworkBufferImpl implements NetworkBuffer {
     private @UnknownNullability MemorySegment segment; // null for dummy buffers
     private long readIndex, writeIndex;
 
-    private @Nullable BinaryTagWriter nbtWriter;
-    private @Nullable BinaryTagReader nbtReader;
-
     final @Nullable AutoResize autoResize;
     @Nullable Registries registries;
 
@@ -515,35 +512,6 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     static NetworkBufferImpl impl(NetworkBuffer buffer) {
         return (NetworkBufferImpl) buffer;
-    }
-
-    BinaryTagWriter nbtWriter() {
-        if (this.nbtWriter == null) {
-            this.nbtWriter = new BinaryTagWriter(new DataOutputStream(new OutputStream() {
-                @Override
-                public void write(int b) {
-                    NetworkBufferImpl.this.write(BYTE, (byte) b);
-                }
-            }));
-        }
-        return this.nbtWriter;
-    }
-
-    BinaryTagReader nbtReader() {
-        if (nbtReader == null) {
-            this.nbtReader = new BinaryTagReader(new DataInputStream(new InputStream() {
-                @Override
-                public int read() {
-                    return NetworkBufferImpl.this.read(BYTE) & 0xFF;
-                }
-
-                @Override
-                public int available() {
-                    return (int) NetworkBufferImpl.this.readableBytes();
-                }
-            }));
-        }
-        return nbtReader;
     }
 
     private static void assertOverflow(long value) {
