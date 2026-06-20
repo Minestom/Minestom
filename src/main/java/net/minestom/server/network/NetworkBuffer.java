@@ -14,10 +14,14 @@ import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.crypto.KeyUtils;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import javax.crypto.Cipher;
+import java.io.DataInput;
+import java.io.DataOutput;
 import java.io.IOException;
 import java.lang.foreign.MemorySegment;
 import java.nio.channels.ReadableByteChannel;
@@ -178,7 +182,9 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     void resize(long newSize);
 
-    void ensureWritable(long length);
+    void ensureWritable(long length) throws IndexOutOfBoundsException;
+
+    void ensureReadable(long length) throws IndexOutOfBoundsException;
 
     void compact();
 
@@ -201,6 +207,16 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     @Nullable Registries registries();
 
     void registries(@Nullable Registries registries);
+
+    /**
+     * Creates a new {@link IOView} of this buffer.
+     * <br>
+     * Useful to interface with API's that support {@link DataInput} or {@link DataOutput}.
+     *
+     * @return the io view.
+     */
+    @Contract(pure = true, value = "-> new")
+    IOView ioView();
 
     interface Type<T extends @UnknownNullability Object> {
         void write(NetworkBuffer buffer, T value);
@@ -323,6 +339,199 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         AutoResize DOUBLE = (capacity, targetSize) -> Math.max(capacity * 2, targetSize);
 
         long resize(long capacity, long targetSize);
+    }
+
+    /**
+     * Self-contained interface
+     * that extends {@link DataInput} and {@link DataOutput} for mostly reading/writing binary tags.
+     * <br>
+     * You can access the io view of a network buffer with {@link NetworkBuffer#ioView()}
+     * <br>
+     * This interface is separate from {@link NetworkBuffer}
+     * because we don't want DataInput and DataOutput to be part of the public API.
+     * You should use {@link NetworkBuffer} instead where possible.
+     *
+     * @apiNote You should never rely on the identity of {@link IOView} as it is a value class candidate.
+     * @implNote This implementation removes checked exceptions as the backing {@link NetworkBuffer} would not throw {@link IOException}'s.
+     * Also {@link #readLine()} is not implemented as it's already deprecated in {@link java.io.DataInputStream}.
+     */
+    interface IOView extends DataInput, DataOutput {
+
+        @Deprecated(forRemoval = true)
+        @Override
+        @Contract("-> fail")
+        default String readLine() {
+            throw new UnsupportedOperationException("Deprecated method readLine() called, not implemented");
+        }
+
+        @Override
+        default void readFully(byte[] bytes) {
+            readFully(bytes, 0, bytes.length);
+        }
+
+        @Override
+        default void readFully(byte[] bytes, int off, int len) {
+            Objects.requireNonNull(bytes, "bytes");
+            NetworkBuffer buffer = buffer();
+            buffer.ensureReadable(len);
+            buffer.copyTo(buffer.readIndex(), bytes, off, len);
+            buffer.advanceRead(len);
+        }
+
+        @Override
+        default int skipBytes(int n) {
+            NetworkBuffer buffer = buffer();
+            long readableBytes = buffer.readableBytes();
+            if (n > readableBytes) {
+                n = (int) readableBytes;
+            }
+            if (n > 0) buffer.advanceRead(n);
+            return n;
+        }
+
+        @Override
+        default boolean readBoolean() {
+            return buffer().read(BOOLEAN);
+        }
+
+        @Override
+        default byte readByte() {
+            return buffer().read(BYTE);
+        }
+
+        @Override
+        default int readUnsignedByte() {
+            return buffer().read(UNSIGNED_BYTE);
+        }
+
+        @Override
+        default short readShort() {
+            return buffer().read(SHORT);
+        }
+
+        @Override
+        default int readUnsignedShort() {
+            return buffer().read(UNSIGNED_SHORT);
+        }
+
+        @Override
+        default char readChar() {
+            return (char) readUnsignedShort();
+        }
+
+        @Override
+        default int readInt() {
+            return buffer().read(INT);
+        }
+
+        @Override
+        default long readLong() {
+            return buffer().read(LONG);
+        }
+
+        @Override
+        default float readFloat() {
+            return buffer().read(FLOAT);
+        }
+
+        @Override
+        default double readDouble() {
+            return buffer().read(DOUBLE);
+        }
+
+        @Override
+        default String readUTF() {
+            return buffer().read(STRING_IO_UTF8);
+        }
+
+        @Override
+        default void write(int lower) {
+            buffer().write(BYTE, (byte) lower);
+        }
+
+        @Override
+        default void write(byte[] bytes) {
+            Objects.requireNonNull(bytes, "bytes");
+            buffer().write(RAW_BYTES, bytes);
+        }
+
+        @Override
+        default void write(byte[] bytes, int off, int len) {
+            Objects.requireNonNull(bytes, "bytes");
+            buffer().write(RAW_BYTES, Arrays.copyOfRange(bytes, off, off + len));
+        }
+
+        @Override
+        default void writeBoolean(boolean value) {
+            buffer().write(BOOLEAN, value);
+        }
+
+        @Override
+        default void writeByte(int value) {
+            buffer().write(BYTE, (byte) value);
+        }
+
+        @Override
+        default void writeShort(int value) {
+            buffer().write(UNSIGNED_SHORT, value);
+        }
+
+        @Override
+        default void writeChar(int value) {
+            buffer().write(UNSIGNED_SHORT, value);
+        }
+
+        @Override
+        default void writeInt(int value) {
+            buffer().write(INT, value);
+        }
+
+        @Override
+        default void writeLong(long value) {
+            buffer().write(LONG, value);
+        }
+
+        @Override
+        default void writeFloat(float value) {
+            buffer().write(FLOAT, value);
+        }
+
+        @Override
+        default void writeDouble(double value) {
+            buffer().write(DOUBLE, value);
+        }
+
+        @Override
+        default void writeBytes(String value) {
+            Objects.requireNonNull(value, "value");
+            NetworkBuffer buffer = buffer();
+            for (int i = 0; i < value.length(); i++) {
+                buffer.write(BYTE, (byte) value.charAt(i)); // Low byte only
+            }
+        }
+
+        @Override
+        default void writeChars(String value) {
+            Objects.requireNonNull(value, "value");
+            NetworkBuffer buffer = buffer();
+            for (int i = 0; i < value.length(); i++) {
+                buffer.write(UNSIGNED_SHORT, (int) value.charAt(i));
+            }
+        }
+
+        @Override
+        default void writeUTF(String value) {
+            Objects.requireNonNull(value, "value");
+            buffer().write(STRING_IO_UTF8, value);
+        }
+
+        /**
+         * You should avoid using this in your code and instead pass the buffer around.
+         *
+         * @return the backing buffer
+         */
+        @ApiStatus.OverrideOnly
+        NetworkBuffer buffer();
     }
 
     static byte[] makeArray(Consumer<NetworkBuffer> writing, @Nullable Registries registries) {

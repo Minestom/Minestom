@@ -4,6 +4,7 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.ObjectPool;
 import net.minestom.server.utils.nbt.BinaryTagReader;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
@@ -213,6 +214,14 @@ final class NetworkBufferImpl implements NetworkBuffer {
         resize(newCapacity);
     }
 
+    @Override
+    public void ensureReadable(long length) {
+        if (length < 0) throw new IllegalArgumentException("Length cannot be negative");
+        long readableBytes = readableBytes();
+        if (readableBytes >= length) return;
+        throw new IndexOutOfBoundsException("Buffer does not have %d bytes left, only %d are readable".formatted(length, readableBytes));
+    }
+
     private long newCapacity(long length, long capacity) {
         final long targetSize = writeIndex + length;
         final AutoResize strategy = this.autoResize;
@@ -344,6 +353,11 @@ final class NetworkBufferImpl implements NetworkBuffer {
     @Override
     public void registries(@Nullable Registries registries) {
         this.registries = registries;
+    }
+
+    @Override
+    public IOView ioView() {
+        return () -> this;
     }
 
     private ByteBuffer bufferSlice(long position, long length) {
