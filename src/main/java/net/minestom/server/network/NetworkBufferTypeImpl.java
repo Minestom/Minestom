@@ -232,7 +232,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             long index = buffer.readIndex();
             // https://github.com/jvm-profiling-tools/async-profiler/blob/a38a375dc62b31a8109f3af97366a307abb0fe6f/src/converter/one/jfr/JfrReader.java#L393
             int result = 0;
-            for (int shift = 0; ; shift += 7) {
+            for (int shift = 0; shift <= 28; shift += 7) {
                 byte b = impl(buffer)._getByte(index++);
                 result |= (b & 0x7f) << shift;
                 if (b >= 0) {
@@ -240,6 +240,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
                     return result;
                 }
             }
+            throw new IndexOutOfBoundsException("VarInt too long");
         }
     }
 

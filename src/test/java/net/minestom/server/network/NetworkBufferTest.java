@@ -465,6 +465,18 @@ public class NetworkBufferTest {
     }
 
     @Test
+    public void variableLengthBounds() {
+        var buffer = NetworkBuffer.staticBuffer(16);
+        buffer.write(LONG, 0x8080808080808080L);
+        buffer.write(LONG, 0x8080808080808080L);
+
+        assertThrows(IndexOutOfBoundsException.class, () -> buffer.read(VAR_INT));
+        buffer.readIndex(0);
+        assertThrows(Exception.class, () -> buffer.read(VAR_LONG)); //todo: convert from runtime to index out of bounds
+        buffer.readIndex(0);
+    }
+
+    @Test
     public void rawBytes() {
         var array = new byte[]{0x0B, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64};
         NetworkBuffer buffer = NetworkBuffer.resizableBuffer();
