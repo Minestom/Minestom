@@ -266,7 +266,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
                 final int z = CoordConversion.chunkBlockIndexGetZ(index);
                 final long packed = CoordConversion.encodeSectionBlockChange(
                         x, CoordConversion.globalToSectionRelative(y), z, entry.getValue().stateId());
-                bySection.computeIfAbsent(CoordConversion.globalToChunk(y), s -> new LongArrayList()).add(packed);
+                bySection.computeIfAbsent(CoordConversion.globalToChunk(y), _ -> new LongArrayList()).add(packed);
             }
         }
         for (var entry : bySection.int2ObjectEntrySet()) {

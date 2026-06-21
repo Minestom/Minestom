@@ -496,14 +496,14 @@ public class InstanceContainer extends Instance {
         final LongList packed = new LongArrayList();
         sectionModifier.genSection().blocks().getAllPresent((x, y, z, value) ->
                 packed.add(CoordConversion.encodeSectionBlockChange(CoordConversion.sectionBlockIndex(x, y, z), value - 1)));
-        Int2ObjectMaps.fastForEach(sectionModifier.genSection().specials(), entry -> {
+        for (var entry : sectionModifier.genSection().specials().int2ObjectEntrySet()) {
             final int index = entry.getIntKey();
             final int sectionBlockIndex = CoordConversion.sectionBlockIndex(
                     CoordConversion.chunkBlockIndexGetX(index),
                     CoordConversion.chunkBlockIndexGetY(index),
                     CoordConversion.chunkBlockIndexGetZ(index));
             packed.add(CoordConversion.encodeSectionBlockChange(sectionBlockIndex, entry.getValue().stateId()));
-        });
+        }
         if (packed.isEmpty()) return;
         forkChunk.sendPacketToViewers(new MultiBlockChangePacket(
                 forkChunk.getChunkX(), section, forkChunk.getChunkZ(), packed.toLongArray()));
