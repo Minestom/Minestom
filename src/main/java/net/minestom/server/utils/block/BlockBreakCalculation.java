@@ -165,7 +165,7 @@ public class BlockBreakCalculation {
             case 1 -> 0.3F;
             case 2 -> 0.09F;
             case 3 -> 0.0027F;
-            default -> 0.00081
+            default -> 0.00081F;
         };
     }
 
