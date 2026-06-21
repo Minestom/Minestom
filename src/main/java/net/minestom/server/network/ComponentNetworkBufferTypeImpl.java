@@ -14,7 +14,6 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.dialog.Dialog;
 import net.minestom.server.registry.RegistryTranscoder;
-import net.minestom.server.utils.nbt.BinaryTagWriter;
 
 import java.io.IOException;
 import java.util.*;
@@ -29,7 +28,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
         Objects.requireNonNull(value, "Component cannot be null");
 
         buffer.write(BYTE, TAG_COMPOUND);
-        writeInnerComponent(buffer, value);
+        writeInnerComponent(new NbtWriter(buffer), value);
     }
 
     @Override
@@ -40,8 +39,6 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
         return Codec.COMPONENT.decode(coder, buffer.read(NBT)).orElseThrow();
     }
 
-    // WRITING IMPL, pretty gross. Would not recommend reading.
-
     private static final byte TAG_END = 0;
     private static final byte TAG_BYTE = 1;
     private static final byte TAG_INT = 3;
@@ -50,339 +47,192 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
     private static final byte TAG_COMPOUND = 10;
     private static final byte TAG_INT_ARRAY = 11;
 
-    private void writeInnerComponent(NetworkBuffer buffer, Component component) {
-        buffer.write(BYTE, TAG_STRING); // Start first tag (always the type)
-        buffer.write(STRING_IO_UTF8, "type");
+    private void writeInnerComponent(NbtWriter nbt, Component component) {
         switch (component) {
             case TextComponent text -> {
-                buffer.write(STRING_IO_UTF8, "text");
-
-                buffer.write(BYTE, TAG_STRING); // Start "text" tag
-                buffer.write(STRING_IO_UTF8, "text");
-                buffer.write(STRING_IO_UTF8, text.content());
+                nbt.componentType("text");
+                nbt.string("text", text.content());
             }
             case TranslatableComponent translatable -> {
-                buffer.write(STRING_IO_UTF8, "translatable");
-
-                buffer.write(BYTE, TAG_STRING); // Start "translate" tag
-                buffer.write(STRING_IO_UTF8, "translate");
-                buffer.write(STRING_IO_UTF8, translatable.key());
+                nbt.componentType("translatable");
+                nbt.string("translate", translatable.key());
 
                 final String fallback = translatable.fallback();
-                if (fallback != null) {
-                    buffer.write(BYTE, TAG_STRING);
-                    buffer.write(STRING_IO_UTF8, "fallback");
-                    buffer.write(STRING_IO_UTF8, fallback);
-                }
+                if (fallback != null) nbt.string("fallback", fallback);
 
                 final List<TranslationArgument> args = translatable.arguments();
                 if (!args.isEmpty()) {
-                    buffer.write(BYTE, TAG_LIST);
-                    buffer.write(STRING_IO_UTF8, "with");
-                    buffer.write(BYTE, TAG_COMPOUND); // List type
-                    buffer.write(INT, args.size());
+                    nbt.list("with", TAG_COMPOUND, args.size());
                     for (final TranslationArgument arg : args)
-                        writeInnerComponent(buffer, arg.asComponent());
+                        writeInnerComponent(nbt, arg.asComponent());
                 }
             }
             case ScoreComponent score -> {
-                buffer.write(STRING_IO_UTF8, "score");
+                nbt.componentType("score");
 
-                buffer.write(BYTE, TAG_COMPOUND); // Start "score" tag
-                buffer.write(STRING_IO_UTF8, "score");
-                {
-                    buffer.write(BYTE, TAG_STRING);
-                    buffer.write(STRING_IO_UTF8, "name");
-                    buffer.write(STRING_IO_UTF8, score.name());
-
-                    buffer.write(BYTE, TAG_STRING);
-                    buffer.write(STRING_IO_UTF8, "objective");
-                    buffer.write(STRING_IO_UTF8, score.objective());
-                }
-                buffer.write(BYTE, TAG_END); // End "score" tag
-
+                nbt.compound("score");
+                nbt.string("name", score.name());
+                nbt.string("objective", score.objective());
+                nbt.end();
             }
             case SelectorComponent selector -> {
-                buffer.write(STRING_IO_UTF8, "selector");
-
-                buffer.write(BYTE, TAG_STRING);
-                buffer.write(STRING_IO_UTF8, "selector");
-                buffer.write(STRING_IO_UTF8, selector.pattern());
+                nbt.componentType("selector");
+                nbt.string("selector", selector.pattern());
 
                 final Component separator = selector.separator();
                 if (separator != null) {
-                    buffer.write(BYTE, TAG_COMPOUND);
-                    buffer.write(STRING_IO_UTF8, "separator");
-                    writeInnerComponent(buffer, separator);
+                    nbt.compound("separator");
+                    writeInnerComponent(nbt, separator);
                 }
             }
             case KeybindComponent keybind -> {
-                buffer.write(STRING_IO_UTF8, "keybind");
-
-                buffer.write(BYTE, TAG_STRING);
-                buffer.write(STRING_IO_UTF8, "keybind");
-                buffer.write(STRING_IO_UTF8, keybind.keybind());
+                nbt.componentType("keybind");
+                nbt.string("keybind", keybind.keybind());
             }
             case NBTComponent<?> _ -> {
                 //todo
                 throw new UnsupportedOperationException("NBTComponent is not implemented yet");
             }
             case ObjectComponent object -> {
-                buffer.write(STRING_IO_UTF8, "object");
+                nbt.componentType("object");
 
                 switch (object.contents()) {
                     case SpriteObjectContents sprite -> {
-                        if (!sprite.atlas().equals(SpriteObjectContents.DEFAULT_ATLAS)) {
-                            buffer.write(BYTE, TAG_STRING);
-                            buffer.write(STRING_IO_UTF8, "atlas");
-                            buffer.write(STRING_IO_UTF8, sprite.atlas().asMinimalString());
-                        }
-
-                        buffer.write(BYTE, TAG_STRING);
-                        buffer.write(STRING_IO_UTF8, "sprite");
-                        buffer.write(STRING_IO_UTF8, sprite.sprite().asMinimalString());
+                        if (!sprite.atlas().equals(SpriteObjectContents.DEFAULT_ATLAS))
+                            nbt.string("atlas", sprite.atlas().asMinimalString());
+                        nbt.string("sprite", sprite.sprite().asMinimalString());
                     }
                     case PlayerHeadObjectContents player -> {
-                        buffer.write(BYTE, TAG_COMPOUND); // Start "player" tag
-                        buffer.write(STRING_IO_UTF8, "player");
+                        nbt.compound("player");
                         {
                             final String name = player.name();
-                            if (name != null) {
-                                buffer.write(BYTE, TAG_STRING);
-                                buffer.write(STRING_IO_UTF8, "name");
-                                buffer.write(STRING_IO_UTF8, name);
-                            }
+                            if (name != null) nbt.string("name", name);
 
                             final UUID id = player.id();
                             if (id != null) {
-                                buffer.write(BYTE, TAG_INT_ARRAY);
-                                buffer.write(STRING_IO_UTF8, "id");
-                                buffer.write(INT, 4);
+                                nbt.intArray("id", 4);
 
                                 final long uuidMost = id.getMostSignificantBits();
                                 final long uuidLeast = id.getLeastSignificantBits();
-                                buffer.write(INT, (int) (uuidMost >> 32));
-                                buffer.write(INT, (int) uuidMost);
-                                buffer.write(INT, (int) (uuidLeast >> 32));
-                                buffer.write(INT, (int) uuidLeast);
+                                nbt.rawInt((int) (uuidMost >> 32));
+                                nbt.rawInt((int) uuidMost);
+                                nbt.rawInt((int) (uuidLeast >> 32));
+                                nbt.rawInt((int) uuidLeast);
                             }
 
-                            int propertyCount = player.profileProperties().size();
+                            final List<PlayerHeadObjectContents.ProfileProperty> properties = player.profileProperties();
+                            final int propertyCount = properties.size();
                             if (propertyCount > 0) {
-                                buffer.write(BYTE, TAG_LIST);
-                                buffer.write(STRING_IO_UTF8, "properties");
-                                buffer.write(BYTE, TAG_COMPOUND); // List type
-                                buffer.write(INT, propertyCount);
-
-                                for (PlayerHeadObjectContents.ProfileProperty property : player.profileProperties()) {
-                                    buffer.write(BYTE, TAG_STRING);
-                                    buffer.write(STRING_IO_UTF8, "name");
-                                    buffer.write(STRING_IO_UTF8, property.name());
-
-                                    buffer.write(BYTE, TAG_STRING);
-                                    buffer.write(STRING_IO_UTF8, "value");
-                                    buffer.write(STRING_IO_UTF8, property.value());
-
-                                    final String signature = property.signature();
-                                    if (signature != null) {
-                                        buffer.write(BYTE, TAG_STRING);
-                                        buffer.write(STRING_IO_UTF8, "signature");
-                                        buffer.write(STRING_IO_UTF8, signature);
-                                    }
-
-                                    buffer.write(BYTE, TAG_END); // End property object
-                                }
+                                nbt.list("properties", TAG_COMPOUND, propertyCount);
+                                for (PlayerHeadObjectContents.ProfileProperty property : properties)
+                                    writeProfileProperty(nbt, property);
                             }
 
                             final Key texture = player.texture();
-                            if (texture != null) {
-                                buffer.write(BYTE, TAG_STRING);
-                                buffer.write(STRING_IO_UTF8, "body");
-                                buffer.write(STRING_IO_UTF8, texture.asMinimalString());
-                            }
+                            if (texture != null) nbt.string("body", texture.asMinimalString());
                         }
-                        buffer.write(BYTE, TAG_END); // End "player" tag
+                        nbt.end();
 
-                        if (!player.hat()) {
-                            buffer.write(BYTE, TAG_BYTE);
-                            buffer.write(STRING_IO_UTF8, "hat");
-                            buffer.write(BYTE, (byte) 0);
-                        }
+                        if (!player.hat()) nbt.byteTag("hat", (byte) 0);
                     }
                     default -> throw new UnsupportedOperationException("Unknown object contents: " + object.contents());
                 }
-                var fallback = object.fallback();
+                final Component fallback = object.fallback();
                 if (fallback != null) {
-                    buffer.write(BYTE, TAG_STRING);
-                    buffer.write(STRING_IO_UTF8, "fallback");
-                    writeInnerComponent(buffer, fallback);
+                    nbt.tag(TAG_STRING, "fallback");
+                    writeInnerComponent(nbt, fallback);
                 }
             }
             default -> throw new UnsupportedOperationException("Unsupported component type: " + component.getClass());
         }
 
         // Children
-        if (!component.children().isEmpty()) {
-            buffer.write(BYTE, TAG_LIST);
-            buffer.write(STRING_IO_UTF8, "extra");
-            buffer.write(BYTE, TAG_COMPOUND); // List type
-
-            buffer.write(INT, component.children().size());
-            for (final Component child : component.children())
-                writeInnerComponent(buffer, child);
+        final List<Component> children = component.children();
+        if (!children.isEmpty()) {
+            nbt.list("extra", TAG_COMPOUND, children.size());
+            for (final Component child : children)
+                writeInnerComponent(nbt, child);
         }
 
         // Formatting/Interactivity
-        writeComponentStyle(buffer, component.style());
+        writeComponentStyle(nbt, component.style());
 
-        buffer.write(BYTE, TAG_END);
+        nbt.end();
     }
 
-    private void writeComponentStyle(NetworkBuffer buffer, Style style) {
+    private void writeComponentStyle(NbtWriter nbt, Style style) {
         final TextColor color = style.color();
         if (color != null) {
-            buffer.write(BYTE, TAG_STRING);
-            buffer.write(STRING_IO_UTF8, "color");
-            if (color instanceof NamedTextColor namedColor)
-                buffer.write(STRING_IO_UTF8, namedColor.name());
-            else buffer.write(STRING_IO_UTF8, color.asHexString());
+            nbt.string("color", color instanceof NamedTextColor namedColor
+                    ? namedColor.name()
+                    : color.asHexString());
         }
 
         final ShadowColor shadowColor = style.shadowColor();
-        if (shadowColor != null) {
-            buffer.write(BYTE, TAG_INT);
-            buffer.write(STRING_IO_UTF8, "shadow_color");
-            buffer.write(INT, shadowColor.value());
-        }
+        if (shadowColor != null) nbt.intTag("shadow_color", shadowColor.value());
 
         final Key font = style.font();
-        if (font != null) {
-            buffer.write(BYTE, TAG_STRING);
-            buffer.write(STRING_IO_UTF8, "font");
-            buffer.write(STRING_IO_UTF8, font.asString());
-        }
+        if (font != null) nbt.string("font", font.asString());
 
-        final TextDecoration.State bold = style.decoration(TextDecoration.BOLD);
-        if (bold != TextDecoration.State.NOT_SET) {
-            buffer.write(BYTE, TAG_BYTE);
-            buffer.write(STRING_IO_UTF8, "bold");
-            buffer.write(BYTE, bold == TextDecoration.State.TRUE ? (byte) 1 : (byte) 0);
-        }
-
-        final TextDecoration.State italic = style.decoration(TextDecoration.ITALIC);
-        if (italic != TextDecoration.State.NOT_SET) {
-            buffer.write(BYTE, TAG_BYTE);
-            buffer.write(STRING_IO_UTF8, "italic");
-            buffer.write(BYTE, italic == TextDecoration.State.TRUE ? (byte) 1 : (byte) 0);
-        }
-
-        final TextDecoration.State underlined = style.decoration(TextDecoration.UNDERLINED);
-        if (underlined != TextDecoration.State.NOT_SET) {
-            buffer.write(BYTE, TAG_BYTE);
-            buffer.write(STRING_IO_UTF8, "underlined");
-            buffer.write(BYTE, underlined == TextDecoration.State.TRUE ? (byte) 1 : (byte) 0);
-        }
-
-        final TextDecoration.State strikethrough = style.decoration(TextDecoration.STRIKETHROUGH);
-        if (strikethrough != TextDecoration.State.NOT_SET) {
-            buffer.write(BYTE, TAG_BYTE);
-            buffer.write(STRING_IO_UTF8, "strikethrough");
-            buffer.write(BYTE, strikethrough == TextDecoration.State.TRUE ? (byte) 1 : (byte) 0);
-        }
-
-        final TextDecoration.State obfuscated = style.decoration(TextDecoration.OBFUSCATED);
-        if (obfuscated != TextDecoration.State.NOT_SET) {
-            buffer.write(BYTE, TAG_BYTE);
-            buffer.write(STRING_IO_UTF8, "obfuscated");
-            buffer.write(BYTE, obfuscated == TextDecoration.State.TRUE ? (byte) 1 : (byte) 0);
-        }
+        writeDecoration(nbt, style, TextDecoration.BOLD, "bold");
+        writeDecoration(nbt, style, TextDecoration.ITALIC, "italic");
+        writeDecoration(nbt, style, TextDecoration.UNDERLINED, "underlined");
+        writeDecoration(nbt, style, TextDecoration.STRIKETHROUGH, "strikethrough");
+        writeDecoration(nbt, style, TextDecoration.OBFUSCATED, "obfuscated");
 
         final String insertion = style.insertion();
-        if (insertion != null) {
-            buffer.write(BYTE, TAG_STRING);
-            buffer.write(STRING_IO_UTF8, "insertion");
-            buffer.write(STRING_IO_UTF8, insertion);
-        }
+        if (insertion != null) nbt.string("insertion", insertion);
 
         final ClickEvent<?> clickEvent = style.clickEvent();
-        if (clickEvent != null) writeClickEvent(buffer, clickEvent);
+        if (clickEvent != null) writeClickEvent(nbt, clickEvent);
 
         final HoverEvent<?> hoverEvent = style.hoverEvent();
-        if (hoverEvent != null) writeHoverEvent(buffer, hoverEvent);
+        if (hoverEvent != null) writeHoverEvent(nbt, hoverEvent);
     }
 
-    private void writeClickEvent(NetworkBuffer buffer, ClickEvent<?> clickEvent) {
-        buffer.write(BYTE, TAG_COMPOUND);
-        buffer.write(STRING_IO_UTF8, "click_event");
-
-        buffer.write(BYTE, TAG_STRING);
-        buffer.write(STRING_IO_UTF8, "action");
-        assert clickEvent.action().name().toLowerCase(Locale.ROOT).equals(clickEvent.action().name()) : "action is not lowercase";
-        buffer.write(STRING_IO_UTF8, clickEvent.action().name());
+    private void writeClickEvent(NbtWriter nbt, ClickEvent<?> clickEvent) {
+        nbt.compound("click_event");
+        nbt.string("action", clickEvent.action().name().toLowerCase(Locale.ROOT));
 
         switch (clickEvent.action()) {
             case ClickEvent.Action.OpenUrl _ -> {
                 final ClickEvent.Payload.Text payload = checkPayload(clickEvent, ClickEvent.Payload.Text.class);
-                buffer.write(BYTE, TAG_STRING);
-                buffer.write(STRING_IO_UTF8, "url");
-                buffer.write(STRING_IO_UTF8, payload.value());
+                nbt.string("url", payload.value());
             }
             case ClickEvent.Action.OpenFile _ -> {
                 final ClickEvent.Payload.Text payload = checkPayload(clickEvent, ClickEvent.Payload.Text.class);
-                buffer.write(BYTE, TAG_STRING);
-                buffer.write(STRING_IO_UTF8, "path");
-                buffer.write(STRING_IO_UTF8, payload.value());
+                nbt.string("path", payload.value());
             }
             case ClickEvent.Action.RunCommand _, ClickEvent.Action.SuggestCommand _ -> {
                 final ClickEvent.Payload.Text payload = checkPayload(clickEvent, ClickEvent.Payload.Text.class);
-                buffer.write(BYTE, TAG_STRING);
-                buffer.write(STRING_IO_UTF8, "command");
-                buffer.write(STRING_IO_UTF8, payload.value());
+                nbt.string("command", payload.value());
             }
             case ClickEvent.Action.ChangePage _ -> {
                 final ClickEvent.Payload.Int payload = checkPayload(clickEvent, ClickEvent.Payload.Int.class);
-                buffer.write(BYTE, TAG_INT);
-                buffer.write(STRING_IO_UTF8, "page");
-                buffer.write(INT, payload.integer());
+                nbt.intTag("page", payload.integer());
             }
             case ClickEvent.Action.CopyToClipboard _ -> {
                 final ClickEvent.Payload.Text payload = checkPayload(clickEvent, ClickEvent.Payload.Text.class);
-                buffer.write(BYTE, TAG_STRING);
-                buffer.write(STRING_IO_UTF8, "value");
-                buffer.write(STRING_IO_UTF8, payload.value());
+                nbt.string("value", payload.value());
             }
             case ClickEvent.Action.ShowDialog _ -> {
                 final ClickEvent.Payload.Dialog payload = checkPayload(clickEvent, ClickEvent.Payload.Dialog.class);
 
-                try {
-                    final Transcoder<BinaryTag> coder = buffer.registries() != null
-                            ? new RegistryTranscoder<>(Transcoder.NBT, buffer.registries())
-                            : Transcoder.NBT;
-                    final BinaryTag dialog = Dialog.CODEC.encode(coder, Dialog.unwrap(payload.dialog())).orElseThrow();
-
-                    final BinaryTagWriter nbtWriter = impl(buffer).nbtWriter();
-                    nbtWriter.writeNamed("dialog", dialog);
-                } catch (IOException e) {
-                    throw new RuntimeException("Failed to write dialog click event payload", e);
-                }
+                final Transcoder<BinaryTag> coder = nbt.buffer().registries() != null
+                        ? new RegistryTranscoder<>(Transcoder.NBT, nbt.buffer().registries())
+                        : Transcoder.NBT;
+                final BinaryTag dialog = Dialog.CODEC.encode(coder, Dialog.unwrap(payload.dialog())).orElseThrow();
+                nbt.named("dialog", dialog, "Failed to write dialog click event payload");
             }
             case ClickEvent.Action.Custom _ -> {
                 final ClickEvent.Payload.Custom payload = checkPayload(clickEvent, ClickEvent.Payload.Custom.class);
-                buffer.write(BYTE, TAG_STRING);
-                buffer.write(STRING_IO_UTF8, "id");
-                buffer.write(STRING_IO_UTF8, payload.key().asString());
-
-                try {
-                    final BinaryTagWriter nbtWriter = impl(buffer).nbtWriter();
-                    nbtWriter.writeNamed("payload", MinestomAdventure.unwrapNbt(payload.nbt()));
-                } catch (IOException e) {
-                    throw new RuntimeException("Failed to write custom click event payload", e);
-                }
+                nbt.string("id", payload.key().asString());
+                nbt.named("payload", MinestomAdventure.unwrapNbt(payload.nbt()), "Failed to write custom click event payload");
             }
             default -> throw new UnsupportedOperationException("Unknown click event action: " + clickEvent.action());
         }
 
-        buffer.write(BYTE, TAG_END);
+        nbt.end();
     }
 
     private <T extends ClickEvent.Payload> T checkPayload(ClickEvent<?> clickEvent, Class<T> expected) {
@@ -394,71 +244,123 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
     }
 
     @SuppressWarnings("unchecked")
-    private void writeHoverEvent(NetworkBuffer buffer, HoverEvent<?> hoverEvent) {
-        buffer.write(BYTE, TAG_COMPOUND);
-        buffer.write(STRING_IO_UTF8, "hover_event");
-
-        buffer.write(BYTE, TAG_STRING);
-        buffer.write(STRING_IO_UTF8, "action");
-        buffer.write(STRING_IO_UTF8, hoverEvent.action().toString().toLowerCase(Locale.ROOT));
+    private void writeHoverEvent(NbtWriter nbt, HoverEvent<?> hoverEvent) {
+        nbt.compound("hover_event");
+        nbt.string("action", hoverEvent.action().toString().toLowerCase(Locale.ROOT));
 
         if (hoverEvent.action() == HoverEvent.Action.SHOW_TEXT) {
-            buffer.write(BYTE, TAG_COMPOUND);
-            buffer.write(STRING_IO_UTF8, "value");
-            writeInnerComponent(buffer, (Component) hoverEvent.value());
+            nbt.compound("value");
+            writeInnerComponent(nbt, (Component) hoverEvent.value());
         } else if (hoverEvent.action() == HoverEvent.Action.SHOW_ITEM) {
             var value = ((HoverEvent<HoverEvent.ShowItem>) hoverEvent).value();
 
-            buffer.write(BYTE, TAG_STRING);
-            buffer.write(STRING_IO_UTF8, "id");
-            buffer.write(STRING_IO_UTF8, value.item().asString());
+            nbt.string("id", value.item().asString());
+            nbt.intTag("count", value.count());
 
-            buffer.write(BYTE, TAG_INT);
-            buffer.write(STRING_IO_UTF8, "count");
-            buffer.write(INT, value.count());
-
-            buffer.write(BYTE, TAG_COMPOUND);
-            buffer.write(STRING_IO_UTF8, "components");
+            nbt.compound("components");
             final Map<Key, NbtDataComponentValue> dataComponents = value.dataComponentsAs(NbtDataComponentValue.class);
             if (!dataComponents.isEmpty()) {
-                final BinaryTagWriter nbtWriter = impl(buffer).nbtWriter();
-                try {
-                    for (final Map.Entry<Key, NbtDataComponentValue> entry : dataComponents.entrySet()) {
-                        final BinaryTag dataComponentValue = entry.getValue().value();
-                        if (dataComponentValue == null) {
-                            buffer.write(BYTE, TAG_COMPOUND);
-                            buffer.write(STRING_IO_UTF8, "!" + entry.getKey().asString());
-                            buffer.write(BYTE, TAG_END);
-                        } else {
-                            nbtWriter.writeNamed(entry.getKey().asString(), dataComponentValue);
-                        }
+                for (final Map.Entry<Key, NbtDataComponentValue> entry : dataComponents.entrySet()) {
+                    final BinaryTag dataComponentValue = entry.getValue().value();
+                    if (dataComponentValue == null) {
+                        nbt.compound("!" + entry.getKey().asString());
+                        nbt.end();
+                    } else {
+                        nbt.named(entry.getKey().asString(), dataComponentValue);
                     }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
                 }
             }
-            buffer.write(BYTE, TAG_END);
+            nbt.end();
         } else if (hoverEvent.action() == HoverEvent.Action.SHOW_ENTITY) {
             var value = ((HoverEvent<HoverEvent.ShowEntity>) hoverEvent).value();
 
             final Component name = value.name();
             if (name != null) {
-                buffer.write(BYTE, TAG_COMPOUND);
-                buffer.write(STRING_IO_UTF8, "name");
-                writeInnerComponent(buffer, name);
+                nbt.compound("name");
+                writeInnerComponent(nbt, name);
             }
 
-            buffer.write(BYTE, TAG_STRING);
-            buffer.write(STRING_IO_UTF8, "id");
-            buffer.write(STRING_IO_UTF8, value.type().asString());
-
-            buffer.write(BYTE, TAG_STRING);
-            buffer.write(STRING_IO_UTF8, "uuid");
-            buffer.write(STRING_IO_UTF8, value.id().toString());
+            nbt.string("id", value.type().asString());
+            nbt.string("uuid", value.id().toString());
         } else {
             throw new UnsupportedOperationException("Unknown hover event action: " + hoverEvent.action());
         }
 
-        buffer.write(BYTE, TAG_END);
+        nbt.end();
+    }
+
+    private static void writeProfileProperty(NbtWriter nbt, PlayerHeadObjectContents.ProfileProperty property) {
+        nbt.string("name", property.name());
+        nbt.string("value", property.value());
+        final String signature = property.signature();
+        if (signature != null) nbt.string("signature", signature);
+        nbt.end();
+    }
+
+    private static void writeDecoration(NbtWriter nbt, Style style, TextDecoration decoration, String name) {
+        final TextDecoration.State state = style.decoration(decoration);
+        if (state != TextDecoration.State.NOT_SET)
+            nbt.byteTag(name, state == TextDecoration.State.TRUE ? (byte) 1 : (byte) 0);
+    }
+
+    private record NbtWriter(NetworkBuffer buffer) {
+        void componentType(String type) {
+            string("type", type);
+        }
+
+        void compound(String name) {
+            tag(TAG_COMPOUND, name);
+        }
+
+        void list(String name, byte elementType, int size) {
+            tag(TAG_LIST, name);
+            buffer.write(BYTE, elementType);
+            buffer.write(INT, size);
+        }
+
+        void string(String name, String value) {
+            tag(TAG_STRING, name);
+            buffer.write(STRING_IO_UTF8, value);
+        }
+
+        void intTag(String name, int value) {
+            tag(TAG_INT, name);
+            rawInt(value);
+        }
+
+        void byteTag(String name, byte value) {
+            tag(TAG_BYTE, name);
+            buffer.write(BYTE, value);
+        }
+
+        void intArray(String name, int size) {
+            tag(TAG_INT_ARRAY, name);
+            rawInt(size);
+        }
+
+        void rawInt(int value) {
+            buffer.write(INT, value);
+        }
+
+        void named(String name, BinaryTag value) {
+            named(name, value, "Failed to write NBT tag");
+        }
+
+        void named(String name, BinaryTag value, String failureMessage) {
+            try {
+                impl(buffer).nbtWriter().writeNamed(name, value);
+            } catch (IOException e) {
+                throw new RuntimeException(failureMessage, e);
+            }
+        }
+
+        void tag(byte type, String name) {
+            buffer.write(BYTE, type);
+            buffer.write(STRING_IO_UTF8, name);
+        }
+
+        void end() {
+            buffer.write(BYTE, TAG_END);
+        }
     }
 }
