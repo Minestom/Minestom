@@ -3,6 +3,7 @@ package net.minestom.server.network.packet.client.common;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
+import net.minestom.server.utils.validate.Check;
 
 import java.util.Arrays;
 
@@ -18,6 +19,7 @@ public record ClientPluginMessagePacket(String channel, byte[] data) implements 
     public ClientPluginMessagePacket {
         if (channel.length() > 256)
             throw new IllegalArgumentException("Channel cannot be more than 256 characters long");
+        Check.argCondition(data.length > Short.MAX_VALUE, "Data cannot be longer than Short.MAX_VALUE bytes");
         data = data.clone();
     }
 
