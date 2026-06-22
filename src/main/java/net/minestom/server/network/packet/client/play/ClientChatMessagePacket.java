@@ -4,6 +4,7 @@ import net.minestom.server.crypto.MessageSignature;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.BitSet;
@@ -25,6 +26,7 @@ public record ClientChatMessagePacket(String message, long timestamp,
     );
 
     public ClientChatMessagePacket {
+        Check.argCondition(message.length() > 256, "Message length cannot be greater than 256");
         ackList = (BitSet) ackList.clone();
     }
 }
