@@ -3,6 +3,7 @@ package net.minestom.server.listener;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.inventory.InventoryBundleItemSelectEvent;
 import net.minestom.server.event.inventory.InventoryButtonClickEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.AbstractInventory;
@@ -13,6 +14,7 @@ import net.minestom.server.network.packet.client.common.ClientPongPacket;
 import net.minestom.server.network.packet.client.play.ClientClickWindowButtonPacket;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.network.packet.client.play.ClientCloseWindowPacket;
+import net.minestom.server.network.packet.client.play.ClientSelectBundleItemPacket;
 import net.minestom.server.network.packet.server.play.SetCursorItemPacket;
 import org.jetbrains.annotations.Nullable;
 
@@ -94,5 +96,36 @@ public class WindowListener {
         if (packet.windowId() != (int) inventory.getWindowId()) return;
 
         EventDispatcher.call(new InventoryButtonClickEvent(player, inventory, packet.buttonId()));
+    }
+
+    public static void selectBundleItemListener(ClientSelectBundleItemPacket packet, Player player) {
+        final int selectedItemIndex = packet.selectedIndex();
+
+        final AbstractInventory openInventory = player.getOpenInventory();
+        final AbstractInventory targetInventory;
+        final int translatedSlot;
+
+        if (openInventory == null) {
+            targetInventory = player.getInventory();
+            translatedSlot = packet.slot();
+        } else {
+            // remap slot relative to the open inventory
+            final int containerSize = openInventory.getSize();
+            if (packet.slot() < containerSize) {
+                targetInventory = openInventory;
+                translatedSlot = packet.slot();
+            } else {
+                targetInventory = player.getInventory();
+                translatedSlot = packet.slot() - containerSize;
+            }
+        }
+
+        InventoryBundleItemSelectEvent event = new InventoryBundleItemSelectEvent(
+                player,
+                targetInventory,
+                translatedSlot,
+                selectedItemIndex
+        );
+        EventDispatcher.call(event);
     }
 }
