@@ -384,6 +384,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             if (this instanceof Player player)
                 player.synchronizePositionAfterTeleport(position, velocity, flags, shouldConfirm);
             else synchronizePosition();
+            if (!globalPosition.sameView(previousPosition))
+                synchronizeView();
         };
 
         if (chunks != null && chunks.length > 0) {
