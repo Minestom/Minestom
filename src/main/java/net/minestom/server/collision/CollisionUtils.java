@@ -51,7 +51,7 @@ public final class CollisionUtils {
      *                     For players this is (0.3^2 + 0.3^2 + 1.8^2) ^ (1/3) ~= 1.51
      */
     public static Collection<EntityCollisionResult> checkEntityCollisions(Instance instance, BoundingBox boundingBox, Point pos, Vec velocity, double extendRadius, Function<Entity, Boolean> entityFilter, @Nullable PhysicsResult physicsResult) {
-        return EntityCollision.checkCollision(instance, boundingBox, pos, velocity, extendRadius, entityFilter, physicsResult);
+        return EntityCollision.checkCollision(instance.getEntityTracker(), boundingBox, pos, velocity, extendRadius, entityFilter, physicsResult);
     }
 
     /**
@@ -65,7 +65,7 @@ public final class CollisionUtils {
      * @return the entity collision results
      */
     public static Collection<EntityCollisionResult> checkEntityCollisions(Entity entity, Vec velocity, double extendRadius, Function<Entity, Boolean> entityFilter, @Nullable PhysicsResult physicsResult) {
-        return EntityCollision.checkCollision(entity.getInstance(), entity.getBoundingBox(), entity.getPosition(), velocity, extendRadius, entityFilter, physicsResult);
+        return EntityCollision.checkCollision(entity.getInstance().getEntityTracker(), entity.getBoundingBox(), entity.getPosition(), velocity, extendRadius, entityFilter, physicsResult);
     }
 
     /**
