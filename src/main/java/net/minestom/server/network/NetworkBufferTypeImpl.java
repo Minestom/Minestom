@@ -430,8 +430,9 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     record JsonComponentType() implements NetworkBufferTypeImpl<Component> {
         @Override
         public void write(NetworkBuffer buffer, Component value) {
-            final Transcoder<JsonElement> coder = buffer.registries() != null
-                    ? new RegistryTranscoder<>(Transcoder.JSON, buffer.registries())
+            final Registries registries = buffer.registries();
+            final Transcoder<JsonElement> coder = registries != null
+                    ? new RegistryTranscoder<>(Transcoder.JSON, registries)
                     : Transcoder.JSON;
             final String json = JsonUtil.toJson(Codec.COMPONENT.encode(coder, value).orElseThrow());
             buffer.write(STRING, json);
@@ -439,8 +440,9 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
         @Override
         public Component read(NetworkBuffer buffer) {
-            final Transcoder<JsonElement> coder = buffer.registries() != null
-                    ? new RegistryTranscoder<>(Transcoder.JSON, buffer.registries())
+            final Registries registries = buffer.registries();
+            final Transcoder<JsonElement> coder = registries != null
+                    ? new RegistryTranscoder<>(Transcoder.JSON, registries)
                     : Transcoder.JSON;
             final JsonElement json = JsonUtil.fromJson(buffer.read(STRING));
             return Codec.COMPONENT.decode(coder, json).orElseThrow();
