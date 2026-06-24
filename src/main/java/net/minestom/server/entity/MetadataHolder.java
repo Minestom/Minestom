@@ -183,7 +183,7 @@ public final class MetadataHolder {
 
     public Map<Integer, Metadata.Entry<?>> getEntries() {
         final var entries = this.entries;
-        Map<Integer, Metadata.Entry<?>> map = new HashMap<>();
+        Map<Integer, Metadata.Entry<?>> map = HashMap.newHashMap(entries.length);
         for (int id = 0; id < entries.length; id++) {
             final var entry = entries[id];
             if (entry != null) map.put(id, entry);
