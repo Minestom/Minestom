@@ -35,8 +35,8 @@ final class NetworkBufferImpl implements NetworkBuffer {
     private @UnknownNullability MemorySegment segment; // null for dummy buffers
     private long readIndex, writeIndex;
 
-    final @Nullable AutoResize autoResize;
-    @Nullable Registries registries;
+    private final @Nullable AutoResize autoResize;
+    private @Nullable Registries registries;
 
     NetworkBufferImpl(@UnknownNullability MemorySegment segment,
                       long readIndex, long writeIndex,
