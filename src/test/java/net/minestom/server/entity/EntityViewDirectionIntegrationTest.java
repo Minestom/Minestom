@@ -69,8 +69,8 @@ public class EntityViewDirectionIntegrationTest {
 
         env.tick();
 
-        rotationTracker.assertCount(1);
-        headLookTracker.assertCount(1);
+        rotationTracker.assertCount(2);
+        headLookTracker.assertCount(2);
     }
 
     @Test
