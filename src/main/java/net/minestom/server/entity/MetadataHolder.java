@@ -1,7 +1,6 @@
 package net.minestom.server.entity;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ambient.BatMeta;
 import net.minestom.server.entity.metadata.animal.*;
@@ -40,6 +39,7 @@ import org.jetbrains.annotations.UnknownNullability;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -60,11 +60,11 @@ public final class MetadataHolder {
     }
 
     private final Consumer<Map<Integer, Metadata.Entry<?>>> changesListener;
-    private final Int2ObjectMap<Metadata.Entry<?>> entries = new Int2ObjectOpenHashMap<>();
+    private Metadata.@Nullable Entry<?>[] entries = new Metadata.Entry<?>[0]; // indexed by metadata id, resized on demand
 
     @SuppressWarnings("FieldMayBeFinal")
     private volatile boolean notifyAboutChanges = true;
-    private final Map<Integer, Metadata.Entry<?>> notNotifiedChanges = new HashMap<>();
+    private final Int2ObjectArrayMap<Metadata.Entry<?>> notNotifiedChanges = new Int2ObjectArrayMap<>();
 
     /**
      * @deprecated Use {@link #MetadataHolder(Consumer)} instead.
@@ -83,7 +83,7 @@ public final class MetadataHolder {
     public <T extends @UnknownNullability Object> T get(MetadataDef.Entry<T> entry) {
         final int id = entry.index();
 
-        final Metadata.Entry<?> value = this.entries.get(id);
+        final Metadata.Entry<?> value = entryAt(id);
         if (value == null) return entry.defaultValue();
         return switch (entry) {
             case MetadataDef.Entry.Index<T> _ -> (T) value.value();
@@ -114,20 +114,20 @@ public final class MetadataHolder {
         Metadata.Entry<?> result = switch (entry) {
             case MetadataDef.Entry.Index<T> v -> v.function().apply(value);
             case MetadataDef.Entry.BitMask bitMask -> {
-                Metadata.Entry<?> currentEntry = this.entries.get(id);
+                Metadata.Entry<?> currentEntry = entryAt(id);
                 byte maskValue = currentEntry != null ? (byte) currentEntry.value() : 0;
                 maskValue = setMaskBit(maskValue, bitMask.bitMask(), (Boolean) value);
                 yield Metadata.Byte(maskValue);
             }
             case MetadataDef.Entry.ByteMask byteMask -> {
-                Metadata.Entry<?> currentEntry = this.entries.get(id);
+                Metadata.Entry<?> currentEntry = entryAt(id);
                 byte maskValue = currentEntry != null ? (byte) currentEntry.value() : 0;
                 maskValue = setMaskByte(maskValue, byteMask.byteMask(), byteMask.offset(), (Byte) value);
                 yield Metadata.Byte(maskValue);
             }
         };
 
-        this.entries.put(id, result);
+        putEntry(id, result);
 
         if (!this.notifyAboutChanges) {
             synchronized (this.notNotifiedChanges) {
@@ -161,183 +161,199 @@ public final class MetadataHolder {
             // Ask future metadata changes to be cached
             return;
         }
-        Map<Integer, Metadata.Entry<?>> entries;
+        Int2ObjectArrayMap<Metadata.Entry<?>> entries;
         synchronized (this.notNotifiedChanges) {
-            Map<Integer, Metadata.Entry<?>> awaitingChanges = this.notNotifiedChanges;
-            if (awaitingChanges.isEmpty()) return;
-            entries = Map.copyOf(awaitingChanges);
-            awaitingChanges.clear();
+            if (this.notNotifiedChanges.isEmpty()) return;
+            entries = new Int2ObjectArrayMap<>(this.notNotifiedChanges);
+            this.notNotifiedChanges.clear();
         }
         this.changesListener.accept(entries);
     }
 
-    public Map<Integer, Metadata.Entry<?>> getEntries() {
-        return Map.copyOf(this.entries);
+    private Metadata.@Nullable Entry<?> entryAt(int id) {
+        final var entries = this.entries;
+        return id >= 0 && id < entries.length ? entries[id] : null;
     }
 
-    static final Map<String, BiFunction<@Nullable Entity, MetadataHolder, ? extends EntityMeta>> ENTITY_META_SUPPLIER = Map.ofEntries(
-            entry("minecraft:acacia_boat", BoatMeta::new),
-            entry("minecraft:acacia_chest_boat", BoatMeta::new),
-            entry("minecraft:allay", AllayMeta::new),
-            entry("minecraft:area_effect_cloud", AreaEffectCloudMeta::new),
-            entry("minecraft:armadillo", ArmadilloMeta::new),
-            entry("minecraft:armor_stand", ArmorStandMeta::new),
-            entry("minecraft:arrow", ArrowMeta::new),
-            entry("minecraft:axolotl", AxolotlMeta::new),
-            entry("minecraft:bamboo_raft", BoatMeta::new),
-            entry("minecraft:bamboo_chest_raft", BoatMeta::new),
-            entry("minecraft:bat", BatMeta::new),
-            entry("minecraft:bee", BeeMeta::new),
-            entry("minecraft:birch_boat", BoatMeta::new),
-            entry("minecraft:birch_chest_boat", BoatMeta::new),
-            entry("minecraft:blaze", BlazeMeta::new),
-            entry("minecraft:block_display", BlockDisplayMeta::new),
-            entry("minecraft:bogged", BoggedMeta::new),
-            entry("minecraft:breeze", BreezeMeta::new),
-            entry("minecraft:breeze_wind_charge", BreezeWindChargeMeta::new),
-            entry("minecraft:camel", CamelMeta::new),
-            entry("minecraft:camel_husk", CamelHuskMeta::new),
-            entry("minecraft:cat", CatMeta::new),
-            entry("minecraft:cave_spider", CaveSpiderMeta::new),
-            entry("minecraft:cherry_boat", BoatMeta::new),
-            entry("minecraft:cherry_chest_boat", BoatMeta::new),
-            entry("minecraft:chicken", ChickenMeta::new),
-            entry("minecraft:cod", CodMeta::new),
-            entry("minecraft:copper_golem", CopperGolemMeta::new),
-            entry("minecraft:cow", CowMeta::new),
-            entry("minecraft:creaking", CreakingMeta::new),
-            entry("minecraft:creeper", CreeperMeta::new),
-            entry("minecraft:dark_oak_boat", BoatMeta::new),
-            entry("minecraft:dark_oak_chest_boat", BoatMeta::new),
-            entry("minecraft:dolphin", DolphinMeta::new),
-            entry("minecraft:donkey", DonkeyMeta::new),
-            entry("minecraft:dragon_fireball", DragonFireballMeta::new),
-            entry("minecraft:drowned", DrownedMeta::new),
-            entry("minecraft:elder_guardian", ElderGuardianMeta::new),
-            entry("minecraft:end_crystal", EndCrystalMeta::new),
-            entry("minecraft:ender_dragon", EnderDragonMeta::new),
-            entry("minecraft:enderman", EndermanMeta::new),
-            entry("minecraft:endermite", EndermiteMeta::new),
-            entry("minecraft:evoker", EvokerMeta::new),
-            entry("minecraft:evoker_fangs", EvokerFangsMeta::new),
-            entry("minecraft:experience_orb", ExperienceOrbMeta::new),
-            entry("minecraft:eye_of_ender", EyeOfEnderMeta::new),
-            entry("minecraft:falling_block", FallingBlockMeta::new),
-            entry("minecraft:fireball", FireballMeta::new),
-            entry("minecraft:firework_rocket", FireworkRocketMeta::new),
-            entry("minecraft:fox", FoxMeta::new),
-            entry("minecraft:frog", FrogMeta::new),
-            entry("minecraft:ghast", GhastMeta::new),
-            entry("minecraft:giant", GiantMeta::new),
-            entry("minecraft:glow_item_frame", GlowItemFrameMeta::new),
-            entry("minecraft:glow_squid", GlowSquidMeta::new),
-            entry("minecraft:goat", GoatMeta::new),
-            entry("minecraft:guardian", GuardianMeta::new),
-            entry("minecraft:happy_ghast", HappyGhastMeta::new),
-            entry("minecraft:hoglin", HoglinMeta::new),
-            entry("minecraft:horse", HorseMeta::new),
-            entry("minecraft:husk", HuskMeta::new),
-            entry("minecraft:illusioner", IllusionerMeta::new),
-            entry("minecraft:interaction", InteractionMeta::new),
-            entry("minecraft:iron_golem", IronGolemMeta::new),
-            entry("minecraft:item", ItemEntityMeta::new),
-            entry("minecraft:item_display", ItemDisplayMeta::new),
-            entry("minecraft:item_frame", ItemFrameMeta::new),
-            entry("minecraft:jungle_boat", BoatMeta::new),
-            entry("minecraft:jungle_chest_boat", BoatMeta::new),
-            entry("minecraft:leash_knot", LeashKnotMeta::new),
-            entry("minecraft:lightning_bolt", LightningBoltMeta::new),
-            entry("minecraft:lingering_potion", LingeringPotionMeta::new),
-            entry("minecraft:llama", LlamaMeta::new),
-            entry("minecraft:llama_spit", LlamaSpitMeta::new),
-            entry("minecraft:magma_cube", MagmaCubeMeta::new),
-            entry("minecraft:mangrove_boat", BoatMeta::new),
-            entry("minecraft:mangrove_chest_boat", BoatMeta::new),
-            entry("minecraft:mannequin", MannequinMeta::new),
-            entry("minecraft:marker", MarkerMeta::new),
-            entry("minecraft:minecart", MinecartMeta::new),
-            entry("minecraft:nautilus", NautilusMeta::new),
-            entry("minecraft:chest_minecart", ChestMinecartMeta::new),
-            entry("minecraft:command_block_minecart", CommandBlockMinecartMeta::new),
-            entry("minecraft:furnace_minecart", FurnaceMinecartMeta::new),
-            entry("minecraft:hopper_minecart", HopperMinecartMeta::new),
-            entry("minecraft:spawner_minecart", SpawnerMinecartMeta::new),
-            entry("minecraft:text_display", TextDisplayMeta::new),
-            entry("minecraft:tnt_minecart", TntMinecartMeta::new),
-            entry("minecraft:mooshroom", MooshroomMeta::new),
-            entry("minecraft:mule", MuleMeta::new),
-            entry("minecraft:oak_boat", BoatMeta::new),
-            entry("minecraft:oak_chest_boat", BoatMeta::new),
-            entry("minecraft:ocelot", OcelotMeta::new),
-            entry("minecraft:ominous_item_spawner", OminousItemSpawnerMeta::new),
-            entry("minecraft:painting", PaintingMeta::new),
-            entry("minecraft:pale_oak_boat", BoatMeta::new),
-            entry("minecraft:pale_oak_chest_boat", BoatMeta::new),
-            entry("minecraft:panda", PandaMeta::new),
-            entry("minecraft:parrot", ParrotMeta::new),
-            entry("minecraft:parched", ParchedMeta::new),
-            entry("minecraft:phantom", PhantomMeta::new),
-            entry("minecraft:pig", PigMeta::new),
-            entry("minecraft:piglin", PiglinMeta::new),
-            entry("minecraft:piglin_brute", PiglinBruteMeta::new),
-            entry("minecraft:pillager", PillagerMeta::new),
-            entry("minecraft:polar_bear", PolarBearMeta::new),
-            entry("minecraft:tnt", PrimedTntMeta::new),
-            entry("minecraft:pufferfish", PufferfishMeta::new),
-            entry("minecraft:rabbit", RabbitMeta::new),
-            entry("minecraft:ravager", RavagerMeta::new),
-            entry("minecraft:salmon", SalmonMeta::new),
-            entry("minecraft:sheep", SheepMeta::new),
-            entry("minecraft:shulker", ShulkerMeta::new),
-            entry("minecraft:shulker_bullet", ShulkerBulletMeta::new),
-            entry("minecraft:silverfish", SilverfishMeta::new),
-            entry("minecraft:skeleton", SkeletonMeta::new),
-            entry("minecraft:skeleton_horse", SkeletonHorseMeta::new),
-            entry("minecraft:slime", SlimeMeta::new),
-            entry("minecraft:small_fireball", SmallFireballMeta::new),
-            entry("minecraft:sniffer", SnifferMeta::new),
-            entry("minecraft:snow_golem", SnowGolemMeta::new),
-            entry("minecraft:snowball", SnowballMeta::new),
-            entry("minecraft:spectral_arrow", SpectralArrowMeta::new),
-            entry("minecraft:spider", SpiderMeta::new),
-            entry("minecraft:splash_potion", SplashPotionMeta::new),
-            entry("minecraft:spruce_boat", BoatMeta::new),
-            entry("minecraft:spruce_chest_boat", BoatMeta::new),
-            entry("minecraft:squid", SquidMeta::new),
-            entry("minecraft:stray", StrayMeta::new),
-            entry("minecraft:strider", StriderMeta::new),
-            entry("minecraft:tadpole", TadpoleMeta::new),
-            entry("minecraft:egg", ThrownEggMeta::new),
-            entry("minecraft:ender_pearl", ThrownEnderPearlMeta::new),
-            entry("minecraft:experience_bottle", ThrownExperienceBottleMeta::new),
-            entry("minecraft:potion", SplashPotionMeta::new),
-            entry("minecraft:trident", ThrownTridentMeta::new),
-            entry("minecraft:trader_llama", TraderLlamaMeta::new),
-            entry("minecraft:tropical_fish", TropicalFishMeta::new),
-            entry("minecraft:turtle", TurtleMeta::new),
-            entry("minecraft:vex", VexMeta::new),
-            entry("minecraft:villager", VillagerMeta::new),
-            entry("minecraft:vindicator", VindicatorMeta::new),
-            entry("minecraft:wandering_trader", WanderingTraderMeta::new),
-            entry("minecraft:warden", WardenMeta::new),
-            entry("minecraft:wind_charge", WindChargeMeta::new),
-            entry("minecraft:witch", WitchMeta::new),
-            entry("minecraft:wither", WitherMeta::new),
-            entry("minecraft:wither_skeleton", WitherSkeletonMeta::new),
-            entry("minecraft:wither_skull", WitherSkullMeta::new),
-            entry("minecraft:wolf", WolfMeta::new),
-            entry("minecraft:zoglin", ZoglinMeta::new),
-            entry("minecraft:zombie", ZombieMeta::new),
-            entry("minecraft:zombie_horse", ZombieHorseMeta::new),
-            entry("minecraft:zombie_nautilus", ZombieNautilusMeta::new),
-            entry("minecraft:zombie_villager", ZombieVillagerMeta::new),
-            entry("minecraft:zombified_piglin", ZombifiedPiglinMeta::new),
-            entry("minecraft:player", PlayerMeta::new),
-            entry("minecraft:fishing_bobber", FishingHookMeta::new)
+    private void putEntry(int id, Metadata.Entry<?> entry) {
+        var entries = this.entries;
+        if (id >= entries.length) this.entries = entries = Arrays.copyOf(entries, id + 1);
+        entries[id] = entry;
+    }
+
+    public Map<Integer, Metadata.Entry<?>> getEntries() {
+        final var entries = this.entries;
+        Map<Integer, Metadata.Entry<?>> map = new HashMap<>();
+        for (int id = 0; id < entries.length; id++) {
+            final var entry = entries[id];
+            if (entry != null) map.put(id, entry);
+        }
+        return Map.copyOf(map);
+    }
+
+    @SuppressWarnings("JavacQuirks")
+    static final Map<EntityType, BiFunction<@Nullable Entity, MetadataHolder, ? extends EntityMeta>> ENTITY_META_SUPPLIER = Map.ofEntries(
+            entry(EntityType.ACACIA_BOAT, BoatMeta::new),
+            entry(EntityType.ACACIA_CHEST_BOAT, BoatMeta::new),
+            entry(EntityType.ALLAY, AllayMeta::new),
+            entry(EntityType.AREA_EFFECT_CLOUD, AreaEffectCloudMeta::new),
+            entry(EntityType.ARMADILLO, ArmadilloMeta::new),
+            entry(EntityType.ARMOR_STAND, ArmorStandMeta::new),
+            entry(EntityType.ARROW, ArrowMeta::new),
+            entry(EntityType.AXOLOTL, AxolotlMeta::new),
+            entry(EntityType.BAMBOO_RAFT, BoatMeta::new),
+            entry(EntityType.BAMBOO_CHEST_RAFT, BoatMeta::new),
+            entry(EntityType.BAT, BatMeta::new),
+            entry(EntityType.BEE, BeeMeta::new),
+            entry(EntityType.BIRCH_BOAT, BoatMeta::new),
+            entry(EntityType.BIRCH_CHEST_BOAT, BoatMeta::new),
+            entry(EntityType.BLAZE, BlazeMeta::new),
+            entry(EntityType.BLOCK_DISPLAY, BlockDisplayMeta::new),
+            entry(EntityType.BOGGED, BoggedMeta::new),
+            entry(EntityType.BREEZE, BreezeMeta::new),
+            entry(EntityType.BREEZE_WIND_CHARGE, BreezeWindChargeMeta::new),
+            entry(EntityType.CAMEL, CamelMeta::new),
+            entry(EntityType.CAMEL_HUSK, CamelHuskMeta::new),
+            entry(EntityType.CAT, CatMeta::new),
+            entry(EntityType.CAVE_SPIDER, CaveSpiderMeta::new),
+            entry(EntityType.CHERRY_BOAT, BoatMeta::new),
+            entry(EntityType.CHERRY_CHEST_BOAT, BoatMeta::new),
+            entry(EntityType.CHICKEN, ChickenMeta::new),
+            entry(EntityType.COD, CodMeta::new),
+            entry(EntityType.COPPER_GOLEM, CopperGolemMeta::new),
+            entry(EntityType.COW, CowMeta::new),
+            entry(EntityType.CREAKING, CreakingMeta::new),
+            entry(EntityType.CREEPER, CreeperMeta::new),
+            entry(EntityType.DARK_OAK_BOAT, BoatMeta::new),
+            entry(EntityType.DARK_OAK_CHEST_BOAT, BoatMeta::new),
+            entry(EntityType.DOLPHIN, DolphinMeta::new),
+            entry(EntityType.DONKEY, DonkeyMeta::new),
+            entry(EntityType.DRAGON_FIREBALL, DragonFireballMeta::new),
+            entry(EntityType.DROWNED, DrownedMeta::new),
+            entry(EntityType.ELDER_GUARDIAN, ElderGuardianMeta::new),
+            entry(EntityType.END_CRYSTAL, EndCrystalMeta::new),
+            entry(EntityType.ENDER_DRAGON, EnderDragonMeta::new),
+            entry(EntityType.ENDERMAN, EndermanMeta::new),
+            entry(EntityType.ENDERMITE, EndermiteMeta::new),
+            entry(EntityType.EVOKER, EvokerMeta::new),
+            entry(EntityType.EVOKER_FANGS, EvokerFangsMeta::new),
+            entry(EntityType.EXPERIENCE_ORB, ExperienceOrbMeta::new),
+            entry(EntityType.EYE_OF_ENDER, EyeOfEnderMeta::new),
+            entry(EntityType.FALLING_BLOCK, FallingBlockMeta::new),
+            entry(EntityType.FIREBALL, FireballMeta::new),
+            entry(EntityType.FIREWORK_ROCKET, FireworkRocketMeta::new),
+            entry(EntityType.FOX, FoxMeta::new),
+            entry(EntityType.FROG, FrogMeta::new),
+            entry(EntityType.GHAST, GhastMeta::new),
+            entry(EntityType.GIANT, GiantMeta::new),
+            entry(EntityType.GLOW_ITEM_FRAME, GlowItemFrameMeta::new),
+            entry(EntityType.GLOW_SQUID, GlowSquidMeta::new),
+            entry(EntityType.GOAT, GoatMeta::new),
+            entry(EntityType.GUARDIAN, GuardianMeta::new),
+            entry(EntityType.HAPPY_GHAST, HappyGhastMeta::new),
+            entry(EntityType.HOGLIN, HoglinMeta::new),
+            entry(EntityType.HORSE, HorseMeta::new),
+            entry(EntityType.HUSK, HuskMeta::new),
+            entry(EntityType.ILLUSIONER, IllusionerMeta::new),
+            entry(EntityType.INTERACTION, InteractionMeta::new),
+            entry(EntityType.IRON_GOLEM, IronGolemMeta::new),
+            entry(EntityType.ITEM, ItemEntityMeta::new),
+            entry(EntityType.ITEM_DISPLAY, ItemDisplayMeta::new),
+            entry(EntityType.ITEM_FRAME, ItemFrameMeta::new),
+            entry(EntityType.JUNGLE_BOAT, BoatMeta::new),
+            entry(EntityType.JUNGLE_CHEST_BOAT, BoatMeta::new),
+            entry(EntityType.LEASH_KNOT, LeashKnotMeta::new),
+            entry(EntityType.LIGHTNING_BOLT, LightningBoltMeta::new),
+            entry(EntityType.LINGERING_POTION, LingeringPotionMeta::new),
+            entry(EntityType.LLAMA, LlamaMeta::new),
+            entry(EntityType.LLAMA_SPIT, LlamaSpitMeta::new),
+            entry(EntityType.MAGMA_CUBE, MagmaCubeMeta::new),
+            entry(EntityType.MANGROVE_BOAT, BoatMeta::new),
+            entry(EntityType.MANGROVE_CHEST_BOAT, BoatMeta::new),
+            entry(EntityType.MANNEQUIN, MannequinMeta::new),
+            entry(EntityType.MARKER, MarkerMeta::new),
+            entry(EntityType.MINECART, MinecartMeta::new),
+            entry(EntityType.NAUTILUS, NautilusMeta::new),
+            entry(EntityType.CHEST_MINECART, ChestMinecartMeta::new),
+            entry(EntityType.COMMAND_BLOCK_MINECART, CommandBlockMinecartMeta::new),
+            entry(EntityType.FURNACE_MINECART, FurnaceMinecartMeta::new),
+            entry(EntityType.HOPPER_MINECART, HopperMinecartMeta::new),
+            entry(EntityType.SPAWNER_MINECART, SpawnerMinecartMeta::new),
+            entry(EntityType.TEXT_DISPLAY, TextDisplayMeta::new),
+            entry(EntityType.TNT_MINECART, TntMinecartMeta::new),
+            entry(EntityType.MOOSHROOM, MooshroomMeta::new),
+            entry(EntityType.MULE, MuleMeta::new),
+            entry(EntityType.OAK_BOAT, BoatMeta::new),
+            entry(EntityType.OAK_CHEST_BOAT, BoatMeta::new),
+            entry(EntityType.OCELOT, OcelotMeta::new),
+            entry(EntityType.OMINOUS_ITEM_SPAWNER, OminousItemSpawnerMeta::new),
+            entry(EntityType.PAINTING, PaintingMeta::new),
+            entry(EntityType.PALE_OAK_BOAT, BoatMeta::new),
+            entry(EntityType.PALE_OAK_CHEST_BOAT, BoatMeta::new),
+            entry(EntityType.PANDA, PandaMeta::new),
+            entry(EntityType.PARROT, ParrotMeta::new),
+            entry(EntityType.PARCHED, ParchedMeta::new),
+            entry(EntityType.PHANTOM, PhantomMeta::new),
+            entry(EntityType.PIG, PigMeta::new),
+            entry(EntityType.PIGLIN, PiglinMeta::new),
+            entry(EntityType.PIGLIN_BRUTE, PiglinBruteMeta::new),
+            entry(EntityType.PILLAGER, PillagerMeta::new),
+            entry(EntityType.POLAR_BEAR, PolarBearMeta::new),
+            entry(EntityType.TNT, PrimedTntMeta::new),
+            entry(EntityType.PUFFERFISH, PufferfishMeta::new),
+            entry(EntityType.RABBIT, RabbitMeta::new),
+            entry(EntityType.RAVAGER, RavagerMeta::new),
+            entry(EntityType.SALMON, SalmonMeta::new),
+            entry(EntityType.SHEEP, SheepMeta::new),
+            entry(EntityType.SHULKER, ShulkerMeta::new),
+            entry(EntityType.SHULKER_BULLET, ShulkerBulletMeta::new),
+            entry(EntityType.SILVERFISH, SilverfishMeta::new),
+            entry(EntityType.SKELETON, SkeletonMeta::new),
+            entry(EntityType.SKELETON_HORSE, SkeletonHorseMeta::new),
+            entry(EntityType.SLIME, SlimeMeta::new),
+            entry(EntityType.SMALL_FIREBALL, SmallFireballMeta::new),
+            entry(EntityType.SNIFFER, SnifferMeta::new),
+            entry(EntityType.SNOW_GOLEM, SnowGolemMeta::new),
+            entry(EntityType.SNOWBALL, SnowballMeta::new),
+            entry(EntityType.SPECTRAL_ARROW, SpectralArrowMeta::new),
+            entry(EntityType.SPIDER, SpiderMeta::new),
+            entry(EntityType.SPLASH_POTION, SplashPotionMeta::new),
+            entry(EntityType.SPRUCE_BOAT, BoatMeta::new),
+            entry(EntityType.SPRUCE_CHEST_BOAT, BoatMeta::new),
+            entry(EntityType.SQUID, SquidMeta::new),
+            entry(EntityType.STRAY, StrayMeta::new),
+            entry(EntityType.STRIDER, StriderMeta::new),
+            entry(EntityType.TADPOLE, TadpoleMeta::new),
+            entry(EntityType.EGG, ThrownEggMeta::new),
+            entry(EntityType.ENDER_PEARL, ThrownEnderPearlMeta::new),
+            entry(EntityType.EXPERIENCE_BOTTLE, ThrownExperienceBottleMeta::new),
+            entry(EntityType.TRIDENT, ThrownTridentMeta::new),
+            entry(EntityType.TRADER_LLAMA, TraderLlamaMeta::new),
+            entry(EntityType.TROPICAL_FISH, TropicalFishMeta::new),
+            entry(EntityType.TURTLE, TurtleMeta::new),
+            entry(EntityType.VEX, VexMeta::new),
+            entry(EntityType.VILLAGER, VillagerMeta::new),
+            entry(EntityType.VINDICATOR, VindicatorMeta::new),
+            entry(EntityType.WANDERING_TRADER, WanderingTraderMeta::new),
+            entry(EntityType.WARDEN, WardenMeta::new),
+            entry(EntityType.WIND_CHARGE, WindChargeMeta::new),
+            entry(EntityType.WITCH, WitchMeta::new),
+            entry(EntityType.WITHER, WitherMeta::new),
+            entry(EntityType.WITHER_SKELETON, WitherSkeletonMeta::new),
+            entry(EntityType.WITHER_SKULL, WitherSkullMeta::new),
+            entry(EntityType.WOLF, WolfMeta::new),
+            entry(EntityType.ZOGLIN, ZoglinMeta::new),
+            entry(EntityType.ZOMBIE, ZombieMeta::new),
+            entry(EntityType.ZOMBIE_HORSE, ZombieHorseMeta::new),
+            entry(EntityType.ZOMBIE_NAUTILUS, ZombieNautilusMeta::new),
+            entry(EntityType.ZOMBIE_VILLAGER, ZombieVillagerMeta::new),
+            entry(EntityType.ZOMBIFIED_PIGLIN, ZombifiedPiglinMeta::new),
+            entry(EntityType.PLAYER, PlayerMeta::new),
+            entry(EntityType.FISHING_BOBBER, FishingHookMeta::new)
     );
 
     @ApiStatus.Internal
     public static EntityMeta createMeta(EntityType entityType, @Nullable Entity entity, MetadataHolder metadata) {
-        return ENTITY_META_SUPPLIER.get(entityType.name()).apply(entity, metadata);
+        return ENTITY_META_SUPPLIER.get(entityType).apply(entity, metadata);
     }
 }
