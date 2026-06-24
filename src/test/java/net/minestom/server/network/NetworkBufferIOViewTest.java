@@ -277,6 +277,18 @@ public class NetworkBufferIOViewTest {
 
     @ParameterizedTest
     @MethodSource("buffers")
+    public void testSkipBytesNegative(NetworkBuffer buffer) {
+        var view = buffer.ioView();
+
+        view.writeInt(100);
+
+        assertEquals(0, view.skipBytes(-1));
+        assertEquals(0, view.skipBytes(Integer.MIN_VALUE));
+        assertEquals(100, view.readInt());
+    }
+
+    @ParameterizedTest
+    @MethodSource("buffers")
     public void testWriteAndReadUTF(NetworkBuffer buffer) {
         var view = buffer.ioView();
 
@@ -660,6 +672,27 @@ public class NetworkBufferIOViewTest {
         var view = buffer.ioView();
         view.readByte(); // Read first byte
         int networkSkipped = view.skipBytes(5);
+        byte networkNext = view.readByte();
+
+        assertEquals(javaSkipped, networkSkipped);
+        assertEquals(javaNext, networkNext);
+    }
+
+    @Test
+    public void testNegativeSkipBytesCompatibility() throws Exception {
+        byte[] testData = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+        // Test with Java DataInputStream
+        DataInputStream dis = new DataInputStream(new ByteArrayInputStream(testData));
+        dis.readByte(); // Read first byte
+        int javaSkipped = dis.skipBytes(-1);
+        byte javaNext = dis.readByte();
+
+        // Test with NetworkBuffer
+        var buffer = NetworkBuffer.wrap(testData, 0, testData.length);
+        var view = buffer.ioView();
+        view.readByte(); // Read first byte
+        int networkSkipped = view.skipBytes(-1);
         byte networkNext = view.readByte();
 
         assertEquals(javaSkipped, networkSkipped);

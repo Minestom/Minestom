@@ -215,6 +215,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      *
      * @return the io view.
      */
+    @ApiStatus.Experimental
     @Contract(pure = true, value = "-> new")
     IOView ioView();
 
@@ -355,6 +356,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @implNote This implementation removes checked exceptions as the backing {@link NetworkBuffer} would not throw {@link IOException}'s.
      * Also {@link #readLine()} is not implemented as it's already deprecated in {@link java.io.DataInputStream}.
      */
+    @ApiStatus.Experimental
     interface IOView extends DataInput, DataOutput {
 
         @Deprecated(forRemoval = true)
@@ -380,12 +382,10 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
         @Override
         default int skipBytes(int n) {
+            if (n <= 0) return 0;
             NetworkBuffer buffer = buffer();
-            long readableBytes = buffer.readableBytes();
-            if (n > readableBytes) {
-                n = (int) readableBytes;
-            }
-            if (n > 0) buffer.advanceRead(n);
+            n = (int) Math.min(n, buffer.readableBytes());
+            buffer.advanceRead(n);
             return n;
         }
 
