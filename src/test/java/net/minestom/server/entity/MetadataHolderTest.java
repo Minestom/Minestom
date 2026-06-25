@@ -54,6 +54,41 @@ public class MetadataHolderTest {
         assertTrue(received.isEmpty());
     }
 
+    @Test
+    public void getEntriesReflectsSets() {
+        MetadataHolder holder = new MetadataHolder(_ -> {
+        });
+
+        assertTrue(holder.getEntries().isEmpty(), "No entries before any set");
+
+        // AIR_TICKS sits at a higher index than CUSTOM_NAME_VISIBLE, exercising the sparse/resized array
+        holder.set(MetadataDef.CUSTOM_NAME_VISIBLE, true);
+        holder.set(MetadataDef.AIR_TICKS, 42);
+
+        Map<Integer, Metadata.Entry<?>> entries = holder.getEntries();
+        assertEquals(2, entries.size(), "Only set ids are present, gaps excluded");
+        assertEquals(true, entries.get(MetadataDef.CUSTOM_NAME_VISIBLE.index()).value());
+        assertEquals(42, entries.get(MetadataDef.AIR_TICKS.index()).value());
+
+        // Overwriting an id keeps the map size and reflects the new value
+        holder.set(MetadataDef.AIR_TICKS, 7);
+        entries = holder.getEntries();
+        assertEquals(2, entries.size());
+        assertEquals(7, entries.get(MetadataDef.AIR_TICKS.index()).value());
+    }
+
+    @Test
+    public void getEntriesIsSnapshot() {
+        MetadataHolder holder = new MetadataHolder(_ -> {
+        });
+        holder.set(MetadataDef.CUSTOM_NAME_VISIBLE, true);
+
+        Map<Integer, Metadata.Entry<?>> snapshot = holder.getEntries();
+        holder.set(MetadataDef.AIR_TICKS, 42);
+
+        assertEquals(1, snapshot.size(), "Previously returned map must not see later sets");
+    }
+
     @SuppressWarnings({"ConstantConditions", "removal"})
     @Test
     public void testNullCtor() {

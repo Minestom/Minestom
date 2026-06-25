@@ -40,7 +40,6 @@ import org.jetbrains.annotations.UnknownNullability;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
@@ -183,12 +182,17 @@ public final class MetadataHolder {
 
     public Map<Integer, Metadata.Entry<?>> getEntries() {
         final var entries = this.entries;
-        Map<Integer, Metadata.Entry<?>> map = HashMap.newHashMap(entries.length);
+        int[] ids = new int[entries.length];
+        Metadata.Entry<?>[] values = new Metadata.Entry<?>[entries.length];
+        int count = 0;
         for (int id = 0; id < entries.length; id++) {
             final var entry = entries[id];
-            if (entry != null) map.put(id, entry);
+            if (entry == null) continue; // skip gaps between metadata ids
+            ids[count] = id;
+            values[count] = entry;
+            count++;
         }
-        return Map.copyOf(map);
+        return Map.copyOf(new Int2ObjectArrayMap<>(ids, values, count));
     }
 
     @SuppressWarnings("JavacQuirks")
