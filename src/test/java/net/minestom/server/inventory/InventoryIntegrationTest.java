@@ -145,8 +145,8 @@ public class InventoryIntegrationTest {
         // Make sure WindowItemsPacket is empty
         updateWindowTracker.assertSingle(windowItemsPacket -> assertEquals(ItemStack.AIR, windowItemsPacket.carriedItem()));
 
-        // Make sure EntityEquipmentPacket is sent
-        equipmentTracker.assertSingle();
+        // Make sure no EntityEquipmentPacket is sent (nothing was equipped)
+        equipmentTracker.assertEmpty();
     }
 
     @Test

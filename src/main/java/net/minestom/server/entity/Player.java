@@ -1493,7 +1493,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         sendPacketToViewersAndSelf(getVelocityPacket());
         sendPacketToViewersAndSelf(getMetadataPacket());
         sendPacketToViewersAndSelf(getPropertiesPacket());
-        sendPacketToViewersAndSelf(getEquipmentsPacket());
+        final var equipmentsPacket = getEquipmentsPacket();
+        if (equipmentsPacket != null) sendPacketToViewersAndSelf(equipmentsPacket);
 
         getInventory().update();
     }
@@ -2335,7 +2336,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         connection.sendPacket(getSpawnPacket());
         connection.sendPacket(getVelocityPacket());
         connection.sendPacket(getMetadataPacket());
-        connection.sendPacket(getEquipmentsPacket());
+        final var equipmentsPacket = getEquipmentsPacket();
+        if (equipmentsPacket != null) connection.sendPacket(equipmentsPacket);
         if (hasPassenger()) {
             connection.sendPacket(getPassengersPacket());
         }
