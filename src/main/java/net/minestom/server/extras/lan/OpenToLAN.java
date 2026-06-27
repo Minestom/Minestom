@@ -4,7 +4,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.timer.Task;
-import net.minestom.server.utils.time.Cooldown;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,6 +15,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static net.minestom.server.ping.ServerListPingType.OPEN_TO_LAN;
 
@@ -27,15 +28,18 @@ import static net.minestom.server.ping.ServerListPingType.OPEN_TO_LAN;
  *
  * @see <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Server_List_Ping#Ping_via_LAN_(Open_to_LAN_in_Singleplayer)">the Minecraft wiki</a>
  */
-public class OpenToLAN {
+public final class OpenToLAN {
     private static final InetSocketAddress PING_ADDRESS = new InetSocketAddress("224.0.2.60", 4445);
-
     private static final Logger LOGGER = LoggerFactory.getLogger(OpenToLAN.class);
 
-    private static volatile Cooldown eventCooldown;
-    private static volatile DatagramSocket socket = null;
-    private static volatile DatagramPacket packet = null;
-    private static volatile Task task = null;
+    private record State(DatagramSocket socket, Task task, long eventDelayNanos,
+                         AtomicReference<@Nullable Snapshot> snapshot) {
+    }
+
+    private record Snapshot(DatagramPacket packet, long timestampNanos) {
+    }
+
+    private static volatile @Nullable State state = null;
 
     private OpenToLAN() {
     }
@@ -57,19 +61,18 @@ public class OpenToLAN {
      */
     public static boolean open(OpenToLANConfig config) {
         Objects.requireNonNull(config, "config");
-        if (socket != null) return false;
-
+        if (state != null) return false;
+        final DatagramSocket socket;
         try {
             socket = new DatagramSocket(config.port);
         } catch (SocketException e) {
             LOGGER.warn("Could not bind to the port!", e);
             return false;
         }
-
-        eventCooldown = new Cooldown(config.delayBetweenEvent);
-        task = MinecraftServer.getSchedulerManager().buildTask(OpenToLAN::ping)
+        final Task task = MinecraftServer.getSchedulerManager().buildTask(OpenToLAN::ping)
                 .repeat(config.delayBetweenPings)
                 .schedule();
+        state = new State(socket, task, config.delayBetweenEvent.toNanos(), new AtomicReference<>());
         return true;
     }
 
@@ -79,12 +82,11 @@ public class OpenToLAN {
      * @return {@code true} if it was closed, {@code false} if it was already closed
      */
     public static boolean close() {
-        if (socket == null) return false;
-        task.cancel();
-        socket.close();
-
-        task = null;
-        socket = null;
+        final State current = state;
+        if (current == null) return false;
+        state = null;
+        current.task.cancel();
+        current.socket.close();
         return true;
     }
 
@@ -94,33 +96,36 @@ public class OpenToLAN {
      * @return {@code true} if it is, {@code false} otherwise
      */
     public static boolean isOpen() {
-        return socket != null;
+        return state != null;
     }
 
-    /**
-     * Performs the ping.
-     */
     private static void ping() {
+        final State current = state;
+        if (current == null) return;
         Thread.startVirtualThread(() -> {
             try {
                 if (!MinecraftServer.getServer().isOpen()) return;
-                if (packet == null || eventCooldown.isReady(System.nanoTime())) {
-                    final ServerListPingEvent event = new ServerListPingEvent(OPEN_TO_LAN);
-                    EventDispatcher.call(event);
-
-                    final byte[] data = OPEN_TO_LAN.getPingResponse(event.getStatus()).getBytes(StandardCharsets.UTF_8);
-                    packet = new DatagramPacket(data, data.length, PING_ADDRESS);
-                    eventCooldown.refreshLastUpdate(System.nanoTime());
-                }
-
-                try {
-                    socket.send(packet);
-                } catch (IOException e) {
-                    LOGGER.warn("Could not send Open to LAN packet!", e);
-                }
+                final DatagramPacket packet = resolvePacket(current);
+                current.socket.send(packet);
+            } catch (IOException e) {
+                LOGGER.warn("Could not send Open to LAN packet!", e);
             } catch (Exception e) {
                 MinecraftServer.getExceptionManager().handleException(e);
             }
         });
+    }
+
+    private static DatagramPacket resolvePacket(State current) {
+        final Snapshot existing = current.snapshot.get();
+        final long now = System.nanoTime();
+        if (existing != null && now - existing.timestampNanos < current.eventDelayNanos) {
+            return existing.packet;
+        }
+        final ServerListPingEvent event = new ServerListPingEvent(OPEN_TO_LAN);
+        EventDispatcher.call(event);
+        final byte[] data = OPEN_TO_LAN.getPingResponse(event.getStatus()).getBytes(StandardCharsets.UTF_8);
+        final DatagramPacket packet = new DatagramPacket(data, data.length, PING_ADDRESS);
+        current.snapshot.set(new Snapshot(packet, now));
+        return packet;
     }
 }
