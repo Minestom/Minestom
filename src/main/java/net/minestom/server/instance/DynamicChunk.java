@@ -9,6 +9,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.instance.heightmap.MotionBlockingHeightmap;
 import net.minestom.server.instance.heightmap.WorldSurfaceHeightmap;
@@ -269,9 +270,10 @@ public class DynamicChunk extends Chunk {
             NetworkBuffer.Type<ChunkData.Section> sectionSerializer = ChunkData.Section.networkType(MinecraftServer.getBiomeRegistry().size());
             final byte[] data = NetworkBuffer.makeArray(networkBuffer -> {
                 for (Section section : sections) {
-                    final short blockCount = (short) section.blockPalette().count();
-                    final short liquidCount = (short) (blockCount > 0 ? 1 : 0); //TODO(26.1) proper fluid count
-                    networkBuffer.write(sectionSerializer, new ChunkData.Section(blockCount, liquidCount, section.blockPalette(), section.biomePalette()));
+                    final Palette blockPalette = section.blockPalette();
+                    final short blockCount = (short) blockPalette.count();
+                    final short fluidCount = countFluids(blockPalette);
+                    networkBuffer.write(sectionSerializer, new ChunkData.Section(blockCount, fluidCount, blockPalette, section.biomePalette()));
                 }
             });
 
@@ -282,6 +284,22 @@ public class DynamicChunk extends Chunk {
         } finally {
             unlockReadLock();
         }
+    }
+
+    // blocks with a non-empty fluid (liquids or waterlogged)
+    private static short countFluids(Palette blockPalette) {
+        final int single = blockPalette.singleValue();
+        if (single != -1) return isFluid(single) ? (short) blockPalette.count() : 0;
+        final int[] count = {0};
+        blockPalette.getAllPresent((x, y, z, stateId) -> {
+            if (isFluid(stateId)) count[0]++;
+        });
+        return (short) count[0];
+    }
+
+    private static boolean isFluid(int blockStateId) {
+        final Block block = Block.fromStateId(blockStateId);
+        return block != null && (block.isLiquid() || "true".equals(block.getProperty("waterlogged")));
     }
 
     UpdateLightPacket createLightPacket() {
