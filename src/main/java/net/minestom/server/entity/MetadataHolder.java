@@ -330,7 +330,7 @@ public final class MetadataHolder {
             entry(EntityType.SQUID, SquidMeta::new),
             entry(EntityType.STRAY, StrayMeta::new),
             entry(EntityType.STRIDER, StriderMeta::new),
-            entry(EntityType.SULPHER_CUBE, SulfurCubeMeta::new),
+            entry(EntityType.SULFUR_CUBE, SulfurCubeMeta::new),
             entry(EntityType.TADPOLE, TadpoleMeta::new),
             entry(EntityType.EGG, ThrownEggMeta::new),
             entry(EntityType.ENDER_PEARL, ThrownEnderPearlMeta::new),
