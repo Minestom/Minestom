@@ -357,7 +357,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * Also {@link #readLine()} is not implemented as it's already deprecated in {@link java.io.DataInputStream}.
      */
     @ApiStatus.Experimental
-    interface IOView extends DataInput, DataOutput {
+    sealed interface IOView extends DataInput, DataOutput permits NetworkBufferImpl.IOView {
 
         @Deprecated(forRemoval = true)
         @Override
@@ -367,171 +367,88 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         }
 
         @Override
-        default void readFully(byte[] bytes) {
-            readFully(bytes, 0, bytes.length);
-        }
+        void readFully(byte[] bytes);
 
         @Override
-        default void readFully(byte[] bytes, int off, int len) {
-            Objects.requireNonNull(bytes, "bytes");
-            NetworkBuffer buffer = buffer();
-            buffer.ensureReadable(len);
-            buffer.copyTo(buffer.readIndex(), bytes, off, len);
-            buffer.advanceRead(len);
-        }
+        void readFully(byte[] bytes, int off, int len);
 
         @Override
-        default int skipBytes(int n) {
-            if (n <= 0) return 0;
-            NetworkBuffer buffer = buffer();
-            n = (int) Math.min(n, buffer.readableBytes());
-            buffer.advanceRead(n);
-            return n;
-        }
+        int skipBytes(int n);
 
         @Override
-        default boolean readBoolean() {
-            return buffer().read(BOOLEAN);
-        }
+        boolean readBoolean();
 
         @Override
-        default byte readByte() {
-            return buffer().read(BYTE);
-        }
+        byte readByte();
 
         @Override
-        default int readUnsignedByte() {
-            return buffer().read(UNSIGNED_BYTE);
-        }
+        int readUnsignedByte();
 
         @Override
-        default short readShort() {
-            return buffer().read(SHORT);
-        }
+        short readShort();
 
         @Override
-        default int readUnsignedShort() {
-            return buffer().read(UNSIGNED_SHORT);
-        }
+        int readUnsignedShort();
 
         @Override
-        default char readChar() {
-            return (char) readUnsignedShort();
-        }
+        char readChar();
 
         @Override
-        default int readInt() {
-            return buffer().read(INT);
-        }
+        int readInt();
 
         @Override
-        default long readLong() {
-            return buffer().read(LONG);
-        }
+        long readLong();
 
         @Override
-        default float readFloat() {
-            return buffer().read(FLOAT);
-        }
+        float readFloat();
 
         @Override
-        default double readDouble() {
-            return buffer().read(DOUBLE);
-        }
+        double readDouble();
 
         @Override
-        default String readUTF() {
-            return buffer().read(STRING_IO_UTF8);
-        }
+        String readUTF();
 
         @Override
-        default void write(int lower) {
-            buffer().write(BYTE, (byte) lower);
-        }
+        void write(int lower);
 
         @Override
-        default void write(byte[] bytes) {
-            Objects.requireNonNull(bytes, "bytes");
-            buffer().write(RAW_BYTES, bytes);
-        }
+        void write(byte[] bytes);
 
         @Override
-        default void write(byte[] bytes, int off, int len) {
-            Objects.requireNonNull(bytes, "bytes");
-            buffer().write(RAW_BYTES, Arrays.copyOfRange(bytes, off, off + len));
-        }
+        void write(byte[] bytes, int off, int len);
 
         @Override
-        default void writeBoolean(boolean value) {
-            buffer().write(BOOLEAN, value);
-        }
+        void writeBoolean(boolean value);
 
         @Override
-        default void writeByte(int value) {
-            buffer().write(BYTE, (byte) value);
-        }
+        void writeByte(int value);
 
         @Override
-        default void writeShort(int value) {
-            buffer().write(UNSIGNED_SHORT, value);
-        }
+        void writeShort(int value);
 
         @Override
-        default void writeChar(int value) {
-            buffer().write(UNSIGNED_SHORT, value);
-        }
+        void writeChar(int value);
 
         @Override
-        default void writeInt(int value) {
-            buffer().write(INT, value);
-        }
+        void writeInt(int value);
 
         @Override
-        default void writeLong(long value) {
-            buffer().write(LONG, value);
-        }
+        void writeLong(long value);
 
         @Override
-        default void writeFloat(float value) {
-            buffer().write(FLOAT, value);
-        }
+        void writeFloat(float value);
 
         @Override
-        default void writeDouble(double value) {
-            buffer().write(DOUBLE, value);
-        }
+        void writeDouble(double value);
 
         @Override
-        default void writeBytes(String value) {
-            Objects.requireNonNull(value, "value");
-            NetworkBuffer buffer = buffer();
-            for (int i = 0; i < value.length(); i++) {
-                buffer.write(BYTE, (byte) value.charAt(i)); // Low byte only
-            }
-        }
+        void writeBytes(String value);
 
         @Override
-        default void writeChars(String value) {
-            Objects.requireNonNull(value, "value");
-            NetworkBuffer buffer = buffer();
-            for (int i = 0; i < value.length(); i++) {
-                buffer.write(UNSIGNED_SHORT, (int) value.charAt(i));
-            }
-        }
+        void writeChars(String value);
 
         @Override
-        default void writeUTF(String value) {
-            Objects.requireNonNull(value, "value");
-            buffer().write(STRING_IO_UTF8, value);
-        }
-
-        /**
-         * You should avoid using this in your code and instead pass the buffer around.
-         *
-         * @return the backing buffer
-         */
-        @ApiStatus.OverrideOnly
-        NetworkBuffer buffer();
+        void writeUTF(String value);
     }
 
     static byte[] makeArray(Consumer<NetworkBuffer> writing, @Nullable Registries registries) {
