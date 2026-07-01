@@ -26,7 +26,7 @@ import static net.minestom.server.instance.block.Block.STATE_STRUCT_CODEC;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 import static net.minestom.server.network.NetworkBuffer.VECTOR3D;
 
-public sealed interface Particle extends StaticProtocolObject<Particle>, Particles permits Particle.Block, Particle.BlockCrumble, Particle.BlockMarker, Particle.DragonBreath, Particle.Dust, Particle.DustColorTransition, Particle.DustPillar, Particle.Effect, Particle.EntityEffect, Particle.FallingDust, Particle.Flash, Particle.InstantEffect, Particle.Item, Particle.SculkCharge, Particle.Shriek, Particle.Simple, Particle.TintedLeaves, Particle.Trail, Particle.Vibration {
+public sealed interface Particle extends StaticProtocolObject<Particle>, Particles {
 
     NetworkBuffer.Type<Particle> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
@@ -756,4 +756,141 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
     }
 
+    record Geyser(Key key, int id, int waterBlocks) implements Particle {
+        public static final StructCodec<Geyser> CODEC = StructCodec.struct(
+                "type", Codec.KEY, Geyser::key,
+                "water_blocks", Codec.INT, Geyser::waterBlocks,
+                (key, waterBlocks) -> ParticleImpl.<Geyser>get(key).withWaterBlocks(waterBlocks));
+
+        @Contract(pure = true)
+        public Geyser withWaterBlocks(int waterBlocks) {
+            return new Geyser(key(), id(), waterBlocks);
+        }
+
+        @Override
+        public Geyser readData(NetworkBuffer reader) {
+            int waterBlocks = reader.read(NetworkBuffer.INT);
+            return withWaterBlocks(waterBlocks);
+        }
+
+        @Override
+        public void writeData(NetworkBuffer writer) {
+            writer.write(NetworkBuffer.INT, waterBlocks);
+        }
+
+        @Override
+        public StructCodec<Geyser> codec() {
+            return CODEC;
+        }
+    }
+
+    record GeyserBase(Key key, int id, int waterBlocks, float burstImpulseBase) implements Particle {
+        public static final StructCodec<GeyserBase> CODEC = StructCodec.struct(
+                "type", Codec.KEY, GeyserBase::key,
+                "water_blocks", Codec.INT, GeyserBase::waterBlocks,
+                "burst_impulse_base", Codec.FLOAT, GeyserBase::burstImpulseBase,
+                (key, waterBlocks, burstImpulseBase) -> ParticleImpl.<GeyserBase>get(key).withProperties(waterBlocks, burstImpulseBase));
+
+        @Contract(pure = true)
+        public GeyserBase withWaterBlocks(int waterBlocks) {
+            return new GeyserBase(key(), id(), waterBlocks, burstImpulseBase());
+        }
+
+        @Contract(pure = true)
+        public GeyserBase withBurstImpulseBase(float burstImpulseBase) {
+            return new GeyserBase(key(), id(), waterBlocks(), burstImpulseBase);
+        }
+
+        @Contract(pure = true)
+        public GeyserBase withProperties(int waterBlocks, float burstImpulseBase) {
+            return new GeyserBase(key(), id(), waterBlocks, burstImpulseBase);
+        }
+
+        @Override
+        public GeyserBase readData(NetworkBuffer reader) {
+            int waterBlocks = reader.read(NetworkBuffer.INT);
+            float burstImpulseBase = reader.read(NetworkBuffer.FLOAT);
+            return withProperties(waterBlocks, burstImpulseBase);
+        }
+
+        @Override
+        public void writeData(NetworkBuffer writer) {
+            writer.write(NetworkBuffer.INT, waterBlocks);
+            writer.write(NetworkBuffer.FLOAT, burstImpulseBase);
+        }
+
+        @Override
+        public StructCodec<GeyserBase> codec() {
+            return CODEC;
+        }
+    }
+
+    record GeyserPlume(Key key, int id, int waterBlocks) implements Particle {
+        public static final StructCodec<GeyserPlume> CODEC = StructCodec.struct(
+                "type", Codec.KEY, GeyserPlume::key,
+                "water_blocks", Codec.INT, GeyserPlume::waterBlocks,
+                (key, waterBlocks) -> ParticleImpl.<GeyserPlume>get(key).withWaterBlocks(waterBlocks));
+
+        @Contract(pure = true)
+        public GeyserPlume withWaterBlocks(int waterBlocks) {
+            return new GeyserPlume(key(), id(), waterBlocks);
+        }
+
+        @Override
+        public GeyserPlume readData(NetworkBuffer reader) {
+            int waterBlocks = reader.read(NetworkBuffer.INT);
+            return withWaterBlocks(waterBlocks);
+        }
+
+        @Override
+        public void writeData(NetworkBuffer writer) {
+            writer.write(NetworkBuffer.INT, waterBlocks);
+        }
+
+        @Override
+        public StructCodec<GeyserPlume> codec() {
+            return CODEC;
+        }
+    }
+
+    record GeyserPoof(Key key, int id, int waterBlocks, float burstImpulseBase) implements Particle {
+        public static final StructCodec<GeyserPoof> CODEC = StructCodec.struct(
+                "type", Codec.KEY, GeyserPoof::key,
+                "water_blocks", Codec.INT, GeyserPoof::waterBlocks,
+                "burst_impulse_base", Codec.FLOAT, GeyserPoof::burstImpulseBase,
+                (key, waterBlocks, burstImpulseBase) -> ParticleImpl.<GeyserPoof>get(key).withProperties(waterBlocks, burstImpulseBase));
+
+        @Contract(pure = true)
+        public GeyserPoof withWaterBlocks(int waterBlocks) {
+            return new GeyserPoof(key(), id(), waterBlocks, burstImpulseBase());
+        }
+
+        @Contract(pure = true)
+        public GeyserPoof withBurstImpulseBase(float burstImpulseBase) {
+            return new GeyserPoof(key(), id(), waterBlocks(), burstImpulseBase);
+        }
+
+        @Contract(pure = true)
+        public GeyserPoof withProperties(int waterBlocks, float burstImpulseBase) {
+            return new GeyserPoof(key(), id(), waterBlocks, burstImpulseBase);
+        }
+
+        @Override
+        public GeyserPoof readData(NetworkBuffer reader) {
+            int waterBlocks = reader.read(NetworkBuffer.INT);
+            float burstImpulseBase = reader.read(NetworkBuffer.FLOAT);
+            return withProperties(waterBlocks, burstImpulseBase);
+        }
+
+        @Override
+        public void writeData(NetworkBuffer writer) {
+            writer.write(NetworkBuffer.INT, waterBlocks);
+            writer.write(NetworkBuffer.FLOAT, burstImpulseBase);
+        }
+
+        @Override
+        public StructCodec<GeyserPoof> codec() {
+            return CODEC;
+        }
+    }
 }

@@ -9,6 +9,9 @@ import net.minestom.server.entity.metadata.animal.tameable.ParrotMeta;
 import net.minestom.server.entity.metadata.animal.tameable.WolfMeta;
 import net.minestom.server.entity.metadata.avatar.MannequinMeta;
 import net.minestom.server.entity.metadata.avatar.PlayerMeta;
+import net.minestom.server.entity.metadata.cube.MagmaCubeMeta;
+import net.minestom.server.entity.metadata.cube.SlimeMeta;
+import net.minestom.server.entity.metadata.cube.SulfurCubeMeta;
 import net.minestom.server.entity.metadata.display.BlockDisplayMeta;
 import net.minestom.server.entity.metadata.display.ItemDisplayMeta;
 import net.minestom.server.entity.metadata.display.TextDisplayMeta;
@@ -327,6 +330,7 @@ public final class MetadataHolder {
             entry(EntityType.SQUID, SquidMeta::new),
             entry(EntityType.STRAY, StrayMeta::new),
             entry(EntityType.STRIDER, StriderMeta::new),
+            entry(EntityType.SULFUR_CUBE, SulfurCubeMeta::new),
             entry(EntityType.TADPOLE, TadpoleMeta::new),
             entry(EntityType.EGG, ThrownEggMeta::new),
             entry(EntityType.ENDER_PEARL, ThrownEnderPearlMeta::new),
