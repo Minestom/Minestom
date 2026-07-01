@@ -119,9 +119,9 @@ public sealed class MetadataDef {
     }
 
     public static final class AreaEffectCloud extends MetadataDef {
-        public static final Entry<Float> RADIUS = index(0, Metadata::Float, 0.5f);
+        public static final Entry<Float> RADIUS = index(0, Metadata::Float, 3f);
         public static final Entry<Boolean> WAITING = index(1, Metadata::Boolean, false);
-        public static final Entry<Particle> PARTICLE = index(2, Metadata::Particle, Particle.EFFECT);
+        public static final Entry<Particle> PARTICLE = index(2, Metadata::Particle, Particle.ENTITY_EFFECT);
     }
 
     public static final class FishingHook extends MetadataDef {
@@ -296,10 +296,9 @@ public sealed class MetadataDef {
         public static final Entry<Boolean> IS_HANGING = bitMask(0, (byte) 0x01, false);
     }
 
-    public static final class Dolphin extends Mob {
-        public static final Entry<Point> TREASURE_POSITION = index(0, Metadata::BlockPosition, Vec.ZERO);
-        public static final Entry<Boolean> HAS_FISH = index(1, Metadata::Boolean, false);
-        public static final Entry<Integer> MOISTURE_LEVEL = index(2, Metadata::VarInt, 2400);
+    public static final class Dolphin extends AgeableMob {
+        public static final Entry<Boolean> HAS_FISH = index(0, Metadata::Boolean, false);
+        public static final Entry<Integer> MOISTURE_LEVEL = index(1, Metadata::VarInt, 2400);
     }
 
     public static sealed class AbstractFish extends Mob {
@@ -311,7 +310,7 @@ public sealed class MetadataDef {
     }
 
     public static final class Salmon extends AbstractFish {
-        public static final Entry<Integer> SIZE = index(0, Metadata::VarInt, SalmonMeta.Size.SMALL.ordinal());
+        public static final Entry<Integer> SIZE = index(0, Metadata::VarInt, SalmonMeta.Size.MEDIUM.ordinal());
     }
 
     public static final class TropicalFish extends AbstractFish {
@@ -404,7 +403,7 @@ public sealed class MetadataDef {
     public static final class Frog extends AgeableMob {
         public static final Entry<RegistryKey<FrogVariant>> VARIANT = index(0, Metadata::FrogVariant,
                                                                             FrogVariant.TEMPERATE);
-        public static final Entry<@Nullable Integer> TONGUE_TARGET = index(1, Metadata::OptVarInt, 0);
+        public static final Entry<@Nullable Integer> TONGUE_TARGET = index(1, Metadata::OptVarInt, null);
     }
 
     public static final class Ocelot extends AgeableMob {
