@@ -4,9 +4,10 @@ import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import org.jetbrains.annotations.Nullable;
 
 public class AgeableMobMeta extends PathfinderMobMeta {
-    protected AgeableMobMeta(Entity entity, MetadataHolder metadata) {
+    protected AgeableMobMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
