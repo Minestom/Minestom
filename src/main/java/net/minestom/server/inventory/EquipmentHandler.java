@@ -6,6 +6,7 @@ import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -198,17 +199,19 @@ public interface EquipmentHandler {
     }
 
     /**
-     * Gets the packet with all the equipments.
+     * Gets the packet with the non-empty equipments, or {@code null} if every slot is empty.
      *
-     * @return the packet with the equipments
+     * @return the equipments packet, or {@code null} if there is nothing to send
      * @throws IllegalStateException if 'this' is not an {@link Entity}
      */
-    default EntityEquipmentPacket getEquipmentsPacket() {
+    default @Nullable EntityEquipmentPacket getEquipmentsPacket() {
         Check.stateCondition(!(this instanceof Entity), "Only accessible for Entity");
         Map<EquipmentSlot, ItemStack> equipment = new HashMap<>();
         for (EquipmentSlot slot : EquipmentSlot.values()) {
-            equipment.put(slot, this.getEquipment(slot));
+            final ItemStack stack = this.getEquipment(slot);
+            if (!stack.isAir()) equipment.put(slot, stack);
         }
+        if (equipment.isEmpty()) return null;
         return new EntityEquipmentPacket(((Entity) this).getEntityId(), equipment);
     }
 

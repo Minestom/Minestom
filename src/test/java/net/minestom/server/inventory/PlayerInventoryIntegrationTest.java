@@ -12,7 +12,6 @@ import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -105,13 +104,8 @@ public class PlayerInventoryIntegrationTest {
             }
         });
 
-        // Make sure EntityEquipmentPacket is empty
-        equipmentTracker.assertSingle(entityEquipmentPacket -> {
-            assertEquals(EquipmentSlot.values().length, entityEquipmentPacket.equipments().size());
-            for (Map.Entry<EquipmentSlot, ItemStack> entry : entityEquipmentPacket.equipments().entrySet()) {
-                assertEquals(ItemStack.AIR, entry.getValue());
-            }
-        });
+        // Nothing was equipped, so no equipment packet is sent
+        equipmentTracker.assertEmpty();
     }
 
     @Test
@@ -139,6 +133,22 @@ public class PlayerInventoryIntegrationTest {
         // Setting to air should send packet
         equipmentTracker = connectionViewer.trackIncoming(EntityEquipmentPacket.class);
         playerArmored.setEquipment(EquipmentSlot.HELMET, ItemStack.AIR);
+        equipmentTracker.assertSingle(entityEquipmentPacket -> assertEquals(ItemStack.AIR, entityEquipmentPacket.equipments().get(EquipmentSlot.HELMET)));
+    }
+
+    @Test
+    public void clearInventoryClearsEquipmentForViewers(Env env) {
+        var instance = env.createFlatInstance();
+        var connectionArmored = env.createConnection();
+        var playerArmored = connectionArmored.connect(instance, new Pos(0, 42, 0));
+        var connectionViewer = env.createConnection();
+        connectionViewer.connect(instance, new Pos(0, 42, 0));
+
+        playerArmored.setEquipment(EquipmentSlot.HELMET, MAGIC_STACK);
+
+        // Clearing the inventory must still clear the equipped slot for viewers
+        var equipmentTracker = connectionViewer.trackIncoming(EntityEquipmentPacket.class);
+        playerArmored.getInventory().clear();
         equipmentTracker.assertSingle(entityEquipmentPacket -> assertEquals(ItemStack.AIR, entityEquipmentPacket.equipments().get(EquipmentSlot.HELMET)));
     }
 

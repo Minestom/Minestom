@@ -380,7 +380,9 @@ public class PlayerSocketConnection extends PlayerConnection {
                     }
                 }
                 case LazyPacket lazyPacket -> {
-                    PacketWriting.writeFramedPacket(buffer, state, lazyPacket.packet(), compressionThreshold);
+                    final ServerPacket serverPacket = lazyPacket.packet();
+                    if (serverPacket != null)
+                        PacketWriting.writeFramedPacket(buffer, state, serverPacket, compressionThreshold);
                     yield true;
                 }
                 case BufferedPacket bufferedPacket -> {
