@@ -9,7 +9,7 @@ import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.Nullable;
 
 public class PigMeta extends AnimalMeta {
-    public PigMeta(Entity entity, MetadataHolder metadata) {
+    public PigMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

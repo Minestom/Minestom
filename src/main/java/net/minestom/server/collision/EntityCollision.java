@@ -3,7 +3,7 @@ package net.minestom.server.collision;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.EntityTracker;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -11,7 +11,11 @@ import java.util.List;
 import java.util.function.Function;
 
 final class EntityCollision {
-    static List<EntityCollisionResult> checkCollision(Instance instance, BoundingBox boundingBox, Point point, Vec entityVelocity, double extendRadius, Function<Entity, Boolean> entityFilter, @Nullable PhysicsResult physicsResult) {
+    static List<EntityCollisionResult> checkCollision(
+            EntityTracker entityTracker,
+            BoundingBox boundingBox, Point point, Vec entityVelocity,
+            double extendRadius, Function<Entity, Boolean> entityFilter, @Nullable PhysicsResult physicsResult
+    ) {
         double minimumRes = physicsResult != null ? physicsResult.res().res : Double.MAX_VALUE;
 
         List<EntityCollisionResult> result = new ArrayList<>();
@@ -19,20 +23,19 @@ final class EntityCollision {
         var maxDistance = Math.pow(boundingBox.height() * boundingBox.height() + boundingBox.depth() / 2 * boundingBox.depth() / 2 + boundingBox.width() / 2 * boundingBox.width() / 2, 1 / 3.0);
         double projectileDistance = entityVelocity.length();
 
-        for (Entity e : instance.getNearbyEntities(point, extendRadius + maxDistance + projectileDistance)) {
-            SweepResult sweepResult = new SweepResult(minimumRes, 0, 0, 0, null, 0, 0, 0, 0, 0, 0);
-
-            if (!entityFilter.apply(e)) continue;
-            if (!e.hasEntityCollision()) continue;
+        entityTracker.nearbyEntities(point, extendRadius + maxDistance + projectileDistance, EntityTracker.Target.ENTITIES, e -> {
+            if (!entityFilter.apply(e)) return;
+            if (!e.hasEntityCollision()) return;
 
             // Overlapping with entity, math can't be done we return the entity
             if (e.getBoundingBox().intersectBox(e.getPosition().sub(point), boundingBox)) {
                 var p = point.asPos();
                 result.add(new EntityCollisionResult(p, e, Vec.ZERO, 0));
-                continue;
+                return;
             }
 
             // Check collisions with entity
+            SweepResult sweepResult = new SweepResult(minimumRes, 0, 0, 0, null, 0, 0, 0, 0, 0, 0);
             boolean intersected = e.getBoundingBox().intersectBoxSwept(point, entityVelocity, e.getPosition(), boundingBox, sweepResult);
 
             if (intersected && sweepResult.res < 1) {
@@ -40,7 +43,7 @@ final class EntityCollision {
                 Vec direction = new Vec(sweepResult.collidedPositionX, sweepResult.collidedPositionY, sweepResult.collidedPositionZ);
                 result.add(new EntityCollisionResult(p, e, direction, sweepResult.res));
             }
-        }
+        });
 
         return result;
     }

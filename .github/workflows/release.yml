@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with: # We have to fetch full history because we need old tags
           fetch-depth: 0
       - name: Setup Java

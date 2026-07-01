@@ -4,9 +4,10 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.AgeableMobMeta;
+import org.jetbrains.annotations.Nullable;
 
 public sealed abstract class AbstractCubeMeta extends AgeableMobMeta permits MagmaCubeMeta, SlimeMeta, SulfurCubeMeta {
-    protected AbstractCubeMeta(Entity entity, MetadataHolder metadata) {
+    protected AbstractCubeMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
