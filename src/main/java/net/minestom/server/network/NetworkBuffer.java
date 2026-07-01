@@ -31,7 +31,6 @@ import java.util.function.Supplier;
 import java.util.zip.DataFormatException;
 
 public sealed interface NetworkBuffer permits NetworkBufferImpl {
-    Type<Unit> UNIT = new NetworkBufferTypeImpl.UnitType();
     Type<Boolean> BOOLEAN = new NetworkBufferTypeImpl.BooleanType();
     Type<Byte> BYTE = new NetworkBufferTypeImpl.ByteType();
     Type<Short> UNSIGNED_BYTE = new NetworkBufferTypeImpl.UnsignedByteType();
@@ -54,11 +53,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<BinaryTag> NBT = new NetworkBufferTypeImpl.NbtType();
     @SuppressWarnings({"unchecked", "rawtypes"})
     Type<CompoundBinaryTag> NBT_COMPOUND = (Type) new NetworkBufferTypeImpl.NbtType();
-    Type<Point> BLOCK_POSITION = new NetworkBufferTypeImpl.BlockPositionType();
     Type<Component> COMPONENT = new ComponentNetworkBufferTypeImpl();
     Type<Component> JSON_COMPONENT = new NetworkBufferTypeImpl.JsonComponentType();
-    Type<java.util.UUID> UUID = new NetworkBufferTypeImpl.UUIDType();
-    Type<Pos> POS = new NetworkBufferTypeImpl.PosType();
 
     Type<byte[]> BYTE_ARRAY = new NetworkBufferTypeImpl.ByteArrayType();
     Type<long[]> LONG_ARRAY = new NetworkBufferTypeImpl.LongArrayType();
@@ -69,12 +65,16 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<Instant> INSTANT_MS = LONG.transform(Instant::ofEpochMilli, Instant::toEpochMilli);
     Type<PublicKey> PUBLIC_KEY = BYTE_ARRAY.transform(KeyUtils::publicRSAKeyFrom, PublicKey::getEncoded);
 
-    Type<Point> VECTOR3 = new NetworkBufferTypeImpl.Vector3Type();
-    Type<Point> VECTOR3D = new NetworkBufferTypeImpl.Vector3DType();
-    Type<Point> VECTOR3I = new NetworkBufferTypeImpl.Vector3IType();
-    Type<Point> VECTOR3B = new NetworkBufferTypeImpl.Vector3BType();
+    Type<Unit> UNIT = NetworkBufferTypeImpl.UNIT;
+    Type<UUID> UUID = NetworkBufferTypeImpl.UUID;
+    Type<Pos> POS = NetworkBufferTypeImpl.POS;
+    Type<Point> VECTOR3 = NetworkBufferTypeImpl.VECTOR3;
+    Type<Point> VECTOR3D = NetworkBufferTypeImpl.VECTOR3D;
+    Type<Point> VECTOR3I = NetworkBufferTypeImpl.VECTOR3I;
+    Type<Point> VECTOR3B = NetworkBufferTypeImpl.VECTOR3B;
     Type<Vec> LP_VECTOR3 = new NetworkBufferTypeImpl.LpVector3Type();
-    Type<float[]> QUATERNION = new NetworkBufferTypeImpl.QuaternionType();
+    Type<float[]> QUATERNION = NetworkBufferTypeImpl.QUATERNION;
+    Type<Point> BLOCK_POSITION = NetworkBufferTypeImpl.BLOCK_POSITION;
 
     Type<@Nullable Component> OPT_CHAT = COMPONENT.optional();
     Type<@Nullable Point> OPT_BLOCK_POSITION = BLOCK_POSITION.optional();
