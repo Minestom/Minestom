@@ -296,10 +296,9 @@ public sealed class MetadataDef {
         public static final Entry<Boolean> IS_HANGING = bitMask(0, (byte) 0x01, false);
     }
 
-    public static final class Dolphin extends Mob {
-        public static final Entry<Point> TREASURE_POSITION = index(0, Metadata::BlockPosition, Vec.ZERO);
-        public static final Entry<Boolean> HAS_FISH = index(1, Metadata::Boolean, false);
-        public static final Entry<Integer> MOISTURE_LEVEL = index(2, Metadata::VarInt, 2400);
+    public static final class Dolphin extends AgeableMob {
+        public static final Entry<Boolean> HAS_FISH = index(0, Metadata::Boolean, false);
+        public static final Entry<Integer> MOISTURE_LEVEL = index(1, Metadata::VarInt, 2400);
     }
 
     public static sealed class AbstractFish extends Mob {
