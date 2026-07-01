@@ -394,7 +394,7 @@ public sealed class MetadataDef {
     public static final class Frog extends AgeableMob {
         public static final Entry<RegistryKey<FrogVariant>> VARIANT = index(0, Metadata::FrogVariant,
                                                                             FrogVariant.TEMPERATE);
-        public static final Entry<@Nullable Integer> TONGUE_TARGET = index(1, Metadata::OptVarInt, 0);
+        public static final Entry<@Nullable Integer> TONGUE_TARGET = index(1, Metadata::OptVarInt, null);
     }
 
     public static final class Ocelot extends AgeableMob {
