@@ -5,6 +5,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
 
 public record ClientTestInstanceBlockActionPacket(
@@ -35,6 +36,11 @@ public record ClientTestInstanceBlockActionPacket(
                 Status.NETWORK_TYPE, Data::status,
                 NetworkBuffer.COMPONENT.optional(), Data::errorMessage,
                 Data::new);
+
+        public Data {
+            if (test != null)
+                Check.argCondition(test.length() > Short.MAX_VALUE, "Test length cannot be greater than Short.MAX_VALUE");
+        }
     }
 
     public enum Action {

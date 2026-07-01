@@ -256,6 +256,11 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
         return registry().isSolid();
     }
 
+    /** Whether this block stops entity movement (motion-blocking collision); unlike {@link #isSolid()}, e.g. cobweb is solid but does not block motion. */
+    default boolean blocksMotion() {
+        return registry().blocksMotion();
+    }
+
     default boolean isLiquid() {
         return registry().isLiquid();
     }
