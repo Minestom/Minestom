@@ -5,9 +5,10 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 public class EyeOfEnderMeta extends EntityMeta {
-    public EyeOfEnderMeta(Entity entity, MetadataHolder metadata) {
+    public EyeOfEnderMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

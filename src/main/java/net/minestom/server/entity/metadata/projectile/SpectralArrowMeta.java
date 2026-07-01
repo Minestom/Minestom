@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 public class SpectralArrowMeta extends AbstractArrowMeta implements ObjectDataProvider, ProjectileMeta {
     private @Nullable Entity shooter;
 
-    public SpectralArrowMeta(Entity entity, MetadataHolder metadata) {
+    public SpectralArrowMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

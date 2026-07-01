@@ -3,9 +3,10 @@ package net.minestom.server.entity.metadata.other;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.animal.LlamaMeta;
+import org.jetbrains.annotations.Nullable;
 
 public class TraderLlamaMeta extends LlamaMeta {
-    public TraderLlamaMeta(Entity entity, MetadataHolder metadata) {
+    public TraderLlamaMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

@@ -4,9 +4,10 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import org.jetbrains.annotations.Nullable;
 
 public class DolphinMeta extends AgeableWaterAnimalMeta {
-    public DolphinMeta(Entity entity, MetadataHolder metadata) {
+    public DolphinMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

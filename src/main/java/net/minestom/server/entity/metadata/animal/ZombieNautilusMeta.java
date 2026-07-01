@@ -9,7 +9,7 @@ import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.Nullable;
 
 public class ZombieNautilusMeta extends AbstractNautilusMeta {
-    public ZombieNautilusMeta(Entity entity, MetadataHolder metadata) {
+    public ZombieNautilusMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
