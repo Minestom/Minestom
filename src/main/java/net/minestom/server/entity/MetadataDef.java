@@ -310,7 +310,7 @@ public sealed class MetadataDef {
     }
 
     public static final class Salmon extends AbstractFish {
-        public static final Entry<Integer> SIZE = index(0, Metadata::VarInt, SalmonMeta.Size.SMALL.ordinal());
+        public static final Entry<Integer> SIZE = index(0, Metadata::VarInt, SalmonMeta.Size.MEDIUM.ordinal());
     }
 
     public static final class TropicalFish extends AbstractFish {
