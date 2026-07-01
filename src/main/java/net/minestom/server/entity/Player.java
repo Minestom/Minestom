@@ -831,8 +831,28 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         EntityPose oldPose = getPose();
         EntityPose newPose;
 
-        // Figure out their expected state
         var meta = getEntityMeta();
+
+        if (instance != null) {
+            Pos pos = getPosition();
+            boolean shouldSwim = false;
+            if (isSprinting() && getVehicle() == null && !isFlying() && getGameMode() != GameMode.SPECTATOR) {
+                if (meta.isSwimming()) {
+                    shouldSwim = isInWater();
+                } else {
+                    double eyeY = pos.y() + getEyeHeight();
+                    int eyeBlockY = (int) Math.floor(eyeY);
+                    Block eyeBlock = getBlockSafe(pos.blockX(), eyeBlockY, pos.blockZ());
+                    Block feetBlock = getBlockSafe(pos.blockX(), pos.blockY(), pos.blockZ());
+                    shouldSwim = isBlockInWater(eyeBlock, pos.blockX(), eyeBlockY, pos.blockZ(), eyeY - eyeBlockY)
+                            && isInWater()
+                            && getFluidHeight(feetBlock, pos.blockX(), pos.blockY(), pos.blockZ()) >= 0;
+                }
+            }
+            meta.setSwimming(shouldSwim);
+        }
+
+        // Figure out their expected state
         if (meta.isFlyingWithElytra()) {
             newPose = EntityPose.FALL_FLYING;
         } else if (meta instanceof LivingEntityMeta livingMeta && livingMeta.getBedInWhichSleepingPosition() != null) {
@@ -860,6 +880,50 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         }
 
         if (newPose != oldPose) setPose(newPose);
+    }
+
+    private @Nullable Block getBlockSafe(int x, int y, int z) {
+        try {
+            return instance.getBlock(x, y, z);
+        } catch (NullPointerException ignored) {
+            return null;
+        }
+    }
+
+    private boolean isBlockInWater(@Nullable Block block, int x, int y, int z, double localY) {
+        if (block == null) return false;
+        return localY < getFluidHeight(block, x, y, z);
+    }
+
+    private boolean isInWater() {
+        Pos pos = getPosition();
+        BoundingBox box = getBoundingBox();
+        double absMinY = pos.y() + box.minY();
+        var iter = box.getBlocks(pos);
+        while (iter.hasNext()) {
+            var blockPos = iter.next();
+            int bx = blockPos.blockX(), by = blockPos.blockY(), bz = blockPos.blockZ();
+            Block block = getBlockSafe(bx, by, bz);
+            if (block == null) continue;
+            double h = getFluidHeight(block, bx, by, bz);
+            if (h >= 0 && by + h >= absMinY) return true;
+        }
+        return false;
+    }
+
+    private double getFluidHeight(@Nullable Block block, int x, int y, int z) {
+        if (block == null) return -1;
+        boolean isWater = block.compare(Block.WATER);
+        boolean isWaterlogged = !isWater && "true".equals(block.getProperty("waterlogged"));
+        if (!isWater && !isWaterlogged) return -1;
+        Block above = getBlockSafe(x, y + 1, z);
+        if (above != null && (above.compare(Block.WATER) || "true".equals(above.getProperty("waterlogged")))) return 1.0;
+        if (isWater) {
+            int level = Integer.parseInt(block.getProperty("level"));
+            if (level >= 8) return 1.0;
+            return (8 - level) / 9.0;
+        }
+        return 8.0 / 9.0;
     }
 
     /**
