@@ -1616,22 +1616,24 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         playerMeta.setMainHand(settings.mainHand());
         if (isInPlayState) playerMeta.setNotifyAboutChanges(true);
 
-        final byte previousViewDistance = previous.viewDistance();
-        final byte newViewDistance = settings.viewDistance();
         // Check to see if we're in an instance first, as this method is called when first logging in since the client sends the Settings packet during configuration
         if (instance != null) {
             // Load/unload chunks if necessary due to view distance changes
-            if (previousViewDistance < newViewDistance) {
+            final int maxViewDistance = instance.viewDistance();
+            final int previousEffective = Math.min(previous.viewDistance(), maxViewDistance) + 1;
+            final int newEffective = Math.min(settings.viewDistance(), maxViewDistance) + 1;
+            final int centerX = position.chunkX(), centerZ = position.chunkZ();
+            if (previousEffective < newEffective) {
                 // View distance expanded, send chunks
-                ChunkRange.chunksInRange(position.chunkX(), position.chunkZ(), newViewDistance, (chunkX, chunkZ) -> {
-                    if (Math.abs(chunkX - position.chunkX()) > previousViewDistance || Math.abs(chunkZ - position.chunkZ()) > previousViewDistance) {
+                ChunkRange.chunksInRange(centerX, centerZ, newEffective, (chunkX, chunkZ) -> {
+                    if (Math.abs(chunkX - centerX) > previousEffective || Math.abs(chunkZ - centerZ) > previousEffective) {
                         chunkAdder.accept(chunkX, chunkZ);
                     }
                 });
-            } else if (previousViewDistance > newViewDistance) {
+            } else if (previousEffective > newEffective) {
                 // View distance shrunk, unload chunks
-                ChunkRange.chunksInRange(position.chunkX(), position.chunkZ(), previousViewDistance, (chunkX, chunkZ) -> {
-                    if (Math.abs(chunkX - position.chunkX()) > newViewDistance || Math.abs(chunkZ - position.chunkZ()) > newViewDistance) {
+                ChunkRange.chunksInRange(centerX, centerZ, previousEffective, (chunkX, chunkZ) -> {
+                    if (Math.abs(chunkX - centerX) > newEffective || Math.abs(chunkZ - centerZ) > newEffective) {
                         chunkRemover.accept(chunkX, chunkZ);
                     }
                 });
