@@ -14,6 +14,7 @@ import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.crypto.KeyUtils;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
@@ -138,12 +139,6 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     <T> @UnknownNullability T readAt(long index, Type<T> type) throws IndexOutOfBoundsException;
 
-    /**
-     * @deprecated Use {@link #copyTo(long, byte[], int, int)} instead, as longs can easily overflow arrays.
-     */
-    @Deprecated(forRemoval = true)
-    void copyTo(long srcOffset, byte[] dest, long destOffset, long length);
-
     void copyTo(long srcOffset, byte[] dest, int destOffset, int length);
 
     void copyTo(long srcOffset, MemorySegment dest, long destOffset, long length);
@@ -172,7 +167,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     long capacity();
 
-    void readOnly();
+    @Contract(pure = true, value = "-> new")
+    NetworkBuffer readOnly();
 
     boolean isReadOnly();
 
@@ -300,9 +296,6 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     static NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex, @Nullable Registries registries) {
-        /* TODO(next) remove me for zero copy. The old behavior didnt actually modify the underlying array.
-            quite unfortunate and will require until waiting for the next release to change this behavior. */
-        bytes = bytes.clone();
         return wrap(MemorySegment.ofArray(bytes), readIndex, writeIndex, registries);
     }
 
