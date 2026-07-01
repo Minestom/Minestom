@@ -2,7 +2,9 @@ package net.minestom.server.entity;
 
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.network.packet.server.play.EntityHeadLookPacket;
 import net.minestom.server.network.packet.server.play.EntityPositionSyncPacket;
+import net.minestom.server.network.packet.server.play.EntityRotationPacket;
 import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
@@ -64,11 +66,29 @@ public class EntityTeleportIntegrationTest {
                 packet -> assertEquals(teleportPosition, packet.position()));
         // Verify broadcast packet(s)
 
-        viewerTracker.assertCount(1);
-        viewerTracker.assertSingle(EntityPositionSyncPacket.class, packet -> {
-            assertEquals(player.getEntityId(), packet.entityId());
-            assertEquals(teleportPosition, packet.position());
-            assertEquals(teleportPosition.yaw(), packet.yaw());
+        viewerTracker.assertCount(3);
+        viewerTracker.assertCount(1, EntityPositionSyncPacket.class::isInstance);
+        viewerTracker.assertCount(1, EntityRotationPacket.class::isInstance);
+        viewerTracker.assertCount(1, EntityHeadLookPacket.class::isInstance);
+        viewerTracker.assertAnyMatch(packet -> {
+            if (!(packet instanceof EntityPositionSyncPacket syncPacket)) return false;
+            assertEquals(player.getEntityId(), syncPacket.entityId());
+            assertEquals(teleportPosition, syncPacket.position());
+            assertEquals(teleportPosition.yaw(), syncPacket.yaw());
+            return true;
+        });
+        viewerTracker.assertAnyMatch(packet -> {
+            if (!(packet instanceof EntityRotationPacket rotationPacket)) return false;
+            assertEquals(player.getEntityId(), rotationPacket.entityId());
+            assertEquals(teleportPosition.yaw(), rotationPacket.yaw());
+            assertEquals(teleportPosition.pitch(), rotationPacket.pitch());
+            return true;
+        });
+        viewerTracker.assertAnyMatch(packet -> {
+            if (!(packet instanceof EntityHeadLookPacket headLookPacket)) return false;
+            assertEquals(player.getEntityId(), headLookPacket.entityId());
+            assertEquals(teleportPosition.yaw(), headLookPacket.yaw());
+            return true;
         });
     }
 
