@@ -3,6 +3,7 @@ package net.minestom.server.listener;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.inventory.InventoryBundleItemSelectEvent;
 import net.minestom.server.event.inventory.InventoryButtonClickEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.AbstractInventory;
@@ -13,6 +14,7 @@ import net.minestom.server.network.packet.client.common.ClientPongPacket;
 import net.minestom.server.network.packet.client.play.ClientClickWindowButtonPacket;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.network.packet.client.play.ClientCloseWindowPacket;
+import net.minestom.server.network.packet.client.play.ClientSelectBundleItemPacket;
 import net.minestom.server.network.packet.server.play.SetCursorItemPacket;
 import org.jetbrains.annotations.Nullable;
 
@@ -94,5 +96,50 @@ public class WindowListener {
         if (packet.windowId() != (int) inventory.getWindowId()) return;
 
         EventDispatcher.call(new InventoryButtonClickEvent(player, inventory, packet.buttonId()));
+    }
+
+    public static void selectBundleItemListener(ClientSelectBundleItemPacket packet, Player player) {
+        final int selectedItemIndex = packet.selectedIndex();
+        if (selectedItemIndex < -1) {
+            throw new IllegalArgumentException("Selected item index cannot be less than -1: " + selectedItemIndex);
+        }
+
+        final int rawSlot = packet.slot();
+        if (rawSlot < 0) {
+            throw new IllegalArgumentException("Slot index cannot be negative: " + rawSlot);
+        }
+
+        final AbstractInventory openInventory = player.getOpenInventory();
+        final AbstractInventory targetInventory;
+        final int translatedSlot;
+
+        if (openInventory == null) {
+            if (rawSlot >= player.getInventory().getSize()) {
+                throw new IllegalArgumentException("Slot index " + rawSlot + " is out of bounds for player inventory size " + player.getInventory().getSize());
+            }
+            targetInventory = player.getInventory();
+            translatedSlot = rawSlot;
+        } else {
+            final int containerSize = openInventory.getSize();
+            if (rawSlot < containerSize) {
+                targetInventory = openInventory;
+                translatedSlot = rawSlot;
+            } else {
+                final int playerSlot = rawSlot - containerSize;
+                if (playerSlot >= player.getInventory().getSize()) {
+                    throw new IllegalArgumentException("Slot index " + rawSlot + " is out of bounds for combined inventory capacities");
+                }
+                targetInventory = player.getInventory();
+                translatedSlot = playerSlot;
+            }
+        }
+
+        InventoryBundleItemSelectEvent event = new InventoryBundleItemSelectEvent(
+                player,
+                targetInventory,
+                translatedSlot,
+                selectedItemIndex
+        );
+        EventDispatcher.call(event);
     }
 }

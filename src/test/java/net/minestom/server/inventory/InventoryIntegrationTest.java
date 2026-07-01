@@ -2,10 +2,13 @@ package net.minestom.server.inventory;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.event.EventFilter;
+import net.minestom.server.event.inventory.InventoryBundleItemSelectEvent;
 import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.network.packet.client.play.ClientSelectBundleItemPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.testing.Env;
@@ -239,5 +242,60 @@ public class InventoryIntegrationTest {
 
         player.openInventory(inventory);
         assertTrue(called.get(), "InventoryOpenEvent not fired");
+    }
+
+    @Test
+    public void bundleActivateTestLowerInventory(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+        final var inventory = new Inventory(InventoryType.CHEST_6_ROW, "title");
+        player.openInventory(inventory);
+        // No bundles are set - they might not exist serverside and be sent directly to the client
+
+        var listenerLowerInv = env.trackEvent(InventoryBundleItemSelectEvent.class, EventFilter.PLAYER, player);
+        player.addPacketToQueue(new ClientSelectBundleItemPacket(inventory.getSize() + 2, 42));
+        player.interpretPacketQueue();
+        listenerLowerInv.assertSingle(event -> {
+            assertEquals(2, event.getSlot());
+            assertEquals(player.getInventory(), event.getInventory());
+        });
+    }
+
+    @Test
+    public void bundleActivateTestUpperInventory(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+        final var inventory = new Inventory(InventoryType.CHEST_6_ROW, "title");
+        player.openInventory(inventory);
+        // No bundles are set - they might not exist serverside and be sent directly to the client
+
+        var listenerUpperInv = env.trackEvent(InventoryBundleItemSelectEvent.class, EventFilter.PLAYER, player);
+        player.addPacketToQueue(new ClientSelectBundleItemPacket(10, 42));
+        player.interpretPacketQueue();
+        listenerUpperInv.assertSingle(event -> {
+            assertEquals(10, event.getSlot());
+            assertEquals(inventory, event.getInventory());
+        });
+    }
+
+    @Test
+    public void bundleActivateTestNoContainerOpen(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+
+        // Ensure no external container is open
+        assertNull(player.getOpenInventory());
+
+        var listener = env.trackEvent(InventoryBundleItemSelectEvent.class, EventFilter.PLAYER, player);
+        player.addPacketToQueue(new ClientSelectBundleItemPacket(2, 42));
+        player.interpretPacketQueue();
+
+        listener.assertSingle(event -> {
+            assertEquals(2, event.getSlot());
+            assertEquals(player.getInventory(), event.getInventory());
+        });
     }
 }
