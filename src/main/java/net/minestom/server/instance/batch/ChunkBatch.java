@@ -4,11 +4,14 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
 import it.unimi.dsi.fastutil.ints.IntSet;
+import it.unimi.dsi.fastutil.longs.LongArrayList;
+import it.unimi.dsi.fastutil.longs.LongList;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.network.packet.server.play.MultiBlockChangePacket;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import org.jetbrains.annotations.Nullable;
@@ -228,8 +231,12 @@ public class ChunkBatch implements Batch<ChunkCallback> {
     private void updateChunk(Instance instance, Chunk chunk, IntSet updatedSections, @Nullable ChunkCallback callback, boolean safeCallback) {
         // Refresh chunk for viewers
         if (options.shouldSendUpdate()) {
-            // TODO update all sections from `updatedSections`
-            chunk.sendChunk();
+            if (options.isFullChunk()) {
+                chunk.sendChunk();
+            } else {
+                // Send only the changed blocks per section instead of resending the whole chunk.
+                sendSectionUpdates(chunk);
+            }
         }
 
         if (instance instanceof InstanceContainer) {
@@ -243,6 +250,27 @@ public class ChunkBatch implements Batch<ChunkCallback> {
             } else {
                 callback.accept(chunk);
             }
+        }
+    }
+
+    // Sends the batch's changed blocks to viewers as per-section multi-block updates instead of a full chunk resend.
+    private void sendSectionUpdates(Chunk chunk) {
+        final int chunkX = chunk.getChunkX();
+        final int chunkZ = chunk.getChunkZ();
+        final Int2ObjectMap<LongList> bySection = new Int2ObjectOpenHashMap<>();
+        synchronized (blocks) {
+            for (var entry : blocks.int2ObjectEntrySet()) {
+                final int index = entry.getIntKey();
+                final int x = CoordConversion.chunkBlockIndexGetX(index);
+                final int y = CoordConversion.chunkBlockIndexGetY(index);
+                final int z = CoordConversion.chunkBlockIndexGetZ(index);
+                final long packed = CoordConversion.encodeSectionBlockChange(
+                        x, CoordConversion.globalToSectionRelative(y), z, entry.getValue().stateId());
+                bySection.computeIfAbsent(CoordConversion.globalToChunk(y), _ -> new LongArrayList()).add(packed);
+            }
+        }
+        for (var entry : bySection.int2ObjectEntrySet()) {
+            chunk.sendPacketToViewers(new MultiBlockChangePacket(chunkX, entry.getIntKey(), chunkZ, entry.getValue().toLongArray()));
         }
     }
 }
