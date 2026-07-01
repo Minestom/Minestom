@@ -1035,6 +1035,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         Check.stateCondition(entity == getVehicle(), "Cannot add the entity vehicle as a passenger");
         final Entity vehicle = entity.getVehicle();
         if (vehicle != null) vehicle.removePassenger(entity);
+        if (this.passengers.contains(entity)) return;
         if (!currentInstance.equals(entity.getInstance()))
             entity.setInstance(currentInstance, position).join();
         this.passengers.add(entity);
