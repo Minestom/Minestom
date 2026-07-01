@@ -145,7 +145,6 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
         }
     }
 
-
     /**
      * Unwrap the contained object unsafely.
      * <p>

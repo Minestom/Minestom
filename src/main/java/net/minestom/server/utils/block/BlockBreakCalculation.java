@@ -160,13 +160,12 @@ public class BlockBreakCalculation {
 
     private static float getMiningFatigueMultiplier(Player player) {
         int level = player.getEffectLevel(PotionEffect.MINING_FATIGUE) + 1;
-        // Use switch to avoid expensive Math.pow
-        return switch (level) { // 0.3 ^ min(level, 4)
+        return switch (level) {
             case 0 -> 0;
-            case 1 -> 0.3F; // 0.3 ^ 1
-            case 2 -> 0.09F; // 0.3 ^ 2
-            case 3 -> 0.027F; // 0.3 ^ 3
-            default -> 0.0081F; // 0.3 ^ 4
+            case 1 -> 0.3F;
+            case 2 -> 0.09F;
+            case 3 -> 0.0027F;
+            default -> 0.00081F;
         };
     }
 
