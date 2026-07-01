@@ -16,6 +16,7 @@ import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.network.packet.client.play.ClientCloseWindowPacket;
 import net.minestom.server.network.packet.client.play.ClientSelectBundleItemPacket;
 import net.minestom.server.network.packet.server.play.SetCursorItemPacket;
+import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.Nullable;
 
 public class WindowListener {
@@ -100,23 +101,36 @@ public class WindowListener {
 
     public static void selectBundleItemListener(ClientSelectBundleItemPacket packet, Player player) {
         final int selectedItemIndex = packet.selectedIndex();
+        if (selectedItemIndex < -1) {
+            throw new IllegalArgumentException("Selected item index cannot be less than -1: " + selectedItemIndex);
+        }
+
+        final int rawSlot = packet.slot();
+        if (rawSlot < 0) {
+            throw new IllegalArgumentException("Slot index cannot be negative: " + rawSlot);
+        }
 
         final AbstractInventory openInventory = player.getOpenInventory();
         final AbstractInventory targetInventory;
         final int translatedSlot;
 
         if (openInventory == null) {
+            translatedSlot = PlayerInventoryUtils.convertWindow0SlotToMinestomSlot(rawSlot);
+            if (translatedSlot >= player.getInventory().getSize() || translatedSlot < 0) {
+                throw new IllegalArgumentException("Slot index " + rawSlot + " is out of bounds for player inventory");
+            }
             targetInventory = player.getInventory();
-            translatedSlot = packet.slot();
         } else {
-            // remap slot relative to the open inventory
             final int containerSize = openInventory.getSize();
-            if (packet.slot() < containerSize) {
+            if (rawSlot < containerSize) {
                 targetInventory = openInventory;
-                translatedSlot = packet.slot();
+                translatedSlot = rawSlot;
             } else {
+                translatedSlot = PlayerInventoryUtils.convertWindowSlotToMinestomSlot(rawSlot, containerSize);
+                if (translatedSlot >= player.getInventory().getSize() || translatedSlot < 0) {
+                    throw new IllegalArgumentException("Slot index " + rawSlot + " is out of bounds for player inventory");
+                }
                 targetInventory = player.getInventory();
-                translatedSlot = packet.slot() - containerSize;
             }
         }
 
