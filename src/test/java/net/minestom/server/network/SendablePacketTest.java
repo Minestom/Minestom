@@ -8,30 +8,15 @@ import net.minestom.server.network.packet.PacketWriting;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.play.ClientAnimationPacket;
 import net.minestom.server.network.packet.server.CachedPacket;
-import net.minestom.server.network.packet.server.LazyPacket;
 import net.minestom.server.network.packet.server.play.SystemChatPacket;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.zip.DataFormatException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SendablePacketTest {
-
-    @Test
-    public void lazy() {
-        var packet = new SystemChatPacket(Component.text("Hello World!"), false);
-        AtomicBoolean called = new AtomicBoolean(false);
-        var lazy = new LazyPacket(() -> {
-            if (called.getAndSet(true))
-                fail();
-            return packet;
-        });
-        assertSame(packet, lazy.packet());
-        assertSame(packet, lazy.packet());
-    }
 
     @Test
     public void cached() {
