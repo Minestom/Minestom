@@ -2,6 +2,7 @@ package net.minestom.server.potion;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
+import net.kyori.adventure.translation.Translatable;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
@@ -12,7 +13,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public sealed interface PotionEffect extends StaticProtocolObject<PotionEffect>, PotionEffects permits PotionEffectImpl {
+public sealed interface PotionEffect extends StaticProtocolObject<PotionEffect>, PotionEffects,
+        Translatable permits PotionEffectImpl {
     NetworkBuffer.Type<PotionEffect> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(PotionEffect::fromId, PotionEffect::id);
     Codec<PotionEffect> CODEC = Codec.KEY.transform(PotionEffect::fromKey, PotionEffect::key);
 
@@ -27,6 +29,11 @@ public sealed interface PotionEffect extends StaticProtocolObject<PotionEffect>,
     @Override
     default int id() {
         return registry().id();
+    }
+
+    @Override
+    default String translationKey() {
+        return registry().translationKey();
     }
 
     static Collection<PotionEffect> values() {

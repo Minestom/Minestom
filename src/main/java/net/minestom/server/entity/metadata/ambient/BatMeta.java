@@ -3,9 +3,10 @@ package net.minestom.server.entity.metadata.ambient;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import org.jetbrains.annotations.Nullable;
 
 public class BatMeta extends AmbientCreatureMeta {
-    public BatMeta(Entity entity, MetadataHolder metadata) {
+    public BatMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

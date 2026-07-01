@@ -3,9 +3,10 @@ package net.minestom.server.entity.metadata.golem;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import org.jetbrains.annotations.Nullable;
 
 public class IronGolemMeta extends AbstractGolemMeta {
-    public IronGolemMeta(Entity entity, MetadataHolder metadata) {
+    public IronGolemMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
