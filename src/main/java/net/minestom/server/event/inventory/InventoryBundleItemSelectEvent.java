@@ -27,13 +27,13 @@ public class InventoryBundleItemSelectEvent implements InventoryEvent, PlayerIns
      *
      * @return the player
      */
-     @Override
+    @Override
     public Player getPlayer() {
         return player;
     }
 
     /**
-     * Returns the modified slot, relative to {@link #getInventory}
+     * Returns the modified slot, relative to {@link #getInventory()}
      */
     public int getSlot() {
         return this.slot;

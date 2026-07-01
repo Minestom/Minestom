@@ -100,23 +100,37 @@ public class WindowListener {
 
     public static void selectBundleItemListener(ClientSelectBundleItemPacket packet, Player player) {
         final int selectedItemIndex = packet.selectedIndex();
+        if (selectedItemIndex < -1) {
+            throw new IllegalArgumentException("Selected item index cannot be less than -1: " + selectedItemIndex);
+        }
+
+        final int rawSlot = packet.slot();
+        if (rawSlot < 0) {
+            throw new IllegalArgumentException("Slot index cannot be negative: " + rawSlot);
+        }
 
         final AbstractInventory openInventory = player.getOpenInventory();
         final AbstractInventory targetInventory;
         final int translatedSlot;
 
         if (openInventory == null) {
+            if (rawSlot >= player.getInventory().getSize()) {
+                throw new IllegalArgumentException("Slot index " + rawSlot + " is out of bounds for player inventory size " + player.getInventory().getSize());
+            }
             targetInventory = player.getInventory();
-            translatedSlot = packet.slot();
+            translatedSlot = rawSlot;
         } else {
-            // remap slot relative to the open inventory
             final int containerSize = openInventory.getSize();
-            if (packet.slot() < containerSize) {
+            if (rawSlot < containerSize) {
                 targetInventory = openInventory;
-                translatedSlot = packet.slot();
+                translatedSlot = rawSlot;
             } else {
+                final int playerSlot = rawSlot - containerSize;
+                if (playerSlot >= player.getInventory().getSize()) {
+                    throw new IllegalArgumentException("Slot index " + rawSlot + " is out of bounds for combined inventory capacities");
+                }
                 targetInventory = player.getInventory();
-                translatedSlot = packet.slot() - containerSize;
+                translatedSlot = playerSlot;
             }
         }
 
