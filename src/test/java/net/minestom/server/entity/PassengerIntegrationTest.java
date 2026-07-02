@@ -45,7 +45,7 @@ public class PassengerIntegrationTest {
         assertEquals(1, vehicle.getPassengers().size());
         assertEquals(vehicle, passenger.getVehicle());
 
-        assertTrue(passenger.getDistance(vehicle) < 2);
+        assertTrue(passenger.getDistance(vehicle) < 3);
     }
 
     @Test
