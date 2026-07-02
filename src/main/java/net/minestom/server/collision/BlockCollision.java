@@ -90,6 +90,7 @@ final class BlockCollision {
                                              Vec velocity, Pos entityPosition,
                                              Block.Getter getter, boolean singleCollision) {
         final SweepResult finalResult = new SweepResult(1 - Vec.EPSILON, 0, 0, 0, null, 0, 0, 0, 0, 0, 0);
+        final Sweep sweep = new Sweep(boundingBox, getter, finalResult);
 
         // Start as the shared (all-null) arrays; only allocate real ones on the first collision.
         Point[] collidedPoints = NO_COLLISION_POINTS;
@@ -101,7 +102,7 @@ final class BlockCollision {
         // Each sweep advances along `remaining` until the first hit, zeroes the
         // collided axis, then repeats so the entity slides along the others.
         while (true) {
-            sweepBlocks(boundingBox, remaining, position, getter, finalResult);
+            sweep.sweepBlocks(position, remaining);
             double dx = finalResult.res * remaining.x();
             double dy = finalResult.res * remaining.y();
             double dz = finalResult.res * remaining.z();
@@ -162,121 +163,157 @@ final class BlockCollision {
     }
 
     /**
-     * Iterate the blocks overlapping the swept bounding box (start -> start+velocity), near-to-far
-     * along the movement so {@code finalResult.res} tightens early and farther blocks are rejected
-     * cheaply by the SweepResult distance gate. Each block is visited exactly once.
+     * One block-sweep pass: primitive mover state shared by the per-block checks, refreshed at the
+     * start of each pass. Keeps the hot loop free of {@link Point} math and argument plumbing.
      */
-    private static void sweepBlocks(BoundingBox boundingBox,
-                                    Vec velocity, Pos entityPosition,
-                                    Block.Getter getter,
-                                    SweepResult finalResult) {
-        final double startX = entityPosition.x();
-        final double startY = entityPosition.y();
-        final double startZ = entityPosition.z();
-        final double endX = startX + velocity.x();
-        final double endY = startY + velocity.y();
-        final double endZ = startZ + velocity.z();
+    private static final class Sweep {
+        final BoundingBox boundingBox;
+        final Block.Getter getter;
+        final SweepResult result;
+        double posX, posY, posZ; // entity position
+        double vX, vY, vZ; // movement this pass
+        double moMinX, moMinY, moMinZ, moMaxX, moMaxY, moMaxZ; // mover world bounds
+        // One-slot block memo; valid across passes since blocks don't change mid-simulation
+        int cacheX, cacheY, cacheZ;
+        @Nullable Block cachedBlock;
 
-        // Block-aligned bounds of the swept AABB.
-        final int minX = (int) Math.floor(Math.min(startX, endX) + boundingBox.minX());
-        final int minY = (int) Math.floor(Math.min(startY, endY) + boundingBox.minY());
-        final int minZ = (int) Math.floor(Math.min(startZ, endZ) + boundingBox.minZ());
-        final int maxX = (int) Math.floor(Math.max(startX, endX) + boundingBox.maxX());
-        final int maxY = (int) Math.floor(Math.max(startY, endY) + boundingBox.maxY());
-        final int maxZ = (int) Math.floor(Math.max(startZ, endZ) + boundingBox.maxZ());
+        Sweep(BoundingBox boundingBox, Block.Getter getter, SweepResult result) {
+            this.boundingBox = boundingBox;
+            this.getter = getter;
+            this.result = result;
+        }
 
-        // Walk from near to far along velocity.
-        final int stepX = velocity.x() < 0 ? -1 : 1;
-        final int stepY = velocity.y() < 0 ? -1 : 1;
-        final int stepZ = velocity.z() < 0 ? -1 : 1;
-        final int firstX = stepX > 0 ? minX : maxX, lastX = stepX > 0 ? maxX : minX;
-        final int firstY = stepY > 0 ? minY : maxY, lastY = stepY > 0 ? maxY : minY;
-        final int firstZ = stepZ > 0 ? minZ : maxZ, lastZ = stepZ > 0 ? maxZ : minZ;
+        /**
+         * Iterate the blocks overlapping the swept bounding box (start -> start+velocity), near-to-far
+         * along the movement so {@code result.res} tightens early and farther blocks are rejected
+         * cheaply by the SweepResult distance gate. Each block is visited exactly once.
+         */
+        void sweepBlocks(Pos position, Vec velocity) {
+            posX = position.x();
+            posY = position.y();
+            posZ = position.z();
+            vX = velocity.x();
+            vY = velocity.y();
+            vZ = velocity.z();
+            moMinX = posX + boundingBox.minX();
+            moMinY = posY + boundingBox.minY();
+            moMinZ = posZ + boundingBox.minZ();
+            moMaxX = posX + boundingBox.maxX();
+            moMaxY = posY + boundingBox.maxY();
+            moMaxZ = posZ + boundingBox.maxZ();
 
-        for (int x = firstX; x != lastX + stepX; x += stepX) {
-            for (int y = firstY; y != lastY + stepY; y += stepY) {
+            // Block-aligned bounds of the swept AABB.
+            final int minX = (int) Math.floor(Math.min(posX, posX + vX) + boundingBox.minX());
+            final int minY = (int) Math.floor(Math.min(posY, posY + vY) + boundingBox.minY());
+            final int minZ = (int) Math.floor(Math.min(posZ, posZ + vZ) + boundingBox.minZ());
+            final int maxX = (int) Math.floor(Math.max(posX, posX + vX) + boundingBox.maxX());
+            final int maxY = (int) Math.floor(Math.max(posY, posY + vY) + boundingBox.maxY());
+            final int maxZ = (int) Math.floor(Math.max(posZ, posZ + vZ) + boundingBox.maxZ());
+
+            // Walk from near to far along velocity.
+            final int stepX = vX < 0 ? -1 : 1;
+            final int stepY = vY < 0 ? -1 : 1;
+            final int stepZ = vZ < 0 ? -1 : 1;
+            final int firstX = stepX > 0 ? minX : maxX, lastX = stepX > 0 ? maxX : minX;
+            final int firstY = stepY > 0 ? minY : maxY, lastY = stepY > 0 ? maxY : minY;
+            final int firstZ = stepZ > 0 ? minZ : maxZ, lastZ = stepZ > 0 ? maxZ : minZ;
+
+            // Y innermost so the one-slot block memo dedups the below-block lookups of short blocks
+            // against the column walk (the below block of one step is the current block of the next).
+            for (int x = firstX; x != lastX + stepX; x += stepX) {
                 for (int z = firstZ; z != lastZ + stepZ; z += stepZ) {
-                    checkBoundingBox(x, y, z, velocity, entityPosition, boundingBox, getter, finalResult);
+                    for (int y = firstY; y != lastY + stepY; y += stepY) {
+                        checkBlock(x, y, z);
+                    }
                 }
             }
-        }
-    }
 
-    /**
-     * Check if a moving entity will collide with a block. Updates finalResult
-     *
-     * @param blockX         block x position
-     * @param blockY         block y position
-     * @param blockZ         block z position
-     * @param entityVelocity entity movement vector
-     * @param entityPosition entity position
-     * @param boundingBox    entity bounding box
-     * @param getter         block getter
-     * @param finalResult    place to store final result of collision
-     * @return true if entity finds collision, other false
-     */
-    static boolean checkBoundingBox(int blockX, int blockY, int blockZ,
-                                    Vec entityVelocity, Pos entityPosition, BoundingBox boundingBox,
-                                    Block.Getter getter, SweepResult finalResult) {
-        // Don't step if chunk isn't loaded yet
-        final Block currentBlock = getter.getBlock(blockX, blockY, blockZ, Block.Getter.Condition.TYPE);
-        final Shape currentShape = currentBlock.registry().collisionShape();
-
-        final boolean currentCollidable = !currentShape.relativeEnd().isZero();
-        final boolean currentShort = currentShape.relativeEnd().y() < 0.5;
-
-        // only consider the block below if our current shape is sufficiently short
-        if (currentShort && shouldCheckLower(entityVelocity, entityPosition, blockX, blockY, blockZ)) {
-            // we need to check below for a tall block (fence, wall, ...)
-            final Vec belowPos = new Vec(blockX, blockY - 1, blockZ);
-            final Block belowBlock = getter.getBlock(belowPos, Block.Getter.Condition.TYPE);
-            final Shape belowShape = belowBlock.registry().collisionShape();
-
-            final Vec currentPos = new Vec(blockX, blockY, blockZ);
-            // don't fall out of if statement, we could end up redundantly grabbing a block, and we only need to
-            // collision check against the current shape since the below shape isn't tall
-            if (belowShape.relativeEnd().y() > 1) {
-                // we should always check both shapes, so no short-circuit here, to handle properties where the bounding box
-                // hits the current solid but misses the tall solid
-                return belowShape.intersectBoxSwept(entityPosition, entityVelocity, belowPos, boundingBox, finalResult) |
-                        (currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity, currentPos, boundingBox, finalResult));
-            } else {
-                return currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity, currentPos, boundingBox, finalResult);
+            // Collided position of the winning hit, filled once per pass.
+            if (result.normalX != 0 || result.normalY != 0 || result.normalZ != 0) {
+                result.collidedPositionX = posX + vX * result.res;
+                result.collidedPositionY = posY + vY * result.res;
+                result.collidedPositionZ = posZ + vZ * result.res;
             }
         }
 
-        if (currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity,
-                new Vec(blockX, blockY, blockZ), boundingBox, finalResult)) {
-            // if the current collision is sufficiently short, we might need to collide against the block below too
-            if (currentShort) {
-                final Vec belowPos = new Vec(blockX, blockY - 1, blockZ);
-                final Block belowBlock = getter.getBlock(belowPos, Block.Getter.Condition.TYPE);
+        /**
+         * Check if the moving entity will collide with the block at the given position (and, for
+         * short blocks, the potentially tall block below it). Updates {@code result}.
+         */
+        private Block blockAt(int x, int y, int z) {
+            final Block cached = cachedBlock;
+            if (cached != null && x == cacheX && y == cacheY && z == cacheZ) return cached;
+            final Block block = getter.getBlock(x, y, z, Block.Getter.Condition.TYPE);
+            cacheX = x;
+            cacheY = y;
+            cacheZ = z;
+            cachedBlock = block;
+            return block;
+        }
+
+        boolean checkBlock(int blockX, int blockY, int blockZ) {
+            // Don't step if chunk isn't loaded yet
+            final Block currentBlock = blockAt(blockX, blockY, blockZ);
+            final Shape currentShape = currentBlock.registry().collisionShape();
+
+            final boolean currentCollidable = !currentShape.relativeEnd().isZero();
+            final boolean currentShort = currentShape.relativeEnd().y() < 0.5;
+
+            // only consider the block below if our current shape is sufficiently short
+            if (currentShort && shouldCheckLower(blockX, blockY, blockZ)) {
+                // we need to check below for a tall block (fence, wall, ...)
+                final Block belowBlock = blockAt(blockX, blockY - 1, blockZ);
                 final Shape belowShape = belowBlock.registry().collisionShape();
-                // only do sweep if the below block is big enough to possibly hit
-                if (belowShape.relativeEnd().y() > 1)
-                    belowShape.intersectBoxSwept(entityPosition, entityVelocity, belowPos, boundingBox, finalResult);
-            }
-            return true;
-        }
-        return false;
-    }
 
-    private static boolean shouldCheckLower(Vec entityVelocity, Pos entityPosition, int blockX, int blockY, int blockZ) {
-        final double yVelocity = entityVelocity.y();
-        // if moving horizontally, just check if the floor of the entity's position is the same as the blockY
-        if (yVelocity == 0) return Math.floor(entityPosition.y()) == blockY;
-        final double xVelocity = entityVelocity.x();
-        final double zVelocity = entityVelocity.z();
-        // if moving straight up, don't bother checking for tall solids beneath anything
-        // if moving straight down, only check for a tall solid underneath the last block
-        if (xVelocity == 0 && zVelocity == 0)
-            return yVelocity < 0 && blockY == Math.floor(entityPosition.y() + yVelocity);
-        // default to true: if no x velocity, only consider YZ line, and vice-versa
-        final boolean underYX = xVelocity != 0 && computeHeight(yVelocity, xVelocity, entityPosition.y(), entityPosition.x(), blockX) >= blockY;
-        final boolean underYZ = zVelocity != 0 && computeHeight(yVelocity, zVelocity, entityPosition.y(), entityPosition.z(), blockZ) >= blockY;
-        // true if the block is at or below the same height as a line drawn from the entity's position to its final
-        // destination
-        return underYX && underYZ;
+                // don't fall out of if statement, we could end up redundantly grabbing a block, and we only need to
+                // collision check against the current shape since the below shape isn't tall
+                if (belowShape.relativeEnd().y() > 1) {
+                    // we should always check both shapes, so no short-circuit here, to handle properties where the bounding box
+                    // hits the current solid but misses the tall solid
+                    return sweepShape(belowShape, blockX, blockY - 1, blockZ) |
+                            (currentCollidable && sweepShape(currentShape, blockX, blockY, blockZ));
+                } else {
+                    return currentCollidable && sweepShape(currentShape, blockX, blockY, blockZ);
+                }
+            }
+
+            if (currentCollidable && sweepShape(currentShape, blockX, blockY, blockZ)) {
+                // if the current collision is sufficiently short, we might need to collide against the block below too
+                if (currentShort) {
+                    final Block belowBlock = blockAt(blockX, blockY - 1, blockZ);
+                    final Shape belowShape = belowBlock.registry().collisionShape();
+                    // only do sweep if the below block is big enough to possibly hit
+                    if (belowShape.relativeEnd().y() > 1)
+                        sweepShape(belowShape, blockX, blockY - 1, blockZ);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        private boolean sweepShape(Shape shape, int blockX, int blockY, int blockZ) {
+            if (shape instanceof ShapeImpl impl)
+                return impl.sweep(moMinX, moMinY, moMinZ, moMaxX, moMaxY, moMaxZ,
+                        vX, vY, vZ, blockX, blockY, blockZ, result);
+            // Custom Shape implementations go through the public API
+            return shape.intersectBoxSwept(new Pos(posX, posY, posZ), new Vec(vX, vY, vZ),
+                    new Vec(blockX, blockY, blockZ), boundingBox, result);
+        }
+
+        private boolean shouldCheckLower(int blockX, int blockY, int blockZ) {
+            // if moving horizontally, just check if the floor of the entity's position is the same as the blockY
+            if (vY == 0) return Math.floor(posY) == blockY;
+            // if moving straight up, don't bother checking for tall solids beneath anything
+            // if moving straight down, only check for a tall solid underneath the last block
+            if (vX == 0 && vZ == 0)
+                return vY < 0 && blockY == Math.floor(posY + vY);
+            // default to true: if no x velocity, only consider YZ line, and vice-versa
+            final boolean underYX = vX != 0 && computeHeight(vY, vX, posY, posX, blockX) >= blockY;
+            final boolean underYZ = vZ != 0 && computeHeight(vY, vZ, posY, posZ, blockZ) >= blockY;
+            // true if the block is at or below the same height as a line drawn from the entity's position to its final
+            // destination
+            return underYX && underYZ;
+        }
     }
 
     /*
