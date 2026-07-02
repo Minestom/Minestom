@@ -593,7 +593,7 @@ public final class RegistryData {
         private final double eyeHeight;
         private final int clientTrackingRange;
         private final boolean fireImmune;
-        private final Map<String, List<Double>> entityOffsets;
+        private final Map<String, List<List<Double>>> entityOffsets;
         private final Map<Attribute, Double> defaultAttributes;
         private final BoundingBox boundingBox;
 
@@ -615,13 +615,13 @@ public final class RegistryData {
             this.boundingBox = new BoundingBox(this.width, this.height, this.width);
 
             // Attachments
-            Map<String, List<Double>> entityOffsets = new HashMap<>();
+            Map<String, List<List<Double>>> entityOffsets = new HashMap<>();
             Properties attachments = main.section("attachments");
             if (attachments != null) {
                 var allAttachments = attachments.asMap().keySet();
                 for (String key : allAttachments) {
                     List<List<Double>> offset = attachments.getList(key);
-                    entityOffsets.put(key, offset.getFirst()); // It's an array of an array with a single element, as of 1.21.3 we only need to grab a single array of 3 doubles
+                    entityOffsets.put(key, offset);
                 }
             }
             this.entityOffsets = Map.copyOf(entityOffsets);
@@ -704,6 +704,18 @@ public final class RegistryData {
          * @return A list of 3 doubles if the attachment is defined for this entity, or null if it is not defined
          */
         public @Nullable List<Double> entityAttachment(String attachmentName) {
+            return entityOffsets.get(attachmentName) != null ? entityOffsets.get(attachmentName).getFirst() : null;
+        }
+
+        /**
+         * Gets all entity attachments under a specific name. Typically, will be PASSENGER or VEHICLE, but some entities have custom attachments (e.g. WARDEN_CHEST, NAMETAG)
+         * <p></p>
+         * This is only needed for happy ghast, as that is (currently) the only entity that has multiple attachments for PASSENGER as of 26.1
+         *
+         * @param attachmentName The attachment to retrieve
+         * @return A list of a list of 3 doubles if the attachment is defined for this entity, or null if it is not defined
+         */
+        public @Nullable List<List<Double>> entityAttachments(String attachmentName) {
             return entityOffsets.get(attachmentName);
         }
 
