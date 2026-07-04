@@ -199,6 +199,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public void ensureWritable(long length) {
+        if (length < 0) throw new IllegalArgumentException("Length cannot be negative");
         final MemorySegment segment = this.segment;
         if (isDummy(segment)) return; // dummy's have infinite write length
         assertReadOnly(segment);
