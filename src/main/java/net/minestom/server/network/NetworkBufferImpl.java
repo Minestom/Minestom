@@ -49,13 +49,14 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public <T> void write(Type<T> type, @UnknownNullability T value) {
-        assertReadOnly();
+        final MemorySegment segment = this.segment;
+        if (segment != null) assertReadOnly(segment);
         type.write(this, value);
     }
 
     @Override
     public <T> @UnknownNullability T read(Type<T> type) {
-        assertDummy();
+        assertDummy(this.segment);
         return type.read(this);
     }
 
@@ -367,10 +368,6 @@ final class NetworkBufferImpl implements NetworkBuffer {
                 readIndex, writeIndex, capacity(), registries != null, autoResize != null, isReadOnly());
     }
 
-    private boolean isDummy() {
-        return segment == null;
-    }
-
     // Internal writing methods
     void _putBytes(long index, byte[] value) {
         final MemorySegment segment = this.segment;
@@ -475,7 +472,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         MemorySegment.copy(src, srcOffset, dst, dstOffset, length);
     }
 
-    public static boolean equals(NetworkBuffer buffer1, NetworkBuffer buffer2) {
+    static boolean equals(NetworkBuffer buffer1, NetworkBuffer buffer2) {
         var impl1 = impl(buffer1).segment;
         var impl2 = impl(buffer2).segment;
         assertDummy(impl1);
@@ -483,14 +480,6 @@ final class NetworkBufferImpl implements NetworkBuffer {
         if (impl1.byteSize() != impl2.byteSize()) return false;
         if (impl1.address() != impl2.address()) return false;
         return impl1.mismatch(impl2) == -1;
-    }
-
-    void assertReadOnly() {
-        if (isReadOnly()) throw new UnsupportedOperationException("Buffer is read-only");
-    }
-
-    void assertDummy() {
-        if (isDummy()) throw new UnsupportedOperationException("Buffer is a dummy buffer");
     }
 
     static void throwDummy() {
