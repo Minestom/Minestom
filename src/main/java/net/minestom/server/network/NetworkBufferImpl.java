@@ -98,13 +98,14 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public byte[] extractBytes(Consumer<NetworkBuffer> extractor) {
-        assertDummy(segment); // See below why it's not hoisted
+        final MemorySegment segment = this.segment;
+        assertDummy(segment);
         final long startingPosition = readIndex();
         extractor.accept(this);
         final long endingPosition = readIndex();
         final long length = endingPosition - startingPosition;
         byte[] output = new byte[Math.toIntExact(length)];
-        copyTo(startingPosition, output, 0, output.length); // Use copyTo because MemorySegement.copy is force inline
+        MemorySegment.copy(segment, ValueLayout.JAVA_BYTE, startingPosition, output, 0, output.length);
         return output;
     }
 
@@ -158,12 +159,12 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public long readableBytes() {
-        return writeIndex - readIndex;
+        return readableBytes(writeIndex, readIndex);
     }
 
     @Override
     public long writableBytes() {
-        return capacity() - writeIndex;
+        return writableBytes(capacity(), writeIndex);
     }
 
     @Override
@@ -205,7 +206,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         if (isDummy(segment)) return; // dummy's have infinite write length
         assertReadOnly(segment);
         final long capacity = segment.byteSize();
-        if (capacity - writeIndex >= length) return;
+        if (writableBytes(capacity, writeIndex) >= length) return;
         final long newCapacity = newCapacity(length, capacity);
         resize(newCapacity);
     }
@@ -235,7 +236,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         assertDummy(segment);
         final long readIndex = readIndex();
         if (readIndex == 0) return;
-        MemorySegment.copy(segment, readIndex, segment, 0, readableBytes());
+        MemorySegment.copy(segment, readIndex, segment, 0, readableBytes(writeIndex, readIndex));
         this.writeIndex -= readIndex;
         this.readIndex = 0;
     }
@@ -255,7 +256,8 @@ final class NetworkBufferImpl implements NetworkBuffer {
         Objects.requireNonNull(channel);
         final MemorySegment segment = this.segment;
         assertDummy(segment);
-        var buffer = bufferSlice(segment, writeIndex, writableBytes());
+        final long writeIndex = this.writeIndex;
+        var buffer = bufferSlice(segment, writeIndex, writableBytes(segment.byteSize(), writeIndex));
         final int count = channel.read(buffer);
         if (count == -1) throw new EOFException("Disconnected");
         advanceWrite(count);
@@ -267,7 +269,8 @@ final class NetworkBufferImpl implements NetworkBuffer {
         Objects.requireNonNull(channel);
         final MemorySegment segment = this.segment;
         assertDummy(segment);
-        final long readableBytes = readableBytes();
+        final long readIndex = this.readIndex;
+        final long readableBytes = readableBytes(writeIndex, readIndex);
         if (readableBytes == 0) return true; // Nothing to write
         var buffer = bufferSlice(segment, readIndex, readableBytes);
         if (!buffer.hasRemaining())
@@ -503,8 +506,16 @@ final class NetworkBufferImpl implements NetworkBuffer {
         if (segment.isReadOnly()) throwReadOnly();
     }
 
-    private static ByteBuffer bufferSlice(MemorySegment segment, long position, long length) {
+    static ByteBuffer bufferSlice(MemorySegment segment, long position, long length) {
         return segment.asSlice(position, length).asByteBuffer().order(BIG_ENDIAN);
+    }
+
+    static long readableBytes(long writeIndex, long readIndex) {
+        return writeIndex - readIndex;
+    }
+
+    static long writableBytes(long capacity, long writeIndex) {
+        return capacity - writeIndex;
     }
 
     static final class Builder implements NetworkBuffer.Builder {
