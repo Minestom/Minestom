@@ -481,7 +481,6 @@ final class NetworkBufferImpl implements NetworkBuffer {
         assertDummy(impl1);
         assertDummy(impl2);
         if (impl1.byteSize() != impl2.byteSize()) return false;
-        if (impl1.address() != impl2.address()) return false;
         return impl1.mismatch(impl2) == -1;
     }
 
