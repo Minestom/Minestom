@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.lang.foreign.MemorySegment;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.SocketChannel;
+import java.nio.channels.WritableByteChannel;
 import java.security.PublicKey;
 import java.time.Instant;
 import java.util.*;
@@ -191,7 +192,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     int readChannel(ReadableByteChannel channel) throws IOException;
 
-    boolean writeChannel(SocketChannel channel) throws IOException;
+    boolean writeChannel(WritableByteChannel channel) throws IOException;
 
     void cipher(Cipher cipher, long start, long length);
 
