@@ -35,11 +35,30 @@ public final class EntityUtils {
             return passengerOffset.sub(vehicleOffset).rotateAroundY(Math.toRadians(-vehicle.getPosition().yaw()));
         } else if (vehicle.getEntityType().name().contains("boat")) {
             double animalOffset = isEntityAnimal(passenger.getEntityType()) ? 0.2 : 0;
-            if (passengerIndex == 0) {
-                return new Vec(0, vehicle.getEntityType().height() / 3f, 0.2 + animalOffset).rotateAroundY(Math.toRadians(vehicle.getPosition().yaw() * -1));
+            if (CHEST_BOATS.contains(passenger.getEntityType())) {
+                // Special case: Single passenger
+                if (vehicle.getPassengers().size() == 1) {
+                    return new Vec(0, vehicle.getEntityType().height() / 3f, 0.15).rotateAroundY(Math.toRadians(vehicle.getPosition().yaw() * -1));
+                } else {
+                    if (passengerIndex == 0) {
+                        return new Vec(0, vehicle.getEntityType().height() / 3f, 0.15 + animalOffset).rotateAroundY(Math.toRadians(vehicle.getPosition().yaw() * -1));
+                    } else {
+                        return new Vec(0, vehicle.getEntityType().height() / 3f, -0.6 + animalOffset).rotateAroundY(Math.toRadians(vehicle.getPosition().yaw() * -1));
+                    }
+                }
             } else {
-                return new Vec(0, vehicle.getEntityType().height() / 3f, -0.6 + animalOffset).rotateAroundY(Math.toRadians(vehicle.getPosition().yaw() * -1));
+                // Special case: Single passenger
+                if (vehicle.getPassengers().size() == 1) {
+                    return new Vec(0, vehicle.getEntityType().height() / 3f, 0).rotateAroundY(Math.toRadians(vehicle.getPosition().yaw() * -1));
+                } else {
+                    if (passengerIndex == 0) {
+                        return new Vec(0, vehicle.getEntityType().height() / 3f, 0.2 + animalOffset).rotateAroundY(Math.toRadians(vehicle.getPosition().yaw() * -1));
+                    } else {
+                        return new Vec(0, vehicle.getEntityType().height() / 3f, -0.6 + animalOffset).rotateAroundY(Math.toRadians(vehicle.getPosition().yaw() * -1));
+                    }
+                }
             }
+
         } else if (vehicle.getEntityType().name().contains("raft")) {
             if (passengerIndex == 0) {
                 return new Vec(0, vehicle.getEntityType().height() / 0.8888f, 0.2).rotateAroundY(Math.toRadians(vehicle.getPosition().yaw() * -1));
@@ -65,6 +84,20 @@ public final class EntityUtils {
         }
         return new Vec(attachmentList.get(0), attachmentList.get(1), attachmentList.get(2));
     }
+
+    private static final Set<EntityType> CHEST_BOATS = new HashSet<>() {
+        {
+            add(EntityType.ACACIA_CHEST_BOAT);
+            add(EntityType.BIRCH_CHEST_BOAT);
+            add(EntityType.CHERRY_CHEST_BOAT);
+            add(EntityType.DARK_OAK_CHEST_BOAT);
+            add(EntityType.JUNGLE_CHEST_BOAT);
+            add(EntityType.MANGROVE_CHEST_BOAT);
+            add(EntityType.OAK_CHEST_BOAT);
+            add(EntityType.PALE_OAK_CHEST_BOAT);
+            add(EntityType.SPRUCE_CHEST_BOAT);
+        }
+    };
 
     private static final Set<EntityType> ANIMALS = new HashSet<>() {
         {
