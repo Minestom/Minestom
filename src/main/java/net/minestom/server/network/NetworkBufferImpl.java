@@ -50,7 +50,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
     @Override
     public <T> void write(Type<T> type, @UnknownNullability T value) {
         final MemorySegment segment = this.segment;
-        if (segment != null) assertReadOnly(segment);
+        if (!isDummy(segment)) assertReadOnly(segment);
         type.write(this, value);
     }
 
@@ -234,6 +234,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
     public void compact() {
         final MemorySegment segment = this.segment;
         assertDummy(segment);
+        assertReadOnly(segment);
         final long readIndex = readIndex();
         if (readIndex == 0) return;
         MemorySegment.copy(segment, readIndex, segment, 0, readableBytes(writeIndex, readIndex));
@@ -488,12 +489,12 @@ final class NetworkBufferImpl implements NetworkBuffer {
         throw new UnsupportedOperationException("Buffer is a dummy buffer");
     }
 
-    static boolean isDummy(@UnknownNullability MemorySegment segment) {
+    static boolean isDummy(@Nullable MemorySegment segment) {
         return segment == null;
     }
 
     @Contract("null -> fail")
-    static void assertDummy(@UnknownNullability MemorySegment segment) {
+    static void assertDummy(@Nullable MemorySegment segment) {
         if (isDummy(segment)) throwDummy();
     }
 
