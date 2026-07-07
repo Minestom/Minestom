@@ -10,7 +10,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementAction;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -118,9 +117,7 @@ public class PacketWriteReadTest {
     }
 
     @BeforeAll
-    public static void setupServer() {
-        MinecraftServer.init(); // Need some tags in here, pretty gross.
-
+    public static void setupServer(Env env) {
         // Handshake
         // Status
         addServerPackets(new ResponsePacket(new JsonObject().toString()));
@@ -417,7 +414,7 @@ public class PacketWriteReadTest {
         addServerPackets(new ChunkDataPacket(0, 0, new ChunkData(Map.of(), new byte[0], Map.of()), new LightData(new BitSet(), new BitSet(), new BitSet(), new BitSet(), List.of(), List.of())));
         addServerPackets(new ChunkBiomesPacket(List.of()), new ChunkBiomesPacket(List.of(new ChunkBiomesPacket.ChunkBiomeData(0, 0, new byte[0]))));
         addServerPackets(new CustomChatCompletionPacket(CustomChatCompletionPacket.Action.ADD, List.of("entry1", "entry2")));
-        addServerPackets(new DamageEventPacket(5, MinecraftServer.getDamageTypeRegistry().getId(DamageType.ARROW), 2, 3, VEC), new DamageEventPacket(50, MinecraftServer.getDamageTypeRegistry().getId(DamageType.WITHER), 0, 0, null));
+        addServerPackets(new DamageEventPacket(5, env.process().damageType().getId(DamageType.ARROW), 2, 3, VEC), new DamageEventPacket(50, env.process().damageType().getId(DamageType.WITHER), 0, 0, null));
         addServerPackets(new DeclareCommandsPacket(List.of(), 0));
         addServerPackets(new BundlePacket());
         addServerPackets(new DebugBlockValuePacket(Vec.ONE, new DebugSubscription.Update<>(DebugSubscription.BEE_HIVES, new DebugHiveInfo(Block.BEEHIVE, 1, 0, true))));
@@ -443,9 +440,7 @@ public class PacketWriteReadTest {
     }
 
     @BeforeAll
-    public static void setupClient() {
-        MinecraftServer.init(); // Need to validate packets with auth mode.
-
+    public static void setupClient(Env ignored) {
         // Handshake
         addClientPackets(
                 new ClientHandshakePacket(755, "localhost", 25565, ClientHandshakePacket.Intent.LOGIN),
