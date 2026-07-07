@@ -13,7 +13,7 @@ Minestom is an open-source library that enables developers to create their own M
 
 Minestom does not include any vanilla features by default, however we have an extensive API which allows you to code any feature with ease.
 
-This is a library for developers, and thus it is not meant to be used by the average server owner. Replacing a Bukkit, Forge, or Fabric server with this **will not work**, because we do not implement their APIs.
+This is a server building library, not a server JAR. You will need to write and compile code to create your own server JAR using Minestom. Replacing a Bukkit, Forge, or Fabric server with this **will not work**, because we do not implement their APIs.
 
 # Table of Contents
 - [Installation](#installation)
@@ -127,7 +127,7 @@ To pin the snapshot version to a specific release you can reference the exact bu
 </details>
 
 # Usage
-To get started writing your first server, check out our official [wiki](https://minestom.net/docs/introduction). For an API reference, consult the [Javadocs](https://javadoc.minestom.net).
+To get started writing your first server, check out our official [wiki](https://minestom.net/docs/introduction). For an API reference, consult the [Javadocs](https://javadoc.minestom.net). You can also look at the [demo server](/demo) for a working example.
 
 # Why Minestom?
 Minecraft has evolved a lot since its release, but many servers today overlook the built-in mechanics in favor of custom gameplay, leading to wasted performance.
@@ -137,12 +137,12 @@ Our target audience are developers who wish to make a server which benefits very
 The goal is to offer more performance for those who need it. In other words, it makes sense to use Minestom when it will take less time implementing every missing feature you want, rather than removing every vanilla feature that will slow you down.
 
 # Advantages and Disadvantages
-Minestom isn't perfect, and while our choices make it better for some cases, it's not suitable for others.
+Minestom doesn't suit all use cases, and while our choices make it better for some, they make it worse for others.
 
 ## Advantages
 * High performance — Designed for efficiency, offering high performance with minimal overhead.
 * Lightweight — Comes with little to no functionality, allowing the server to be easily extended.
-* Modern API — Written in Java 21, using best practices and standards.
+* Modern API — Written in the latest LTS version of Java, using best practices and standards.
 * Open source — Anyone can contribute new features and improvements.
 * Multi-threaded — Uses a thread pool to manage chunks independently from instances.
 * Active community — We have lots of developers who contribute to our development and are happy to provide assistance.
@@ -150,9 +150,9 @@ Minestom isn't perfect, and while our choices make it better for some cases, it'
 
 ## Disadvantages
 * Doesn't work with traditional plugins or mods.
+* Often takes longer to develop something playable.
 * Doesn't support older versions. See [the wiki page](https://minestom.net/docs/compatibility/unsupported-versions) for more info.
-* Unsuitable for those who want a server with vanilla mechanics.
-* Takes a bigger time investment to develop something playable.
+* Unsuitable for those who want a server with many vanilla mechanics.
 * Less users and a smaller plugin/library ecosystem than Spigot.
 
 # API
@@ -163,14 +163,14 @@ This is one of our major concepts. While worlds are great for playing survival w
 
 Being able to create instances directly on the go is a must-have, and we believe it can push many more projects forward.
 
-Instances also come with performance benefits, unlike other server implementations which are single-threaded or only using one thread per world, we are using a set number of threads in a pool to manage all chunks independently from instances, meaning taking advantage of the CPU power.
+Instances also come with performance benefits, unlike other server implementations which are single-threaded or only using one thread per world, we are using a set number of threads in a pool to manage all chunks independently from instances, allowing you to take better advantage of your CPU power.
 
 ## Blocks
 Minestom does not recognize what a chest does by default, you will have to define that it should open an inventory when you right click it.
 
 Every "special block" that isn't purely visual will need a specialized block handler. After applying this handler, you have a block that can be properly placed down and used.
 
-However, all blocks exist visually, they just won't have any interaction by default.
+All Minecraft blocks exist visually, however they won't have any interaction by default.
 
 ## Entities
 "Passive" or "hostile" mobs do not exist, and there's nothing stopping you from making a flying chicken rushing into any players coming too close. Doing so with NMS quickly becomes a mess due to Minecraft's obfuscation and inheritance.
