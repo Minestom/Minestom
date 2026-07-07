@@ -7,8 +7,6 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.NetworkBufferTemplate;
-import net.minestom.server.codec.StructCodec;
 import org.jetbrains.annotations.Nullable;
 
 public class HorseMeta extends AbstractHorseMeta {
@@ -16,31 +14,24 @@ public class HorseMeta extends AbstractHorseMeta {
         super(entity, metadata);
     }
 
-    /**
-     * @deprecated use {@link net.minestom.server.component.DataComponents#HORSE_VARIANT} instead.
-     */
-    @Deprecated
     public Variant getVariant() {
-        return getVariantFromID(metadata.get(MetadataDef.Horse.VARIANT));
+        return Variant.VALUES[metadata.get(MetadataDef.Horse.VARIANT) & 0xFF];
     }
 
-    /**
-     * @deprecated use {@link net.minestom.server.component.DataComponents#HORSE_VARIANT} instead.
-     */
-    @Deprecated
     public void setVariant(Variant variant) {
-        metadata.set(MetadataDef.Horse.VARIANT, getVariantID(variant.marking, variant.color));
+        metadata.set(MetadataDef.Horse.VARIANT, variant.ordinal() | (metadata.get(MetadataDef.Horse.VARIANT) & ~0xFF));
     }
 
-    public static int getVariantID(Marking marking, Color color) {
-        return (marking.ordinal() << 8) + color.ordinal();
+    public Marking getMarking() {
+        return Marking.VALUES[(metadata.get(MetadataDef.Horse.VARIANT) >> 8) & 0xFF];
     }
 
-    public static Variant getVariantFromID(int variantID) {
-        return new Variant(
-                Marking.VALUES[variantID >> 8],
-                Color.VALUES[variantID & 0xFF]
-        );
+    public void setMarking(Marking marking) {
+        metadata.set(MetadataDef.Horse.VARIANT, (metadata.get(MetadataDef.Horse.VARIANT) & 0xFF) | (marking.ordinal() << 8));
+    }
+
+    public void setVariantAndMarking(Variant variant, Marking marking) {
+        metadata.set(MetadataDef.Horse.VARIANT, variant.ordinal() | (marking.ordinal() << 8));
     }
 
     @Override
@@ -60,45 +51,6 @@ public class HorseMeta extends AbstractHorseMeta {
         }
     }
 
-    public static class Variant {
-        public static final NetworkBuffer.Type<Variant> NETWORK_TYPE = NetworkBufferTemplate.template(
-                Marking.NETWORK_TYPE, Variant::getMarking,
-                Color.NETWORK_TYPE, Variant::getColor,
-                Variant::new
-        );
-
-        public static final Codec<Variant> CODEC = StructCodec.struct(
-                "marking", Marking.CODEC, Variant::getMarking,
-                "color", Color.CODEC, Variant::getColor,
-                Variant::new
-        );
-
-        private Marking marking;
-        private Color color;
-
-        public Variant(Marking marking, Color color) {
-            this.marking = marking;
-            this.color = color;
-        }
-
-        public Marking getMarking() {
-            return this.marking;
-        }
-
-        public void setMarking(Marking marking) {
-            this.marking = marking;
-        }
-
-        public Color getColor() {
-            return this.color;
-        }
-
-        public void setColor(Color color) {
-            this.color = color;
-        }
-
-    }
-
     public enum Marking {
         NONE,
         WHITE,
@@ -106,13 +58,10 @@ public class HorseMeta extends AbstractHorseMeta {
         WHITE_DOTS,
         BLACK_DOTS;
 
-        public static final NetworkBuffer.Type<Marking> NETWORK_TYPE = NetworkBuffer.Enum(Marking.class);
-        public static final Codec<Marking> CODEC = Codec.Enum(Marking.class);
-
         private final static Marking[] VALUES = values();
     }
 
-    public enum Color {
+    public enum Variant {
         WHITE,
         CREAMY,
         CHESTNUT,
@@ -121,10 +70,10 @@ public class HorseMeta extends AbstractHorseMeta {
         GRAY,
         DARK_BROWN;
 
-        public static final NetworkBuffer.Type<Color> NETWORK_TYPE = NetworkBuffer.Enum(Color.class);
-        public static final Codec<Color> CODEC = Codec.Enum(Color.class);
+        public static final NetworkBuffer.Type<Variant> NETWORK_TYPE = NetworkBuffer.Enum(Variant.class);
+        public static final Codec<Variant> CODEC = Codec.Enum(Variant.class);
 
-        private final static Color[] VALUES = values();
+        private final static Variant[] VALUES = values();
     }
 
 }
