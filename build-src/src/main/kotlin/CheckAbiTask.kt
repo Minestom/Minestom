@@ -259,7 +259,19 @@ abstract class CheckAbiTask : DefaultTask() {
                 }
             }
         }
-        return apis
+        return apis.mapValues { (className, api) ->
+            if (!api.internal && isEnclosedByInternalClass(className, apis)) api.copy(internal = true) else api
+        }
+    }
+
+    private fun isEnclosedByInternalClass(className: String, apis: Map<String, ClassApiDump>): Boolean {
+        var name = className
+        while (true) {
+            val index = name.lastIndexOf('$')
+            if (index == -1) return false
+            name = name.substring(0, index)
+            if (apis[name]?.internal == true) return true
+        }
     }
 
     private fun isPublicOrProtected(flags: Set<AccessFlag>): Boolean {
