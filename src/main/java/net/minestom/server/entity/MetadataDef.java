@@ -332,8 +332,8 @@ public sealed class MetadataDef {
     }
 
     public static final class SulfurCube extends AbstractCubeMob {
-        public static final Entry<Boolean> FROM_BUCKET = index(0, Metadata::Boolean, false);
         public static final Entry<Integer> MAX_FUSE = index(0, Metadata::VarInt, -1);
+        public static final Entry<Boolean> FROM_BUCKET = index(1, Metadata::Boolean, false);
     }
 
     public static final class Sniffer extends AgeableMob {
