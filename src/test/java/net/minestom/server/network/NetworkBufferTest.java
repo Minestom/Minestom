@@ -312,11 +312,11 @@ public class NetworkBufferTest {
         assertEquals(42, readOnly.read(INT));
 
         // Mutating operations on read-only buffer should fail
-        assertThrows(UnsupportedOperationException.class, () -> readOnly.write(INT, 24));
-        assertThrows(UnsupportedOperationException.class, () -> readOnly.writeAt(0, INT, 24));
-        assertThrows(UnsupportedOperationException.class, () -> readOnly.ensureWritable(4));
-        assertThrows(UnsupportedOperationException.class, () -> readOnly.resize(32));
-        assertThrows(UnsupportedOperationException.class, readOnly::compact);
+        assertThrows(IllegalArgumentException.class, () -> readOnly.write(INT, 24));
+        assertThrows(IllegalArgumentException.class, () -> readOnly.writeAt(0, INT, 24));
+        assertThrows(IllegalArgumentException.class, () -> readOnly.ensureWritable(4));
+        assertThrows(IllegalArgumentException.class, () -> readOnly.resize(32));
+        assertThrows(IllegalArgumentException.class, readOnly::compact);
 
         // Verify that the original buffer's indices/content are unaffected by readOnly read
         assertEquals(4, buffer.writeIndex());
@@ -333,7 +333,7 @@ public class NetworkBufferTest {
         assertTrue(readOnly.isReadOnly());
         assertEquals(100, readOnly.read(INT));
 
-        assertThrows(UnsupportedOperationException.class, () -> readOnly.write(INT, 200));
+        assertThrows(IllegalArgumentException.class, () -> readOnly.write(INT, 200));
     }
 
     @Test
@@ -348,8 +348,8 @@ public class NetworkBufferTest {
             assertEquals(500, readOnly.read(INT));
 
             // Verify mutating backing segment through readOnly throws
-            assertThrows(UnsupportedOperationException.class, () -> readOnly.write(INT, 600));
-            assertThrows(UnsupportedOperationException.class, () -> readOnly.writeAt(0, INT, 600));
+            assertThrows(IllegalArgumentException.class, () -> readOnly.write(INT, 600));
+            assertThrows(IllegalArgumentException.class, () -> readOnly.writeAt(0, INT, 600));
 
             // Verify the backing segment was not modified by the failed writes
             assertEquals(500, buffer.readAt(0, INT));
@@ -374,7 +374,7 @@ public class NetworkBufferTest {
             assertTrue(readOnly.isReadOnly());
             assertEquals(777, readOnly.read(INT));
 
-            assertThrows(UnsupportedOperationException.class, () -> readOnly.write(INT, 888));
+            assertThrows(IllegalArgumentException.class, () -> readOnly.write(INT, 888));
         }
     }
 
@@ -420,11 +420,11 @@ public class NetworkBufferTest {
             }
         };
 
-        assertThrows(UnsupportedOperationException.class, () -> fn.apply(buffer -> buffer.resize(2)).sizeOf(1));
-        assertThrows(UnsupportedOperationException.class, () -> fn.apply(buffer -> buffer.read(INT)).sizeOf(1));
-        assertThrows(UnsupportedOperationException.class, () -> fn.apply(buffer -> buffer.readAt(0, INT)).sizeOf(1));
-        assertThrows(UnsupportedOperationException.class, () -> fn.apply(NetworkBuffer::compact).sizeOf(1));
-        assertThrows(UnsupportedOperationException.class, () -> fn.apply(buffer -> buffer.copy(0, 0, 0, 0)).sizeOf(1));
+        assertThrows(IllegalArgumentException.class, () -> fn.apply(buffer -> buffer.resize(2)).sizeOf(1));
+        assertThrows(IllegalArgumentException.class, () -> fn.apply(buffer -> buffer.read(INT)).sizeOf(1));
+        assertThrows(IllegalArgumentException.class, () -> fn.apply(buffer -> buffer.readAt(0, INT)).sizeOf(1));
+        assertThrows(IllegalArgumentException.class, () -> fn.apply(NetworkBuffer::compact).sizeOf(1));
+        assertThrows(IllegalArgumentException.class, () -> fn.apply(buffer -> buffer.copy(0, 0, 0, 0)).sizeOf(1));
     }
 
     @Test

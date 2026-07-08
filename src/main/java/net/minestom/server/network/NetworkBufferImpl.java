@@ -486,7 +486,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     static void throwDummy() {
-        throw new UnsupportedOperationException("Buffer is a dummy buffer");
+        throw new IllegalArgumentException("Buffer is a dummy buffer");
     }
 
     static boolean isDummy(@Nullable MemorySegment segment) {
@@ -499,7 +499,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     static void throwReadOnly() {
-        throw new UnsupportedOperationException("Buffer is read-only");
+        throw new IllegalArgumentException("Buffer is read-only");
     }
 
     static void assertReadOnly(MemorySegment segment) {
