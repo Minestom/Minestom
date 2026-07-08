@@ -3,9 +3,10 @@ package net.minestom.server.entity.metadata.water.fish;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import org.jetbrains.annotations.Nullable;
 
 public class PufferfishMeta extends AbstractFishMeta {
-    public PufferfishMeta(Entity entity, MetadataHolder metadata) {
+    public PufferfishMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
         updateBoundingBox(State.UNPUFFED);
     }

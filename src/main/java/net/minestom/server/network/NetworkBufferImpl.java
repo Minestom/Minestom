@@ -2,8 +2,6 @@ package net.minestom.server.network;
 
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.ObjectPool;
-import net.minestom.server.utils.nbt.BinaryTagReader;
-import net.minestom.server.utils.nbt.BinaryTagWriter;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
@@ -16,6 +14,7 @@ import java.lang.foreign.ValueLayout;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.SocketChannel;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.zip.DataFormatException;
@@ -33,9 +32,6 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     private @UnknownNullability MemorySegment segment; // null for dummy buffers
     private long readIndex, writeIndex;
-
-    private @Nullable BinaryTagWriter nbtWriter;
-    private @Nullable BinaryTagReader nbtReader;
 
     private final @Nullable AutoResize autoResize;
     private @Nullable Registries registries;
@@ -213,6 +209,14 @@ final class NetworkBufferImpl implements NetworkBuffer {
         resize(newCapacity);
     }
 
+    @Override
+    public void ensureReadable(long length) {
+        if (length < 0) throw new IllegalArgumentException("Length cannot be negative");
+        long readableBytes = readableBytes();
+        if (readableBytes >= length) return;
+        throw new IndexOutOfBoundsException("Buffer does not have %d bytes left, only %d are readable".formatted(length, readableBytes));
+    }
+
     private long newCapacity(long length, long capacity) {
         final long targetSize = writeIndex + length;
         final AutoResize strategy = this.autoResize;
@@ -346,6 +350,11 @@ final class NetworkBufferImpl implements NetworkBuffer {
         this.registries = registries;
     }
 
+    @Override
+    public IOView ioView() {
+        return new IOView(this);
+    }
+
     private ByteBuffer bufferSlice(long position, long length) {
         return segment.asSlice(position, length).asByteBuffer().order(BIG_ENDIAN);
     }
@@ -365,6 +374,12 @@ final class NetworkBufferImpl implements NetworkBuffer {
         if (isDummy()) return;
         assertReadOnly();
         MemorySegment.copy(value, 0, segment, ValueLayout.JAVA_BYTE, index, value.length);
+    }
+
+    void _putBytes(long index, byte[] value, int offset, int length) {
+        if (isDummy()) return;
+        assertReadOnly();
+        MemorySegment.copy(value, offset, segment, ValueLayout.JAVA_BYTE, index, length);
     }
 
     void _getBytes(long index, byte[] value) {
@@ -503,41 +518,178 @@ final class NetworkBufferImpl implements NetworkBuffer {
         return (NetworkBufferImpl) buffer;
     }
 
-    BinaryTagWriter nbtWriter() {
-        if (this.nbtWriter == null) {
-            this.nbtWriter = new BinaryTagWriter(new DataOutputStream(new OutputStream() {
-                @Override
-                public void write(int b) {
-                    NetworkBufferImpl.this.write(BYTE, (byte) b);
-                }
-            }));
-        }
-        return this.nbtWriter;
-    }
-
-    BinaryTagReader nbtReader() {
-        if (nbtReader == null) {
-            this.nbtReader = new BinaryTagReader(new DataInputStream(new InputStream() {
-                @Override
-                public int read() {
-                    return NetworkBufferImpl.this.read(BYTE) & 0xFF;
-                }
-
-                @Override
-                public int available() {
-                    return (int) NetworkBufferImpl.this.readableBytes();
-                }
-            }));
-        }
-        return nbtReader;
-    }
-
     private static void assertOverflow(long value) {
         try {
             //noinspection ResultOfMethodCallIgnored
             Math.toIntExact(value); // Check if long is within the bounds of an int
         } catch (ArithmeticException e) {
             throw new RuntimeException("Method does not support long values: " + value);
+        }
+    }
+
+    // Use a record for final field trusting, hopefully better scalar replacement, to avoid caching IOView
+    record IOView(NetworkBufferImpl buffer) implements NetworkBuffer.IOView {
+        @Override
+        public void readFully(byte[] bytes) {
+            readFully(bytes, 0, bytes.length);
+        }
+
+        @Override
+        public void readFully(byte[] bytes, int off, int len) {
+            Objects.requireNonNull(bytes, "bytes");
+            var buffer = buffer();
+            buffer.ensureReadable(len);
+            buffer.copyTo(buffer.readIndex(), bytes, off, len);
+            buffer.advanceRead(len);
+        }
+
+        @Override
+        public int skipBytes(int n) {
+            if (n <= 0) return 0;
+            var buffer = buffer();
+            n = (int) Math.min(n, buffer.readableBytes());
+            buffer.advanceRead(n);
+            return n;
+        }
+
+        @Override
+        public boolean readBoolean() {
+            return buffer().read(BOOLEAN);
+        }
+
+        @Override
+        public byte readByte() {
+            return buffer().read(BYTE);
+        }
+
+        @Override
+        public int readUnsignedByte() {
+            return buffer().read(UNSIGNED_BYTE);
+        }
+
+        @Override
+        public short readShort() {
+            return buffer().read(SHORT);
+        }
+
+        @Override
+        public int readUnsignedShort() {
+            return buffer().read(UNSIGNED_SHORT);
+        }
+
+        @Override
+        public char readChar() {
+            return (char) readUnsignedShort();
+        }
+
+        @Override
+        public int readInt() {
+            return buffer().read(INT);
+        }
+
+        @Override
+        public long readLong() {
+            return buffer().read(LONG);
+        }
+
+        @Override
+        public float readFloat() {
+            return buffer().read(FLOAT);
+        }
+
+        @Override
+        public double readDouble() {
+            return buffer().read(DOUBLE);
+        }
+
+        @Override
+        public String readUTF() {
+            return buffer().read(STRING_IO_UTF8);
+        }
+
+        @Override
+        public void write(int lower) {
+            buffer().write(BYTE, (byte) lower);
+        }
+
+        @Override
+        public void write(byte[] bytes) {
+            Objects.requireNonNull(bytes, "bytes");
+            buffer().write(RAW_BYTES, bytes);
+        }
+
+        @Override
+        public void write(byte[] bytes, int off, int len) {
+            Objects.requireNonNull(bytes, "bytes");
+            if (len == 0) return;
+            var buffer = buffer();
+            buffer.ensureWritable(len); // Small intrinsic like RAW_BYTES
+            buffer._putBytes(buffer.writeIndex(), bytes, off, len);
+            buffer.advanceWrite(len);
+        }
+
+        @Override
+        public void writeBoolean(boolean value) {
+            buffer().write(BOOLEAN, value);
+        }
+
+        @Override
+        public void writeByte(int value) {
+            buffer().write(BYTE, (byte) value);
+        }
+
+        @Override
+        public void writeShort(int value) {
+            buffer().write(UNSIGNED_SHORT, value);
+        }
+
+        @Override
+        public void writeChar(int value) {
+            buffer().write(UNSIGNED_SHORT, value);
+        }
+
+        @Override
+        public void writeInt(int value) {
+            buffer().write(INT, value);
+        }
+
+        @Override
+        public void writeLong(long value) {
+            buffer().write(LONG, value);
+        }
+
+        @Override
+        public void writeFloat(float value) {
+            buffer().write(FLOAT, value);
+        }
+
+        @Override
+        public void writeDouble(double value) {
+            buffer().write(DOUBLE, value);
+        }
+
+        @Override
+        public void writeBytes(String value) {
+            Objects.requireNonNull(value, "value");
+            var buffer = buffer();
+            for (int i = 0; i < value.length(); i++) {
+                buffer.write(BYTE, (byte) value.charAt(i)); // Low byte only
+            }
+        }
+
+        @Override
+        public void writeChars(String value) {
+            Objects.requireNonNull(value, "value");
+            var buffer = buffer();
+            for (int i = 0; i < value.length(); i++) {
+                buffer.write(UNSIGNED_SHORT, (int) value.charAt(i));
+            }
+        }
+
+        @Override
+        public void writeUTF(String value) {
+            Objects.requireNonNull(value, "value");
+            buffer().write(STRING_IO_UTF8, value);
         }
     }
 }

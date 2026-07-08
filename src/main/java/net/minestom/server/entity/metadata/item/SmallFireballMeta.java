@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 public class SmallFireballMeta extends EntityMeta implements ObjectDataProvider, ProjectileMeta {
     private @Nullable Entity shooter;
 
-    public SmallFireballMeta(Entity entity, MetadataHolder metadata) {
+    public SmallFireballMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

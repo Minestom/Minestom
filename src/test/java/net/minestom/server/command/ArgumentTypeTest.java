@@ -38,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ArgumentTypeTest {
 
     static {
-        MinecraftServer.init();
+        MinecraftServer.init(); // TODO, some args require a ServerProcess.
     }
 
     @Test
