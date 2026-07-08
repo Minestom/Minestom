@@ -7,6 +7,8 @@ import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
@@ -84,5 +86,45 @@ public class PassengerIntegrationTest {
             // Entity#updateNewViewer ran as it should
             assertEquals(startingId + i, spawnPackets.get(i).entityId());
         }
+    }
+
+    @Test
+    public void passengersOnCamelsAtDifferentHeights(Env env) {
+        var instance = env.createFlatInstance();
+        var camel1 = new Entity(EntityType.CAMEL);
+        var camel2 = new Entity(EntityType.CAMEL);
+        var rider1 = new Entity(EntityType.ZOMBIE);
+        var rider2 = new Entity(EntityType.ZOMBIE);
+
+        camel1.setInstance(instance, new Pos(0, 42, 0)).join();
+        camel2.setInstance(instance, new Pos(0, 42, 0)).join();
+
+        camel2.setPose(EntityPose.SITTING);
+        camel1.addPassenger(rider1);
+        camel2.addPassenger(rider2);
+
+        assertNotEquals(rider2.getPosition().y(), rider1.getPosition().y());
+    }
+
+    @Test
+    public void passengerOffsetProcessedCorrectly(Env env) {
+        var instance = env.createFlatInstance();
+        var vehicle = new Entity(EntityType.ZOMBIE);
+        var passenger = new Entity(EntityType.SKELETON);
+
+        vehicle.setInstance(instance, new Pos(0, 42, 0, 0, 0)).join();
+        vehicle.addPassenger(passenger);
+
+        // Default case
+
+        List<Double> passengerAttachment = vehicle.getEntityType().registry().entityAttachment("PASSENGER");
+        List<Double> vehicleAttachment = passenger.getEntityType().registry().entityAttachment("VEHICLE");
+        assertNotNull(passengerAttachment);
+        assertNotNull(vehicleAttachment);
+
+        Pos passengerOffset = new Pos(passengerAttachment.get(0), passengerAttachment.get(1), passengerAttachment.get(2));
+        Pos vehicleOffset = new Pos(vehicleAttachment.get(0), vehicleAttachment.get(1), vehicleAttachment.get(2));
+        Pos assumedPosition = vehicle.getPosition().add(passengerOffset).sub(vehicleOffset);
+        assertEquals(passenger.getPosition(), assumedPosition);
     }
 }

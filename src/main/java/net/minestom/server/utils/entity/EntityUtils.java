@@ -3,7 +3,9 @@ package net.minestom.server.utils.entity;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityPose;
 import net.minestom.server.entity.EntityType;
+import net.minestom.server.entity.metadata.animal.CamelMeta;
 import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
@@ -19,13 +21,30 @@ public final class EntityUtils {
      * @return the height offset for the passenger of this vehicle
      */
     public static Point getPassengerPositionOffset(Entity vehicle, Entity passenger, int passengerIndex) {
-        // Special cases: Boats, Camel, Happy Ghast
+        // Special cases: Boats, Rafts, Camel, Happy Ghast
         if (vehicle.getEntityType() == EntityType.CAMEL || vehicle.getEntityType() == EntityType.CAMEL_HUSK) {
+            List<Double> passengerVehiclePos = passenger.getEntityType().registry().entityAttachment("VEHICLE");
+            Vec vehicleOffset = attachmentListToVec(passengerVehiclePos, Vec.ZERO);
+            // Check pose
+            boolean isSitting = vehicle.getPose() == EntityPose.SITTING;
+            boolean isBaby = vehicle.getEntityMeta() instanceof CamelMeta camelMeta && camelMeta.isBaby();
+            // Calculate height
+            double yOffset = isBaby ? 0.09375 : 0.375;
+            double height = isBaby ? 1.4 : vehicle.getEntityType().height() - yOffset;
+            if (isSitting) {
+                // Some magic constants, somewhat unavoidable since these are not stored in entity data
+                if (isBaby) {
+                    height -= 0.855;
+                } else {
+                    height -= 1.23f;
+                }
+            }
+
             double animalOffset = isEntityAnimal(passenger.getEntityType()) ? 0.2 : 0;
             if (passengerIndex == 0) {
-                return new Vec(0, vehicle.getEntityType().height(), 0.5 + animalOffset).rotateAroundY(Math.toRadians(vehicle.getPosition().yaw() * -1));
+                return new Vec(0, height, 0.5 + animalOffset).sub(vehicleOffset).rotateAroundY(Math.toRadians(vehicle.getPosition().yaw() * -1));
             } else {
-                return new Vec(0, vehicle.getEntityType().height(), -0.7 + animalOffset).rotateAroundY(Math.toRadians(vehicle.getPosition().yaw() * -1));
+                return new Vec(0, height, -0.7 + animalOffset).sub(vehicleOffset).rotateAroundY(Math.toRadians(vehicle.getPosition().yaw() * -1));
             }
         } else if (vehicle.getEntityType() == EntityType.HAPPY_GHAST) {
             List<List<Double>> positions = vehicle.getEntityType().registry().entityAttachments("PASSENGER");
@@ -33,7 +52,7 @@ public final class EntityUtils {
             List<Double> passengerVehiclePos = passenger.getEntityType().registry().entityAttachment("VEHICLE");
             Vec vehicleOffset = attachmentListToVec(passengerVehiclePos, Vec.ZERO);
             return passengerOffset.sub(vehicleOffset).rotateAroundY(Math.toRadians(-vehicle.getPosition().yaw()));
-        } else if (vehicle.getEntityType().name().contains("boat")) {
+        } else if (vehicle.getEntityType().key().value().contains("boat")) {
             double animalOffset = isEntityAnimal(passenger.getEntityType()) ? 0.2 : 0;
             if (CHEST_BOATS.contains(passenger.getEntityType())) {
                 // Special case: Single passenger
@@ -59,7 +78,7 @@ public final class EntityUtils {
                 }
             }
 
-        } else if (vehicle.getEntityType().name().contains("raft")) {
+        } else if (vehicle.getEntityType().key().value().contains("raft")) {
             if (passengerIndex == 0) {
                 return new Vec(0, vehicle.getEntityType().height() / 0.8888f, 0.2).rotateAroundY(Math.toRadians(vehicle.getPosition().yaw() * -1));
             } else {
