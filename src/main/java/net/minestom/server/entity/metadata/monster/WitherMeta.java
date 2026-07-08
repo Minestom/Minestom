@@ -11,7 +11,7 @@ public class WitherMeta extends MonsterMeta {
     private @Nullable Entity leftHead;
     private @Nullable Entity rightHead;
 
-    public WitherMeta(Entity entity, MetadataHolder metadata) {
+    public WitherMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

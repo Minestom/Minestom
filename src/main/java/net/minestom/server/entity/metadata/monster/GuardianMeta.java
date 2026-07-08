@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 public class GuardianMeta extends MonsterMeta {
     private @Nullable Entity target;
 
-    public GuardianMeta(Entity entity, MetadataHolder metadata) {
+    public GuardianMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

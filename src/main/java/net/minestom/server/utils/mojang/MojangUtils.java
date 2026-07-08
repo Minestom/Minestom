@@ -41,12 +41,7 @@ public final class MojangUtils {
     public static UUID getUUID(String username) throws IOException {
         // Thanks stackoverflow: https://stackoverflow.com/a/19399768/13247146
         return UUID.fromString(
-                retrieve(String.format(FROM_USERNAME_URL, validateUsername(username))).get("id")
-                        .getAsString()
-                        .replaceFirst(
-                                "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)",
-                                "$1-$2-$3-$4-$5"
-                        )
+                formatUUID(retrieve(String.format(FROM_USERNAME_URL, validateUsername(username))).get("id").getAsString())
         );
     }
 
@@ -87,7 +82,7 @@ public final class MojangUtils {
     public static @Nullable JsonObject fromUuid(String uuid) {
         final UUID parsed;
         try {
-            parsed = UUID.fromString(uuid);
+            parsed = UUID.fromString(formatUUID(uuid));
         } catch (IllegalArgumentException e) {
             return null;
         }
@@ -127,6 +122,13 @@ public final class MojangUtils {
         }
 
         return retrieve(url);
+    }
+
+    private static String formatUUID(String uuid) {
+        return uuid.replaceFirst(
+                "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)",
+                "$1-$2-$3-$4-$5"
+        );
     }
 
     private static String encode(String value) {

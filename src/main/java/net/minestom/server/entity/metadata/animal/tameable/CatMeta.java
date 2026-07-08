@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 public class CatMeta extends TameableAnimalMeta {
     private static final DyeColor[] DYE_VALUES = DyeColor.values();
 
-    public CatMeta(Entity entity, MetadataHolder metadata) {
+    public CatMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
