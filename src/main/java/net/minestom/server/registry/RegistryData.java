@@ -704,7 +704,11 @@ public final class RegistryData {
          * @return A list of 3 doubles if the attachment is defined for this entity, or null if it is not defined
          */
         public @Nullable List<Double> entityAttachment(String attachmentName) {
-            return entityOffsets.get(attachmentName) != null ? entityOffsets.get(attachmentName).getFirst() : null;
+            var attachments = entityOffsets.get(attachmentName);
+            if (attachments == null) {
+                return null;
+            }
+            return attachments.getFirst();
         }
 
         /**
