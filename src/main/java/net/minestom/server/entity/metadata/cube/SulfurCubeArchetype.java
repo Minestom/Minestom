@@ -159,6 +159,8 @@ public sealed interface SulfurCubeArchetype extends SulfurCubeArchetypes permits
         private KnockbackModifiers knockbackModifiers = KnockbackModifiers.DEFAULT;
         private SoundSettings soundSettings = SoundSettings.DEFAULT;
 
+        private Builder() {}
+
         public Builder items(RegistryTag<Material> items) {
             this.items = Objects.requireNonNull(items, "items");
             return this;
