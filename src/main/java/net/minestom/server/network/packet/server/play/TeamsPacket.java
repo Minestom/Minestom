@@ -7,6 +7,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -24,7 +25,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
     public static final int MAX_MEMBERS = 16384;
 
     private static final NetworkBuffer.Type<Action> ACTION_NETWORK_TYPE = Tagged(
-            NetworkBuffer.BYTE, action -> (byte) action.id(),
+            NetworkBuffer.BYTE, Action::id,
             Map.of(
                     (byte) 0, CreateTeamAction.SERIALIZER,
                     (byte) 1, RemoveTeamAction.SERIALIZER,
@@ -94,7 +95,9 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
     }
 
     public sealed interface Action permits CreateTeamAction, RemoveTeamAction, UpdateTeamAction, AddEntitiesToTeamAction, RemoveEntitiesToTeamAction {
-        int id();
+        @ApiStatus.Internal
+        @ApiStatus.OverrideOnly
+        byte id();
     }
 
     public record CreateTeamAction(
@@ -112,7 +115,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         );
 
         @Override
-        public int id() {
+        public byte id() {
             return 0;
         }
 
@@ -132,7 +135,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
                 new RemoveTeamAction());
 
         @Override
-        public int id() {
+        public byte id() {
             return 1;
         }
     }
@@ -145,7 +148,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         );
 
         @Override
-        public int id() {
+        public byte id() {
             return 2;
         }
 
@@ -175,7 +178,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         );
 
         @Override
-        public int id() {
+        public byte id() {
             return 3;
         }
     }
@@ -195,7 +198,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         );
 
         @Override
-        public int id() {
+        public byte id() {
             return 4;
         }
     }
