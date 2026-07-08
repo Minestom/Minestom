@@ -134,14 +134,13 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return Tagged(discriminator, discriminatorFromValue, serializerMap, null);
     }
 
-    <T>
-    void write(Type<T> type, @UnknownNullability T value) throws IndexOutOfBoundsException;
+    <T extends @UnknownNullability Object> void write(Type<T> type, T value) throws IndexOutOfBoundsException;
 
-    <T> @UnknownNullability T read(Type<T> type) throws IndexOutOfBoundsException;
+    <T extends @UnknownNullability Object> T read(Type<T> type) throws IndexOutOfBoundsException;
 
-    <T> void writeAt(long index, Type<T> type, @UnknownNullability T value) throws IndexOutOfBoundsException;
+    <T extends @UnknownNullability Object> void writeAt(long index, Type<T> type, T value) throws IndexOutOfBoundsException;
 
-    <T> @UnknownNullability T readAt(long index, Type<T> type) throws IndexOutOfBoundsException;
+    <T extends @UnknownNullability Object> T readAt(long index, Type<T> type) throws IndexOutOfBoundsException;
 
     void copyTo(long srcOffset, byte[] dest, int destOffset, int length);
 

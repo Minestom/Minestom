@@ -546,7 +546,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         }
     }
 
-    static NetworkBufferImpl dummy(Registries registries) {
+    static NetworkBufferImpl dummy(@Nullable Registries registries) {
         // Dummy buffer with no memory allocated
         // Useful for size calculations
         return new NetworkBufferImpl(null, 0, 0, null, registries);
