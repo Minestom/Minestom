@@ -37,17 +37,6 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     int SEGMENT_BITS = 0x7F;
     int CONTINUE_BIT = 0x80;
 
-    record UnitType() implements NetworkBufferTypeImpl<Unit> {
-        @Override
-        public void write(NetworkBuffer buffer, Unit value) {
-        }
-
-        @Override
-        public Unit read(NetworkBuffer buffer) {
-            return Unit.INSTANCE;
-        }
-    }
-
     record BooleanType() implements NetworkBufferTypeImpl<Boolean> {
         @Override
         public void write(NetworkBuffer buffer, Boolean value) {
@@ -405,28 +394,6 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record BlockPositionType() implements NetworkBufferTypeImpl<Point> {
-        @Override
-        public void write(NetworkBuffer buffer, Point value) {
-            final int blockX = value.blockX();
-            final int blockY = value.blockY();
-            final int blockZ = value.blockZ();
-            final long longPos = (((long) blockX & 0x3FFFFFF) << 38) |
-                    (((long) blockZ & 0x3FFFFFF) << 12) |
-                    ((long) blockY & 0xFFF);
-            buffer.write(LONG, longPos);
-        }
-
-        @Override
-        public Point read(NetworkBuffer buffer) {
-            final long value = buffer.read(LONG);
-            final int x = (int) (value >> 38);
-            final int y = (int) (value << 52 >> 52);
-            final int z = (int) (value << 26 >> 38);
-            return new Vec(x, y, z);
-        }
-    }
-
     record JsonComponentType() implements NetworkBufferTypeImpl<Component> {
         @Override
         public void write(NetworkBuffer buffer, Component value) {
@@ -446,42 +413,6 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
                     : Transcoder.JSON;
             final JsonElement json = JsonUtil.fromJson(buffer.read(STRING));
             return Codec.COMPONENT.decode(coder, json).orElseThrow();
-        }
-    }
-
-    record UUIDType() implements NetworkBufferTypeImpl<UUID> {
-        @Override
-        public void write(NetworkBuffer buffer, java.util.UUID value) {
-            buffer.write(LONG, value.getMostSignificantBits());
-            buffer.write(LONG, value.getLeastSignificantBits());
-        }
-
-        @Override
-        public java.util.UUID read(NetworkBuffer buffer) {
-            final long mostSignificantBits = buffer.read(LONG);
-            final long leastSignificantBits = buffer.read(LONG);
-            return new UUID(mostSignificantBits, leastSignificantBits);
-        }
-    }
-
-    record PosType() implements NetworkBufferTypeImpl<Pos> {
-        @Override
-        public void write(NetworkBuffer buffer, Pos value) {
-            buffer.write(DOUBLE, value.x());
-            buffer.write(DOUBLE, value.y());
-            buffer.write(DOUBLE, value.z());
-            buffer.write(FLOAT, value.yaw());
-            buffer.write(FLOAT, value.pitch());
-        }
-
-        @Override
-        public Pos read(NetworkBuffer buffer) {
-            final double x = buffer.read(DOUBLE);
-            final double y = buffer.read(DOUBLE);
-            final double z = buffer.read(DOUBLE);
-            final float yaw = buffer.read(FLOAT);
-            final float pitch = buffer.read(FLOAT);
-            return new Pos(x, y, z, yaw, pitch);
         }
     }
 
@@ -550,74 +481,6 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record Vector3Type() implements NetworkBufferTypeImpl<Point> {
-        @Override
-        public void write(NetworkBuffer buffer, Point value) {
-            buffer.write(FLOAT, (float) value.x());
-            buffer.write(FLOAT, (float) value.y());
-            buffer.write(FLOAT, (float) value.z());
-        }
-
-        @Override
-        public Point read(NetworkBuffer buffer) {
-            final float x = buffer.read(FLOAT);
-            final float y = buffer.read(FLOAT);
-            final float z = buffer.read(FLOAT);
-            return new Vec(x, y, z);
-        }
-    }
-
-    record Vector3DType() implements NetworkBufferTypeImpl<Point> {
-        @Override
-        public void write(NetworkBuffer buffer, Point value) {
-            buffer.write(DOUBLE, value.x());
-            buffer.write(DOUBLE, value.y());
-            buffer.write(DOUBLE, value.z());
-        }
-
-        @Override
-        public Point read(NetworkBuffer buffer) {
-            final double x = buffer.read(DOUBLE);
-            final double y = buffer.read(DOUBLE);
-            final double z = buffer.read(DOUBLE);
-            return new Vec(x, y, z);
-        }
-    }
-
-    record Vector3IType() implements NetworkBufferTypeImpl<Point> {
-        @Override
-        public void write(NetworkBuffer buffer, Point value) {
-            buffer.write(VAR_INT, (int) value.x());
-            buffer.write(VAR_INT, (int) value.y());
-            buffer.write(VAR_INT, (int) value.z());
-        }
-
-        @Override
-        public Point read(NetworkBuffer buffer) {
-            final int x = buffer.read(VAR_INT);
-            final int y = buffer.read(VAR_INT);
-            final int z = buffer.read(VAR_INT);
-            return new Vec(x, y, z);
-        }
-    }
-
-    record Vector3BType() implements NetworkBufferTypeImpl<Point> {
-        @Override
-        public void write(NetworkBuffer buffer, Point value) {
-            buffer.write(BYTE, (byte) value.x());
-            buffer.write(BYTE, (byte) value.y());
-            buffer.write(BYTE, (byte) value.z());
-        }
-
-        @Override
-        public Point read(NetworkBuffer buffer) {
-            final byte x = buffer.read(BYTE);
-            final byte y = buffer.read(BYTE);
-            final byte z = buffer.read(BYTE);
-            return new Vec(x, y, z);
-        }
-    }
-
     record LpVector3Type() implements NetworkBufferTypeImpl<Vec> {
         private static final int DATA_BITS_MASK = 0b111111111111111;
         private static final double MAX_QUANTIZED_VALUE = 32766.0;
@@ -681,25 +544,6 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
         private static double unpack(long value) {
             return Math.min((double) (value & DATA_BITS_MASK), MAX_QUANTIZED_VALUE) * 2.0 / MAX_QUANTIZED_VALUE - 1.0;
-        }
-    }
-
-    record QuaternionType() implements NetworkBufferTypeImpl<float[]> {
-        @Override
-        public void write(NetworkBuffer buffer, float[] value) {
-            buffer.write(FLOAT, value[0]);
-            buffer.write(FLOAT, value[1]);
-            buffer.write(FLOAT, value[2]);
-            buffer.write(FLOAT, value[3]);
-        }
-
-        @Override
-        public float[] read(NetworkBuffer buffer) {
-            final float x = buffer.read(FLOAT);
-            final float y = buffer.read(FLOAT);
-            final float z = buffer.read(FLOAT);
-            final float w = buffer.read(FLOAT);
-            return new float[]{x, y, z, w};
         }
     }
 
@@ -1167,6 +1011,66 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             return new String(chararr, 0, chararr_count);
         }
     }
+
+    Type<Unit> UNIT = NetworkBufferTemplate.template(Unit.INSTANCE);
+
+    Type<UUID> UUID = NetworkBufferTemplate.template(
+            LONG, java.util.UUID::getMostSignificantBits,
+            LONG, java.util.UUID::getLeastSignificantBits,
+            UUID::new
+    );
+
+    Type<Pos> POS = NetworkBufferTemplate.template(
+            DOUBLE, Pos::x,
+            DOUBLE, Pos::y,
+            DOUBLE, Pos::z,
+            FLOAT, Pos::yaw,
+            FLOAT, Pos::pitch,
+            Pos::new
+    );
+
+    Type<Point> VECTOR3 = NetworkBufferTemplate.template(
+            FLOAT, p -> (float) p.x(),
+            FLOAT, p -> (float) p.y(),
+            FLOAT, p -> (float) p.z(),
+            Vec::new
+    );
+
+    Type<Point> VECTOR3D = NetworkBufferTemplate.template(
+            DOUBLE, Point::x,
+            DOUBLE, Point::y,
+            DOUBLE, Point::z,
+            Vec::new
+    );
+
+    Type<Point> VECTOR3I = NetworkBufferTemplate.template(
+            VAR_INT, p -> (int) p.x(),
+            VAR_INT, p -> (int) p.y(),
+            VAR_INT, p -> (int) p.z(),
+            Vec::new
+    );
+
+    Type<Point> VECTOR3B = NetworkBufferTemplate.template(
+            BYTE, p -> (byte) p.x(),
+            BYTE, p -> (byte) p.y(),
+            BYTE, p -> (byte) p.z(),
+            Vec::new
+    );
+
+    Type<float[]> QUATERNION = NetworkBufferTemplate.template(
+            FLOAT, arr -> arr[0],
+            FLOAT, arr -> arr[1],
+            FLOAT, arr -> arr[2],
+            FLOAT, arr -> arr[3],
+            (a, b, c, d) -> new float[]{a, b, c, d}
+    );
+
+    Type<Point> BLOCK_POSITION = LONG.transform(
+            value -> new Vec((int) (value >> 38), (int) (value << 52 >> 52), (int) (value << 26 >> 38)),
+            p -> (((long) p.blockX() & 0x3FFFFFF) << 38) |
+                    (((long) p.blockZ() & 0x3FFFFFF) << 12) |
+                    ((long) p.blockY() & 0xFFF)
+    );
 
     static <T> long sizeOf(Type<T> type, T value, Registries registries) {
         NetworkBuffer buffer = NetworkBufferImpl.dummy(registries);
