@@ -42,7 +42,7 @@ jobs:
             exit 0
           fi
 
-          VIOLATIONS=$(gh run view "${{ github.event.workflow_run.id }}" --job "$JOB_ID" --log | grep "::error" | sed -E 's/^.*[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]+Z[[:space:]]+//g' | sed -E 's/::error file=([^,]+),line=([0-9]+)::/\1:\2 - /' || true)
+          VIOLATIONS=$(gh run view "${{ github.event.workflow_run.id }}" --job "$JOB_ID" --log | grep "##\[error\]" | grep -v "Process completed with exit code" | sed -E 's/^.*[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]+Z[[:space:]]+//g' | sed -E 's/##\[error\]//' || true)
 
           if [ -z "$VIOLATIONS" ]; then
             exit 0
