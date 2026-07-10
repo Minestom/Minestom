@@ -55,7 +55,7 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
      * @return the created display scoreboard packet
      */
     default DisplayScoreboardPacket getDisplayScoreboardPacket(byte position) {
-        return new DisplayScoreboardPacket(position, getObjectiveName());
+        return new DisplayScoreboardPacket(DisplaySlot.values()[position], getObjectiveName());
     }
 
     /**

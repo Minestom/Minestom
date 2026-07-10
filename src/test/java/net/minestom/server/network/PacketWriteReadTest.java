@@ -66,6 +66,7 @@ import net.minestom.server.recipe.RecipeBookCategory;
 import net.minestom.server.recipe.RecipeProperty;
 import net.minestom.server.recipe.display.RecipeDisplay;
 import net.minestom.server.recipe.display.SlotDisplay;
+import net.minestom.server.scoreboard.DisplaySlot;
 import net.minestom.server.scoreboard.NumberFormat;
 import net.minestom.server.scoreboard.RenderType;
 import net.minestom.server.sound.SoundEvent;
@@ -258,7 +259,7 @@ public class PacketWriteReadTest {
 
         addServerPackets(new DestroyEntitiesPacket(List.of(5, 5, 5)));
         addServerPackets(new DisconnectPacket(COMPONENT));
-        addServerPackets(new DisplayScoreboardPacket((byte) 5, "scoreboard"));
+        addServerPackets(new DisplayScoreboardPacket(DisplaySlot.SIDEBAR, "scoreboard"));
         addServerPackets(new WorldEventPacket(5, BLOCK_VEC, 5, false));
         addServerPackets(new EndCombatEventPacket(5));
         addServerPackets(new EnterCombatEventPacket());
