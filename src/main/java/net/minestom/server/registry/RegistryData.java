@@ -17,8 +17,8 @@ import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.EntityType;
-import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.EquipmentSlot;
+import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockEntityType;
 import net.minestom.server.instance.block.BlockSoundType;
@@ -221,7 +221,9 @@ public final class RegistryData {
         WOLF_SOUND_VARIANTS("wolf_sound_variant.json"),
         ZOMBIE_NAUTILUS_VARIANTS("zombie_nautilus_variant.json"),
         TIMELINES("timeline.json"),
-        WORLD_CLOCKS("world_clock.json");
+        WORLD_CLOCKS("world_clock.json"),
+        SULFUR_CUBE_ARCHETYPES("sulfur_cube_archetype.json"),
+        ;
 
         private final String name;
 

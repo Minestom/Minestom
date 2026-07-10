@@ -97,7 +97,7 @@ public final class PacketListenerManager {
         setPlayListener(ClientPlayerAbilitiesPacket.class, AbilitiesListener::listener);
         setPlayListener(ClientResourcePackStatusPacket.class, ResourcePackListener::listener);
         setPlayListener(ClientAdvancementTabPacket.class, AdvancementTabListener::listener);
-        setPlayListener(ClientSpectateEntityPacket.class, PlayerSpectatorListener::listener);
+        setPlayListener(ClientSpectatorActionPacket.class, PlayerSpectatorListener::listener);
         setPlayListener(ClientTeleportToEntityPacket.class, PlayerSpectatorListener::listener);
         setPlayListener(ClientEditBookPacket.class, BookListener::listener);
         setPlayListener(ClientChatSessionUpdatePacket.class, (packet, player) -> {/* empty */});

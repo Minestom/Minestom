@@ -9,6 +9,7 @@ import net.minestom.server.entity.metadata.animal.tameable.CatSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
+import net.minestom.server.entity.metadata.cube.SulfurCubeArchetype;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.game.GameEvent;
 import net.minestom.server.instance.block.Block;
@@ -135,6 +136,8 @@ public interface Registries {
     DynamicRegistry<Timeline> timeline();
 
     DynamicRegistry<WorldClock> worldClock();
+
+    DynamicRegistry<SulfurCubeArchetype> sulfurCubeArchetype();
 
     // The following are _not_ sent to the client.
 
@@ -313,6 +316,11 @@ public interface Registries {
         @Override
         default DynamicRegistry<WorldClock> worldClock() {
             return registries().worldClock();
+        }
+
+        @Override
+        default DynamicRegistry<SulfurCubeArchetype> sulfurCubeArchetype() {
+            return registries().sulfurCubeArchetype();
         }
 
         @Override

@@ -8,6 +8,7 @@ import net.minestom.server.entity.metadata.animal.tameable.CatSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
+import net.minestom.server.entity.metadata.cube.SulfurCubeArchetype;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
@@ -17,8 +18,8 @@ import net.minestom.server.item.enchant.*;
 import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.message.ChatType;
 import net.minestom.server.world.DimensionType;
-import net.minestom.server.world.clock.WorldClock;
 import net.minestom.server.world.biome.Biome;
+import net.minestom.server.world.clock.WorldClock;
 import net.minestom.server.world.timeline.Timeline;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,6 +53,7 @@ public class TestRegistries implements Registries {
     public @Nullable DynamicRegistry<Dialog> dialog = null;
     public @Nullable DynamicRegistry<Timeline> timeline = null;
     public @Nullable DynamicRegistry<WorldClock> worldClock = null;
+    public @Nullable DynamicRegistry<SulfurCubeArchetype> sulfurCubeArchetype = null;
     public @Nullable DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues = null;
     public @Nullable DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects = null;
     public @Nullable DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects = null;
@@ -189,6 +191,11 @@ public class TestRegistries implements Registries {
     @Override
     public DynamicRegistry<WorldClock> worldClock() {
         return Objects.requireNonNull(worldClock);
+    }
+
+    @Override
+    public DynamicRegistry<SulfurCubeArchetype> sulfurCubeArchetype() {
+        return Objects.requireNonNull(sulfurCubeArchetype);
     }
 
     @Override
