@@ -1,6 +1,5 @@
 package net.minestom.server.instance.generator;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.generator.GeneratorImpl.GenSection;
 import net.minestom.server.world.biome.Biome;
 import net.minestom.testing.Env;
@@ -32,7 +31,7 @@ public class BiomeIntegrationTest {
         final int sectionCount = maxSection - minSection;
         GenSection[] sections = new GenSection[sectionCount];
         Arrays.setAll(sections, i -> new GenSection());
-        var chunkUnits = GeneratorImpl.chunk(MinecraftServer.getBiomeRegistry(), sections, chunkX, minSection, chunkZ);
+        var chunkUnits = GeneratorImpl.chunk(env.process().biome(), sections, chunkX, minSection, chunkZ);
         Generator generator = unit -> {
             var modifier = unit.modifier();
             modifier.setBiome(48, -16, -32, Biome.BADLANDS);
@@ -55,7 +54,7 @@ public class BiomeIntegrationTest {
         final int sectionCount = maxSection - minSection;
         GenSection[] sections = new GenSection[sectionCount];
         Arrays.setAll(sections, i -> new GenSection());
-        var chunkUnits = GeneratorImpl.chunk(MinecraftServer.getBiomeRegistry(), sections, chunkX, minSection, chunkZ);
+        var chunkUnits = GeneratorImpl.chunk(env.process().biome(), sections, chunkX, minSection, chunkZ);
         Generator generator = chunk -> {
             var modifier = chunk.modifier();
             modifier.fillBiome(Biome.PLAINS);

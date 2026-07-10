@@ -131,7 +131,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     // Velocity
     protected Vec velocity = Vec.ZERO; // Movement in block per second
-    protected boolean lastVelocityWasZero = true;
     protected boolean hasPhysics = true;
     protected boolean collidesWithEntities = true;
     protected boolean preventBlockPlacement = true;
@@ -174,7 +173,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private boolean isActive; // False if entity has only been instanced without being added somewhere
     protected boolean removed;
 
-    private final Set<Entity> passengers = new CopyOnWriteArraySet<>();
+    private final List<Entity> passengers = new CopyOnWriteArrayList<>();
 
     private final Set<Entity> leashedEntities = new CopyOnWriteArraySet<>();
     private Entity leashHolder;
@@ -639,7 +638,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             if (vehicle == null) {
                 synchronizePosition();
                 sendPacketToViewers(getVelocityPacket());
-            } else synchronizeView();
+            } else {
+                synchronizeView();
+                nextSynchronizationTick = ticks + synchronizationTicks;
+            }
         }
         // End of tick scheduled tasks
         this.scheduler.processTickEnd();
@@ -1033,12 +1035,13 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         Check.stateCondition(entity == getVehicle(), "Cannot add the entity vehicle as a passenger");
         final Entity vehicle = entity.getVehicle();
         if (vehicle != null) vehicle.removePassenger(entity);
+        if (this.passengers.contains(entity)) return;
         if (!currentInstance.equals(entity.getInstance()))
             entity.setInstance(currentInstance, position).join();
         this.passengers.add(entity);
         entity.vehicle = this;
         sendPacketToViewersAndSelf(getPassengersPacket());
-        updatePassengerPosition(position, entity);
+        updatePassengerPosition(position, entity, this.passengers.size() - 1);
         entity.synchronizePosition();
     }
 
@@ -1072,8 +1075,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      *
      * @return an unmodifiable list containing all the entity passengers
      */
-    public Set<Entity> getPassengers() {
-        return Collections.unmodifiableSet(passengers);
+    public List<Entity> getPassengers() {
+        return Collections.unmodifiableList(passengers);
     }
 
     protected SetPassengersPacket getPassengersPacket() {
@@ -1326,6 +1329,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     public void refreshPosition(final Pos newPosition, boolean ignoreView, boolean sendPackets) {
         final var previousPosition = this.position;
         final Pos position = ignoreView ? previousPosition.withCoord(newPosition) : newPosition;
+        final Pos lastSyncedPosition = this.lastSyncedPosition;
         if (position.equals(lastSyncedPosition)) return;
         setPositionInternal(position, ignoreView ? headRotation : position.yaw());
         this.previousPosition = previousPosition;
@@ -1378,16 +1382,14 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
-     * Sets the coordinates of the passenger to the coordinates of this vehicle + {@link EntityUtils#getPassengerHeightOffset(Entity, Entity)}
+     * Sets the coordinates of the passenger to the coordinates of this vehicle + {@link EntityUtils#getPassengerPositionOffset(Entity, Entity, int)}
      *
      * @param newPosition the new position of this vehicle
      * @param passenger   the passenger to be moved
      */
-    private void updatePassengerPosition(Point newPosition, Entity passenger) {
+    private void updatePassengerPosition(Point newPosition, Entity passenger, int passengerIndex) {
         final Pos oldPassengerPos = passenger.position;
-        final Pos newPassengerPos = oldPassengerPos.withCoord(newPosition.x(),
-                newPosition.y() + EntityUtils.getPassengerHeightOffset(this, passenger),
-                newPosition.z());
+        final Pos newPassengerPos = newPosition.add(EntityUtils.getPassengerPositionOffset(this, passenger, passengerIndex)).asPos();
         passenger.setPositionInternal(newPassengerPos, newPassengerPos.yaw());
         passenger.previousPosition = oldPassengerPos;
         passenger.refreshCoordinate(newPassengerPos);
@@ -1406,10 +1408,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     @ApiStatus.Internal
     protected void refreshCoordinate(Point newPosition) {
         // Passengers update
-        final Set<Entity> passengers = getPassengers();
+        final List<Entity> passengers = getPassengers();
         if (!passengers.isEmpty()) {
-            for (Entity passenger : passengers) {
-                updatePassengerPosition(newPosition, passenger);
+            for (int i = 0; i < passengers.size(); i++) {
+                updatePassengerPosition(newPosition, passengers.get(i), i);
             }
         }
         // Handle chunk switch
@@ -1567,7 +1569,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
 
         // Remove passengers if any (also done with LivingEntity#kill)
-        Set<Entity> passengers = getPassengers();
+        Collection<Entity> passengers = getPassengers();
         if (!passengers.isEmpty()) passengers.forEach(this::removePassenger);
         final Entity vehicle = this.vehicle;
         if (vehicle != null) vehicle.removePassenger(this);
@@ -1677,7 +1679,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.lastSyncedPosition = posCache;
     }
 
-    private void synchronizeView() {
+    /**
+     * Used to synchronize the head position and rotation of the entity
+     */
+    @ApiStatus.Internal
+    protected void synchronizeView() {
+        final Pos position = this.position;
         sendPacketToViewers(new EntityHeadLookPacket(getEntityId(), headRotation));
         sendPacketToViewers(new EntityRotationPacket(getEntityId(), position.yaw(), position.pitch(), onGround));
     }

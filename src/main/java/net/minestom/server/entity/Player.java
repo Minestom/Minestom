@@ -66,6 +66,7 @@ import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.common.*;
 import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.packet.server.play.data.PlayerSpawnInfo;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.network.player.ClientSettings;
 import net.minestom.server.network.player.GameProfile;
@@ -289,10 +290,12 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                 getEntityId(), this.hardcore, List.of(), 0,
                 ServerFlag.CHUNK_VIEW_DISTANCE, ServerFlag.CHUNK_VIEW_DISTANCE,
                 false, true, false,
-                dimensionTypeId, spawnInstance.getDimensionName(), 0,
-                gameMode, null, false, levelFlat,
-                deathLocation, portalCooldown, DEFAULT_SEA_LEVEL,
-                true);
+                new PlayerSpawnInfo(dimensionTypeId, spawnInstance.getDimensionName(), 0,
+                        gameMode, null, false, levelFlat,
+                        deathLocation, portalCooldown, DEFAULT_SEA_LEVEL),
+                // Always leave online mode & chat secure chat enabled
+                // so the client makes a chat session and shows tablist heads.
+                true, true);
         sendPacket(joinGamePacket);
 
         // Start sending inventory updates
@@ -492,9 +495,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         entityMeta.setOnFire(false);
         refreshHealth();
 
-        sendPacket(new RespawnPacket(dimensionTypeId, instance.getDimensionName(),
+        sendPacket(new RespawnPacket(new PlayerSpawnInfo(dimensionTypeId, instance.getDimensionName(),
                 0, gameMode, gameMode, false, levelFlat,
-                deathLocation, portalCooldown, DEFAULT_SEA_LEVEL, (byte) RespawnPacket.COPY_ALL));
+                deathLocation, portalCooldown, DEFAULT_SEA_LEVEL), (byte) RespawnPacket.COPY_ALL));
         refreshClientStateAfterRespawn();
 
         PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this);
@@ -749,9 +752,10 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     @ApiStatus.Internal
     public void onChunkBatchReceived(float newTargetChunksPerTick) {
 //        logger.debug("chunk batch received player={} chunks/tick={} lead={}", username, newTargetChunksPerTick, chunkBatchLead);
-        chunkBatchLead -= 1;
+        chunkBatchLead = Math.max(0, chunkBatchLead - 1);
+        newTargetChunksPerTick = newTargetChunksPerTick * ServerFlag.CHUNKS_PER_TICK_MULTIPLIER;
         targetChunksPerTick = Float.isNaN(newTargetChunksPerTick) ? ServerFlag.MIN_CHUNKS_PER_TICK : MathUtils.clamp(
-                newTargetChunksPerTick * ServerFlag.CHUNKS_PER_TICK_MULTIPLIER, ServerFlag.MIN_CHUNKS_PER_TICK, ServerFlag.MAX_CHUNKS_PER_TICK);
+                newTargetChunksPerTick, ServerFlag.MIN_CHUNKS_PER_TICK, ServerFlag.MAX_CHUNKS_PER_TICK);
 
         // Beyond the first batch we can preemptively send up to 10 (matching mojang server)
         if (maxChunkBatchLead == 1) maxChunkBatchLead = 10;
@@ -1262,10 +1266,10 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         final PlayerInfoRemovePacket removePlayerPacket = getRemovePlayerToList();
         final PlayerInfoUpdatePacket addPlayerPacket = getAddPlayerToList();
 
-        final RespawnPacket respawnPacket = new RespawnPacket(dimensionTypeId,
+        final RespawnPacket respawnPacket = new RespawnPacket(new PlayerSpawnInfo(dimensionTypeId,
                 instance.getDimensionName(), 0, gameMode, gameMode,
                 false, levelFlat, deathLocation, portalCooldown,
-                DEFAULT_SEA_LEVEL, (byte) RespawnPacket.COPY_ALL);
+                DEFAULT_SEA_LEVEL), (byte) RespawnPacket.COPY_ALL);
 
         sendPacket(removePlayerPacket);
         sendPacket(destroyEntitiesPacket);
@@ -1726,9 +1730,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         Check.argCondition(instance.getDimensionName().equals(dimensionName),
                 "The dimension needs to be different than the current one!");
         this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(dimensionType);
-        sendPacket(new RespawnPacket(dimensionTypeId, dimensionName,
+        sendPacket(new RespawnPacket(new PlayerSpawnInfo(dimensionTypeId, dimensionName,
                 0, gameMode, gameMode, false, levelFlat,
-                deathLocation, portalCooldown, DEFAULT_SEA_LEVEL, (byte) RespawnPacket.COPY_ALL));
+                deathLocation, portalCooldown, DEFAULT_SEA_LEVEL), (byte) RespawnPacket.COPY_ALL));
         refreshClientStateAfterRespawn();
     }
 
@@ -2265,12 +2269,6 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
         var event = new PlayerInputEvent(this, oldForward, oldBackward, oldLeft, oldRight, oldJump, oldShift, oldSprint);
         EventDispatcher.call(event);
-
-        if (event.hasPressedShiftKey()) {
-            EventDispatcher.call(new PlayerStartSneakingEvent(this));
-        } else if (event.hasReleasedShiftKey()) {
-            EventDispatcher.call(new PlayerStopSneakingEvent(this));
-        }
     }
 
     /**

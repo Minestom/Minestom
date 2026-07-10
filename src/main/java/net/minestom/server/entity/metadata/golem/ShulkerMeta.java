@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 public class ShulkerMeta extends AbstractGolemMeta {
     private static final DyeColor[] DYE_VALUES = DyeColor.values();
 
-    public ShulkerMeta(Entity entity, MetadataHolder metadata) {
+    public ShulkerMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

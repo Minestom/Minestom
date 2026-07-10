@@ -6,6 +6,8 @@ import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.potion.Potion;
+import net.minestom.server.potion.PotionEffect;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -63,6 +65,45 @@ public class BlockBreakCalculationTest {
         assertEquals(0, breakTicks(Block.SCAFFOLDING, player));
         player.getAttribute(Attribute.BLOCK_BREAK_SPEED).setBaseValue(0);
         assertEquals(BlockBreakCalculation.UNBREAKABLE, breakTicks(Block.SCAFFOLDING, player));
+    }
+
+    @Test
+    public void testMiningFatigue() {
+        player.setItemInMainHand(ItemStack.AIR);
+        final int noFatigue = breakTicks(Block.STONE, player);
+
+        final int amplifier0 = breakWithFatigue(0); // x0.3
+        final int amplifier1 = breakWithFatigue(1); // x0.09
+        final int amplifier2 = breakWithFatigue(2); // x0.0027
+        final int amplifier3 = breakWithFatigue(3); // x0.00081 (default case)
+
+        // Mining Fatigue always slows breaking, and stronger levels are progressively slower.
+        assertTrue(noFatigue < amplifier0, "fatigue must slow breaking");
+        assertTrue(amplifier0 < amplifier1 && amplifier1 < amplifier2 && amplifier2 < amplifier3,
+                "a higher amplifier must break slower");
+
+        // Every amplifier >= 3 must fall through to the same default multiplier (the "Fix default case" regression guard).
+        assertEquals(amplifier3, breakWithFatigue(4), "amplifier 4 must reuse the default multiplier");
+        assertEquals(amplifier3, breakWithFatigue(10), "amplifier 10 must reuse the default multiplier");
+        assertEquals(amplifier3, breakWithFatigue(127), "amplifier 127 must reuse the default multiplier");
+
+        // Break time scales as 1/multiplier, so consecutive ratios must match vanilla's hardcoded table
+        // (0.3, 0.09, 0.0027, 0.00081 for amplifier 0/1/2/3+). This pins the magnitudes and would catch a
+        // regression to a clean 0.3^level table (0.027 / 0.0081).
+        assertRatio(0.3 / 0.09, amplifier1, amplifier0);
+        assertRatio(0.09 / 0.0027, amplifier2, amplifier1);
+        assertRatio(0.0027 / 0.00081, amplifier3, amplifier2);
+    }
+
+    private int breakWithFatigue(int amplifier) {
+        player.removeEffect(PotionEffect.MINING_FATIGUE);
+        player.addEffect(new Potion(PotionEffect.MINING_FATIGUE, amplifier, 200));
+        return breakTicks(Block.STONE, player);
+    }
+
+    private static void assertRatio(double expected, int slower, int faster) {
+        assertEquals(expected, (double) slower / faster, expected * 0.02,
+                "break-time ratio should reflect the vanilla mining-fatigue multiplier table");
     }
 
     @BeforeEach

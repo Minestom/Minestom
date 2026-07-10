@@ -11,7 +11,7 @@ import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.Nullable;
 
 public class TropicalFishMeta extends AbstractFishMeta {
-    public TropicalFishMeta(Entity entity, MetadataHolder metadata) {
+    public TropicalFishMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

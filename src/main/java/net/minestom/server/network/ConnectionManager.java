@@ -210,7 +210,7 @@ public final class ConnectionManager {
             throw new RuntimeException("Error getting replies for login plugin messages", t);
         }
         // Send login success packet (and switch to configuration phase)
-        connection.sendPacket(new LoginSuccessPacket(gameProfile));
+        connection.sendPacket(new LoginSuccessPacket(gameProfile, new UUID(0L, 0L)));
         return gameProfile;
     }
 

@@ -4,7 +4,6 @@ module net.minestom.server {
     requires transitive com.google.gson;
     requires it.unimi.dsi.fastutil;
     requires space.vectrix.flare.fastutil;
-    requires jdk.unsupported; // Unsafe
     requires transitive net.kyori.adventure.api;
     requires transitive net.kyori.adventure.nbt;
     requires net.kyori.adventure.text.logger.slf4j;
@@ -17,7 +16,6 @@ module net.minestom.server {
     requires org.jctools.core;
     requires jdk.jfr;
     requires java.desktop;
-    requires java.management;
     requires net.minestom.data;
 
     // EXPORTS
@@ -181,6 +179,7 @@ module net.minestom.server {
     exports net.minestom.server.world.biome;
     exports net.minestom.server.world.timeline;
     exports net.minestom.server.world.clock;
+    exports net.minestom.server.entity.metadata.cube;
 
     provides net.kyori.adventure.text.logger.slf4j.ComponentLoggerProvider with net.minestom.server.adventure.provider.MinestomComponentLoggerProvider;
     provides net.kyori.adventure.text.serializer.ansi.ANSIComponentSerializer.Provider with net.minestom.server.adventure.provider.MinestomAnsiComponentSerializerProvider;

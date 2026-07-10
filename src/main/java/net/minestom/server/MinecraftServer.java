@@ -8,14 +8,11 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.metadata.animal.ChickenVariant;
-import net.minestom.server.entity.metadata.animal.CowVariant;
-import net.minestom.server.entity.metadata.animal.FrogVariant;
-import net.minestom.server.entity.metadata.animal.PigVariant;
-import net.minestom.server.entity.metadata.animal.ZombieNautilusVariant;
+import net.minestom.server.entity.metadata.animal.*;
 import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
+import net.minestom.server.entity.metadata.cube.SulfurCubeArchetype;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
@@ -29,10 +26,8 @@ import net.minestom.server.item.enchant.*;
 import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatType;
-import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.PacketParser;
-import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.common.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.network.socket.Server;
@@ -46,6 +41,7 @@ import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Difficulty;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
+import net.minestom.server.world.clock.WorldClock;
 import net.minestom.server.world.timeline.Timeline;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnknownNullability;
@@ -176,15 +172,6 @@ public final class MinecraftServer implements MinecraftConstants {
 
     public static SchedulerManager getSchedulerManager() {
         return serverProcess.scheduler();
-    }
-
-    /**
-     * Gets the manager handling server monitoring.
-     *
-     * @return the benchmark manager
-     */
-    public static BenchmarkManager getBenchmarkManager() {
-        return serverProcess.benchmark();
     }
 
     public static ExceptionManager getExceptionManager() {
@@ -347,6 +334,14 @@ public final class MinecraftServer implements MinecraftConstants {
 
     public static DynamicRegistry<Timeline> getTimelineRegistry() {
         return serverProcess.timeline();
+    }
+
+    public static DynamicRegistry<WorldClock> getWorldClockRegistry() {
+        return serverProcess.worldClock();
+    }
+
+    public static DynamicRegistry<SulfurCubeArchetype> getSulfurCubeArchetypeRegistry() {
+        return serverProcess.sulfurCubeArchetype();
     }
 
     public static DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {

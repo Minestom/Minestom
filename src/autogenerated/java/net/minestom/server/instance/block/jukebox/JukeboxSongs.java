@@ -19,6 +19,8 @@ sealed interface JukeboxSongs permits JukeboxSong {
 
     RegistryKey<JukeboxSong> _13 = RegistryKey.unsafeOf("13");
 
+    RegistryKey<JukeboxSong> BOUNCE = RegistryKey.unsafeOf("bounce");
+
     RegistryKey<JukeboxSong> RELIC = RegistryKey.unsafeOf("relic");
 
     RegistryKey<JukeboxSong> FAR = RegistryKey.unsafeOf("far");

@@ -10,6 +10,8 @@ import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.play.DeclareRecipesPacket;
 import net.minestom.server.network.packet.server.play.RecipeBookAddPacket;
 import net.minestom.server.recipe.display.RecipeDisplay;
+import net.minestom.server.recipe.display.SlotDisplay;
+import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
 
@@ -125,13 +127,24 @@ public final class RecipeManager {
             if (!(recipeBookEntry.getKey().display() instanceof RecipeDisplay.Stonecutter stonecutterDisplay))
                 continue;
 
-            final Ingredient input = Ingredient.fromSlotDisplay(stonecutterDisplay.ingredient());
+            final Ingredient input = ingredientFromSlotDisplay(stonecutterDisplay.ingredient());
             if (input == null) continue;
 
             stonecutterRecipes.add(new DeclareRecipesPacket.StonecutterRecipe(input, stonecutterDisplay.result()));
         }
 
         return new DeclareRecipesPacket(itemPropertiesLists, stonecutterRecipes);
+    }
+
+    private static @Nullable Ingredient ingredientFromSlotDisplay(SlotDisplay slotDisplay) {
+        return switch (slotDisplay) {
+            case SlotDisplay.Item item -> new Ingredient(item.material());
+            case SlotDisplay.Tag tag -> {
+                final RegistryTag<Material> tagValue = Material.staticRegistry().getTag(tag.tag());
+                yield tagValue != null ? new Ingredient(tagValue) : null;
+            }
+            default -> null;
+        };
     }
 
 }

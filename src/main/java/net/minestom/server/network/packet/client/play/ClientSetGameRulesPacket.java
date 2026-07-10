@@ -6,6 +6,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryKey;
+import net.minestom.server.utils.validate.Check;
 
 import java.util.List;
 import java.util.Objects;
@@ -29,6 +30,7 @@ public record ClientSetGameRulesPacket(List<Entry> entries) implements ClientPac
         public Entry {
             Objects.requireNonNull(key, "key");
             Objects.requireNonNull(value, "value");
+            Check.argCondition(value.length() > Short.MAX_VALUE, "Value length cannot be greater than Short.MAX_VALUE");
         }
     }
 }

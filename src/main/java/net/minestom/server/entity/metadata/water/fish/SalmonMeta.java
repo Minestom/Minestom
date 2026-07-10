@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SalmonMeta extends AbstractFishMeta {
-    public SalmonMeta(Entity entity, MetadataHolder metadata) {
+    public SalmonMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

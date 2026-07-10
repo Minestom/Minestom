@@ -109,6 +109,27 @@ final class RegistryTagImpl {
         public int size() {
             return keys.size();
         }
+
+        // Equality is defined by the underlying keys rather than the concrete RegistryKey
+        // implementation, so a tag built from registry values (e.g. Material) is equal to an
+        // equivalent tag read back from the network (which holds RegistryKeyImpl instances).
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof RegistryTagImpl.Direct<?>(var keys1))
+                    || keys.size() != keys1.size()) return false;
+            for (int i = 0; i < keys.size(); i++)
+                if (!keys.get(i).key().equals(keys1.get(i).key())) return false;
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = 1;
+            for (RegistryKey<T> key : keys)
+                result = 31 * result + key.key().hashCode();
+            return result;
+        }
     }
 
 }

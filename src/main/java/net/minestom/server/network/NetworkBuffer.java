@@ -14,13 +14,19 @@ import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.crypto.KeyUtils;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import javax.crypto.Cipher;
+import java.io.DataInput;
+import java.io.DataOutput;
 import java.io.IOException;
+import java.lang.foreign.MemorySegment;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.SocketChannel;
+import java.nio.channels.WritableByteChannel;
 import java.security.PublicKey;
 import java.time.Instant;
 import java.util.*;
@@ -89,7 +95,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     static <E extends Enum<E>> Type<EnumSet<E>> EnumSet(Class<E> enumClass) {
-        return new NetworkBufferTypeImpl.EnumSetType<>(enumClass, enumClass.getEnumConstants());
+        final E[] values = enumClass.getEnumConstants();
+        return new NetworkBufferTypeImpl.EnumSetType<>(enumClass, values);
     }
 
     static Type<BitSet> FixedBitSet(int length) {
@@ -127,16 +134,17 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return Tagged(discriminator, discriminatorFromValue, serializerMap, null);
     }
 
-    <T>
-    void write(Type<T> type, @UnknownNullability T value) throws IndexOutOfBoundsException;
+    <T extends @UnknownNullability Object> void write(Type<T> type, T value) throws IndexOutOfBoundsException;
 
-    <T> @UnknownNullability T read(Type<T> type) throws IndexOutOfBoundsException;
+    <T extends @UnknownNullability Object> T read(Type<T> type) throws IndexOutOfBoundsException;
 
-    <T> void writeAt(long index, Type<T> type, @UnknownNullability T value) throws IndexOutOfBoundsException;
+    <T extends @UnknownNullability Object> void writeAt(long index, Type<T> type, T value) throws IndexOutOfBoundsException;
 
-    <T> @UnknownNullability T readAt(long index, Type<T> type) throws IndexOutOfBoundsException;
+    <T extends @UnknownNullability Object> T readAt(long index, Type<T> type) throws IndexOutOfBoundsException;
 
-    void copyTo(long srcOffset, byte[] dest, long destOffset, long length);
+    void copyTo(long srcOffset, byte[] dest, int destOffset, int length);
+
+    void copyTo(long srcOffset, MemorySegment dest, long destOffset, long length);
 
     byte[] extractBytes(Consumer<NetworkBuffer> extractor);
 
@@ -162,13 +170,16 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     long capacity();
 
-    void readOnly();
+    @Contract(pure = true, value = "-> new")
+    NetworkBuffer readOnly();
 
     boolean isReadOnly();
 
     void resize(long newSize);
 
-    void ensureWritable(long length);
+    void ensureWritable(long length) throws IndexOutOfBoundsException;
+
+    void ensureReadable(long length) throws IndexOutOfBoundsException;
 
     void compact();
 
@@ -180,7 +191,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     int readChannel(ReadableByteChannel channel) throws IOException;
 
-    boolean writeChannel(SocketChannel channel) throws IOException;
+    boolean writeChannel(WritableByteChannel channel) throws IOException;
 
     void cipher(Cipher cipher, long start, long length);
 
@@ -189,6 +200,19 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     long decompress(long start, long length, NetworkBuffer output) throws DataFormatException;
 
     @Nullable Registries registries();
+
+    void registries(@Nullable Registries registries);
+
+    /**
+     * Creates a new {@link IOView} of this buffer.
+     * <br>
+     * Useful to interface with API's that support {@link DataInput} or {@link DataOutput}.
+     *
+     * @return the io view.
+     */
+    @ApiStatus.Experimental
+    @Contract(pure = true, value = "-> new")
+    IOView ioView();
 
     interface Type<T extends @UnknownNullability Object> {
         void write(NetworkBuffer buffer, T value);
@@ -279,8 +303,16 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return resizableBuffer(null);
     }
 
+    static NetworkBuffer wrap(MemorySegment segment, long readIndex, long writeIndex, @Nullable Registries registries) {
+        return NetworkBufferImpl.wrap(segment, readIndex, writeIndex, registries);
+    }
+
+    static NetworkBuffer wrap(MemorySegment segment, long readIndex, long writeIndex) {
+        return wrap(segment, readIndex, writeIndex, null);
+    }
+
     static NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex, @Nullable Registries registries) {
-        return NetworkBufferImpl.wrap(bytes, readIndex, writeIndex, registries);
+        return wrap(MemorySegment.ofArray(bytes), readIndex, writeIndex, registries);
     }
 
     static NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex) {
@@ -300,6 +332,115 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         AutoResize DOUBLE = (capacity, targetSize) -> Math.max(capacity * 2, targetSize);
 
         long resize(long capacity, long targetSize);
+    }
+
+    /**
+     * Self-contained interface
+     * that extends {@link DataInput} and {@link DataOutput} for mostly reading/writing binary tags.
+     * <br>
+     * You can access the io view of a network buffer with {@link NetworkBuffer#ioView()}
+     * <br>
+     * This interface is separate from {@link NetworkBuffer}
+     * because we don't want DataInput and DataOutput to be part of the public API.
+     * You should use {@link NetworkBuffer} instead where possible.
+     *
+     * @apiNote You should never rely on the identity of {@link IOView} as it is a value class candidate.
+     * @implNote This implementation removes checked exceptions as the backing {@link NetworkBuffer} would not throw {@link IOException}'s.
+     * Also {@link #readLine()} is not implemented as it's already deprecated in {@link java.io.DataInputStream}.
+     */
+    @ApiStatus.Experimental
+    sealed interface IOView extends DataInput, DataOutput permits NetworkBufferImpl.IOView {
+
+        @Deprecated(forRemoval = true)
+        @Override
+        @Contract("-> fail")
+        default String readLine() {
+            throw new UnsupportedOperationException("Deprecated method readLine() called, not implemented");
+        }
+
+        @Override
+        void readFully(byte[] bytes);
+
+        @Override
+        void readFully(byte[] bytes, int off, int len);
+
+        @Override
+        int skipBytes(int n);
+
+        @Override
+        boolean readBoolean();
+
+        @Override
+        byte readByte();
+
+        @Override
+        int readUnsignedByte();
+
+        @Override
+        short readShort();
+
+        @Override
+        int readUnsignedShort();
+
+        @Override
+        char readChar();
+
+        @Override
+        int readInt();
+
+        @Override
+        long readLong();
+
+        @Override
+        float readFloat();
+
+        @Override
+        double readDouble();
+
+        @Override
+        String readUTF();
+
+        @Override
+        void write(int lower);
+
+        @Override
+        void write(byte[] bytes);
+
+        @Override
+        void write(byte[] bytes, int off, int len);
+
+        @Override
+        void writeBoolean(boolean value);
+
+        @Override
+        void writeByte(int value);
+
+        @Override
+        void writeShort(int value);
+
+        @Override
+        void writeChar(int value);
+
+        @Override
+        void writeInt(int value);
+
+        @Override
+        void writeLong(long value);
+
+        @Override
+        void writeFloat(float value);
+
+        @Override
+        void writeDouble(double value);
+
+        @Override
+        void writeBytes(String value);
+
+        @Override
+        void writeChars(String value);
+
+        @Override
+        void writeUTF(String value);
     }
 
     static byte[] makeArray(Consumer<NetworkBuffer> writing, @Nullable Registries registries) {

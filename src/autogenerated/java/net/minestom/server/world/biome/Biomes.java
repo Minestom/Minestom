@@ -121,6 +121,8 @@ sealed interface Biomes permits Biome {
 
     RegistryKey<Biome> WARM_OCEAN = RegistryKey.unsafeOf("warm_ocean");
 
+    RegistryKey<Biome> SULFUR_CAVES = RegistryKey.unsafeOf("sulfur_caves");
+
     RegistryKey<Biome> ICE_SPIKES = RegistryKey.unsafeOf("ice_spikes");
 
     RegistryKey<Biome> JAGGED_PEAKS = RegistryKey.unsafeOf("jagged_peaks");

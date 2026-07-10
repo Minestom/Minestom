@@ -17,8 +17,8 @@ import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.EntityType;
-import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.EquipmentSlot;
+import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockEntityType;
 import net.minestom.server.instance.block.BlockSoundType;
@@ -221,7 +221,9 @@ public final class RegistryData {
         WOLF_SOUND_VARIANTS("wolf_sound_variant.json"),
         ZOMBIE_NAUTILUS_VARIANTS("zombie_nautilus_variant.json"),
         TIMELINES("timeline.json"),
-        WORLD_CLOCKS("world_clock.json");
+        WORLD_CLOCKS("world_clock.json"),
+        SULFUR_CUBE_ARCHETYPES("sulfur_cube_archetype.json"),
+        ;
 
         private final String name;
 
@@ -261,6 +263,9 @@ public final class RegistryData {
         private final float jumpFactor;
         private final int mapColorId;
         private final byte packedFlags;
+        // standalone field rather than a packedFlags bit: that byte is already full (8 flags; SIGNAL_SOURCE uses bit 7).
+        // fold into a wider flags field if the flag set ever grows - changed here if needed.
+        private final boolean blocksMotion;
         private final byte lightEmission;
         private final byte lightBlocked;
         private final @Nullable BlockEntityType blockEntityType;
@@ -283,6 +288,7 @@ public final class RegistryData {
             this.mapColorId = fromParent(parent, BlockEntry::mapColorId, main, "mapColorId", Properties::getInt, 0);
             var air = fromParent(parent, BlockEntry::isAir, main, "air", Properties::getBoolean, false);
             var solid = fromParent(parent, BlockEntry::isSolid, main, "solid", Properties::getBoolean, null);
+            this.blocksMotion = fromParent(parent, BlockEntry::blocksMotion, main, "blocksMotion", Properties::getBoolean, false);
             var liquid = fromParent(parent, BlockEntry::isLiquid, main, "liquid", Properties::getBoolean, false);
             var occludes = fromParent(parent, BlockEntry::occludes, main, "occludes", Properties::getBoolean, true);
             var requiresTool = fromParent(parent, BlockEntry::requiresTool, main, "requiresTool", Properties::getBoolean, true);
@@ -408,6 +414,10 @@ public final class RegistryData {
             return (packedFlags & SOLID_OFFSET) != 0;
         }
 
+        public boolean blocksMotion() {
+            return blocksMotion;
+        }
+
         public boolean isLiquid() {
             return (packedFlags & LIQUID_OFFSET) != 0;
         }
@@ -516,26 +526,37 @@ public final class RegistryData {
         }
 
         public DataComponentMap prototype() {
-            if (prototype instanceof Either.Left(var components)) {
-                final Transcoder<Object> coder = new RegistryTranscoder<>(Transcoder.JAVA, MinecraftServer.process());
-                DataComponentMap.Builder builder = DataComponentMap.builder();
-                for (Map.Entry<String, Object> entry : components) {
-                    //noinspection unchecked
-                    DataComponent<Object> component = (DataComponent<Object>) DataComponent.fromKey(entry.getKey());
-                    Check.notNull(component, "Unknown component {0} in {1}", entry.getKey(), key);
+            return switch (prototype) {
+                case Either.Left(_) -> throw new IllegalStateException("Should have been bound");
+                case Either.Right(var dataComponentMap) -> dataComponentMap;
+                case null -> DataComponentMap.EMPTY;
+            };
+        }
 
-                    final Result<Object> result = component.decode(coder, entry.getValue());
-                    switch (result) {
-                        case Result.Ok(Object ok) -> builder.set(component, ok);
-                        case Result.Error(String message) ->
-                                throw new IllegalStateException("Failed to decode component " + entry.getKey() + " in " + key + ": " + message);
-                    }
+        /**
+         * Attempts the bind the current prototype using the registries provided.
+         *
+         * @param registries the registries used during decode
+         */
+        @ApiStatus.Internal
+        void bindComponents(Registries registries) {
+            if (!(prototype instanceof Either.Left(var components))) return;
+            final Transcoder<Object> coder = new RegistryTranscoder<>(Transcoder.JAVA, registries);
+            DataComponentMap.Builder builder = DataComponentMap.builder();
+            for (Map.Entry<String, Object> entry : components) {
+                //noinspection unchecked
+                DataComponent<Object> component = (DataComponent<Object>) DataComponent.fromKey(entry.getKey());
+                Check.notNull(component, "Unknown component {0} in {1}", entry.getKey(), key);
+
+                final Result<Object> result = component.decode(coder, entry.getValue());
+                switch (result) {
+                    case Result.Ok(Object ok) -> builder.set(component, ok);
+                    case Result.Error(String message) ->
+                            throw new IllegalStateException("Failed to decode component " + entry.getKey() + " in " + key + ": " + message);
                 }
-                final DataComponentMap prototype = builder.build();
-                this.prototype = !prototype.isEmpty() ? Either.right(prototype) : null;
             }
-
-            return prototype instanceof Either.Right(var dataComponentMap) ? dataComponentMap : DataComponentMap.EMPTY;
+            final DataComponentMap prototype = builder.build();
+            this.prototype = prototype.isEmpty() ? null : Either.right(prototype); // null is essential for EMPTY
         }
 
         public boolean isArmor() {
@@ -574,7 +595,7 @@ public final class RegistryData {
         private final double eyeHeight;
         private final int clientTrackingRange;
         private final boolean fireImmune;
-        private final Map<String, List<Double>> entityOffsets;
+        private final Map<String, List<List<Double>>> entityOffsets;
         private final Map<Attribute, Double> defaultAttributes;
         private final BoundingBox boundingBox;
 
@@ -596,13 +617,13 @@ public final class RegistryData {
             this.boundingBox = new BoundingBox(this.width, this.height, this.width);
 
             // Attachments
-            Map<String, List<Double>> entityOffsets = new HashMap<>();
+            Map<String, List<List<Double>>> entityOffsets = new HashMap<>();
             Properties attachments = main.section("attachments");
             if (attachments != null) {
                 var allAttachments = attachments.asMap().keySet();
                 for (String key : allAttachments) {
                     List<List<Double>> offset = attachments.getList(key);
-                    entityOffsets.put(key, offset.getFirst()); // It's an array of an array with a single element, as of 1.21.3 we only need to grab a single array of 3 doubles
+                    entityOffsets.put(key, offset);
                 }
             }
             this.entityOffsets = Map.copyOf(entityOffsets);
@@ -685,6 +706,22 @@ public final class RegistryData {
          * @return A list of 3 doubles if the attachment is defined for this entity, or null if it is not defined
          */
         public @Nullable List<Double> entityAttachment(String attachmentName) {
+            var attachments = entityOffsets.get(attachmentName);
+            if (attachments == null) {
+                return null;
+            }
+            return attachments.getFirst();
+        }
+
+        /**
+         * Gets all entity attachments under a specific name. Typically, will be PASSENGER or VEHICLE, but some entities have custom attachments (e.g. WARDEN_CHEST, NAMETAG)
+         * <p></p>
+         * This is only needed for happy ghast, as that is (currently) the only entity that has multiple attachments for PASSENGER as of 26.1
+         *
+         * @param attachmentName The attachment to retrieve
+         * @return A list of a list of 3 doubles if the attachment is defined for this entity, or null if it is not defined
+         */
+        public @Nullable List<List<Double>> entityAttachments(String attachmentName) {
             return entityOffsets.get(attachmentName);
         }
 

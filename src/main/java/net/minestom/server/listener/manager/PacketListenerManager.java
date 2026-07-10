@@ -97,7 +97,7 @@ public final class PacketListenerManager {
         setPlayListener(ClientPlayerAbilitiesPacket.class, AbilitiesListener::listener);
         setPlayListener(ClientResourcePackStatusPacket.class, ResourcePackListener::listener);
         setPlayListener(ClientAdvancementTabPacket.class, AdvancementTabListener::listener);
-        setPlayListener(ClientSpectateEntityPacket.class, PlayerSpectatorListener::listener);
+        setPlayListener(ClientSpectatorActionPacket.class, PlayerSpectatorListener::listener);
         setPlayListener(ClientTeleportToEntityPacket.class, PlayerSpectatorListener::listener);
         setPlayListener(ClientEditBookPacket.class, BookListener::listener);
         setPlayListener(ClientChatSessionUpdatePacket.class, (packet, player) -> {/* empty */});
@@ -107,7 +107,7 @@ public final class PacketListenerManager {
         setPlayListener(ClientNameItemPacket.class, AnvilListener::nameItemListener);
         setPlayListener(ClientTickEndPacket.class, PlayerTickListener::listener);
         setPlayListener(ClientPlayerLoadedPacket.class, PlayerLoadedListener::listener);
-        setPlayListener(ClientSelectBundleItemPacket.class, (packet, player) -> {/* noop for now */});
+        setPlayListener(ClientSelectBundleItemPacket.class, WindowListener::selectBundleItemListener);
         setPlayListener(ClientSignedCommandChatPacket.class, ChatMessageListener::signedCommandChatListener);
         setPlayListener(ClientCustomClickActionPacket.class, CustomClickListener::listener);
         setPlayListener(ClientUpdateSignPacket.class, EditSignListener::listener);

@@ -4,9 +4,10 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 public class ItemDisplayMeta extends AbstractDisplayMeta {
-    public ItemDisplayMeta(Entity entity, MetadataHolder metadata) {
+    public ItemDisplayMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
