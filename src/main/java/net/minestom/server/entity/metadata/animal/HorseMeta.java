@@ -14,76 +14,41 @@ public class HorseMeta extends AbstractHorseMeta {
         super(entity, metadata);
     }
 
-    /**
-     * @deprecated use {@link net.minestom.server.component.DataComponents#HORSE_VARIANT} instead.
-     */
-    @Deprecated
     public Variant getVariant() {
-        return getVariantFromID(metadata.get(MetadataDef.Horse.VARIANT));
+        return Variant.VALUES[metadata.get(MetadataDef.Horse.VARIANT) & 0xFF];
     }
 
-    /**
-     * @deprecated use {@link net.minestom.server.component.DataComponents#HORSE_VARIANT} instead.
-     */
-    @Deprecated
     public void setVariant(Variant variant) {
-        metadata.set(MetadataDef.Horse.VARIANT, getVariantID(variant.marking, variant.color));
+        metadata.set(MetadataDef.Horse.VARIANT, variant.ordinal() | (metadata.get(MetadataDef.Horse.VARIANT) & ~0xFF));
     }
 
-    public static int getVariantID(Marking marking, Color color) {
-        return (marking.ordinal() << 8) + color.ordinal();
+    public Marking getMarking() {
+        return Marking.VALUES[(metadata.get(MetadataDef.Horse.VARIANT) >> 8) & 0xFF];
     }
 
-    public static Variant getVariantFromID(int variantID) {
-        return new Variant(
-                Marking.VALUES[variantID >> 8],
-                Color.VALUES[variantID & 0xFF]
-        );
+    public void setMarking(Marking marking) {
+        metadata.set(MetadataDef.Horse.VARIANT, (metadata.get(MetadataDef.Horse.VARIANT) & 0xFF) | (marking.ordinal() << 8));
+    }
+
+    public void setVariantAndMarking(Variant variant, Marking marking) {
+        metadata.set(MetadataDef.Horse.VARIANT, variant.ordinal() | (marking.ordinal() << 8));
     }
 
     @Override
     @SuppressWarnings("unchecked")
     protected <T> @Nullable T get(DataComponent<T> component) {
         if (component == DataComponents.HORSE_VARIANT)
-            return (T) getVariant().getMarking();
+            return (T) getVariant();
         return super.get(component);
     }
 
     @Override
     protected <T> void set(DataComponent<T> component, T value) {
         if (component == DataComponents.HORSE_VARIANT) {
-            var variant = getVariant();
-            variant.setMarking((Marking) value);
-            setVariant(variant);
-        } else super.set(component, value);
-    }
-
-    public static class Variant {
-
-        private Marking marking;
-        private Color color;
-
-        public Variant(Marking marking, Color color) {
-            this.marking = marking;
-            this.color = color;
+            setVariant((Variant) value);
+        } else {
+            super.set(component, value);
         }
-
-            public Marking getMarking() {
-            return this.marking;
-        }
-
-        public void setMarking(Marking marking) {
-            this.marking = marking;
-        }
-
-            public Color getColor() {
-            return this.color;
-        }
-
-        public void setColor(Color color) {
-            this.color = color;
-        }
-
     }
 
     public enum Marking {
@@ -96,7 +61,7 @@ public class HorseMeta extends AbstractHorseMeta {
         private final static Marking[] VALUES = values();
     }
 
-    public enum Color {
+    public enum Variant {
         WHITE,
         CREAMY,
         CHESTNUT,
@@ -105,10 +70,10 @@ public class HorseMeta extends AbstractHorseMeta {
         GRAY,
         DARK_BROWN;
 
-        public static final NetworkBuffer.Type<Color> NETWORK_TYPE = NetworkBuffer.Enum(Color.class);
-        public static final Codec<Color> NBT_TYPE = Codec.Enum(Color.class);
+        public static final NetworkBuffer.Type<Variant> NETWORK_TYPE = NetworkBuffer.Enum(Variant.class);
+        public static final Codec<Variant> CODEC = Codec.Enum(Variant.class);
 
-        private final static Color[] VALUES = values();
+        private final static Variant[] VALUES = values();
     }
 
 }
