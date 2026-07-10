@@ -4,6 +4,7 @@ import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.Result;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
@@ -124,7 +125,7 @@ public record BlockPredicate(
 
         CompoundBinaryTag componentsTag = block.nbt().getCompound("components");
         final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
-        DataComponentMap componentMap = DataComponent.MAP_NBT_TYPE.decode(coder, componentsTag).orElseThrow();
-        return components.test(componentMap);
+        final var componentMapResult = DataComponent.MAP_NBT_TYPE.decode(coder, componentsTag);
+        return componentMapResult instanceof Result.Ok(DataComponentMap componentMap) && components.test(componentMap);
     }
 }

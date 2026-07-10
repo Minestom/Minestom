@@ -11,6 +11,10 @@ import org.jetbrains.annotations.Nullable;
  */
 public sealed interface Range<T extends Number> {
     record Byte(@Nullable java.lang.Byte min, @Nullable java.lang.Byte max) implements Range<java.lang.Byte> {
+        public Byte {
+            if (min != null && max != null && min > max) throw new IllegalArgumentException("min must not exceed max");
+        }
+
         public Byte(@Nullable java.lang.Byte value) {
             this(value, value);
         }
@@ -21,6 +25,10 @@ public sealed interface Range<T extends Number> {
     }
 
     record Short(@Nullable java.lang.Short min, @Nullable java.lang.Short max) implements Range<java.lang.Short> {
+        public Short {
+            if (min != null && max != null && min > max) throw new IllegalArgumentException("min must not exceed max");
+        }
+
         public Short(@Nullable java.lang.Short value) {
             this(value, value);
         }
@@ -31,11 +39,18 @@ public sealed interface Range<T extends Number> {
     }
 
     record Int(@Nullable java.lang.Integer min, @Nullable java.lang.Integer max) implements Range<java.lang.Integer> {
-        public static final Codec<Range.Int> CODEC = StructCodec.struct(
+        private static final Codec<Range.Int> STRUCT_CODEC = StructCodec.struct(
                 "min", Codec.INT.optional(), Range.Int::min,
                 "max", Codec.INT.optional(), Range.Int::max,
                 Range.Int::new
-        ).orElse(Codec.INT.optional().transform(Range.Int::new, Range.Int::min));
+        );
+        public static final Codec<Range.Int> CODEC = Codec.Either(STRUCT_CODEC, Codec.INT).transform(
+                either -> either.unify(range -> range, Range.Int::new),
+                range -> range.min != null && range.min.equals(range.max) ? Either.right(range.min) : Either.left(range));
+
+        public Int {
+            if (min != null && max != null && min > max) throw new IllegalArgumentException("min must not exceed max");
+        }
 
         public Int(@Nullable java.lang.Integer value) {
             this(value, value);
@@ -47,6 +62,10 @@ public sealed interface Range<T extends Number> {
     }
 
     record Long(@Nullable java.lang.Long min, @Nullable java.lang.Long max) implements Range<java.lang.Long> {
+        public Long {
+            if (min != null && max != null && min > max) throw new IllegalArgumentException("min must not exceed max");
+        }
+
         public Long(@Nullable java.lang.Long value) {
             this(value, value);
         }
@@ -57,6 +76,10 @@ public sealed interface Range<T extends Number> {
     }
 
     record Float(@Nullable java.lang.Float min, @Nullable java.lang.Float max) implements Range<java.lang.Float> {
+        public Float {
+            if (min != null && max != null && min > max) throw new IllegalArgumentException("min must not exceed max");
+        }
+
         public Float(@Nullable java.lang.Float value) {
             this(value, value);
         }
@@ -67,11 +90,18 @@ public sealed interface Range<T extends Number> {
     }
 
     record Double(@Nullable java.lang.Double min, @Nullable java.lang.Double max) implements Range<java.lang.Double> {
-        public static final Codec<Range.Double> CODEC = StructCodec.struct(
+        private static final Codec<Range.Double> STRUCT_CODEC = StructCodec.struct(
                 "min", Codec.DOUBLE.optional(), Range.Double::min,
                 "max", Codec.DOUBLE.optional(), Range.Double::max,
                 Range.Double::new
-        ).orElse(Codec.DOUBLE.optional().transform(Range.Double::new, Range.Double::min));
+        );
+        public static final Codec<Range.Double> CODEC = Codec.Either(STRUCT_CODEC, Codec.DOUBLE).transform(
+                either -> either.unify(range -> range, Range.Double::new),
+                range -> range.min != null && range.min.equals(range.max) ? Either.right(range.min) : Either.left(range));
+
+        public Double {
+            if (min != null && max != null && min > max) throw new IllegalArgumentException("min must not exceed max");
+        }
 
         public Double(@Nullable java.lang.Double value) {
             this(value, value);

@@ -58,6 +58,8 @@ public abstract class ArgumentRange<T extends Range<N>, N extends Number> extend
             }
         } catch (NumberFormatException e2) {
             throw new ArgumentSyntaxException("Invalid number", input, FORMAT_ERROR);
+        } catch (IllegalArgumentException e) {
+            throw new ArgumentSyntaxException("Invalid range", input, FORMAT_ERROR);
         }
         throw new ArgumentSyntaxException("Invalid range format", input, FORMAT_ERROR);
     }

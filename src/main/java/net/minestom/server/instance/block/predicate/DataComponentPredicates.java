@@ -6,7 +6,6 @@ import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
-import net.minestom.server.utils.Range;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -22,7 +21,7 @@ public record DataComponentPredicates(DataComponentMap exact,
     public static final DataComponentPredicates EMPTY = new DataComponentPredicates(DataComponentMap.EMPTY, ComponentPredicateSet.EMPTY);
 
     public static final Codec<DataComponentPredicates> CODEC = StructCodec.struct(
-            "components", DataComponent.PATCH_CODEC.optional(DataComponentMap.EMPTY), DataComponentPredicates::exact,
+            "components", DataComponent.MAP_NBT_TYPE.optional(DataComponentMap.EMPTY), DataComponentPredicates::exact,
             "predicates", ComponentPredicateSet.CODEC.optional(ComponentPredicateSet.EMPTY), DataComponentPredicates::predicates,
             DataComponentPredicates::new
     );

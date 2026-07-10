@@ -40,7 +40,9 @@ public class BlockPredicatesTest extends AbstractItemComponentTest<BlockPredicat
                 entry("single, no tooltip", new BlockPredicates(BlockPredicate.ALL)),
                 entry("many", new BlockPredicates(List.of(BlockPredicate.ALL, BlockPredicate.NONE))),
                 entry("data component", new BlockPredicates(new BlockPredicate(DataComponentMap.builder().set(DataComponents.CUSTOM_DATA, new CustomData(testCompound)).build()))),
-                entry("component predicate", new BlockPredicates(new BlockPredicate(ComponentPredicateSet.EMPTY.add(new DataComponentPredicate.CustomData(testCompound)))))
+                entry("component predicate", new BlockPredicates(new BlockPredicate(ComponentPredicateSet.EMPTY
+                        .add(new DataComponentPredicate.CustomData(testCompound))
+                        .add(new DataComponentPredicate.Exists(DataComponents.CUSTOM_NAME)))))
         );
     }
 

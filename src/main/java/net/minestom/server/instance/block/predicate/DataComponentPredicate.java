@@ -27,10 +27,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+/**
+ * A partial predicate for the data components held by an item or block entity.
+ *
+ * <p>Registered predicates inspect the value of a particular component, while {@link Exists}
+ * only requires that a component be present.</p>
+ */
 public sealed interface DataComponentPredicate extends Predicate<DataComponent.Holder> {
 
     @ApiStatus.Internal
@@ -54,7 +59,34 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         return registry;
     }
 
-    Codec<? extends DataComponentPredicate> codec();
+    /**
+     * A component predicate whose codec is registered in the data component predicate type registry.
+     */
+    sealed interface Registered extends DataComponentPredicate {
+        /**
+         * Returns the codec registered for this predicate type.
+         *
+         * @return the predicate codec
+         */
+        Codec<? extends DataComponentPredicate.Registered> codec();
+    }
+
+    /**
+     * Tests whether a data component is present, without inspecting its value.
+     *
+     * @param component the component which must be present
+     */
+    record Exists(DataComponent<?> component) implements DataComponentPredicate {
+
+        public Exists {
+            Objects.requireNonNull(component, "component");
+        }
+
+        @Override
+        public boolean test(DataComponent.Holder holder) {
+            return holder.has(component);
+        }
+    }
 
     /**
      * Tests damage or remaining durability.
@@ -62,7 +94,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @param durability Remaining durability ({@link DataComponents#MAX_DAMAGE} - {@link DataComponents#DAMAGE})
      * @param damage     Damage value ({@link DataComponents#DAMAGE})
      */
-    record Damage(@Nullable Range.Int durability, @Nullable Range.Int damage) implements DataComponentPredicate {
+    record Damage(@Nullable Range.Int durability, @Nullable Range.Int damage) implements Registered {
         public static Codec<Damage> CODEC = StructCodec.struct(
                 "durability", Range.Int.CODEC.optional(), Damage::durability,
                 "damage", Range.Int.CODEC.optional(), Damage::damage,
@@ -82,7 +114,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
 
         @Override
-        public Codec<? extends DataComponentPredicate> codec() {
+        public Codec<Damage> codec() {
             return CODEC;
         }
     }
@@ -138,7 +170,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @param children The enchantment predicates to apply to the object. All items must pass for this predicate to pass.
      * @see EnchantmentListPredicate Information about enchantment matching
      */
-    record Enchantments(List<EnchantmentListPredicate> children) implements DataComponentPredicate {
+    record Enchantments(List<EnchantmentListPredicate> children) implements Registered {
         public static final Codec<Enchantments> CODEC = EnchantmentListPredicate.CODEC.list().transform(Enchantments::new, Enchantments::children);
 
         public Enchantments {
@@ -163,7 +195,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
 
         @Override
-        public Codec<? extends DataComponentPredicate> codec() {
+        public Codec<Enchantments> codec() {
             return CODEC;
         }
     }
@@ -175,7 +207,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @see EnchantmentListPredicate Information about enchantment matching
      */
     record StoredEnchantments(
-            List<EnchantmentListPredicate> children) implements DataComponentPredicate {
+            List<EnchantmentListPredicate> children) implements Registered {
         public static final Codec<StoredEnchantments> CODEC = EnchantmentListPredicate.CODEC.list().transform(StoredEnchantments::new, StoredEnchantments::children);
 
         public StoredEnchantments {
@@ -200,7 +232,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
 
         @Override
-        public Codec<? extends DataComponentPredicate> codec() {
+        public Codec<StoredEnchantments> codec() {
             return CODEC;
         }
     }
@@ -210,19 +242,23 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      *
      * @param potionTypes The types of potions to match. The object's potion type must be contained in {@code potionTypes} for this predicate to return true.
      */
-    record Potions(@Nullable RegistryTag<PotionType> potionTypes) implements DataComponentPredicate {
-        public static final Codec<Potions> CODEC = RegistryTag.codec(Registries::potionType).transform(Potions::new, Potions::potionTypes).optional();
+    record Potions(RegistryTag<PotionType> potionTypes) implements Registered {
+        public static final Codec<Potions> CODEC = RegistryTag.codec(Registries::potionType)
+                .transform(Potions::new, Potions::potionTypes);
+
+        public Potions {
+            Objects.requireNonNull(potionTypes, "potionTypes");
+        }
 
         @Override
         public boolean test(DataComponent.Holder holder) {
-            if (potionTypes == null) return false;
             var potion = holder.get(DataComponents.POTION_CONTENTS);
             if (potion == null || potion.potion() == null) return false;
             return potionTypes.contains(potion.potion());
         }
 
         @Override
-        public Codec<? extends DataComponentPredicate> codec() {
+        public Codec<Potions> codec() {
             return CODEC;
         }
     }
@@ -233,7 +269,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @param nbt An NBT predicate to match against the object's custom data
      * @see NbtPredicate#compareNBT(BinaryTag, BinaryTag) Description of NBT comparison logic
      */
-    record CustomData(NbtPredicate nbt) implements DataComponentPredicate {
+    record CustomData(NbtPredicate nbt) implements Registered {
         public static final Codec<CustomData> CODEC = NbtPredicate.CODEC.transform(CustomData::new, CustomData::nbt);
 
         public CustomData(@Nullable CompoundBinaryTag nbt) {
@@ -247,7 +283,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
 
         @Override
-        public Codec<? extends DataComponentPredicate> codec() {
+        public Codec<CustomData> codec() {
             return CODEC;
         }
     }
@@ -258,7 +294,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @param items Predicates to match against the object's items
      * @see CollectionPredicate
      */
-    record Container(@Nullable CollectionPredicate<ItemStack, ItemPredicate> items) implements DataComponentPredicate {
+    record Container(@Nullable CollectionPredicate<ItemStack, ItemPredicate> items) implements Registered {
         public static final Codec<Container> CODEC = StructCodec.struct(
                 "items", CollectionPredicate.codec(ItemPredicate.CODEC).optional(), Container::items,
                 Container::new
@@ -266,13 +302,15 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
 
         @Override
         public boolean test(DataComponent.Holder holder) {
-            List<ItemStack> itemStacks = new ArrayList<>(Objects.requireNonNullElseGet(holder.get(DataComponents.CONTAINER), List::of));
+            final List<ItemStack> container = holder.get(DataComponents.CONTAINER);
+            if (container == null) return false;
+            List<ItemStack> itemStacks = new ArrayList<>(container);
             itemStacks.removeIf(ItemStack::isAir);
             return items == null || items.test(itemStacks);
         }
 
         @Override
-        public Codec<? extends DataComponentPredicate> codec() {
+        public Codec<Container> codec() {
             return CODEC;
         }
     }
@@ -284,7 +322,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @see CollectionPredicate
      */
     record BundleContents(
-            @Nullable CollectionPredicate<ItemStack, ItemPredicate> items) implements DataComponentPredicate {
+            @Nullable CollectionPredicate<ItemStack, ItemPredicate> items) implements Registered {
         public static final Codec<BundleContents> CODEC = StructCodec.struct(
                 "items", CollectionPredicate.codec(ItemPredicate.CODEC).optional(), BundleContents::items,
                 BundleContents::new
@@ -293,11 +331,11 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         @Override
         public boolean test(DataComponent.Holder holder) {
             List<ItemStack> itemStacks = holder.get(DataComponents.BUNDLE_CONTENTS);
-            return items == null || items.test(itemStacks != null ? itemStacks : List.of());
+            return itemStacks != null && (items == null || items.test(itemStacks));
         }
 
         @Override
-        public Codec<? extends DataComponentPredicate> codec() {
+        public Codec<BundleContents> codec() {
             return CODEC;
         }
     }
@@ -332,11 +370,11 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      */
     record Fireworks(
             @Nullable CollectionPredicate<net.minestom.server.item.component.FireworkExplosion, FireworkExplosionPredicate> explosions,
-            @Nullable Range.Int flightDuration) implements DataComponentPredicate {
+            @Nullable Range.Int flightDuration) implements Registered {
 
         public static final Codec<Fireworks> CODEC = StructCodec.struct(
                 "explosions", CollectionPredicate.codec(FireworkExplosionPredicate.CODEC).optional(), Fireworks::explosions,
-                "flight_duration", Range.Int.CODEC.optional().optional(), Fireworks::flightDuration,
+                "flight_duration", Range.Int.CODEC.optional(), Fireworks::flightDuration,
                 Fireworks::new
         );
 
@@ -350,7 +388,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
 
         @Override
-        public Codec<? extends DataComponentPredicate> codec() {
+        public Codec<Fireworks> codec() {
             return CODEC;
         }
     }
@@ -360,7 +398,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      *
      * @param delegate A predicate to match against the object's firework explosion
      */
-    record FireworkExplosion(Fireworks.FireworkExplosionPredicate delegate) implements DataComponentPredicate {
+    record FireworkExplosion(Fireworks.FireworkExplosionPredicate delegate) implements Registered {
         public static final Codec<FireworkExplosion> CODEC = FireworkExplosionPredicate.CODEC.transform(FireworkExplosion::new, FireworkExplosion::delegate);
 
         public FireworkExplosion(@Nullable net.minestom.server.item.component.FireworkExplosion.Shape shape,
@@ -376,7 +414,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
 
         @Override
-        public Codec<? extends DataComponentPredicate> codec() {
+        public Codec<FireworkExplosion> codec() {
             return CODEC;
         }
     }
@@ -388,7 +426,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @see CollectionPredicate
      */
     record WritableBook(
-            @Nullable CollectionPredicate<FilteredText<String>, PagePredicate> pages) implements DataComponentPredicate {
+            @Nullable CollectionPredicate<FilteredText<String>, PagePredicate> pages) implements Registered {
         public static final Codec<WritableBook> CODEC = StructCodec.struct(
                 "pages", CollectionPredicate.codec(PagePredicate.CODEC).optional(), WritableBook::pages,
                 WritableBook::new
@@ -396,10 +434,9 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
 
         @Override
         public boolean test(DataComponent.Holder holder) {
-            if (pages == null) return true;
             WritableBookContent content = holder.get(DataComponents.WRITABLE_BOOK_CONTENT);
             if (content == null) return false;
-            return pages.test(content.pages());
+            return pages == null || pages.test(content.pages());
         }
 
         public record PagePredicate(String contents) implements Predicate<FilteredText<String>> {
@@ -413,7 +450,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
 
         @Override
-        public Codec<? extends DataComponentPredicate> codec() {
+        public Codec<WritableBook> codec() {
             return CODEC;
         }
     }
@@ -431,7 +468,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
     record WrittenBook(@Nullable CollectionPredicate<FilteredText<Component>, PagePredicate> pages,
                        @Nullable String author,
                        @Nullable String title,
-                       @Nullable Range.Int generation, @Nullable Boolean resolved) implements DataComponentPredicate {
+                       @Nullable Range.Int generation, @Nullable Boolean resolved) implements Registered {
 
         public static final Codec<WrittenBook> CODEC = StructCodec.struct(
                 "pages", CollectionPredicate.codec(PagePredicate.CODEC).optional(), WrittenBook::pages,
@@ -469,7 +506,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
 
         @Override
-        public Codec<? extends DataComponentPredicate> codec() {
+        public Codec<WrittenBook> codec() {
             return CODEC;
         }
     }
@@ -518,7 +555,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @see CollectionPredicate
      */
     record AttributeModifiers(
-            @Nullable CollectionPredicate<AttributeList.Modifier, AttributeModifierPredicate> modifiers) implements DataComponentPredicate {
+            @Nullable CollectionPredicate<AttributeList.Modifier, AttributeModifierPredicate> modifiers) implements Registered {
 
         public static final Codec<AttributeModifiers> CODEC = StructCodec.struct(
                 "modifiers", CollectionPredicate.codec(AttributeModifierPredicate.CODEC).optional(), AttributeModifiers::modifiers,
@@ -527,14 +564,13 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
 
         @Override
         public boolean test(DataComponent.Holder holder) {
-            if (modifiers == null) return true;
             AttributeList attributes = holder.get(DataComponents.ATTRIBUTE_MODIFIERS);
             if (attributes == null) return false;
-            return modifiers.test(attributes.modifiers());
+            return modifiers == null || modifiers.test(attributes.modifiers());
         }
 
         @Override
-        public Codec<? extends DataComponentPredicate> codec() {
+        public Codec<AttributeModifiers> codec() {
             return CODEC;
         }
     }
@@ -546,7 +582,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @param pattern  The trim pattern to match, or null to ignore
      */
     record ArmorTrim(@Nullable RegistryTag<TrimMaterial> material,
-                     @Nullable RegistryTag<TrimPattern> pattern) implements DataComponentPredicate {
+                     @Nullable RegistryTag<TrimPattern> pattern) implements Registered {
 
         public static final Codec<ArmorTrim> CODEC = StructCodec.struct(
                 "material", RegistryTag.codec(Registries::trimMaterial).optional(), ArmorTrim::material,
@@ -558,13 +594,13 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         public boolean test(DataComponent.Holder holder) {
             var trim = holder.get(DataComponents.TRIM);
             if (trim == null) return false;
-            if (material != null && !trim.material().isDirect() && !material.contains(trim.material().asKey()))
+            if (material != null && (trim.material().asKey() == null || !material.contains(trim.material().asKey())))
                 return false;
-            return pattern == null || (!trim.pattern().isDirect() && pattern.contains(trim.pattern().asKey()));
+            return pattern == null || (trim.pattern().asKey() != null && pattern.contains(trim.pattern().asKey()));
         }
 
         @Override
-        public Codec<? extends DataComponentPredicate> codec() {
+        public Codec<ArmorTrim> codec() {
             return CODEC;
         }
     }
@@ -574,7 +610,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      *
      * @param songs The songs to accept, or null to ignore.
      */
-    record JukeboxPlayable(@Nullable RegistryTag<JukeboxSong> songs) implements DataComponentPredicate {
+    record JukeboxPlayable(@Nullable RegistryTag<JukeboxSong> songs) implements Registered {
 
         public static final Codec<JukeboxPlayable> CODEC = StructCodec.struct(
                 "song", RegistryTag.codec(Registries::jukeboxSong).optional(), JukeboxPlayable::songs,
@@ -589,7 +625,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
 
         @Override
-        public Codec<? extends DataComponentPredicate> codec() {
+        public Codec<JukeboxPlayable> codec() {
             return CODEC;
         }
     }
@@ -599,7 +635,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      *
      * @param villagerTypes The types of villagers to match
      */
-    record VillagerVariant(List<net.minestom.server.entity.VillagerType> villagerTypes) implements DataComponentPredicate {
+    record VillagerVariant(List<net.minestom.server.entity.VillagerType> villagerTypes) implements Registered {
         public static final Codec<VillagerVariant> CODEC = net.minestom.server.entity.VillagerType.CODEC.listOrSingle().transform(VillagerVariant::new, VillagerVariant::villagerTypes);
 
         public VillagerVariant {
@@ -613,7 +649,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
 
         @Override
-        public Codec<? extends DataComponentPredicate> codec() {
+        public Codec<VillagerVariant> codec() {
             return CODEC;
         }
     }

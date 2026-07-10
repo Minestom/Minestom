@@ -67,6 +67,13 @@ public class DataComponentPredicateTest {
     }
 
     @Test
+    void testExists() {
+        var predicate = new DataComponentPredicate.Exists(DataComponents.CUSTOM_NAME);
+        assertFail(predicate, EMPTY_HOLDER);
+        assertPass(predicate, DataComponents.CUSTOM_NAME, Component.empty());
+    }
+
+    @Test
     void testDamage() {
         var durability = new DataComponentPredicate.Damage(new Range.Int(0, 10), // remaining durability
                 null // damage
@@ -145,7 +152,6 @@ public class DataComponentPredicateTest {
         assertFail(potions, DataComponents.POTION_CONTENTS, new PotionContents(null, null, List.of(), null));
         assertFail(potions, EMPTY_HOLDER);
         assertFail(new DataComponentPredicate.Potions(RegistryTag.empty()), DataComponents.POTION_CONTENTS, new PotionContents(PotionType.STRENGTH)); // Predicate's list is empty
-        assertFail(new DataComponentPredicate.Potions(null), DataComponents.POTION_CONTENTS, new PotionContents(PotionType.STRENGTH)); // Predicate's list is empty
     }
 
     @Test
@@ -183,7 +189,7 @@ public class DataComponentPredicateTest {
         );
         var empty = new DataComponentPredicate.Container(CollectionPredicate.<ItemStack, ItemPredicate>builder().build());
 
-        assertPass(new DataComponentPredicate.Container(null), EMPTY_HOLDER);
+        assertFail(new DataComponentPredicate.Container(null), EMPTY_HOLDER);
         assertPass(empty, DataComponents.CONTAINER, List.of());
         assertFail(container, DataComponents.CONTAINER, List.of());
 
@@ -213,7 +219,7 @@ public class DataComponentPredicateTest {
         ));
 
         // If the inner CollectionPredicate is null, the predicate always returns true
-        assertPass(new DataComponentPredicate.Container(null), EMPTY_HOLDER);
+        assertFail(new DataComponentPredicate.Container(null), EMPTY_HOLDER);
         assertPass(new DataComponentPredicate.Container(null), DataComponents.CONTAINER, List.of());
     }
 
@@ -297,7 +303,7 @@ public class DataComponentPredicateTest {
                 .build()
         );
 
-        assertPass(new DataComponentPredicate.WritableBook(null), EMPTY_HOLDER);
+        assertFail(new DataComponentPredicate.WritableBook(null), EMPTY_HOLDER);
         assertFail(empty, EMPTY_HOLDER);
         assertPass(empty, DataComponents.WRITABLE_BOOK_CONTENT, WritableBookContent.EMPTY);
 
