@@ -3,9 +3,10 @@ package net.minestom.server.entity.metadata.water.fish;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import org.jetbrains.annotations.Nullable;
 
 public class TadpoleMeta extends AbstractFishMeta {
-    public TadpoleMeta(Entity entity, MetadataHolder metadata) {
+    public TadpoleMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

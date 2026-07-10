@@ -33,6 +33,7 @@ import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
+import net.minestom.server.network.packet.server.play.data.PlayerSpawnInfo;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.network.packet.server.status.ResponsePacket;
 import net.minestom.server.network.player.GameProfile;
@@ -118,7 +119,8 @@ public final class Scratch {
                                 case ClientPingRequestPacket ping ->
                                         connection.send(new PingResponsePacket(ping.number()));
                                 case ClientLoginStartPacket login -> connection.send(new LoginSuccessPacket(
-                                        new GameProfile(login.profileId(), login.username())));
+                                        new GameProfile(login.profileId(), login.username()),
+                                        new UUID(0L, 0L)));
                                 case ClientLoginAcknowledgedPacket _ -> sendConfigurationStart(connection);
                                 case ClientSelectKnownPacksPacket _ -> sendConfigurationData(connection, registries);
                                 case ClientFinishConfigurationPacket _ ->
@@ -164,8 +166,9 @@ public final class Scratch {
         connection.send(new JoinGamePacket(
                 ENTITY_ID, false, List.of(WORLD), 1,
                 VIEW_DISTANCE, VIEW_DISTANCE, false, true, false,
-                dimensionTypeId, WORLD, 0L, GameMode.CREATIVE, null,
-                false, true, null, 0, SEA_LEVEL, false
+                new PlayerSpawnInfo(dimensionTypeId, WORLD, 0L, GameMode.CREATIVE, null,
+                                    false, true, null, 0, SEA_LEVEL),
+                true, true
         ));
         connection.send(new ServerDifficultyPacket(Difficulty.PEACEFUL, true));
         connection.send(new SpawnPositionPacket(new WorldPos(WORLD, spawn), 0f, 0f));

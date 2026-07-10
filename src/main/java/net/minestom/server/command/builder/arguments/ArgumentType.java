@@ -109,10 +109,10 @@ public class ArgumentType {
     // Minecraft specific arguments
 
     /**
-     * @see ArgumentColor
+     * @see ArgumentTeamColor
      */
-    public static ArgumentColor Color(String id) {
-        return new ArgumentColor(id);
+    public static ArgumentTeamColor TeamColor(String id) {
+        return new ArgumentTeamColor(id);
     }
 
     /**

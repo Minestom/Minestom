@@ -53,7 +53,8 @@ final class RegistriesImpl {
                 registries.zombieNautilusVariant(),
                 registries.worldClock(),
                 registries.timeline(),
-                registries.dimensionType()
+                registries.dimensionType(),
+                registries.sulfurCubeArchetype()
         );
     }
 

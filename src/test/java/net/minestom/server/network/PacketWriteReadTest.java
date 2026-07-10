@@ -10,8 +10,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementAction;
+import net.minestom.server.color.TeamColor;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.crypto.*;
@@ -52,6 +52,7 @@ import net.minestom.server.network.packet.server.login.*;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
+import net.minestom.server.network.packet.server.play.data.PlayerSpawnInfo;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.network.packet.server.status.ResponsePacket;
 import net.minestom.server.network.player.ClientSettings;
@@ -118,9 +119,7 @@ public class PacketWriteReadTest {
     }
 
     @BeforeAll
-    public static void setupServer() {
-        MinecraftServer.init(); // Need some tags in here, pretty gross.
-
+    public static void setupServer(Env env) {
         // Handshake
         // Status
         addServerPackets(new ResponsePacket(new JsonObject().toString()));
@@ -136,12 +135,12 @@ public class PacketWriteReadTest {
                 new EncryptionRequestPacket("", new byte[54], new byte[23], true) // default
         );
         addServerPackets(
-                new LoginSuccessPacket(new GameProfile(UUID.randomUUID(), OG)),
-                new LoginSuccessPacket(new GameProfile(UUID.randomUUID(), "APlrWith_LongNam")),
+                new LoginSuccessPacket(new GameProfile(UUID.randomUUID(), OG), UUID.randomUUID()),
+                new LoginSuccessPacket(new GameProfile(UUID.randomUUID(), "APlrWith_LongNam"), UUID.randomUUID()),
                 new LoginSuccessPacket(new GameProfile(new UUID(0, 0), "8", List.of(
                         new GameProfile.Property("textures", "randomtexturethatprobablyshouldbevalidated"),
                         new GameProfile.Property("signature", "supersigned")
-                )))
+                )), UUID.randomUUID())
         );
         addServerPackets(new SetCompressionPacket(256), new SetCompressionPacket(0), new SetCompressionPacket(1024));
         addServerPackets(
@@ -340,7 +339,10 @@ public class PacketWriteReadTest {
         addServerPackets(new HeldItemChangePacket((byte) 0));
         addServerPackets(new HitAnimationPacket(5, 90f));
         addServerPackets(new InitializeWorldBorderPacket(0.0, 0.0, 10.0, 5.0, 0L, 29999984, 5, 15));
-        addServerPackets(new JoinGamePacket(5, false, List.of("minecraft:overworld"), 0, 10, 10, false, true, false, 0, "minecraft:overworld", 0L, GameMode.CREATIVE, GameMode.SURVIVAL, false, false, null, 0, 0, false));
+        addServerPackets(new JoinGamePacket(
+                5, false, List.of("minecraft:overworld"), 0, 10, 10, false, true, false,
+                new PlayerSpawnInfo(0, "minecraft:overworld", 0L, GameMode.CREATIVE, GameMode.SURVIVAL, false, false, null, 0, 0),
+                false, true));
         addServerPackets(new MapDataPacket(5, (byte) 1, true, true, List.of(), null));
         addServerPackets(new MultiBlockChangePacket(0, 0, 0, new long[0]));
         addServerPackets(new NbtQueryResponsePacket(5, CompoundBinaryTag.builder().putString("key", "value").build()));
@@ -354,7 +356,10 @@ public class PacketWriteReadTest {
         addServerPackets(new PlayerPositionAndLookPacket(5, VEC, Vec.ZERO, 0f, 0f, 0));
         addServerPackets(new PlayerRotationPacket(45f, false, 90f, false));
         addServerPackets(new ProjectilePowerPacket(5, 1.0));
-        addServerPackets(new RespawnPacket(0, "overworld", 0L, GameMode.CREATIVE, GameMode.SURVIVAL, false, false, null, 5, 63, (byte) RespawnPacket.COPY_METADATA));
+        addServerPackets(new RespawnPacket(
+                new PlayerSpawnInfo(0, "overworld", 0L, GameMode.CREATIVE, GameMode.SURVIVAL, false, false, null, 5, 63),
+                (byte) RespawnPacket.COPY_METADATA)
+        );
         addServerPackets(
                 new ScoreboardObjectivePacket("objective", (byte) 0, COMPONENT, ScoreboardObjectivePacket.Type.HEARTS, Sidebar.NumberFormat.blank()),
                 new ScoreboardObjectivePacket("objective", (byte) 0, COMPONENT, ScoreboardObjectivePacket.Type.HEARTS, null),
@@ -387,7 +392,10 @@ public class PacketWriteReadTest {
                 new StopSoundPacket((byte) 3, Sound.Source.BLOCK, "block.amethyst_block.break")
         );
         addServerPackets(new TabCompletePacket(5, 0, 0, List.of()));
-        addServerPackets(new TeamsPacket("team", new TeamsPacket.CreateTeamAction(COMPONENT, (byte) 0, TeamsPacket.NameTagVisibility.ALWAYS, TeamsPacket.CollisionRule.ALWAYS, NamedTextColor.RED, COMPONENT, COMPONENT, List.of("player1"))));
+        addServerPackets(new TeamsPacket("team", new TeamsPacket.CreateTeamAction(
+                new TeamsPacket.Settings(COMPONENT, COMPONENT, COMPONENT, TeamsPacket.NameTagVisibility.ALWAYS, TeamsPacket.CollisionRule.ALWAYS, TeamColor.RED, (byte) 0),
+                List.of("player1")
+        )));
         addServerPackets(new TickStepPacket(20));
         addServerPackets(
                 new SetTimePacket(1000L, Map.of()),
@@ -417,7 +425,7 @@ public class PacketWriteReadTest {
         addServerPackets(new ChunkDataPacket(0, 0, new ChunkData(Map.of(), new byte[0], Map.of()), new LightData(new BitSet(), new BitSet(), new BitSet(), new BitSet(), List.of(), List.of())));
         addServerPackets(new ChunkBiomesPacket(List.of()), new ChunkBiomesPacket(List.of(new ChunkBiomesPacket.ChunkBiomeData(0, 0, new byte[0]))));
         addServerPackets(new CustomChatCompletionPacket(CustomChatCompletionPacket.Action.ADD, List.of("entry1", "entry2")));
-        addServerPackets(new DamageEventPacket(5, MinecraftServer.getDamageTypeRegistry().getId(DamageType.ARROW), 2, 3, VEC), new DamageEventPacket(50, MinecraftServer.getDamageTypeRegistry().getId(DamageType.WITHER), 0, 0, null));
+        addServerPackets(new DamageEventPacket(5, env.process().damageType().getId(DamageType.ARROW), 2, 3, VEC), new DamageEventPacket(50, env.process().damageType().getId(DamageType.WITHER), 0, 0, null));
         addServerPackets(new DeclareCommandsPacket(List.of(), 0));
         addServerPackets(new BundlePacket());
         addServerPackets(new DebugBlockValuePacket(Vec.ONE, new DebugSubscription.Update<>(DebugSubscription.BEE_HIVES, new DebugHiveInfo(Block.BEEHIVE, 1, 0, true))));
@@ -443,9 +451,7 @@ public class PacketWriteReadTest {
     }
 
     @BeforeAll
-    public static void setupClient() {
-        MinecraftServer.init(); // Need to validate packets with auth mode.
-
+    public static void setupClient(Env ignored) {
         // Handshake
         addClientPackets(
                 new ClientHandshakePacket(755, "localhost", 25565, ClientHandshakePacket.Intent.LOGIN),
@@ -609,7 +615,7 @@ public class PacketWriteReadTest {
         addClientPackets(new ClientPlayerRotationPacket(45f, 90f, true, false), new ClientPlayerRotationPacket(180f, -45f, false, true));
         addClientPackets(new ClientPlayerBlockPlacementPacket(PlayerHand.MAIN, Vec.ONE, BlockFace.TOP, 0.5f, 0.5f, 0.5f, false, false, 0), new ClientPlayerBlockPlacementPacket(PlayerHand.OFF, Vec.ZERO, BlockFace.BOTTOM, 1f, 1f, 1f, true, true, Integer.MAX_VALUE));
         addClientPackets(new ClientUseItemPacket(PlayerHand.MAIN, 0, 45f, 90f), new ClientUseItemPacket(PlayerHand.OFF, Integer.MAX_VALUE, 180f, -45f));
-        addClientPackets(new ClientSpectateEntityPacket(1251), new ClientSpectateEntityPacket(Integer.MAX_VALUE), new ClientSpectateEntityPacket(Integer.MIN_VALUE), new ClientSpectateEntityPacket(0));
+        addClientPackets(new ClientSpectatorActionPacket(1251), new ClientSpectatorActionPacket(Integer.MAX_VALUE), new ClientSpectatorActionPacket(Integer.MIN_VALUE), new ClientSpectatorActionPacket(0));
         addClientPackets(new ClientTeleportToEntityPacket(UUID.randomUUID()), new ClientTeleportToEntityPacket(new UUID(0, 0)));
         addClientPackets(new ClientSetRecipeBookStatePacket(ClientSetRecipeBookStatePacket.BookType.CRAFTING, true, false), new ClientSetRecipeBookStatePacket(ClientSetRecipeBookStatePacket.BookType.FURNACE, false, true), new ClientSetRecipeBookStatePacket(ClientSetRecipeBookStatePacket.BookType.BLAST_FURNACE, true, true), new ClientSetRecipeBookStatePacket(ClientSetRecipeBookStatePacket.BookType.SMOKER, false, false));
         addClientPackets(new ClientNameItemPacket("Diamond Sword"), new ClientNameItemPacket(""), new ClientNameItemPacket("A".repeat(100)));

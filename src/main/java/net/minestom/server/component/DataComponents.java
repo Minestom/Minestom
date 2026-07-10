@@ -114,6 +114,7 @@ public class DataComponents {
     public static final DataComponent<List<ItemStack>> CONTAINER = register("container", ItemStackTemplate.NETWORK_TYPE.list(256), ItemStackTemplate.CODEC.list(256), List::copyOf);
     public static final DataComponent<ItemBlockState> BLOCK_STATE = register("block_state", ItemBlockState.NETWORK_TYPE, ItemBlockState.CODEC);
     public static final DataComponent<List<Bee>> BEES = register("bees", Bee.NETWORK_TYPE.list(Short.MAX_VALUE), Bee.CODEC.list(), List::copyOf);
+    public static final DataComponent<ItemStack> SULFUR_CUBE_CONTENT = register("sulfur_cube_content", ItemStackTemplate.NETWORK_TYPE, ItemStackTemplate.CODEC);
     // Lock is an item predicate which we do not support, but can be user-represented as a compound tag (an empty tag would match everything).
     public static final DataComponent<CustomData> LOCK = register("lock", null, CustomData.CODEC);
     public static final DataComponent<SeededContainerLoot> CONTAINER_LOOT = register("container_loot", null, SeededContainerLoot.CODEC);
@@ -138,7 +139,7 @@ public class DataComponents {
     public static final DataComponent<RegistryKey<ChickenSoundVariant>> CHICKEN_SOUND_VARIANT = register("chicken/sound_variant", ChickenSoundVariant.NETWORK_TYPE, ChickenSoundVariant.CODEC);
     public static final DataComponent<RegistryKey<ZombieNautilusVariant>> ZOMBIE_NAUTILUS_VARIANT = register("zombie_nautilus/variant", ZombieNautilusVariant.NETWORK_TYPE, ZombieNautilusVariant.CODEC);
     public static final DataComponent<RegistryKey<FrogVariant>> FROG_VARIANT = register("frog/variant", FrogVariant.NETWORK_TYPE, FrogVariant.CODEC);
-    public static final DataComponent<HorseMeta.Color> HORSE_VARIANT = register("horse/variant", HorseMeta.Color.NETWORK_TYPE, HorseMeta.Color.NBT_TYPE);
+    public static final DataComponent<HorseMeta.Variant> HORSE_VARIANT = register("horse/variant", HorseMeta.Variant.NETWORK_TYPE, HorseMeta.Variant.CODEC);
     public static final DataComponent<Holder<PaintingVariant>> PAINTING_VARIANT = register("painting/variant", PaintingVariant.NETWORK_TYPE, PaintingVariant.CODEC);
     public static final DataComponent<LlamaMeta.Variant> LLAMA_VARIANT = register("llama/variant", LlamaMeta.Variant.NETWORK_TYPE, LlamaMeta.Variant.CODEC);
     public static final DataComponent<AxolotlMeta.Variant> AXOLOTL_VARIANT = register("axolotl/variant", AxolotlMeta.Variant.NETWORK_TYPE, AxolotlMeta.Variant.CODEC);
