@@ -286,7 +286,7 @@ public class DynamicChunk extends Chunk {
     // blocks with a non-empty fluid (liquids or waterlogged)
     private static int countFluids(Palette blockPalette) {
         final int single = blockPalette.singleValue();
-        if (single != -1) return isFluid(single) ? (short) blockPalette.count() : 0;
+        if (single != -1) return isFluid(single) ? blockPalette.count() : 0;
         final int[] count = {0};
         blockPalette.getAllPresent((_, _, _, stateId) -> {
             if (isFluid(stateId)) count[0]++;
