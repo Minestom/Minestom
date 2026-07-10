@@ -8,7 +8,7 @@ import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.generator.GeneratorImpl;
-import net.minestom.server.instance.heightmap.Heightmap;
+import net.minestom.server.instance.heightmap.HeightmapType;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.PacketReading;
@@ -214,7 +214,7 @@ public final class Scratch {
         }
     }
 
-    private record FlatWorld(byte[] chunkData, Map<Heightmap.Type, long[]> heightmaps, LightData lightData) {
+    private record FlatWorld(byte[] chunkData, Map<HeightmapType, long[]> heightmaps, LightData lightData) {
         private static final Generator GENERATOR = unit -> {
             unit.modifier().fillBiome(Biome.PLAINS);
             unit.modifier().fillHeight(MIN_Y, GROUND_Y, Block.DIRT);
@@ -252,13 +252,13 @@ public final class Scratch {
             );
         }
 
-        private static Map<Heightmap.Type, long[]> createHeightmaps() {
+        private static Map<HeightmapType, long[]> createHeightmaps() {
             short[] heights = new short[16 * 16];
             Arrays.fill(heights, (short) (GROUND_Y - (MIN_Y - 1)));
-            long[] packed = Heightmap.encode(heights, MathUtils.bitsToRepresent(HEIGHT));
+            long[] packed = HeightmapType.encode(heights, MathUtils.bitsToRepresent(HEIGHT));
             return Map.of(
-                    Heightmap.Type.MOTION_BLOCKING, packed,
-                    Heightmap.Type.WORLD_SURFACE, packed
+                    HeightmapType.MOTION_BLOCKING, packed,
+                    HeightmapType.WORLD_SURFACE, packed
             );
         }
 

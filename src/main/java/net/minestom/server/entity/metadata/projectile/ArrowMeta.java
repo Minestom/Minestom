@@ -1,15 +1,15 @@
 package net.minestom.server.entity.metadata.projectile;
 
-import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetaTarget;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import org.jetbrains.annotations.Nullable;
 
 public class ArrowMeta extends AbstractArrowMeta implements ObjectDataProvider, ProjectileMeta {
-    private Entity shooter;
+    private MetaTarget shooter;
 
-    public ArrowMeta(@Nullable Entity entity, MetadataHolder metadata) {
+    public ArrowMeta(@Nullable MetaTarget entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -23,12 +23,12 @@ public class ArrowMeta extends AbstractArrowMeta implements ObjectDataProvider, 
 
     @Override
     @Nullable
-    public Entity getShooter() {
+    public MetaTarget getShooter() {
         return this.shooter;
     }
 
     @Override
-    public void setShooter(@Nullable Entity shooter) {
+    public void setShooter(@Nullable MetaTarget shooter) {
         this.shooter = shooter;
     }
 

@@ -1,6 +1,6 @@
 package net.minestom.server.entity.metadata.other;
 
-import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetaTarget;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
@@ -9,10 +9,10 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 public class FishingHookMeta extends EntityMeta implements ObjectDataProvider {
-    private Entity hooked;
-    private Entity owner;
+    private MetaTarget hooked;
+    private MetaTarget owner;
 
-    public FishingHookMeta(@Nullable Entity entity, MetadataHolder metadata) {
+    public FishingHookMeta(@Nullable MetaTarget entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -26,11 +26,11 @@ public class FishingHookMeta extends EntityMeta implements ObjectDataProvider {
     }
 
     @Nullable
-    public Entity getHookedEntity() {
+    public MetaTarget getHookedEntity() {
         return this.hooked;
     }
 
-    public void setHookedEntity(@Nullable Entity value) {
+    public void setHookedEntity(@Nullable MetaTarget value) {
         this.hooked = value;
         int entityID = value == null ? 0 : value.getEntityId() + 1;
         setHookedEntityId(entityID);
@@ -45,11 +45,11 @@ public class FishingHookMeta extends EntityMeta implements ObjectDataProvider {
     }
 
     @Nullable
-    public Entity getOwnerEntity() {
+    public MetaTarget getOwnerEntity() {
         return owner;
     }
 
-    public void setOwnerEntity(@Nullable Entity value) {
+    public void setOwnerEntity(@Nullable MetaTarget value) {
         this.owner = value;
     }
 

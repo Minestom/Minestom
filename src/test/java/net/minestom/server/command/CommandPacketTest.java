@@ -15,7 +15,7 @@ public class CommandPacketTest {
         final Command foo = new Command("foo");
         foo.addSyntax(CommandPacketTest::dummyExecutor, ArgumentType.Integer("bar"));
 
-        final DeclareCommandsPacket packet = GraphConverter.createPacket(new CommandManager(), Graph.merge(Graph.fromCommand(foo)), null);
+        final DeclareCommandsPacket packet = GraphConverter.createPacket(Graph.merge(Graph.fromCommand(foo)), null, new ConsoleSender(), CommandParser.parser());
         assertEquals(3, packet.nodes().size());
         final DeclareCommandsPacket.Node root = packet.nodes().get(packet.rootIndex());
         assertNotNull(root);
@@ -229,7 +229,7 @@ public class CommandPacketTest {
     }
 
     static void assertPacketGraph(String expected, Graph... graphs) {
-        var packet = GraphConverter.createPacket(new CommandManager(), Graph.merge(graphs), null);
+        var packet = GraphConverter.createPacket(Graph.merge(graphs), null, new ConsoleSender(), CommandParser.parser());
         CommandTestUtils.assertPacket(packet, expected);
     }
 

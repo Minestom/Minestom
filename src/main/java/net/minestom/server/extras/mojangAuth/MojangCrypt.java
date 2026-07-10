@@ -1,6 +1,5 @@
 package net.minestom.server.extras.mojangAuth;
 
-import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,8 +19,7 @@ public final class MojangCrypt {
             keyGen.initialize(1024);
             return keyGen.generateKeyPair();
         } catch (NoSuchAlgorithmException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
-            LOGGER.error("Key pair generation failed!");
+            LOGGER.error("Key pair generation failed!", e);
             return null;
         }
     }
@@ -30,7 +28,7 @@ public final class MojangCrypt {
         try {
             return digestData("SHA-1", data.getBytes("ISO_8859_1"), secretKey.getEncoded(), publicKey.getEncoded());
         } catch (UnsupportedEncodingException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
+            LOGGER.error("Failed to digest data!", e);
             return null;
         }
     }
@@ -43,7 +41,7 @@ public final class MojangCrypt {
             }
             return digest.digest();
         } catch (NoSuchAlgorithmException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
+            LOGGER.error("Failed to digest data!", e);
             return null;
         }
     }
@@ -60,9 +58,8 @@ public final class MojangCrypt {
         try {
             return setupCipher(mode, key.getAlgorithm(), key).doFinal(data);
         } catch (IllegalBlockSizeException | BadPaddingException var4) {
-            MinecraftServer.getExceptionManager().handleException(var4);
+            LOGGER.error("Cipher data failed!", var4);
         }
-        LOGGER.error("Cipher data failed!");
         return null;
     }
 
@@ -72,9 +69,8 @@ public final class MojangCrypt {
             cipher4.init(mode, key);
             return cipher4;
         } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException var4) {
-            MinecraftServer.getExceptionManager().handleException(var4);
+            LOGGER.error("Cipher creation failed!", var4);
         }
-        LOGGER.error("Cipher creation failed!");
         return null;
     }
 

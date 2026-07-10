@@ -1,25 +1,25 @@
 package net.minestom.server.entity.metadata.projectile;
 
-import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetaTarget;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import org.jetbrains.annotations.Nullable;
 
 public class AbstractWindChargeMeta extends EntityMeta implements ObjectDataProvider, ProjectileMeta {
-    private @Nullable Entity shooter;
+    private @Nullable MetaTarget shooter;
 
-    public AbstractWindChargeMeta(@Nullable Entity entity, MetadataHolder metadata) {
+    public AbstractWindChargeMeta(@Nullable MetaTarget entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     @Override
-    public @Nullable Entity getShooter() {
+    public @Nullable MetaTarget getShooter() {
         return shooter;
     }
 
     @Override
-    public void setShooter(@Nullable Entity shooter) {
+    public void setShooter(@Nullable MetaTarget shooter) {
         this.shooter = shooter;
     }
 

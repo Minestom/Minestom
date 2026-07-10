@@ -1,12 +1,12 @@
 package net.minestom.server.entity.metadata.water;
 
-import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetaTarget;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.Nullable;
 
 public class GlowSquidMeta extends AgeableWaterAnimalMeta {
-    public GlowSquidMeta(@Nullable Entity entity, MetadataHolder metadata) {
+    public GlowSquidMeta(@Nullable MetaTarget entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

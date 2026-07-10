@@ -3,14 +3,14 @@ package net.minestom.server.entity.metadata.animal;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
-import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetaTarget;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.Nullable;
 
 public class MooshroomMeta extends AnimalMeta {
-    public MooshroomMeta(@Nullable Entity entity, MetadataHolder metadata) {
+    public MooshroomMeta(@Nullable MetaTarget entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

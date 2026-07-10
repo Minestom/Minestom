@@ -6,7 +6,6 @@ import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
 import net.kyori.adventure.key.Key;
 import net.minestom.data.MinestomData;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Result;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.collision.BoundingBox;
@@ -32,6 +31,8 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,6 +50,7 @@ import java.util.function.Supplier;
  * Use at your own risk.
  */
 public final class RegistryData {
+    private static final Logger LOGGER = LoggerFactory.getLogger(RegistryData.class);
     static final Gson GSON = new GsonBuilder().disableHtmlEscaping().disableJdkUnsafe().create();
 
     @ApiStatus.Internal
@@ -134,7 +136,7 @@ public final class RegistryData {
                 return Properties.fromMap(map);
             }
         } catch (IOException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
+            LOGGER.error("Failed to load registry file: {}", resourcePath, e);
         }
         if (required) Check.fail("Failed to load required registry file: {0}", resourcePath);
         return Properties.fromMap(Map.of());

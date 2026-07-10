@@ -2,11 +2,11 @@ package net.minestom.server.tag;
 
 import net.kyori.adventure.nbt.*;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.utils.UUIDUtils;
 import org.jetbrains.annotations.Nullable;
@@ -29,11 +29,11 @@ final class Serializers {
 
     static final Entry<java.util.UUID, IntArrayBinaryTag> UUID = new Entry<>(BinaryTagTypes.INT_ARRAY, UUIDUtils::fromNbt, UUIDUtils::toNbt);
     static final Entry<ItemStack, CompoundBinaryTag> ITEM = new Entry<>(BinaryTagTypes.COMPOUND,
-            input -> ItemStack.fromItemNBT(input, MinecraftServer.process()),
-            itemStack -> itemStack.toItemNBT(MinecraftServer.process()));
+            input -> ItemStack.fromItemNBT(input, Registries.staticRegistries()),
+            itemStack -> itemStack.toItemNBT(Registries.staticRegistries()));
     static final Entry<Component, BinaryTag> COMPONENT = new Entry<>(null,
-            input -> Codec.COMPONENT.decode(new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process()), input).orElse(null),
-            component -> Codec.COMPONENT.encode(new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process()), component).orElse(null)
+            input -> Codec.COMPONENT.decode(new RegistryTranscoder<>(Transcoder.NBT, Registries.staticRegistries()), input).orElse(null),
+            component -> Codec.COMPONENT.encode(new RegistryTranscoder<>(Transcoder.NBT, Registries.staticRegistries()), component).orElse(null)
     );
 
     static final Entry<Object, ByteBinaryTag> EMPTY = new Entry<>(BinaryTagTypes.BYTE, _ -> null, _ -> null);

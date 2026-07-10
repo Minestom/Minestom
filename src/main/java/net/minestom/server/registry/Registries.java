@@ -30,6 +30,7 @@ import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import net.minestom.server.world.clock.WorldClock;
 import net.minestom.server.world.timeline.Timeline;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 
@@ -42,6 +43,19 @@ import java.util.List;
 public interface Registries {
     static Registries vanilla() {
         return new VanillaRegistries();
+    }
+
+    /**
+     * Returns the installed default {@link Registries}, used by lib serialization code that has no
+     * explicit registries source. Lazily defaults to {@link #vanilla()} until the framework installs one.
+     */
+    static Registries staticRegistries() {
+        return RegistriesImpl.staticRegistries();
+    }
+
+    @ApiStatus.Internal
+    static void staticRegistries(Registries registries) {
+        RegistriesImpl.staticRegistries(registries);
     }
 
     static List<SendablePacket> registryDataPackets(Registries registries, boolean excludeVanilla) {

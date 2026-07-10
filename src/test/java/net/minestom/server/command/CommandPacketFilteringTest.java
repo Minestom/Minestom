@@ -200,7 +200,7 @@ public class CommandPacketFilteringTest {
     }
 
     private void assertFiltering(Command command, String expectedStructure) {
-        final DeclareCommandsPacket packet = GraphConverter.createPacket(new CommandManager(), Graph.merge(Set.of(command)), PLAYER);
+        final DeclareCommandsPacket packet = GraphConverter.createPacket(Graph.merge(Set.of(command)), PLAYER, new ConsoleSender(), CommandParser.parser());
         CommandTestUtils.assertPacket(packet, expectedStructure);
     }
 }

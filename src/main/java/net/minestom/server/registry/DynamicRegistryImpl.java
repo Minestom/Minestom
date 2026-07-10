@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Result;
@@ -27,10 +26,14 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BooleanSupplier;
 
 @ApiStatus.Internal
 final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     private static final String UNSAFE_REMOVE_MESSAGE = "Unsafe remove is disabled. Enable by setting the system property 'minestom.registry.unsafe-ops' to 'true'";
+    // Lib freeze-state hook. Defaults to never-frozen; the framework installs a supplier reflecting
+    // whether the server process has started.
+    private static volatile BooleanSupplier frozenHook = () -> false;
     // Could also just use `this`, but this is a good candidate for identityless classes.
     // Also, what use case requires you to mutate registries faster than one monitor?
     private static final Object REGISTRY_LOCK = new Object();
@@ -320,8 +323,12 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         );
     }
 
+    static void frozenHook(BooleanSupplier hook) {
+        frozenHook = hook;
+    }
+
     static boolean isFrozen() {
-        return canFreeze() && MinecraftServer.process() != null && MinecraftServer.isStarted();
+        return canFreeze() && frozenHook.getAsBoolean();
     }
 
     static boolean canFreeze() {

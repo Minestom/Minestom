@@ -14,7 +14,7 @@ public class WorldSurfaceHeightmap extends Heightmap {
     }
 
     @Override
-    public Type type() {
-        return Type.WORLD_SURFACE;
+    public HeightmapType type() {
+        return HeightmapType.WORLD_SURFACE;
     }
 }

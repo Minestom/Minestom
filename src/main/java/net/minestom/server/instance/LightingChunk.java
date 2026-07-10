@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.collision.Shape;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -15,6 +16,8 @@ import net.minestom.server.instance.light.Light;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.data.LightData;
+import net.minestom.server.utils.Direction;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -409,7 +412,7 @@ public class LightingChunk extends DynamicChunk {
                                     lightingChunk.getOcclusionMap(), chunk.instance.getCachedDimensionType().maxY(),
                                     lightLookup);
                             case EXTERNAL -> light.calculateExternal(blockPalette,
-                                    Light.getNeighbors(chunk, point.blockY()),
+                                    getNeighbors(chunk, point.blockY()),
                                     lightLookup, paletteLookup);
                         };
                     } finally {
@@ -436,6 +439,27 @@ public class LightingChunk extends DynamicChunk {
         }
 
         return responseChunks;
+    }
+
+    @ApiStatus.Internal
+    static Point[] getNeighbors(Chunk chunk, int sectionY) {
+        final int chunkX = chunk.getChunkX(), chunkZ = chunk.getChunkZ();
+
+        final Direction[] directions = Direction.values();
+        Point[] links = new BlockVec[directions.length];
+        for (Direction direction : directions) {
+            final int x = chunkX + direction.normalX();
+            final int z = chunkZ + direction.normalZ();
+            final int y = sectionY + direction.normalY();
+
+            Chunk foundChunk = chunk.getInstance().getChunk(x, z);
+            if (foundChunk == null) continue;
+            if (y - foundChunk.getMinSection() > foundChunk.getMaxSection() || y - foundChunk.getMinSection() < 0)
+                continue;
+
+            links[direction.ordinal()] = new BlockVec(foundChunk.getChunkX(), y, foundChunk.getChunkZ());
+        }
+        return links;
     }
 
     /**

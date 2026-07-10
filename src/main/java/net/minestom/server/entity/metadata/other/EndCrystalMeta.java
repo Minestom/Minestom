@@ -1,14 +1,14 @@
 package net.minestom.server.entity.metadata.other;
 
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetaTarget;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import org.jetbrains.annotations.Nullable;
 
 public class EndCrystalMeta extends EntityMeta {
-    public EndCrystalMeta(@Nullable Entity entity, MetadataHolder metadata) {
+    public EndCrystalMeta(@Nullable MetaTarget entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

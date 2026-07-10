@@ -1,17 +1,17 @@
 package net.minestom.server.entity.metadata.monster;
 
-import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetaTarget;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 public class WitherMeta extends MonsterMeta {
-    private @Nullable Entity centerHead;
-    private @Nullable Entity leftHead;
-    private @Nullable Entity rightHead;
+    private @Nullable MetaTarget centerHead;
+    private @Nullable MetaTarget leftHead;
+    private @Nullable MetaTarget rightHead;
 
-    public WitherMeta(@Nullable Entity entity, MetadataHolder metadata) {
+    public WitherMeta(@Nullable MetaTarget entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -25,11 +25,11 @@ public class WitherMeta extends MonsterMeta {
     }
 
     @Nullable
-    public Entity getCenterHead() {
+    public MetaTarget getCenterHead() {
         return this.centerHead;
     }
 
-    public void setCenterHead(@Nullable Entity value) {
+    public void setCenterHead(@Nullable MetaTarget value) {
         this.centerHead = value;
         setCenterHeadEntityId(value == null ? 0 : value.getEntityId());
     }
@@ -44,11 +44,11 @@ public class WitherMeta extends MonsterMeta {
     }
 
     @Nullable
-    public Entity getLeftHead() {
+    public MetaTarget getLeftHead() {
         return this.leftHead;
     }
 
-    public void setLeftHead(@Nullable Entity value) {
+    public void setLeftHead(@Nullable MetaTarget value) {
         this.leftHead = value;
         setLeftHeadEntityId(value == null ? 0 : value.getEntityId());
     }
@@ -63,11 +63,11 @@ public class WitherMeta extends MonsterMeta {
     }
 
     @Nullable
-    public Entity getRightHead() {
+    public MetaTarget getRightHead() {
         return this.rightHead;
     }
 
-    public void setRightHead(@Nullable Entity value) {
+    public void setRightHead(@Nullable MetaTarget value) {
         this.rightHead = value;
         setRightHeadEntityId(value == null ? 0 : value.getEntityId());
     }

@@ -1,15 +1,15 @@
 package net.minestom.server.entity.metadata.monster;
 
-import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetaTarget;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 public class GuardianMeta extends MonsterMeta {
-    private @Nullable Entity target;
+    private @Nullable MetaTarget target;
 
-    public GuardianMeta(@Nullable Entity entity, MetadataHolder metadata) {
+    public GuardianMeta(@Nullable MetaTarget entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -30,11 +30,11 @@ public class GuardianMeta extends MonsterMeta {
         metadata.set(MetadataDef.Guardian.TARGET_EID, value);
     }
 
-    public Entity getTarget() {
+    public MetaTarget getTarget() {
         return this.target;
     }
 
-    public void setTarget(@Nullable Entity target) {
+    public void setTarget(@Nullable MetaTarget target) {
         this.target = target;
         setTargetEntityId(target == null ? 0 : target.getEntityId());
     }

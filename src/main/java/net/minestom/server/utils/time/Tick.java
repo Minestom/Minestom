@@ -1,6 +1,6 @@
 package net.minestom.server.utils.time;
 
-import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerFlag;
 
 import java.time.Duration;
 import java.time.temporal.Temporal;
@@ -12,9 +12,9 @@ import java.time.temporal.TemporalUnit;
 public final class Tick implements TemporalUnit {
     /**
      * A TemporalUnit representing the server tick. This is defined using
-     * {@link MinecraftServer#TICK_MS}.
+     * {@link ServerFlag#SERVER_TICKS_PER_SECOND}.
      */
-    public static final Tick SERVER_TICKS = new Tick(MinecraftServer.TICK_MS);
+    public static final Tick SERVER_TICKS = new Tick(1000 / ServerFlag.SERVER_TICKS_PER_SECOND);
 
     /**
      * A TemporalUnit representing the client tick. This is always equal to 50ms.

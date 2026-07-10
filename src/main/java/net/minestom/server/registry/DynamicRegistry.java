@@ -27,6 +27,15 @@ import java.util.Objects;
  */
 public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRegistryImpl {
 
+    /**
+     * Installs the lib freeze-state hook. The framework sets this to reflect whether the server
+     * process has started; registries reject mutation once frozen. Default is never-frozen.
+     */
+    @ApiStatus.Internal
+    static void setFrozenHook(java.util.function.BooleanSupplier hook) {
+        DynamicRegistryImpl.frozenHook(hook);
+    }
+
     @SafeVarargs
     static <T> DynamicRegistry<T> fromMap(Key key, Map.Entry<Key, T>... entries) {
         var registry = new DynamicRegistryImpl<T>(key, null);

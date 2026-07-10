@@ -120,9 +120,8 @@ public final class CollisionUtils {
                                               BoundingBox boundingBox,
                                               Pos position, Vec velocity,
                                               @Nullable PhysicsResult lastPhysicsResult, boolean singleCollision) {
-        return BlockCollision.handlePhysics(boundingBox,
-                velocity, position,
-                blockGetter, lastPhysicsResult, singleCollision);
+        return BlockCollisionCore.handlePhysics(blockGetter, boundingBox,
+                position, velocity, lastPhysicsResult, singleCollision);
     }
 
     /**
@@ -164,36 +163,17 @@ public final class CollisionUtils {
      * @return the position with the world border collision applied (can be {@code newPosition} if not changed)
      */
     public static Pos applyWorldBorder(WorldBorder worldBorder, Pos currentPosition, Pos newPosition) {
-        double radius = worldBorder.diameter() / 2;
-        // If there is a collision on a given axis prevent the entity
-        // from moving forward by supplying their previous position's value
-        boolean xCollision = newPosition.x() > worldBorder.centerX() + radius || newPosition.x() < worldBorder.centerX() - radius;
-        boolean zCollision = newPosition.z() > worldBorder.centerZ() + radius || newPosition.z() < worldBorder.centerZ() - radius;
-        if (xCollision || zCollision) {
-            return newPosition.withCoord(xCollision ? currentPosition.x() : newPosition.x(), newPosition.y(),
-                    zCollision ? currentPosition.z() : newPosition.z());
-        }
-        return newPosition;
+        return BlockCollisionCore.applyWorldBorder(worldBorder, currentPosition, newPosition);
     }
 
     @ApiStatus.Internal
     public static Shape parseCollisionShape(Map<Object, Object> internCache, String shape) {
-        final Shape cachedShape = (Shape) internCache.get(shape);
-        if (cachedShape != null) return cachedShape;
-        final Shape parsedShape = ShapeImpl.parseShapeFromRegistry(shape, (byte) 0);
-        internCache.put(shape, parsedShape);
-        return (Shape) internCache.computeIfAbsent(parsedShape, k -> parsedShape);
+        return BlockCollisionCore.parseCollisionShape(internCache, shape);
     }
 
     @ApiStatus.Internal
     public static Shape parseOcclusionShape(Map<Object, Object> internCache, String shape, boolean occludes, byte lightEmission) {
-        record ShapeEntry(String shape, boolean occludes, byte lightEmission) {} // Easy way to Hashcode
-        ShapeEntry entry = new ShapeEntry(shape, occludes, lightEmission);
-        final Shape cachedShape = (Shape) internCache.get(entry);
-        if (cachedShape != null) return cachedShape;
-        final Shape parsedShape = occludes ? ShapeImpl.parseShapeFromRegistry(shape, lightEmission) : ShapeImpl.emptyShape(lightEmission);
-        internCache.put(entry, parsedShape);
-        return (Shape) internCache.computeIfAbsent(parsedShape, k -> parsedShape);
+        return BlockCollisionCore.parseOcclusionShape(internCache, shape, occludes, lightEmission);
     }
 
     /**
@@ -204,8 +184,6 @@ public final class CollisionUtils {
      * @return the result of physics simulation
      */
     public static PhysicsResult blocklessCollision(Pos entityPosition, Vec entityVelocity) {
-        return new PhysicsResult(entityPosition.add(entityVelocity), entityVelocity, false,
-                false, false, false, entityVelocity, BlockCollision.NO_COLLISION_POINTS,
-                BlockCollision.NO_COLLISION_SHAPES, BlockCollision.NO_COLLISION_SHAPE_POSITIONS, false, SweepResult.NO_COLLISION);
+        return BlockCollisionCore.blocklessCollision(entityPosition, entityVelocity);
     }
 }

@@ -4,14 +4,14 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.color.DyeColor;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
-import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetaTarget;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.Nullable;
 
 public class TropicalFishMeta extends AbstractFishMeta {
-    public TropicalFishMeta(@Nullable Entity entity, MetadataHolder metadata) {
+    public TropicalFishMeta(@Nullable MetaTarget entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

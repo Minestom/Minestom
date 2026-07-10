@@ -89,10 +89,9 @@ public class MetadataHolderTest {
         assertEquals(1, snapshot.size(), "Previously returned map must not see later sets");
     }
 
-    @SuppressWarnings({"ConstantConditions", "removal"})
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void testNullCtor() {
-        assertDoesNotThrow(() -> new MetadataHolder((Entity) null));
         assertThrows(NullPointerException.class, () -> new MetadataHolder((Consumer<Map<Integer, Metadata.Entry<?>>>) null));
     }
 }

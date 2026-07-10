@@ -8,7 +8,6 @@ import net.kyori.adventure.text.event.DataComponentValue;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEventSource;
 import net.kyori.adventure.util.RGBLike;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomDataComponentValue;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Result;
@@ -117,7 +116,7 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
      */
     @Deprecated
     static ItemStack fromItemNBT(CompoundBinaryTag nbtCompound) {
-        return fromItemNBT(nbtCompound, MinecraftServer.process());
+        return fromItemNBT(nbtCompound, Registries.staticRegistries());
     }
 
     /**
@@ -294,7 +293,7 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
      */
     @Deprecated
     default CompoundBinaryTag toItemNBT() {
-        return toItemNBT(MinecraftServer.process());
+        return toItemNBT(Registries.staticRegistries());
     }
 
     /**
@@ -351,7 +350,7 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
          */
         @Deprecated
         static Hash of(ItemStack itemStack) {
-            return of(itemStack, MinecraftServer.process());
+            return of(itemStack, Registries.staticRegistries());
         }
 
         /**

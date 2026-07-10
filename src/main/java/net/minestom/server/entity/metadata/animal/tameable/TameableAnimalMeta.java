@@ -1,6 +1,6 @@
 package net.minestom.server.entity.metadata.animal.tameable;
 
-import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetaTarget;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.animal.AnimalMeta;
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 public class TameableAnimalMeta extends AnimalMeta {
-    protected TameableAnimalMeta(@Nullable Entity entity, MetadataHolder metadata) {
+    protected TameableAnimalMeta(@Nullable MetaTarget entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

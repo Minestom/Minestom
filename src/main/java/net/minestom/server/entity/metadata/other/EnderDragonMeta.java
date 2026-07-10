@@ -1,13 +1,13 @@
 package net.minestom.server.entity.metadata.other;
 
-import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetaTarget;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.MobMeta;
 import org.jetbrains.annotations.Nullable;
 
 public class EnderDragonMeta extends MobMeta {
-    public EnderDragonMeta(@Nullable Entity entity, MetadataHolder metadata) {
+    public EnderDragonMeta(@Nullable MetaTarget entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

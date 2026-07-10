@@ -1,6 +1,6 @@
 package net.minestom.server.entity.metadata.projectile;
 
-import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetaTarget;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
@@ -9,9 +9,9 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 public class FireworkRocketMeta extends EntityMeta implements ProjectileMeta {
-    private Entity shooter;
+    private MetaTarget shooter;
 
-    public FireworkRocketMeta(@Nullable Entity entity, MetadataHolder metadata) {
+    public FireworkRocketMeta(@Nullable MetaTarget entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -35,12 +35,12 @@ public class FireworkRocketMeta extends EntityMeta implements ProjectileMeta {
 
     @Override
     @Nullable
-    public Entity getShooter() {
+    public MetaTarget getShooter() {
         return this.shooter;
     }
 
     @Override
-    public void setShooter(@Nullable Entity value) {
+    public void setShooter(@Nullable MetaTarget value) {
         this.shooter = value;
         Integer entityID = value == null ? null : value.getEntityId();
         setShooterEntityId(entityID);

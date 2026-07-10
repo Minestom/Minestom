@@ -28,11 +28,14 @@ import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatType;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.PacketParser;
+import net.minestom.server.network.packet.PacketVanilla;
 import net.minestom.server.network.packet.server.common.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.thread.TickSchedulerThread;
 import net.minestom.server.timer.SchedulerManager;
@@ -91,6 +94,16 @@ public final class MinecraftServer implements MinecraftConstants {
     public static ServerProcess updateProcess(Auth auth) {
         ServerProcess process = new ServerProcessImpl(auth);
         serverProcess = process;
+        // Install the lib holders/hooks so lib serialization code reaches the live process.
+        Registries.staticRegistries(process);
+        DynamicRegistry.setFrozenHook(() -> {
+            final ServerProcess p = serverProcess;
+            return p != null && p.isAlive();
+        });
+        RegistryTag.setInvalidationHook(() -> {
+            final ServerProcess p = serverProcess;
+            if (p != null) p.connection().invalidateTags();
+        });
         return process;
     }
 
@@ -242,6 +255,7 @@ public final class MinecraftServer implements MinecraftConstants {
     public static void setCompressionThreshold(int compressionThreshold) {
         Check.stateCondition(serverProcess != null && serverProcess.isAlive(), "The compression threshold cannot be changed after the server has been started.");
         MinecraftServer.compressionThreshold = compressionThreshold;
+        PacketVanilla.compressionThreshold(compressionThreshold);
     }
 
     public static AdvancementManager getAdvancementManager() {

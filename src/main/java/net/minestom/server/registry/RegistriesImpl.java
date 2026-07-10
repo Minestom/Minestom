@@ -5,9 +5,29 @@ import net.minestom.server.network.packet.server.common.TagsPacket;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 final class RegistriesImpl {
+    // Settable default-Registries holder. The framework installs the live ServerProcess on startup;
+    // lib code that needs registries but has no explicit source reads this. Defaults lazily to vanilla().
+    private static final AtomicReference<Registries> STATIC_REGISTRIES = new AtomicReference<>();
+
     private RegistriesImpl() {
+    }
+
+    static Registries staticRegistries() {
+        Registries registries = STATIC_REGISTRIES.get();
+        if (registries == null) {
+            registries = Registries.vanilla();
+            if (!STATIC_REGISTRIES.compareAndSet(null, registries)) {
+                registries = STATIC_REGISTRIES.get();
+            }
+        }
+        return registries;
+    }
+
+    static void staticRegistries(Registries registries) {
+        STATIC_REGISTRIES.set(registries);
     }
 
     static List<SendablePacket> registryDataPackets(Registries registries, boolean excludeVanilla) {

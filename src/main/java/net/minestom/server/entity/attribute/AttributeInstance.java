@@ -1,9 +1,9 @@
 package net.minestom.server.entity.attribute;
 
 import net.kyori.adventure.key.Key;
-import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -23,6 +23,15 @@ public final class AttributeInstance {
             AttributeModifier.NETWORK_TYPE.list(Short.MAX_VALUE), value -> List.copyOf(value.modifiers()),
             (attribute, baseValue, modifiers) -> new AttributeInstance(attribute, baseValue, modifiers, null)
     );
+
+    @ApiStatus.Internal
+    public static final AttributeModifier SPRINTING_SPEED_MODIFIER = new AttributeModifier(Key.key("sprinting"), 0.3, AttributeOperation.ADD_MULTIPLIED_TOTAL);
+
+    /**
+     * IDs of modifiers that are protected from removal by methods like {@link #clearModifiers()}.
+     */
+    @ApiStatus.Internal
+    public static final Set<Key> PROTECTED_MODIFIERS = Set.of(SPRINTING_SPEED_MODIFIER.id());
 
     private final Attribute attribute;
     private final Map<Key, AttributeModifier> modifiers;
@@ -114,10 +123,10 @@ public final class AttributeInstance {
 
     /**
      * Clears all modifiers on this instance, excepting those whose ID is defined in
-     * {@link LivingEntity#PROTECTED_MODIFIERS}.
+     * {@link #PROTECTED_MODIFIERS}.
      */
     public void clearModifiers() {
-        this.modifiers.values().removeIf(modifier -> !LivingEntity.PROTECTED_MODIFIERS.contains(modifier.id()));
+        this.modifiers.values().removeIf(modifier -> !PROTECTED_MODIFIERS.contains(modifier.id()));
         refreshCachedValue(getBaseValue());
     }
 

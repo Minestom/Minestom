@@ -3,8 +3,8 @@ package net.minestom.server.entity.metadata;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
-import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityPose;
+import net.minestom.server.entity.MetaTarget;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.ApiStatus;
@@ -15,10 +15,10 @@ import java.lang.ref.WeakReference;
 import java.util.function.Consumer;
 
 public class EntityMeta {
-    private final WeakReference<@Nullable Entity> entityRef;
+    private final WeakReference<@Nullable MetaTarget> entityRef;
     protected final MetadataHolder metadata;
 
-    public EntityMeta(@Nullable Entity entity, MetadataHolder metadata) {
+    public EntityMeta(@Nullable MetaTarget entity, MetadataHolder metadata) {
         this.entityRef = new WeakReference<>(entity);
         this.metadata = metadata;
     }
@@ -160,8 +160,8 @@ public class EntityMeta {
         metadata.set(MetadataDef.TICKS_FROZEN, tickFrozen);
     }
 
-    protected void consumeEntity(Consumer<? super Entity> consumer) {
-        Entity entity = this.entityRef.get();
+    protected void consumeEntity(Consumer<? super MetaTarget> consumer) {
+        MetaTarget entity = this.entityRef.get();
         if (entity != null) {
             consumer.accept(entity);
         }
@@ -172,7 +172,7 @@ public class EntityMeta {
      *
      * <p>Planned to only exist while we have both metadata and components separately/all metadata is not represented by components.</p>
      *
-     * @see Entity#set(DataComponent, Object)
+     * @see net.minestom.server.entity.Entity#set(DataComponent, Object)
      */
     @ApiStatus.Internal
     public static <T> @Nullable T getComponent(EntityMeta meta, DataComponent<T> component) {
@@ -184,7 +184,7 @@ public class EntityMeta {
      *
      * <p>Planned to only exist while we have both metadata and components separately/all metadata is not represented by components.</p>
      *
-     * @see Entity#set(DataComponent, Object)
+     * @see net.minestom.server.entity.Entity#set(DataComponent, Object)
      */
     @ApiStatus.Internal
     public static <T> void setComponent(EntityMeta meta, DataComponent<T> component, T value) {

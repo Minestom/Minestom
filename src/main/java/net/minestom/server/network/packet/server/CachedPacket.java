@@ -1,9 +1,9 @@
 package net.minestom.server.network.packet.server;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.packet.PacketVanilla;
 import net.minestom.server.network.packet.PacketWriting;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -53,7 +53,7 @@ public final class CachedPacket implements SendablePacket {
         if (ref == null || (cache = ref.get()) == null) {
             final ServerPacket packet = packetSupplier.get();
             final NetworkBuffer buffer = PacketWriting.allocateTrimmedPacket(state, packet,
-                    MinecraftServer.getCompressionThreshold());
+                    PacketVanilla.compressionThreshold());
             cache = new FramedPacket(packet, buffer);
             this.packet = new SoftReference<>(cache);
         }

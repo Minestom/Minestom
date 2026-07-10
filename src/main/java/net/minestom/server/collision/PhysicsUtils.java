@@ -31,13 +31,13 @@ public final class PhysicsUtils {
                                                           WorldBorder worldBorder, Block.Getter blockGetter, Aerodynamics aerodynamics, boolean entityNoGravity,
                                                           boolean entityHasPhysics, boolean entityOnGround, boolean entityFlying, @Nullable PhysicsResult previousPhysicsResult) {
         final PhysicsResult physicsResult = entityHasPhysics ?
-                CollisionUtils.handlePhysics(blockGetter, entityBoundingBox, entityPosition, entityVelocityPerTick, previousPhysicsResult, false) :
-                CollisionUtils.blocklessCollision(entityPosition, entityVelocityPerTick);
+                BlockCollisionCore.handlePhysics(blockGetter, entityBoundingBox, entityPosition, entityVelocityPerTick, previousPhysicsResult, false) :
+                BlockCollisionCore.blocklessCollision(entityPosition, entityVelocityPerTick);
 
         Pos newPosition = physicsResult.newPosition();
         Vec newVelocity = physicsResult.newVelocity();
 
-        Pos positionWithinBorder = CollisionUtils.applyWorldBorder(worldBorder, entityPosition, newPosition);
+        Pos positionWithinBorder = BlockCollisionCore.applyWorldBorder(worldBorder, entityPosition, newPosition);
         newVelocity = updateVelocity(positionWithinBorder, newVelocity, blockGetter, aerodynamics, !positionWithinBorder.samePoint(entityPosition), entityFlying, entityOnGround, entityNoGravity);
 
         final boolean stillCached = physicsResult.cached() && newVelocity.samePoint(physicsResult.newVelocity()) && positionWithinBorder.samePoint(physicsResult.newPosition());

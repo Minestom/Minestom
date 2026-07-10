@@ -199,6 +199,8 @@ final class ServerProcessImpl implements ServerProcess, Registries.Delegating {
         if (!started.compareAndSet(false, true)) {
             throw new IllegalStateException("Server already started");
         }
+        // Install the compression threshold into the lib holder (covers the default when the setter was never called).
+        PacketVanilla.compressionThreshold(MinecraftServer.getCompressionThreshold());
 
         final String brand = MinecraftServer.getBrandName();
         LOGGER.info("Starting {} ({}) server.", brand, Git.version());

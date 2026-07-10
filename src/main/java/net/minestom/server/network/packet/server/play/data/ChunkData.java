@@ -6,7 +6,7 @@ import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockEntityType;
-import net.minestom.server.instance.heightmap.Heightmap;
+import net.minestom.server.instance.heightmap.HeightmapType;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte[] data,
+public record ChunkData(Map<HeightmapType, long[]> heightmaps, byte[] data,
                         Map<Integer, Block> blockEntities) {
     public ChunkData {
         heightmaps = Map.copyOf(heightmaps); // TODO deep copy?
@@ -31,8 +31,8 @@ public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte[] data,
     }
 
     public static final NetworkBuffer.Type<ChunkData> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-        private static final NetworkBuffer.Type<Map<Heightmap.Type, long[]>> HEIGHTMAPS = Heightmap.Type.NETWORK_TYPE
-                .mapValue(LONG_ARRAY, Heightmap.Type.values().length);
+        private static final NetworkBuffer.Type<Map<HeightmapType, long[]>> HEIGHTMAPS = HeightmapType.NETWORK_TYPE
+                .mapValue(LONG_ARRAY, HeightmapType.values().length);
 
         @Override
         public void write(NetworkBuffer buffer, ChunkData value) {
@@ -84,7 +84,7 @@ public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte[] data,
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof ChunkData(
-                Map<Heightmap.Type, long[]> heightmaps1, byte[] data1, Map<Integer, Block> entities
+                Map<HeightmapType, long[]> heightmaps1, byte[] data1, Map<Integer, Block> entities
         ))) return false;
         return Arrays.equals(data(), data1) && blockEntities().equals(entities) && heightmaps().equals(heightmaps1);
     }

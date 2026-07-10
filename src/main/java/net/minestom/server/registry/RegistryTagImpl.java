@@ -1,6 +1,5 @@
 package net.minestom.server.registry;
 
-import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,6 +10,15 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 final class RegistryTagImpl {
+
+    // Lib tag-invalidation hook. Defaults to a no-op; the framework installs a callback that
+    // invalidates the connection tag cache when a backed tag mutates.
+    private static volatile Runnable invalidationHook = () -> {
+    };
+
+    static void invalidationHook(Runnable hook) {
+        invalidationHook = hook;
+    }
 
     record Empty() implements RegistryTag<Object> {
         public static final Empty INSTANCE = new Empty();
@@ -79,9 +87,7 @@ final class RegistryTagImpl {
         }
 
         private void invalidate() {
-            var process = MinecraftServer.process();
-            if (process == null) return;
-            process.connection().invalidateTags();
+            invalidationHook.run();
         }
     }
 

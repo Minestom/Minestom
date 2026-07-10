@@ -1,6 +1,6 @@
 package net.minestom.server.entity.metadata.other;
 
-import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetaTarget;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
@@ -8,7 +8,7 @@ import net.minestom.server.particle.Particle;
 import org.jetbrains.annotations.Nullable;
 
 public class AreaEffectCloudMeta extends EntityMeta {
-    public AreaEffectCloudMeta(@Nullable Entity entity, MetadataHolder metadata) {
+    public AreaEffectCloudMeta(@Nullable MetaTarget entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

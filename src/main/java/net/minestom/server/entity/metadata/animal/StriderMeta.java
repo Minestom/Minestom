@@ -1,12 +1,12 @@
 package net.minestom.server.entity.metadata.animal;
 
-import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetaTarget;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.Nullable;
 
 public class StriderMeta extends AnimalMeta {
-    public StriderMeta(@Nullable Entity entity, MetadataHolder metadata) {
+    public StriderMeta(@Nullable MetaTarget entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

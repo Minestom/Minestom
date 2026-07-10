@@ -1,13 +1,13 @@
 package net.minestom.server.entity.metadata.projectile;
 
-import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetaTarget;
 import org.jetbrains.annotations.Nullable;
 
 public interface ProjectileMeta {
 
     @Nullable
-    Entity getShooter();
+    MetaTarget getShooter();
 
-    void setShooter(@Nullable Entity shooter);
+    void setShooter(@Nullable MetaTarget shooter);
 
 }

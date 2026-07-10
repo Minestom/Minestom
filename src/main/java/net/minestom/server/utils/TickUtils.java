@@ -1,6 +1,6 @@
 package net.minestom.server.utils;
 
-import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.utils.validate.Check;
 
 import java.time.Duration;
@@ -20,14 +20,14 @@ public final class TickUtils {
     public static final int CLIENT_TICK_MS = 50;
 
     /**
-     * Creates a number of ticks from a given duration, based on {@link MinecraftServer#TICK_MS}.
+     * Creates a number of ticks from a given duration, based on {@link ServerFlag#SERVER_TICKS_PER_SECOND}.
      *
      * @param duration the duration
      * @return the number of ticks
      * @throws IllegalArgumentException if duration is negative
      */
     public static int fromDuration(Duration duration) {
-        return TickUtils.fromDuration(duration, MinecraftServer.TICK_MS);
+        return TickUtils.fromDuration(duration, 1000 / ServerFlag.SERVER_TICKS_PER_SECOND);
     }
 
     /**

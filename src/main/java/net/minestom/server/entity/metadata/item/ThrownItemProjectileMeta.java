@@ -1,6 +1,6 @@
 package net.minestom.server.entity.metadata.item;
 
-import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetaTarget;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
@@ -8,7 +8,7 @@ import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 class ThrownItemProjectileMeta extends EntityMeta {
-    protected ThrownItemProjectileMeta(@Nullable Entity entity, MetadataHolder metadata) {
+    protected ThrownItemProjectileMeta(@Nullable MetaTarget entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

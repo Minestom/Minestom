@@ -1,6 +1,5 @@
 package net.minestom.server.network.packet;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
@@ -22,6 +21,7 @@ import net.minestom.server.network.packet.server.configuration.*;
 import net.minestom.server.network.packet.server.login.*;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.status.ResponsePacket;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.ObjectPool;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -34,14 +34,33 @@ import static net.minestom.server.network.packet.PacketRegistry.registry;
 @ApiStatus.Internal
 public final class PacketVanilla {
 
+    // Lib compression-threshold holder, read by CachedPacket when framing. The framework updates it
+    // from MinecraftServer's compression threshold; 0 means compression disabled.
+    private static volatile int compressionThreshold = 0;
+
     /**
      * Pool containing a buffer able to hold the largest packet.
      * <p>
      * Size starts with {@link ServerFlag#POOLED_BUFFER_SIZE} and doubles until {@link ServerFlag#MAX_PACKET_SIZE}.
+     * <p>
+     * Seeded with {@link Registries#staticRegistries()} (the framework points this at the live registries):
+     * the read path resets the buffer registries per read, while the write path
+     * ({@link net.minestom.server.network.packet.PacketWriting#allocateTrimmedPacket}) serializes into the
+     * pooled buffer and requires registries for registry-referencing packets.
      */
     public static final ObjectPool<NetworkBuffer> PACKET_POOL = ObjectPool.pool(
-            () -> NetworkBuffer.staticBuffer(ServerFlag.POOLED_BUFFER_SIZE, MinecraftServer.process()),
+            () -> NetworkBuffer.staticBuffer(ServerFlag.POOLED_BUFFER_SIZE, Registries.staticRegistries()),
             NetworkBuffer::clear);
+
+    @ApiStatus.Internal
+    public static int compressionThreshold() {
+        return compressionThreshold;
+    }
+
+    @ApiStatus.Internal
+    public static void compressionThreshold(int threshold) {
+        compressionThreshold = threshold;
+    }
 
     public static ConnectionState nextClientState(ClientPacket packet, ConnectionState currentState) {
         return switch (packet) {

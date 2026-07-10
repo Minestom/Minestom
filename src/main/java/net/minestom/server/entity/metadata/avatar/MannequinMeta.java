@@ -1,14 +1,14 @@
 package net.minestom.server.entity.metadata.avatar;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetaTarget;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.player.ResolvableProfile;
 import org.jetbrains.annotations.Nullable;
 
 public class MannequinMeta extends AvatarMeta {
-    public MannequinMeta(@Nullable Entity entity, MetadataHolder metadata) {
+    public MannequinMeta(@Nullable MetaTarget entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

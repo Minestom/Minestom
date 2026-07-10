@@ -9,6 +9,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.heightmap.Heightmap;
+import net.minestom.server.instance.heightmap.HeightmapType;
 import net.minestom.server.instance.heightmap.MotionBlockingHeightmap;
 import net.minestom.server.instance.heightmap.WorldSurfaceHeightmap;
 import net.minestom.server.network.NetworkBuffer;
@@ -251,7 +252,7 @@ public class DynamicChunk extends Chunk {
     }
 
     private ChunkDataPacket createChunkPacket() {
-        final Map<Heightmap.Type, long[]> heightmaps;
+        final Map<HeightmapType, long[]> heightmaps;
         lockWriteLock();
         try {
             heightmaps = getHeightmaps();
@@ -318,7 +319,7 @@ public class DynamicChunk extends Chunk {
         );
     }
 
-    protected Map<Heightmap.Type, long[]> getHeightmaps() {
+    protected Map<HeightmapType, long[]> getHeightmaps() {
         assertReadLock();
         if (needsCompleteHeightmapRefresh) calculateFullHeightmap();
         return Map.of(

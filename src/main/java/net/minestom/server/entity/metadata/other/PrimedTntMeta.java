@@ -1,6 +1,6 @@
 package net.minestom.server.entity.metadata.other;
 
-import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetaTarget;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
@@ -8,7 +8,7 @@ import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.Nullable;
 
 public class PrimedTntMeta extends EntityMeta {
-    public PrimedTntMeta(@Nullable Entity entity, MetadataHolder metadata) {
+    public PrimedTntMeta(@Nullable MetaTarget entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

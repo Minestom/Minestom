@@ -16,8 +16,7 @@ record ConstantsGenerator(Codegen codegen) {
         JsonObject constants = codegen.objectResource("constants.json");
 
         TypeSpec.Builder constantsInterface = TypeSpec.interfaceBuilder(minecraftConstantsCN)
-                .addModifiers(Modifier.SEALED)
-                .addPermittedSubclass(implCN)
+                .addModifiers(Modifier.PUBLIC)
                 .addJavadoc(codegen.constantsJavadoc(implCN));
 
         constantsInterface.addField(FieldSpec.builder(String.class, "VERSION_NAME")

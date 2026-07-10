@@ -1,10 +1,11 @@
 package net.minestom.server.crypto;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.crypto.KeyUtils;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.security.*;
 import java.util.function.Consumer;
@@ -66,14 +67,15 @@ public interface SignatureValidator {
     }
 
     private static SignatureValidator createYggdrasilValidator() {
+        final Logger logger = LoggerFactory.getLogger(SignatureValidator.class);
         try (var stream = SignatureValidator.class.getResourceAsStream("/yggdrasil_session_pubkey.der")) {
             if (stream == null) {
-                MinecraftServer.LOGGER.error("Couldn't find Yggdrasil public key, falling back to prohibiting validator!");
+                logger.error("Couldn't find Yggdrasil public key, falling back to prohibiting validator!");
                 return FAIL;
             }
             return from(KeyUtils.publicRSAKeyFrom(stream.readAllBytes()), KeyUtils.SignatureAlgorithm.SHA1withRSA);
         } catch (Exception e) {
-            MinecraftServer.LOGGER.error("Exception while reading Yggdrasil public key, falling back to prohibiting validator!", e);
+            logger.error("Exception while reading Yggdrasil public key, falling back to prohibiting validator!", e);
             return FAIL;
         }
     }

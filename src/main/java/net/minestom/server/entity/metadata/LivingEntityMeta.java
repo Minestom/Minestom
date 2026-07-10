@@ -1,7 +1,7 @@
 package net.minestom.server.entity.metadata;
 
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetaTarget;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.PlayerHand;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class LivingEntityMeta extends EntityMeta {
-    protected LivingEntityMeta(@Nullable Entity entity, MetadataHolder metadata) {
+    protected LivingEntityMeta(@Nullable MetaTarget entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

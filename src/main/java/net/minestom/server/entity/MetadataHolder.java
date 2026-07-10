@@ -68,15 +68,6 @@ public final class MetadataHolder {
     private volatile boolean notifyAboutChanges = true;
     private final Int2ObjectArrayMap<Metadata.Entry<?>> notNotifiedChanges = new Int2ObjectArrayMap<>();
 
-    /**
-     * @deprecated Use {@link #MetadataHolder(Consumer)} instead.
-     */
-    @Deprecated(forRemoval = true)
-    public MetadataHolder(@Nullable Entity entity) {
-        this(entity == null ? _ -> {
-        } : entity::notifyMetadataChanges);
-    }
-
     public MetadataHolder(Consumer<Map<Integer, Metadata.Entry<?>>> changesListener) {
         this.changesListener = Objects.requireNonNull(changesListener, "changesListener");
     }
@@ -199,7 +190,7 @@ public final class MetadataHolder {
     }
 
     @SuppressWarnings("JavacQuirks")
-    static final Map<EntityType, BiFunction<@Nullable Entity, MetadataHolder, ? extends EntityMeta>> ENTITY_META_SUPPLIER = Map.ofEntries(
+    static final Map<EntityType, BiFunction<@Nullable MetaTarget, MetadataHolder, ? extends EntityMeta>> ENTITY_META_SUPPLIER = Map.ofEntries(
             entry(EntityType.ACACIA_BOAT, BoatMeta::new),
             entry(EntityType.ACACIA_CHEST_BOAT, BoatMeta::new),
             entry(EntityType.ALLAY, AllayMeta::new),
@@ -361,7 +352,7 @@ public final class MetadataHolder {
     );
 
     @ApiStatus.Internal
-    public static EntityMeta createMeta(EntityType entityType, @Nullable Entity entity, MetadataHolder metadata) {
+    public static EntityMeta createMeta(EntityType entityType, @Nullable MetaTarget entity, MetadataHolder metadata) {
         return ENTITY_META_SUPPLIER.get(entityType).apply(entity, metadata);
     }
 }

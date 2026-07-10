@@ -3,7 +3,7 @@ package net.minestom.server.entity.metadata.animal.tameable;
 import net.minestom.server.color.DyeColor;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
-import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetaTarget;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.registry.RegistryKey;
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 public class CatMeta extends TameableAnimalMeta {
     private static final DyeColor[] DYE_VALUES = DyeColor.values();
 
-    public CatMeta(@Nullable Entity entity, MetadataHolder metadata) {
+    public CatMeta(@Nullable MetaTarget entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

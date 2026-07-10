@@ -2,6 +2,7 @@ package net.minestom.server.registry;
 
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -18,6 +19,15 @@ import java.util.List;
  */
 public sealed interface RegistryTag<T> extends HolderSet<T>, Iterable<RegistryKey<T>>
         permits RegistryTagImpl.Empty, RegistryTagImpl.Backed, RegistryTagImpl.Direct {
+
+    /**
+     * Installs the lib tag-invalidation hook, run whenever a registry-backed tag mutates. The
+     * framework registers a callback that invalidates the connection tag cache. Default is a no-op.
+     */
+    @ApiStatus.Internal
+    static void setInvalidationHook(Runnable hook) {
+        RegistryTagImpl.invalidationHook(hook);
+    }
 
     static <T> NetworkBuffer.Type<RegistryTag<T>> networkType(Registries.Selector<T> selector) {
         return new RegistryNetworkTypes.RegistryTagImpl<>(selector);

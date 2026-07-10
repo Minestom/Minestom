@@ -1,6 +1,6 @@
 package net.minestom.server.entity.metadata.avatar;
 
-import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetaTarget;
 import net.minestom.server.entity.MainHand;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class AvatarMeta extends LivingEntityMeta {
 
-    protected AvatarMeta(@Nullable Entity entity, MetadataHolder metadata) {
+    protected AvatarMeta(@Nullable MetaTarget entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
     

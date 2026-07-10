@@ -3,7 +3,6 @@ package net.minestom.server.instance.heightmap;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.palette.Palette;
-import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.MathUtils;
 
 import static net.minestom.server.coordinate.CoordConversion.globalToChunk;
@@ -12,17 +11,6 @@ import static net.minestom.server.instance.Chunk.CHUNK_SIZE_X;
 import static net.minestom.server.instance.Chunk.CHUNK_SIZE_Z;
 
 public abstract class Heightmap {
-    public enum Type {
-        WORLD_SURFACE_WG,
-        WORLD_SURFACE,
-        OCEAN_FLOOR_WG,
-        OCEAN_FLOOR,
-        MOTION_BLOCKING,
-        MOTION_BLOCKING_NO_LEAVES;
-
-        public static final NetworkBuffer.Type<Type> NETWORK_TYPE = NetworkBuffer.Enum(Type.class);
-    }
-
     private final short[] heights = new short[CHUNK_SIZE_X * CHUNK_SIZE_Z];
     private final Chunk chunk;
     private final int minHeight;
@@ -33,7 +21,7 @@ public abstract class Heightmap {
         this.minHeight = chunk.getInstance().getCachedDimensionType().minY() - 1;
     }
 
-    public abstract Type type();
+    public abstract HeightmapType type();
 
     protected abstract boolean checkBlock(Block block);
 
@@ -95,7 +83,7 @@ public abstract class Heightmap {
     public long[] getNBT() {
         final int dimensionHeight = chunk.getInstance().getCachedDimensionType().height();
         final int bitsForHeight = MathUtils.bitsToRepresent(dimensionHeight);
-        return encode(heights, bitsForHeight);
+        return HeightmapType.encode(heights, bitsForHeight);
     }
 
     public void loadFrom(long[] data) {
@@ -136,36 +124,5 @@ public abstract class Heightmap {
             y -= 16;
         }
         return y;
-    }
-
-    /**
-     * Creates compressed longs array from uncompressed heights array.
-     *
-     * @param heights      array of heights. Note that for this method it doesn't
-     *                     matter what size this array will be.
-     *                     But to get correct heights, array must be 256 elements
-     *                     long, and at index `i` must be height of (z=i/16,
-     *                     x=i%16).
-     * @param bitsPerEntry bits that each entry from height will take in `long`
-     *                     container.
-     * @return array of encoded heights.
-     */
-    public static long[] encode(short[] heights, int bitsPerEntry) {
-        final int entriesPerLong = 64 / bitsPerEntry;
-        // ceil(HeightsCount / entriesPerLong)
-        final int len = (heights.length + entriesPerLong - 1) / entriesPerLong;
-
-        final int maxPossibleIndexInContainer = entriesPerLong - 1;
-        final int entryMask = (1 << bitsPerEntry) - 1;
-
-        long[] data = new long[len];
-        int containerIndex = 0;
-        for (int i = 0; i < heights.length; i++) {
-            final int indexInContainer = i % entriesPerLong;
-            final int entry = heights[i];
-            data[containerIndex] |= ((long) (entry & entryMask)) << (indexInContainer * bitsPerEntry);
-            if (indexInContainer == maxPossibleIndexInContainer) containerIndex++;
-        }
-        return data;
     }
 }

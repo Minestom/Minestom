@@ -1,13 +1,13 @@
 package net.minestom.server.entity.metadata.display;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetaTarget;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.Nullable;
 
 public class TextDisplayMeta extends AbstractDisplayMeta {
-    public TextDisplayMeta(@Nullable Entity entity, MetadataHolder metadata) {
+    public TextDisplayMeta(@Nullable MetaTarget entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

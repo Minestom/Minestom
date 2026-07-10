@@ -12,7 +12,6 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeInstance;
 import net.minestom.server.entity.attribute.AttributeModifier;
-import net.minestom.server.entity.attribute.AttributeOperation;
 import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.EntityMeta;
@@ -49,13 +48,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class LivingEntity extends Entity implements EquipmentHandler {
 
-    private static final AttributeModifier SPRINTING_SPEED_MODIFIER = new AttributeModifier(Key.key("sprinting"), 0.3, AttributeOperation.ADD_MULTIPLIED_TOTAL);
+    private static final AttributeModifier SPRINTING_SPEED_MODIFIER = AttributeInstance.SPRINTING_SPEED_MODIFIER;
 
     /**
      * IDs of modifiers that are protected from removal by methods like {@link AttributeInstance#clearModifiers()}.
+     *
+     * <p>Alias of the canonical {@link AttributeInstance#PROTECTED_MODIFIERS}.
      */
     @ApiStatus.Internal
-    public static final Set<Key> PROTECTED_MODIFIERS = Set.of(SPRINTING_SPEED_MODIFIER.id());
+    public static final Set<Key> PROTECTED_MODIFIERS = AttributeInstance.PROTECTED_MODIFIERS;
 
     // ItemStack pickup
     protected boolean canPickupItem;

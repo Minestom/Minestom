@@ -16,7 +16,7 @@ public class MotionBlockingHeightmap extends Heightmap {
     }
 
     @Override
-    public Type type() {
-        return Type.MOTION_BLOCKING;
+    public HeightmapType type() {
+        return HeightmapType.MOTION_BLOCKING;
     }
 }

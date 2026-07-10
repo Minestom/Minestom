@@ -1,12 +1,12 @@
 package net.minestom.server.entity.metadata.projectile;
 
-import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetaTarget;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.Nullable;
 
 public class ThrownTridentMeta extends AbstractArrowMeta {
-    public ThrownTridentMeta(@Nullable Entity entity, MetadataHolder metadata) {
+    public ThrownTridentMeta(@Nullable MetaTarget entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
