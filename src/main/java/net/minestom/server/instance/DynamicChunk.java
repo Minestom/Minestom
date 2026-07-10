@@ -296,7 +296,7 @@ public class DynamicChunk extends Chunk {
 
     private static boolean isFluid(int blockStateId) {
         final Block block = Block.fromStateId(blockStateId);
-        return block != null && block.registry().isFluid();
+        return block != null && block.isFluid();
     }
 
     UpdateLightPacket createLightPacket() {
