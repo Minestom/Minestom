@@ -50,6 +50,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         registry.register("attribute_modifiers", AttributeModifiers.CODEC);
         registry.register("trim", ArmorTrim.CODEC);
         registry.register("jukebox_playable", JukeboxPlayable.CODEC);
+        registry.register("villager/variant", VillagerVariant.CODEC);
         return registry;
     }
 
@@ -63,8 +64,8 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      */
     record Damage(@Nullable Range.Int durability, @Nullable Range.Int damage) implements DataComponentPredicate {
         public static Codec<Damage> CODEC = StructCodec.struct(
-                "durability", DataComponentPredicates.INT_RANGE_CODEC.optional(), Damage::durability,
-                "damage", DataComponentPredicates.INT_RANGE_CODEC.optional(), Damage::damage,
+                "durability", Range.Int.CODEC.optional(), Damage::durability,
+                "damage", Range.Int.CODEC.optional(), Damage::damage,
                 Damage::new
         );
 
@@ -103,7 +104,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
 
         public static final Codec<EnchantmentListPredicate> CODEC = StructCodec.struct(
                 "enchantments", RegistryTag.codec(Registries::enchantment).optional(), EnchantmentListPredicate::enchantments,
-                "levels", DataComponentPredicates.INT_RANGE_CODEC.optional(), EnchantmentListPredicate::levels,
+                "levels", Range.Int.CODEC.optional(), EnchantmentListPredicate::levels,
                 EnchantmentListPredicate::new
         );
 
@@ -335,7 +336,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
 
         public static final Codec<Fireworks> CODEC = StructCodec.struct(
                 "explosions", CollectionPredicate.codec(FireworkExplosionPredicate.CODEC).optional(), Fireworks::explosions,
-                "flight_duration", DataComponentPredicates.INT_RANGE_CODEC.optional().optional(), Fireworks::flightDuration,
+                "flight_duration", Range.Int.CODEC.optional().optional(), Fireworks::flightDuration,
                 Fireworks::new
         );
 
@@ -436,7 +437,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
                 "pages", CollectionPredicate.codec(PagePredicate.CODEC).optional(), WrittenBook::pages,
                 "author", Codec.STRING.optional(), WrittenBook::author,
                 "title", Codec.STRING.optional(), WrittenBook::title,
-                "generation", DataComponentPredicates.INT_RANGE_CODEC.optional(), WrittenBook::generation,
+                "generation", Range.Int.CODEC.optional(), WrittenBook::generation,
                 "resolved", Codec.BOOLEAN.optional(), WrittenBook::resolved,
                 WrittenBook::new
         );
@@ -490,7 +491,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         public static final Codec<AttributeModifierPredicate> CODEC = StructCodec.struct(
                 "attribute", Attribute.CODEC.optional(), AttributeModifierPredicate::attribute,
                 "id", Codec.KEY.optional(), AttributeModifierPredicate::id,
-                "amount", DataComponentPredicates.DOUBLE_RANGE_CODEC.optional(), AttributeModifierPredicate::amount,
+                "amount", Range.Double.CODEC.optional(), AttributeModifierPredicate::amount,
                 "operation", AttributeOperation.CODEC.optional(), AttributeModifierPredicate::operation,
                 "slot", EquipmentSlotGroup.CODEC.optional(), AttributeModifierPredicate::slot,
                 AttributeModifierPredicate::new
@@ -585,6 +586,30 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             var song = holder.get(DataComponents.JUKEBOX_PLAYABLE);
             if (song == null) return false;
             return songs == null || songs.contains(song);
+        }
+
+        @Override
+        public Codec<? extends DataComponentPredicate> codec() {
+            return CODEC;
+        }
+    }
+
+    /**
+     * Tests the villager variant in {@link DataComponents#VILLAGER_VARIANT}
+     *
+     * @param villagerTypes The types of villagers to match
+     */
+    record VillagerVariant(List<net.minestom.server.entity.VillagerType> villagerTypes) implements DataComponentPredicate {
+        public static final Codec<VillagerVariant> CODEC = net.minestom.server.entity.VillagerType.CODEC.listOrSingle().transform(VillagerVariant::new, VillagerVariant::villagerTypes);
+
+        public VillagerVariant {
+            villagerTypes = List.copyOf(villagerTypes);
+        }
+
+        @Override
+        public boolean test(DataComponent.Holder holder) {
+            var variant = holder.get(DataComponents.VILLAGER_VARIANT);
+            return variant != null && villagerTypes.contains(variant);
         }
 
         @Override

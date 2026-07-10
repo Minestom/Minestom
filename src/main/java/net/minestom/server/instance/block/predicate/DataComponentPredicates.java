@@ -22,18 +22,6 @@ public record DataComponentPredicates(DataComponentMap exact,
 
     public static final DataComponentPredicates EMPTY = new DataComponentPredicates(DataComponentMap.EMPTY, ComponentPredicateSet.EMPTY);
 
-    public static final Codec<Range.Int> INT_RANGE_CODEC = StructCodec.struct(
-            "min", Codec.INT.optional(), Range.Int::min,
-            "max", Codec.INT.optional(), Range.Int::max,
-            Range.Int::new
-    ).orElse(Codec.INT.optional().transform(Range.Int::new, Range.Int::min));
-
-    public static final Codec<Range.Double> DOUBLE_RANGE_CODEC = StructCodec.struct(
-            "min", Codec.DOUBLE.optional(), Range.Double::min,
-            "max", Codec.DOUBLE.optional(), Range.Double::max,
-            Range.Double::new
-    ).orElse(Codec.DOUBLE.optional().transform(Range.Double::new, Range.Double::min));
-
     public static final Codec<DataComponentPredicates> CODEC = StructCodec.struct(
             "components", DataComponent.PATCH_CODEC.optional(DataComponentMap.EMPTY), DataComponentPredicates::exact,
             "predicates", ComponentPredicateSet.CODEC.optional(ComponentPredicateSet.EMPTY), DataComponentPredicates::predicates,

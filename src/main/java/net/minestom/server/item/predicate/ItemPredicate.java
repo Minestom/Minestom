@@ -20,7 +20,7 @@ public record ItemPredicate(
 
     public static final Codec<ItemPredicate> CODEC = StructCodec.struct(
             "items", Material.CODEC.listOrSingle().optional(), ItemPredicate::items,
-            "count", DataComponentPredicates.INT_RANGE_CODEC.optional(), ItemPredicate::count,
+            "count", Range.Int.CODEC.optional(), ItemPredicate::count,
             StructCodec.INLINE, DataComponentPredicates.CODEC.optional(), ItemPredicate::predicates,
             ItemPredicate::new
     );

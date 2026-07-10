@@ -30,7 +30,7 @@ public record CollectionPredicate<T, P extends Predicate<T>>(@Nullable Contains<
         return StructCodec.struct(
                 "contains", Contains.codec(itemCodec).optional(), CollectionPredicate::contains,
                 "count", Count.codec(itemCodec).optional(), CollectionPredicate::counts,
-                "size", DataComponentPredicates.INT_RANGE_CODEC.optional(), CollectionPredicate::size,
+                "size", Range.Int.CODEC.optional(), CollectionPredicate::size,
                 CollectionPredicate::new
         );
     }
@@ -89,7 +89,7 @@ public record CollectionPredicate<T, P extends Predicate<T>>(@Nullable Contains<
             public static <T, P extends Predicate<T>> Codec<Entry<T, P>> codec(Codec<P> itemCodec) {
                 return StructCodec.struct(
                         "test", itemCodec, Entry::predicate,
-                        "count", DataComponentPredicates.INT_RANGE_CODEC, Entry::count,
+                        "count", Range.Int.CODEC, Entry::count,
                         Entry::new
                 );
             }

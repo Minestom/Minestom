@@ -1,5 +1,7 @@
 package net.minestom.server.utils;
 
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -29,6 +31,12 @@ public sealed interface Range<T extends Number> {
     }
 
     record Int(@Nullable java.lang.Integer min, @Nullable java.lang.Integer max) implements Range<java.lang.Integer> {
+        public static final Codec<Range.Int> CODEC = StructCodec.struct(
+                "min", Codec.INT.optional(), Range.Int::min,
+                "max", Codec.INT.optional(), Range.Int::max,
+                Range.Int::new
+        ).orElse(Codec.INT.optional().transform(Range.Int::new, Range.Int::min));
+
         public Int(@Nullable java.lang.Integer value) {
             this(value, value);
         }
@@ -59,6 +67,12 @@ public sealed interface Range<T extends Number> {
     }
 
     record Double(@Nullable java.lang.Double min, @Nullable java.lang.Double max) implements Range<java.lang.Double> {
+        public static final Codec<Range.Double> CODEC = StructCodec.struct(
+                "min", Codec.DOUBLE.optional(), Range.Double::min,
+                "max", Codec.DOUBLE.optional(), Range.Double::max,
+                Range.Double::new
+        ).orElse(Codec.DOUBLE.optional().transform(Range.Double::new, Range.Double::min));
+
         public Double(@Nullable java.lang.Double value) {
             this(value, value);
         }
