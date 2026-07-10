@@ -7,6 +7,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -74,13 +75,18 @@ public final class Sidebar implements Viewable {
         return true;
     }
 
-    /// Gets all players viewing the [backing objective][#getObjective()],
-    /// which for a sidebar under normal usage equals the players viewing this sidebar.
+    /// Gets all players currently shown this sidebar. Players displaying the
+    /// [backing objective][#getObjective()] in a slot other than [DisplaySlot#SIDEBAR]
+    /// are not included.
     ///
-    /// @return an unmodifiable view of all viewers
+    /// @return an unmodifiable copy of the viewers
     @Override
     public Set<Player> getViewers() {
-        return objective.getViewers();
+        Set<Player> viewers = new HashSet<>();
+        for (Player player : objective.getViewers()) {
+            if (isViewer(player)) viewers.add(player);
+        }
+        return Set.copyOf(viewers);
     }
 
     /// Gets if a player is currently shown this sidebar.
