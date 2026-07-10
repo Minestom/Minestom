@@ -1,6 +1,5 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.event.entity.EntityPotionAddEvent;
 import net.minestom.server.potion.Potion;
@@ -9,15 +8,10 @@ import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @EnvTest
-public class EntityCancellableEffectTest
-{
-
-    static {
-        MinecraftServer.init();
-    }
+public class EntityCancellableEffectIntegrationTest {
 
     @Test
     public void cancelEffect(Env env) {
@@ -28,7 +22,7 @@ public class EntityCancellableEffectTest
         entity.setInstance(instance, new Vec(0, 0, 0));
 
         Potion potion = new Potion(PotionEffect.ABSORPTION, 0, Potion.INFINITE_DURATION);
-        MinecraftServer.getGlobalEventHandler().addListener(EntityPotionAddEvent.class, event -> event.setCancelled(true));
+        env.process().eventHandler().addListener(EntityPotionAddEvent.class, event -> event.setCancelled(true));
         entity.addEffect(potion);
 
         assertFalse(entity.hasEffect(PotionEffect.ABSORPTION));

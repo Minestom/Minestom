@@ -4,8 +4,6 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
-import net.minestom.server.MinecraftServer;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -15,11 +13,6 @@ import static net.minestom.server.network.NetworkBuffer.NBT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ComponentNetworkBufferTypeReadTest {
-
-    @BeforeAll
-    static void init() {
-        MinecraftServer.init();
-    }
 
     @Test
     void networkBufferReadsShowEntityWithoutName() {
@@ -44,7 +37,7 @@ class ComponentNetworkBufferTypeReadTest {
                         null
                 ));
 
-        NetworkBuffer buffer = NetworkBuffer.resizableBuffer(256, MinecraftServer.process());
+        NetworkBuffer buffer = NetworkBuffer.resizableBuffer(256);
         buffer.write(NBT, component);
         buffer.readIndex(0);
 

@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.lang.foreign.MemorySegment;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.SocketChannel;
+import java.nio.channels.WritableByteChannel;
 import java.security.PublicKey;
 import java.time.Instant;
 import java.util.*;
@@ -133,20 +134,13 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return Tagged(discriminator, discriminatorFromValue, serializerMap, null);
     }
 
-    <T>
-    void write(Type<T> type, @UnknownNullability T value) throws IndexOutOfBoundsException;
+    <T extends @UnknownNullability Object> void write(Type<T> type, T value) throws IndexOutOfBoundsException;
 
-    <T> @UnknownNullability T read(Type<T> type) throws IndexOutOfBoundsException;
+    <T extends @UnknownNullability Object> T read(Type<T> type) throws IndexOutOfBoundsException;
 
-    <T> void writeAt(long index, Type<T> type, @UnknownNullability T value) throws IndexOutOfBoundsException;
+    <T extends @UnknownNullability Object> void writeAt(long index, Type<T> type, T value) throws IndexOutOfBoundsException;
 
-    <T> @UnknownNullability T readAt(long index, Type<T> type) throws IndexOutOfBoundsException;
-
-    /**
-     * @deprecated Use {@link #copyTo(long, byte[], int, int)} instead, as longs can easily overflow arrays.
-     */
-    @Deprecated(forRemoval = true)
-    void copyTo(long srcOffset, byte[] dest, long destOffset, long length);
+    <T extends @UnknownNullability Object> T readAt(long index, Type<T> type) throws IndexOutOfBoundsException;
 
     void copyTo(long srcOffset, byte[] dest, int destOffset, int length);
 
@@ -176,7 +170,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     long capacity();
 
-    void readOnly();
+    @Contract(pure = true, value = "-> new")
+    NetworkBuffer readOnly();
 
     boolean isReadOnly();
 
@@ -196,7 +191,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     int readChannel(ReadableByteChannel channel) throws IOException;
 
-    boolean writeChannel(SocketChannel channel) throws IOException;
+    boolean writeChannel(WritableByteChannel channel) throws IOException;
 
     void cipher(Cipher cipher, long start, long length);
 
@@ -317,9 +312,6 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     static NetworkBuffer wrap(byte[] bytes, int readIndex, int writeIndex, @Nullable Registries registries) {
-        /* TODO(next) remove me for zero copy. The old behavior didnt actually modify the underlying array.
-            quite unfortunate and will require until waiting for the next release to change this behavior. */
-        bytes = bytes.clone();
         return wrap(MemorySegment.ofArray(bytes), readIndex, writeIndex, registries);
     }
 

@@ -14,7 +14,7 @@ import java.util.Set;
 final class ItemStackHashImpl {
 
     public static ItemStack.Hash of(Transcoder<Integer> hashCoder, ItemStack itemStack) {
-        if (itemStack.isAir()) return net.minestom.server.item.ItemStack.Hash.AIR;
+        if (itemStack.isAir()) return ItemStack.Hash.AIR;
 
         final Map<DataComponent<?>, Integer> addedComponents = new HashMap<>();
         final Set<DataComponent<?>> removedComponents = new HashSet<>();

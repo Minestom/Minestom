@@ -2,7 +2,6 @@ package net.minestom.server.item;
 
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
@@ -10,6 +9,7 @@ import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.component.CustomData;
 import net.minestom.server.item.component.TooltipDisplay;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.Contract;
@@ -148,8 +148,8 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
     }
 
     @Override
-    public CompoundBinaryTag toItemNBT() {
-        final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
+    public CompoundBinaryTag toItemNBT(Registries registries) {
+        final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, registries);
         return (CompoundBinaryTag) CODEC.encode(coder, this).orElseThrow("Invalid NBT for ItemStack");
     }
 

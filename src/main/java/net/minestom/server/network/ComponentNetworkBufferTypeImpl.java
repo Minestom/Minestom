@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.util.*;
 
 import static net.minestom.server.network.NetworkBuffer.*;
-import static net.minestom.server.network.NetworkBufferImpl.impl;
 
 record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Component> {
 

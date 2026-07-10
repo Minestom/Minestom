@@ -2,6 +2,7 @@ package net.minestom.server.tag;
 
 import net.kyori.adventure.nbt.*;
 import net.minestom.server.utils.collection.AutoIncrementMap;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
@@ -13,7 +14,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
-public record TagImpl<T>(int index, String key,
+@ApiStatus.Internal
+record TagImpl<T>(int index, String key,
                          Function<?, ?> readComparator,
                          Serializers.Entry<T, BinaryTag> entry,
                          // Optional properties
