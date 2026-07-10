@@ -13,8 +13,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.List;
 import java.util.zip.DataFormatException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SocketReadTest {
 
@@ -146,7 +145,7 @@ public class SocketReadTest {
     }
 
     @Test
-    public void compressedReadInheritsSourceBufferRegistries() throws DataFormatException {
+    public void compressedReadDoesNotPollutePoolRegistries() throws DataFormatException {
         // Encode a framed packet large enough to actually compress (threshold = 256), keeping
         // the pool untouched by the test setup so the read is the only relevant consumer.
         final var packet = new ClientPluginMessagePacket("ch", new byte[2000]);
@@ -165,8 +164,8 @@ public class SocketReadTest {
 
         final NetworkBuffer pooled = PacketVanilla.PACKET_POOL.get();
         try {
-            assertSame(sourceRegistries, pooled.registries(),
-                    "Decompressed pool buffer must inherit the source buffer's registries");
+            assertNotSame(pooled.registries(), sourceRegistries,
+                    "Decompressed pool buffer must not be polluted with registries");
         } finally {
             PacketVanilla.PACKET_POOL.add(pooled);
         }
