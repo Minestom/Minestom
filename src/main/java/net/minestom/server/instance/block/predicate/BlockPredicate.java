@@ -16,7 +16,6 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.utils.block.BlockUtils;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -107,7 +106,7 @@ public record BlockPredicate(
     }
 
     public BlockPredicate {
-        Check.notNull(components, "Component predicates cannot be null");
+        java.util.Objects.requireNonNull(components, "Component predicates cannot be null");
     }
 
     @Override

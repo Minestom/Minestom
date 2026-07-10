@@ -7,7 +7,6 @@ import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.utils.Range;
-import net.minestom.server.utils.validate.Check;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -16,8 +15,8 @@ public record DataComponentPredicates(DataComponentMap exact,
                                       ComponentPredicateSet predicates) implements Predicate<DataComponent.Holder> {
 
     public DataComponentPredicates {
-        Check.notNull(exact, "Exact cannot be null. Use DataComponentMap.EMPTY to skip exact data component checks.");
-        Check.notNull(predicates, "Component predicates cannot be null. Use ComponentPredicateSet.EMPTY to skip exact data component checks.");
+        java.util.Objects.requireNonNull(exact, "Exact cannot be null. Use DataComponentMap.EMPTY to skip exact data component checks.");
+        java.util.Objects.requireNonNull(predicates, "Component predicates cannot be null. Use ComponentPredicateSet.EMPTY to skip exact data component checks.");
     }
 
     public static final DataComponentPredicates EMPTY = new DataComponentPredicates(DataComponentMap.EMPTY, ComponentPredicateSet.EMPTY);

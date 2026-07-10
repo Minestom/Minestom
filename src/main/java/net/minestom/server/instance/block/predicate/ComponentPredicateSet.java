@@ -8,7 +8,6 @@ import net.minestom.server.component.DataComponent;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryKey;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 
 import java.util.*;
@@ -38,7 +37,7 @@ public class ComponentPredicateSet implements Predicate<DataComponent.Holder> {
         this.predicates = new Int2ObjectArrayMap<>(predicates.size());
         for (DataComponentPredicate predicate : predicates) {
             var key = MinecraftServer.componentPredicateTypes().getKey(predicate.codec());
-            Check.notNull(key, "Unknown DataComponentPredicate type");
+            java.util.Objects.requireNonNull(key, "Unknown DataComponentPredicate type");
             this.predicates.put(MinecraftServer.componentPredicateTypes().getId(key), predicate);
         }
     }
@@ -51,7 +50,7 @@ public class ComponentPredicateSet implements Predicate<DataComponent.Holder> {
             .mapValueTyped((key) -> {
                 //noinspection unchecked
                 Codec<DataComponentPredicate> codec = (Codec<DataComponentPredicate>) MinecraftServer.componentPredicateTypes().get(key);
-                Check.notNull(codec, "Unknown DataComponentPredicate type");
+                java.util.Objects.requireNonNull(codec, "Unknown DataComponentPredicate type");
                 return codec;
             })
             .transform(ComponentPredicateSet::fromMap, ComponentPredicateSet::toMap);
@@ -60,7 +59,7 @@ public class ComponentPredicateSet implements Predicate<DataComponent.Holder> {
             .mapValue((key) -> {
                 //noinspection unchecked
                 Codec<DataComponentPredicate> codec = (Codec<DataComponentPredicate>) MinecraftServer.componentPredicateTypes().get(key);
-                Check.notNull(codec, "Unknown DataComponentPredicate type");
+                java.util.Objects.requireNonNull(codec, "Unknown DataComponentPredicate type");
                 return NetworkBuffer.TypedNBT(codec);
             })
             .transform(ComponentPredicateSet::fromMap, ComponentPredicateSet::toMap);
@@ -69,7 +68,7 @@ public class ComponentPredicateSet implements Predicate<DataComponent.Holder> {
         Int2ObjectArrayMap<DataComponentPredicate> map = new Int2ObjectArrayMap<>(input.size());
         for (DataComponentPredicate predicate : input.values()) {
             var key = MinecraftServer.componentPredicateTypes().getKey(predicate.codec());
-            Check.notNull(key, "Unknown DataComponentPredicate type");
+            java.util.Objects.requireNonNull(key, "Unknown DataComponentPredicate type");
             map.put(MinecraftServer.componentPredicateTypes().getId(key), predicate);
         }
         return new ComponentPredicateSet(map);
@@ -100,7 +99,7 @@ public class ComponentPredicateSet implements Predicate<DataComponent.Holder> {
         var newMap = new Int2ObjectArrayMap<DataComponentPredicate>(predicates.size() + 1);
         newMap.putAll(predicates);
         var key = MinecraftServer.componentPredicateTypes().getKey(predicate.codec());
-        Check.notNull(key, "Unknown DataComponentPredicate type");
+        java.util.Objects.requireNonNull(key, "Unknown DataComponentPredicate type");
         newMap.put(MinecraftServer.componentPredicateTypes().getId(key), predicate);
         return new ComponentPredicateSet(newMap);
     }
@@ -114,7 +113,7 @@ public class ComponentPredicateSet implements Predicate<DataComponent.Holder> {
     public ComponentPredicateSet remove(DataComponentPredicate predicate) {
         var newMap = new Int2ObjectArrayMap<>(predicates);
         var key = MinecraftServer.componentPredicateTypes().getKey(predicate.codec());
-        Check.notNull(key, "Unknown DataComponentPredicate type");
+        java.util.Objects.requireNonNull(key, "Unknown DataComponentPredicate type");
         newMap.remove(MinecraftServer.componentPredicateTypes().getId(key));
         return new ComponentPredicateSet(newMap);
     }
