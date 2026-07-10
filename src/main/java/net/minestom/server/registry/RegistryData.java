@@ -243,14 +243,15 @@ public final class RegistryData {
     }
 
     public static final class BlockEntry implements Entry {
-        private static final byte AIR_OFFSET = 1 << 0;
-        private static final byte LIQUID_OFFSET = 1 << 1;
-        private static final byte SOLID_OFFSET = 1 << 2;
-        private static final byte OCCLUDES_OFFSET = 1 << 3;
-        private static final byte REQUIRES_TOOL_OFFSET = 1 << 4;
-        private static final byte REPLACEABLE_OFFSET = 1 << 5;
-        private static final byte REDSTONE_CONDUCTOR_OFFSET = 1 << 6;
-        private static final byte SIGNAL_SOURCE_OFFSET = -1 << 7; // 2's complement
+        private static final short AIR_OFFSET = 1 << 0;
+        private static final short LIQUID_OFFSET = 1 << 1;
+        private static final short SOLID_OFFSET = 1 << 2;
+        private static final short OCCLUDES_OFFSET = 1 << 3;
+        private static final short REQUIRES_TOOL_OFFSET = 1 << 4;
+        private static final short REPLACEABLE_OFFSET = 1 << 5;
+        private static final short REDSTONE_CONDUCTOR_OFFSET = 1 << 6;
+        private static final short SIGNAL_SOURCE_OFFSET = 1 << 7;
+        private static final short FLUID_OFFSET = 1 << 8;
 
         private final Key key;
         private final int id;
@@ -262,9 +263,7 @@ public final class RegistryData {
         private final float speedFactor;
         private final float jumpFactor;
         private final int mapColorId;
-        private final byte packedFlags;
-        // standalone field rather than a packedFlags bit: that byte is already full (8 flags; SIGNAL_SOURCE uses bit 7).
-        // fold into a wider flags field if the flag set ever grows - changed here if needed.
+        private final short packedFlags;
         private final boolean blocksMotion;
         private final byte lightEmission;
         private final byte lightBlocked;
@@ -286,15 +285,16 @@ public final class RegistryData {
             this.speedFactor = fromParent(parent, BlockEntry::speedFactor, main, "speedFactor", Properties::getFloat, 1.0f);
             this.jumpFactor = fromParent(parent, BlockEntry::jumpFactor, main, "jumpFactor", Properties::getFloat, 1.0f);
             this.mapColorId = fromParent(parent, BlockEntry::mapColorId, main, "mapColorId", Properties::getInt, 0);
-            var air = fromParent(parent, BlockEntry::isAir, main, "air", Properties::getBoolean, false);
-            var solid = fromParent(parent, BlockEntry::isSolid, main, "solid", Properties::getBoolean, null);
+            boolean air = fromParent(parent, BlockEntry::isAir, main, "air", Properties::getBoolean, false);
+            boolean solid = fromParent(parent, BlockEntry::isSolid, main, "solid", Properties::getBoolean, null);
             this.blocksMotion = fromParent(parent, BlockEntry::blocksMotion, main, "blocksMotion", Properties::getBoolean, false);
-            var liquid = fromParent(parent, BlockEntry::isLiquid, main, "liquid", Properties::getBoolean, false);
-            var occludes = fromParent(parent, BlockEntry::occludes, main, "occludes", Properties::getBoolean, true);
-            var requiresTool = fromParent(parent, BlockEntry::requiresTool, main, "requiresTool", Properties::getBoolean, true);
+            boolean liquid = fromParent(parent, BlockEntry::isLiquid, main, "liquid", Properties::getBoolean, false);
+            boolean fluid = fromParent(parent, BlockEntry::isFluid, main, "fluid", Properties::getBoolean, false);
+            boolean occludes = fromParent(parent, BlockEntry::occludes, main, "occludes", Properties::getBoolean, true);
+            boolean requiresTool = fromParent(parent, BlockEntry::requiresTool, main, "requiresTool", Properties::getBoolean, true);
             this.lightEmission = fromParent(parent, BlockEntry::lightEmission, main, "lightEmission", Properties::getInt, 0).byteValue();
             this.lightBlocked = fromParent(parent, BlockEntry::lightBlocked, main, "lightBlock", Properties::getInt, 0).byteValue();
-            var replaceable = fromParent(parent, BlockEntry::isReplaceable, main, "replaceable", Properties::getBoolean, false);
+            boolean replaceable = fromParent(parent, BlockEntry::isReplaceable, main, "replaceable", Properties::getBoolean, false);
             this.blockSoundType = fromParent(parent, BlockEntry::getBlockSoundType, main, "soundType", (properties, string) -> {
                 final String soundTypeKey = properties.getString(string);
                 return soundTypeKey != null ? BlockSoundType.fromKey(soundTypeKey) : null;
@@ -335,9 +335,10 @@ public final class RegistryData {
             }
             var redstoneConductor = fromParent(parent, BlockEntry::isRedstoneConductor, main, "redstoneConductor", Properties::getBoolean, null);
             var signalSource = fromParent(parent, BlockEntry::isSignalSource, main, "signalSource", Properties::getBoolean, false);
-            this.packedFlags = (byte) (
+            this.packedFlags = (short) (
                     (air ? AIR_OFFSET : 0) |
                     (liquid ? LIQUID_OFFSET : 0) |
+                    (fluid ? FLUID_OFFSET : 0) |
                     (solid ? SOLID_OFFSET : 0) |
                     (occludes ? OCCLUDES_OFFSET : 0) |
                     (requiresTool ? REQUIRES_TOOL_OFFSET : 0) |
@@ -420,6 +421,10 @@ public final class RegistryData {
 
         public boolean isLiquid() {
             return (packedFlags & LIQUID_OFFSET) != 0;
+        }
+
+        public boolean isFluid() {
+            return (packedFlags & FLUID_OFFSET) != 0;
         }
 
         public boolean occludes() {

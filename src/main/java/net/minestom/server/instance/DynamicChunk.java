@@ -8,6 +8,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.instance.heightmap.MotionBlockingHeightmap;
 import net.minestom.server.instance.heightmap.WorldSurfaceHeightmap;
@@ -59,7 +60,7 @@ public class DynamicChunk extends Chunk {
         super(instance, chunkX, chunkZ, true);
         // Required to be here because the super call populates the min and max section.
         var sectionsTemp = new Section[maxSection - minSection];
-        Arrays.setAll(sectionsTemp, value -> new Section());
+        Arrays.setAll(sectionsTemp, _ -> new Section());
         this.sections = List.of(sectionsTemp);
     }
 
@@ -266,9 +267,10 @@ public class DynamicChunk extends Chunk {
             NetworkBuffer.Type<ChunkData.Section> sectionSerializer = ChunkData.Section.networkType(instance.registries().biome().size());
             final byte[] data = NetworkBuffer.makeArray(networkBuffer -> {
                 for (Section section : sections) {
-                    final short blockCount = (short) section.blockPalette().count();
-                    final short liquidCount = (short) (blockCount > 0 ? 1 : 0); //TODO(26.1) proper fluid count
-                    networkBuffer.write(sectionSerializer, new ChunkData.Section(blockCount, liquidCount, section.blockPalette(), section.biomePalette()));
+                    final Palette blockPalette = section.blockPalette();
+                    final short blockCount = (short) blockPalette.count();
+                    final short fluidCount = (short) countFluids(blockPalette);
+                    networkBuffer.write(sectionSerializer, new ChunkData.Section(blockCount, fluidCount, blockPalette, section.biomePalette()));
                 }
             });
 
@@ -279,6 +281,22 @@ public class DynamicChunk extends Chunk {
         } finally {
             unlockReadLock();
         }
+    }
+
+    // blocks with a non-empty fluid (liquids or waterlogged)
+    private static int countFluids(Palette blockPalette) {
+        final int single = blockPalette.singleValue();
+        if (single != -1) return isFluid(single) ? blockPalette.count() : 0;
+        final int[] count = {0};
+        blockPalette.getAllPresent((_, _, _, stateId) -> {
+            if (isFluid(stateId)) count[0]++;
+        });
+        return count[0];
+    }
+
+    private static boolean isFluid(int blockStateId) {
+        final Block block = Block.fromStateId(blockStateId);
+        return block != null && block.isFluid();
     }
 
     UpdateLightPacket createLightPacket() {
