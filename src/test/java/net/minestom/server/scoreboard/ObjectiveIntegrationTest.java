@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @EnvTest
 public class ObjectiveIntegrationTest {
     @Test
-    public void entryUpdates(Env env) {
+    public void entryUpdates(Env ignored) {
         Objective objective = Objective.create("test");
         assertEquals("test", objective.getName());
         assertEquals(Component.text("test"), objective.getDisplayName());
@@ -84,7 +84,7 @@ public class ObjectiveIntegrationTest {
         assertEquals(Component.text("Test"), creation.objectiveValue());
 
         var score = assertInstanceOf(UpdateScorePacket.class, packets.get(1));
-        assertEquals("holder", score.entityName());
+        assertEquals("holder", score.owner());
         assertEquals(5, score.score());
 
         var display = assertInstanceOf(DisplayScoreboardPacket.class, packets.get(2));

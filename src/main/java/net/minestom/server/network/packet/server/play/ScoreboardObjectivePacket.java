@@ -26,7 +26,7 @@ public record ScoreboardObjectivePacket(String objectiveName, byte mode,
                 assert value.objectiveValue != null;
                 buffer.write(COMPONENT, value.objectiveValue);
                 assert value.type != null;
-                buffer.write(VAR_INT, value.type.ordinal());
+                buffer.write(NetworkBuffer.Enum(RenderType.class), value.type);
                 buffer.write(NumberFormat.SERIALIZER.optional(), value.numberFormat);
             }
         }
@@ -40,7 +40,7 @@ public record ScoreboardObjectivePacket(String objectiveName, byte mode,
             NumberFormat numberFormat = null;
             if (mode == 0 || mode == 2) {
                 objectiveValue = buffer.read(COMPONENT);
-                type = RenderType.values()[buffer.read(VAR_INT)];
+                type = buffer.read(NetworkBuffer.Enum(RenderType.class));
                 numberFormat = buffer.read(NumberFormat.SERIALIZER.optional());
             }
             return new ScoreboardObjectivePacket(objectiveName, mode, objectiveValue, type, numberFormat);

@@ -211,7 +211,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     // Experience orb pickup
     protected Cooldown experiencePickupCooldown = new Cooldown(Duration.of(10, TimeUnit.SERVER_TICK));
 
-    private final Map<DisplaySlot, Objective> displayedObjectives = Collections.synchronizedMap(new EnumMap<>(DisplaySlot.class));
+    private final Map<DisplaySlot, Objective> displayedObjectives = new EnumMap<>(DisplaySlot.class);
 
     private int permissionLevel;
 
@@ -1815,7 +1815,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * @return the displayed objective, or {@code null} if the slot is empty
      */
     public @Nullable Objective getDisplayedObjective(DisplaySlot slot) {
-        return displayedObjectives.get(slot);
+        synchronized (displayedObjectives) {
+            return displayedObjectives.get(slot);
+        }
     }
 
     public ClickPreprocessor getClickPreprocessor() {

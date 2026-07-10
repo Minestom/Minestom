@@ -24,7 +24,8 @@ import java.util.Set;
 public sealed interface Objective extends PacketGroupingAudience permits ObjectiveImpl {
     /// Creates a new objective with its name as the display name.
     ///
-    /// @param name the objective name, unique per client
+    /// @param name the objective name; must be unique per client, as displaying two
+    ///             objectives with the same name to one player is not supported
     /// @return a new objective
     static Objective create(String name) {
         return new ObjectiveImpl(name, Component.text(name));
@@ -32,7 +33,8 @@ public sealed interface Objective extends PacketGroupingAudience permits Objecti
 
     /// Creates a new objective.
     ///
-    /// @param name        the objective name, unique per client
+    /// @param name        the objective name; must be unique per client, as displaying two
+    ///                     objectives with the same name to one player is not supported
     /// @param displayName the display name
     /// @return a new objective
     static Objective create(String name, Component displayName) {

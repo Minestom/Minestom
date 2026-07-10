@@ -41,13 +41,13 @@ public class SidebarIntegrationTest {
         );
         assertTrue(packets.get(0).score() > packets.get(1).score());
         assertTrue(packets.get(1).score() > packets.get(2).score());
-        final String secondLineHolder = packets.get(1).entityName();
+        final String secondLineHolder = packets.get(1).owner();
 
         scoreCollector = connection.trackIncoming(UpdateScorePacket.class);
         sidebar.update(Component.text("a"), Component.text("updated"), Component.text("c"));
         scoreCollector.assertSingle(packet -> {
             assertEquals(Component.text("updated"), packet.displayName());
-            assertEquals(secondLineHolder, packet.entityName());
+            assertEquals(secondLineHolder, packet.owner());
         });
 
         scoreCollector = connection.trackIncoming(UpdateScorePacket.class);
@@ -71,7 +71,7 @@ public class SidebarIntegrationTest {
 
         var scoreCollector = connection.trackIncoming(UpdateScorePacket.class);
         sidebar.update(Component.text("a"), Component.text("b"), Component.text("c"));
-        var holders = scoreCollector.collect().stream().map(UpdateScorePacket::entityName).toList();
+        var holders = scoreCollector.collect().stream().map(UpdateScorePacket::owner).toList();
 
         var resetCollector = connection.trackIncoming(ResetScorePacket.class);
         sidebar.update(Component.text("a"));
@@ -136,7 +136,24 @@ public class SidebarIntegrationTest {
     }
 
     @Test
-    public void maxLines(Env env) {
+    public void viewersMatchSidebarSlot(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 40, 0));
+
+        Sidebar sidebar = Sidebar.create(Component.text("Title"));
+        player.setDisplayedObjective(DisplaySlot.PLAYER_LIST, sidebar.getObjective());
+        assertTrue(sidebar.getObjective().isViewer(player));
+        assertFalse(sidebar.isViewer(player));
+        assertFalse(sidebar.getViewers().contains(player));
+
+        sidebar.addViewer(player);
+        assertTrue(sidebar.isViewer(player));
+        assertTrue(sidebar.getViewers().contains(player));
+    }
+
+    @Test
+    public void maxLines(Env ignored) {
         Sidebar sidebar = Sidebar.create(Component.text("Title"));
         List<Component> lines = IntStream.range(0, Sidebar.MAX_LINES + 1)
                 .mapToObj(i -> (Component) Component.text(i))

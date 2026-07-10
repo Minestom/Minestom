@@ -15,14 +15,14 @@ import java.util.function.UnaryOperator;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record UpdateScorePacket(
-        String entityName,
+        String owner,
         String objectiveName,
         int score,
         @Nullable Component displayName,
         @Nullable NumberFormat numberFormat
 ) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final NetworkBuffer.Type<UpdateScorePacket> SERIALIZER = NetworkBufferTemplate.template(
-            STRING, UpdateScorePacket::entityName,
+            STRING, UpdateScorePacket::owner,
             STRING, UpdateScorePacket::objectiveName,
             VAR_INT, UpdateScorePacket::score,
             COMPONENT.optional(), UpdateScorePacket::displayName,
@@ -61,7 +61,7 @@ public record UpdateScorePacket(
 
 
         return new UpdateScorePacket(
-                entityName,
+                owner,
                 objectiveName,
                 score,
                 name,

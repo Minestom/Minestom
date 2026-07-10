@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -25,8 +26,8 @@ final class ObjectiveImpl implements Objective {
     private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
 
     ObjectiveImpl(String name, Component displayName) {
-        this.name = name;
-        this.displayName = displayName;
+        this.name = Objects.requireNonNull(name);
+        this.displayName = Objects.requireNonNull(displayName);
     }
 
     @Override
@@ -41,7 +42,7 @@ final class ObjectiveImpl implements Objective {
 
     @Override
     public synchronized void setDisplayName(Component displayName) {
-        this.displayName = displayName;
+        this.displayName = Objects.requireNonNull(displayName);
         sendGroupedPacket(getUpdateObjectivePacket());
     }
 
@@ -52,7 +53,7 @@ final class ObjectiveImpl implements Objective {
 
     @Override
     public synchronized void setRenderType(RenderType renderType) {
-        this.renderType = renderType;
+        this.renderType = Objects.requireNonNull(renderType);
         sendGroupedPacket(getUpdateObjectivePacket());
     }
 
