@@ -39,7 +39,11 @@ public class ObjectiveIntegrationTest {
         objective.updateScore("holder", 6);
         assertEquals(new ScoreEntry(6, displayName, numberFormat), objective.getEntry("holder"));
 
+        objective.updateDisplayName("other", displayName);
+        assertEquals(new ScoreEntry(0, displayName, null), objective.getEntry("other"));
+
         objective.removeEntry("holder");
+        objective.removeEntry("other");
         assertNull(objective.getEntry("holder"));
         assertTrue(objective.getEntries().isEmpty());
 
@@ -57,7 +61,7 @@ public class ObjectiveIntegrationTest {
     }
 
     @Test
-    public void displaySendsObjective(Env env) {
+    public void displaySendsObjectiveInOrder(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 40, 0));
@@ -65,28 +69,27 @@ public class ObjectiveIntegrationTest {
         Objective objective = Objective.create("test", Component.text("Test"));
         objective.updateScore("holder", 5);
 
-        var objectiveCollector = connection.trackIncoming(ScoreboardObjectivePacket.class);
-        var displayCollector = connection.trackIncoming(DisplayScoreboardPacket.class);
-        var scoreCollector = connection.trackIncoming(UpdateScorePacket.class);
-
+        var collector = connection.trackIncoming();
         player.setDisplayedObjective(DisplaySlot.SIDEBAR, objective);
         assertEquals(objective, player.getDisplayedObjective(DisplaySlot.SIDEBAR));
         assertTrue(objective.isViewer(player));
         assertEquals(Set.of(player), objective.getViewers());
 
-        objectiveCollector.assertSingle(packet -> {
-            assertEquals("test", packet.objectiveName());
-            assertEquals(0, packet.mode());
-            assertEquals(Component.text("Test"), packet.objectiveValue());
-        });
-        displayCollector.assertSingle(packet -> {
-            assertEquals(DisplaySlot.SIDEBAR, packet.position());
-            assertEquals("test", packet.scoreName());
-        });
-        scoreCollector.assertSingle(packet -> {
-            assertEquals("holder", packet.entityName());
-            assertEquals(5, packet.score());
-        });
+        var packets = collector.collect();
+        assertEquals(3, packets.size());
+
+        var creation = assertInstanceOf(ScoreboardObjectivePacket.class, packets.get(0));
+        assertEquals("test", creation.objectiveName());
+        assertEquals(0, creation.mode());
+        assertEquals(Component.text("Test"), creation.objectiveValue());
+
+        var score = assertInstanceOf(UpdateScorePacket.class, packets.get(1));
+        assertEquals("holder", score.entityName());
+        assertEquals(5, score.score());
+
+        var display = assertInstanceOf(DisplayScoreboardPacket.class, packets.get(2));
+        assertEquals(DisplaySlot.SIDEBAR, display.position());
+        assertEquals("test", display.scoreName());
     }
 
     @Test
@@ -106,11 +109,22 @@ public class ObjectiveIntegrationTest {
         objective.removeEntry("holder");
         resetCollector.assertSingle(packet -> assertEquals("holder", packet.owner()));
 
+        resetCollector = connection.trackIncoming(ResetScorePacket.class);
+        objective.removeEntry("missing");
+        resetCollector.assertEmpty();
+
         var objectiveCollector = connection.trackIncoming(ScoreboardObjectivePacket.class);
         objective.setDisplayName(Component.text("Updated"));
         objectiveCollector.assertSingle(packet -> {
             assertEquals(2, packet.mode());
             assertEquals(Component.text("Updated"), packet.objectiveValue());
+        });
+
+        objectiveCollector = connection.trackIncoming(ScoreboardObjectivePacket.class);
+        objective.setRenderType(RenderType.HEARTS);
+        objectiveCollector.assertSingle(packet -> {
+            assertEquals(2, packet.mode());
+            assertEquals(RenderType.HEARTS, packet.type());
         });
     }
 
@@ -127,7 +141,11 @@ public class ObjectiveIntegrationTest {
         player.setDisplayedObjective(DisplaySlot.SIDEBAR, objective);
         player.setDisplayedObjective(DisplaySlot.PLAYER_LIST, objective);
         objectiveCollector.assertSingle(packet -> assertEquals(0, packet.mode()));
-        displayCollector.assertCount(2);
+
+        var displays = displayCollector.collect();
+        assertEquals(2, displays.size());
+        assertEquals(DisplaySlot.SIDEBAR, displays.get(0).position());
+        assertEquals(DisplaySlot.PLAYER_LIST, displays.get(1).position());
 
         objectiveCollector = connection.trackIncoming(ScoreboardObjectivePacket.class);
         displayCollector = connection.trackIncoming(DisplayScoreboardPacket.class);
@@ -155,13 +173,25 @@ public class ObjectiveIntegrationTest {
         Objective second = Objective.create("second");
         player.setDisplayedObjective(DisplaySlot.SIDEBAR, first);
 
-        var objectiveCollector = connection.trackIncoming(ScoreboardObjectivePacket.class);
+        var collector = connection.trackIncoming();
         player.setDisplayedObjective(DisplaySlot.SIDEBAR, second);
         assertFalse(first.isViewer(player));
         assertTrue(second.isViewer(player));
-        objectiveCollector.assertCount(2);
-        objectiveCollector = connection.trackIncoming(ScoreboardObjectivePacket.class);
-        objectiveCollector.assertEmpty();
+
+        var packets = collector.collect();
+        assertEquals(3, packets.size());
+
+        var creation = assertInstanceOf(ScoreboardObjectivePacket.class, packets.get(0));
+        assertEquals("second", creation.objectiveName());
+        assertEquals(0, creation.mode());
+
+        var display = assertInstanceOf(DisplayScoreboardPacket.class, packets.get(1));
+        assertEquals(DisplaySlot.SIDEBAR, display.position());
+        assertEquals("second", display.scoreName());
+
+        var destruction = assertInstanceOf(ScoreboardObjectivePacket.class, packets.get(2));
+        assertEquals("first", destruction.objectiveName());
+        assertEquals(1, destruction.mode());
     }
 
     @Test
@@ -179,5 +209,6 @@ public class ObjectiveIntegrationTest {
         assertFalse(objective.isViewer(player));
         assertTrue(objective.getViewers().isEmpty());
         assertNull(player.getDisplayedObjective(DisplaySlot.SIDEBAR));
+        assertNull(player.getDisplayedObjective(DisplaySlot.BELOW_NAME));
     }
 }

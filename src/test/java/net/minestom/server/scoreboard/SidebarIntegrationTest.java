@@ -2,6 +2,7 @@ package net.minestom.server.scoreboard;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.network.packet.server.play.DisplayScoreboardPacket;
 import net.minestom.server.network.packet.server.play.ResetScorePacket;
 import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
 import net.minestom.server.network.packet.server.play.UpdateScorePacket;
@@ -10,6 +11,8 @@ import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,20 +32,32 @@ public class SidebarIntegrationTest {
         var scoreCollector = connection.trackIncoming(UpdateScorePacket.class);
         sidebar.update(Component.text("a"), Component.text("b"), Component.text("c"));
         assertEquals(List.of(Component.text("a"), Component.text("b"), Component.text("c")), sidebar.getLines());
+
         var packets = scoreCollector.collect();
         assertEquals(3, packets.size());
-        assertEquals(Component.text("a"), packets.get(0).displayName());
+        assertEquals(
+                List.of(Component.text("a"), Component.text("b"), Component.text("c")),
+                packets.stream().map(UpdateScorePacket::displayName).toList()
+        );
         assertTrue(packets.get(0).score() > packets.get(1).score());
         assertTrue(packets.get(1).score() > packets.get(2).score());
+        final String secondLineHolder = packets.get(1).entityName();
 
         scoreCollector = connection.trackIncoming(UpdateScorePacket.class);
         sidebar.update(Component.text("a"), Component.text("updated"), Component.text("c"));
-        scoreCollector.assertSingle(packet -> assertEquals(Component.text("updated"), packet.displayName()));
+        scoreCollector.assertSingle(packet -> {
+            assertEquals(Component.text("updated"), packet.displayName());
+            assertEquals(secondLineHolder, packet.entityName());
+        });
 
         scoreCollector = connection.trackIncoming(UpdateScorePacket.class);
         sidebar.setLine(0, Component.text("first"));
         assertEquals(Component.text("first"), sidebar.getLines().getFirst());
         scoreCollector.assertSingle(packet -> assertEquals(Component.text("first"), packet.displayName()));
+
+        scoreCollector = connection.trackIncoming(UpdateScorePacket.class);
+        sidebar.update(sidebar.getLines());
+        scoreCollector.assertEmpty();
     }
 
     @Test
@@ -53,11 +68,15 @@ public class SidebarIntegrationTest {
 
         Sidebar sidebar = Sidebar.create(Component.text("Title"));
         sidebar.addViewer(player);
+
+        var scoreCollector = connection.trackIncoming(UpdateScorePacket.class);
         sidebar.update(Component.text("a"), Component.text("b"), Component.text("c"));
+        var holders = scoreCollector.collect().stream().map(UpdateScorePacket::entityName).toList();
 
         var resetCollector = connection.trackIncoming(ResetScorePacket.class);
         sidebar.update(Component.text("a"));
-        resetCollector.assertCount(2);
+        var removed = resetCollector.collect().stream().map(ResetScorePacket::owner).collect(Collectors.toSet());
+        assertEquals(Set.of(holders.get(1), holders.get(2)), removed);
         assertEquals(1, sidebar.getLines().size());
         assertEquals(1, sidebar.getObjective().getEntries().size());
     }
@@ -71,16 +90,24 @@ public class SidebarIntegrationTest {
 
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 40, 0));
-        var objectiveCollector = connection.trackIncoming(ScoreboardObjectivePacket.class);
-        var scoreCollector = connection.trackIncoming(UpdateScorePacket.class);
+        var collector = connection.trackIncoming();
         sidebar.addViewer(player);
 
-        objectiveCollector.assertSingle(packet -> {
-            assertEquals(0, packet.mode());
-            assertEquals(Component.text("Title"), packet.objectiveValue());
-            assertEquals(NumberFormat.blank(), packet.numberFormat());
-        });
-        scoreCollector.assertCount(3);
+        var packets = collector.collect();
+        assertEquals(5, packets.size());
+
+        var creation = assertInstanceOf(ScoreboardObjectivePacket.class, packets.getFirst());
+        assertEquals(0, creation.mode());
+        assertEquals(Component.text("Title"), creation.objectiveValue());
+        assertEquals(NumberFormat.blank(), creation.numberFormat());
+
+        var contents = packets.subList(1, 4).stream()
+                .map(packet -> assertInstanceOf(UpdateScorePacket.class, packet).displayName())
+                .collect(Collectors.toSet());
+        assertEquals(Set.of(Component.text("a"), Component.text("b"), Component.text("c")), contents);
+
+        var display = assertInstanceOf(DisplayScoreboardPacket.class, packets.getLast());
+        assertEquals(DisplaySlot.SIDEBAR, display.position());
     }
 
     @Test
@@ -92,17 +119,18 @@ public class SidebarIntegrationTest {
         Sidebar first = Sidebar.create(Component.text("First"));
         Sidebar second = Sidebar.create(Component.text("Second"));
 
-        first.addViewer(player);
+        assertTrue(first.addViewer(player));
+        assertFalse(first.addViewer(player));
         assertTrue(first.isViewer(player));
 
-        second.addViewer(player);
+        assertTrue(second.addViewer(player));
         assertFalse(first.isViewer(player));
         assertTrue(second.isViewer(player));
 
-        first.removeViewer(player);
+        assertFalse(first.removeViewer(player));
         assertTrue(second.isViewer(player));
 
-        second.removeViewer(player);
+        assertTrue(second.removeViewer(player));
         assertFalse(second.isViewer(player));
         assertNull(player.getDisplayedObjective(DisplaySlot.SIDEBAR));
     }
@@ -114,6 +142,7 @@ public class SidebarIntegrationTest {
                 .mapToObj(i -> (Component) Component.text(i))
                 .toList();
         assertThrows(IllegalArgumentException.class, () -> sidebar.update(lines));
+        assertTrue(sidebar.getLines().isEmpty());
 
         sidebar.update(lines.subList(0, Sidebar.MAX_LINES));
         assertEquals(Sidebar.MAX_LINES, sidebar.getLines().size());
