@@ -43,8 +43,6 @@ import static net.minestom.server.instance.Chunk.CHUNK_SIZE_Z;
 
 public class AnvilLoader implements ChunkLoader {
     private final static Logger LOGGER = LoggerFactory.getLogger(AnvilLoader.class);
-    private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
-    private final static int PLAINS_ID = BIOME_REGISTRY.getId(Biome.PLAINS);
     private static final CompoundBinaryTag[] BLOCK_STATE_ID_2_OBJECT_CACHE = new CompoundBinaryTag[Block.statesCount()];
 
     private final ReentrantLock fileCreationLock = new ReentrantLock();
@@ -224,7 +222,7 @@ public class AnvilLoader implements ChunkLoader {
             {   // Biomes
                 final CompoundBinaryTag biomesTag = sectionData.getCompound("biomes");
                 final ListBinaryTag biomePaletteTag = biomesTag.getList("palette", BinaryTagTypes.STRING);
-                int[] convertedBiomePalette = loadBiomePalette(biomePaletteTag);
+                int[] convertedBiomePalette = loadBiomePalette(chunk.getInstance().registries().biome(), biomePaletteTag);
                 if (convertedBiomePalette.length == 1) {
                     // One solid block, no need to check the data
                     section.biomePalette().fill(convertedBiomePalette[0]);
@@ -286,13 +284,13 @@ public class AnvilLoader implements ChunkLoader {
         return convertedPalette;
     }
 
-    private int[] loadBiomePalette(ListBinaryTag paletteTag) {
+    private int[] loadBiomePalette(DynamicRegistry<Biome> biomeRegistry, ListBinaryTag paletteTag) {
         final int length = paletteTag.size();
         int[] convertedPalette = new int[length];
         for (int i = 0; i < length; i++) {
             final String name = paletteTag.getString(i);
-            int biomeId = BIOME_REGISTRY.getId(RegistryKey.unsafeOf(name));
-            if (biomeId == -1) biomeId = PLAINS_ID;
+            int biomeId = biomeRegistry.getId(RegistryKey.unsafeOf(name));
+            if (biomeId == -1) biomeId = biomeRegistry.getId(Biome.PLAINS);
             convertedPalette[i] = biomeId;
         }
         return convertedPalette;
@@ -406,6 +404,7 @@ public class AnvilLoader implements ChunkLoader {
     }
 
     private void saveSectionData(Chunk chunk, CompoundBinaryTag.Builder chunkData) {
+        final DynamicRegistry<Biome> biomeRegistry = chunk.getInstance().registries().biome();
         final ListBinaryTag.Builder<CompoundBinaryTag> sections = ListBinaryTag.builder(BinaryTagTypes.COMPOUND);
         final ListBinaryTag.Builder<CompoundBinaryTag> blockEntities = ListBinaryTag.builder(BinaryTagTypes.COMPOUND);
 
@@ -470,7 +469,7 @@ public class AnvilLoader implements ChunkLoader {
                 }
                 // Retrieve biome data
                 if (section.biomePalette().singleValue() != -1) {
-                    final RegistryKey<Biome> biomeKey = MinecraftServer.getBiomeRegistry()
+                    final RegistryKey<Biome> biomeKey = biomeRegistry
                             .getKey(section.biomePalette().singleValue());
                     assert biomeKey != null;
                     final BinaryTag biomeName = StringBinaryTag.stringBinaryTag(biomeKey.key().asString());
@@ -478,7 +477,7 @@ public class AnvilLoader implements ChunkLoader {
                 } else {
                     section.biomePalette().getAll((x, y, z, value) -> {
                         int biomeIndex = x + y * 4 * 4 + z * 4;
-                        final RegistryKey<Biome> biomeKey = MinecraftServer.getBiomeRegistry().getKey(value);
+                        final RegistryKey<Biome> biomeKey = biomeRegistry.getKey(value);
                         assert biomeKey != null;
                         final BinaryTag biomeName = StringBinaryTag.stringBinaryTag(biomeKey.key().asString());
                         int biomePaletteIndex = biomePalette.indexOf(biomeName);

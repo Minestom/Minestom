@@ -71,12 +71,27 @@ tasks.register<CheckAbiTask>("checkBinaryCompatibility") {
     group = "verification"
     description = "Checks binary compatibility against the baseline released version."
 
-    oldJar = layout.file(provider {
-        project.findProperty("baselineJarDir")?.toString()
-                ?.let { dir -> project.rootProject.file("$dir/${project.name}.jar") }
-                ?.takeIf { it.exists() }
+    val baselineJarDir = providers.gradleProperty("baselineJarDir")
+    oldJar = layout.file(baselineJarDir.flatMap { dir ->
+        val file = project.rootProject.layout.projectDirectory.file("$dir/${project.name}.jar")
+        providers.provider { if (file.asFile.exists()) file.asFile else null }
     })
 
     newJar = tasks.named<Jar>("jar").flatMap { it.archiveFile }
-}
 
+    rootProjectDir.set(project.rootProject.projectDir)
+    val javaExtension = project.extensions.findByType<JavaPluginExtension>() // No java plugin applied
+    if (javaExtension != null) {
+        sourceDirectories.from(javaExtension.sourceSets["main"].java.srcDirs)
+        project.configurations.findByName("compileClasspath")?.let { classpath.from(it) }
+
+        val javaToolchainService = project.extensions.findByType<JavaToolchainService>()
+        if (javaToolchainService != null) {
+            classpath.from(javaToolchainService.launcherFor(javaExtension.toolchain).map { launcher ->
+                project.fileTree(launcher.metadata.installationPath.dir("jmods")) {
+                    include("**/*.jmod")
+                }
+            })
+        }
+    }
+}
