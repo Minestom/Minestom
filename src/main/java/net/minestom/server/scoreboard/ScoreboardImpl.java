@@ -76,8 +76,7 @@ final class ScoreboardImpl implements Scoreboard {
     @Override
     public boolean isViewer(Player player, Position position) {
         Set<Position> positions = viewers.get(player);
-        if (positions != null) return positions.contains(position);
-        return false;
+        return positions != null && positions.contains(position);
     }
 
     @Override
