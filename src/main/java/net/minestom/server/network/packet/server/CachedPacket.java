@@ -32,6 +32,7 @@ public final class CachedPacket implements SendablePacket {
     }
 
     public void invalidate() {
+        if (!ServerFlag.CACHED_PACKET) return;
         this.packet = null;
     }
 
@@ -61,6 +62,7 @@ public final class CachedPacket implements SendablePacket {
     }
 
     public boolean isValid() {
+        if (!ServerFlag.CACHED_PACKET) return false;
         final SoftReference<FramedPacket> ref = packet;
         return ref != null && ref.get() != null;
     }
