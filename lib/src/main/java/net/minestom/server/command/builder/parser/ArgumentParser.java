@@ -65,6 +65,21 @@ public class ArgumentParser {
         ARGUMENT_FUNCTION_MAP.put(identifier, function);
     }
 
+    private static @Nullable Function<String, Argument<?>> lookupArgument(String argument) {
+        final String key = argument.toLowerCase(Locale.ROOT);
+        Function<String, Argument<?>> function = ARGUMENT_FUNCTION_MAP.get(key);
+        if (function != null) return function;
+        // Server-bound identifiers (entity, itemstack, ...) are registered by the framework's
+        // ServerArgumentType; format strings may run before any framework class loaded
+        // (e.g. static Command fields), so trigger it reflectively when present.
+        try {
+            Class.forName("net.minestom.server.command.builder.arguments.ServerArgumentType");
+        } catch (ClassNotFoundException e) {
+            return null; // :lib alone; identifier genuinely unknown
+        }
+        return ARGUMENT_FUNCTION_MAP.get(key);
+    }
+
     @ApiStatus.Experimental
     public static Argument<?>[] generate(String format) {
         List<Argument<?>> result = new ArrayList<>();
@@ -94,9 +109,10 @@ public class ArgumentParser {
                 } else if (c == '<') {
                     // Retrieve argument type
                     final String argument = builder.toString();
-                    argumentFunction = ARGUMENT_FUNCTION_MAP.get(argument.toLowerCase(Locale.ROOT));
+                    argumentFunction = lookupArgument(argument);
                     if (argumentFunction == null) {
-                        throw new IllegalArgumentException("error invalid argument name: " + argument);
+                        throw new IllegalArgumentException("error invalid argument name: " + argument
+                                + " (server-bound identifiers like <entity> or <itemstack> require the framework module)");
                     }
 
                     builder = new StringBuilder();

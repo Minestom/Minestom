@@ -45,8 +45,9 @@ Most user code compiles unchanged. The exhaustive list of API changes follows, w
    *Migration:* mechanical rename / static-import swap. All other `ArgumentType.*`
    factories are unchanged. Related: the `"entity"`, `"entities"`, `"player"`,
    `"players"`, `"itemstack"`, `"component"`, `"command"` identifiers of
-   `ArgumentType.generate(format)` are registered by the framework at class-load of
-   `ServerArgumentType`/server init — they are unavailable to `:lib`-only consumers.
+   `ArgumentType.generate(format)` are registered by the framework (loaded lazily on
+   first use, so format strings in static initializers keep working) — they are
+   unavailable to `:lib`-only consumers.
 
 ## Medium
 
@@ -88,7 +89,7 @@ Most user code compiles unchanged. The exhaustive list of API changes follows, w
     `Conditions.all/any/not` stay in lib.
 15. `ping.Status.PlayerInfo.onlineCount()` / `online(int)` → statics on
     `event.server.ServerListPingEvent`. `Status.builder()` no longer defaults
-    `playerInfo` to live online sampling (the default ping path still does).
+    `playerInfo` to the live online count (the default ping path still does).
 16. `ServerListPingType.OPEN_TO_LAN.getPingResponse(Status)` now throws; use the pure
     `getOpenToLANPing(Status, int port)` (the framework's `OpenToLAN` supplies its port).
 17. `AdventurePacketConvertor.createSoundPacket(Sound, Entity)` and
@@ -103,6 +104,8 @@ Most user code compiles unchanged. The exhaustive list of API changes follows, w
 
 - `AsyncUtils.runAsync` completes its future exceptionally instead of routing to
   `ExceptionManager` (which previously completed it normally after swallowing).
+  Fire-and-forget callers that ignore the returned future no longer see those
+  exceptions anywhere; chain `.exceptionally(...)` or inspect the future.
 - `MojangCrypt`, `RegistryData`, `SignatureValidator` log via local SLF4J loggers instead
   of `MinecraftServer.getExceptionManager()`/`LOGGER`.
 - Lib serialization (`tag.Serializers`, NBT component serializer, deprecated `ItemStack`

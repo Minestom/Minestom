@@ -106,6 +106,7 @@ public final class MinecraftServer implements MinecraftConstants {
             if (p != null) p.connection().invalidateTags();
         });
         ServerArgumentType.registerFormatArguments();
+        PacketVanilla.compressionThreshold(compressionThreshold);
         return process;
     }
 
