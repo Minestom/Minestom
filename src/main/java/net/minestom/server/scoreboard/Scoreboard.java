@@ -21,10 +21,10 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
      * @param value The value for the objective
      * @param type  The type for the objective
      * @return the creation objective packet
-     * @deprecated Use {@link #getCreationObjectivePacket(Component, ScoreboardObjectivePacket.Type)}
+     * @deprecated Use {@link #getCreationObjectivePacket(Component, RenderType)}
      */
     @Deprecated
-    default ScoreboardObjectivePacket getCreationObjectivePacket(String value, ScoreboardObjectivePacket.Type type) {
+    default ScoreboardObjectivePacket getCreationObjectivePacket(String value, RenderType type) {
         return this.getCreationObjectivePacket(Component.text(value), type);
     }
 
@@ -35,7 +35,7 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
      * @param type  The type for the objective
      * @return the creation objective packet
      */
-    default ScoreboardObjectivePacket getCreationObjectivePacket(Component value, ScoreboardObjectivePacket.Type type) {
+    default ScoreboardObjectivePacket getCreationObjectivePacket(Component value, RenderType type) {
         return new ScoreboardObjectivePacket(getObjectiveName(), (byte) 0, value, type, null);
     }
 

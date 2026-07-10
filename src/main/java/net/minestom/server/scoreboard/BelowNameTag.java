@@ -44,7 +44,7 @@ public class BelowNameTag implements Scoreboard {
      */
     public BelowNameTag(String name, Component value) {
         this.objectiveName = BELOW_NAME_TAG_PREFIX + name;
-        this.scoreboardObjectivePacket = this.getCreationObjectivePacket(value, ScoreboardObjectivePacket.Type.INTEGER);
+        this.scoreboardObjectivePacket = this.getCreationObjectivePacket(value, RenderType.INTEGER);
     }
 
     @Override

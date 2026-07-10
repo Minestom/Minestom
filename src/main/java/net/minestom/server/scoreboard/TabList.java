@@ -2,7 +2,6 @@ package net.minestom.server.scoreboard;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
 
 import java.util.Collections;
 import java.util.Set;
@@ -22,9 +21,9 @@ public class TabList implements Scoreboard {
     private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
     private final String objectiveName;
 
-    private ScoreboardObjectivePacket.Type type;
+    private RenderType type;
 
-    public TabList(String name, ScoreboardObjectivePacket.Type type) {
+    public TabList(String name, RenderType type) {
         this.objectiveName = TAB_LIST_PREFIX + name;
 
         this.type = type;
@@ -35,7 +34,7 @@ public class TabList implements Scoreboard {
      *
      * @return the scoreboard objective type
      */
-    public ScoreboardObjectivePacket.Type getType() {
+    public RenderType getType() {
         return type;
     }
 
@@ -44,7 +43,7 @@ public class TabList implements Scoreboard {
      *
      * @param type The new type for the objective
      */
-    public void setType(ScoreboardObjectivePacket.Type type) {
+    public void setType(RenderType type) {
         this.type = type;
     }
 
