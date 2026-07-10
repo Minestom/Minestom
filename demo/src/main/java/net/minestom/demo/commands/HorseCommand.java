@@ -6,7 +6,7 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.condition.Conditions;
+import net.minestom.server.command.builder.condition.SenderConditions;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
@@ -21,7 +21,7 @@ public class HorseCommand extends Command {
 
     public HorseCommand() {
         super("horse");
-        setCondition(Conditions::playerOnly);
+        setCondition(SenderConditions::playerOnly);
         setDefaultExecutor(this::defaultExecutor);
         var babyArg = ArgumentType.Boolean("baby");
         var markingArg = ArgumentType.Enum("marking", HorseMeta.Marking.class).setFormat(ArgumentEnum.Format.LOWER_CASED);

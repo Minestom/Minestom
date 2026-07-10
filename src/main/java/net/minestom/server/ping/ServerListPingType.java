@@ -3,10 +3,7 @@ package net.minestom.server.ping;
 import com.google.gson.JsonObject;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Transcoder;
-import net.minestom.server.event.server.ServerListPingEvent;
-import net.minestom.server.extras.lan.OpenToLAN;
 
 import java.util.function.Function;
 
@@ -14,7 +11,7 @@ import java.util.function.Function;
  * An enum containing the different types of server list ping responses.
  *
  * @see <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Server_List_Ping">the Minecraft Wiki</a>
- * @see ServerListPingEvent
+ * @see net.minestom.server.event.server.ServerListPingEvent
  */
 public enum ServerListPingType {
     /**
@@ -38,11 +35,16 @@ public enum ServerListPingType {
     LEGACY_UNVERSIONED(data -> getLegacyPingResponse(data, false)),
 
     /**
-     * The ping that is sent when {@link OpenToLAN} is enabled and sending packets.
+     * The ping that is sent when Open to LAN is enabled and sending packets.
      * Only the description formatted as a legacy string is sent.
      * Ping events with this ping version are <b>not</b> cancellable.
+     * <p>
+     * A LAN ping requires the server port, which is a framework concern; build the response with
+     * {@link #getOpenToLANPing(Status, int)} instead of {@link #getPingResponse(Status)}.
      */
-    OPEN_TO_LAN(ServerListPingType::getOpenToLANPing);
+    OPEN_TO_LAN(status -> {
+        throw new UnsupportedOperationException("OPEN_TO_LAN responses require the server port; use ServerListPingType.getOpenToLANPing(Status, int)");
+    });
 
     private final Function<Status, String> pingResponseCreator;
 
@@ -66,14 +68,14 @@ public enum ServerListPingType {
     private static final LegacyComponentSerializer SECTION = LegacyComponentSerializer.legacySection();
 
     /**
-     * Creates a ping sent when the server is sending {@link OpenToLAN} packets.
+     * Creates a ping sent when the server is sending Open to LAN packets.
      *
      * @param status the response data
+     * @param port   the port to advertise
      * @return the ping
-     * @see OpenToLAN
      */
-    public static String getOpenToLANPing(Status status) {
-        return String.format(LAN_PING_FORMAT, SECTION.serialize(status.description()), MinecraftServer.getServer().getPort());
+    public static String getOpenToLANPing(Status status, int port) {
+        return String.format(LAN_PING_FORMAT, SECTION.serialize(status.description()), port);
     }
 
     /**

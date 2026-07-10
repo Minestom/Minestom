@@ -1,16 +1,13 @@
 package net.minestom.server.potion;
 
-import net.minestom.server.entity.Entity;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
-import net.minestom.server.network.packet.server.play.EntityEffectPacket;
-import net.minestom.server.network.packet.server.play.RemoveEntityEffectPacket;
 
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 /**
- * Represents a potion effect that can be added to an {@link net.minestom.server.entity.Entity}.
+ * Represents a potion effect that can be added to an entity.
  *
  * @param effect    the potion effect
  * @param amplifier the amplifier starting at 0 (level 1)
@@ -112,28 +109,6 @@ public record Potion(PotionEffect effect, int amplifier, int duration, byte flag
 
     public boolean hasBlend() {
         return (flags & BLEND_FLAG) == BLEND_FLAG;
-    }
-
-    /**
-     * Sends a packet that a potion effect has been applied to the entity.
-     * <p>
-     * Used internally by {@link net.minestom.server.entity.Player#addEffect(Potion)}
-     *
-     * @param entity the entity to add the effect to
-     */
-    public void sendAddPacket(Entity entity) {
-        entity.sendPacketToViewersAndSelf(new EntityEffectPacket(entity.getEntityId(), this));
-    }
-
-    /**
-     * Sends a packet that a potion effect has been removed from the entity.
-     * <p>
-     * Used internally by {@link net.minestom.server.entity.Player#removeEffect(PotionEffect)}
-     *
-     * @param entity the entity to remove the effect from
-     */
-    public void sendRemovePacket(Entity entity) {
-        entity.sendPacketToViewersAndSelf(new RemoveEntityEffectPacket(entity.getEntityId(), effect));
     }
 
     public static final NetworkBuffer.Type<Potion> NETWORK_TYPE = NetworkBufferTemplate.template(

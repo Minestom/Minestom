@@ -4,7 +4,7 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.block.BlockDataHandler;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.Registries;
@@ -25,7 +25,7 @@ import static net.minestom.server.network.NetworkBuffer.NBT_COMPOUND;
  *
  * <p>Note: To match the vanilla behavior of comparing block NBT, the NBT predicate
  * will ONLY match data which would be sent to the client eg with
- * {@link BlockHandler#getBlockEntityTags()}. This is relevant because this structure
+ * {@link BlockDataHandler#getBlockEntityTags()}. This is relevant because this structure
  * is used for matching adventure mode blocks and must line up with client prediction.</p>
  *
  * @param blocks The block names/tags to match.

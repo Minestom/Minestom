@@ -7,6 +7,7 @@ import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockDataHandler;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.instance.heightmap.HeightmapType;
@@ -97,7 +98,7 @@ public class DynamicChunk extends Chunk {
 
         final int index = CoordConversion.chunkBlockIndex(x, y, z);
         // Handler
-        final BlockHandler handler = block.handler();
+        final BlockDataHandler handler = block.handler();
         final Block lastCachedBlock;
         if (handler != null || block.hasNbt() || block.registry().isBlockEntity()) {
             lastCachedBlock = this.entries.put(index, block);
@@ -112,16 +113,16 @@ public class DynamicChunk extends Chunk {
         }
 
         // Update block handlers
-        if (lastCachedBlock != null && lastCachedBlock.handler() != null) {
+        if (lastCachedBlock != null && lastCachedBlock.handler() instanceof BlockHandler lastHandler) {
             // Previous destroy
-            lastCachedBlock.handler().onDestroy(Objects.requireNonNullElseGet(destroy,
+            lastHandler.onDestroy(Objects.requireNonNullElseGet(destroy,
                     () -> new BlockHandler.Destroy(lastCachedBlock, block, instance, CoordConversion.chunkBlockRelativeGetGlobal(sectionRelativeX, y, sectionRelativeZ, chunkX, chunkZ))));
         }
-        if (handler != null) {
+        if (handler instanceof BlockHandler blockHandler) {
             // New placement
             final Block finalBlock = block;
             final Point placePoint = CoordConversion.chunkBlockRelativeGetGlobal(sectionRelativeX, y, sectionRelativeZ, chunkX, chunkZ);
-            handler.onPlace(Objects.requireNonNullElseGet(placement,
+            blockHandler.onPlace(Objects.requireNonNullElseGet(placement,
                     () -> new BlockHandler.Placement(finalBlock, Objects.requireNonNullElseGet(lastCachedBlock, () -> this.getBlock(placePoint, Condition.TYPE)), instance, placePoint)));
         }
 
@@ -184,8 +185,7 @@ public class DynamicChunk extends Chunk {
         tickableMap.int2ObjectEntrySet().fastForEach(entry -> {
             final int index = entry.getIntKey();
             final Block block = entry.getValue();
-            final BlockHandler handler = block.handler();
-            if (handler == null) return;
+            if (!(block.handler() instanceof BlockHandler handler)) return;
             final Point blockPosition = CoordConversion.chunkBlockIndexGetGlobal(index, chunkX, chunkZ);
             handler.tick(new BlockHandler.Tick(block, instance, blockPosition));
         });

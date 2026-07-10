@@ -3,7 +3,6 @@ package net.minestom.server.utils.block;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.Entity;
 
 import java.util.ArrayDeque;
 import java.util.Iterator;
@@ -157,33 +156,6 @@ public class BlockIterator implements Iterator<Point> {
 
     public BlockIterator(Pos pos) {
         this(pos, 0f);
-    }
-
-    /**
-     * Constructs the BlockIterator.
-     * <p>
-     * This considers all blocks as 1x1x1 in size.
-     *
-     * @param entity      Information from the entity is used to set up the trace
-     * @param maxDistance This is the maximum distance in blocks for the
-     *                    trace. Setting this value above 140 may lead to problems with
-     *                    unloaded chunks. A value of 0 indicates no limit
-     */
-
-    public BlockIterator(Entity entity, int maxDistance) {
-        this(entity.getPosition(), entity.getEyeHeight(), maxDistance);
-    }
-
-    /**
-     * Constructs the BlockIterator.
-     * <p>
-     * This considers all blocks as 1x1x1 in size.
-     *
-     * @param entity Information from the entity is used to set up the trace
-     */
-
-    public BlockIterator(Entity entity) {
-        this(entity, 0);
     }
 
     /**

@@ -1,7 +1,6 @@
 package net.minestom.server.collision;
 
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.block.BlockFace;
 
 public interface Shape {
@@ -41,11 +40,12 @@ public interface Shape {
     /**
      * Used to know if this {@link BoundingBox} intersects with the bounding box of an entity.
      *
-     * @param entity the entity to check the bounding box
+     * @param entityPosition    the position of the entity to check
+     * @param entityBoundingBox the bounding box of the entity to check
      * @return true if this bounding box intersects with the entity, false otherwise
      */
-    default boolean intersectEntity(Point src, Entity entity) {
-        return intersectBox(src.sub(entity.getPosition()), entity.getBoundingBox());
+    default boolean intersectEntity(Point src, Point entityPosition, BoundingBox entityBoundingBox) {
+        return intersectBox(src.sub(entityPosition), entityBoundingBox);
     }
 
     /**

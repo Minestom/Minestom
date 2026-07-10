@@ -5,7 +5,7 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.condition.Conditions;
+import net.minestom.server.command.builder.condition.SenderConditions;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
@@ -18,7 +18,7 @@ public class ShootCommand extends Command {
 
     public ShootCommand() {
         super("shoot");
-        setCondition(Conditions::playerOnly);
+        setCondition(SenderConditions::playerOnly);
         setDefaultExecutor(this::defaultExecutor);
         var typeArg = ArgumentType.Word("type").from("default", "spectral", "colored");
         setArgumentCallback(this::onTypeError, typeArg);

@@ -62,8 +62,7 @@ public class BlockPlacementListener {
         EventDispatcher.call(playerBlockInteractEvent);
         boolean blockUse = playerBlockInteractEvent.isBlockingItemUse();
         if (!playerBlockInteractEvent.isCancelled()) {
-            final var handler = interactedBlock.handler();
-            if (handler != null) {
+            if (interactedBlock.handler() instanceof BlockHandler handler) {
                 blockUse |= !handler.onInteract(new BlockHandler.Interaction(interactedBlock, instance, blockFace, blockPosition, cursorPosition, player, hand));
             }
         }

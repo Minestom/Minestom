@@ -2,7 +2,6 @@ package net.minestom.server.instance;
 
 import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Entity;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
@@ -66,16 +65,6 @@ public record WorldBorder(double diameter, double centerX, double centerZ, int w
         double radius = diameter / 2;
         return point.x() <= centerX + radius && point.x() >= centerX - radius &&
                 point.z() <= centerZ + radius && point.z() >= centerZ - radius;
-    }
-
-    /**
-     * Used to know if an entity is located inside the world border or not.
-     *
-     * @param entity the entity to check
-     * @return true if {@code entity} is inside the world border, false otherwise
-     */
-    public boolean inBounds(Entity entity) {
-        return inBounds(entity.getPosition());
     }
 
     /**

@@ -7,7 +7,7 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.condition.Conditions;
+import net.minestom.server.command.builder.condition.SenderConditions;
 import net.minestom.server.entity.Player;
 import net.minestom.server.scoreboard.NumberFormat;
 import net.minestom.server.scoreboard.Sidebar;
@@ -26,7 +26,7 @@ public class SidebarCommand extends Command {
         addLine("NULL ", null);
 
         setDefaultExecutor((source, args) -> source.sendMessage(Component.text("Unknown syntax (note: title must be quoted)")));
-        setCondition(Conditions::playerOnly);
+        setCondition(SenderConditions::playerOnly);
 
         var option = ArgumentType.Word("option").from("add-line", "remove-line", "set-title", "toggle", "update-content", "update-score");
         var content = ArgumentType.String("content").setDefaultValue("");

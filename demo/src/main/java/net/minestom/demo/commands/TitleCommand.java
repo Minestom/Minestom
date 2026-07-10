@@ -6,14 +6,14 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.condition.Conditions;
+import net.minestom.server.command.builder.condition.SenderConditions;
 import net.minestom.server.entity.Player;
 
 public class TitleCommand extends Command {
     public TitleCommand() {
         super("title");
         setDefaultExecutor((source, args) -> source.sendMessage(Component.text("Unknown syntax (note: title must be quoted)")));
-        setCondition(Conditions::playerOnly);
+        setCondition(SenderConditions::playerOnly);
 
         var content = ArgumentType.String("content");
 

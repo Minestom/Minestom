@@ -3,13 +3,13 @@ package net.minestom.demo.commands;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.sound.SoundEvent;
+import net.minestom.server.utils.PacketSendingUtils;
 
 public class TestCommand extends Command {
 
@@ -22,7 +22,7 @@ public class TestCommand extends Command {
 
         setDefaultExecutor((sender, context) -> {
             sender.playSound(Sound.sound(Key.key("item.trumpet.doot"), Sound.Source.PLAYER, 1, 1));
-            AdventurePacketConvertor.createSoundPacket(Sound.sound(Key.key(SoundEvent.BLOCK_ANVIL_HIT.name()), Sound.Source.HOSTILE, 1, 1), (Player) sender);
+            PacketSendingUtils.createSoundPacket(Sound.sound(Key.key(SoundEvent.BLOCK_ANVIL_HIT.name()), Sound.Source.HOSTILE, 1, 1), (Player) sender);
         });
         addSyntax((sender, context) -> System.out.println("executed"), block);
 

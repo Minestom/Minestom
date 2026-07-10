@@ -1,12 +1,18 @@
 package net.minestom.server.event.server;
 
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.AsyncEvent;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.ping.ServerListPingType;
 import net.minestom.server.ping.Status;
+import net.minestom.server.utils.identity.NamedAndIdentified;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -36,9 +42,39 @@ public class ServerListPingEvent implements CancellableEvent, AsyncEvent {
      * @param type       the ping type to respond with
      */
     public ServerListPingEvent(@Nullable PlayerConnection connection, ServerListPingType type) {
-        this.status = Status.builder().build();
+        this.status = Status.builder().playerInfo(onlineCount()).build();
         this.connection = connection;
         this.type = type;
+    }
+
+    /**
+     * Builds a {@link Status.PlayerInfo} reflecting the current online player count with no sample.
+     *
+     * @return the player info
+     */
+    public static Status.PlayerInfo onlineCount() {
+        final Collection<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
+        return new Status.PlayerInfo(players.size(), players.size() + 1, List.of());
+    }
+
+    /**
+     * Builds a {@link Status.PlayerInfo} reflecting the current online player count, along with a
+     * sample of online players (respecting {@code allowServerListings}).
+     *
+     * @param maxSamples the maximum number of player entries to include in the sample
+     * @return the player info
+     */
+    public static Status.PlayerInfo online(int maxSamples) {
+        final Collection<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
+        final List<NamedAndIdentified> samples = new ArrayList<>(Math.min(maxSamples, players.size()));
+        for (final Player player : players) {
+            if (!player.getSettings().allowServerListings())
+                continue;
+            samples.add(player);
+            if (samples.size() >= maxSamples)
+                break;
+        }
+        return new Status.PlayerInfo(players.size(), players.size() + 1, samples);
     }
 
     /**

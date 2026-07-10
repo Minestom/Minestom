@@ -689,8 +689,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 for (int z = minZ; z <= maxZ; z++) {
                     final Block block = cache.getBlock(x, y, z, Block.Getter.Condition.CACHED);
                     if (block == null) continue;
-                    final BlockHandler handler = block.handler();
-                    if (handler != null) {
+                    if (block.handler() instanceof BlockHandler handler) {
                         // Move a small amount towards the entity. If the entity is within 0.01 blocks of the block, touch will trigger
                         Vec blockPos = new Vec(x, y, z);
                         Point blockEntityVector = (blockPos.sub(position)).normalize().mul(0.01);
@@ -712,7 +711,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             // Remove if the potion should be expired
             if (getAliveTicks() >= timedPotion.startingTicks() + duration) {
                 // Send the packet that the potion should no longer be applied
-                timedPotion.potion().sendRemovePacket(this);
+                sendPotionRemovePacket(timedPotion.potion());
                 EventDispatcher.call(new EntityPotionRemoveEvent(this, timedPotion.potion()));
                 return true;
             }
@@ -1489,7 +1488,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         EventDispatcher.callCancellable(new EntityPotionAddEvent(this, potion), () -> {
             removeEffect(potion.effect());
             this.effects.add(new TimedPotion(potion, getAliveTicks()));
-            potion.sendAddPacket(this);
+            sendPotionAddPacket(potion);
         });
     }
 
@@ -1501,7 +1500,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     public void removeEffect(PotionEffect effect) {
         this.effects.removeIf(timedPotion -> {
             if (timedPotion.potion().effect() == effect) {
-                timedPotion.potion().sendRemovePacket(this);
+                sendPotionRemovePacket(timedPotion.potion());
                 EventDispatcher.call(new EntityPotionRemoveEvent(this, timedPotion.potion()));
                 return true;
             }
@@ -1544,10 +1543,28 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public void clearEffects() {
         for (TimedPotion timedPotion : effects) {
-            timedPotion.potion().sendRemovePacket(this);
+            sendPotionRemovePacket(timedPotion.potion());
             EventDispatcher.call(new EntityPotionRemoveEvent(this, timedPotion.potion()));
         }
         this.effects.clear();
+    }
+
+    /**
+     * Sends a packet that a potion effect has been applied to this entity.
+     *
+     * @param potion the potion to add
+     */
+    private void sendPotionAddPacket(Potion potion) {
+        sendPacketToViewersAndSelf(new EntityEffectPacket(getEntityId(), potion));
+    }
+
+    /**
+     * Sends a packet that a potion effect has been removed from this entity.
+     *
+     * @param potion the potion to remove
+     */
+    private void sendPotionRemovePacket(Potion potion) {
+        sendPacketToViewersAndSelf(new RemoveEntityEffectPacket(getEntityId(), potion.effect()));
     }
 
     /**
@@ -1781,7 +1798,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
 
         List<Point> blocks = new ArrayList<>();
-        var it = new BlockIterator(this, maxDistance);
+        var it = new BlockIterator(getPosition(), getEyeHeight(), maxDistance);
         while (it.hasNext()) {
             final Point position = it.next();
             if (!instance.getBlock(position).isAir()) blocks.add(position);

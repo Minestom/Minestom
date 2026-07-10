@@ -3,6 +3,7 @@ package net.minestom.server.ping;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.MainHand;
+import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.player.ClientSettings;
 import net.minestom.testing.Env;
@@ -31,7 +32,7 @@ public class StatusIntegrationTest {
                 ClientSettings.ParticleSetting.ALL
         ));
 
-        var unlimitedInfo = Status.PlayerInfo.online(20);
+        var unlimitedInfo = ServerListPingEvent.online(20);
         assertEquals(4, unlimitedInfo.maxPlayers());
         assertEquals(3, unlimitedInfo.onlinePlayers());
         assertEquals(2, unlimitedInfo.sample().size());
@@ -40,7 +41,7 @@ public class StatusIntegrationTest {
                 .anyMatch(entry -> entry.getUuid().equals(player3.getUuid()));
         assertFalse(containsHiddenPlayer);
 
-        var limitedInfo = Status.PlayerInfo.online(1);
+        var limitedInfo = ServerListPingEvent.online(1);
         assertEquals(1, limitedInfo.sample().size());
     }
 }

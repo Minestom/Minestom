@@ -7,7 +7,7 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentBoolean;
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
 import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeBlockPosition;
-import net.minestom.server.command.builder.condition.Conditions;
+import net.minestom.server.command.builder.condition.SenderConditions;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.batch.BatchOption;
@@ -15,6 +15,7 @@ import net.minestom.server.instance.batch.RelativeBlockBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.timer.TaskSchedule;
 import net.minestom.server.utils.location.RelativeVec;
+import net.minestom.server.utils.location.RelativeVecUtils;
 
 
 public class DebugGridCommand extends Command {
@@ -26,7 +27,7 @@ public class DebugGridCommand extends Command {
 
     public DebugGridCommand() {
         super("dg");
-        setCondition(Conditions::playerOnly);
+        setCondition(SenderConditions::playerOnly);
         addSyntax(this::execute, radius, center, replace);
     }
 
@@ -42,7 +43,7 @@ public class DebugGridCommand extends Command {
         }
 
         //noinspection ConstantConditions
-        relativeBlockBatch.apply(player.getInstance(), context.get(center).from(player), (inverse) -> {
+        relativeBlockBatch.apply(player.getInstance(), RelativeVecUtils.from(context.get(center), player), (inverse) -> {
             if (!replace) return;
             player.getInstance().scheduler().scheduleTask(() -> {
                 if (inverse == null) return;

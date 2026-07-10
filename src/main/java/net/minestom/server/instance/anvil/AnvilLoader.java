@@ -14,6 +14,7 @@ import net.minestom.server.instance.ChunkLoader;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockDataHandler;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.palette.Palettes;
 import net.minestom.server.registry.DynamicRegistry;
@@ -453,7 +454,7 @@ public class AnvilLoader implements ChunkLoader {
                         blockIndices[blockIndex] = blockPaletteIndex;
 
                         // Add block entity if present
-                        final BlockHandler handler = block.handler();
+                        final BlockDataHandler handler = block.handler();
                         final CompoundBinaryTag originalNBT = block.nbt();
                         if (originalNBT != null || handler != null) {
                             CompoundBinaryTag.Builder blockEntityTag = CompoundBinaryTag.builder();

@@ -971,7 +971,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
 
     public void playSoundExcept(@Nullable Player excludedPlayer, Sound sound, Sound.Emitter emitter) {
         if (emitter != Sound.Emitter.self()) {
-            ServerPacket packet = AdventurePacketConvertor.createSoundPacket(sound, emitter);
+            ServerPacket packet = PacketSendingUtils.createSoundPacket(sound, emitter);
             PacketSendingUtils.sendGroupedPacket(getPlayers(), packet, p -> p != excludedPlayer);
         } else {
             // if we're playing on self, we need to delegate to each audience member

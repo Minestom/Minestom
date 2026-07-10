@@ -2,7 +2,7 @@ package net.minestom.demo.commands;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.condition.Conditions;
+import net.minestom.server.command.builder.condition.SenderConditions;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 
@@ -12,7 +12,7 @@ public class DimensionCommand extends Command {
 
     public DimensionCommand() {
         super("dimensiontest");
-        setCondition(Conditions::playerOnly);
+        setCondition(SenderConditions::playerOnly);
 
         addSyntax((sender, context) -> {
             final Player player = (Player) sender;

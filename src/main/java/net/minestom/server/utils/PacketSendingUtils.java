@@ -2,13 +2,16 @@ package net.minestom.server.utils;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
+import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.CachedPacket;
@@ -84,6 +87,35 @@ public final class PacketSendingUtils {
 
     public static void broadcastPlayPacket(ServerPacket packet) {
         sendGroupedPacket(MinecraftServer.getConnectionManager().getOnlinePlayers(), packet);
+    }
+
+    /**
+     * Creates a sound effect packet from a sound and an emitter.<br>
+     * Random variation by default unless a seed is provided in the {@link Sound}.
+     *
+     * @param sound   the sound
+     * @param emitter the emitter, must be an {@link Entity}
+     * @return the sound packet
+     */
+    public static ServerPacket createSoundPacket(Sound sound, Sound.Emitter emitter) {
+        if (emitter == Sound.Emitter.self())
+            throw new IllegalArgumentException("you must replace instances of Emitter.self() before calling this method");
+        if (!(emitter instanceof Entity entity))
+            throw new IllegalArgumentException("you can only call this method with entities");
+        return AdventurePacketConvertor.createSoundPacket(sound, entity.getEntityId());
+    }
+
+    /**
+     * Creates an entity sound packet from an Adventure sound.
+     *
+     * @param sound  the sound
+     * @param entity the entity the sound is coming from
+     * @return the packet
+     * @deprecated Use {@link #createSoundPacket(Sound, Sound.Emitter)}
+     */
+    @Deprecated(forRemoval = true)
+    public static ServerPacket createEntitySoundPacket(Sound sound, Entity entity) {
+        return createSoundPacket(sound, entity);
     }
 
     private static SendablePacket groupedPacket(ServerPacket packet) {

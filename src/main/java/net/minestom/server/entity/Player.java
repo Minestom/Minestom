@@ -394,7 +394,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             experiencePickupCooldown.refreshLastUpdate(time);
             this.instance.getEntityTracker().nearbyEntities(position, expandedBoundingBox.width(),
                     EntityTracker.Target.EXPERIENCE_ORBS, experienceOrb -> {
-                        if (!expandedBoundingBox.intersectEntity(position, experienceOrb)) return;
+                        if (!expandedBoundingBox.intersectEntity(position, experienceOrb.getPosition(), experienceOrb.getBoundingBox())) return;
                         final PickupExperienceEvent pickupExperienceEvent = new PickupExperienceEvent(this, experienceOrb);
                         EventDispatcher.callCancellable(pickupExperienceEvent, () -> {
                             short experienceCount = pickupExperienceEvent.getExperienceCount(); // TODO give to player
@@ -945,9 +945,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     public void playSound(Sound sound, Sound.Emitter emitter) {
         final ServerPacket packet;
         if (emitter == Sound.Emitter.self()) {
-            packet = AdventurePacketConvertor.createSoundPacket(sound, this);
+            packet = PacketSendingUtils.createSoundPacket(sound, this);
         } else {
-            packet = AdventurePacketConvertor.createSoundPacket(sound, emitter);
+            packet = PacketSendingUtils.createSoundPacket(sound, emitter);
         }
         sendPacket(packet);
     }

@@ -7,10 +7,11 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
-import net.minestom.server.command.builder.condition.Conditions;
+import net.minestom.server.command.builder.condition.SenderConditions;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.*;
 import net.minestom.server.utils.location.RelativeVec;
+import net.minestom.server.utils.location.RelativeVecUtils;
 
 public class SummonCommand extends Command {
 
@@ -20,7 +21,7 @@ public class SummonCommand extends Command {
 
     public SummonCommand() {
         super("summon");
-        setCondition(Conditions::playerOnly);
+        setCondition(SenderConditions::playerOnly);
 
         entity = ArgumentType.EntityType("entity type");
         pos = ArgumentType.RelativeVec3("pos").setDefaultValue(() -> new RelativeVec(
@@ -38,7 +39,7 @@ public class SummonCommand extends Command {
     private void execute(CommandSender commandSender, CommandContext commandContext) {
         final Entity entity = commandContext.get(entityClass).instantiate(commandContext.get(this.entity));
         //noinspection ConstantConditions - One couldn't possibly execute a command without being in an instance
-        entity.setInstance(((Player) commandSender).getInstance(), commandContext.get(pos).fromSender(commandSender));
+        entity.setInstance(((Player) commandSender).getInstance(), RelativeVecUtils.fromSender(commandContext.get(pos), commandSender));
     }
 
     @SuppressWarnings("unused")

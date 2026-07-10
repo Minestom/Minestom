@@ -6,6 +6,7 @@ import net.minestom.server.command.builder.arguments.minecraft.ArgumentBlockStat
 import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeBlockPosition;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.utils.location.RelativeVecUtils;
 
 import static net.minestom.server.command.builder.arguments.ArgumentType.BlockState;
 import static net.minestom.server.command.builder.arguments.ArgumentType.RelativeBlockPosition;
@@ -24,7 +25,7 @@ public class SetBlockCommand extends Command {
             if (blockToPlace.stateId() == Block.GOLD_BLOCK.stateId())
                 blockToPlace = blockToPlace.withHandler(TestBlockHandler.INSTANCE);
 
-            player.getInstance().setBlock(context.get(position).from(player), blockToPlace);
+            player.getInstance().setBlock(RelativeVecUtils.from(context.get(position), player), blockToPlace);
         }, position, block);
     }
 }

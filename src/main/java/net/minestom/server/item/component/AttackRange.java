@@ -2,9 +2,7 @@ package net.minestom.server.item.component;
 
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
-import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.GameMode;
-import net.minestom.server.entity.Player;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 
@@ -33,20 +31,20 @@ public record AttackRange(
             "mob_factor", Codec.FLOAT.optional(1f), AttackRange::mobFactor,
             AttackRange::new);
 
-    public float effectiveMinReach(Entity entity) {
-        if (!(entity instanceof Player player))
+    public float effectiveMinReach(GameMode gameMode, boolean isPlayer) {
+        if (!isPlayer)
             return minReach * mobFactor;
-        return switch (player.getGameMode()) {
+        return switch (gameMode) {
             case SPECTATOR -> 0f;
             case CREATIVE -> minCreativeReach;
             default -> minReach;
         };
     }
 
-    public float effectiveMaxReach(Entity entity) {
-        if (!(entity instanceof Player player))
+    public float effectiveMaxReach(GameMode gameMode, boolean isPlayer) {
+        if (!isPlayer)
             return maxReach * mobFactor;
-        return player.getGameMode() == GameMode.CREATIVE
+        return gameMode == GameMode.CREATIVE
                 ? maxCreativeReach : maxReach;
     }
 }

@@ -4,7 +4,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.block.BlockDataHandler;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.Nullable;
@@ -90,7 +90,7 @@ public class BlockUtils {
     public static @Nullable CompoundBinaryTag extractClientNbt(Block block) {
         if (!block.registry().isBlockEntity()) return null;
         // Append handler tags
-        final BlockHandler handler = block.handler();
+        final BlockDataHandler handler = block.handler();
         final CompoundBinaryTag blockNbt = Objects.requireNonNullElseGet(block.nbt(), CompoundBinaryTag::empty);
         if (handler != null) {
             // Extract explicitly defined tags and keep the rest server-side

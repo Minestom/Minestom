@@ -1,17 +1,14 @@
 package net.minestom.server.utils.location;
 
-import net.minestom.server.command.CommandSender;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Player;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
 /**
- * Represents a location which can have fields relative to an {@link Entity} position.
+ * Represents a location which can have fields relative to an entity position.
  * <p>
  * Useful for parsing Vec2 or Vec3 types
  */
@@ -38,32 +35,6 @@ public record RelativeVec(Vec vec, CoordinateType coordinateType, boolean relati
     }
 
     /**
-     * Gets the location based on the relative fields.
-     *
-     * @param entity the entity to get the relative position from
-     * @return the location
-     */
-    public Vec from(@Nullable Entity entity) {
-        if (entity != null) {
-            return from(entity.getPosition());
-        } else {
-            return from(Pos.ZERO);
-        }
-    }
-
-    /**
-     * Shorthand for {@link #from(Pos)}
-     * If player uses their position otherwise, {@link Vec#ZERO}
-     *
-     * @param sender entity
-     * @return the position with any relativity
-     */
-    public Vec fromSender(@Nullable CommandSender sender) {
-        final var entityPosition = sender instanceof Player ? ((Player) sender).getPosition() : Pos.ZERO;
-        return from(entityPosition);
-    }
-
-    /**
      * Computes a view {@link Vec} based on the given point's yaw and pitch.
      * If no point is null, a default position {@link Pos#ZERO} is used.
      *
@@ -78,16 +49,6 @@ public record RelativeVec(Vec vec, CoordinateType coordinateType, boolean relati
         final double x = vec.x() + (relativeX ? absolute.yaw() : 0);
         final double z = vec.z() + (relativeZ ? absolute.pitch() : 0);
         return new Vec(x, 0, z);
-    }
-
-    /**
-     * Shorthand for {@link #fromView(Pos)}
-     * @param entity to get the position from, otherwise {@link Pos#ZERO}
-     * @return the view.
-     */
-    public Vec fromView(@Nullable Entity entity) {
-        final var entityPosition = entity != null ? entity.getPosition() : Pos.ZERO;
-        return fromView(entityPosition);
     }
 
     /**

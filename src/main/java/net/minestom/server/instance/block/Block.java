@@ -140,13 +140,13 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
     Block withNbt(@Nullable CompoundBinaryTag compound);
 
     /**
-     * Creates a new block with the specified {@link BlockHandler handler}.
+     * Creates a new block with the specified {@link BlockDataHandler handler}.
      *
      * @param handler the new block handler, null to remove
      * @return a new block with the specified handler
      */
     @Contract(pure = true)
-    Block withHandler(@Nullable BlockHandler handler);
+    Block withHandler(@Nullable BlockDataHandler handler);
 
     /**
      * Returns an unmodifiable view to the block nbt.
@@ -178,7 +178,7 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      * @return the block handler, null if not present
      */
     @Contract(pure = true)
-    @Nullable BlockHandler handler();
+    @Nullable BlockDataHandler handler();
 
     /**
      * Returns the block properties.

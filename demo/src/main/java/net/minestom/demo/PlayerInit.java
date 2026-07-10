@@ -34,8 +34,8 @@ import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockDataHandler;
 import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.predicate.BlockPredicate;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
@@ -379,7 +379,7 @@ public class PlayerInit {
             })
             .addListener(PlayerBlockPlaceEvent.class, event -> {
                 Block block = event.getBlock();
-                BlockHandler handler = block.handler();
+                BlockDataHandler handler = block.handler();
                 if (handler != null) return;
                 event.setBlock(event.getBlock().withHandler(MinecraftServer.getBlockManager().getHandler(block.key().asString())));
             })

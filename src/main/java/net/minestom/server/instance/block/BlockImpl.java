@@ -19,7 +19,7 @@ import java.util.*;
 record BlockImpl(RegistryData.BlockEntry registry,
                  long propertiesArray,
                  @Nullable CompoundBinaryTag nbt,
-                 @Nullable BlockHandler handler) implements Block {
+                 @Nullable BlockDataHandler handler) implements Block {
     /**
      * Number of bits used to store the index of a property value.
      * <p>
@@ -184,7 +184,7 @@ record BlockImpl(RegistryData.BlockEntry registry,
     }
 
     @Override
-    public Block withHandler(@Nullable BlockHandler handler) {
+    public Block withHandler(@Nullable BlockDataHandler handler) {
         return new BlockImpl(registry, propertiesArray, nbt, handler);
     }
 

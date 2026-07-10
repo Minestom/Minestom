@@ -2,10 +2,9 @@ package net.minestom.server.ping;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import net.minestom.server.MinecraftServer;
+import net.minestom.server.MinecraftConstants;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
-import net.minestom.server.entity.Player;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.validate.Check;
@@ -53,7 +52,7 @@ public record Status(
     }
 
     public record VersionInfo(String name, int protocolVersion) {
-        public static final VersionInfo DEFAULT = new VersionInfo(MinecraftServer.VERSION_NAME, MinecraftServer.PROTOCOL_VERSION);
+        public static final VersionInfo DEFAULT = new VersionInfo(MinecraftConstants.VERSION_NAME, MinecraftConstants.PROTOCOL_VERSION);
         public static final Codec<VersionInfo> CODEC = StructCodec.struct(
                 "name", Codec.STRING, VersionInfo::name,
                 "protocol", Codec.INT, VersionInfo::protocolVersion,
@@ -82,28 +81,6 @@ public record Status(
 
         public PlayerInfo(int onlinePlayers, int maxPlayers) {
             this(onlinePlayers, maxPlayers, List.of());
-        }
-
-        public static PlayerInfo onlineCount() {
-            final Collection<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
-            return new PlayerInfo(players.size(), players.size() + 1, List.of());
-        }
-
-        /**
-         * @param maxSamples The maximum number of player entries to include in the sample
-         * @return A {@link PlayerInfo} containing the online count, and a sample of online players.
-         */
-        public static PlayerInfo online(int maxSamples) {
-            final Collection<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
-            final List<NamedAndIdentified> samples = new ArrayList<>(Math.min(maxSamples, players.size()));
-            for (final Player player : players) {
-                if (!player.getSettings().allowServerListings())
-                    continue;
-                samples.add(player);
-                if (samples.size() >= maxSamples)
-                    break;
-            }
-            return new PlayerInfo(players.size(), players.size() + 1, samples);
         }
 
         public static Builder builder() {
@@ -186,7 +163,7 @@ public record Status(
         private Builder() {
             this.description = DEFAULT_DESCRIPTION;
             this.versionInfo = VersionInfo.DEFAULT;
-            this.playerInfo = PlayerInfo.onlineCount();
+            this.playerInfo = null;
         }
 
         private Builder(Status status) {

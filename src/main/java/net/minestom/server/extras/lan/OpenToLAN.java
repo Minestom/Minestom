@@ -3,6 +3,7 @@ package net.minestom.server.extras.lan;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.server.ServerListPingEvent;
+import net.minestom.server.ping.ServerListPingType;
 import net.minestom.server.timer.Task;
 import net.minestom.server.utils.time.Cooldown;
 import org.slf4j.Logger;
@@ -108,7 +109,7 @@ public class OpenToLAN {
                     final ServerListPingEvent event = new ServerListPingEvent(OPEN_TO_LAN);
                     EventDispatcher.call(event);
 
-                    final byte[] data = OPEN_TO_LAN.getPingResponse(event.getStatus()).getBytes(StandardCharsets.UTF_8);
+                    final byte[] data = ServerListPingType.getOpenToLANPing(event.getStatus(), MinecraftServer.getServer().getPort()).getBytes(StandardCharsets.UTF_8);
                     packet = new DatagramPacket(data, data.length, PING_ADDRESS);
                     eventCooldown.refreshLastUpdate(System.nanoTime());
                 }

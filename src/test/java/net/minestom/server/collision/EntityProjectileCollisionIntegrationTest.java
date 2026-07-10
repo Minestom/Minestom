@@ -116,7 +116,7 @@ public class EntityProjectileCollisionIntegrationTest {
         final var event = eventRef.get();
         assertNotNull(event, "Could not hit entity at " + targetPosition);
         assertSame(target, event.getTarget());
-        assertTrue(projectile.getBoundingBox().intersectEntity(event.getCollisionPosition(), target));
+        assertTrue(projectile.getBoundingBox().intersectEntity(event.getCollisionPosition(), target.getPosition(), target.getBoundingBox()));
         target.remove();
     }
 
@@ -149,7 +149,7 @@ public class EntityProjectileCollisionIntegrationTest {
         final var event = eventRef.get();
         assertNotNull(event);
         assertSame(shooter, event.getTarget());
-        assertTrue(shooter.getBoundingBox().intersectEntity(shooter.getPosition(), projectile));
+        assertTrue(shooter.getBoundingBox().intersectEntity(shooter.getPosition(), projectile.getPosition(), projectile.getBoundingBox()));
     }
 
 }

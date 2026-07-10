@@ -5,7 +5,7 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.condition.Conditions;
+import net.minestom.server.command.builder.condition.SenderConditions;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
@@ -21,7 +21,7 @@ public class MinecartCommand extends Command {
     public MinecartCommand() {
         super("minecart");
 
-        setCondition(Conditions::playerOnly);
+        setCondition(SenderConditions::playerOnly);
         addSyntax(this::execute, type, block, offset);
     }
 

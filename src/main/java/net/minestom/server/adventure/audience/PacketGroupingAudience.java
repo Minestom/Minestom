@@ -111,7 +111,7 @@ public interface PacketGroupingAudience extends ForwardingAudience {
     @Override
     default void playSound(Sound sound, Sound.Emitter emitter) {
         if (emitter != Sound.Emitter.self()) {
-            sendGroupedPacket(AdventurePacketConvertor.createSoundPacket(sound, emitter));
+            sendGroupedPacket(PacketSendingUtils.createSoundPacket(sound, emitter));
         } else {
             // if we're playing on self, we need to delegate to each audience member
             for (Audience audience : this.audiences()) {

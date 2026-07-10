@@ -6,20 +6,21 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Interface used to provide block behavior. Set with {@link Block#withHandler(BlockHandler)}.
+ * Interface used to provide block behavior. Set with {@link Block#withHandler(BlockDataHandler)}.
+ * <p>
+ * Extends the lib-safe identity surface {@link BlockDataHandler} with the behavioral callbacks
+ * ({@link #onPlace(Placement)}, {@link #onDestroy(Destroy)}, {@link #onInteract(Interaction)},
+ * {@link #onTouch(Touch)}, {@link #tick(Tick)}) and their live-context records.
  * <p>
  * Implementations are expected to be thread safe.
  */
-public interface BlockHandler {
+public interface BlockHandler extends BlockDataHandler {
 
     /**
      * Called when a block has been placed.
@@ -58,33 +59,6 @@ public interface BlockHandler {
 
     default void tick(Tick tick) {
     }
-
-    default boolean isTickable() {
-        return false;
-    }
-
-    /**
-     * Specifies which block entity tags should be sent to the player.
-     *
-     * @return The list of tags from this block's block entity that should be sent to the player
-     * @see <a href="https://minecraft.wiki/w/Block_entity">Block entity on the Minecraft wiki</a>
-     */
-    default Collection<Tag<?>> getBlockEntityTags() {
-        return List.of();
-    }
-
-    default byte getBlockEntityAction() {
-        return -1;
-    }
-
-    /**
-     * Gets the id of this handler.
-     * <p>
-     * Used to write the block entity in the anvil world format.
-     *
-     * @return the key of this handler
-     */
-    Key getKey();
 
     /**
      * Represents an object forwarded to {@link #onPlace(Placement)}.

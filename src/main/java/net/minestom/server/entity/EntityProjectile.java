@@ -170,7 +170,7 @@ public class EntityProjectile extends Entity {
             }
             final Point currentPos = pos;
             Stream<LivingEntity> victimsStream = entities.stream()
-                    .filter(entity -> bb.intersectEntity(currentPos, entity));
+                    .filter(entity -> bb.intersectEntity(currentPos, entity.getPosition(), entity.getBoundingBox()));
             /*
               We won't check collisions with a shooter for first ticks of arrow's life, because it spawns in him
               and will immediately deal damage.

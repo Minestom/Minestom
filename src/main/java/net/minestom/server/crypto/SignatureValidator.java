@@ -1,9 +1,7 @@
 package net.minestom.server.crypto;
 
-import net.minestom.server.entity.Player;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.crypto.KeyUtils;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,8 +16,8 @@ import java.util.function.Consumer;
  *     <li>{@link SignatureValidator#FAIL}: will always report false</li>
  *     <li>{@link SignatureValidator#YGGDRASIL}: Uses SHA1 with RSA and Yggdrasil Public Key for
  *     verifying signatures</li>
- *     <li>{@link SignatureValidator#from(Player)}: Uses SHA256 with RSA and the
- *     Player's {@link PlayerPublicKey#publicKey()}</li>
+ *     <li>{@link SignatureValidator#from(PlayerPublicKey)}: Uses SHA256 with RSA and the
+ *     given {@link PlayerPublicKey#publicKey()}</li>
  *     <li>{@link SignatureValidator#from(PublicKey, KeyUtils.SignatureAlgorithm)}: General purpose factory method</li>
  * </ul>
  */
@@ -55,14 +53,12 @@ public interface SignatureValidator {
     }
 
     /**
-     * Creates a validator from the player's public key using SHA256 with RSA
+     * Creates a validator from a player's public key using SHA256 with RSA.
      *
-     * @param player source of the key
-     * @return null if the player didn't send a public key
+     * @param playerPublicKey source of the key
+     * @return the validator
      */
-    static @Nullable SignatureValidator from(Player player) {
-        final PlayerPublicKey playerPublicKey = player.getPlayerConnection().playerPublicKey();
-        if (playerPublicKey == null) return null;
+    static SignatureValidator from(PlayerPublicKey playerPublicKey) {
         return from(playerPublicKey.publicKey(), KeyUtils.SignatureAlgorithm.SHA256withRSA);
     }
 

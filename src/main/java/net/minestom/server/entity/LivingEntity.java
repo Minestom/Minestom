@@ -207,7 +207,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
                     EntityTracker.Target.ITEMS, itemEntity -> {
                         if (this instanceof Player player && !itemEntity.isViewer(player)) return;
                         if (!itemEntity.isPickable()) return;
-                        if (!expandedBoundingBox.intersectEntity(position, itemEntity)) return;
+                        if (!expandedBoundingBox.intersectEntity(position, itemEntity.getPosition(), itemEntity.getBoundingBox())) return;
                         final PickupItemEvent pickupItemEvent = new PickupItemEvent(this, itemEntity);
                         EventDispatcher.callCancellable(pickupItemEvent, () -> {
                             final ItemStack item = itemEntity.getItemStack();
@@ -703,7 +703,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @return The block position targeted by this entity, null if non are found
      */
     public @Nullable Point getTargetBlockPosition(int maxDistance) {
-        Iterator<Point> it = new BlockIterator(this, maxDistance);
+        Iterator<Point> it = new BlockIterator(getPosition(), getEyeHeight(), maxDistance);
         while (it.hasNext()) {
             final Point position = it.next();
             if (!getInstance().getBlock(position).isAir()) return position;
