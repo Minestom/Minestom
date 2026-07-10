@@ -48,7 +48,7 @@ public class ComponentPredicateSet implements Predicate<DataComponent.Holder> {
     }
 
     public static final Codec<ComponentPredicateSet> CODEC = RegistryKey.codec(Registries::componentPredicateTypes)
-            .mapValue((key) -> {
+            .mapValueTyped((key) -> {
                 //noinspection unchecked
                 Codec<DataComponentPredicate> codec = (Codec<DataComponentPredicate>) MinecraftServer.componentPredicateTypes().get(key);
                 Check.notNull(codec, "Unknown DataComponentPredicate type");

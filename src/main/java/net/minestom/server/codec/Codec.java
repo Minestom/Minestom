@@ -132,6 +132,17 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
 
     StructCodec<CompoundBinaryTag> NBT_COMPOUND = new CodecImpl.CompoundBinaryTagImpl();
 
+    Codec<CompoundBinaryTag> NBT_COMPOUND_COERCED = NBT_COMPOUND.orElse(Codec.STRING.transform(
+            string -> {
+                try {
+                    return net.minestom.server.adventure.MinestomAdventure.tagStringIO().asCompound(string);
+                } catch (java.io.IOException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            },
+            net.minestom.server.adventure.MinestomAdventure.tagStringIO()::asString
+    ));
+
     /**
      * Creates an enum codec from a given class
      * <br>

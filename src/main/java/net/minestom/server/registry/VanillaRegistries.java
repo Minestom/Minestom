@@ -1,8 +1,10 @@
 package net.minestom.server.registry;
 
+import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.dialog.Dialog;
+import net.minestom.server.instance.block.predicate.DataComponentPredicate;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.*;
 import net.minestom.server.entity.metadata.animal.tameable.CatSoundVariant;

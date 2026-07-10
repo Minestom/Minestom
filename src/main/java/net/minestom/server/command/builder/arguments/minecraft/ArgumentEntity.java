@@ -277,9 +277,9 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                     throw new ArgumentSyntaxException("Invalid distance", input, INVALID_ARGUMENT_VALUE);
                 }
 
-                // An open lower bound like ..10 parses to -Float.MAX_VALUE, meaning zero
-                final double minDistance = distanceRange.min() == -Float.MAX_VALUE ? 0 : distanceRange.min();
-                final double maxDistance = distanceRange.max();
+                // An open lower bound like ..10 parses to null or -Float.MAX_VALUE, meaning zero
+                final double minDistance = distanceRange.min() == null || distanceRange.min() == -Float.MAX_VALUE ? 0 : distanceRange.min();
+                final double maxDistance = distanceRange.max() == null ? Double.MAX_VALUE : distanceRange.max();
 
                 if (!Double.isFinite(minDistance) || !Double.isFinite(maxDistance) || minDistance < 0 || maxDistance < 0) {
                     throw new ArgumentSyntaxException("Distance cannot be negative", input, INVALID_ARGUMENT_VALUE);

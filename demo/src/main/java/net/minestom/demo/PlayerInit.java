@@ -51,7 +51,7 @@ import net.minestom.server.item.component.Bee;
 import net.minestom.server.item.component.BlockPredicates;
 import net.minestom.server.item.component.BlockPredicates;
 import net.minestom.server.item.component.CustomData;
-import net.minestom.server.monitoring.BenchmarkManager;
+import net.minestom.server.item.component.Consumable;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.packet.server.common.CustomReportDetailsPacket;
 import net.minestom.server.network.packet.server.common.ServerLinksPacket;
