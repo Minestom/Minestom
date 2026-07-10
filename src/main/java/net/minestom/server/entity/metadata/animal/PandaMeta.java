@@ -3,9 +3,10 @@ package net.minestom.server.entity.metadata.animal;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import org.jetbrains.annotations.Nullable;
 
 public class PandaMeta extends AnimalMeta {
-    public PandaMeta(Entity entity, MetadataHolder metadata) {
+    public PandaMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -83,12 +84,12 @@ public class PandaMeta extends AnimalMeta {
 
     public enum Gene {
         NORMAL,
-        AGGRESSIVE,
         LAZY,
         WORRIED,
         PLAYFUL,
+        BROWN,
         WEAK,
-        BROWN;
+        AGGRESSIVE;
 
         private final static Gene[] VALUES = values();
     }

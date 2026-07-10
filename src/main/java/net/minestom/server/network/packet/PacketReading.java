@@ -155,9 +155,8 @@ public final class PacketReading {
             return EMPTY_CLIENT_PACKET;
         }
         final int maxPacketSize = maxPacketSize(state);
-        if (packetLength > maxPacketSize) {
-            throw new DataFormatException("Packet too large: " + packetLength);
-        }
+        if (packetLength < 0) throw new DataFormatException("Packet length negative: " + packetLength);
+        if (packetLength > maxPacketSize) throw new DataFormatException("Packet too large: " + packetLength);
         // READ PAYLOAD https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol#Packet_format
         if (buffer.readableBytes() < packetLength) {
             // Can't read the full packet
@@ -169,19 +168,18 @@ public final class PacketReading {
             if (requiredCapacity > buffer.capacity()) return new Result.Failure<>(requiredCapacity);
             else return EMPTY_CLIENT_PACKET;
         }
-        final long readerEnd = readerStart + packetLength;
-        final long writerEnd = buffer.writeIndex();
-        buffer.writeIndex(readerEnd);
-        final PacketRegistry<T> registry = parser.stateRegistry(state);
-        final T packet = readFramedPacket(buffer, registry, compressed);
+        final PacketRegistry<? extends T> registry = parser.stateRegistry(state);
+        final long offset = buffer.advanceRead(packetLength); // ensureReadable checked above
+        final NetworkBuffer slice = buffer.slice(offset, packetLength, 0, packetLength).readOnly();
+        final T packet = readFramedPacket(slice, registry, compressed, maxPacketSize);
         final ConnectionState nextState = stateUpdater.apply(packet, state);
-        buffer.index(readerEnd, writerEnd);
         return new Result.Success<>(new ParsedPacket<>(nextState, packet));
     }
 
     private static <T> T readFramedPacket(NetworkBuffer buffer,
                                           PacketRegistry<T> registry,
-                                          boolean compressed) throws DataFormatException {
+                                          boolean compressed,
+                                          int maxPacketSize) throws DataFormatException {
         if (!compressed) {
             // No compression format
             return readPayload(buffer, registry);
@@ -192,16 +190,23 @@ public final class PacketReading {
             // Uncompressed packet
             return readPayload(buffer, registry);
         }
+        if (dataLength < 0 || dataLength > maxPacketSize) {
+            throw new DataFormatException("Invalid decompressed length: " + dataLength);
+        }
 
-        // Decompress the packet into the pooled buffer
-        // and read the uncompressed packet from it
-        NetworkBuffer decompressed = PacketVanilla.PACKET_POOL.get();
+        // Decompress the packet into the pooled buffer and read the uncompressed packet from it
+        NetworkBuffer poolBuffer = PacketVanilla.PACKET_POOL.get();
         try {
-            if (decompressed.capacity() < dataLength) decompressed.resize(dataLength);
-            buffer.decompress(buffer.readIndex(), buffer.readableBytes(), decompressed);
-            return readPayload(decompressed, registry);
+            if (poolBuffer.capacity() < dataLength) poolBuffer.resize(dataLength);
+            final NetworkBuffer slice = poolBuffer.slice(0, dataLength, 0, 0);
+            slice.registries(buffer.registries());
+            final long written = buffer.decompress(buffer.readIndex(), buffer.readableBytes(), slice);
+            if (written != dataLength) {
+                throw new DataFormatException("Decompressed length mismatch: expected " + dataLength + ", got " + written);
+            }
+            return readPayload(slice.readOnly(), registry);
         } finally {
-            PacketVanilla.PACKET_POOL.add(decompressed);
+            PacketVanilla.PACKET_POOL.add(poolBuffer);
         }
     }
 

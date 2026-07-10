@@ -9,12 +9,13 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.lang.ref.WeakReference;
 import java.util.function.Consumer;
 
 public class EntityMeta {
-    private final WeakReference<Entity> entityRef;
+    private final WeakReference<@Nullable Entity> entityRef;
     protected final MetadataHolder metadata;
 
     public EntityMeta(@Nullable Entity entity, MetadataHolder metadata) {
@@ -159,7 +160,7 @@ public class EntityMeta {
         metadata.set(MetadataDef.TICKS_FROZEN, tickFrozen);
     }
 
-    protected void consumeEntity(Consumer<Entity> consumer) {
+    protected void consumeEntity(Consumer<? super Entity> consumer) {
         Entity entity = this.entityRef.get();
         if (entity != null) {
             consumer.accept(entity);
@@ -202,4 +203,27 @@ public class EntityMeta {
             metadata.set(MetadataDef.CUSTOM_NAME, (Component) value);
     }
 
+    /**
+     * Retrieves the value of the specified metadata entry.
+     *
+     * @param entry The metadata entry to retrieve the value from.
+     * @param <T>   The type of the metadata value.
+     * @return The value associated with the specified metadata entry.
+     */
+    @ApiStatus.Experimental
+    public <T extends @UnknownNullability Object> T get(MetadataDef.Entry<T> entry) {
+        return metadata.get(entry);
+    }
+
+    /**
+     * Sets the value of the specified metadata entry.
+     *
+     * @param entry The metadata entry to be updated.
+     * @param value The value to assign to the specified metadata entry.
+     * @param <T>   The type of the metadata value.
+     */
+    @ApiStatus.Experimental
+    public <T extends @UnknownNullability Object> void set(MetadataDef.Entry<T> entry, T value) {
+        metadata.set(entry, value);
+    }
 }

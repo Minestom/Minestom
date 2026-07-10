@@ -414,7 +414,7 @@ public class Command {
         BiConsumer<String, Consumer<JsonArray>> processor = (s, consumer) -> {
             JsonArray array = new JsonArray();
             consumer.accept(array);
-            if (array.size() != 0) {
+            if (!array.isEmpty()) {
                 jsonObject.add(s, array);
             }
         };

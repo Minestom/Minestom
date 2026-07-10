@@ -77,7 +77,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
 
     public void setEquipment(EquipmentSlot slot, byte heldSlot, ItemStack itemStack) {
         final int slotId = getSlotId(slot, heldSlot);
-        if (slotId < 0) Check.fail("PlayerInventory does not support " + slot + " equipment");
+        if (slotId < 0) Check.fail("PlayerInventory does not support {0} equipment", slot);
 
         setItemStack(slotId, itemStack);
     }
@@ -267,14 +267,14 @@ public non-sealed class PlayerInventory extends AbstractInventory {
             // we want to prioritize the hotbar from right-to-left and then the inventory from right-to-left
             clickResult = clickProcessor.shiftClick(
                     this, this,
-                    9, 0, -1,
+                    8, -1, -1,
                     player, slot, clicked, cursor
             );
 
             if(clickResult.isCancel()) {
                 clickResult = clickProcessor.shiftClick(
                         this, this,
-                        INNER_INVENTORY_SIZE, 9, -1,
+                        INNER_INVENTORY_SIZE - 1, 8, -1,
                         player, slot, clicked, cursor
                 );
             }

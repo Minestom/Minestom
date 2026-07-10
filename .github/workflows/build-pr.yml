@@ -1,45 +1,160 @@
 name: Build PR
-on: [ pull_request ]
+
+on:
+  pull_request:
+    branches: [ master ]
+    types: [ opened, reopened, synchronize, labeled, unlabeled ]
+  merge_group:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-pr-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
-  build_pr:
-    name: Build & Test PR
+  build:
+    name: JVM Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
       - name: Setup Java
         uses: actions/setup-java@v5
         with:
           distribution: graalvm
           java-version: 25
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
         with:
-          # Allow caching for all branches in our repo;
-          # this is so we don't get evicted, see Cache Optimization in action docs for more info
-          cache-read-only: ${{ github.repository_owner != github.event.pull_request.head.repo.owner.login }}
-      - name: Build
-        run: ./gradlew test javadoc
-  publish:
-    name: Publish PR
-    if: contains(github.event.pull_request.labels.*.name, 'Publish Pull Request') && github.repository_owner == 'Minestom'
+          cache-read-only: ${{ github.event_name != 'pull_request' || github.repository_owner != github.event.pull_request.head.repo.owner.login }}
+      - name: Run JVM Tests
+        run: ./gradlew test
+
+  javadoc:
+    name: Javadoc Compilation
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Setup Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: graalvm
           java-version: 25
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
         with:
-          # Allow caching for all branches in our repo;
-          # this is so we don't get evicted, see Cache Optimization in action docs for more info
-          cache-read-only: false
+          cache-read-only: ${{ github.event_name != 'pull_request' || github.repository_owner != github.event.pull_request.head.repo.owner.login }}
+      - name: Build Javadoc
+        run: ./gradlew javadoc
 
+  native-test:
+    name: Native Test
+    needs: build
+    runs-on: ubuntu-latest
+    outputs:
+      metadata-updated: ${{ steps.native-run.outcome == 'failure' }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: graalvm
+          java-version: 25
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: ${{ github.event_name != 'pull_request' || github.repository_owner != github.event.pull_request.head.repo.owner.login }}
+      - id: native-run # Small optimization to assume that metadata doesn't need to be updated.
+        name: Run Tests in Native Image
+        continue-on-error: true
+        run: ./gradlew nativeTest
+      - name: Run Tracing Agent (Fallback)
+        if: steps.native-run.outcome == 'failure'
+        run: ./gradlew -Pagent test
+      - name: Copy Native Metadata (Fallback)
+        if: steps.native-run.outcome == 'failure'
+        run: ./gradlew metadataCopy
+      - name: Run Tests in Native Image (Fallback)
+        if: steps.native-run.outcome == 'failure'
+        run: ./gradlew nativeTest
+
+  binary-compatibility:
+    name: Binary Compatibility
+    if: |
+      github.event_name != 'merge_group' &&
+      !contains(github.event.pull_request.labels.*.name, 'breaking')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Base Branch
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.base_ref }}
+          path: baseline-repo
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: graalvm
+          java-version: 25
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: ${{ github.event_name != 'pull_request' || github.repository_owner != github.event.pull_request.head.repo.owner.login }}
+      - name: Build Base Branch Jars
+        run: |
+          cd baseline-repo
+          ./gradlew jar
+          mkdir -p ${{ runner.temp }}/baseline-libs
+          find . -name "*.jar" -path "*/build/libs/*" -not -name "*-sources.jar" -not -name "*-javadoc.jar" | while read -r jar_path; do
+            proj_dir=$(echo "$jar_path" | sed 's|/build/libs/.*||')
+            if [ "$proj_dir" = "." ]; then
+              proj_name="minestom"
+            else
+              proj_name=$(basename "$proj_dir")
+            fi
+            cp "$jar_path" "${{ runner.temp }}/baseline-libs/${proj_name}.jar"
+          done
+      - name: Checkout PR Branch
+        uses: actions/checkout@v7
+      - name: Check Binary Compatibility
+        run: ./gradlew checkBinaryCompatibility -PbaselineJarDir="${{ runner.temp }}/baseline-libs"
+
+  publish:
+    name: Publish PR
+    needs: [build, javadoc, native-test, binary-compatibility]
+    if: |
+      always() &&
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      contains(github.event.pull_request.labels.*.name, 'Publish Pull Request') &&
+      needs.build.result == 'success' &&
+      needs.javadoc.result == 'success' &&
+      needs.native-test.result == 'success' &&
+      (needs.binary-compatibility.result == 'success' || needs.binary-compatibility.result == 'skipped')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: graalvm
+          java-version: 25
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: false
+      - name: Run Tracing Agent # Skip unless metadata was updated during the native test fallback
+        if: needs.native-test.outputs.metadata-updated == 'true'
+        run: ./gradlew -Pagent test
+      - name: Copy Reachability Metadata
+        if: needs.native-test.outputs.metadata-updated == 'true'
+        run: ./gradlew metadataCopy
       - name: Publish Artifacts
+        if: github.repository == 'Minestom/Minestom'
         env:
           MINESTOM_VERSION: ${{ github.head_ref }}-SNAPSHOT
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}

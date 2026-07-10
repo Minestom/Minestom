@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 /**
  * Represents the target selector argument.
- * https://minecraft.wiki/w/Target_selectors
+ * <a href="https://minecraft.wiki/w/Target_selectors">Target selectors</a>
  */
 public class ArgumentEntity extends Argument<EntityFinder> {
 
@@ -163,6 +163,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
         //System.out.println("structure data: " + structureData);
 
         String currentArgument = "";
+        boolean danglingComma = false;
         for (int i = 0; i < structureData.length(); i++) {
             final char c = structureData.charAt(i);
             if (c == '=') {
@@ -174,10 +175,23 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                     throw new ArgumentSyntaxException("Argument name '" + currentArgument + "' does not exist", input, INVALID_ARGUMENT_NAME);
 
                 i = parseArgument(sender, entityFinder, currentArgument, input, structureData, i);
+                danglingComma = i < structureData.length() && structureData.charAt(i) == ',';
                 currentArgument = ""; // Reset current argument
             } else {
                 currentArgument += c;
             }
+        }
+
+        currentArgument = currentArgument.trim();
+
+        // Prevents @e[a=b,c]
+        if (!currentArgument.isEmpty()) {
+            throw new ArgumentSyntaxException("Argument name '" + currentArgument + "' does not have a value", input, INVALID_ARGUMENT_NAME);
+        }
+
+        // Prevents @e[a=b,]
+        if (danglingComma) {
+            throw new ArgumentSyntaxException("Expected an argument after the comma", input, INVALID_SYNTAX);
         }
 
         return entityFinder;
@@ -255,14 +269,25 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                     throw new ArgumentSyntaxException("Invalid level number", input, INVALID_ARGUMENT_VALUE);
                 }
                 break;
-            case "distance":
+            case "distance": {
+                final Range.Float distanceRange;
                 try {
-                    final Range.Int distance = Argument.parse(sender, new ArgumentIntRange(value));
-                    entityFinder.setDistance(distance);
+                    distanceRange = Argument.parse(sender, new ArgumentFloatRange(value));
                 } catch (ArgumentSyntaxException e) {
-                    throw new ArgumentSyntaxException("Invalid level number", input, INVALID_ARGUMENT_VALUE);
+                    throw new ArgumentSyntaxException("Invalid distance", input, INVALID_ARGUMENT_VALUE);
                 }
+
+                // An open lower bound like ..10 parses to -Float.MAX_VALUE, meaning zero
+                final double minDistance = distanceRange.min() == -Float.MAX_VALUE ? 0 : distanceRange.min();
+                final double maxDistance = distanceRange.max();
+
+                if (!Double.isFinite(minDistance) || !Double.isFinite(maxDistance) || minDistance < 0 || maxDistance < 0) {
+                    throw new ArgumentSyntaxException("Distance cannot be negative", input, INVALID_ARGUMENT_VALUE);
+                }
+
+                entityFinder.setDistance(new Range.Double(minDistance, maxDistance));
                 break;
+            }
         }
 
         return finalIndex;
@@ -291,18 +316,14 @@ public class ArgumentEntity extends Argument<EntityFinder> {
     }
 
     private static EntityFinder.TargetSelector toTargetSelector(String selectorVariable) {
-        if (selectorVariable.equals("@p"))
-            return EntityFinder.TargetSelector.NEAREST_PLAYER;
-        if (selectorVariable.equals("@n"))
-            return EntityFinder.TargetSelector.NEAREST_ENTITY;
-        if (selectorVariable.equals("@r"))
-            return EntityFinder.TargetSelector.RANDOM_PLAYER;
-        if (selectorVariable.equals("@a"))
-            return EntityFinder.TargetSelector.ALL_PLAYERS;
-        if (selectorVariable.equals("@e"))
-            return EntityFinder.TargetSelector.ALL_ENTITIES;
-        if (selectorVariable.equals("@s"))
-            return EntityFinder.TargetSelector.SELF;
-        throw new IllegalStateException("Weird selector variable: " + selectorVariable);
+        return switch (selectorVariable) {
+            case "@p" -> EntityFinder.TargetSelector.NEAREST_PLAYER;
+            case "@n" -> EntityFinder.TargetSelector.NEAREST_ENTITY;
+            case "@r" -> EntityFinder.TargetSelector.RANDOM_PLAYER;
+            case "@a" -> EntityFinder.TargetSelector.ALL_PLAYERS;
+            case "@e" -> EntityFinder.TargetSelector.ALL_ENTITIES;
+            case "@s" -> EntityFinder.TargetSelector.SELF;
+            default -> throw new IllegalStateException("Weird selector variable: " + selectorVariable);
+        };
     }
 }

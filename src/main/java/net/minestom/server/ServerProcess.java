@@ -1,6 +1,7 @@
 package net.minestom.server;
 
 import net.minestom.server.advancements.AdvancementManager;
+import net.minestom.server.adventure.ClickCallbackManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Entity;
@@ -11,7 +12,6 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.listener.manager.PacketListenerManager;
-import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.client.ClientPacket;
@@ -73,8 +73,6 @@ public interface ServerProcess extends Registries, Snapshotable {
      */
     SchedulerManager scheduler();
 
-    BenchmarkManager benchmark();
-
     /**
      * Handles registered advancements.
      */
@@ -100,7 +98,7 @@ public interface ServerProcess extends Registries, Snapshotable {
      * <p>
      * Can be used if you want to convert a buffer to a client packet object.
      */
-    PacketParser<ClientPacket> packetParser();
+    PacketParser.Client packetParser();
 
     /**
      * Exposed socket server.
@@ -116,6 +114,11 @@ public interface ServerProcess extends Registries, Snapshotable {
      * Handles the server ticks.
      */
     Ticker ticker();
+
+    /**
+     * The click callback manager.
+     */
+    ClickCallbackManager clickCallbackManager();
 
     void start(SocketAddress socketAddress);
 

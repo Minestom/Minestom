@@ -1,6 +1,8 @@
 package net.minestom.server.inventory.click.integration;
 
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.AbstractInventory;
@@ -9,6 +11,7 @@ import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.component.Equippable;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.testing.Env;
@@ -17,8 +20,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class LeftClickIntegrationTest {
@@ -32,6 +34,9 @@ public class LeftClickIntegrationTest {
         inventory.setItemStack(1, ItemStack.of(Material.DIAMOND));
         inventory.setItemStack(2, ItemStack.of(Material.DIAMOND_HELMET));
         inventory.setItemStack(3, ItemStack.of(Material.SHIELD));
+        inventory.setItemStack(4, ItemStack.builder(Material.COOKED_BEEF).set(DataComponents.EQUIPPABLE,
+                new Equippable(EquipmentSlot.LEGGINGS, Equippable.DEFAULT_EQUIP_SOUND, null, null, null,
+                        true, true, true, true, true, Equippable.DEFAULT_SHEARING_SOUND)).build());
         // Empty click
         {
             listener.followup(event -> {
@@ -74,6 +79,18 @@ public class LeftClickIntegrationTest {
             assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
             assertEquals(ItemStack.AIR, player.getInventory().getItemStack(2));
             assertEquals(ItemStack.of(Material.DIAMOND_HELMET), player.getHelmet());
+        }
+        // Shift click non armor material but equippable item into the armor slot
+        {
+            listener.followup(event -> {
+                assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+                assertEquals(new Click.LeftShift(4), event.getClick());
+                assertEquals(Material.COOKED_BEEF, player.getInventory().getItemStack(4).material());
+            });
+            shiftClick(player, 4);
+            assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+            assertEquals(ItemStack.AIR, player.getInventory().getItemStack(4));
+            assertEquals(Material.COOKED_BEEF, player.getLeggings().material());
         }
         // Shift click an armor slot item back into the inventory
         {
@@ -231,9 +248,7 @@ public class LeftClickIntegrationTest {
             for (int hotbarSlot = 0; hotbarSlot < 9; hotbarSlot++) {
                 player.getInventory().setItemStack(hotbarSlot, ItemStack.of(Material.BRICK));
             }
-            listener.followup(event -> {
-                assertEquals(inventory, event.getInventory());
-            });
+            listener.followup(event -> assertEquals(inventory, event.getInventory()));
             shiftClickOpenInventory(player, 1);
             assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
             assertEquals(ItemStack.of(Material.GOLD_INGOT), player.getInventory().getItemStack(35)); // The item should appear in the bottom right of the player's inventory excluding the hotbar
@@ -262,6 +277,50 @@ public class LeftClickIntegrationTest {
         }
     }
 
+    @Test
+    public void shiftClickHotbarToSlotNine(Env env) {
+        var instance = env.createFlatInstance();
+        var player = env.createPlayer(instance, new Pos(0, 40, 0));
+        var inventory = player.getInventory();
+
+        // Fill main inventory slots 10 to 35, leaving slot 9 empty
+        for (int i = 10; i <= 35; i++) {
+            inventory.setItemStack(i, ItemStack.of(Material.STONE));
+        }
+
+        // Put an item in a hotbar slot (slot 0)
+        inventory.setItemStack(0, ItemStack.of(Material.DIAMOND));
+
+        // Perform shift click on slot 0
+        shiftClick(player, 0);
+
+        // Assert that the item successfully lands in slot 9
+        assertEquals(ItemStack.of(Material.DIAMOND), inventory.getItemStack(9));
+        assertEquals(ItemStack.AIR, inventory.getItemStack(0));
+    }
+
+    @Test
+    public void shiftClickCraftingResultToSlotZero(Env env) {
+        var instance = env.createFlatInstance();
+        var player = env.createPlayer(instance, new Pos(0, 40, 0));
+        var inventory = player.getInventory();
+
+        // Fill hotbar slots 1 to 8, leaving slot 0 empty
+        for (int i = 1; i <= 8; i++) {
+            inventory.setItemStack(i, ItemStack.of(Material.STONE));
+        }
+
+        // Put an item in the crafting result slot (slot 36)
+        inventory.setItemStack(36, ItemStack.of(Material.IRON_HELMET));
+
+        // Perform shift click on slot 36
+        shiftClick(player, 36);
+
+        // Assert that the item successfully lands in slot 0
+        assertEquals(ItemStack.of(Material.IRON_HELMET), inventory.getItemStack(0));
+        assertEquals(ItemStack.AIR, inventory.getItemStack(36));
+    }
+
     private void shiftClickOpenInventory(Player player, int slot) {
         _leftClick(player.getOpenInventory(), true, player, slot, true);
     }
@@ -281,7 +340,7 @@ public class LeftClickIntegrationTest {
     private void _leftClick(AbstractInventory openInventory, boolean clickOpenInventory, Player player, int slot, boolean shift) {
         final byte windowId = openInventory != null ? openInventory.getWindowId() : 0;
         if (clickOpenInventory) {
-            assert openInventory != null;
+            assertNotNull(openInventory);
             // Do not touch slot
         } else {
             int offset = openInventory != null ? openInventory.getInnerSize() : 0;

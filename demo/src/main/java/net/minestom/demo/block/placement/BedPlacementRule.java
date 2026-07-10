@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /**
- * https://gist.github.com/mworzala/0676c28343310458834d70ed29b11a37
+ * <a href="https://gist.github.com/mworzala/0676c28343310458834d70ed29b11a37">...</a>
  */
 public class BedPlacementRule extends BlockPlacementRule {
 

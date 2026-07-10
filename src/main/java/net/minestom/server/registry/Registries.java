@@ -5,13 +5,12 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.metadata.animal.ChickenVariant;
-import net.minestom.server.entity.metadata.animal.CowVariant;
-import net.minestom.server.entity.metadata.animal.FrogVariant;
-import net.minestom.server.entity.metadata.animal.PigVariant;
+import net.minestom.server.entity.metadata.animal.*;
+import net.minestom.server.entity.metadata.animal.tameable.CatSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
+import net.minestom.server.entity.metadata.cube.SulfurCubeArchetype;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.game.GameEvent;
 import net.minestom.server.instance.block.Block;
@@ -19,16 +18,23 @@ import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
 import net.minestom.server.instance.block.predicate.DataComponentPredicate;
 import net.minestom.server.instance.fluid.Fluid;
+import net.minestom.server.instance.gamerule.GameRule;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.item.enchant.*;
 import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.message.ChatType;
+import net.minestom.server.network.packet.server.SendablePacket;
+import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
+import net.minestom.server.world.clock.WorldClock;
+import net.minestom.server.world.timeline.Timeline;
+
+import java.util.List;
 
 /**
  * <p>Provides access to all the dynamic registries. {@link net.minestom.server.ServerProcess} is the most relevant
@@ -37,6 +43,17 @@ import net.minestom.server.world.biome.Biome;
  * @see net.minestom.server.MinecraftServer for static access to these
  */
 public interface Registries {
+    static Registries vanilla() {
+        return new VanillaRegistries();
+    }
+
+    static List<SendablePacket> registryDataPackets(Registries registries, boolean excludeVanilla) {
+        return RegistriesImpl.registryDataPackets(registries, excludeVanilla);
+    }
+
+    static TagsPacket tagsPacket(Registries registries) {
+        return RegistriesImpl.tagsPacket(registries);
+    }
 
     // Static registries
 
@@ -69,6 +86,10 @@ public interface Registries {
         return GameEvent.staticRegistry();
     }
 
+    default Registry<GameRule<?>> gameRule() {
+        return GameRule.staticRegistry();
+    }
+
     // Dynamic registries
 
     DynamicRegistry<ChatType> chatType();
@@ -99,15 +120,31 @@ public interface Registries {
 
     DynamicRegistry<CatVariant> catVariant();
 
+    DynamicRegistry<CatSoundVariant> catSoundVariant();
+
     DynamicRegistry<ChickenVariant> chickenVariant();
 
+    DynamicRegistry<ChickenSoundVariant> chickenSoundVariant();
+
     DynamicRegistry<CowVariant> cowVariant();
+
+    DynamicRegistry<CowSoundVariant> cowSoundVariant();
 
     DynamicRegistry<FrogVariant> frogVariant();
 
     DynamicRegistry<PigVariant> pigVariant();
 
+    DynamicRegistry<PigSoundVariant> pigSoundVariant();
+
+    DynamicRegistry<ZombieNautilusVariant> zombieNautilusVariant();
+
     DynamicRegistry<Dialog> dialog();
+
+    DynamicRegistry<Timeline> timeline();
+
+    DynamicRegistry<WorldClock> worldClock();
+
+    DynamicRegistry<SulfurCubeArchetype> sulfurCubeArchetype();
 
     // The following are _not_ sent to the client.
 
@@ -126,166 +163,202 @@ public interface Registries {
         Registry<T> select(Registries registries);
     }
 
-    class Delegating implements Registries {
-        private final Registries delegate;
+    @FunctionalInterface
+    interface Delegating extends Registries {
+        Registries registries();
 
-        public Delegating(Registries delegate) {
-            this.delegate = delegate;
+        @Override
+        default Registry<Block> blocks() {
+            return registries().blocks();
         }
 
         @Override
-        public Registry<Block> blocks() {
-            return delegate.blocks();
+        default Registry<Material> material() {
+            return registries().material();
         }
 
         @Override
-        public Registry<Material> material() {
-            return delegate.material();
+        default Registry<PotionEffect> potionEffect() {
+            return registries().potionEffect();
         }
 
         @Override
-        public Registry<PotionEffect> potionEffect() {
-            return delegate.potionEffect();
+        default Registry<EntityType> entityType() {
+            return registries().entityType();
+        }
+
+        default Registry<PotionType> potionType() {
+            return registries().potionType();
         }
 
         @Override
-        public Registry<PotionType> potionType() {
-            return delegate.potionType();
+        default Registry<Fluid> fluid() {
+            return registries().fluid();
         }
 
         @Override
-        public Registry<EntityType> entityType() {
-            return delegate.entityType();
+        default Registry<GameEvent> gameEvent() {
+            return registries().gameEvent();
         }
 
         @Override
-        public Registry<Fluid> fluid() {
-            return delegate.fluid();
+        default DynamicRegistry<ChatType> chatType() {
+            return registries().chatType();
         }
 
         @Override
-        public Registry<GameEvent> gameEvent() {
-            return delegate.gameEvent();
+        default DynamicRegistry<DimensionType> dimensionType() {
+            return registries().dimensionType();
         }
 
         @Override
-        public DynamicRegistry<ChatType> chatType() {
-            return delegate.chatType();
+        default DynamicRegistry<Biome> biome() {
+            return registries().biome();
         }
 
         @Override
-        public DynamicRegistry<DimensionType> dimensionType() {
-            return delegate.dimensionType();
+        default DynamicRegistry<DamageType> damageType() {
+            return registries().damageType();
         }
 
         @Override
-        public DynamicRegistry<Biome> biome() {
-            return delegate.biome();
+        default DynamicRegistry<TrimMaterial> trimMaterial() {
+            return registries().trimMaterial();
         }
 
         @Override
-        public DynamicRegistry<DamageType> damageType() {
-            return delegate.damageType();
+        default DynamicRegistry<TrimPattern> trimPattern() {
+            return registries().trimPattern();
         }
 
         @Override
-        public DynamicRegistry<TrimMaterial> trimMaterial() {
-            return delegate.trimMaterial();
+        default DynamicRegistry<BannerPattern> bannerPattern() {
+            return registries().bannerPattern();
         }
 
         @Override
-        public DynamicRegistry<TrimPattern> trimPattern() {
-            return delegate.trimPattern();
+        default DynamicRegistry<Enchantment> enchantment() {
+            return registries().enchantment();
         }
 
         @Override
-        public DynamicRegistry<BannerPattern> bannerPattern() {
-            return delegate.bannerPattern();
+        default DynamicRegistry<PaintingVariant> paintingVariant() {
+            return registries().paintingVariant();
         }
 
         @Override
-        public DynamicRegistry<Enchantment> enchantment() {
-            return delegate.enchantment();
+        default DynamicRegistry<JukeboxSong> jukeboxSong() {
+            return registries().jukeboxSong();
         }
 
         @Override
-        public DynamicRegistry<PaintingVariant> paintingVariant() {
-            return delegate.paintingVariant();
+        default DynamicRegistry<Instrument> instrument() {
+            return registries().instrument();
         }
 
         @Override
-        public DynamicRegistry<JukeboxSong> jukeboxSong() {
-            return delegate.jukeboxSong();
+        default DynamicRegistry<WolfVariant> wolfVariant() {
+            return registries().wolfVariant();
         }
 
         @Override
-        public DynamicRegistry<Instrument> instrument() {
-            return delegate.instrument();
+        default DynamicRegistry<WolfSoundVariant> wolfSoundVariant() {
+            return registries().wolfSoundVariant();
         }
 
         @Override
-        public DynamicRegistry<WolfVariant> wolfVariant() {
-            return delegate.wolfVariant();
+        default DynamicRegistry<CatVariant> catVariant() {
+            return registries().catVariant();
         }
 
         @Override
-        public DynamicRegistry<WolfSoundVariant> wolfSoundVariant() {
-            return delegate.wolfSoundVariant();
+        default DynamicRegistry<CatSoundVariant> catSoundVariant() {
+            return registries().catSoundVariant();
         }
 
         @Override
-        public DynamicRegistry<CatVariant> catVariant() {
-            return delegate.catVariant();
+        default DynamicRegistry<ChickenVariant> chickenVariant() {
+            return registries().chickenVariant();
         }
 
         @Override
-        public DynamicRegistry<ChickenVariant> chickenVariant() {
-            return delegate.chickenVariant();
+        default DynamicRegistry<ChickenSoundVariant> chickenSoundVariant() {
+            return registries().chickenSoundVariant();
         }
 
         @Override
-        public DynamicRegistry<CowVariant> cowVariant() {
-            return delegate.cowVariant();
+        default DynamicRegistry<CowVariant> cowVariant() {
+            return registries().cowVariant();
         }
 
         @Override
-        public DynamicRegistry<FrogVariant> frogVariant() {
-            return delegate.frogVariant();
+        default DynamicRegistry<CowSoundVariant> cowSoundVariant() {
+            return registries().cowSoundVariant();
         }
 
         @Override
-        public DynamicRegistry<PigVariant> pigVariant() {
-            return delegate.pigVariant();
+        default DynamicRegistry<FrogVariant> frogVariant() {
+            return registries().frogVariant();
         }
 
         @Override
-        public DynamicRegistry<Dialog> dialog() {
-            return delegate.dialog();
+        default DynamicRegistry<PigVariant> pigVariant() {
+            return registries().pigVariant();
         }
 
         @Override
-        public DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
-            return delegate.enchantmentLevelBasedValues();
+        default DynamicRegistry<PigSoundVariant> pigSoundVariant() {
+            return registries().pigSoundVariant();
         }
 
         @Override
-        public DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects() {
-            return delegate.enchantmentValueEffects();
+        default DynamicRegistry<ZombieNautilusVariant> zombieNautilusVariant() {
+            return registries().zombieNautilusVariant();
         }
 
         @Override
-        public DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects() {
-            return delegate.enchantmentEntityEffects();
+        default DynamicRegistry<Dialog> dialog() {
+            return registries().dialog();
         }
 
         @Override
-        public DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
-            return delegate.enchantmentLocationEffects();
+        default DynamicRegistry<Timeline> timeline() {
+            return registries().timeline();
         }
 
         @Override
-        public DynamicRegistry<Codec<? extends DataComponentPredicate>> componentPredicateTypes() {
-            return delegate.componentPredicateTypes();
+        default DynamicRegistry<WorldClock> worldClock() {
+            return registries().worldClock();
+        }
+
+        @Override
+        default DynamicRegistry<SulfurCubeArchetype> sulfurCubeArchetype() {
+            return registries().sulfurCubeArchetype();
+        }
+
+        @Override
+        default DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
+            return registries().enchantmentLevelBasedValues();
+        }
+
+        @Override
+        default DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects() {
+            return registries().enchantmentValueEffects();
+        }
+
+        @Override
+        default DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects() {
+            return registries().enchantmentEntityEffects();
+        }
+
+        @Override
+        default DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
+            return registries().enchantmentLocationEffects();
+        }
+
+        @Override
+        default DynamicRegistry<Codec<? extends DataComponentPredicate>> componentPredicateTypes() {
+            return registries().componentPredicateTypes();
         }
     }
 }

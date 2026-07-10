@@ -45,7 +45,7 @@ public final class ChunkRange {
      */
     public static void chunksInRange(int chunkX, int chunkZ, int range, ChunkConsumer consumer) {
         // Send in spiral around the center chunk
-        // Note: its not really required to start at the center anymore since the chunk queue is sorted by distance,
+        // Note: it's not really required to start at the center anymore since the chunk queue is sorted by distance,
         //       however we still should send a circle so this method is still fine, and good for any other case a
         //       spiral might be needed.
         consumer.accept(chunkX, chunkZ);

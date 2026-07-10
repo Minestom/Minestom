@@ -88,7 +88,12 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
             RegistryData.Resource resource, Registries registries
     ) {
         final DynamicRegistryImpl<Enchantment> registry = new DynamicRegistryImpl<>(key, codec);
-        DynamicRegistryImpl.loadStaticJsonRegistry(new Registries.Delegating(registries) {
+        DynamicRegistryImpl.loadStaticJsonRegistry(new Registries.Delegating() {
+            @Override
+            public Registries registries() {
+                return registries;
+            }
+
             @Override
             public DynamicRegistry<Enchantment> enchantment() {
                 return registry;
@@ -103,7 +108,12 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
             RegistryData.Resource resource, Registries registries
     ) {
         final DynamicRegistryImpl<Dialog> registry = new DynamicRegistryImpl<>(key, codec);
-        DynamicRegistryImpl.loadStaticJsonRegistry(new Registries.Delegating(registries) {
+        DynamicRegistryImpl.loadStaticJsonRegistry(new Registries.Delegating() {
+            @Override
+            public Registries registries() {
+                return registries;
+            }
+
             @Override
             public DynamicRegistry<Dialog> dialog() {
                 return registry;

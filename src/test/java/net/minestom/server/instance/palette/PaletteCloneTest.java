@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Random;
 
+import static net.minestom.server.instance.palette.PaletteAssertions.assertAllEquals;
+import static net.minestom.server.instance.palette.PaletteAssertions.testPalettes;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -79,14 +81,7 @@ public class PaletteCloneTest {
             assertEquals(original.dimension(), cloned.dimension());
             assertTrue(original.compare(cloned));
 
-            // Verify all values are 0
-            for (int x = 0; x < cloned.dimension(); x++) {
-                for (int y = 0; y < cloned.dimension(); y++) {
-                    for (int z = 0; z < cloned.dimension(); z++) {
-                        assertEquals(0, cloned.get(x, y, z));
-                    }
-                }
-            }
+            assertAllEquals(0, cloned);
         }
     }
 
@@ -103,14 +98,7 @@ public class PaletteCloneTest {
             assertEquals(original.maxSize(), cloned.count());
             assertTrue(original.compare(cloned));
 
-            // Verify all values are correct
-            for (int x = 0; x < cloned.dimension(); x++) {
-                for (int y = 0; y < cloned.dimension(); y++) {
-                    for (int z = 0; z < cloned.dimension(); z++) {
-                        assertEquals(123, cloned.get(x, y, z));
-                    }
-                }
-            }
+            assertAllEquals(123, cloned);
         }
     }
 
@@ -204,23 +192,8 @@ public class PaletteCloneTest {
             // Verify they're completely independent
             assertFalse(original.compare(cloned));
 
-            // Check original
-            for (int x = 0; x < original.dimension(); x++) {
-                for (int y = 0; y < original.dimension(); y++) {
-                    for (int z = 0; z < original.dimension(); z++) {
-                        assertEquals(500, original.get(x, y, z));
-                    }
-                }
-            }
-
-            // Check clone
-            for (int x = 0; x < cloned.dimension(); x++) {
-                for (int y = 0; y < cloned.dimension(); y++) {
-                    for (int z = 0; z < cloned.dimension(); z++) {
-                        assertEquals(600, cloned.get(x, y, z));
-                    }
-                }
-            }
+            assertAllEquals(500, original);
+            assertAllEquals(600, cloned);
         }
     }
 
@@ -368,13 +341,4 @@ public class PaletteCloneTest {
         }
     }
 
-    private static List<Palette> testPalettes() {
-        return List.of(
-                Palette.sized(2, 1, 5, 15, 3),
-                Palette.sized(4, 1, 5, 15, 3),
-                Palette.sized(8, 1, 5, 15, 3),
-                Palette.sized(16, 1, 5, 15, 3),
-                Palette.blocks()
-        );
-    }
 }

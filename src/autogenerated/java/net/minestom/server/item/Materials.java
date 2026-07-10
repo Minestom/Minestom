@@ -59,6 +59,60 @@ sealed interface Materials permits Material {
 
     Material CHISELED_TUFF_BRICKS = MaterialImpl.get("chiseled_tuff_bricks");
 
+    Material SULFUR = MaterialImpl.get("sulfur");
+
+    Material POTENT_SULFUR = MaterialImpl.get("potent_sulfur");
+
+    Material SULFUR_SLAB = MaterialImpl.get("sulfur_slab");
+
+    Material SULFUR_STAIRS = MaterialImpl.get("sulfur_stairs");
+
+    Material SULFUR_WALL = MaterialImpl.get("sulfur_wall");
+
+    Material POLISHED_SULFUR = MaterialImpl.get("polished_sulfur");
+
+    Material POLISHED_SULFUR_SLAB = MaterialImpl.get("polished_sulfur_slab");
+
+    Material POLISHED_SULFUR_STAIRS = MaterialImpl.get("polished_sulfur_stairs");
+
+    Material POLISHED_SULFUR_WALL = MaterialImpl.get("polished_sulfur_wall");
+
+    Material SULFUR_BRICKS = MaterialImpl.get("sulfur_bricks");
+
+    Material SULFUR_BRICK_SLAB = MaterialImpl.get("sulfur_brick_slab");
+
+    Material SULFUR_BRICK_STAIRS = MaterialImpl.get("sulfur_brick_stairs");
+
+    Material SULFUR_BRICK_WALL = MaterialImpl.get("sulfur_brick_wall");
+
+    Material CHISELED_SULFUR = MaterialImpl.get("chiseled_sulfur");
+
+    Material CINNABAR = MaterialImpl.get("cinnabar");
+
+    Material CINNABAR_SLAB = MaterialImpl.get("cinnabar_slab");
+
+    Material CINNABAR_STAIRS = MaterialImpl.get("cinnabar_stairs");
+
+    Material CINNABAR_WALL = MaterialImpl.get("cinnabar_wall");
+
+    Material POLISHED_CINNABAR = MaterialImpl.get("polished_cinnabar");
+
+    Material POLISHED_CINNABAR_SLAB = MaterialImpl.get("polished_cinnabar_slab");
+
+    Material POLISHED_CINNABAR_STAIRS = MaterialImpl.get("polished_cinnabar_stairs");
+
+    Material POLISHED_CINNABAR_WALL = MaterialImpl.get("polished_cinnabar_wall");
+
+    Material CINNABAR_BRICKS = MaterialImpl.get("cinnabar_bricks");
+
+    Material CINNABAR_BRICK_SLAB = MaterialImpl.get("cinnabar_brick_slab");
+
+    Material CINNABAR_BRICK_STAIRS = MaterialImpl.get("cinnabar_brick_stairs");
+
+    Material CINNABAR_BRICK_WALL = MaterialImpl.get("cinnabar_brick_wall");
+
+    Material CHISELED_CINNABAR = MaterialImpl.get("chiseled_cinnabar");
+
     Material DRIPSTONE_BLOCK = MaterialImpl.get("dripstone_block");
 
     Material GRASS_BLOCK = MaterialImpl.get("grass_block");
@@ -191,49 +245,11 @@ sealed interface Materials permits Material {
 
     Material COPPER_BLOCK = MaterialImpl.get("copper_block");
 
-    Material GOLD_BLOCK = MaterialImpl.get("gold_block");
-
-    Material DIAMOND_BLOCK = MaterialImpl.get("diamond_block");
-
-    Material NETHERITE_BLOCK = MaterialImpl.get("netherite_block");
-
     Material EXPOSED_COPPER = MaterialImpl.get("exposed_copper");
 
     Material WEATHERED_COPPER = MaterialImpl.get("weathered_copper");
 
     Material OXIDIZED_COPPER = MaterialImpl.get("oxidized_copper");
-
-    Material CHISELED_COPPER = MaterialImpl.get("chiseled_copper");
-
-    Material EXPOSED_CHISELED_COPPER = MaterialImpl.get("exposed_chiseled_copper");
-
-    Material WEATHERED_CHISELED_COPPER = MaterialImpl.get("weathered_chiseled_copper");
-
-    Material OXIDIZED_CHISELED_COPPER = MaterialImpl.get("oxidized_chiseled_copper");
-
-    Material CUT_COPPER = MaterialImpl.get("cut_copper");
-
-    Material EXPOSED_CUT_COPPER = MaterialImpl.get("exposed_cut_copper");
-
-    Material WEATHERED_CUT_COPPER = MaterialImpl.get("weathered_cut_copper");
-
-    Material OXIDIZED_CUT_COPPER = MaterialImpl.get("oxidized_cut_copper");
-
-    Material CUT_COPPER_STAIRS = MaterialImpl.get("cut_copper_stairs");
-
-    Material EXPOSED_CUT_COPPER_STAIRS = MaterialImpl.get("exposed_cut_copper_stairs");
-
-    Material WEATHERED_CUT_COPPER_STAIRS = MaterialImpl.get("weathered_cut_copper_stairs");
-
-    Material OXIDIZED_CUT_COPPER_STAIRS = MaterialImpl.get("oxidized_cut_copper_stairs");
-
-    Material CUT_COPPER_SLAB = MaterialImpl.get("cut_copper_slab");
-
-    Material EXPOSED_CUT_COPPER_SLAB = MaterialImpl.get("exposed_cut_copper_slab");
-
-    Material WEATHERED_CUT_COPPER_SLAB = MaterialImpl.get("weathered_cut_copper_slab");
-
-    Material OXIDIZED_CUT_COPPER_SLAB = MaterialImpl.get("oxidized_cut_copper_slab");
 
     Material WAXED_COPPER_BLOCK = MaterialImpl.get("waxed_copper_block");
 
@@ -243,6 +259,20 @@ sealed interface Materials permits Material {
 
     Material WAXED_OXIDIZED_COPPER = MaterialImpl.get("waxed_oxidized_copper");
 
+    Material GOLD_BLOCK = MaterialImpl.get("gold_block");
+
+    Material DIAMOND_BLOCK = MaterialImpl.get("diamond_block");
+
+    Material NETHERITE_BLOCK = MaterialImpl.get("netherite_block");
+
+    Material CHISELED_COPPER = MaterialImpl.get("chiseled_copper");
+
+    Material EXPOSED_CHISELED_COPPER = MaterialImpl.get("exposed_chiseled_copper");
+
+    Material WEATHERED_CHISELED_COPPER = MaterialImpl.get("weathered_chiseled_copper");
+
+    Material OXIDIZED_CHISELED_COPPER = MaterialImpl.get("oxidized_chiseled_copper");
+
     Material WAXED_CHISELED_COPPER = MaterialImpl.get("waxed_chiseled_copper");
 
     Material WAXED_EXPOSED_CHISELED_COPPER = MaterialImpl.get("waxed_exposed_chiseled_copper");
@@ -250,6 +280,14 @@ sealed interface Materials permits Material {
     Material WAXED_WEATHERED_CHISELED_COPPER = MaterialImpl.get("waxed_weathered_chiseled_copper");
 
     Material WAXED_OXIDIZED_CHISELED_COPPER = MaterialImpl.get("waxed_oxidized_chiseled_copper");
+
+    Material CUT_COPPER = MaterialImpl.get("cut_copper");
+
+    Material EXPOSED_CUT_COPPER = MaterialImpl.get("exposed_cut_copper");
+
+    Material WEATHERED_CUT_COPPER = MaterialImpl.get("weathered_cut_copper");
+
+    Material OXIDIZED_CUT_COPPER = MaterialImpl.get("oxidized_cut_copper");
 
     Material WAXED_CUT_COPPER = MaterialImpl.get("waxed_cut_copper");
 
@@ -259,6 +297,14 @@ sealed interface Materials permits Material {
 
     Material WAXED_OXIDIZED_CUT_COPPER = MaterialImpl.get("waxed_oxidized_cut_copper");
 
+    Material CUT_COPPER_STAIRS = MaterialImpl.get("cut_copper_stairs");
+
+    Material EXPOSED_CUT_COPPER_STAIRS = MaterialImpl.get("exposed_cut_copper_stairs");
+
+    Material WEATHERED_CUT_COPPER_STAIRS = MaterialImpl.get("weathered_cut_copper_stairs");
+
+    Material OXIDIZED_CUT_COPPER_STAIRS = MaterialImpl.get("oxidized_cut_copper_stairs");
+
     Material WAXED_CUT_COPPER_STAIRS = MaterialImpl.get("waxed_cut_copper_stairs");
 
     Material WAXED_EXPOSED_CUT_COPPER_STAIRS = MaterialImpl.get("waxed_exposed_cut_copper_stairs");
@@ -266,6 +312,14 @@ sealed interface Materials permits Material {
     Material WAXED_WEATHERED_CUT_COPPER_STAIRS = MaterialImpl.get("waxed_weathered_cut_copper_stairs");
 
     Material WAXED_OXIDIZED_CUT_COPPER_STAIRS = MaterialImpl.get("waxed_oxidized_cut_copper_stairs");
+
+    Material CUT_COPPER_SLAB = MaterialImpl.get("cut_copper_slab");
+
+    Material EXPOSED_CUT_COPPER_SLAB = MaterialImpl.get("exposed_cut_copper_slab");
+
+    Material WEATHERED_CUT_COPPER_SLAB = MaterialImpl.get("weathered_cut_copper_slab");
+
+    Material OXIDIZED_CUT_COPPER_SLAB = MaterialImpl.get("oxidized_cut_copper_slab");
 
     Material WAXED_CUT_COPPER_SLAB = MaterialImpl.get("waxed_cut_copper_slab");
 
@@ -466,6 +520,8 @@ sealed interface Materials permits Material {
     Material BLACK_WOOL = MaterialImpl.get("black_wool");
 
     Material DANDELION = MaterialImpl.get("dandelion");
+
+    Material GOLDEN_DANDELION = MaterialImpl.get("golden_dandelion");
 
     Material OPEN_EYEBLOSSOM = MaterialImpl.get("open_eyeblossom");
 
@@ -2055,6 +2111,8 @@ sealed interface Materials permits Material {
 
     Material AXOLOTL_BUCKET = MaterialImpl.get("axolotl_bucket");
 
+    Material SULFUR_CUBE_BUCKET = MaterialImpl.get("sulfur_cube_bucket");
+
     Material TADPOLE_BUCKET = MaterialImpl.get("tadpole_bucket");
 
     Material BRICK = MaterialImpl.get("brick");
@@ -2267,45 +2325,173 @@ sealed interface Materials permits Material {
 
     Material GLISTERING_MELON_SLICE = MaterialImpl.get("glistering_melon_slice");
 
+    Material CHICKEN_SPAWN_EGG = MaterialImpl.get("chicken_spawn_egg");
+
+    Material COW_SPAWN_EGG = MaterialImpl.get("cow_spawn_egg");
+
+    Material PIG_SPAWN_EGG = MaterialImpl.get("pig_spawn_egg");
+
+    Material SHEEP_SPAWN_EGG = MaterialImpl.get("sheep_spawn_egg");
+
+    Material CAMEL_SPAWN_EGG = MaterialImpl.get("camel_spawn_egg");
+
+    Material DONKEY_SPAWN_EGG = MaterialImpl.get("donkey_spawn_egg");
+
+    Material HORSE_SPAWN_EGG = MaterialImpl.get("horse_spawn_egg");
+
+    Material MULE_SPAWN_EGG = MaterialImpl.get("mule_spawn_egg");
+
+    Material CAT_SPAWN_EGG = MaterialImpl.get("cat_spawn_egg");
+
+    Material PARROT_SPAWN_EGG = MaterialImpl.get("parrot_spawn_egg");
+
+    Material WOLF_SPAWN_EGG = MaterialImpl.get("wolf_spawn_egg");
+
     Material ARMADILLO_SPAWN_EGG = MaterialImpl.get("armadillo_spawn_egg");
-
-    Material ALLAY_SPAWN_EGG = MaterialImpl.get("allay_spawn_egg");
-
-    Material AXOLOTL_SPAWN_EGG = MaterialImpl.get("axolotl_spawn_egg");
 
     Material BAT_SPAWN_EGG = MaterialImpl.get("bat_spawn_egg");
 
     Material BEE_SPAWN_EGG = MaterialImpl.get("bee_spawn_egg");
 
-    Material BLAZE_SPAWN_EGG = MaterialImpl.get("blaze_spawn_egg");
+    Material FOX_SPAWN_EGG = MaterialImpl.get("fox_spawn_egg");
 
-    Material BOGGED_SPAWN_EGG = MaterialImpl.get("bogged_spawn_egg");
+    Material GOAT_SPAWN_EGG = MaterialImpl.get("goat_spawn_egg");
 
-    Material BREEZE_SPAWN_EGG = MaterialImpl.get("breeze_spawn_egg");
+    Material LLAMA_SPAWN_EGG = MaterialImpl.get("llama_spawn_egg");
 
-    Material CAT_SPAWN_EGG = MaterialImpl.get("cat_spawn_egg");
+    Material OCELOT_SPAWN_EGG = MaterialImpl.get("ocelot_spawn_egg");
 
-    Material CAMEL_SPAWN_EGG = MaterialImpl.get("camel_spawn_egg");
+    Material PANDA_SPAWN_EGG = MaterialImpl.get("panda_spawn_egg");
 
-    Material CAVE_SPIDER_SPAWN_EGG = MaterialImpl.get("cave_spider_spawn_egg");
+    Material POLAR_BEAR_SPAWN_EGG = MaterialImpl.get("polar_bear_spawn_egg");
 
-    Material CHICKEN_SPAWN_EGG = MaterialImpl.get("chicken_spawn_egg");
+    Material RABBIT_SPAWN_EGG = MaterialImpl.get("rabbit_spawn_egg");
+
+    Material AXOLOTL_SPAWN_EGG = MaterialImpl.get("axolotl_spawn_egg");
 
     Material COD_SPAWN_EGG = MaterialImpl.get("cod_spawn_egg");
 
-    Material COPPER_GOLEM_SPAWN_EGG = MaterialImpl.get("copper_golem_spawn_egg");
-
-    Material COW_SPAWN_EGG = MaterialImpl.get("cow_spawn_egg");
-
-    Material CREEPER_SPAWN_EGG = MaterialImpl.get("creeper_spawn_egg");
-
     Material DOLPHIN_SPAWN_EGG = MaterialImpl.get("dolphin_spawn_egg");
 
-    Material DONKEY_SPAWN_EGG = MaterialImpl.get("donkey_spawn_egg");
+    Material FROG_SPAWN_EGG = MaterialImpl.get("frog_spawn_egg");
+
+    Material GLOW_SQUID_SPAWN_EGG = MaterialImpl.get("glow_squid_spawn_egg");
+
+    Material NAUTILUS_SPAWN_EGG = MaterialImpl.get("nautilus_spawn_egg");
+
+    Material PUFFERFISH_SPAWN_EGG = MaterialImpl.get("pufferfish_spawn_egg");
+
+    Material SALMON_SPAWN_EGG = MaterialImpl.get("salmon_spawn_egg");
+
+    Material SQUID_SPAWN_EGG = MaterialImpl.get("squid_spawn_egg");
+
+    Material TADPOLE_SPAWN_EGG = MaterialImpl.get("tadpole_spawn_egg");
+
+    Material TROPICAL_FISH_SPAWN_EGG = MaterialImpl.get("tropical_fish_spawn_egg");
+
+    Material TURTLE_SPAWN_EGG = MaterialImpl.get("turtle_spawn_egg");
+
+    Material ALLAY_SPAWN_EGG = MaterialImpl.get("allay_spawn_egg");
+
+    Material MOOSHROOM_SPAWN_EGG = MaterialImpl.get("mooshroom_spawn_egg");
+
+    Material SNIFFER_SPAWN_EGG = MaterialImpl.get("sniffer_spawn_egg");
+
+    Material SULFUR_CUBE_SPAWN_EGG = MaterialImpl.get("sulfur_cube_spawn_egg");
+
+    Material COPPER_GOLEM_SPAWN_EGG = MaterialImpl.get("copper_golem_spawn_egg");
+
+    Material IRON_GOLEM_SPAWN_EGG = MaterialImpl.get("iron_golem_spawn_egg");
+
+    Material SNOW_GOLEM_SPAWN_EGG = MaterialImpl.get("snow_golem_spawn_egg");
+
+    Material TRADER_LLAMA_SPAWN_EGG = MaterialImpl.get("trader_llama_spawn_egg");
+
+    Material VILLAGER_SPAWN_EGG = MaterialImpl.get("villager_spawn_egg");
+
+    Material WANDERING_TRADER_SPAWN_EGG = MaterialImpl.get("wandering_trader_spawn_egg");
+
+    Material BOGGED_SPAWN_EGG = MaterialImpl.get("bogged_spawn_egg");
+
+    Material CAMEL_HUSK_SPAWN_EGG = MaterialImpl.get("camel_husk_spawn_egg");
 
     Material DROWNED_SPAWN_EGG = MaterialImpl.get("drowned_spawn_egg");
 
+    Material HUSK_SPAWN_EGG = MaterialImpl.get("husk_spawn_egg");
+
+    Material PARCHED_SPAWN_EGG = MaterialImpl.get("parched_spawn_egg");
+
+    Material SKELETON_SPAWN_EGG = MaterialImpl.get("skeleton_spawn_egg");
+
+    Material SKELETON_HORSE_SPAWN_EGG = MaterialImpl.get("skeleton_horse_spawn_egg");
+
+    Material STRAY_SPAWN_EGG = MaterialImpl.get("stray_spawn_egg");
+
+    Material WITHER_SPAWN_EGG = MaterialImpl.get("wither_spawn_egg");
+
+    Material WITHER_SKELETON_SPAWN_EGG = MaterialImpl.get("wither_skeleton_spawn_egg");
+
+    Material ZOMBIE_SPAWN_EGG = MaterialImpl.get("zombie_spawn_egg");
+
+    Material ZOMBIE_HORSE_SPAWN_EGG = MaterialImpl.get("zombie_horse_spawn_egg");
+
+    Material ZOMBIE_NAUTILUS_SPAWN_EGG = MaterialImpl.get("zombie_nautilus_spawn_egg");
+
+    Material ZOMBIE_VILLAGER_SPAWN_EGG = MaterialImpl.get("zombie_villager_spawn_egg");
+
+    Material CAVE_SPIDER_SPAWN_EGG = MaterialImpl.get("cave_spider_spawn_egg");
+
+    Material SPIDER_SPAWN_EGG = MaterialImpl.get("spider_spawn_egg");
+
+    Material BREEZE_SPAWN_EGG = MaterialImpl.get("breeze_spawn_egg");
+
+    Material CREAKING_SPAWN_EGG = MaterialImpl.get("creaking_spawn_egg");
+
+    Material CREEPER_SPAWN_EGG = MaterialImpl.get("creeper_spawn_egg");
+
     Material ELDER_GUARDIAN_SPAWN_EGG = MaterialImpl.get("elder_guardian_spawn_egg");
+
+    Material GUARDIAN_SPAWN_EGG = MaterialImpl.get("guardian_spawn_egg");
+
+    Material PHANTOM_SPAWN_EGG = MaterialImpl.get("phantom_spawn_egg");
+
+    Material SILVERFISH_SPAWN_EGG = MaterialImpl.get("silverfish_spawn_egg");
+
+    Material SLIME_SPAWN_EGG = MaterialImpl.get("slime_spawn_egg");
+
+    Material WARDEN_SPAWN_EGG = MaterialImpl.get("warden_spawn_egg");
+
+    Material WITCH_SPAWN_EGG = MaterialImpl.get("witch_spawn_egg");
+
+    Material EVOKER_SPAWN_EGG = MaterialImpl.get("evoker_spawn_egg");
+
+    Material PILLAGER_SPAWN_EGG = MaterialImpl.get("pillager_spawn_egg");
+
+    Material RAVAGER_SPAWN_EGG = MaterialImpl.get("ravager_spawn_egg");
+
+    Material VINDICATOR_SPAWN_EGG = MaterialImpl.get("vindicator_spawn_egg");
+
+    Material VEX_SPAWN_EGG = MaterialImpl.get("vex_spawn_egg");
+
+    Material BLAZE_SPAWN_EGG = MaterialImpl.get("blaze_spawn_egg");
+
+    Material GHAST_SPAWN_EGG = MaterialImpl.get("ghast_spawn_egg");
+
+    Material HAPPY_GHAST_SPAWN_EGG = MaterialImpl.get("happy_ghast_spawn_egg");
+
+    Material HOGLIN_SPAWN_EGG = MaterialImpl.get("hoglin_spawn_egg");
+
+    Material MAGMA_CUBE_SPAWN_EGG = MaterialImpl.get("magma_cube_spawn_egg");
+
+    Material PIGLIN_SPAWN_EGG = MaterialImpl.get("piglin_spawn_egg");
+
+    Material PIGLIN_BRUTE_SPAWN_EGG = MaterialImpl.get("piglin_brute_spawn_egg");
+
+    Material STRIDER_SPAWN_EGG = MaterialImpl.get("strider_spawn_egg");
+
+    Material ZOGLIN_SPAWN_EGG = MaterialImpl.get("zoglin_spawn_egg");
+
+    Material ZOMBIFIED_PIGLIN_SPAWN_EGG = MaterialImpl.get("zombified_piglin_spawn_egg");
 
     Material ENDER_DRAGON_SPAWN_EGG = MaterialImpl.get("ender_dragon_spawn_egg");
 
@@ -2313,125 +2499,7 @@ sealed interface Materials permits Material {
 
     Material ENDERMITE_SPAWN_EGG = MaterialImpl.get("endermite_spawn_egg");
 
-    Material EVOKER_SPAWN_EGG = MaterialImpl.get("evoker_spawn_egg");
-
-    Material FOX_SPAWN_EGG = MaterialImpl.get("fox_spawn_egg");
-
-    Material FROG_SPAWN_EGG = MaterialImpl.get("frog_spawn_egg");
-
-    Material GHAST_SPAWN_EGG = MaterialImpl.get("ghast_spawn_egg");
-
-    Material HAPPY_GHAST_SPAWN_EGG = MaterialImpl.get("happy_ghast_spawn_egg");
-
-    Material GLOW_SQUID_SPAWN_EGG = MaterialImpl.get("glow_squid_spawn_egg");
-
-    Material GOAT_SPAWN_EGG = MaterialImpl.get("goat_spawn_egg");
-
-    Material GUARDIAN_SPAWN_EGG = MaterialImpl.get("guardian_spawn_egg");
-
-    Material HOGLIN_SPAWN_EGG = MaterialImpl.get("hoglin_spawn_egg");
-
-    Material HORSE_SPAWN_EGG = MaterialImpl.get("horse_spawn_egg");
-
-    Material HUSK_SPAWN_EGG = MaterialImpl.get("husk_spawn_egg");
-
-    Material IRON_GOLEM_SPAWN_EGG = MaterialImpl.get("iron_golem_spawn_egg");
-
-    Material LLAMA_SPAWN_EGG = MaterialImpl.get("llama_spawn_egg");
-
-    Material MAGMA_CUBE_SPAWN_EGG = MaterialImpl.get("magma_cube_spawn_egg");
-
-    Material MOOSHROOM_SPAWN_EGG = MaterialImpl.get("mooshroom_spawn_egg");
-
-    Material MULE_SPAWN_EGG = MaterialImpl.get("mule_spawn_egg");
-
-    Material OCELOT_SPAWN_EGG = MaterialImpl.get("ocelot_spawn_egg");
-
-    Material PANDA_SPAWN_EGG = MaterialImpl.get("panda_spawn_egg");
-
-    Material PARROT_SPAWN_EGG = MaterialImpl.get("parrot_spawn_egg");
-
-    Material PHANTOM_SPAWN_EGG = MaterialImpl.get("phantom_spawn_egg");
-
-    Material PIG_SPAWN_EGG = MaterialImpl.get("pig_spawn_egg");
-
-    Material PIGLIN_SPAWN_EGG = MaterialImpl.get("piglin_spawn_egg");
-
-    Material PIGLIN_BRUTE_SPAWN_EGG = MaterialImpl.get("piglin_brute_spawn_egg");
-
-    Material PILLAGER_SPAWN_EGG = MaterialImpl.get("pillager_spawn_egg");
-
-    Material POLAR_BEAR_SPAWN_EGG = MaterialImpl.get("polar_bear_spawn_egg");
-
-    Material PUFFERFISH_SPAWN_EGG = MaterialImpl.get("pufferfish_spawn_egg");
-
-    Material RABBIT_SPAWN_EGG = MaterialImpl.get("rabbit_spawn_egg");
-
-    Material RAVAGER_SPAWN_EGG = MaterialImpl.get("ravager_spawn_egg");
-
-    Material SALMON_SPAWN_EGG = MaterialImpl.get("salmon_spawn_egg");
-
-    Material SHEEP_SPAWN_EGG = MaterialImpl.get("sheep_spawn_egg");
-
     Material SHULKER_SPAWN_EGG = MaterialImpl.get("shulker_spawn_egg");
-
-    Material SILVERFISH_SPAWN_EGG = MaterialImpl.get("silverfish_spawn_egg");
-
-    Material SKELETON_SPAWN_EGG = MaterialImpl.get("skeleton_spawn_egg");
-
-    Material SKELETON_HORSE_SPAWN_EGG = MaterialImpl.get("skeleton_horse_spawn_egg");
-
-    Material SLIME_SPAWN_EGG = MaterialImpl.get("slime_spawn_egg");
-
-    Material SNIFFER_SPAWN_EGG = MaterialImpl.get("sniffer_spawn_egg");
-
-    Material SNOW_GOLEM_SPAWN_EGG = MaterialImpl.get("snow_golem_spawn_egg");
-
-    Material SPIDER_SPAWN_EGG = MaterialImpl.get("spider_spawn_egg");
-
-    Material SQUID_SPAWN_EGG = MaterialImpl.get("squid_spawn_egg");
-
-    Material STRAY_SPAWN_EGG = MaterialImpl.get("stray_spawn_egg");
-
-    Material STRIDER_SPAWN_EGG = MaterialImpl.get("strider_spawn_egg");
-
-    Material TADPOLE_SPAWN_EGG = MaterialImpl.get("tadpole_spawn_egg");
-
-    Material TRADER_LLAMA_SPAWN_EGG = MaterialImpl.get("trader_llama_spawn_egg");
-
-    Material TROPICAL_FISH_SPAWN_EGG = MaterialImpl.get("tropical_fish_spawn_egg");
-
-    Material TURTLE_SPAWN_EGG = MaterialImpl.get("turtle_spawn_egg");
-
-    Material VEX_SPAWN_EGG = MaterialImpl.get("vex_spawn_egg");
-
-    Material VILLAGER_SPAWN_EGG = MaterialImpl.get("villager_spawn_egg");
-
-    Material VINDICATOR_SPAWN_EGG = MaterialImpl.get("vindicator_spawn_egg");
-
-    Material WANDERING_TRADER_SPAWN_EGG = MaterialImpl.get("wandering_trader_spawn_egg");
-
-    Material WARDEN_SPAWN_EGG = MaterialImpl.get("warden_spawn_egg");
-
-    Material WITCH_SPAWN_EGG = MaterialImpl.get("witch_spawn_egg");
-
-    Material WITHER_SPAWN_EGG = MaterialImpl.get("wither_spawn_egg");
-
-    Material WITHER_SKELETON_SPAWN_EGG = MaterialImpl.get("wither_skeleton_spawn_egg");
-
-    Material WOLF_SPAWN_EGG = MaterialImpl.get("wolf_spawn_egg");
-
-    Material ZOGLIN_SPAWN_EGG = MaterialImpl.get("zoglin_spawn_egg");
-
-    Material CREAKING_SPAWN_EGG = MaterialImpl.get("creaking_spawn_egg");
-
-    Material ZOMBIE_SPAWN_EGG = MaterialImpl.get("zombie_spawn_egg");
-
-    Material ZOMBIE_HORSE_SPAWN_EGG = MaterialImpl.get("zombie_horse_spawn_egg");
-
-    Material ZOMBIE_VILLAGER_SPAWN_EGG = MaterialImpl.get("zombie_villager_spawn_egg");
-
-    Material ZOMBIFIED_PIGLIN_SPAWN_EGG = MaterialImpl.get("zombified_piglin_spawn_egg");
 
     Material EXPERIENCE_BOTTLE = MaterialImpl.get("experience_bottle");
 
@@ -2517,6 +2585,8 @@ sealed interface Materials permits Material {
 
     Material DIAMOND_HORSE_ARMOR = MaterialImpl.get("diamond_horse_armor");
 
+    Material NETHERITE_HORSE_ARMOR = MaterialImpl.get("netherite_horse_armor");
+
     Material LEATHER_HORSE_ARMOR = MaterialImpl.get("leather_horse_armor");
 
     Material LEAD = MaterialImpl.get("lead");
@@ -2589,6 +2659,20 @@ sealed interface Materials permits Material {
 
     Material SHIELD = MaterialImpl.get("shield");
 
+    Material WOODEN_SPEAR = MaterialImpl.get("wooden_spear");
+
+    Material STONE_SPEAR = MaterialImpl.get("stone_spear");
+
+    Material COPPER_SPEAR = MaterialImpl.get("copper_spear");
+
+    Material IRON_SPEAR = MaterialImpl.get("iron_spear");
+
+    Material GOLDEN_SPEAR = MaterialImpl.get("golden_spear");
+
+    Material DIAMOND_SPEAR = MaterialImpl.get("diamond_spear");
+
+    Material NETHERITE_SPEAR = MaterialImpl.get("netherite_spear");
+
     Material TOTEM_OF_UNDYING = MaterialImpl.get("totem_of_undying");
 
     Material SHULKER_SHELL = MaterialImpl.get("shulker_shell");
@@ -2606,6 +2690,8 @@ sealed interface Materials permits Material {
     Material MUSIC_DISC_CAT = MaterialImpl.get("music_disc_cat");
 
     Material MUSIC_DISC_BLOCKS = MaterialImpl.get("music_disc_blocks");
+
+    Material MUSIC_DISC_BOUNCE = MaterialImpl.get("music_disc_bounce");
 
     Material MUSIC_DISC_CHIRP = MaterialImpl.get("music_disc_chirp");
 
@@ -2648,6 +2734,16 @@ sealed interface Materials permits Material {
     Material TRIDENT = MaterialImpl.get("trident");
 
     Material NAUTILUS_SHELL = MaterialImpl.get("nautilus_shell");
+
+    Material IRON_NAUTILUS_ARMOR = MaterialImpl.get("iron_nautilus_armor");
+
+    Material GOLDEN_NAUTILUS_ARMOR = MaterialImpl.get("golden_nautilus_armor");
+
+    Material DIAMOND_NAUTILUS_ARMOR = MaterialImpl.get("diamond_nautilus_armor");
+
+    Material NETHERITE_NAUTILUS_ARMOR = MaterialImpl.get("netherite_nautilus_armor");
+
+    Material COPPER_NAUTILUS_ARMOR = MaterialImpl.get("copper_nautilus_armor");
 
     Material HEART_OF_THE_SEA = MaterialImpl.get("heart_of_the_sea");
 
@@ -2812,6 +2908,8 @@ sealed interface Materials permits Material {
     Material AMETHYST_CLUSTER = MaterialImpl.get("amethyst_cluster");
 
     Material POINTED_DRIPSTONE = MaterialImpl.get("pointed_dripstone");
+
+    Material SULFUR_SPIKE = MaterialImpl.get("sulfur_spike");
 
     Material OCHRE_FROGLIGHT = MaterialImpl.get("ochre_froglight");
 

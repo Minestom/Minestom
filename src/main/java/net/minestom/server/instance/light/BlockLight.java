@@ -7,17 +7,19 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
 import static net.minestom.server.instance.light.LightCompute.*;
 
 final class BlockLight implements Light {
-    private byte[] content;
-    private byte[] contentPropagation;
-    private byte[] contentPropagationSwap;
+    private byte @Nullable [] content;
+    private byte @Nullable [] contentPropagation;
+    private byte @Nullable [] contentPropagationSwap;
 
     private volatile boolean isValidBorders = true;
     private final AtomicBoolean needsSend = new AtomicBoolean(false);
@@ -30,19 +32,33 @@ final class BlockLight implements Light {
     }
 
     static ShortArrayFIFOQueue buildInternalQueue(Palette blockPalette) {
-        ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
-        // Apply section light
-        blockPalette.getAllPresent((x, y, z, stateId) -> {
-            final Block block = Block.fromStateId(stateId);
-            assert block != null;
-            final byte lightEmission = (byte) block.registry().lightEmission();
+        if (blockPalette.isEmpty()) return new ShortArrayFIFOQueue(0); // Avoid state id lookup for air
 
-            final int index = x | (z << 4) | (y << 8);
-            if (lightEmission > 0) {
-                lightSources.enqueue((short) (index | (lightEmission << 12)));
+        int singleValue = blockPalette.singleValue();
+        if (singleValue != -1) {
+            Block block = Block.fromStateId(singleValue);
+            assert block != null;
+            int lightEmission = block.registry().lightEmission();
+            if (lightEmission <= 0) return new ShortArrayFIFOQueue(0);
+            ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue(SECTION_BLOCK_COUNT);
+            final int prefix = lightEmission << 12;
+            for (int index = 0; index < SECTION_BLOCK_COUNT; index++) {
+                lightSources.enqueue((short) (index | prefix));
             }
-        });
-        return lightSources;
+            return lightSources;
+        } else {
+            ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
+            // Apply section light
+            blockPalette.getAllPresent((x, y, z, stateId) -> {
+                final Block block = Block.fromStateId(stateId);
+                assert block != null;
+                final int lightEmission = block.registry().lightEmission();
+                if (lightEmission <= 0) return;
+                final int index = x | (z << 4) | (y << 8);
+                lightSources.enqueue((short) (index | (lightEmission << 12)));
+            });
+            return lightSources;
+        }
     }
 
     @Override

@@ -15,8 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class PathfinderIntegrationTest {
@@ -30,7 +29,7 @@ public class PathfinderIntegrationTest {
      */
     private boolean validateNodes(List<PNode> nodes, Instance instance) {
         if (nodes == null) fail("Path is null");
-        if (nodes.size() == 0) fail("Path is empty");
+        if (nodes.isEmpty()) fail("Path is empty");
 
         nodes.forEach((node) -> {
             if (instance.getBlock(node.blockX(), node.blockY(), node.blockZ()).isSolid()) {
@@ -45,9 +44,7 @@ public class PathfinderIntegrationTest {
     public void testTall(Env env) {
         var i = env.createFlatInstance();
 
-        ChunkRange.chunksInRange(0, 0, 10, (x, z) -> {
-            i.loadChunk(x, z).join();
-        });
+        ChunkRange.chunksInRange(0, 0, 10, (x, z) -> i.loadChunk(x, z).join());
 
         var zombie = new LivingEntity(EntityType.ZOMBIE);
         zombie.setInstance(i, new Pos(0, 40, 0));
@@ -60,7 +57,7 @@ public class PathfinderIntegrationTest {
         while (nav.getState() == PPath.State.CALCULATING) {
         }
 
-        assert (nav.getNodes() != null);
+        assertNotNull(nav.getNodes());
         validateNodes(nav.getNodes(), i);
     }
 
@@ -68,9 +65,7 @@ public class PathfinderIntegrationTest {
     public void testStraightLine(Env env) {
         var i = env.createFlatInstance();
 
-        ChunkRange.chunksInRange(0, 0, 10, (x, z) -> {
-            i.loadChunk(x, z).join();
-        });
+        ChunkRange.chunksInRange(0, 0, 10, (x, z) -> i.loadChunk(x, z).join());
 
         var zombie = new LivingEntity(EntityType.ZOMBIE);
         zombie.setInstance(i, new Pos(0, 40, 0));
@@ -80,7 +75,7 @@ public class PathfinderIntegrationTest {
         while (nav.getState() == PPath.State.CALCULATING) {
         }
 
-        assert (nav.getNodes() != null);
+        assertNotNull(nav.getNodes());
         validateNodes(nav.getNodes(), i);
     }
 
@@ -88,9 +83,7 @@ public class PathfinderIntegrationTest {
     public void testShort(Env env) {
         var i = env.createFlatInstance();
 
-        ChunkRange.chunksInRange(0, 0, 10, (x, z) -> {
-            i.loadChunk(x, z).join();
-        });
+        ChunkRange.chunksInRange(0, 0, 10, (x, z) -> i.loadChunk(x, z).join());
 
         var zombie = new LivingEntity(EntityType.ZOMBIE);
         zombie.setInstance(i, new Pos(0, 40, 0));
@@ -101,7 +94,7 @@ public class PathfinderIntegrationTest {
         while (nav.getState() == PPath.State.CALCULATING) {
         }
 
-        assert (nav.getNodes() != null);
+        assertNotNull(nav.getNodes());
         validateNodes(nav.getNodes(), i);
     }
 
@@ -109,9 +102,7 @@ public class PathfinderIntegrationTest {
     public void testBug(Env env) {
         var i = env.createFlatInstance();
 
-        ChunkRange.chunksInRange(0, 0, 10, (x, z) -> {
-            i.loadChunk(x, z).join();
-        });
+        ChunkRange.chunksInRange(0, 0, 10, (x, z) -> i.loadChunk(x, z).join());
 
         var zombie = new LivingEntity(EntityType.ZOMBIE);
         zombie.setInstance(i, new Pos(43.972731367054266, 40.000000000040735, -39.89155139999369));
@@ -125,8 +116,7 @@ public class PathfinderIntegrationTest {
         while (nav.getState() == PPath.State.CALCULATING) {
         }
 
-        assert (nav.getNodes() != null);
-
+        assertNotNull(nav.getNodes());
         validateNodes(nav.getNodes(), i);
     }
 
@@ -139,17 +129,15 @@ public class PathfinderIntegrationTest {
         nodes.add(node1);
         nodes.add(node2);
 
-        assert node1.equals(node2);
-        assert nodes.size() == 1;
+        assertEquals(node1, node2);
+        assertEquals(1, nodes.size());
     }
 
     @Test
     public void testStraightLineBlocked(Env env) {
         var i = env.createFlatInstance();
 
-        ChunkRange.chunksInRange(0, 0, 10, (x, z) -> {
-            i.loadChunk(x, z).join();
-        });
+        ChunkRange.chunksInRange(0, 0, 10, (x, z) -> i.loadChunk(x, z).join());
 
         i.setBlock(-6, 40, 5, Block.STONE);
         i.setBlock(-5, 40, 5, Block.STONE);
@@ -190,7 +178,7 @@ public class PathfinderIntegrationTest {
         while (nav.getState() == PPath.State.CALCULATING) {
         }
 
-        assert (nav.getNodes() != null);
+        assertNotNull(nav.getNodes());
         validateNodes(nav.getNodes(), i);
     }
 
@@ -198,15 +186,14 @@ public class PathfinderIntegrationTest {
     public void testGravitySnap(Env env) {
         var i = env.createFlatInstance();
 
-        ChunkRange.chunksInRange(0, 0, 10, (x, z) -> {
-            i.loadChunk(x, z).join();
-        });
+        ChunkRange.chunksInRange(0, 0, 10, (x, z) -> i.loadChunk(x, z).join());
 
         var zombie = new LivingEntity(EntityType.ZOMBIE);
 
         var nodeGenerator = new GroundNodeGenerator();
 
         var snapped = nodeGenerator.gravitySnap(i, -140.74433362614695, 40.58268292446131, 18.87966960447388, zombie.getBoundingBox(), 100);
+        assertTrue(snapped.isPresent());
         assertEquals(40.0, snapped.getAsDouble());
     }
 }

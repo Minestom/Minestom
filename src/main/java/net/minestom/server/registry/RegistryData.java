@@ -5,17 +5,20 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
 import net.kyori.adventure.key.Key;
+import net.minestom.data.MinestomData;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Result;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.collision.Shape;
+import net.minestom.server.collision.ShapeImpl;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.EquipmentSlot;
+import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockEntityType;
 import net.minestom.server.instance.block.BlockSoundType;
@@ -105,8 +108,8 @@ public final class RegistryData {
      * @param path The path without a leading slash, e.g. "blocks.json"
      */
     public static @Nullable InputStream loadRegistryFile(String path) throws IOException {
-        // 1. Try to load from jar resources
-        InputStream resourceStream = RegistryData.class.getClassLoader().getResourceAsStream(path);
+        // 1. Try to load from data resources
+        InputStream resourceStream = MinestomData.resource(path);
 
         // 2. Try to load from working directory
         final Path filesystemPath = Path.of(path);
@@ -196,9 +199,12 @@ public final class RegistryData {
         BANNER_PATTERNS("banner_pattern.json"),
         BIOMES("biome.json"),
         CAT_VARIANTS("cat_variant.json"),
+        CAT_SOUND_VARIANTS("cat_sound_variant.json"),
         CHAT_TYPES("chat_type.json"),
         CHICKEN_VARIANTS("chicken_variant.json"),
+        CHICKEN_SOUND_VARIANTS("chicken_sound_variant.json"),
         COW_VARIANTS("cow_variant.json"),
+        COW_SOUND_VARIANTS("cow_sound_variant.json"),
         DAMAGE_TYPES("damage_type.json"),
         DIALOGS("dialog.json"),
         DIMENSION_TYPES("dimension_type.json"),
@@ -208,10 +214,16 @@ public final class RegistryData {
         INSTRUMENTS("instrument.json"),
         PAINTING_VARIANTS("painting_variant.json"),
         PIG_VARIANTS("pig_variant.json"),
+        PIG_SOUND_VARIANTS("pig_sound_variant.json"),
         TRIM_MATERIALS("trim_material.json"),
         TRIM_PATTERNS("trim_pattern.json"),
         WOLF_VARIANTS("wolf_variant.json"),
-        WOLF_SOUND_VARIANTS("wolf_sound_variant.json");
+        WOLF_SOUND_VARIANTS("wolf_sound_variant.json"),
+        ZOMBIE_NAUTILUS_VARIANTS("zombie_nautilus_variant.json"),
+        TIMELINES("timeline.json"),
+        WORLD_CLOCKS("world_clock.json"),
+        SULFUR_CUBE_ARCHETYPES("sulfur_cube_archetype.json"),
+        ;
 
         private final String name;
 
@@ -231,14 +243,15 @@ public final class RegistryData {
     }
 
     public static final class BlockEntry implements Entry {
-        private static final byte AIR_OFFSET = 1 << 0;
-        private static final byte LIQUID_OFFSET = 1 << 1;
-        private static final byte SOLID_OFFSET = 1 << 2;
-        private static final byte OCCLUDES_OFFSET = 1 << 3;
-        private static final byte REQUIRES_TOOL_OFFSET = 1 << 4;
-        private static final byte REPLACEABLE_OFFSET = 1 << 5;
-        private static final byte REDSTONE_CONDUCTOR_OFFSET = 1 << 6;
-        private static final byte SIGNAL_SOURCE_OFFSET = -1 << 7; // 2's complement
+        private static final short AIR_OFFSET = 1 << 0;
+        private static final short LIQUID_OFFSET = 1 << 1;
+        private static final short SOLID_OFFSET = 1 << 2;
+        private static final short OCCLUDES_OFFSET = 1 << 3;
+        private static final short REQUIRES_TOOL_OFFSET = 1 << 4;
+        private static final short REPLACEABLE_OFFSET = 1 << 5;
+        private static final short REDSTONE_CONDUCTOR_OFFSET = 1 << 6;
+        private static final short SIGNAL_SOURCE_OFFSET = 1 << 7;
+        private static final short FLUID_OFFSET = 1 << 8;
 
         private final Key key;
         private final int id;
@@ -249,8 +262,11 @@ public final class RegistryData {
         private final float friction;
         private final float speedFactor;
         private final float jumpFactor;
-        private final byte packedFlags;
+        private final int mapColorId;
+        private final short packedFlags;
+        private final boolean blocksMotion;
         private final byte lightEmission;
+        private final byte lightBlocked;
         private final @Nullable BlockEntityType blockEntityType;
         private final @Nullable Material material;
         private final @Nullable BlockSoundType blockSoundType;
@@ -268,13 +284,17 @@ public final class RegistryData {
             this.friction = fromParent(parent, BlockEntry::friction, main, "friction", Properties::getFloat, 0.6f);
             this.speedFactor = fromParent(parent, BlockEntry::speedFactor, main, "speedFactor", Properties::getFloat, 1.0f);
             this.jumpFactor = fromParent(parent, BlockEntry::jumpFactor, main, "jumpFactor", Properties::getFloat, 1.0f);
-            var air = fromParent(parent, BlockEntry::isAir, main, "air", Properties::getBoolean, false);
-            var solid = fromParent(parent, BlockEntry::isSolid, main, "solid", Properties::getBoolean, null);
-            var liquid = fromParent(parent, BlockEntry::isLiquid, main, "liquid", Properties::getBoolean, false);
-            var occludes = fromParent(parent, BlockEntry::occludes, main, "occludes", Properties::getBoolean, true);
-            var requiresTool = fromParent(parent, BlockEntry::requiresTool, main, "requiresTool", Properties::getBoolean, true);
+            this.mapColorId = fromParent(parent, BlockEntry::mapColorId, main, "mapColorId", Properties::getInt, 0);
+            boolean air = fromParent(parent, BlockEntry::isAir, main, "air", Properties::getBoolean, false);
+            boolean solid = fromParent(parent, BlockEntry::isSolid, main, "solid", Properties::getBoolean, null);
+            this.blocksMotion = fromParent(parent, BlockEntry::blocksMotion, main, "blocksMotion", Properties::getBoolean, false);
+            boolean liquid = fromParent(parent, BlockEntry::isLiquid, main, "liquid", Properties::getBoolean, false);
+            boolean fluid = fromParent(parent, BlockEntry::isFluid, main, "fluid", Properties::getBoolean, false);
+            boolean occludes = fromParent(parent, BlockEntry::occludes, main, "occludes", Properties::getBoolean, true);
+            boolean requiresTool = fromParent(parent, BlockEntry::requiresTool, main, "requiresTool", Properties::getBoolean, true);
             this.lightEmission = fromParent(parent, BlockEntry::lightEmission, main, "lightEmission", Properties::getInt, 0).byteValue();
-            var replaceable = fromParent(parent, BlockEntry::isReplaceable, main, "replaceable", Properties::getBoolean, false);
+            this.lightBlocked = fromParent(parent, BlockEntry::lightBlocked, main, "lightBlock", Properties::getInt, 0).byteValue();
+            boolean replaceable = fromParent(parent, BlockEntry::isReplaceable, main, "replaceable", Properties::getBoolean, false);
             this.blockSoundType = fromParent(parent, BlockEntry::getBlockSoundType, main, "soundType", (properties, string) -> {
                 final String soundTypeKey = properties.getString(string);
                 return soundTypeKey != null ? BlockSoundType.fromKey(soundTypeKey) : null;
@@ -297,23 +317,28 @@ public final class RegistryData {
                     String shape = properties.getString(string);
                     return CollisionUtils.parseCollisionShape(internCache, shape);
                 }, null);
-                this.occlusionShape = fromParent(parent, BlockEntry::occlusionShape, main, "occlusionShape", (properties, string) -> {
+                Shape occludeShape = fromParent(parent, BlockEntry::occlusionShape, main, "occlusionShape", (properties, string) -> {
                     String shape = properties.getString(string);
                     if (parent == null || parentProperties == null) // No parent, so we can just parse the shape
                         return CollisionUtils.parseOcclusionShape(internCache, shape, occludes, this.lightEmission);
-                    // TODO make this condition just change the condition; like adding lightData if emission just changes.
-                    if (shape != null || occludes != parent.occludes() || this.lightEmission != parent.lightEmission) {
+                    if (shape != null || occludes != parent.occludes()) {
                         if (shape == null) shape = parentProperties.getString(string);
                         return CollisionUtils.parseOcclusionShape(internCache, shape, occludes, this.lightEmission);
                     }
                     return parent.occlusionShape();
                 }, null);
+                // Apply possible lightEmission override, since that isn't specified in occlusionShape
+                if (parent != null && this.lightEmission != parent.lightEmission && occludeShape instanceof ShapeImpl shapeImpl) {
+                    occludeShape = shapeImpl.withLightEmission(this.lightEmission);
+                }
+                this.occlusionShape = occludeShape;
             }
             var redstoneConductor = fromParent(parent, BlockEntry::isRedstoneConductor, main, "redstoneConductor", Properties::getBoolean, null);
             var signalSource = fromParent(parent, BlockEntry::isSignalSource, main, "signalSource", Properties::getBoolean, false);
-            this.packedFlags = (byte) (
+            this.packedFlags = (short) (
                     (air ? AIR_OFFSET : 0) |
                     (liquid ? LIQUID_OFFSET : 0) |
+                    (fluid ? FLUID_OFFSET : 0) |
                     (solid ? SOLID_OFFSET : 0) |
                     (occludes ? OCCLUDES_OFFSET : 0) |
                     (requiresTool ? REQUIRES_TOOL_OFFSET : 0) |
@@ -378,6 +403,10 @@ public final class RegistryData {
             return jumpFactor;
         }
 
+        public int mapColorId() {
+            return mapColorId;
+        }
+
         public boolean isAir() {
             return (packedFlags & AIR_OFFSET) != 0;
         }
@@ -386,8 +415,16 @@ public final class RegistryData {
             return (packedFlags & SOLID_OFFSET) != 0;
         }
 
+        public boolean blocksMotion() {
+            return blocksMotion;
+        }
+
         public boolean isLiquid() {
             return (packedFlags & LIQUID_OFFSET) != 0;
+        }
+
+        public boolean isFluid() {
+            return (packedFlags & FLUID_OFFSET) != 0;
         }
 
         public boolean occludes() {
@@ -400,6 +437,10 @@ public final class RegistryData {
 
         public int lightEmission() {
             return lightEmission;
+        }
+
+        public int lightBlocked() {
+            return lightBlocked;
         }
 
         public boolean isReplaceable() {
@@ -490,26 +531,37 @@ public final class RegistryData {
         }
 
         public DataComponentMap prototype() {
-            if (prototype instanceof Either.Left(var components)) {
-                final Transcoder<Object> coder = new RegistryTranscoder<>(Transcoder.JAVA, MinecraftServer.process());
-                DataComponentMap.Builder builder = DataComponentMap.builder();
-                for (Map.Entry<String, Object> entry : components) {
-                    //noinspection unchecked
-                    DataComponent<Object> component = (DataComponent<Object>) DataComponent.fromKey(entry.getKey());
-                    Check.notNull(component, "Unknown component {0} in {1}", entry.getKey(), key);
+            return switch (prototype) {
+                case Either.Left(_) -> throw new IllegalStateException("Should have been bound");
+                case Either.Right(var dataComponentMap) -> dataComponentMap;
+                case null -> DataComponentMap.EMPTY;
+            };
+        }
 
-                    final Result<Object> result = component.decode(coder, entry.getValue());
-                    switch (result) {
-                        case Result.Ok(Object ok) -> builder.set(component, ok);
-                        case Result.Error(String message) ->
-                                throw new IllegalStateException("Failed to decode component " + entry.getKey() + " in " + key + ": " + message);
-                    }
+        /**
+         * Attempts the bind the current prototype using the registries provided.
+         *
+         * @param registries the registries used during decode
+         */
+        @ApiStatus.Internal
+        void bindComponents(Registries registries) {
+            if (!(prototype instanceof Either.Left(var components))) return;
+            final Transcoder<Object> coder = new RegistryTranscoder<>(Transcoder.JAVA, registries);
+            DataComponentMap.Builder builder = DataComponentMap.builder();
+            for (Map.Entry<String, Object> entry : components) {
+                //noinspection unchecked
+                DataComponent<Object> component = (DataComponent<Object>) DataComponent.fromKey(entry.getKey());
+                Check.notNull(component, "Unknown component {0} in {1}", entry.getKey(), key);
+
+                final Result<Object> result = component.decode(coder, entry.getValue());
+                switch (result) {
+                    case Result.Ok(Object ok) -> builder.set(component, ok);
+                    case Result.Error(String message) ->
+                            throw new IllegalStateException("Failed to decode component " + entry.getKey() + " in " + key + ": " + message);
                 }
-                final DataComponentMap prototype = builder.build();
-                this.prototype = !prototype.isEmpty() ? Either.right(prototype) : null;
             }
-
-            return prototype instanceof Either.Right(var dataComponentMap) ? dataComponentMap : DataComponentMap.EMPTY;
+            final DataComponentMap prototype = builder.build();
+            this.prototype = prototype.isEmpty() ? null : Either.right(prototype); // null is essential for EMPTY
         }
 
         public boolean isArmor() {
@@ -548,7 +600,8 @@ public final class RegistryData {
         private final double eyeHeight;
         private final int clientTrackingRange;
         private final boolean fireImmune;
-        private final Map<String, List<Double>> entityOffsets;
+        private final Map<String, List<List<Double>>> entityOffsets;
+        private final Map<Attribute, Double> defaultAttributes;
         private final BoundingBox boundingBox;
 
         public EntityEntry(String namespace, Properties main) {
@@ -569,16 +622,34 @@ public final class RegistryData {
             this.boundingBox = new BoundingBox(this.width, this.height, this.width);
 
             // Attachments
-            Map<String, List<Double>> entityOffsets = new HashMap<>();
+            Map<String, List<List<Double>>> entityOffsets = new HashMap<>();
             Properties attachments = main.section("attachments");
             if (attachments != null) {
                 var allAttachments = attachments.asMap().keySet();
                 for (String key : allAttachments) {
                     List<List<Double>> offset = attachments.getList(key);
-                    entityOffsets.put(key, offset.getFirst()); // It's an array of an array with a single element, as of 1.21.3 we only need to grab a single array of 3 doubles
+                    entityOffsets.put(key, offset);
                 }
             }
             this.entityOffsets = Map.copyOf(entityOffsets);
+
+            Properties defaultAttributesSection = main.section("defaultAttributes");
+
+            if (defaultAttributesSection == null) {
+                this.defaultAttributes = Map.of();
+            } else {
+                Map<Attribute, Double> attributes = new HashMap<>();
+
+                for (var entry : defaultAttributesSection) {
+                    Attribute attribute = Attribute.fromKey(entry.getKey());
+                    Check.notNull(attribute, "Failed to find attribute {0}", entry.getKey());
+                    Object value = entry.getValue();
+                    Check.stateCondition(!(value instanceof Number), "Attribute value {0} is not a number", value);
+                    attributes.put(attribute, ((Number) value).doubleValue());
+                }
+
+                this.defaultAttributes = Map.copyOf(attributes);
+            }
         }
 
         public Key key() {
@@ -640,11 +711,31 @@ public final class RegistryData {
          * @return A list of 3 doubles if the attachment is defined for this entity, or null if it is not defined
          */
         public @Nullable List<Double> entityAttachment(String attachmentName) {
+            var attachments = entityOffsets.get(attachmentName);
+            if (attachments == null) {
+                return null;
+            }
+            return attachments.getFirst();
+        }
+
+        /**
+         * Gets all entity attachments under a specific name. Typically, will be PASSENGER or VEHICLE, but some entities have custom attachments (e.g. WARDEN_CHEST, NAMETAG)
+         * <p></p>
+         * This is only needed for happy ghast, as that is (currently) the only entity that has multiple attachments for PASSENGER as of 26.1
+         *
+         * @param attachmentName The attachment to retrieve
+         * @return A list of a list of 3 doubles if the attachment is defined for this entity, or null if it is not defined
+         */
+        public @Nullable List<List<Double>> entityAttachments(String attachmentName) {
             return entityOffsets.get(attachmentName);
         }
 
         public BoundingBox boundingBox() {
             return boundingBox;
+        }
+
+        public Map<Attribute, Double> defaultAttributes() {
+            return defaultAttributes;
         }
     }
 
@@ -843,7 +934,7 @@ public final class RegistryData {
         @Override
         public String toString() {
             AtomicReference<String> string = new AtomicReference<>("{ ");
-            this.map.forEach((s, object) -> string.set(string.get() + " , " + "\"" + s + "\"" + " : " + "\"" + object.toString() + "\""));
+            this.map.forEach((s, object) -> string.set(string.get() + " , " + "\"" + s + "\"" + " : " + "\"" + object + "\""));
             return string.updateAndGet(s -> s.replaceFirst(" , ", "") + "}");
         }
 

@@ -7,6 +7,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.utils.validate.Check;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -204,15 +205,11 @@ public interface EquipmentHandler {
      */
     default EntityEquipmentPacket getEquipmentsPacket() {
         Check.stateCondition(!(this instanceof Entity), "Only accessible for Entity");
-        return new EntityEquipmentPacket(((Entity) this).getEntityId(), Map.of(
-                EquipmentSlot.MAIN_HAND, getItemInMainHand(),
-                EquipmentSlot.OFF_HAND, getItemInOffHand(),
-                EquipmentSlot.BOOTS, getBoots(),
-                EquipmentSlot.LEGGINGS, getLeggings(),
-                EquipmentSlot.CHESTPLATE, getChestplate(),
-                EquipmentSlot.HELMET, getHelmet(),
-                EquipmentSlot.BODY, getBodyEquipment()));
-        // Some entities do not allow body equipment, in which case the client will ignore this
+        Map<EquipmentSlot, ItemStack> equipment = new HashMap<>();
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            equipment.put(slot, this.getEquipment(slot));
+        }
+        return new EntityEquipmentPacket(((Entity) this).getEntityId(), equipment);
     }
 
 }

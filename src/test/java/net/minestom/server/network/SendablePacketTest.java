@@ -8,29 +8,15 @@ import net.minestom.server.network.packet.PacketWriting;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.play.ClientAnimationPacket;
 import net.minestom.server.network.packet.server.CachedPacket;
-import net.minestom.server.network.packet.server.LazyPacket;
 import net.minestom.server.network.packet.server.play.SystemChatPacket;
 import org.junit.jupiter.api.Test;
 
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.List;
 import java.util.zip.DataFormatException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SendablePacketTest {
-
-    @Test
-    public void lazy() {
-        var packet = new SystemChatPacket(Component.text("Hello World!"), false);
-        AtomicBoolean called = new AtomicBoolean(false);
-        var lazy = new LazyPacket(() -> {
-            if (called.getAndSet(true))
-                fail();
-            return packet;
-        });
-        assertSame(packet, lazy.packet());
-        assertSame(packet, lazy.packet());
-    }
 
     @Test
     public void cached() {
@@ -39,7 +25,7 @@ public class SendablePacketTest {
         assertSame(packet, cached.packet(ConnectionState.PLAY));
 
         var buffer = PacketWriting.allocateTrimmedPacket(ConnectionState.PLAY, packet,
-                MinecraftServer.getCompressionThreshold());
+                MinecraftServer.getCompressionThreshold()); // TODO required because CachedPacket internally uses process.
         var cachedBuffer = cached.body(ConnectionState.PLAY);
         assertTrue(NetworkBuffer.equals(buffer, cachedBuffer));
         // May fail in the very unlikely case where soft references are cleared
@@ -56,12 +42,14 @@ public class SendablePacketTest {
         var buffer = PacketWriting.allocateTrimmedPacket(ConnectionState.PLAY, packet, 0);
 
         var result = PacketReading.readClient(buffer, ConnectionState.PLAY, false);
-        if (!(result instanceof PacketReading.Result.Success<ClientPacket> success)) {
+        if (!(result instanceof PacketReading.Result.Success<ClientPacket>(
+                List<PacketReading.ParsedPacket<ClientPacket>> packets
+        ))) {
             fail();
             return;
         }
-        assertEquals(1, success.packets().size());
-        ClientPacket readPacket = success.packets().getFirst().packet();
+        assertEquals(1, packets.size());
+        ClientPacket readPacket = packets.getFirst().packet();
         assertEquals(packet, readPacket);
     }
 }

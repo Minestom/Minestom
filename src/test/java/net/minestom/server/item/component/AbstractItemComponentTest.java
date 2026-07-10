@@ -1,6 +1,5 @@
 package net.minestom.server.item.component;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.network.NetworkBuffer;
@@ -47,13 +46,13 @@ public abstract class AbstractItemComponentTest<T> {
         }
 
         if (component().isSynced()) {
-            var written1 = NetworkBuffer.makeArray(b -> component().write(b, entry), MinecraftServer.process());
+            var written1 = NetworkBuffer.makeArray(b -> component().write(b, entry), env.process());
 
-            var buffer = NetworkBuffer.wrap(written1, 0, written1.length, MinecraftServer.process());
+            var buffer = NetworkBuffer.wrap(written1, 0, written1.length, env.process());
             var read = component().read(buffer);
             assertEquals(entry, read);
 
-            var written2 = NetworkBuffer.makeArray(b -> component().write(b, entry), MinecraftServer.process());
+            var written2 = NetworkBuffer.makeArray(b -> component().write(b, entry), env.process());
             assertArrayEquals(written1, written2);
         }
     }

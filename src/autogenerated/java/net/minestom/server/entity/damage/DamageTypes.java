@@ -29,6 +29,8 @@ sealed interface DamageTypes permits DamageType {
 
     RegistryKey<DamageType> STING = RegistryKey.unsafeOf("sting");
 
+    RegistryKey<DamageType> SPEAR = RegistryKey.unsafeOf("spear");
+
     RegistryKey<DamageType> IN_FIRE = RegistryKey.unsafeOf("in_fire");
 
     RegistryKey<DamageType> ARROW = RegistryKey.unsafeOf("arrow");
@@ -65,11 +67,11 @@ sealed interface DamageTypes permits DamageType {
 
     RegistryKey<DamageType> ENDER_PEARL = RegistryKey.unsafeOf("ender_pearl");
 
-    RegistryKey<DamageType> FALL = RegistryKey.unsafeOf("fall");
+    RegistryKey<DamageType> MOB_PROJECTILE = RegistryKey.unsafeOf("mob_projectile");
 
     RegistryKey<DamageType> MOB_ATTACK = RegistryKey.unsafeOf("mob_attack");
 
-    RegistryKey<DamageType> MOB_PROJECTILE = RegistryKey.unsafeOf("mob_projectile");
+    RegistryKey<DamageType> FALL = RegistryKey.unsafeOf("fall");
 
     RegistryKey<DamageType> THROWN = RegistryKey.unsafeOf("thrown");
 
@@ -80,6 +82,8 @@ sealed interface DamageTypes permits DamageType {
     RegistryKey<DamageType> PLAYER_EXPLOSION = RegistryKey.unsafeOf("player_explosion");
 
     RegistryKey<DamageType> UNATTRIBUTED_FIREBALL = RegistryKey.unsafeOf("unattributed_fireball");
+
+    RegistryKey<DamageType> SULFUR_CUBE_HOT = RegistryKey.unsafeOf("sulfur_cube_hot");
 
     RegistryKey<DamageType> IN_WALL = RegistryKey.unsafeOf("in_wall");
 
@@ -97,9 +101,9 @@ sealed interface DamageTypes permits DamageType {
 
     RegistryKey<DamageType> EXPLOSION = RegistryKey.unsafeOf("explosion");
 
-    RegistryKey<DamageType> BAD_RESPAWN_POINT = RegistryKey.unsafeOf("bad_respawn_point");
-
     RegistryKey<DamageType> THORNS = RegistryKey.unsafeOf("thorns");
+
+    RegistryKey<DamageType> BAD_RESPAWN_POINT = RegistryKey.unsafeOf("bad_respawn_point");
 
     RegistryKey<DamageType> INDIRECT_MAGIC = RegistryKey.unsafeOf("indirect_magic");
 

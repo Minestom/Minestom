@@ -5,13 +5,15 @@ import net.minestom.server.network.packet.PacketVanilla;
 import net.minestom.server.network.packet.PacketWriting;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.common.ClientPluginMessagePacket;
+import net.minestom.server.registry.Registries;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.List;
 import java.util.zip.DataFormatException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SocketReadTest {
 
@@ -24,10 +26,12 @@ public class SocketReadTest {
         PacketWriting.writeFramedPacket(buffer, ConnectionState.PLAY, packet, compressed ? 256 : 0);
 
         var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
-        if (!(readResult instanceof PacketReading.Result.Success<ClientPacket> success)) {
+        if (!(readResult instanceof PacketReading.Result.Success<ClientPacket>(
+                List<PacketReading.ParsedPacket<ClientPacket>> packets1
+        ))) {
             throw new AssertionError("Expected a success result, got " + readResult);
         }
-        List<ClientPacket> packets = success.packets().stream().map(PacketReading.ParsedPacket::packet).toList();
+        List<ClientPacket> packets = packets1.stream().map(PacketReading.ParsedPacket::packet).toList();
         assertEquals(List.of(packet), packets);
     }
 
@@ -41,10 +45,12 @@ public class SocketReadTest {
         PacketWriting.writeFramedPacket(buffer, ConnectionState.PLAY, packet, compressed ? 256 : 0);
 
         var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
-        if (!(readResult instanceof PacketReading.Result.Success<ClientPacket> success)) {
+        if (!(readResult instanceof PacketReading.Result.Success<ClientPacket>(
+                List<PacketReading.ParsedPacket<ClientPacket>> packets1
+        ))) {
             throw new AssertionError("Expected a success result, got " + readResult);
         }
-        List<ClientPacket> packets = success.packets().stream().map(PacketReading.ParsedPacket::packet).toList();
+        List<ClientPacket> packets = packets1.stream().map(PacketReading.ParsedPacket::packet).toList();
         assertEquals(List.of(packet, packet), packets);
     }
 
@@ -60,10 +66,12 @@ public class SocketReadTest {
         buffer.write(NetworkBuffer.VAR_INT, 200); // incomplete 200 bytes packet
 
         var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
-        if (!(readResult instanceof PacketReading.Result.Success<ClientPacket> success)) {
+        if (!(readResult instanceof PacketReading.Result.Success<ClientPacket>(
+                List<PacketReading.ParsedPacket<ClientPacket>> packets1
+        ))) {
             throw new AssertionError("Expected a success result, got " + readResult);
         }
-        List<ClientPacket> packets = success.packets().stream().map(PacketReading.ParsedPacket::packet).toList();
+        List<ClientPacket> packets = packets1.stream().map(PacketReading.ParsedPacket::packet).toList();
         assertEquals(List.of(packet), packets);
 
         readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
@@ -84,10 +92,12 @@ public class SocketReadTest {
         buffer.write(NetworkBuffer.BYTE, (byte) -85); // incomplete var-int length
 
         var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
-        if (!(readResult instanceof PacketReading.Result.Success<ClientPacket> success)) {
+        if (!(readResult instanceof PacketReading.Result.Success<ClientPacket>(
+                List<PacketReading.ParsedPacket<ClientPacket>> packets1
+        ))) {
             throw new AssertionError("Expected a success result, got " + readResult);
         }
-        List<ClientPacket> packets = success.packets().stream().map(PacketReading.ParsedPacket::packet).toList();
+        List<ClientPacket> packets = packets1.stream().map(PacketReading.ParsedPacket::packet).toList();
         assertEquals(1, buffer.readableBytes());
 
         assertEquals(List.of(packet), packets);
@@ -112,10 +122,10 @@ public class SocketReadTest {
         buffer = buffer.copy(0, packetLength / 2).index(0, packetLength / 2);
 
         var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
-        if (!(readResult instanceof PacketReading.Result.Failure<ClientPacket> failure)) {
+        if (!(readResult instanceof PacketReading.Result.Failure<ClientPacket>(long requiredCapacity))) {
             throw new AssertionError("Expected a failure result, got " + readResult);
         }
-        assertEquals(packetLength, failure.requiredCapacity());
+        assertEquals(packetLength, requiredCapacity);
     }
 
     @ParameterizedTest
@@ -127,11 +137,38 @@ public class SocketReadTest {
         buffer.write(NetworkBuffer.BYTE, (byte) -85); // incomplete var-int length
 
         var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
-        if (!(readResult instanceof PacketReading.Result.Failure<ClientPacket> failure)) {
+        if (!(readResult instanceof PacketReading.Result.Failure<ClientPacket>(long requiredCapacity))) {
             throw new AssertionError("Expected a failure result, got " + readResult);
         }
         // 5 = max var-int size
-        assertEquals(5, failure.requiredCapacity());
+        assertEquals(5, requiredCapacity);
+    }
+
+    @Test
+    public void compressedReadDoesNotPollutePoolRegistries() throws DataFormatException {
+        // Encode a framed packet large enough to actually compress (threshold = 256), keeping
+        // the pool untouched by the test setup so the read is the only relevant consumer.
+        final var packet = new ClientPluginMessagePacket("ch", new byte[2000]);
+        final var encoded = NetworkBuffer.resizableBuffer();
+        PacketWriting.writeFramedPacket(encoded, ConnectionState.PLAY, packet, 256);
+        final int length = (int) encoded.writeIndex();
+        final byte[] framed = new byte[length];
+        encoded.copyTo(0, framed, 0, length);
+
+        // Drain the pool so any buffer we inspect afterwards must have been used by the read.
+        while (PacketVanilla.PACKET_POOL.count() > 0) PacketVanilla.PACKET_POOL.get();
+
+        final Registries sourceRegistries = Registries.vanilla();
+        final var source = NetworkBuffer.wrap(framed, 0, framed.length, sourceRegistries);
+        PacketReading.readClients(source, ConnectionState.PLAY, true);
+
+        final NetworkBuffer pooled = PacketVanilla.PACKET_POOL.get();
+        try {
+            assertNotSame(pooled.registries(), sourceRegistries,
+                    "Decompressed pool buffer must not be polluted with registries");
+        } finally {
+            PacketVanilla.PACKET_POOL.add(pooled);
+        }
     }
 
     private static int getVarIntSize(int input) {

@@ -6,11 +6,12 @@ import net.minestom.server.network.NetworkBuffer;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static net.minestom.server.instance.palette.PaletteAssertions.assertAllEquals;
+import static net.minestom.server.instance.palette.PaletteAssertions.testPalettes;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PaletteTest {
@@ -104,23 +105,11 @@ public class PaletteTest {
             palette.fill(6);
             assertEquals(6, palette.get(0, 0, 0));
             assertEquals(palette.maxSize(), palette.count());
-            for (int x = 0; x < palette.dimension(); x++) {
-                for (int y = 0; y < palette.dimension(); y++) {
-                    for (int z = 0; z < palette.dimension(); z++) {
-                        assertEquals(6, palette.get(x, y, z));
-                    }
-                }
-            }
+            assertAllEquals(6, palette);
 
             palette.fill(0);
             assertEquals(0, palette.count());
-            for (int x = 0; x < palette.dimension(); x++) {
-                for (int y = 0; y < palette.dimension(); y++) {
-                    for (int z = 0; z < palette.dimension(); z++) {
-                        assertEquals(0, palette.get(x, y, z));
-                    }
-                }
-            }
+            assertAllEquals(0, palette);
         }
     }
 
@@ -129,13 +118,7 @@ public class PaletteTest {
         for (Palette palette : testPalettes()) {
             palette.fill(0);
             palette.offset(1);
-            for (int x = 0; x < palette.dimension(); x++) {
-                for (int y = 0; y < palette.dimension(); y++) {
-                    for (int z = 0; z < palette.dimension(); z++) {
-                        assertEquals(1, palette.get(x, y, z));
-                    }
-                }
-            }
+            assertAllEquals(1, palette);
 
             palette.fill(1);
             palette.set(0, 0, 1, 2);
@@ -217,13 +200,7 @@ public class PaletteTest {
         for (Palette palette : testPalettes()) {
             palette.fill(0);
             palette.replace(0, 1);
-            for (int x = 0; x < palette.dimension(); x++) {
-                for (int y = 0; y < palette.dimension(); y++) {
-                    for (int z = 0; z < palette.dimension(); z++) {
-                        assertEquals(1, palette.get(x, y, z));
-                    }
-                }
-            }
+            assertAllEquals(1, palette);
 
             palette.fill(1);
             palette.set(0, 0, 1, 2);
@@ -283,6 +260,30 @@ public class PaletteTest {
             assertEquals(palette.maxSize(), palette.count());
             palette.replace(100, 0);
             assertEquals(palette.maxSize() - 1, palette.count());
+        }
+    }
+
+    @Test
+    public void replaceWithExistingValue() {
+        for (Palette palette : testPalettes()) {
+            palette.set(0, 0, 0, 1);
+            palette.set(1, 0, 0, 2);
+            palette.set(0, 1, 0, 2);
+
+            palette.replace(1, 2);
+
+            assertEquals(2, palette.get(0, 0, 0));
+            assertEquals(2, palette.get(1, 0, 0));
+            assertEquals(2, palette.get(0, 1, 0));
+            assertEquals(3, palette.count(2));
+            assertEquals(0, palette.count(1));
+            assertFalse(palette.any(1));
+            assertTrue(palette.any(2));
+
+            palette.set(1, 1, 0, 1);
+            assertEquals(1, palette.get(1, 1, 0));
+            assertEquals(1, palette.count(1));
+            assertEquals(3, palette.count(2));
         }
     }
 
@@ -506,6 +507,40 @@ public class PaletteTest {
     }
 
     @Test
+    public void getAllPresentNonAirFill() {
+        // Filling with a non-air value then editing a cell must still report every non-air cell.
+        for (Palette palette : testPalettes()) {
+            palette.fill(5);
+            palette.set(0, 0, 0, 7);
+            AtomicInteger reported = new AtomicInteger();
+            palette.getAllPresent((x, y, z, value) -> {
+                assertNotEquals(0, value, "air must never be reported as present");
+                assertEquals(x == 0 && y == 0 && z == 0 ? 7 : 5, value);
+                reported.incrementAndGet();
+            });
+            assertEquals(palette.maxSize(), reported.get());
+            assertEquals(palette.count(), reported.get(), "getAllPresent must agree with count()");
+        }
+    }
+
+    @Test
+    public void getAllPresentNonAirFillThenAir() {
+        // Carving a single air cell out of a non-air fill must exclude only that cell.
+        for (Palette palette : testPalettes()) {
+            palette.fill(5);
+            palette.set(0, 0, 0, 0);
+            AtomicInteger reported = new AtomicInteger();
+            palette.getAllPresent((x, y, z, value) -> {
+                assertEquals(5, value);
+                assertFalse(x == 0 && y == 0 && z == 0, "the air cell must be excluded");
+                reported.incrementAndGet();
+            });
+            assertEquals(palette.maxSize() - 1, reported.get());
+            assertEquals(palette.count(), reported.get(), "getAllPresent must agree with count()");
+        }
+    }
+
+    @Test
     public void replaceAll() {
         for (Palette palette : testPalettes()) {
             palette.setAll((x, y, z) -> x + y + z + 1);
@@ -593,6 +628,23 @@ public class PaletteTest {
 
         Palette deserialized = buffer.read(Palette.BLOCK_SERIALIZER);
         assertTrue(palette.compare(deserialized));
+    }
+
+    @Test
+    public void serializationBlockLinearMutation() {
+        NetworkBuffer buffer = NetworkBuffer.resizableBuffer();
+        Palette palette = Palette.blocks();
+        palette.set(0, 0, 0, 1);
+        palette.set(1, 0, 0, 2);
+
+        buffer.write(Palette.BLOCK_SERIALIZER, palette);
+        Palette deserialized = buffer.read(Palette.BLOCK_SERIALIZER);
+
+        deserialized.set(2, 0, 0, 3);
+
+        assertEquals(1, deserialized.get(0, 0, 0));
+        assertEquals(2, deserialized.get(1, 0, 0));
+        assertEquals(3, deserialized.get(2, 0, 0));
     }
 
     @Test
@@ -983,13 +1035,4 @@ public class PaletteTest {
         assertEquals(testPalette.maxSize() - 12, testPalette.count());
     }
 
-    private static List<Palette> testPalettes() {
-        return List.of(
-                Palette.sized(2, 1, 5, 15, 3),
-                Palette.sized(4, 1, 5, 15, 3),
-                Palette.sized(8, 1, 5, 15, 3),
-                Palette.sized(16, 1, 5, 15, 3),
-                Palette.blocks()
-        );
-    }
 }

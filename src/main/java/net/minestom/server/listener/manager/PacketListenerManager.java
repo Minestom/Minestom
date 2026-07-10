@@ -65,6 +65,7 @@ public final class PacketListenerManager {
         setPlayListener(ClientChatMessagePacket.class, ChatMessageListener::chatMessageListener);
         setPlayListener(ClientClickWindowPacket.class, WindowListener::clickWindowListener);
         setPlayListener(ClientCloseWindowPacket.class, WindowListener::closeWindowListener);
+        setPlayListener(ClientClickWindowButtonPacket.class, WindowListener::inventoryButtonClickListener);
         setPlayListener(ClientConfigurationAckPacket.class, LoginListener::configAckListener);
         setPlayListener(ClientPongPacket.class, WindowListener::pong);
         setPlayListener(ClientEntityActionPacket.class, EntityActionListener::listener);
@@ -79,9 +80,10 @@ public final class PacketListenerManager {
         setPlayListener(ClientPlayerPositionPacket.class, PlayerPositionListener::playerPositionListener);
         setPlayListener(ClientPlayerPositionAndRotationPacket.class, PlayerPositionListener::playerPositionAndLookListener);
         setPlayListener(ClientTeleportConfirmPacket.class, PlayerPositionListener::teleportConfirmListener);
-        setPlayListener(ClientPlayerDiggingPacket.class, PlayerDiggingListener::playerDiggingListener);
+        setPlayListener(ClientPlayerActionPacket.class, PlayerActionListener::playerActionListener);
         setPlayListener(ClientAnimationPacket.class, AnimationListener::animationListener);
         setPlayListener(ClientInteractEntityPacket.class, UseEntityListener::useEntityListener);
+        setPlayListener(ClientAttackPacket.class, UseEntityListener::attackEntityListener);
         setPlayListener(ClientUseItemPacket.class, UseItemListener::useItemListener);
         setPlayListener(ClientPickItemFromBlockPacket.class, PlayerPickListener::playerPickBlockListener);
         setPlayListener(ClientPickItemFromEntityPacket.class, PlayerPickListener::playerPickEntityListener);
@@ -95,7 +97,8 @@ public final class PacketListenerManager {
         setPlayListener(ClientPlayerAbilitiesPacket.class, AbilitiesListener::listener);
         setPlayListener(ClientResourcePackStatusPacket.class, ResourcePackListener::listener);
         setPlayListener(ClientAdvancementTabPacket.class, AdvancementTabListener::listener);
-        setPlayListener(ClientSpectatePacket.class, SpectateListener::listener);
+        setPlayListener(ClientSpectatorActionPacket.class, PlayerSpectatorListener::listener);
+        setPlayListener(ClientTeleportToEntityPacket.class, PlayerSpectatorListener::listener);
         setPlayListener(ClientEditBookPacket.class, BookListener::listener);
         setPlayListener(ClientChatSessionUpdatePacket.class, (packet, player) -> {/* empty */});
         setPlayListener(ClientChunkBatchReceivedPacket.class, ChunkBatchListener::batchReceivedListener);
@@ -104,11 +107,12 @@ public final class PacketListenerManager {
         setPlayListener(ClientNameItemPacket.class, AnvilListener::nameItemListener);
         setPlayListener(ClientTickEndPacket.class, PlayerTickListener::listener);
         setPlayListener(ClientPlayerLoadedPacket.class, PlayerLoadedListener::listener);
-        setPlayListener(ClientSelectBundleItemPacket.class, (packet, player) -> {/* noop for now */});
+        setPlayListener(ClientSelectBundleItemPacket.class, WindowListener::selectBundleItemListener);
         setPlayListener(ClientSignedCommandChatPacket.class, ChatMessageListener::signedCommandChatListener);
         setPlayListener(ClientCustomClickActionPacket.class, CustomClickListener::listener);
         setPlayListener(ClientUpdateSignPacket.class, EditSignListener::listener);
         setPlayListener(ClientDebugSubscriptionRequestPacket.class, DebugSubscriptionListener::requestListener);
+        setPlayListener(ClientSetGameRulesPacket.class, PlayerSettingsMenuListener::setGameRules);
     }
 
     /**

@@ -110,7 +110,7 @@ public record DeclareCommandsPacket(List<Node> nodes,
                 case STRING -> reader.extractBytes(b -> b.read(VAR_INT));
                 case ENTITY, SCORE_HOLDER -> reader.extractBytes(b -> b.read(BYTE));
                 case TIME -> reader.extractBytes(b -> b.read(INT));
-                case RESOURCE_OR_TAG, RESOURCE_OR_TAG_KEY, RESOURCE, RESOURCE_KEY -> reader.extractBytes(b -> b.read(STRING));
+                case RESOURCE_OR_TAG, RESOURCE_OR_TAG_KEY, RESOURCE, RESOURCE_KEY, RESOURCE_SELECTOR -> reader.extractBytes(b -> b.read(STRING));
                 default -> new byte[0]; // unknown
             };
         }
@@ -133,6 +133,6 @@ public record DeclareCommandsPacket(List<Node> nodes,
     }
 
     public enum NodeType {
-        ROOT, LITERAL, ARGUMENT, NONE;
+        ROOT, LITERAL, ARGUMENT, NONE
     }
 }

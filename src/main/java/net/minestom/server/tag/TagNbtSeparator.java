@@ -2,6 +2,7 @@ package net.minestom.server.tag;
 
 import net.kyori.adventure.nbt.*;
 import net.minestom.server.utils.nbt.BinaryTagUtil;
+import net.minestom.server.ServerFlag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,13 +51,19 @@ final class TagNbtSeparator {
     private static void convert(List<String> path, String key, BinaryTag nbt, Consumer<Entry> consumer) {
         var tagFunction = SUPPORTED_TYPES.get(nbt.type());
         if (tagFunction != null) {
-            Tag tag = tagFunction.apply(key);
-            consumer.accept(makeEntry(path, tag, BinaryTagUtil.nbtValueFromTag(nbt)));
+            Tag<?> tag = tagFunction.apply(key);
+            consumer.accept(makeEntry(path, (Tag<Object>) tag, BinaryTagUtil.nbtValueFromTag(nbt)));
         } else if (nbt instanceof CompoundBinaryTag nbtCompound) {
-            for (var ent : nbtCompound) {
-                var newPath = new ArrayList<>(path);
-                newPath.add(key);
-                convert(newPath, ent.getKey(), ent.getValue(), consumer);
+            if (nbtCompound.isEmpty()) {
+                if (ServerFlag.SERIALIZE_EMPTY_COMPOUND || path.isEmpty()) {
+                    consumer.accept(makeEntry(path, Tag.NBT(key), nbt));
+                }
+            } else {
+                for (var ent : nbtCompound) {
+                    var newPath = new ArrayList<>(path);
+                    newPath.add(key);
+                    convert(newPath, ent.getKey(), ent.getValue(), consumer);
+                }
             }
         } else if (nbt instanceof ListBinaryTag nbtList) {
             tagFunction = SUPPORTED_TYPES.get(nbtList.elementType());
@@ -70,7 +77,7 @@ final class TagNbtSeparator {
                     for (int i = 0; i < values.length; i++) {
                         values[i] = BinaryTagUtil.nbtValueFromTag(nbtList.get(i));
                     }
-                    consumer.accept(makeEntry(path, Tag.class.cast(tag), List.of(values)));
+                    consumer.accept(makeEntry(path, (Tag<? super List<Object>>) tag, List.of(values)));
                 } catch (Exception e) {
                     e.printStackTrace();
                     consumer.accept(makeEntry(path, Tag.NBT(key), nbt));
@@ -86,6 +93,9 @@ final class TagNbtSeparator {
         return new Entry<>(tag.path(path.toArray(String[]::new)), value);
     }
 
-    record Entry<T>(Tag<T> tag, T value) {
+    record Entry<T>(TagImpl<T> tag, T value) {
+        public Entry(Tag<T> tag, T value) {
+            this((TagImpl<T>) tag, value);
+        }
     }
 }

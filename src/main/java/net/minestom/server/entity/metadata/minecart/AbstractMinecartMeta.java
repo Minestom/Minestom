@@ -8,7 +8,7 @@ import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractMinecartMeta extends AbstractVehicleMeta {
-    protected AbstractMinecartMeta(Entity entity, MetadataHolder metadata) {
+    protected AbstractMinecartMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
