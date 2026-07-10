@@ -267,14 +267,14 @@ public non-sealed class PlayerInventory extends AbstractInventory {
             // we want to prioritize the hotbar from right-to-left and then the inventory from right-to-left
             clickResult = clickProcessor.shiftClick(
                     this, this,
-                    9, 0, -1,
+                    8, -1, -1,
                     player, slot, clicked, cursor
             );
 
             if(clickResult.isCancel()) {
                 clickResult = clickProcessor.shiftClick(
                         this, this,
-                        INNER_INVENTORY_SIZE, 9, -1,
+                        INNER_INVENTORY_SIZE - 1, 8, -1,
                         player, slot, clicked, cursor
                 );
             }
