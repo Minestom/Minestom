@@ -22,6 +22,11 @@ tasks.named("check") {
     dependsOn(tasks.named("compileScratchJava"))
 }
 
+tasks.register<JavaExec>("runScratch") {
+    classpath = sourceSets["scratch"].runtimeClasspath
+    mainClass.set("net.minestom.demo.Scratch")
+}
+
 application {
     mainClass.set("net.minestom.demo.Main")
     mainModule.set("net.minestom.demo")
