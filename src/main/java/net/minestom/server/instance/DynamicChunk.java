@@ -60,7 +60,7 @@ public class DynamicChunk extends Chunk {
         super(instance, chunkX, chunkZ, true);
         // Required to be here because the super call populates the min and max section.
         var sectionsTemp = new Section[maxSection - minSection];
-        Arrays.setAll(sectionsTemp, value -> new Section());
+        Arrays.setAll(sectionsTemp, _ -> new Section());
         this.sections = List.of(sectionsTemp);
     }
 
@@ -269,7 +269,7 @@ public class DynamicChunk extends Chunk {
                 for (Section section : sections) {
                     final Palette blockPalette = section.blockPalette();
                     final short blockCount = (short) blockPalette.count();
-                    final short fluidCount = countFluids(blockPalette);
+                    final short fluidCount = (short) countFluids(blockPalette);
                     networkBuffer.write(sectionSerializer, new ChunkData.Section(blockCount, fluidCount, blockPalette, section.biomePalette()));
                 }
             });
@@ -284,19 +284,19 @@ public class DynamicChunk extends Chunk {
     }
 
     // blocks with a non-empty fluid (liquids or waterlogged)
-    private static short countFluids(Palette blockPalette) {
+    private static int countFluids(Palette blockPalette) {
         final int single = blockPalette.singleValue();
         if (single != -1) return isFluid(single) ? (short) blockPalette.count() : 0;
         final int[] count = {0};
-        blockPalette.getAllPresent((x, y, z, stateId) -> {
+        blockPalette.getAllPresent((_, _, _, stateId) -> {
             if (isFluid(stateId)) count[0]++;
         });
-        return (short) count[0];
+        return count[0];
     }
 
     private static boolean isFluid(int blockStateId) {
         final Block block = Block.fromStateId(blockStateId);
-        return block != null && (block.isLiquid() || "true".equals(block.getProperty("waterlogged")));
+        return block != null && block.registry().isFluid();
     }
 
     UpdateLightPacket createLightPacket() {
