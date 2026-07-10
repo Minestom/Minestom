@@ -3,14 +3,25 @@ package net.minestom.server.instance.block.predicate;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.ListBinaryTag;
+import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
 import java.util.function.Predicate;
 
 public record NbtPredicate(@Nullable CompoundBinaryTag nbt) implements Predicate<@Nullable BinaryTag> {
-    public static final Codec<NbtPredicate> CODEC = Codec.NBT_COMPOUND_COERCED.transform(NbtPredicate::new, NbtPredicate::nbt);
+    public static final Codec<NbtPredicate> CODEC = Codec.NBT_COMPOUND.orElse(Codec.STRING.transform(
+            string -> {
+                try {
+                    return MinestomAdventure.tagStringIO().asCompound(string);
+                } catch (IOException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            },
+            MinestomAdventure.tagStringIO()::asString
+    )).transform(NbtPredicate::new, NbtPredicate::nbt);
     public static final NetworkBuffer.Type<NbtPredicate> NETWORK_TYPE = NetworkBuffer.NBT_COMPOUND.transform(NbtPredicate::new, NbtPredicate::nbt);
 
     /**
