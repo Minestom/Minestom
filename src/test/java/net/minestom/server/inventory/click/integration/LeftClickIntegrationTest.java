@@ -277,6 +277,50 @@ public class LeftClickIntegrationTest {
         }
     }
 
+    @Test
+    public void shiftClickHotbarToSlotNine(Env env) {
+        var instance = env.createFlatInstance();
+        var player = env.createPlayer(instance, new Pos(0, 40, 0));
+        var inventory = player.getInventory();
+
+        // Fill main inventory slots 10 to 35, leaving slot 9 empty
+        for (int i = 10; i <= 35; i++) {
+            inventory.setItemStack(i, ItemStack.of(Material.STONE));
+        }
+
+        // Put an item in a hotbar slot (slot 0)
+        inventory.setItemStack(0, ItemStack.of(Material.IRON_HELMET));
+
+        // Perform shift click on slot 0
+        shiftClick(player, 0);
+
+        // Assert that the item successfully lands in slot 9
+        assertEquals(ItemStack.of(Material.IRON_HELMET), inventory.getItemStack(9));
+        assertEquals(ItemStack.AIR, inventory.getItemStack(0));
+    }
+
+    @Test
+    public void shiftClickCraftingResultToSlotZero(Env env) {
+        var instance = env.createFlatInstance();
+        var player = env.createPlayer(instance, new Pos(0, 40, 0));
+        var inventory = player.getInventory();
+
+        // Fill hotbar slots 1 to 8, leaving slot 0 empty
+        for (int i = 1; i <= 8; i++) {
+            inventory.setItemStack(i, ItemStack.of(Material.STONE));
+        }
+
+        // Put an item in the crafting result slot (slot 36)
+        inventory.setItemStack(36, ItemStack.of(Material.IRON_HELMET));
+
+        // Perform shift click on slot 36
+        shiftClick(player, 36);
+
+        // Assert that the item successfully lands in slot 0
+        assertEquals(ItemStack.of(Material.IRON_HELMET), inventory.getItemStack(0));
+        assertEquals(ItemStack.AIR, inventory.getItemStack(36));
+    }
+
     private void shiftClickOpenInventory(Player player, int slot) {
         _leftClick(player.getOpenInventory(), true, player, slot, true);
     }
