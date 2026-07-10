@@ -362,6 +362,14 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     @Override
+    public NetworkBuffer slice(long offset, long byteLength, long readIndex, long writeIndex) {
+        final MemorySegment segment = this.segment;
+        assertDummy(segment);
+        final MemorySegment slice = segment.asSlice(offset, byteLength);
+        return new NetworkBufferImpl(slice, readIndex, writeIndex, null, registries);
+    }
+
+    @Override
     public IOView ioView() {
         return new IOView(this);
     }

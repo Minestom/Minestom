@@ -6,6 +6,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.registry.Registries;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.junit.jupiter.api.Test;
@@ -376,6 +377,78 @@ public class NetworkBufferTest {
 
             assertThrows(IllegalArgumentException.class, () -> readOnly.write(INT, 888));
         }
+    }
+
+    @Test
+    public void sliceBasic() {
+        var buffer = NetworkBuffer.staticBuffer(16);
+        buffer.write(INT, 10);
+        buffer.write(INT, 20);
+        buffer.write(INT, 30);
+        buffer.write(INT, 40);
+
+        // Slice containing elements 20 and 30
+        var slice = buffer.slice(4, 8, 0, 8);
+        assertEquals(8, slice.capacity());
+        assertEquals(0, slice.readIndex());
+        assertEquals(8, slice.writeIndex());
+
+        // Read from slice
+        assertEquals(20, slice.read(INT));
+        assertEquals(30, slice.read(INT));
+        assertEquals(8, slice.readIndex());
+
+        // Write relative to slice offset
+        slice.writeAt(4, INT, 99);
+        assertEquals(99, slice.readAt(4, INT));
+        assertEquals(99, buffer.readAt(8, INT));
+    }
+
+    @Test
+    public void sliceReadOnly() {
+        var buffer = NetworkBuffer.staticBuffer(16);
+        buffer.write(INT, 10);
+
+        // Slicing a read only buffer
+        var readOnlyBuffer = buffer.readOnly();
+        var slice1 = readOnlyBuffer.slice(0, 4, 0, 4);
+        assertTrue(slice1.isReadOnly());
+        assertEquals(10, slice1.read(INT));
+        assertThrows(IllegalArgumentException.class, () -> slice1.write(INT, 20));
+
+        // Slicing a writable buffer and then making the slice read only
+        var slice2 = buffer.slice(0, 4, 0, 4).readOnly();
+        assertTrue(slice2.isReadOnly());
+        assertEquals(10, slice2.read(INT));
+        assertThrows(IllegalArgumentException.class, () -> slice2.write(INT, 20));
+    }
+
+    @Test
+    public void sliceDummy() {
+        var dummy = NetworkBufferImpl.dummy(null);
+        assertThrows(IllegalArgumentException.class, () -> dummy.slice(0, 0, 0, 0));
+    }
+
+    @Test
+    public void sliceOutOfBounds() {
+        var buffer = NetworkBuffer.staticBuffer(16);
+        assertThrows(IndexOutOfBoundsException.class, () -> buffer.slice(10, 8, 0, 8));
+        assertThrows(IndexOutOfBoundsException.class, () -> buffer.slice(-1, 8, 0, 8));
+        assertThrows(IndexOutOfBoundsException.class, () -> buffer.slice(0, -1, 0, 0));
+    }
+
+    @Test
+    public void sliceRegistries() {
+        var registries = Registries.vanilla();
+        var buffer = NetworkBuffer.staticBuffer(16, registries);
+
+        var slice = buffer.slice(0, 16, 0, 16);
+        assertSame(registries, slice.registries());
+
+        // Changing registry on slice doesn't affect parent
+        slice.registries(null);
+        assertNull(slice.registries());
+        assertSame(registries, buffer.registries());
     }
 
     @Test

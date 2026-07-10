@@ -204,6 +204,22 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     void registries(@Nullable Registries registries);
 
     /**
+     * A slice is an operation where the backing memory is used for the new buffer. Consider it a view over the backing memory region.
+     *
+     * @param offset     the position to start the slice
+     * @param byteLength the length of the slice, equal to {@link #capacity()}
+     * @param readIndex  the read index
+     * @param writeIndex the write index
+     * @return a new buffer
+     * @throws IllegalArgumentException if this buffer is a dummy
+     * @apiNote With resized segments, you could observe behavior where you may see stale data or close arenas.
+     * To avoid this, do not use resizable segments in a way where they are written or resized like {@link #resize(long)}.
+     * @implNote {@link #registries()} are copied into the new buffer
+     */
+    @Contract(pure = true, value = "_, _, _, _ -> new")
+    NetworkBuffer slice(long offset, long byteLength, long readIndex, long writeIndex);
+
+    /**
      * Creates a new {@link IOView} of this buffer.
      * <br>
      * Useful to interface with API's that support {@link DataInput} or {@link DataOutput}.
