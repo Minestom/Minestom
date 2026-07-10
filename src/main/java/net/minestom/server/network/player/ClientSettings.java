@@ -2,7 +2,6 @@ package net.minestom.server.network.player;
 
 import net.minestom.server.ServerFlag;
 import net.minestom.server.entity.MainHand;
-import net.minestom.server.entity.Player;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
@@ -55,7 +54,7 @@ public record ClientSettings(Locale locale, byte viewDistance,
     }
 
     /**
-     * Deprecated in favor of {@link Player#effectiveViewDistance()}
+     * Deprecated in favor of {@link net.minestom.server.entity.Player#effectiveViewDistance()}
      * @return The effective view distance, which is the smaller of either the client's view distance settings and the server's max view distance
      */
     @Deprecated

@@ -97,6 +97,27 @@ public abstract class Argument<T> {
         return null;
     }
 
+    /**
+     * Whether this argument dispatches a full sub-command against the running server
+     * (i.e. an {@code ArgumentCommand}). Used to order command graph nodes without a
+     * hard reference to the framework-bound argument type.
+     *
+     * @return true if this argument redirects to command dispatch
+     */
+    @ApiStatus.Internal
+    public boolean dispatchesCommand() {
+        return false;
+    }
+
+    /**
+     * The shortcut of a command-dispatching argument, empty when redirecting to the root.
+     * Only meaningful when {@link #dispatchesCommand()} is true.
+     */
+    @ApiStatus.Internal
+    public String commandShortcut() {
+        return "";
+    }
+
     public @Nullable SuggestionType suggestionType() {
         return suggestionType;
     }

@@ -92,13 +92,6 @@ public class ArgumentType {
     }
 
     /**
-     * @see ArgumentCommand
-     */
-    public static ArgumentCommand Command(String id) {
-        return new ArgumentCommand(id);
-    }
-
-    /**
      * @see ArgumentEnum
      */
     @SuppressWarnings("rawtypes")
@@ -179,27 +172,6 @@ public class ArgumentType {
     }
 
     /**
-     * @see ArgumentEntity
-     */
-    public static ArgumentEntity Entity(String id) {
-        return new ArgumentEntity(id);
-    }
-
-    /**
-     * @see ArgumentItemStack
-     */
-    public static ArgumentItemStack ItemStack(String id) {
-        return new ArgumentItemStack(id);
-    }
-
-    /**
-     * @see ArgumentComponent
-     */
-    public static ArgumentComponent Component(String id) {
-        return new ArgumentComponent(id);
-    }
-
-    /**
      * @see ArgumentUUID
      */
     public static ArgumentUUID UUID(String id) {
@@ -258,14 +230,5 @@ public class ArgumentType {
      */
     public static ArgumentLong Long(String id) {
         return new ArgumentLong(id);
-    }
-
-    /**
-     * @see ArgumentEntity
-     * @deprecated use {@link #Entity(String)}
-     */
-    @Deprecated
-    public static ArgumentEntity Entities(String id) {
-        return new ArgumentEntity(id);
     }
 }

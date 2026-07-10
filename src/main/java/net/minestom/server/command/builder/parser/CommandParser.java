@@ -4,13 +4,13 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.command.builder.CommandDispatcher;
 import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static net.minestom.server.command.builder.parser.ArgumentParser.validate;
@@ -20,10 +20,10 @@ import static net.minestom.server.command.builder.parser.ArgumentParser.validate
  */
 public final class CommandParser {
 
-    private static @Nullable CommandQueryResult recursiveCommandQuery(CommandDispatcher dispatcher,
+    private static @Nullable CommandQueryResult recursiveCommandQuery(Function<String, Command> dispatcher,
                                                                       List<Command> parents,
                                                                       @Nullable Command parentCommand, String commandName, String[] args) {
-        Command command = parentCommand == null ? dispatcher.findCommand(commandName) : parentCommand;
+        Command command = parentCommand == null ? dispatcher.apply(commandName) : parentCommand;
         if (command == null) return null;
 
         CommandQueryResult commandQueryResult = new CommandQueryResult(parents, command, commandName, args);
@@ -41,7 +41,7 @@ public final class CommandParser {
         return commandQueryResult;
     }
 
-    public static @Nullable CommandQueryResult findCommand(CommandDispatcher dispatcher, String input) {
+    public static @Nullable CommandQueryResult findCommand(Function<String, Command> dispatcher, String input) {
         final String[] parts = input.split(StringUtils.SPACE);
         final String commandName = parts[0];
 

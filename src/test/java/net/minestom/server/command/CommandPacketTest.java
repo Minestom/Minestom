@@ -3,6 +3,7 @@ package net.minestom.server.command;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.arguments.ServerArgumentType;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.junit.jupiter.api.Test;
 
@@ -40,10 +41,10 @@ public class CommandPacketTest {
         final Command execute = new Command("execute");
         execute.addSyntax(CommandPacketTest::dummyExecutor, ArgumentType.Loop("params",
                 ArgumentType.Group("facing", ArgumentType.Literal("facing"), ArgumentType.RelativeVec3("pos")),
-                ArgumentType.Group("at", ArgumentType.Literal("at"), ArgumentType.Entity("targets")),
-                ArgumentType.Group("as", ArgumentType.Literal("as"), ArgumentType.Entity("targets")),
+                ArgumentType.Group("at", ArgumentType.Literal("at"), ServerArgumentType.Entity("targets")),
+                ArgumentType.Group("as", ArgumentType.Literal("as"), ServerArgumentType.Entity("targets")),
                 ArgumentType.Group("in", ArgumentType.Literal("in"), ArgumentType.Enum("dimension", Dimension.class)),
-                ArgumentType.Group("run", ArgumentType.Command("run"))
+                ArgumentType.Group("run", ServerArgumentType.Command("run"))
         ));
         var graph = Graph.fromCommand(execute);
         assertPacketGraph("""
@@ -105,7 +106,7 @@ public class CommandPacketTest {
     @Test
     public void singleCommandCommandAfterEnum() {
         var graph = Graph.builder(ArgumentType.Literal("foo"))
-                .append(ArgumentType.Enum("bar", A.class), b -> b.append(ArgumentType.Command("baz")))
+                .append(ArgumentType.Enum("bar", A.class), b -> b.append(ServerArgumentType.Command("baz")))
                 .build();
         assertPacketGraph("""
                 foo baz=%
@@ -198,7 +199,7 @@ public class CommandPacketTest {
                 .append(ArgumentType.String("msg"))
                 .build();
         var bar = Graph.builder(ArgumentType.Literal("bar"))
-                .append(ArgumentType.Command("cmd").setShortcut("foo"))
+                .append(ServerArgumentType.Command("cmd").setShortcut("foo"))
                 .build();
         assertPacketGraph("""
                 foo bar cmd=%
@@ -216,7 +217,7 @@ public class CommandPacketTest {
                 .append(ArgumentType.String("msg"))
                 .build();
         var bar = Graph.builder(ArgumentType.Literal("bar"))
-                .append(ArgumentType.Command("cmd").setShortcut("foo \"prefix "))
+                .append(ServerArgumentType.Command("cmd").setShortcut("foo \"prefix "))
                 .build();
         assertPacketGraph("""
                 foo bar cmd=%

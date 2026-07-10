@@ -1,11 +1,10 @@
 package net.minestom.server.network.packet.server;
 
 import net.minestom.server.network.ConnectionState;
-import net.minestom.server.network.player.PlayerConnection;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Represents a packet that can be sent to a {@link PlayerConnection}.
+ * Represents a packet that can be sent to a {@link net.minestom.server.network.player.PlayerConnection}.
  */
 public sealed interface SendablePacket
         permits BufferedPacket, CachedPacket, FramedPacket, ServerPacket {

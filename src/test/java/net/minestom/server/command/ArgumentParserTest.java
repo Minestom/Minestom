@@ -2,6 +2,7 @@ package net.minestom.server.command;
 
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.arguments.ServerArgumentType;
 import net.minestom.server.command.builder.parser.ArgumentParser;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +24,7 @@ public class ArgumentParserTest {
         assertParserEquals("String<example>", ArgumentType.String("example"));
         assertParserEquals("Word<example>", ArgumentType.Word("example"));
         assertParserEquals("StringArray<example>", ArgumentType.StringArray("example"));
-        assertParserEquals("Command<example>", ArgumentType.Command("example"));
+        assertParserEquals("Command<example>", ServerArgumentType.Command("example"));
         assertParserEquals("Color<example>", ArgumentType.TeamColor("example"));
         assertParserEquals("Time<example>", ArgumentType.Time("example"));
         assertParserEquals("Particle<example>", ArgumentType.Particle("example"));
@@ -32,18 +33,18 @@ public class ArgumentParserTest {
         assertParserEquals("BlockState<example>", ArgumentType.BlockState("example"));
         assertParserEquals("IntRange<example>", ArgumentType.IntRange("example"));
         assertParserEquals("FloatRange<example>", ArgumentType.FloatRange("example"));
-        assertParserEquals("ItemStack<example>", ArgumentType.ItemStack("example"));
-        assertParserEquals("Component<example>", ArgumentType.Component("example"));
+        assertParserEquals("ItemStack<example>", ServerArgumentType.ItemStack("example"));
+        assertParserEquals("Component<example>", ServerArgumentType.Component("example"));
         assertParserEquals("UUID<example>", ArgumentType.UUID("example"));
         assertParserEquals("NBT<example>", ArgumentType.NBT("example"));
         assertParserEquals("NBTCompound<example>", ArgumentType.NbtCompound("example"));
         assertParserEquals("RelativeBlockPosition<example>", ArgumentType.RelativeBlockPosition("example"));
         assertParserEquals("RelativeVec2<example>", ArgumentType.RelativeVec2("example"));
         assertParserEquals("RelativeVec3<example>", ArgumentType.RelativeVec3("example"));
-        assertParserEquals("Entities<example>", ArgumentType.Entity("example"));
-        assertParserEquals("Entity<example>", ArgumentType.Entity("example").singleEntity(true));
-        assertParserEquals("Players<example>", ArgumentType.Entity("example").onlyPlayers(true));
-        assertParserEquals("Player<example>", ArgumentType.Entity("example").onlyPlayers(true).singleEntity(true));
+        assertParserEquals("Entities<example>", ServerArgumentType.Entity("example"));
+        assertParserEquals("Entity<example>", ServerArgumentType.Entity("example").singleEntity(true));
+        assertParserEquals("Players<example>", ServerArgumentType.Entity("example").onlyPlayers(true));
+        assertParserEquals("Player<example>", ServerArgumentType.Entity("example").onlyPlayers(true).singleEntity(true));
 
         // Test multiple argument functionality
         assertParserEquals("NBT<arg1> RelativeVec2<arg2>", ArgumentType.NBT("arg1"), ArgumentType.RelativeVec2("arg2"));

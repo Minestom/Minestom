@@ -15,6 +15,7 @@ import net.minestom.server.color.TeamColor;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.arguments.ServerArgumentType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Vec;
@@ -78,7 +79,7 @@ public class ArgumentTypeTest {
 
     @Test
     public void testArgumentComponent() {
-        var arg = ArgumentType.Component("component");
+        var arg = ServerArgumentType.Component("component");
         var component1 = Component.text("Example text", NamedTextColor.DARK_AQUA);
         var component2 = Component.text("Other example text", Style.style(TextDecoration.OBFUSCATED));
         var json1 = GsonComponentSerializer.gson().serialize(component1);
@@ -91,7 +92,7 @@ public class ArgumentTypeTest {
 
     @Test
     public void testArgumentEntity() {
-        var arg = ArgumentType.Entity("entity");
+        var arg = ServerArgumentType.Entity("entity");
 
         assertValidArg(arg, "@a");
         assertValidArg(arg, "@p");
@@ -173,7 +174,7 @@ public class ArgumentTypeTest {
 
     @Test
     public void testArgumentItemStack() {
-        var arg = ArgumentType.ItemStack("item_stack");
+        var arg = ServerArgumentType.ItemStack("item_stack");
         assertArg(arg, ItemStack.AIR, "air");
         assertArg(arg, ItemStack.of(Material.GLASS_PANE).withTag(Tag.String("tag"), "value"), "glass_pane{tag:value}");
         assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(DataComponents.REPAIR_COST, 5), "glass_pane[repair_cost=5]");

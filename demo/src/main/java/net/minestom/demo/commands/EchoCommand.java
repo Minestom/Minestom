@@ -5,6 +5,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.arguments.ServerArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentComponent;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentUUID;
 
@@ -17,7 +18,7 @@ public class EchoCommand extends Command {
                         .hoverEvent(Component.text("Click to get this command.")
                         .clickEvent(ClickEvent.suggestCommand("/echo ")))));
 
-        ArgumentComponent json = ArgumentType.Component("json");
+        ArgumentComponent json = ServerArgumentType.Component("json");
         ArgumentUUID uuid = ArgumentType.UUID("uuid");
 
         this.addSyntax((sender, context) -> sender.sendMessage(context.get(json)), json);

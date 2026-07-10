@@ -6,6 +6,7 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.arguments.ServerArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.GameMode;
@@ -33,7 +34,7 @@ public class GamemodeCommand extends Command {
                         .append(Component.text(exception.getInput(), NamedTextColor.WHITE))
                         .append(Component.text("!"))));
 
-        ArgumentEntity player = ArgumentType.Entity("targets").onlyPlayers(true);
+        ArgumentEntity player = ServerArgumentType.Entity("targets").onlyPlayers(true);
 
         //Upon invalid usage, print the correct usage of the command to the sender
         setDefaultExecutor((sender, context) -> {

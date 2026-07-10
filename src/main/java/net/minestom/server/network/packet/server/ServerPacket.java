@@ -2,10 +2,9 @@ package net.minestom.server.network.packet.server;
 
 import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.network.packet.Packet;
-import net.minestom.server.network.player.PlayerConnection;
 
 /**
- * Represents a packet which can be sent to a player using {@link PlayerConnection#sendPacket(SendablePacket)}.
+ * Represents a packet which can be sent to a player using {@link net.minestom.server.network.player.PlayerConnection#sendPacket(SendablePacket)}.
  * <p>
  * Packets are value-based, and should therefore not be reliant on identity.
  */

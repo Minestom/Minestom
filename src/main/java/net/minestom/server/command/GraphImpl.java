@@ -4,7 +4,6 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandExecutor;
 import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.arguments.ArgumentCommand;
 import net.minestom.server.command.builder.arguments.ArgumentLiteral;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import org.jetbrains.annotations.Nullable;
@@ -94,7 +93,7 @@ record GraphImpl(NodeImpl root) implements Graph {
         };
 
         private static int argumentValue(Argument<?> argument) {
-            if (argument.getClass() == ArgumentCommand.class) return -3000;
+            if (argument.dispatchesCommand()) return -3000;
             if (argument.getClass() == ArgumentLiteral.class) return -2000;
             return -1000;
         }

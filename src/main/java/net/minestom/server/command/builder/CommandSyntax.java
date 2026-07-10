@@ -3,7 +3,6 @@ package net.minestom.server.command.builder;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.condition.CommandCondition;
-import net.minestom.server.entity.Player;
 import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
@@ -59,7 +58,7 @@ public class CommandSyntax {
      * <p>
      * Be aware that changing the command condition will not automatically update players auto-completion.
      * You can create a new packet containing the changes with
-     * {@link net.minestom.server.command.CommandManager#createDeclareCommandsPacket(Player)}.
+     * {@code CommandManager#createDeclareCommandsPacket(Player)}.
      *
      * @param commandCondition the new command condition, null to remove it
      */

@@ -1,6 +1,6 @@
 package net.minestom.server.network.packet.server.configuration;
 
-import net.minestom.server.MinecraftServer;
+import net.minestom.server.MinecraftConstants;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -12,7 +12,7 @@ public record SelectKnownPacksPacket(
         List<Entry> entries
 ) implements ServerPacket.Configuration {
     private static final int MAX_ENTRIES = 64;
-    public static final Entry MINECRAFT_CORE = new Entry("minecraft", "core", MinecraftServer.VERSION_NAME);
+    public static final Entry MINECRAFT_CORE = new Entry("minecraft", "core", MinecraftConstants.VERSION_NAME);
 
     public static final NetworkBuffer.Type<SelectKnownPacksPacket> SERIALIZER = NetworkBufferTemplate.template(
             Entry.SERIALIZER.list(MAX_ENTRIES), SelectKnownPacksPacket::entries,

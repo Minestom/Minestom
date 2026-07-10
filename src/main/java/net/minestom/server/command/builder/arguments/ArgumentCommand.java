@@ -39,6 +39,16 @@ public class ArgumentCommand extends Argument<CommandResult> {
         return null;
     }
 
+    @Override
+    public boolean dispatchesCommand() {
+        return true;
+    }
+
+    @Override
+    public String commandShortcut() {
+        return shortcut;
+    }
+
     public boolean isOnlyCorrect() {
         return onlyCorrect;
     }

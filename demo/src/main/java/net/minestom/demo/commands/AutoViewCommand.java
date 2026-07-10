@@ -9,6 +9,7 @@ import java.util.List;
 
 import static net.minestom.server.command.builder.arguments.ArgumentType.Boolean;
 import static net.minestom.server.command.builder.arguments.ArgumentType.*;
+import static net.minestom.server.command.builder.arguments.ServerArgumentType.*;
 
 public class AutoViewCommand extends Command {
     public AutoViewCommand() {

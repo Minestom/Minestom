@@ -1,11 +1,9 @@
 package net.minestom.server.statistic;
 
-import net.minestom.server.entity.Player;
-
 /**
  * Represents a single statistic in the "statistics" game menu.
  * <p>
- * You can retrieve the statistics map with {@link Player#getStatisticValueMap()} and modify it with your own values.
+ * You can retrieve the statistics map with {@link net.minestom.server.entity.Player#getStatisticValueMap()} and modify it with your own values.
  */
 public class PlayerStatistic {
     private final StatisticCategory category;

@@ -5,6 +5,7 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -16,7 +17,8 @@ import java.util.Map;
  * entry points. The live runtime overloads live in {@link CollisionUtils} and {@link BlockCollision}
  * and delegate here.
  */
-final class BlockCollisionCore {
+@ApiStatus.Internal
+public final class BlockCollisionCore {
     static final Point[] NO_COLLISION_POINTS = new Point[3];
     static final Shape[] NO_COLLISION_SHAPES = new Shape[3];
     static final Point[] NO_COLLISION_SHAPE_POSITIONS = new Point[3];
@@ -81,7 +83,8 @@ final class BlockCollisionCore {
         return newPosition;
     }
 
-    static Shape parseCollisionShape(Map<Object, Object> internCache, String shape) {
+    @ApiStatus.Internal
+    public static Shape parseCollisionShape(Map<Object, Object> internCache, String shape) {
         final Shape cachedShape = (Shape) internCache.get(shape);
         if (cachedShape != null) return cachedShape;
         final Shape parsedShape = ShapeImpl.parseShapeFromRegistry(shape, (byte) 0);
@@ -89,7 +92,8 @@ final class BlockCollisionCore {
         return (Shape) internCache.computeIfAbsent(parsedShape, k -> parsedShape);
     }
 
-    static Shape parseOcclusionShape(Map<Object, Object> internCache, String shape, boolean occludes, byte lightEmission) {
+    @ApiStatus.Internal
+    public static Shape parseOcclusionShape(Map<Object, Object> internCache, String shape, boolean occludes, byte lightEmission) {
         record ShapeEntry(String shape, boolean occludes, byte lightEmission) {} // Easy way to Hashcode
         ShapeEntry entry = new ShapeEntry(shape, occludes, lightEmission);
         final Shape cachedShape = (Shape) internCache.get(entry);

@@ -73,10 +73,10 @@ final class GraphConverter {
             to.add(node);
             return new int[]{id.getAndIncrement()};
         } else {
-            if (argument instanceof ArgumentCommand argCmd) {
+            if (argument.dispatchesCommand()) {
                 node.flags = literal(isExecutable, true);
                 node.name = argument.getId();
-                final String shortcut = argCmd.getShortcut();
+                final String shortcut = argument.commandShortcut();
                 if (shortcut.isEmpty()) {
                     redirects.add((graph, root) -> node.redirectedNode = root);
                 } else {

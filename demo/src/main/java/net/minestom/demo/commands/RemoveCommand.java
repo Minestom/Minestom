@@ -4,6 +4,7 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.arguments.ServerArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.command.builder.condition.SenderConditions;
 import net.minestom.server.entity.Entity;
@@ -22,7 +23,7 @@ public class RemoveCommand extends Command {
         public RemoveEntities() {
             super("entities");
             setCondition(SenderConditions::playerOnly);
-            entity = ArgumentType.Entity("entity");
+            entity = ServerArgumentType.Entity("entity");
             addSyntax(this::remove, entity);
         }
 

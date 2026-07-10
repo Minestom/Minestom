@@ -3,7 +3,6 @@ package net.minestom.server.registry;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.dialog.Dialog;
-import net.minestom.server.entity.Player;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.network.packet.server.SendablePacket;
@@ -135,7 +134,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * <p>Register an object to this registry, overwriting the previous entry if any is present.</p>
      *
      * <p>Note: the new registry will not be sent to existing players. They must be returned to
-     * the configuration phase to receive new registry data. See {@link Player#startConfigurationPhase()}.</p>
+     * the configuration phase to receive new registry data. See {@link net.minestom.server.entity.Player#startConfigurationPhase()}.</p>
      *
      * <p><b>WARNING:</b> Updating an existing entry is an inherently unsafe operation as it may cause desync with
      * existing structures. <b>This behavior is disabled by default, and must be enabled by setting the system
@@ -170,7 +169,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * enabled by setting the system property <code>minestom.registry.unsafe-ops</code> to <code>true</code>.</b></p>
      *
      * <p>Note: the new registry will not be sent to existing players. They must be returned to
-     * the configuration phase to receive new registry data. See {@link Player#startConfigurationPhase()}.</p>
+     * the configuration phase to receive new registry data. See {@link net.minestom.server.entity.Player#startConfigurationPhase()}.</p>
      *
      * @param key The id of the entry to remove
      * @return True if the object was removed, false if it was not present

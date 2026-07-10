@@ -8,8 +8,8 @@ import net.kyori.adventure.key.Key;
 import net.minestom.data.MinestomData;
 import net.minestom.server.codec.Result;
 import net.minestom.server.codec.Transcoder;
+import net.minestom.server.collision.BlockCollisionCore;
 import net.minestom.server.collision.BoundingBox;
-import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.collision.Shape;
 import net.minestom.server.collision.ShapeImpl;
 import net.minestom.server.component.DataComponent;
@@ -317,15 +317,15 @@ public final class RegistryData {
             { // Unique special case where the shape strings can mutate but arent saved after the parse.
                 this.collisionShape = fromParent(parent, BlockEntry::collisionShape, main, "collisionShape", (properties, string) -> {
                     String shape = properties.getString(string);
-                    return CollisionUtils.parseCollisionShape(internCache, shape);
+                    return BlockCollisionCore.parseCollisionShape(internCache, shape);
                 }, null);
                 Shape occludeShape = fromParent(parent, BlockEntry::occlusionShape, main, "occlusionShape", (properties, string) -> {
                     String shape = properties.getString(string);
                     if (parent == null || parentProperties == null) // No parent, so we can just parse the shape
-                        return CollisionUtils.parseOcclusionShape(internCache, shape, occludes, this.lightEmission);
+                        return BlockCollisionCore.parseOcclusionShape(internCache, shape, occludes, this.lightEmission);
                     if (shape != null || occludes != parent.occludes()) {
                         if (shape == null) shape = parentProperties.getString(string);
-                        return CollisionUtils.parseOcclusionShape(internCache, shape, occludes, this.lightEmission);
+                        return BlockCollisionCore.parseOcclusionShape(internCache, shape, occludes, this.lightEmission);
                     }
                     return parent.occlusionShape();
                 }, null);

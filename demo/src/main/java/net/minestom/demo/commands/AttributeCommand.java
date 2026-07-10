@@ -6,6 +6,7 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentLiteral;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.arguments.ServerArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentResource;
 import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
@@ -24,7 +25,7 @@ public class AttributeCommand extends Command {
     public AttributeCommand() {
         super("attribute");
 
-        ArgumentEntity target = ArgumentType.Entity("target").singleEntity(true);
+        ArgumentEntity target = ServerArgumentType.Entity("target").singleEntity(true);
         ArgumentResource attribute = ArgumentType.Resource("attribute", "minecraft:attribute");
         ArgumentLiteral base = ArgumentType.Literal("base");
         ArgumentLiteral get = ArgumentType.Literal("get");

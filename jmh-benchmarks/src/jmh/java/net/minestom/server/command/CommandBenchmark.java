@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 import static net.minestom.server.command.builder.arguments.ArgumentType.*;
+import static net.minestom.server.command.builder.arguments.ServerArgumentType.*;
 
 @BenchmarkMode(Mode.AverageTime)
 @State(Scope.Benchmark)
