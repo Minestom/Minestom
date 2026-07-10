@@ -29,7 +29,6 @@ import net.minestom.server.item.enchant.*;
 import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatType;
-import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.client.ClientPacket;
@@ -176,15 +175,6 @@ public final class MinecraftServer implements MinecraftConstants {
 
     public static SchedulerManager getSchedulerManager() {
         return serverProcess.scheduler();
-    }
-
-    /**
-     * Gets the manager handling server monitoring.
-     *
-     * @return the benchmark manager
-     */
-    public static BenchmarkManager getBenchmarkManager() {
-        return serverProcess.benchmark();
     }
 
     public static ExceptionManager getExceptionManager() {

@@ -122,8 +122,19 @@ public class ArgumentTypeTest {
 
         assertValidArg(arg, "@e[distance=500]");
         assertValidArg(arg, "@e[distance=50..150]");
+        assertValidArg(arg, "@e[distance=5..]");
+        assertValidArg(arg, "@e[distance=..10]");
+        assertValidArg(arg, "@e[distance=1.5..3.5]");
         assertInvalidArg(arg, "@e[distance=-500-500]");
-        assertInvalidArg(arg, "@e[distance=2147483648]");
+        assertInvalidArg(arg, "@e[distance=-5]");
+        assertInvalidArg(arg, "@e[distance=-3..-1]");
+        assertInvalidArg(arg, "@e[distance=..-3]");
+        assertInvalidArg(arg, "@e[distance=NaN]");
+        assertInvalidArg(arg, "@e[distance=Infinity..]");
+
+        assertInvalidArg(arg, "@e[type=pig,garbage]");
+        assertInvalidArg(arg, "@e[type=pig,]");
+        assertInvalidArg(arg, "@e[garbage]");
     }
 
     @Test

@@ -10,11 +10,11 @@ public class GlowSquidMeta extends AgeableWaterAnimalMeta {
         super(entity, metadata);
     }
 
-    private int getDarkTicksRemaining() {
+    public int getDarkTicksRemaining() {
         return metadata.get(MetadataDef.GlowSquid.DARK_TICKS_REMAINING);
     }
 
-    private void setDarkTicksRemaining(int ticks) {
+    public void setDarkTicksRemaining(int ticks) {
         metadata.set(MetadataDef.GlowSquid.DARK_TICKS_REMAINING, ticks);
     }
 
