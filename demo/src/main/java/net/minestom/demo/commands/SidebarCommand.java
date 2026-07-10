@@ -1,99 +1,86 @@
 package net.minestom.demo.commands;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.entity.Player;
-import net.minestom.server.scoreboard.NumberFormat;
 import net.minestom.server.scoreboard.Sidebar;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+
+import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
 
 public class SidebarCommand extends Command {
-    private final Sidebar sidebar = new Sidebar(Component.text("DEMO").decorate(TextDecoration.BOLD));
-    private int currentLine = 0;
+    private final Sidebar sidebar;
 
     public SidebarCommand() {
         super("sidebar");
+        this.sidebar = Sidebar.create(Component.text("DEMO").decorate(TextDecoration.BOLD));
+        this.setCondition(Conditions::playerOnly);
+        this.setDefaultExecutor((source, _) -> source.sendMessage(Component.text("Usage: /sidebar toggle|add|remove|title|set")));
 
-        addLine("BLANK ", NumberFormat.blank());
-        addLine("STYLE ", NumberFormat.styled(Component.empty().decorate(TextDecoration.STRIKETHROUGH).color(NamedTextColor.GRAY)));
-        addLine("FIXED ", NumberFormat.fixed(Component.text("FIXED").color(NamedTextColor.GRAY)));
-        addLine("NULL ", null);
+        var content = ArgumentType.Component("content");
+        var line = ArgumentType.Integer("line");
 
-        setDefaultExecutor((source, args) -> source.sendMessage(Component.text("Unknown syntax (note: title must be quoted)")));
-        setCondition(Conditions::playerOnly);
+        this.addSyntax((source, _) -> {
+            var player = (Player) source;
 
-        var option = ArgumentType.Word("option").from("add-line", "remove-line", "set-title", "toggle", "update-content", "update-score");
-        var content = ArgumentType.String("content").setDefaultValue("");
-        var targetLine = ArgumentType.Integer("target line").setDefaultValue(-1);
+            if (this.sidebar.isViewer(player)) {
+                this.sidebar.removeViewer(player);
+            } else {
+                this.sidebar.addViewer(player);
+            }
+        }, Literal("toggle"));
 
-        addSyntax(this::handleSidebar, option);
-        addSyntax(this::handleSidebar, option, content);
-        addSyntax(this::handleSidebar, option, content, targetLine);
-    }
+        this.addSyntax((source, context) -> {
+            var lines = new ArrayList<>(this.sidebar.getLines());
 
+            if (lines.size() >= Sidebar.MAX_LINES) {
+                source.sendMessage(Component.text("The sidebar is full"));
+                return;
+            }
 
-    private void handleSidebar(CommandSender source, CommandContext context) {
-        Player player = (Player) source;
-        String option = context.get("option");
-        String content = context.get("content");
-        int targetLine = context.get("target line");
-        if (targetLine == -1) targetLine = currentLine;
-        switch (option) {
-            case "add-line":
-                addLine(content, null);
-                break;
-            case "remove-line":
-                removeLine();
-                break;
-            case "set-title":
-                setTitle(content);
-                break;
-            case "toggle":
-                toggleSidebar(player);
-                break;
-            case "update-content":
-                updateLineContent(content, String.valueOf(targetLine));
-                break;
-            case "update-score":
-                updateLineScore(Integer.parseInt(content), String.valueOf(targetLine));
-                break;
-        }
-    }
+            lines.add(context.get(content));
+            this.sidebar.update(lines);
+        }, Literal("add"), content);
 
-    private void addLine(String content, @Nullable NumberFormat numberFormat) {
-        if (currentLine < 16) {
-            sidebar.createLine(new Sidebar.ScoreboardLine(String.valueOf(currentLine), Component.text(content).color(NamedTextColor.WHITE), currentLine, numberFormat));
-            currentLine++;
-        }
-    }
+        this.addSyntax((_, _) -> {
+            var lines = new ArrayList<>(this.sidebar.getLines());
 
-    private void removeLine() {
-        if (currentLine > 0) {
-            sidebar.removeLine(String.valueOf(currentLine));
-            currentLine--;
-        }
-    }
+            if (lines.isEmpty()) {
+                return;
+            }
 
-    private void setTitle(String title) {
-        sidebar.setTitle(Component.text(title).decorate(TextDecoration.BOLD));
-    }
+            lines.removeLast();
+            this.sidebar.update(lines);
+        }, Literal("remove"));
 
-    private void toggleSidebar(Player player) {
-        if (sidebar.getViewers().contains(player)) sidebar.removeViewer(player);
-        else sidebar.addViewer(player);
-    }
+        this.addSyntax((source, context) -> {
+            int index = context.get(line);
+            var lines = new ArrayList<>(this.sidebar.getLines());
 
-    private void updateLineContent(String content, String lineId) {
-        sidebar.updateLineContent(lineId, Component.text(content).color(NamedTextColor.WHITE));
-    }
+            if (index < 0 || index >= lines.size()) {
+                source.sendMessage(Component.text("No line at index " + index));
+                return;
+            }
 
-    private void updateLineScore(int score, String lineId) {
-        sidebar.updateLineScore(lineId, score);
+            lines.remove(index);
+            this.sidebar.update(lines);
+        }, Literal("remove"), line);
+
+        this.addSyntax((_, context) -> this.sidebar.setTitle(context.get(content)), Literal("title"), content);
+
+        this.addSyntax((source, context) -> {
+            int index = context.get(line);
+
+            if (index < 0 || index >= this.sidebar.getLines().size()) {
+                source.sendMessage(Component.text("No line at index " + index));
+                return;
+            }
+
+            this.sidebar.setLine(index, context.get(content));
+        }, Literal("set"), line, content);
     }
 }

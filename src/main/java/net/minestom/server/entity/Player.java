@@ -74,7 +74,8 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.RegistryKey;
-import net.minestom.server.scoreboard.BelowNameTag;
+import net.minestom.server.scoreboard.DisplaySlot;
+import net.minestom.server.scoreboard.Objective;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.snapshot.EntitySnapshot;
 import net.minestom.server.snapshot.PlayerSnapshot;
@@ -210,7 +211,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     // Experience orb pickup
     protected Cooldown experiencePickupCooldown = new Cooldown(Duration.of(10, TimeUnit.SERVER_TICK));
 
-    private BelowNameTag belowNameTag;
+    private final Map<DisplaySlot, Objective> displayedObjectives = Collections.synchronizedMap(new EnumMap<>(DisplaySlot.class));
 
     private int permissionLevel;
 
@@ -573,6 +574,12 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         if (currentInventory != null) currentInventory.removeViewer(this);
 
         MinecraftServer.getBossBarManager().removeAllBossBars(this);
+        synchronized (displayedObjectives) {
+            for (Objective objective : Set.copyOf(displayedObjectives.values())) {
+                objective.updateOldViewer(this);
+            }
+            displayedObjectives.clear();
+        }
         // Advancement tabs cache
         {
             Set<AdvancementTab> advancementTabs = AdvancementTab.getTabs(this);
@@ -1776,18 +1783,39 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     }
 
     /**
-     * Changes the tag below the name.
+     * Displays an {@link Objective} in the given {@link DisplaySlot}, replacing the objective
+     * previously displayed in the slot, if any. The objective's viewer set is updated accordingly,
+     * and all bindings are removed when the player disconnects.
      *
-     * @param belowNameTag The new below name tag
+     * @param slot      the display slot
+     * @param objective the objective to display, or {@code null} to clear the slot
      */
-    public void setBelowNameTag(BelowNameTag belowNameTag) {
-        if (this.belowNameTag == belowNameTag) return;
-
-        if (this.belowNameTag != null) {
-            this.belowNameTag.removeViewer(this);
+    public void setDisplayedObjective(DisplaySlot slot, @Nullable Objective objective) {
+        synchronized (displayedObjectives) {
+            final Objective previous = displayedObjectives.get(slot);
+            if (previous == objective) return;
+            if (objective != null) {
+                displayedObjectives.put(slot, objective);
+                objective.updateNewViewer(this);
+                sendPacket(new DisplayScoreboardPacket(slot, objective.getName()));
+            } else {
+                displayedObjectives.remove(slot);
+                sendPacket(new DisplayScoreboardPacket(slot, ""));
+            }
+            if (previous != null && !displayedObjectives.containsValue(previous)) {
+                previous.updateOldViewer(this);
+            }
         }
+    }
 
-        this.belowNameTag = belowNameTag;
+    /**
+     * Gets the {@link Objective} displayed in the given {@link DisplaySlot}.
+     *
+     * @param slot the display slot
+     * @return the displayed objective, or {@code null} if the slot is empty
+     */
+    public @Nullable Objective getDisplayedObjective(DisplaySlot slot) {
+        return displayedObjectives.get(slot);
     }
 
     public ClickPreprocessor getClickPreprocessor() {

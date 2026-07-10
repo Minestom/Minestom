@@ -1,515 +1,162 @@
 package net.minestom.server.scoreboard;
 
-import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.color.TeamColor;
+import net.minestom.server.Viewable;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Represents a sidebar which can contain up to 16 {@link ScoreboardLine}.
- * <p>
- * In order to use it you need to create a new instance using the constructor {@link #Sidebar(String)} and create new lines
- * with {@link #createLine(ScoreboardLine)}. You can then add a {@link Player} to the viewing list using {@link #addViewer(Player)}
- * and remove him later with {@link #removeViewer(Player)}.
- * <p>
- * Lines can be modified using their respective identifier using
- * {@link #updateLineContent(String, Component)} and {@link #updateLineScore(String, int)}.
- */
-public class Sidebar implements Scoreboard {
+/// A sidebar displaying up to [#MAX_LINES] lines of text, ordered top to bottom.
+///
+/// Scores are hidden and managed internally; if you need visible scores or per-line
+/// number formats, use an [Objective] directly. The backing objective is accessible
+/// through [#getObjective()].
+///
+/// ```java
+/// Sidebar sidebar = Sidebar.create(Component.text("Title"));
+/// sidebar.update(
+///         Component.text("Line 1"),
+///         Component.text("Line 2")
+/// );
+/// sidebar.addViewer(player);
+/// ```
+public final class Sidebar implements Viewable {
+    /// The maximum number of lines the client can display.
+    public static final int MAX_LINES = 15;
 
     private static final AtomicInteger COUNTER = new AtomicInteger();
+    private static final String OBJECTIVE_PREFIX = "sidebar-";
+    private static final String LINE_PREFIX = "line-";
 
-    /**
-     * <b>WARNING:</b> You should NOT create any scoreboards/teams with the same prefixes as those
-     */
-    private static final String SCOREBOARD_PREFIX = "sb-";
-    private static final String TEAM_PREFIX = "sbt-";
+    private final Objective objective;
+    private final List<Component> lines;
 
-    /**
-     * Limited by the notch client, do not change
-     */
-    private static final int MAX_LINES_COUNT = 15;
-
-    private final Set<Player> viewers = new CopyOnWriteArraySet<>();
-
-    private final Set<ScoreboardLine> lines = new CopyOnWriteArraySet<>();
-    private final IntLinkedOpenHashSet availableColors = new IntLinkedOpenHashSet();
-
-    private final String objectiveName;
-
-    private Component title;
-
-    /**
-     * Creates a new sidebar
-     *
-     * @param title The title of the sidebar
-     * @deprecated Use {@link #Sidebar(Component)}
-     */
-    @Deprecated
-    public Sidebar(String title) {
-        this(Component.text(title));
+    private Sidebar(Component title) {
+        this.objective = Objective.create(OBJECTIVE_PREFIX + COUNTER.incrementAndGet(), title);
+        this.objective.setDefaultNumberFormat(NumberFormat.blank());
+        this.lines = new ArrayList<>();
     }
 
-    /**
-     * Creates a new sidebar
-     *
-     * @param title The title of the sidebar
-     */
-    public Sidebar(Component title) {
-        this.title = title;
-
-        this.objectiveName = SCOREBOARD_PREFIX + COUNTER.incrementAndGet();
-
-        // Fill available colors for entities name showed in scoreboard
-        for (int i = 0; i < 16; i++) {
-            availableColors.add(i);
-        }
+    /// Creates a new sidebar with no lines.
+    ///
+    /// @param title the sidebar title
+    /// @return a new sidebar
+    public static Sidebar create(Component title) {
+        return new Sidebar(title);
     }
 
-    /**
-     * Changes the {@link Sidebar} title
-     *
-     * @param title The new sidebar title
-     * @deprecated Use {@link #setTitle(Component)}
-     */
-    @Deprecated
-    public void setTitle(String title) {
-        this.setTitle(Component.text(title));
-    }
-
-    /**
-     * Gets the {@link Sidebar} title
-     *
-     * @return The sidebar title
-     */
-    public Component getTitle() {
-        return title;
-    }
-
-    /**
-     * Changes the {@link Sidebar} title
-     *
-     * @param title The new sidebar title
-     */
-    public void setTitle(Component title) {
-        this.title = title;
-        sendPacketToViewers(new ScoreboardObjectivePacket(objectiveName, (byte) 2, title,
-                                                          RenderType.INTEGER, null));
-    }
-
-    /**
-     * Creates a new {@link ScoreboardLine}.
-     *
-     * @param scoreboardLine the new scoreboard line
-     * @throws IllegalStateException    if the sidebar cannot take more line
-     * @throws IllegalArgumentException if the sidebar already contains the line {@code scoreboardLine}
-     *                                  or has a line with the same id
-     */
-    public void createLine(ScoreboardLine scoreboardLine) {
-        synchronized (lines) {
-            Check.stateCondition(lines.size() >= MAX_LINES_COUNT,
-                                 "You cannot have more than " + MAX_LINES_COUNT + "  lines");
-            Check.argCondition(lines.contains(scoreboardLine), "You cannot add two times the same ScoreboardLine");
-
-            // Check ID duplication
-            for (ScoreboardLine line : lines) {
-                Check.argCondition(line.id.equals(scoreboardLine.id),
-                                   "You cannot add two ScoreboardLine with the same id");
-            }
-
-            // Setup line
-            scoreboardLine.retrieveName(availableColors);
-            scoreboardLine.createTeam();
-
-            // Finally add the line in cache
-            this.lines.add(scoreboardLine);
-
-            // Send to current viewers
-            sendPacketsToViewers(scoreboardLine.sidebarTeam.getCreationPacket(),
-                                 scoreboardLine.getScoreCreationPacket(objectiveName));
-        }
-    }
-
-    /**
-     * Updates a {@link ScoreboardLine} content through the given identifier.
-     *
-     * @param id      The identifier of the {@link ScoreboardLine}
-     * @param content The new content for the {@link ScoreboardLine}
-     */
-    public void updateLineContent(String id, Component content) {
-        final ScoreboardLine scoreboardLine = getLine(id);
-        if (scoreboardLine != null) {
-            scoreboardLine.refreshContent(content);
-            sendPacketToViewers(scoreboardLine.sidebarTeam.updatePrefix(content));
-        }
-    }
-
-    /**
-     * Updates the score of a {@link ScoreboardLine} through the given identifier
-     *
-     * @param id    The identifier of the team
-     * @param score The new score for the {@link ScoreboardLine}
-     */
-    public void updateLineScore(String id, int score) {
-        final ScoreboardLine scoreboardLine = getLine(id);
-        if (scoreboardLine != null) {
-            scoreboardLine.line = score;
-            sendPacketToViewers(scoreboardLine.getLineScoreUpdatePacket(objectiveName, score));
-        }
-    }
-
-    /**
-     * Updates a {@link ScoreboardLine} number format through the given identifier.
-     *
-     * @param id           The identifier of the {@link ScoreboardLine}
-     * @param numberFormat The new number format for the {@link ScoreboardLine}
-     */
-    public void updateLineNumberFormat(String id, NumberFormat numberFormat) {
-        final ScoreboardLine scoreboardLine = getLine(id);
-        if (scoreboardLine != null) {
-            scoreboardLine.numberFormat = numberFormat;
-            sendPacketsToViewers(scoreboardLine.getNumberFormatPacket(objectiveName, numberFormat));
-        }
-    }
-
-    /**
-     * Gets a {@link ScoreboardLine} through the given identifier
-     *
-     * @param id The identifier of the line
-     * @return a {@link ScoreboardLine} or {@code null}
-     */
-    @Nullable
-    public ScoreboardLine getLine(String id) {
-        for (ScoreboardLine line : lines) {
-            if (line.id.equals(id))
-                return line;
-        }
-        return null;
-    }
-
-    /**
-     * Gets a {@link Set} containing all the registered lines.
-     *
-     * @return an unmodifiable set containing the sidebar's lines
-     */
-    public Set<ScoreboardLine> getLines() {
-        return Collections.unmodifiableSet(lines);
-    }
-
-    /**
-     * Removes a {@link ScoreboardLine} through the given identifier
-     *
-     * @param id the identifier of the {@link ScoreboardLine}
-     */
-    public void removeLine(String id) {
-        this.lines.removeIf(line -> {
-            if (line.id.equals(id)) {
-
-                // Remove the line for current viewers
-                sendPacketsToViewers(line.getScoreDestructionPacket(objectiveName),
-                                     line.sidebarTeam.getDestructionPacket());
-
-                line.returnName(availableColors);
-                return true;
-            }
-            return false;
-        });
-    }
-
+    /// Displays this sidebar to a player, replacing any sidebar or objective
+    /// previously displayed in [DisplaySlot#SIDEBAR].
+    ///
+    /// @param player the viewer to add
+    /// @return true if the player was not already viewing this sidebar
     @Override
     public boolean addViewer(Player player) {
-        final boolean result = this.viewers.add(player);
-        if (result) {
-            ScoreboardObjectivePacket scoreboardObjectivePacket = this.getCreationObjectivePacket(this.title,
-                                                                                                  RenderType.INTEGER);
-            player.sendPacket(scoreboardObjectivePacket);
-        }
-        DisplayScoreboardPacket displayScoreboardPacket = this.getDisplayScoreboardPacket((byte) 1);
-        player.sendPacket(displayScoreboardPacket); // Show sidebar scoreboard (wait for scores packet)
-        for (ScoreboardLine line : lines) {
-            player.sendPacket(line.sidebarTeam.getCreationPacket());
-            player.sendPacket(line.getScoreCreationPacket(objectiveName));
-        }
-        return result;
-    }
-
-    @Override
-    public boolean removeViewer(Player player) {
-        final boolean result = this.viewers.remove(player);
-        if (!result) return false;
-        ScoreboardObjectivePacket scoreboardObjectivePacket = this.getDestructionObjectivePacket();
-        player.sendPacket(scoreboardObjectivePacket);
-        for (ScoreboardLine line : lines) {
-            player.sendPacket(line.getScoreDestructionPacket(objectiveName)); // Is it necessary?
-            player.sendPacket(line.sidebarTeam.getDestructionPacket());
-        }
+        if (isViewer(player)) return false;
+        player.setDisplayedObjective(DisplaySlot.SIDEBAR, objective);
         return true;
     }
 
+    /// Hides this sidebar from a player. Does nothing if the player currently
+    /// displays another objective in [DisplaySlot#SIDEBAR].
+    ///
+    /// @param player the viewer to remove
+    /// @return true if the player was viewing this sidebar
     @Override
-    public Set<? extends Player> getViewers() {
-        return Collections.unmodifiableSet(viewers);
+    public boolean removeViewer(Player player) {
+        if (!isViewer(player)) return false;
+        player.setDisplayedObjective(DisplaySlot.SIDEBAR, null);
+        return true;
     }
 
+    /// Gets all players viewing the [backing objective][#getObjective()],
+    /// which for a sidebar under normal usage equals the players viewing this sidebar.
+    ///
+    /// @return an unmodifiable view of all viewers
     @Override
-    public String getObjectiveName() {
-        return this.objectiveName;
+    public Set<Player> getViewers() {
+        return objective.getViewers();
     }
 
-    /**
-     * This class is used to create a line for the sidebar.
-     */
-    public static class ScoreboardLine {
-
-        /**
-         * The identifier is used to modify the line later
-         */
-        private final String id;
-        /**
-         * The content for the line
-         */
-        private final Component content;
-        /**
-         * The score of the line
-         */
-        private int line;
-        /**
-         * The number format of the line
-         */
-        private NumberFormat numberFormat;
-
-        private final String teamName;
-        /**
-         * The name of the score ({@code entityName}) which is essentially an identifier
-         */
-        private int colorName;
-        private String entityName;
-        /**
-         * The sidebar team of the line
-         */
-        private SidebarTeam sidebarTeam;
-
-        public ScoreboardLine(String id, Component content, int line) {
-            this(id, content, line, null);
-        }
-
-        public ScoreboardLine(String id, Component content, int line, @Nullable NumberFormat numberFormat) {
-            this.id = id;
-            this.content = content;
-            this.line = line;
-            this.numberFormat = numberFormat;
-
-            this.teamName = TEAM_PREFIX + COUNTER.incrementAndGet();
-        }
-
-        /**
-         * Gets the identifier of the line
-         *
-         * @return the line identifier
-         */
-        public String getId() {
-            return id;
-        }
-
-        /**
-         * Gets the content of the line
-         *
-         * @return The line content
-         */
-        public Component getContent() {
-            return sidebarTeam == null ? content : sidebarTeam.getPrefix();
-        }
-
-        /**
-         * Gets the position of the line
-         *
-         * @return the line position
-         */
-        public int getLine() {
-            return line;
-        }
-
-        private void retrieveName(IntLinkedOpenHashSet colors) {
-            synchronized (colors) {
-                this.colorName = colors.removeFirstInt();
-            }
-        }
-
-        /**
-         * Creates a new {@link SidebarTeam}
-         */
-        private void createTeam() {
-            this.entityName = '§' + Integer.toHexString(colorName);
-
-            this.sidebarTeam = new SidebarTeam(teamName, content, Component.empty(), entityName);
-        }
-
-        private void returnName(IntLinkedOpenHashSet colors) {
-            synchronized (colors) {
-                colors.add(colorName);
-            }
-        }
-
-        /**
-         * Gets a score creation packet
-         *
-         * @param objectiveName The objective name to be updated
-         * @return a {@link UpdateScorePacket}
-         */
-        private UpdateScorePacket getScoreCreationPacket(String objectiveName) {
-            //TODO displayName acts as a suffix to the objective name, find way to handle elegantly
-            return new UpdateScorePacket(entityName, objectiveName, line, Component.empty(), numberFormat);
-        }
-
-        /**
-         * Gets a score destruction packet
-         *
-         * @param objectiveName The objective name to be destroyed
-         * @return a {@link UpdateScorePacket}
-         */
-        private ResetScorePacket getScoreDestructionPacket(String objectiveName) {
-            return new ResetScorePacket(entityName, objectiveName);
-        }
-
-        /**
-         * Gets a line score update packet
-         *
-         * @param objectiveName The objective name to be updated
-         * @param score         The new score
-         * @return a {@link UpdateScorePacket}
-         */
-        private UpdateScorePacket getLineScoreUpdatePacket(String objectiveName, int score) {
-            //TODO displayName acts as a suffix to the objective name, find way to handle elegantly
-            return new UpdateScorePacket(entityName, objectiveName, score, Component.empty(), numberFormat);
-        }
-
-        /**
-         * Gets a number format update packet
-         *
-         * @param objectiveName The objective name to be updated
-         * @param numberFormat  The new number format
-         * @return a {@link UpdateScorePacket}
-         */
-        private UpdateScorePacket getNumberFormatPacket(String objectiveName, NumberFormat numberFormat) {
-            return new UpdateScorePacket(entityName, objectiveName, line, Component.empty(), numberFormat);
-        }
-
-        /**
-         * Refresh the prefix of the {@link SidebarTeam}
-         *
-         * @param content The new content
-         */
-        private void refreshContent(Component content) {
-            this.sidebarTeam.refreshPrefix(content);
-        }
-
+    /// Gets if a player is currently shown this sidebar.
+    ///
+    /// @param player the player
+    /// @return true if the player views this sidebar
+    @Override
+    public boolean isViewer(Player player) {
+        return player.getDisplayedObjective(DisplaySlot.SIDEBAR) == objective;
     }
 
-    /**
-     * This class is used to create a team for the {@link Sidebar}
-     */
-    private static class SidebarTeam {
-
-        private final String teamName;
-        private Component prefix, suffix;
-        private final String entityName;
-
-        private final Component teamDisplayName = Component.text("displaynametest");
-        private final byte friendlyFlags = 0x00;
-        private final TeamsPacket.NameTagVisibility nameTagVisibility = TeamsPacket.NameTagVisibility.NEVER;
-        private final TeamsPacket.CollisionRule collisionRule = TeamsPacket.CollisionRule.NEVER;
-        private final @Nullable TeamColor color = null;
-
-        /**
-         * The constructor to creates a team
-         *
-         * @param teamName   The registry name of the team
-         * @param prefix     The team prefix
-         * @param suffix     The team suffix
-         * @param entityName The team entity name
-         */
-        private SidebarTeam(String teamName, Component prefix, Component suffix, String entityName) {
-            this.teamName = teamName;
-            this.prefix = prefix;
-            this.suffix = suffix;
-            this.entityName = entityName;
-        }
-
-        /**
-         * Gets a team creation packet
-         *
-         * @return a {@link TeamsPacket} which creates a new team
-         */
-        private TeamsPacket getCreationPacket() {
-            final var action = new TeamsPacket.CreateTeamAction(
-                    new TeamsPacket.Settings(
-                            teamDisplayName, prefix, suffix,
-                            nameTagVisibility, collisionRule,
-                            color, friendlyFlags
-                    ),
-                    List.of(entityName));
-            return new TeamsPacket(teamName, action);
-        }
-
-        /**
-         * Gets a team destruction packet
-         *
-         * @return a {@link TeamsPacket} which destroyed a team
-         */
-        private TeamsPacket getDestructionPacket() {
-            return new TeamsPacket(teamName, new TeamsPacket.RemoveTeamAction());
-        }
-
-        /**
-         * Updates the prefix of the {@link SidebarTeam}
-         *
-         * @param prefix The new prefix
-         * @return a {@link TeamsPacket} with the updated prefix
-         */
-        private TeamsPacket updatePrefix(Component prefix) {
-            final var action = new TeamsPacket.UpdateTeamAction(new TeamsPacket.Settings(
-                    teamDisplayName, prefix, suffix,
-                    nameTagVisibility, collisionRule,
-                    color, friendlyFlags
-            ));
-            return new TeamsPacket(teamName, action);
-        }
-
-        /**
-         * Gets the entity name of the team
-         *
-         * @return the entity name
-         */
-        private String getEntityName() {
-            return entityName;
-        }
-
-        /**
-         * Gets the prefix of the team
-         *
-         * @return the prefix
-         */
-        private Component getPrefix() {
-            return prefix;
-        }
-
-        /**
-         * Refresh the prefix of the {@link SidebarTeam}
-         *
-         * @param prefix The refreshed prefix
-         */
-        private void refreshPrefix(Component prefix) {
-            this.prefix = prefix;
-        }
+    /// Gets the title of the sidebar.
+    ///
+    /// @return the title
+    public Component getTitle() {
+        return objective.getDisplayName();
     }
 
+    /// Sets the title of the sidebar.
+    ///
+    /// @param title the new title
+    public void setTitle(Component title) {
+        objective.setDisplayName(title);
+    }
+
+    /// Gets the current lines, ordered top to bottom.
+    ///
+    /// @return an immutable copy of the lines
+    public synchronized @Unmodifiable List<Component> getLines() {
+        return List.copyOf(lines);
+    }
+
+    /// Replaces all lines of the sidebar. Only lines whose content changed are sent to viewers.
+    ///
+    /// @param lines the new lines, ordered top to bottom
+    /// @throws IllegalArgumentException if more than [#MAX_LINES] lines are given
+    public void update(Component... lines) {
+        update(List.of(lines));
+    }
+
+    /// Replaces all lines of the sidebar. Only lines whose content changed are sent to viewers.
+    ///
+    /// @param newLines the new lines, ordered top to bottom
+    /// @throws IllegalArgumentException if more than [#MAX_LINES] lines are given
+    public synchronized void update(List<Component> newLines) {
+        Check.argCondition(newLines.size() > MAX_LINES,
+                "A sidebar cannot have more than {0} lines", MAX_LINES);
+        for (int i = 0; i < newLines.size(); i++) {
+            final Component content = newLines.get(i);
+            if (i < lines.size() && lines.get(i).equals(content)) continue;
+            objective.updateEntry(LINE_PREFIX + i, new ScoreEntry(MAX_LINES - i, content, null));
+        }
+        for (int i = newLines.size(); i < lines.size(); i++) {
+            objective.removeEntry(LINE_PREFIX + i);
+        }
+        lines.clear();
+        lines.addAll(newLines);
+    }
+
+    /// Updates the content of a single existing line.
+    ///
+    /// @param index   the line index, from 0 at the top
+    /// @param content the new content
+    /// @throws IllegalArgumentException if no line exists at `index`
+    public synchronized void setLine(int index, Component content) {
+        Check.argCondition(index < 0 || index >= lines.size(), "No line at index {0}", index);
+        if (lines.get(index).equals(content)) return;
+        lines.set(index, content);
+        objective.updateEntry(LINE_PREFIX + index, new ScoreEntry(MAX_LINES - index, content, null));
+    }
+
+    /// Gets the objective backing this sidebar, for advanced customization
+    /// such as per-line number formats.
+    ///
+    /// @return the backing objective
+    public Objective getObjective() {
+        return objective;
+    }
 }
