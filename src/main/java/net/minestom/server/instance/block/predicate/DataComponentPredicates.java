@@ -15,8 +15,8 @@ public record DataComponentPredicates(DataComponentMap exact,
                                       ComponentPredicateSet predicates) implements Predicate<DataComponent.Holder> {
 
     public DataComponentPredicates {
-        java.util.Objects.requireNonNull(exact, "Exact cannot be null. Use DataComponentMap.EMPTY to skip exact data component checks.");
-        java.util.Objects.requireNonNull(predicates, "Component predicates cannot be null. Use ComponentPredicateSet.EMPTY to skip exact data component checks.");
+        Objects.requireNonNull(exact, "Exact cannot be null. Use DataComponentMap.EMPTY to skip exact data component checks.");
+        Objects.requireNonNull(predicates, "Component predicates cannot be null. Use ComponentPredicateSet.EMPTY to skip exact data component checks.");
     }
 
     public static final DataComponentPredicates EMPTY = new DataComponentPredicates(DataComponentMap.EMPTY, ComponentPredicateSet.EMPTY);

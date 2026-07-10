@@ -248,19 +248,11 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         }
 
         default <V> Type<Map<T, V>> mapValue(Type<V> valueType, int maxSize) {
-            return mapValue((ignored) -> valueType, maxSize);
-        }
-
-        default <V> Type<Map<T, V>> mapValue(Function<T, Type<V>> valueTypeGetter, int maxSize) {
-            return new NetworkBufferTypeImpl.MapType<>(this, valueTypeGetter, maxSize);
+            return new NetworkBufferTypeImpl.MapType<>(this, valueType, maxSize);
         }
 
         default <V> Type<Map<T, V>> mapValue(Type<V> valueType) {
             return mapValue(valueType, Integer.MAX_VALUE);
-        }
-
-        default <V> Type<Map<T, V>> mapValue(Function<T, Type<V>> valueTypeGetter) {
-            return mapValue(valueTypeGetter, Integer.MAX_VALUE);
         }
 
         default Type<List<T>> list(int maxSize) {
