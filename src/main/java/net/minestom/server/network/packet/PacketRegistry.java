@@ -2,12 +2,10 @@ package net.minestom.server.network.packet;
 
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnknownNullability;
-import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public interface PacketRegistry<T> extends Iterable<PacketRegistry.PacketInfo<? extends T>> {
     @UnknownNullability
@@ -25,16 +23,16 @@ public interface PacketRegistry<T> extends Iterable<PacketRegistry.PacketInfo<? 
 
     ConnectionSide side();
 
-    @ApiStatus.Experimental
-    @Unmodifiable
-    List<PacketInfo<? extends T>> packets();
-
-    record PacketInfo<T>(Class<T> packetClass, int id, NetworkBuffer.Type<T> serializer) {
+    record PacketInfo<T>(Class<? extends T> packetClass, int id, NetworkBuffer.Type<T> serializer) {
+        public PacketInfo {
+            Objects.requireNonNull(packetClass);
+            Objects.requireNonNull(serializer);
+        }
     }
 
     @SafeVarargs
     static <T> PacketRegistry<T> registry(ConnectionState state, ConnectionSide side,
-                                          Map.Entry<? extends Class<?>, ? extends NetworkBuffer.Type<?>>... entries) {
+                                          Map.Entry<? extends Class<? extends T>, ? extends NetworkBuffer.Type<? extends T>>... entries) {
         return new PacketRegistryImpl<>(state, side, entries);
     }
 

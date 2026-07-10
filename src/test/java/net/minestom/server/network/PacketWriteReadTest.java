@@ -84,6 +84,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -655,7 +656,7 @@ public class PacketWriteReadTest {
     }
 
     static <T> Stream<Arguments> packets(PacketRegistry<? extends T> registry, Map<Class<? extends T>, ? extends Collection<T>> map) {
-        return registry.packets().stream().flatMap(info -> {
+        return StreamSupport.stream(registry.spliterator(), false).flatMap(info -> {
             var tests = map.get(info.packetClass());
             var name = info.packetClass().getSimpleName();
             assertNotNull(tests, "No packet tests for %s".formatted(name));

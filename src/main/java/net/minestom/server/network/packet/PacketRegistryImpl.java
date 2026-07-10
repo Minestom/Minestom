@@ -9,35 +9,31 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static java.util.Map.entry;
+
 final class PacketRegistryImpl<T> implements PacketRegistry<T> {
     private final ConnectionState state;
     private final ConnectionSide side;
-    private final PacketInfo<? extends T>[] suppliers;
-    private final ClassValue<PacketInfo<T>> packetIds;
+    private final List<PacketInfo<? extends T>> packets;
+    private final Map<Class<?>, PacketInfo<? extends T>> packetIds;
 
     @SafeVarargs
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings("unchecked")
     PacketRegistryImpl(ConnectionState state, ConnectionSide side,
-                       Map.Entry<? extends Class<?>, ? extends NetworkBuffer.Type<?>>... entries) {
+                       Map.Entry<? extends Class<? extends T>, ? extends NetworkBuffer.Type<? extends T>>... entries) {
         this.state = state;
         this.side = side;
-        final String errorSuffix = side.name() + "_" + state.name();
         final PacketInfo<? extends T>[] packetInfos = new PacketInfo[entries.length];
+        final Map.Entry<Class<?>, PacketInfo<? extends T>>[] packetIdEntries = new Map.Entry[entries.length];
         for (int i = 0; i < entries.length; i++) {
-            final Map.Entry<? extends Class<?>, ? extends NetworkBuffer.Type<?>> entry = entries[i];
+            final Map.Entry<? extends Class<? extends T>, ? extends NetworkBuffer.Type<? extends T>> entry = entries[i];
             Objects.requireNonNull(entry);
-            packetInfos[i] = new PacketInfo(entry.getKey(), i, entry.getValue());
+            final PacketInfo<? extends T> packetInfo = new PacketInfo<>(entry.getKey(), i, (NetworkBuffer.Type<T>) entry.getValue());
+            packetInfos[i] = packetInfo;
+            packetIdEntries[i] = entry(packetInfo.packetClass(), packetInfo);
         }
-        this.suppliers = packetInfos;
-        this.packetIds = new ClassValue<>() {
-            @Override
-            protected PacketInfo<T> computeValue(Class<?> type) {
-                for (PacketInfo<? extends T> info : suppliers) {
-                    if (info.packetClass() == type) return (PacketInfo<T>) info;
-                }
-                throw new IllegalStateException("Packet type " + type + " cannot be sent in state " + errorSuffix + "!");
-            }
-        };
+        this.packets = List.of(packetInfos);
+        this.packetIds = Map.ofEntries(packetIdEntries);
     }
 
     @Override
@@ -51,9 +47,9 @@ final class PacketRegistryImpl<T> implements PacketRegistry<T> {
     }
 
     @Override
-    public @UnknownNullability T create(int packetId, NetworkBuffer reader) {
+    public T create(int packetId, NetworkBuffer reader) {
         final PacketInfo<T> info = packetInfo(packetId);
-        final NetworkBuffer.Type<T> serializer = info.serializer();
+        final NetworkBuffer.Type<@UnknownNullability T> serializer = info.serializer();
         final T packet = serializer.read(reader);
         if (packet == null) {
             throw new IllegalStateException("Packet " + info.packetClass() + " failed to read!");
@@ -62,20 +58,25 @@ final class PacketRegistryImpl<T> implements PacketRegistry<T> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public PacketInfo<T> packetInfo(Class<?> packetClass) {
-        return packetIds.get(packetClass);
+        final PacketInfo<? extends T> packetInfo = packetIds.get(packetClass);
+        if (packetInfo == null) {
+            throw new IllegalStateException("Packet type " + packetClass + " cannot be sent in state " + side.name() + "_" + state.name() + "!");
+        }
+        return (PacketInfo<T>) packetInfo;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public PacketInfo<T> packetInfo(int packetId) {
-        if (packetId < 0 || packetId >= suppliers.length)
+        if (packetId < 0 || packetId >= packets.size())
             throw new IllegalStateException("Packet id 0x" + Integer.toHexString(packetId) + " isn't registered!");
-        return (PacketInfo<T>) suppliers[packetId];
+        return (PacketInfo<T>) packets.get(packetId);
     }
 
     @Override
     public Iterator<PacketInfo<? extends T>> iterator() {
-        return List.of(suppliers).iterator();
+        return packets.iterator();
     }
 }
