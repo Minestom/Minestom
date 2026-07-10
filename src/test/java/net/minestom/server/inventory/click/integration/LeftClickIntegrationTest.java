@@ -289,13 +289,13 @@ public class LeftClickIntegrationTest {
         }
 
         // Put an item in a hotbar slot (slot 0)
-        inventory.setItemStack(0, ItemStack.of(Material.IRON_HELMET));
+        inventory.setItemStack(0, ItemStack.of(Material.DIAMOND));
 
         // Perform shift click on slot 0
         shiftClick(player, 0);
 
         // Assert that the item successfully lands in slot 9
-        assertEquals(ItemStack.of(Material.IRON_HELMET), inventory.getItemStack(9));
+        assertEquals(ItemStack.of(Material.DIAMOND), inventory.getItemStack(9));
         assertEquals(ItemStack.AIR, inventory.getItemStack(0));
     }
 
