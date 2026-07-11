@@ -6,7 +6,6 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ByteMap;
 import it.unimi.dsi.fastutil.objects.Object2ByteOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.registry.Registry;
@@ -282,7 +281,7 @@ record BlockImpl(RegistryData.BlockEntry registry,
             keys[i] = property.key();
             values[i] = property.values().get((int) extractIndex(propertiesArray, i));
         }
-        return Object2ObjectMaps.unmodifiable(new Object2ObjectArrayMap<>(keys, values, length));
+        return Map.copyOf(new Object2ObjectArrayMap<>(keys, values, length));
     }
 
     private static String createStateString(String namespace, PropertyType[] properties, long propertiesArray) {

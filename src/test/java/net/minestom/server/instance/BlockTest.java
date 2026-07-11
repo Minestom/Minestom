@@ -106,13 +106,18 @@ public class BlockTest {
                 assertTrue(assignedStates.add(blockWithState.stateId()));
             }
         }
+        assertEquals(Block.statesCount(), assignedStates.size());
     }
 
     @Test
-    public void testStateIdConversion() {
+    public void testStateConversions() {
         for (Block block : Block.values()) {
             for (Block blockWithState : block.possibleStates()) {
-                assertEquals(blockWithState, Block.fromStateId(blockWithState.stateId()));
+                assertSame(blockWithState, Block.fromStateId(blockWithState.stateId()));
+                assertSame(blockWithState, Block.fromState(blockWithState.state()));
+                assertSame(blockWithState, block.withProperties(blockWithState.properties()));
+                blockWithState.properties().forEach((property, value) ->
+                        assertEquals(value, blockWithState.getProperty(property)));
             }
         }
     }
