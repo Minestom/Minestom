@@ -1,6 +1,8 @@
 package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
+import it.unimi.dsi.fastutil.longs.LongArrayList;
+import it.unimi.dsi.fastutil.longs.LongList;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
@@ -15,7 +17,6 @@ import net.minestom.server.event.instance.InstanceBlockUpdateEvent;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
-import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockEntityType;
 import net.minestom.server.instance.block.BlockFace;
@@ -26,10 +27,11 @@ import net.minestom.server.instance.generator.GeneratorImpl;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
+import net.minestom.server.network.packet.server.play.MultiBlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.network.packet.server.play.WorldEventPacket;
-import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.PacketSendingUtils;
 import net.minestom.server.utils.async.AsyncUtils;
@@ -62,7 +64,7 @@ import static net.minestom.server.utils.chunk.ChunkUtils.isLoaded;
 public class InstanceContainer extends Instance {
     private static final Logger LOGGER = LoggerFactory.getLogger(InstanceContainer.class);
 
-    private static final AnvilLoader DEFAULT_LOADER = new AnvilLoader("world");
+    private static final NoopChunkLoaderImpl DEFAULT_LOADER = NoopChunkLoaderImpl.INSTANCE;
 
     private static final BlockFace[] BLOCK_UPDATE_FACES = new BlockFace[]{
             BlockFace.WEST, BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.BOTTOM, BlockFace.TOP
@@ -107,17 +109,17 @@ public class InstanceContainer extends Instance {
     }
 
     public InstanceContainer(UUID uuid, RegistryKey<DimensionType> dimensionType, @Nullable ChunkLoader loader, Key dimensionName) {
-        this(MinecraftServer.getDimensionTypeRegistry(), uuid, dimensionType, loader, dimensionName);
+        this(MinecraftServer.process(), uuid, dimensionType, loader, dimensionName);
     }
 
     public InstanceContainer(
-            DynamicRegistry<DimensionType> dimensionTypeRegistry,
+            Registries registries,
             UUID uuid,
             RegistryKey<DimensionType> dimensionType,
             @Nullable ChunkLoader loader,
             Key dimensionName
     ) {
-        super(dimensionTypeRegistry, uuid, dimensionType, dimensionName);
+        super(registries, uuid, dimensionType, dimensionName);
         setChunkSupplier(DynamicChunk::new);
         setChunkLoader(Objects.requireNonNullElse(loader, DEFAULT_LOADER));
         this.chunkLoader.loadInstance(this);
@@ -157,7 +159,8 @@ public class InstanceContainer extends Instance {
             return;
         }
 
-        synchronized (chunk) {
+        chunk.lockWriteLock();
+        try {
             // Refresh the last block change time
             this.lastBlockChangeTime = System.nanoTime();
             final BlockVec blockPosition = new BlockVec(x, y, z);
@@ -210,6 +213,8 @@ public class InstanceContainer extends Instance {
                 }
             }
             EventDispatcher.call(new InstanceBlockUpdateEvent(this, blockPosition, block));
+        } finally {
+            chunk.unlockWriteLock();
         }
     }
 
@@ -226,7 +231,7 @@ public class InstanceContainer extends Instance {
     @Override
     public boolean breakBlock(Player player, Point blockPosition, BlockFace blockFace, boolean doBlockUpdates) {
         final Chunk chunk = getChunkAt(blockPosition);
-        Check.notNull(chunk, "You cannot break blocks in a null chunk!");
+        Objects.requireNonNull(chunk, "You cannot break blocks in a null chunk!");
         if (chunk.isReadOnly()) return false;
         if (!isLoaded(chunk)) return false;
 
@@ -235,11 +240,11 @@ public class InstanceContainer extends Instance {
         final int y = blockPosition.blockY();
         final int z = blockPosition.blockZ();
         if (block.isAir()) {
-            // The player probably have a wrong version of this chunk section, send it
-            chunk.sendChunk(player);
+            // The player has a wrong version of this block; correct just that block instead of resending the chunk.
+            player.sendPacket(new BlockChangePacket(blockPosition, block));
             return false;
         }
-        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, block, Block.AIR, new BlockVec(blockPosition), blockFace);
+        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, this, block, Block.AIR, blockPosition.asBlockVec(), blockFace);
         EventDispatcher.call(blockBreakEvent);
         final boolean allowed = !blockBreakEvent.isCancelled();
         if (allowed) {
@@ -317,6 +322,7 @@ public class InstanceContainer extends Instance {
                 runnable.run();
                 future.complete(null);
             } catch (Throwable e) {
+                future.completeExceptionally(e);
                 MinecraftServer.getExceptionManager().handleException(e);
             }
         });
@@ -343,10 +349,10 @@ public class InstanceContainer extends Instance {
             cacheChunk(chunk);
             chunk.onLoad();
 
-            EventDispatcher.call(new InstanceChunkLoadEvent(this, chunk));
             final CompletableFuture<Chunk> future = this.loadingChunks.remove(index);
             assert future == completableFuture : "Invalid future: " + future;
             completableFuture.complete(chunk);
+            EventDispatcher.call(new InstanceChunkLoadEvent(this, chunk));
         };
         Supplier<Chunk> loaderSupplier = () -> {
             var chunkLoading = EventsJFR.newChunkLoading(getUuid(), loader.getClass(), chunkX, chunkZ);
@@ -362,15 +368,27 @@ public class InstanceContainer extends Instance {
                     final Chunk chunk = loaderSupplier.get();
                     generate.accept(chunk);
                 } catch (Throwable e) {
+                    this.loadingChunks.remove(index, completableFuture);
+                    completableFuture.completeExceptionally(e);
                     MinecraftServer.getExceptionManager().handleException(e);
                 }
             });
         } else {
-            final Chunk chunk = loaderSupplier.get();
+            final Chunk chunk;
+            try {
+                chunk = loaderSupplier.get();
+            } catch (Throwable e) {
+                this.loadingChunks.remove(index, completableFuture);
+                completableFuture.completeExceptionally(e);
+                MinecraftServer.getExceptionManager().handleException(e);
+                return completableFuture;
+            }
             Thread.startVirtualThread(() -> {
                 try {
                     generate.accept(chunk);
                 } catch (Throwable e) {
+                    this.loadingChunks.remove(index, completableFuture);
+                    completableFuture.completeExceptionally(e);
                     MinecraftServer.getExceptionManager().handleException(e);
                 }
             });
@@ -382,7 +400,7 @@ public class InstanceContainer extends Instance {
 
     protected Chunk createChunk(int chunkX, int chunkZ) {
         final Chunk chunk = chunkSupplier.createChunk(this, chunkX, chunkZ);
-        Check.notNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
+        Objects.requireNonNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
         Generator generator = generator();
         if (generator == null || !chunk.shouldGenerate()) {
             // No chunk generator, execute the callback with the empty chunk
@@ -400,7 +418,7 @@ public class InstanceContainer extends Instance {
             Section section = chunk.getSections().get(i);
             return new GeneratorImpl.GenSection(section.blockPalette(), section.biomePalette());
         });
-        var chunkUnit = GeneratorImpl.chunk(MinecraftServer.getBiomeRegistry(), genSections,
+        var chunkUnit = GeneratorImpl.chunk(registries().biome(), genSections,
                 chunk.getChunkX(), chunk.minSection, chunk.getChunkZ());
         try {
             // Generate block/biome palette
@@ -424,9 +442,10 @@ public class InstanceContainer extends Instance {
                         final Chunk forkChunk = start.chunkX() == chunkX && start.chunkZ() == chunkZ ? chunk : getChunkAt(start);
                         if (forkChunk != null) {
                             applyFork(forkChunk, sectionModifier);
-                            // Update players
+                            // Refresh the cached chunk packet, then push the fork's changes as a per-section update instead of a chunk resend.
                             forkChunk.invalidate();
-                            forkChunk.sendChunk();
+                            if (!forkChunk.getViewers().isEmpty()) // if we have viewers send the updates
+                                sendForkSectionUpdate(forkChunk, sectionModifier);
                         } else {
                             final long index = CoordConversion.chunkIndex(start);
                             this.generationForks.compute(index, (i, sectionModifiers) -> {
@@ -460,20 +479,48 @@ public class InstanceContainer extends Instance {
     }
 
     private void applyFork(Chunk chunk, GeneratorImpl.SectionModifierImpl sectionModifier) {
-        synchronized (chunk) {
+        chunk.lockWriteLock();
+        try {
             Section section = chunk.getSectionAt(sectionModifier.start().blockY());
             Palette currentBlocks = section.blockPalette();
             // -1 is necessary because forked units handle explicit changes by changing AIR 0 to 1
             sectionModifier.genSection().blocks().getAllPresent((x, y, z, value) -> currentBlocks.set(x, y, z, value - 1));
             applyGenerationData(chunk, sectionModifier);
+        } finally {
+            chunk.unlockWriteLock();
         }
+    }
+
+    // Sends a fork's section changes to viewers as a single multi-block update instead of a full chunk resend.
+    private void sendForkSectionUpdate(Chunk forkChunk, GeneratorImpl.SectionModifierImpl sectionModifier) {
+        final int section = CoordConversion.globalToChunk(sectionModifier.start().blockY());
+        final LongList packed = new LongArrayList();
+        sectionModifier.genSection().blocks().getAllPresent((x, y, z, value) ->
+                packed.add(CoordConversion.encodeSectionBlockChange(CoordConversion.sectionBlockIndex(x, y, z), value - 1)));
+        for (var entry : sectionModifier.genSection().specials().int2ObjectEntrySet()) {
+            final Block block = entry.getValue();
+            final BlockEntityType blockEntityType = block.registry().blockEntityType();
+            if (blockEntityType != null) {
+                final int index = entry.getIntKey();
+                final int x = CoordConversion.chunkBlockIndexGetX(index);
+                final int y = CoordConversion.chunkBlockIndexGetY(index) + sectionModifier.start().blockY();
+                final int z = CoordConversion.chunkBlockIndexGetZ(index);
+                final Point blockPosition = new BlockVec(x + forkChunk.getChunkX() * 16, y, z + forkChunk.getChunkZ() * 16);
+                final CompoundBinaryTag data = BlockUtils.extractClientNbt(block);
+                forkChunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, blockEntityType, data));
+            }
+        }
+        if (packed.isEmpty()) return;
+        forkChunk.sendPacketToViewers(new MultiBlockChangePacket(
+                forkChunk.getChunkX(), section, forkChunk.getChunkZ(), packed.toLongArray()));
     }
 
     private void applyGenerationData(Chunk chunk, GeneratorImpl.SectionModifierImpl section) {
         var cache = section.genSection().specials();
         if (cache.isEmpty()) return;
         final int height = section.start().blockY();
-        synchronized (chunk) {
+        chunk.lockWriteLock();
+        try {
             Int2ObjectMaps.fastForEach(cache, blockEntry -> {
                 final int index = blockEntry.getIntKey();
                 final Block block = blockEntry.getValue();
@@ -482,6 +529,8 @@ public class InstanceContainer extends Instance {
                 final int z = CoordConversion.chunkBlockIndexGetZ(index);
                 chunk.setBlock(x, y, z, block);
             });
+        } finally {
+            chunk.unlockWriteLock();
         }
     }
 
@@ -626,13 +675,21 @@ public class InstanceContainer extends Instance {
     public CompletableFuture<Void> generateChunk(int chunkX, int chunkZ, Generator generator) {
         CompletableFuture<Void> future = new CompletableFuture<>();
         Thread.startVirtualThread(() -> {
-            Chunk chunk = loadChunk(chunkX, chunkZ).join();
-            synchronized (chunk) {
-                generateChunk(chunk, generator);
-                chunk.invalidate();
+            try {
+                Chunk chunk = loadChunk(chunkX, chunkZ).join();
+                chunk.lockWriteLock();
+                try {
+                    generateChunk(chunk, generator);
+                    chunk.invalidate();
+                } finally {
+                    chunk.unlockWriteLock();
+                }
+                chunk.sendChunk();
+                future.complete(null);
+            } catch (Throwable e) {
+                future.completeExceptionally(e);
+                MinecraftServer.getExceptionManager().handleException(e);
             }
-            chunk.sendChunk();
-            future.complete(null);
         });
         return future;
     }

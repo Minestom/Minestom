@@ -4,17 +4,9 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.ClickCallbackManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
-import net.minestom.server.codec.StructCodec;
+
 import net.minestom.server.command.CommandManager;
-import net.minestom.server.component.DataComponents;
-import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.metadata.animal.*;
-import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
-import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
-import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
-import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
@@ -23,15 +15,8 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.instance.block.banner.BannerPattern;
-import net.minestom.server.instance.block.jukebox.JukeboxSong;
-import net.minestom.server.item.armor.TrimMaterial;
-import net.minestom.server.item.armor.TrimPattern;
-import net.minestom.server.item.enchant.*;
-import net.minestom.server.item.instrument.Instrument;
+
 import net.minestom.server.listener.manager.PacketListenerManager;
-import net.minestom.server.message.ChatType;
-import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
@@ -40,7 +25,7 @@ import net.minestom.server.network.packet.PacketVanilla;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
-import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.snapshot.*;
 import net.minestom.server.thread.Acquirable;
@@ -50,9 +35,6 @@ import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.PacketViewableUtils;
 import net.minestom.server.utils.collection.MappedCollection;
 import net.minestom.server.utils.time.Tick;
-import net.minestom.server.world.DimensionType;
-import net.minestom.server.world.biome.Biome;
-import net.minestom.server.world.timeline.Timeline;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,43 +46,17 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-final class ServerProcessImpl implements ServerProcess {
+final class ServerProcessImpl implements ServerProcess, Registries.Delegating {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerProcessImpl.class);
 
     private final Auth auth;
 
     private final ExceptionManager exception;
-
-    private final DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues;
-    private final DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects;
-    private final DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects;
-    private final DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects;
-
-    private final DynamicRegistry<ChatType> chatType;
-    private final DynamicRegistry<Dialog> dialog;
-    private final DynamicRegistry<DimensionType> dimensionType;
-    private final DynamicRegistry<Biome> biome;
-    private final DynamicRegistry<DamageType> damageType;
-    private final DynamicRegistry<TrimMaterial> trimMaterial;
-    private final DynamicRegistry<TrimPattern> trimPattern;
-    private final DynamicRegistry<BannerPattern> bannerPattern;
-    private final DynamicRegistry<Enchantment> enchantment;
-    private final DynamicRegistry<PaintingVariant> paintingVariant;
-    private final DynamicRegistry<JukeboxSong> jukeboxSong;
-    private final DynamicRegistry<Instrument> instrument;
-    private final DynamicRegistry<WolfVariant> wolfVariant;
-    private final DynamicRegistry<WolfSoundVariant> wolfSoundVariant;
-    private final DynamicRegistry<CatVariant> catVariant;
-    private final DynamicRegistry<ChickenVariant> chickenVariant;
-    private final DynamicRegistry<CowVariant> cowVariant;
-    private final DynamicRegistry<FrogVariant> frogVariant;
-    private final DynamicRegistry<PigVariant> pigVariant;
-    private final DynamicRegistry<ZombieNautilusVariant> zombieNautilusVariant;
-    private final DynamicRegistry<Timeline> timeline;
+    private final Registries registries;
 
     private final ConnectionManager connection;
     private final PacketListenerManager packetListener;
-    private final PacketParser<ClientPacket> packetParser;
+    private final PacketParser.Client packetParser;
     private final InstanceManager instance;
     private final BlockManager block;
     private final CommandManager command;
@@ -108,7 +64,6 @@ final class ServerProcessImpl implements ServerProcess {
     private final TeamManager team;
     private final GlobalEventHandler eventHandler;
     private final SchedulerManager scheduler;
-    private final BenchmarkManager benchmark;
     private final AdvancementManager advancement;
     private final BossBarManager bossBar;
     private final ClickCallbackManager clickCallbackManager;
@@ -124,36 +79,7 @@ final class ServerProcessImpl implements ServerProcess {
     public ServerProcessImpl(Auth auth) {
         this.auth = auth;
         this.exception = new ExceptionManager();
-
-        // The order of initialization here is relevant, we must load the enchantment util registries before the vanilla data is loaded.
-        var ignoredForInit = DataComponents.ITEM_NAME;
-
-        this.enchantmentLevelBasedValues = LevelBasedValue.createDefaultRegistry();
-        this.enchantmentValueEffects = ValueEffect.createDefaultRegistry();
-        this.enchantmentEntityEffects = EntityEffect.createDefaultRegistry();
-        this.enchantmentLocationEffects = LocationEffect.createDefaultRegistry();
-
-        this.chatType = ChatType.createDefaultRegistry();
-        this.dialog = Dialog.createDefaultRegistry(this);
-        this.biome = Biome.createDefaultRegistry();
-        this.damageType = DamageType.createDefaultRegistry();
-        this.trimMaterial = TrimMaterial.createDefaultRegistry();
-        this.trimPattern = TrimPattern.createDefaultRegistry();
-        this.bannerPattern = BannerPattern.createDefaultRegistry();
-        this.enchantment = Enchantment.createDefaultRegistry(this);
-        this.paintingVariant = PaintingVariant.createDefaultRegistry();
-        this.jukeboxSong = JukeboxSong.createDefaultRegistry();
-        this.instrument = Instrument.createDefaultRegistry();
-        this.wolfVariant = WolfVariant.createDefaultRegistry();
-        this.wolfSoundVariant = WolfSoundVariant.createDefaultRegistry();
-        this.catVariant = CatVariant.createDefaultRegistry();
-        this.chickenVariant = ChickenVariant.createDefaultRegistry();
-        this.cowVariant = CowVariant.createDefaultRegistry();
-        this.frogVariant = FrogVariant.createDefaultRegistry();
-        this.pigVariant = PigVariant.createDefaultRegistry();
-        this.zombieNautilusVariant = ZombieNautilusVariant.createDefaultRegistry();
-        this.timeline = Timeline.createDefaultRegistry();
-        this.dimensionType = DimensionType.createDefaultRegistry(this); // depends on timelines
+        this.registries = Registries.vanilla();
 
         this.connection = new ConnectionManager();
         this.packetListener = new PacketListenerManager();
@@ -165,7 +91,6 @@ final class ServerProcessImpl implements ServerProcess {
         this.team = new TeamManager();
         this.eventHandler = new GlobalEventHandler();
         this.scheduler = new SchedulerManager();
-        this.benchmark = new BenchmarkManager();
         this.advancement = new AdvancementManager();
         this.bossBar = new BossBarManager();
         this.clickCallbackManager = new ClickCallbackManager();
@@ -187,114 +112,10 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public DynamicRegistry<Dialog> dialog() {
-        return dialog;
+    public Registries registries() {
+        return registries;
     }
 
-    @Override
-    public DynamicRegistry<Timeline> timeline() {
-        return timeline;
-    }
-
-    @Override
-    public DynamicRegistry<DamageType> damageType() {
-        return damageType;
-    }
-
-    @Override
-    public DynamicRegistry<TrimMaterial> trimMaterial() {
-        return trimMaterial;
-    }
-
-    @Override
-    public DynamicRegistry<TrimPattern> trimPattern() {
-        return trimPattern;
-    }
-
-    @Override
-    public DynamicRegistry<BannerPattern> bannerPattern() {
-        return bannerPattern;
-    }
-
-    @Override
-    public DynamicRegistry<Enchantment> enchantment() {
-        return enchantment;
-    }
-
-    @Override
-    public DynamicRegistry<PaintingVariant> paintingVariant() {
-        return paintingVariant;
-    }
-
-    @Override
-    public DynamicRegistry<JukeboxSong> jukeboxSong() {
-        return jukeboxSong;
-    }
-
-    @Override
-    public DynamicRegistry<Instrument> instrument() {
-        return instrument;
-    }
-
-    @Override
-    public DynamicRegistry<WolfVariant> wolfVariant() {
-        return wolfVariant;
-    }
-
-    @Override
-    public DynamicRegistry<WolfSoundVariant> wolfSoundVariant() {
-        return wolfSoundVariant;
-    }
-
-    @Override
-    public DynamicRegistry<CatVariant> catVariant() {
-        return catVariant;
-    }
-
-    @Override
-    public DynamicRegistry<ChickenVariant> chickenVariant() {
-        return chickenVariant;
-    }
-
-    @Override
-    public DynamicRegistry<CowVariant> cowVariant() {
-        return cowVariant;
-    }
-
-    @Override
-    public DynamicRegistry<FrogVariant> frogVariant() {
-        return frogVariant;
-    }
-
-    @Override
-    public DynamicRegistry<PigVariant> pigVariant() {
-        return pigVariant;
-    }
-
-    @Override
-    public DynamicRegistry<ZombieNautilusVariant> zombieNautilusVariant() {
-        return zombieNautilusVariant;
-    }
-
-    @Override
-    public DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
-        return enchantmentLevelBasedValues;
-    }
-
-    @Override
-    public DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects() {
-        return enchantmentValueEffects;
-    }
-
-    @Override
-    public DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects() {
-        return enchantmentEntityEffects;
-    }
-
-    @Override
-    public DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
-        return enchantmentLocationEffects;
-    }
 
     @Override
     public ConnectionManager connection() {
@@ -337,11 +158,6 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public BenchmarkManager benchmark() {
-        return benchmark;
-    }
-
-    @Override
     public AdvancementManager advancement() {
         return advancement;
     }
@@ -352,27 +168,12 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public DynamicRegistry<ChatType> chatType() {
-        return chatType;
-    }
-
-    @Override
-    public DynamicRegistry<DimensionType> dimensionType() {
-        return dimensionType;
-    }
-
-    @Override
-    public DynamicRegistry<Biome> biome() {
-        return biome;
-    }
-
-    @Override
     public PacketListenerManager packetListener() {
         return packetListener;
     }
 
     @Override
-    public PacketParser<ClientPacket> packetParser() {
+    public PacketParser.Client packetParser() {
         return packetParser;
     }
 
@@ -444,7 +245,6 @@ final class ServerProcessImpl implements ServerProcess {
         connection.shutdown();
         server.stop();
         LOGGER.info("Shutting down all thread pools.");
-        benchmark.disable();
         dispatcher.shutdown();
         LOGGER.info("{} server stopped successfully.", brand);
     }

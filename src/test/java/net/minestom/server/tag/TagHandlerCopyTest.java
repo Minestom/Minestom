@@ -64,7 +64,7 @@ public class TagHandlerCopyTest {
         assertEquals("test3", copy.getTag(tag));
         assertEqualsSNBT("""
                 {"key":"test2"}
-                 """, handler.asCompound());
+                """, handler.asCompound());
         assertEqualsSNBT("""
                 {"key":"test3"}
                 """, copy.asCompound());

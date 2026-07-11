@@ -3,7 +3,7 @@ package net.minestom.server.adventure;
 import net.kyori.adventure.text.event.DataComponentValue;
 import org.jetbrains.annotations.Nullable;
 
-public sealed interface MinestomDataComponentValue extends DataComponentValue permits MinestomDataComponentValueImpl {
+public sealed interface MinestomDataComponentValue extends DataComponentValue permits MinestomDataComponentValueImpl, MinestomDataComponentValueImpl.Removed {
 
     static MinestomDataComponentValue removed() {
         return MinestomDataComponentValueImpl.Removed.INSTANCE;

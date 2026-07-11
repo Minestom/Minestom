@@ -2,7 +2,6 @@ package net.minestom.server.entity;
 
 import it.unimi.dsi.fastutil.longs.LongArrayPriorityQueue;
 import it.unimi.dsi.fastutil.longs.LongPriorityQueue;
-import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.dialog.DialogLike;
 import net.kyori.adventure.identity.Identity;
@@ -33,7 +32,6 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.*;
 import net.minestom.server.dialog.Dialog;
-import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.entity.metadata.avatar.PlayerMeta;
 import net.minestom.server.entity.vehicle.PlayerInputs;
@@ -68,6 +66,7 @@ import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.common.*;
 import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.packet.server.play.data.PlayerSpawnInfo;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.network.player.ClientSettings;
 import net.minestom.server.network.player.GameProfile;
@@ -202,7 +201,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     private long startItemUseTime;
     private long itemUseTime;
-    private PlayerHand itemUseHand;
+    private @Nullable PlayerHand itemUseHand;
 
     // Game state (https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol#Game_Event)
     private boolean enableRespawnScreen;
@@ -256,7 +255,6 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         this.gameMode = GameMode.SURVIVAL;
         this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(DimensionType.OVERWORLD); // Default dimension
         this.levelFlat = true;
-        getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.1);
 
         // FakePlayer init its connection there
         playerConnectionInit();
@@ -292,10 +290,12 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                 getEntityId(), this.hardcore, List.of(), 0,
                 ServerFlag.CHUNK_VIEW_DISTANCE, ServerFlag.CHUNK_VIEW_DISTANCE,
                 false, true, false,
-                dimensionTypeId, spawnInstance.getDimensionName(), 0,
-                gameMode, null, false, levelFlat,
-                deathLocation, portalCooldown, DEFAULT_SEA_LEVEL,
-                true);
+                new PlayerSpawnInfo(dimensionTypeId, spawnInstance.getDimensionName(), 0,
+                        gameMode, null, false, levelFlat,
+                        deathLocation, portalCooldown, DEFAULT_SEA_LEVEL),
+                // Always leave online mode & chat secure chat enabled
+                // so the client makes a chat session and shows tablist heads.
+                true, true);
         sendPacket(joinGamePacket);
 
         // Start sending inventory updates
@@ -495,9 +495,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         entityMeta.setOnFire(false);
         refreshHealth();
 
-        sendPacket(new RespawnPacket(dimensionTypeId, instance.getDimensionName(),
+        sendPacket(new RespawnPacket(new PlayerSpawnInfo(dimensionTypeId, instance.getDimensionName(),
                 0, gameMode, gameMode, false, levelFlat,
-                deathLocation, portalCooldown, DEFAULT_SEA_LEVEL, (byte) RespawnPacket.COPY_ALL));
+                deathLocation, portalCooldown, DEFAULT_SEA_LEVEL), (byte) RespawnPacket.COPY_ALL));
         refreshClientStateAfterRespawn();
 
         PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this);
@@ -531,6 +531,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         sendPacket(new SetExperiencePacket(exp, level, 0));
         triggerStatus((byte) (EntityStatuses.Player.PERMISSION_LEVEL_0 + permissionLevel)); // Set permission level
         refreshAbilities();
+        sendPacket(instance.createTimePacket());
     }
 
     /**
@@ -751,9 +752,10 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     @ApiStatus.Internal
     public void onChunkBatchReceived(float newTargetChunksPerTick) {
 //        logger.debug("chunk batch received player={} chunks/tick={} lead={}", username, newTargetChunksPerTick, chunkBatchLead);
-        chunkBatchLead -= 1;
+        chunkBatchLead = Math.max(0, chunkBatchLead - 1);
+        newTargetChunksPerTick = newTargetChunksPerTick * ServerFlag.CHUNKS_PER_TICK_MULTIPLIER;
         targetChunksPerTick = Float.isNaN(newTargetChunksPerTick) ? ServerFlag.MIN_CHUNKS_PER_TICK : MathUtils.clamp(
-                newTargetChunksPerTick * ServerFlag.CHUNKS_PER_TICK_MULTIPLIER, ServerFlag.MIN_CHUNKS_PER_TICK, ServerFlag.MAX_CHUNKS_PER_TICK);
+                newTargetChunksPerTick, ServerFlag.MIN_CHUNKS_PER_TICK, ServerFlag.MAX_CHUNKS_PER_TICK);
 
         // Beyond the first batch we can preemptively send up to 10 (matching mojang server)
         if (maxChunkBatchLead == 1) maxChunkBatchLead = 10;
@@ -899,10 +901,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     }
 
     @Override
-    @SuppressWarnings({"UnstableApiUsage", "deprecation"})
-    public void sendMessage(final Identity source, final Component message, final MessageType type) {
-        // Note to readers: this method may be deprecated, however it is in fact required.
-        Messenger.sendMessage(this, message, ChatPosition.fromMessageType(type), source.uuid());
+    public void sendMessage(Component message) {
+        Messenger.sendMessage(this, message, ChatPosition.SYSTEM_MESSAGE);
     }
 
     /**
@@ -1229,7 +1229,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * More information can be found <a href="https://minecraft.wiki/w/Java_Edition_protocol/Packets#player-info:player-actions">here</a>.
      *
      * @param listOrder the order in which the player should be displayed in the tab-list. A higher number means
-     *                     the player will appear higher in the tab-list.
+     *                  the player will appear higher in the tab-list.
      */
     public void setListOrder(int listOrder) {
         this.listOrder = listOrder;
@@ -1266,10 +1266,10 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         final PlayerInfoRemovePacket removePlayerPacket = getRemovePlayerToList();
         final PlayerInfoUpdatePacket addPlayerPacket = getAddPlayerToList();
 
-        final RespawnPacket respawnPacket = new RespawnPacket(dimensionTypeId,
+        final RespawnPacket respawnPacket = new RespawnPacket(new PlayerSpawnInfo(dimensionTypeId,
                 instance.getDimensionName(), 0, gameMode, gameMode,
                 false, levelFlat, deathLocation, portalCooldown,
-                DEFAULT_SEA_LEVEL, (byte) RespawnPacket.COPY_ALL);
+                DEFAULT_SEA_LEVEL), (byte) RespawnPacket.COPY_ALL);
 
         sendPacket(removePlayerPacket);
         sendPacket(destroyEntitiesPacket);
@@ -1380,7 +1380,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     @Override
     public void clearResourcePacks() {
-        sendPacket(new ResourcePackPopPacket((UUID) null));
+        sendPacket(new ResourcePackPopPacket(null));
     }
 
     /**
@@ -1618,28 +1618,38 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         playerMeta.setDisplayedSkinParts(settings.displayedSkinParts());
         playerMeta.setMainHand(settings.mainHand());
         if (isInPlayState) playerMeta.setNotifyAboutChanges(true);
+        // Update view distance
+        final Instance instance = this.instance;
+        if (instance == null) return;
+        final int viewDistance = instance.viewDistance();
+        updateViewDistance(previous.viewDistance(), viewDistance, viewDistance);
+    }
 
-        final byte previousViewDistance = previous.viewDistance();
-        final byte newViewDistance = settings.viewDistance();
-        // Check to see if we're in an instance first, as this method is called when first logging in since the client sends the Settings packet during configuration
-        if (instance != null) {
-            // Load/unload chunks if necessary due to view distance changes
-            if (previousViewDistance < newViewDistance) {
-                // View distance expanded, send chunks
-                ChunkRange.chunksInRange(position.chunkX(), position.chunkZ(), newViewDistance, (chunkX, chunkZ) -> {
-                    if (Math.abs(chunkX - position.chunkX()) > previousViewDistance || Math.abs(chunkZ - position.chunkZ()) > previousViewDistance) {
-                        chunkAdder.accept(chunkX, chunkZ);
-                    }
-                });
-            } else if (previousViewDistance > newViewDistance) {
-                // View distance shrunk, unload chunks
-                ChunkRange.chunksInRange(position.chunkX(), position.chunkZ(), previousViewDistance, (chunkX, chunkZ) -> {
-                    if (Math.abs(chunkX - position.chunkX()) > newViewDistance || Math.abs(chunkZ - position.chunkZ()) > newViewDistance) {
-                        chunkRemover.accept(chunkX, chunkZ);
-                    }
-                });
-            }
-            // Else previous and current are equal, do nothing
+    @ApiStatus.Internal
+    public void updateViewDistance(int oldInstanceViewDistance, int newInstanceViewDistance) {
+        updateViewDistance(settings.viewDistance(), oldInstanceViewDistance, newInstanceViewDistance);
+    }
+
+    private void updateViewDistance(int oldSettingsViewDistance, int oldInstanceViewDistance, int newInstanceViewDistance) {
+        final int previousEffective = Math.min(oldSettingsViewDistance, oldInstanceViewDistance) + 1;
+        final int newEffective = Math.min(settings.viewDistance(), newInstanceViewDistance) + 1;
+        if (previousEffective == newEffective) return;
+
+        final int centerX = position.chunkX(), centerZ = position.chunkZ();
+        if (previousEffective < newEffective) {
+            // View distance expanded, send chunks
+            ChunkRange.chunksInRange(centerX, centerZ, newEffective, (chunkX, chunkZ) -> {
+                if (Math.abs(chunkX - centerX) > previousEffective || Math.abs(chunkZ - centerZ) > previousEffective) {
+                    chunkAdder.accept(chunkX, chunkZ);
+                }
+            });
+        } else {
+            // View distance shrunk, unload chunks
+            ChunkRange.chunksInRange(centerX, centerZ, previousEffective, (chunkX, chunkZ) -> {
+                if (Math.abs(chunkX - centerX) > newEffective || Math.abs(chunkZ - centerZ) > newEffective) {
+                    chunkRemover.accept(chunkX, chunkZ);
+                }
+            });
         }
     }
 
@@ -1730,9 +1740,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         Check.argCondition(instance.getDimensionName().equals(dimensionName),
                 "The dimension needs to be different than the current one!");
         this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(dimensionType);
-        sendPacket(new RespawnPacket(dimensionTypeId, dimensionName,
+        sendPacket(new RespawnPacket(new PlayerSpawnInfo(dimensionTypeId, dimensionName,
                 0, gameMode, gameMode, false, levelFlat,
-                deathLocation, portalCooldown, DEFAULT_SEA_LEVEL, (byte) RespawnPacket.COPY_ALL));
+                deathLocation, portalCooldown, DEFAULT_SEA_LEVEL), (byte) RespawnPacket.COPY_ALL));
         refreshClientStateAfterRespawn();
     }
 
@@ -2269,12 +2279,6 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
         var event = new PlayerInputEvent(this, oldForward, oldBackward, oldLeft, oldRight, oldJump, oldShift, oldSprint);
         EventDispatcher.call(event);
-
-        if (event.hasPressedShiftKey()) {
-            EventDispatcher.call(new PlayerStartSneakingEvent(this));
-        } else if (event.hasReleasedShiftKey()) {
-            EventDispatcher.call(new PlayerStopSneakingEvent(this));
-        }
     }
 
     /**
@@ -2445,6 +2449,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     /**
      * Gets the client's 'effective' view distance, which is the minimum of the client's view distance settings, and the local instance settings, plus one
+     *
      * @return The effective chunk view distance range of the client
      */
     public int effectiveViewDistance() {

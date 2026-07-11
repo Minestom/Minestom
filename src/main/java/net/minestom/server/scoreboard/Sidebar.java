@@ -2,8 +2,8 @@ package net.minestom.server.scoreboard;
 
 import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.adventure.ComponentHolder;
+import net.minestom.server.color.TeamColor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.play.*;
@@ -107,7 +107,7 @@ public class Sidebar implements Scoreboard {
     public void setTitle(Component title) {
         this.title = title;
         sendPacketToViewers(new ScoreboardObjectivePacket(objectiveName, (byte) 2, title,
-                ScoreboardObjectivePacket.Type.INTEGER, null));
+                                                          ScoreboardObjectivePacket.Type.INTEGER, null));
     }
 
     /**
@@ -120,13 +120,14 @@ public class Sidebar implements Scoreboard {
      */
     public void createLine(ScoreboardLine scoreboardLine) {
         synchronized (lines) {
-            Check.stateCondition(lines.size() >= MAX_LINES_COUNT, "You cannot have more than " + MAX_LINES_COUNT + "  lines");
+            Check.stateCondition(lines.size() >= MAX_LINES_COUNT,
+                                 "You cannot have more than " + MAX_LINES_COUNT + "  lines");
             Check.argCondition(lines.contains(scoreboardLine), "You cannot add two times the same ScoreboardLine");
 
             // Check ID duplication
             for (ScoreboardLine line : lines) {
                 Check.argCondition(line.id.equals(scoreboardLine.id),
-                        "You cannot add two ScoreboardLine with the same id");
+                                   "You cannot add two ScoreboardLine with the same id");
             }
 
             // Setup line
@@ -137,7 +138,8 @@ public class Sidebar implements Scoreboard {
             this.lines.add(scoreboardLine);
 
             // Send to current viewers
-            sendPacketsToViewers(scoreboardLine.sidebarTeam.getCreationPacket(), scoreboardLine.getScoreCreationPacket(objectiveName));
+            sendPacketsToViewers(scoreboardLine.sidebarTeam.getCreationPacket(),
+                                 scoreboardLine.getScoreCreationPacket(objectiveName));
         }
     }
 
@@ -217,7 +219,8 @@ public class Sidebar implements Scoreboard {
             if (line.id.equals(id)) {
 
                 // Remove the line for current viewers
-                sendPacketsToViewers(line.getScoreDestructionPacket(objectiveName), line.sidebarTeam.getDestructionPacket());
+                sendPacketsToViewers(line.getScoreDestructionPacket(objectiveName),
+                                     line.sidebarTeam.getDestructionPacket());
 
                 line.returnName(availableColors);
                 return true;
@@ -230,7 +233,8 @@ public class Sidebar implements Scoreboard {
     public boolean addViewer(Player player) {
         final boolean result = this.viewers.add(player);
         if (result) {
-            ScoreboardObjectivePacket scoreboardObjectivePacket = this.getCreationObjectivePacket(this.title, ScoreboardObjectivePacket.Type.INTEGER);
+            ScoreboardObjectivePacket scoreboardObjectivePacket = this.getCreationObjectivePacket(this.title,
+                                                                                                  ScoreboardObjectivePacket.Type.INTEGER);
             player.sendPacket(scoreboardObjectivePacket);
         }
         DisplayScoreboardPacket displayScoreboardPacket = this.getDisplayScoreboardPacket((byte) 1);
@@ -256,7 +260,7 @@ public class Sidebar implements Scoreboard {
     }
 
     @Override
-    public Set<Player> getViewers() {
+    public Set<? extends Player> getViewers() {
         return Collections.unmodifiableSet(viewers);
     }
 
@@ -427,8 +431,7 @@ public class Sidebar implements Scoreboard {
         private final byte friendlyFlags = 0x00;
         private final TeamsPacket.NameTagVisibility nameTagVisibility = TeamsPacket.NameTagVisibility.NEVER;
         private final TeamsPacket.CollisionRule collisionRule = TeamsPacket.CollisionRule.NEVER;
-        private final NamedTextColor teamColor = NamedTextColor.WHITE;
-
+        private final @Nullable TeamColor color = null;
 
         /**
          * The constructor to creates a team
@@ -451,8 +454,13 @@ public class Sidebar implements Scoreboard {
          * @return a {@link TeamsPacket} which creates a new team
          */
         private TeamsPacket getCreationPacket() {
-            final var action = new TeamsPacket.CreateTeamAction(teamDisplayName, friendlyFlags,
-                    nameTagVisibility, collisionRule, teamColor, prefix, suffix, List.of(entityName));
+            final var action = new TeamsPacket.CreateTeamAction(
+                    new TeamsPacket.Settings(
+                            teamDisplayName, prefix, suffix,
+                            nameTagVisibility, collisionRule,
+                            color, friendlyFlags
+                    ),
+                    List.of(entityName));
             return new TeamsPacket(teamName, action);
         }
 
@@ -472,8 +480,11 @@ public class Sidebar implements Scoreboard {
          * @return a {@link TeamsPacket} with the updated prefix
          */
         private TeamsPacket updatePrefix(Component prefix) {
-            final var action = new TeamsPacket.UpdateTeamAction(teamDisplayName, friendlyFlags,
-                    nameTagVisibility, collisionRule, teamColor, prefix, suffix);
+            final var action = new TeamsPacket.UpdateTeamAction(new TeamsPacket.Settings(
+                    teamDisplayName, prefix, suffix,
+                    nameTagVisibility, collisionRule,
+                    color, friendlyFlags
+            ));
             return new TeamsPacket(teamName, action);
         }
 
@@ -506,7 +517,10 @@ public class Sidebar implements Scoreboard {
     }
 
 
-    public record NumberFormat(FormatType formatType, @Nullable Component content) implements ComponentHolder<NumberFormat> {
+    public record NumberFormat(
+            FormatType formatType,
+            @Nullable Component content
+    ) implements ComponentHolder<NumberFormat> {
         private NumberFormat() {
             this(FormatType.BLANK, null);
         }

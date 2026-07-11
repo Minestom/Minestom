@@ -10,7 +10,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.utils.UUIDUtils;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.function.Function;
 
@@ -29,7 +28,9 @@ final class Serializers {
     static final Entry<BinaryTag, BinaryTag> NBT_ENTRY = new Entry<>(null, Function.identity(), Function.identity());
 
     static final Entry<java.util.UUID, IntArrayBinaryTag> UUID = new Entry<>(BinaryTagTypes.INT_ARRAY, UUIDUtils::fromNbt, UUIDUtils::toNbt);
-    static final Entry<ItemStack, CompoundBinaryTag> ITEM = new Entry<>(BinaryTagTypes.COMPOUND, ItemStack::fromItemNBT, ItemStack::toItemNBT);
+    static final Entry<ItemStack, CompoundBinaryTag> ITEM = new Entry<>(BinaryTagTypes.COMPOUND,
+            input -> ItemStack.fromItemNBT(input, MinecraftServer.process()),
+            itemStack -> itemStack.toItemNBT(MinecraftServer.process()));
     static final Entry<Component, BinaryTag> COMPONENT = new Entry<>(null,
             input -> Codec.COMPONENT.decode(new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process()), input).orElse(null),
             component -> Codec.COMPONENT.encode(new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process()), component).orElse(null)

@@ -10,7 +10,7 @@ import net.minestom.server.entity.metadata.villager.VillagerMeta;
 import org.jetbrains.annotations.Nullable;
 
 public class ZombieVillagerMeta extends ZombieMeta {
-    public ZombieVillagerMeta(Entity entity, MetadataHolder metadata) {
+    public ZombieVillagerMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -28,6 +28,14 @@ public class ZombieVillagerMeta extends ZombieMeta {
 
     public void setVillagerData(VillagerMeta.VillagerData data) {
         metadata.set(MetadataDef.ZombieVillager.VILLAGER_DATA, data);
+    }
+
+    public boolean isFinalized() {
+        return metadata.get(MetadataDef.ZombieVillager.IS_FINALIZED);
+    }
+
+    public void setFinalized(boolean value) {
+        metadata.set(MetadataDef.ZombieVillager.IS_FINALIZED, value);
     }
 
     @Override

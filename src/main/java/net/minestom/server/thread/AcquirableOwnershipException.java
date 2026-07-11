@@ -7,7 +7,8 @@ import org.jetbrains.annotations.Nullable;
  * Exception thrown when an acquirable element is accessed without proper ownership.
  */
 public final class AcquirableOwnershipException extends RuntimeException {
-    private final Thread initThread, assignedThread;
+    private final Thread initThread;
+    private final @Nullable Thread assignedThread;
     private final Object element;
 
     @ApiStatus.Internal
@@ -29,10 +30,7 @@ public final class AcquirableOwnershipException extends RuntimeException {
                       Assigned thread: %s
                       Problem: The element is assigned to a different thread and is not currently owned.
                       Solution: Use Acquirable#sync() or Acquirable#lock() to acquire ownership before accessing the element.
-                    """.formatted(valueString,
-                    Thread.currentThread().getName(),
-                    assignedThread.getName()
-            );
+                    """.formatted(valueString, Thread.currentThread().getName(), assignedThread.getName());
         } else {
             return """
                     Thread ownership assertion failed for %s:
@@ -40,10 +38,7 @@ public final class AcquirableOwnershipException extends RuntimeException {
                       Initialization thread: %s
                       Problem: The element is not yet initialized and is being accessed from a different thread.
                       Solution: Handle the element in the same thread it has been initialized in until it is fully initialized.
-                    """.formatted(valueString,
-                    Thread.currentThread().getName(),
-                    initThread.getName()
-            );
+                    """.formatted(valueString, Thread.currentThread().getName(), initThread.getName());
         }
     }
 

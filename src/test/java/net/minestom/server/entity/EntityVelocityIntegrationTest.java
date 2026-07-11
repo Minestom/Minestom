@@ -114,7 +114,7 @@ public class EntityVelocityIntegrationTest {
 
         final double epsilon = 0.000001;
 
-        assertEquals(player.getVelocity().y(), -1.568, epsilon);
+        assertEquals(-1.568, player.getVelocity().y(), epsilon);
         double previousVelocity = player.getVelocity().y();
 
         player.setFlying(true);
@@ -126,7 +126,7 @@ public class EntityVelocityIntegrationTest {
             previousVelocity = player.getVelocity().y();
             env.tick();
         }
-        assertEquals(player.getVelocity().y(), 0);
+        assertEquals(0, player.getVelocity().y());
     }
 
     @Test

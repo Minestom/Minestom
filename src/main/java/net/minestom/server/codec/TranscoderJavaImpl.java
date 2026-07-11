@@ -98,6 +98,18 @@ final class TranscoderJavaImpl implements Transcoder<Object> {
     }
 
     @Override
+    public Object createNumber(Number value) {
+        return value;
+    }
+
+    @Override
+    public Result<Number> getNumber(Object value) {
+        if (!(value instanceof Number n))
+            return new Result.Error<>("Not a number: " + value);
+        return new Result.Ok<>(n);
+    }
+
+    @Override
     public Result<String> getString(Object value) {
         if (!(value instanceof String s))
             return new Result.Error<>("Not a string: " + value);

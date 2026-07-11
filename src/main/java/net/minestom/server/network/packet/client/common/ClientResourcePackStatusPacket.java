@@ -13,7 +13,7 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 public record ClientResourcePackStatusPacket(
         UUID id,
         ResourcePackStatus status
-) implements ClientPacket {
+) implements ClientPacket.Configuration, ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientResourcePackStatusPacket> SERIALIZER = NetworkBufferTemplate.template(
             UUID, ClientResourcePackStatusPacket::id,
             VAR_INT.transform(ClientResourcePackStatusPacket::readStatus, ClientResourcePackStatusPacket::statusId), ClientResourcePackStatusPacket::status,

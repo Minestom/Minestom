@@ -3,14 +3,20 @@ package net.minestom.server.listener;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.inventory.InventoryBundleItemSelectEvent;
+import net.minestom.server.event.inventory.InventoryButtonClickEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.AbstractInventory;
+import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.client.common.ClientPongPacket;
+import net.minestom.server.network.packet.client.play.ClientClickWindowButtonPacket;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.network.packet.client.play.ClientCloseWindowPacket;
+import net.minestom.server.network.packet.client.play.ClientSelectBundleItemPacket;
 import net.minestom.server.network.packet.server.play.SetCursorItemPacket;
+import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.Nullable;
 
 public class WindowListener {
@@ -81,4 +87,59 @@ public class WindowListener {
         player.closeInventory(true, (byte) packet.windowId());
     }
 
+    public static void inventoryButtonClickListener(ClientClickWindowButtonPacket packet, Player player) {
+        AbstractInventory inventory = player.getOpenInventory();
+
+        // Can't press a button if the inventory is not open
+        if (inventory == null) return;
+
+        // Can't press a button if the inventory is different from the packet's window id
+        if (packet.windowId() != (int) inventory.getWindowId()) return;
+
+        EventDispatcher.call(new InventoryButtonClickEvent(player, inventory, packet.buttonId()));
+    }
+
+    public static void selectBundleItemListener(ClientSelectBundleItemPacket packet, Player player) {
+        final int selectedItemIndex = packet.selectedIndex();
+        if (selectedItemIndex < -1) {
+            throw new IllegalArgumentException("Selected item index cannot be less than -1: " + selectedItemIndex);
+        }
+
+        final int rawSlot = packet.slot();
+        if (rawSlot < 0) {
+            throw new IllegalArgumentException("Slot index cannot be negative: " + rawSlot);
+        }
+
+        final AbstractInventory openInventory = player.getOpenInventory();
+        final AbstractInventory targetInventory;
+        final int translatedSlot;
+
+        if (openInventory == null) {
+            translatedSlot = PlayerInventoryUtils.convertWindow0SlotToMinestomSlot(rawSlot);
+            if (translatedSlot > player.getInventory().getSize() || translatedSlot < 0) {
+                throw new IllegalArgumentException("Slot index " + rawSlot + " is out of bounds for player inventory");
+            }
+            targetInventory = player.getInventory();
+        } else {
+            final int containerSize = openInventory.getSize();
+            if (rawSlot < containerSize) {
+                targetInventory = openInventory;
+                translatedSlot = rawSlot;
+            } else {
+                translatedSlot = PlayerInventoryUtils.convertWindowSlotToMinestomSlot(rawSlot, containerSize);
+                if (translatedSlot > player.getInventory().getSize() || translatedSlot < 0) {
+                    throw new IllegalArgumentException("Slot index " + rawSlot + " is out of bounds for player inventory");
+                }
+                targetInventory = player.getInventory();
+            }
+        }
+
+        InventoryBundleItemSelectEvent event = new InventoryBundleItemSelectEvent(
+                player,
+                targetInventory,
+                translatedSlot,
+                selectedItemIndex
+        );
+        EventDispatcher.call(event);
+    }
 }

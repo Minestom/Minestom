@@ -15,13 +15,14 @@ import static net.minestom.server.network.NetworkBuffer.STRING;
 public record ClientCookieResponsePacket(
         String key,
         byte @Nullable [] value
-) implements ClientPacket {
+) implements ClientPacket.Login, ClientPacket.Configuration, ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientCookieResponsePacket> SERIALIZER = NetworkBufferTemplate.template(
             STRING, ClientCookieResponsePacket::key,
             BYTE_ARRAY.optional(), ClientCookieResponsePacket::value,
             ClientCookieResponsePacket::new);
 
     public ClientCookieResponsePacket {
+        Check.argCondition(key.length() > Short.MAX_VALUE, "Key length cannot be greater than Short.MAX_VALUE");
         Check.argCondition(value != null && value.length > CookieStorePacket.MAX_VALUE_LENGTH,
                 "Value is too long: {0} > {1}", value != null ? value.length : 0, CookieStorePacket.MAX_VALUE_LENGTH);
         value = value != null ? value.clone() : null;

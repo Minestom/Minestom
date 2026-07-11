@@ -1,13 +1,13 @@
 package net.minestom.server.snapshot;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
@@ -81,6 +81,7 @@ public final class SnapshotImpl {
                         Int2ObjectOpenHashMap<Block> blockEntries,
                         int[] entitiesIds,
                         AtomicReference<InstanceSnapshot> instanceRef,
+                        DynamicRegistry<Biome> biomeRegistry,
                         TagReadable tagReadable) implements ChunkSnapshot {
         @Override
         public @UnknownNullability Block getBlock(int x, int y, int z, Condition condition) {
@@ -104,7 +105,7 @@ public final class SnapshotImpl {
             final Section section = sections[globalToChunk(y) - minSection];
             final int id = section.biomePalette()
                     .get(globalToSectionRelative(x) / 4, globalToSectionRelative(y) / 4, globalToSectionRelative(z) / 4);
-            RegistryKey<Biome> key = MinecraftServer.getBiomeRegistry().getKey(id);
+            RegistryKey<Biome> key = biomeRegistry.getKey(id);
             Check.notNull(key, "Biome with id {0} is not registered", id);
             return key;
         }

@@ -9,10 +9,12 @@ import java.util.Map;
 
 import static java.util.Map.entry;
 
+import net.minestom.server.entity.EntityType;
+
 public class BeesTest extends AbstractItemComponentTest<List<Bee>> {
-    private static final CustomData SOME_DATA = new CustomData(CompoundBinaryTag.builder()
-            .putString("Id", "minecraft:bee")
-            .build());
+    private static final TypedCustomData<EntityType> SOME_DATA = new TypedCustomData<>(
+            EntityType.BEE, CompoundBinaryTag.empty()
+    );
 
     @Override
     protected DataComponent<List<Bee>> component() {

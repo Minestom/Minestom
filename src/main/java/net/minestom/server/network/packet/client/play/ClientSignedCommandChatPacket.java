@@ -12,7 +12,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public record ClientSignedCommandChatPacket(String message, long timestamp,
                                             long salt, ArgumentSignatures signatures,
                                             LastSeenMessages.Update lastSeenMessages,
-                                            byte checksum) implements ClientPacket {
+                                            byte checksum) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientSignedCommandChatPacket> SERIALIZER = NetworkBufferTemplate.template(
             STRING, ClientSignedCommandChatPacket::message,
             LONG, ClientSignedCommandChatPacket::timestamp,

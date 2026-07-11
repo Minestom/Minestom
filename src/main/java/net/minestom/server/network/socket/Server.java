@@ -4,32 +4,31 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.PacketVanilla;
-import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.player.PlayerSocketConnection;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.io.EOFException;
 import java.io.IOException;
 import java.net.*;
-import java.nio.channels.AsynchronousCloseException;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.file.Files;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 public final class Server {
     private volatile boolean stop;
 
-    private final PacketParser<ClientPacket> packetParser;
+    private final PacketParser.Client packetParser;
 
-    private ServerSocketChannel serverSocket;
-    private SocketAddress socketAddress;
-    private String address;
+    private @UnknownNullability ServerSocketChannel serverSocket;
+    private @UnknownNullability SocketAddress socketAddress;
+    private @UnknownNullability String address;
     private int port;
 
-    public Server(PacketParser<ClientPacket> packetParser) {
+    public Server(PacketParser.Client packetParser) {
         this.packetParser = packetParser;
     }
 
@@ -67,25 +66,35 @@ public final class Server {
 
     @ApiStatus.Internal
     public void start() {
-        // Use named thread builders for logging
-        var readBuilder = Thread.ofVirtual().name("Ms-Socket-Reader-", 0);
-        var writeBuilder = Thread.ofVirtual().name("Ms-Socket-Writer-", 0);
         Thread.ofVirtual().name("Ms-Socket-Server").start(() -> {
+            // Use named thread builders for logging
+            var readBuilder = Thread.ofVirtual().name("Ms-Socket-Reader-", 0);
+            var writeBuilder = Thread.ofVirtual().name("Ms-Socket-Writer-", 0);
+            final var serverSocket = Objects.requireNonNull(this.serverSocket, "Not bound did you forget to call #init?");
             while (!stop) {
+                final SocketChannel client;
                 try {
-                    final SocketChannel client = serverSocket.accept();
+                    client = serverSocket.accept();
+                } catch (ClosedChannelException e) {
+                    break; // We are exiting, bye bye!
+                } catch (IOException e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                    continue;
+                }
+
+                AtomicReference<@UnknownNullability PlayerSocketConnection> reference = new AtomicReference<>(null);
+                try {
                     configureSocket(client);
-                    AtomicReference<PlayerSocketConnection> reference = new AtomicReference<>(null);
                     Thread readThread = readBuilder.unstarted(() -> playerReadLoop(reference.get()));
                     Thread writeThread = writeBuilder.unstarted(() -> playerWriteLoop(reference.get()));
                     PlayerSocketConnection connection = new PlayerSocketConnection(client, client.getRemoteAddress(), readThread, writeThread);
                     reference.set(connection);
                     readThread.start();
                     writeThread.start();
-                } catch (AsynchronousCloseException ignored) {
-                    // We are exiting, bye bye!
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                } catch (IOException _) {
+                    try {
+                        client.close();
+                    } catch (IOException _) {}
                 }
             }
         });
@@ -102,15 +111,13 @@ public final class Server {
     }
 
     private void playerReadLoop(PlayerSocketConnection connection) {
-        Check.notNull(connection, "connection cannot be null");
+        Objects.requireNonNull(connection, "connection cannot be null");
         while (!stop) {
             try {
                 // Read & process packets
                 connection.read(packetParser);
-            } catch (ClosedChannelException ignored) {
-                break; // We closed the socket during read, just exit.
-            } catch (EOFException e) {
-                connection.disconnect();
+            } catch (ClosedChannelException | EOFException _) {
+                connection.disconnect(); // We closed the socket during read, just exit.
                 break;
             } catch (Throwable e) {
                 boolean isExpected = e instanceof SocketException && e.getMessage().equals("Connection reset");
@@ -122,32 +129,35 @@ public final class Server {
     }
 
     private void playerWriteLoop(PlayerSocketConnection connection) {
-        Check.notNull(connection, "connection cannot be null");
-        while (!stop) {
-            try {
-                connection.flushSync();
-            } catch (ClosedChannelException ignored) {
-                break; // We closed the socket during write, just exit.
-            } catch (EOFException e) {
-                connection.disconnect();
-                break;
-            } catch (Throwable e) {
-                boolean isExpected = e instanceof IOException && e.getMessage().equals("Broken pipe");
-                if (!isExpected) MinecraftServer.getExceptionManager().handleException(e);
-
-                connection.disconnect();
-                break;
-            }
-            if (!connection.isOnline()) {
+        Objects.requireNonNull(connection, "connection cannot be null");
+        try {
+            while (!stop) {
                 try {
                     connection.flushSync();
-                    connection.getChannel().close();
-                    break;
-                } catch (IOException e) {
-                    // Disconnect
-                    break;
+                } catch (ClosedChannelException | EOFException _) {
+                    connection.disconnect();
+                } catch (Throwable e) {
+                    boolean isExpected = e instanceof IOException && e.getMessage().equals("Broken pipe");
+                    if (!isExpected) MinecraftServer.getExceptionManager().handleException(e);
+                    connection.disconnect();
+                }
+                if (!connection.isOnline()) {
+                    try {
+                        connection.flushSync();
+                    } catch (IOException _) {
+                        // Ignore IO errors
+                    } finally {
+                        try {
+                            connection.getChannel().close();
+                        } catch (IOException _) {
+                            // May error if it was disconnect client side
+                        }
+                    }
+                    break; // Disconnect
                 }
             }
+        } finally {
+            connection.cleanup(); // Cleanup pooling
         }
     }
 
@@ -158,8 +168,9 @@ public final class Server {
     public void stop() {
         this.stop = true;
         try {
+            final var serverSocket = this.serverSocket;
             if (serverSocket != null) {
-                this.serverSocket.close();
+                serverSocket.close();
             }
 
             if (socketAddress instanceof UnixDomainSocketAddress unixDomainSocketAddress) {
@@ -171,7 +182,7 @@ public final class Server {
     }
 
     @ApiStatus.Internal
-    public PacketParser<ClientPacket> packetParser() {
+    public PacketParser.Client packetParser() {
         return packetParser;
     }
 
