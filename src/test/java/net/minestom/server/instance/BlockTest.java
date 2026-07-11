@@ -26,8 +26,10 @@ public class BlockTest {
         block = block.withNbt(nbt);
         assertTrue(block.hasNbt());
         assertEquals(block.nbt(), nbt);
+        assertSame(block, block.withNbt(nbt));
 
         block = block.withNbt(null);
+        assertSame(Block.CHEST, block);
         assertFalse(block.hasNbt());
         assertNull(block.nbt());
 
@@ -60,6 +62,8 @@ public class BlockTest {
         assertEquals(Block.CHEST, Block.fromState("minecraft:chest"));
         assertEquals(Block.CHEST, Block.fromState("minecraft:chest[]"));
         assertEquals(Block.CHEST.withProperty("facing", "north"), Block.fromState("minecraft:chest[facing=north]"));
+        assertNull(Block.fromState("invalid namespace:dirt"));
+        assertNull(Block.fromState("invalid namespace:chest[facing=north]"));
     }
 
     @Test
@@ -104,13 +108,18 @@ public class BlockTest {
                 assertTrue(assignedStates.add(blockWithState.stateId()));
             }
         }
+        assertEquals(Block.statesCount(), assignedStates.size());
     }
 
     @Test
-    public void testStateIdConversion() {
+    public void testStateConversions() {
         for (Block block : Block.values()) {
             for (Block blockWithState : block.possibleStates()) {
-                assertEquals(blockWithState, Block.fromStateId(blockWithState.stateId()));
+                assertSame(blockWithState, Block.fromStateId(blockWithState.stateId()));
+                assertSame(blockWithState, Block.fromState(blockWithState.state()));
+                assertSame(blockWithState, block.withProperties(blockWithState.properties()));
+                blockWithState.properties().forEach((property, value) ->
+                        assertEquals(value, blockWithState.getProperty(property)));
             }
         }
     }
