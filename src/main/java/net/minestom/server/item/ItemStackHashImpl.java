@@ -15,6 +15,7 @@ final class ItemStackHashImpl {
 
     public static ItemStack.Hash of(Transcoder<Integer> hashCoder, ItemStack itemStack) {
         if (itemStack.isAir()) return ItemStack.Hash.AIR;
+
         final Map<DataComponent<?>, Integer> addedComponents = new HashMap<>();
         final Set<DataComponent<?>> removedComponents = new HashSet<>();
         for (var entry : itemStack.componentPatch().entrySet()) {
