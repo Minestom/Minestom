@@ -4,11 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minestom.data.MinestomData;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTranscoder;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -22,15 +24,9 @@ import static java.util.Map.entry;
 import static net.minestom.server.codec.CodecAssertions.assertOk;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ItemComponentReadWriteTest {
+@EnvTest
+public class ItemComponentReadWriteIntegrationTest {
     private static final Gson GSON = new Gson();
-
-    private static final Transcoder<JsonElement> CODER;
-
-    static {
-        MinecraftServer.init();
-        CODER = new RegistryTranscoder<>(Transcoder.JSON, MinecraftServer.process());
-    }
 
     // This test will go through all of the default components present on vanilla items and make sure that we are
     // capable of reading/writing them correctly. This will help to find cases where fields have changed in case
@@ -43,7 +39,7 @@ public class ItemComponentReadWriteTest {
     );
 
     @Test
-    public void testReadWrite() throws IOException {
+    public void testReadWrite(Env env) throws IOException {
         var componentEntries = new ArrayList<>(EXTRA_CASES.entrySet());
         try (InputStream is = MinestomData.resource("item.json")) {
             Objects.requireNonNull(is, "item.json not found");
@@ -60,14 +56,15 @@ public class ItemComponentReadWriteTest {
             var component = DataComponent.fromKey(entry.getKey());
             assertNotNull(component, "Component not found: " + entry.getKey());
             //noinspection unchecked
-            readWriteTestImpl((DataComponent<Object>) component, entry.getValue());
+            readWriteTestImpl((DataComponent<Object>) component, entry.getValue(), env.process());
         }));
     }
 
-    private static void readWriteTestImpl(DataComponent<Object> component, JsonElement input) {
+    private static void readWriteTestImpl(DataComponent<Object> component, JsonElement input, Registries registries) {
         try {
-            var value = assertOk(component.decode(CODER, input));
-            var actual = assertOk(component.encode(CODER, value));
+            var transcoder = new RegistryTranscoder<>(Transcoder.JSON, registries);
+            var value = assertOk(component.decode(transcoder, input));
+            var actual = assertOk(component.encode(transcoder, value));
             // This is pretty cursed but we need to serialize and reparse because the JsonPrimitive number implementation changes
             // When reading from a string it has LazilyParsedNumber which is NOT equal to `new JsonPrimitive(1)` for example.
             var actualParsed = GSON.fromJson(actual.toString(), JsonElement.class);
@@ -83,10 +80,10 @@ public class ItemComponentReadWriteTest {
                     "ACT: " + actualParsed);
 
             if (component.isSynced()) {
-                var buffer = NetworkBuffer.resizableBuffer(MinecraftServer.process());
+                var buffer = NetworkBuffer.resizableBuffer(registries);
                 component.write(buffer, value);
                 var comp2 = component.read(buffer);
-                var expected2 = assertOk(component.encode(CODER, comp2));
+                var expected2 = assertOk(component.encode(transcoder, comp2));
                 assertEquals(expected2, actual, () -> "\n--- " + component.name() + " (NETWORK) ---\n" +
                         "EXP: " + expected2 + "\n" +
                         "ACT: " + actual);
@@ -96,8 +93,5 @@ public class ItemComponentReadWriteTest {
         }
     }
 
-    private static void assertEqualsJson(JsonElement expected, JsonElement actual) {
-
-    }
 }
 

@@ -267,6 +267,8 @@ sealed interface EntityTypes permits EntityType {
 
     EntityType STRIDER = EntityTypeImpl.get("strider");
 
+    EntityType SULFUR_CUBE = EntityTypeImpl.get("sulfur_cube");
+
     EntityType TADPOLE = EntityTypeImpl.get("tadpole");
 
     EntityType TEXT_DISPLAY = EntityTypeImpl.get("text_display");

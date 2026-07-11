@@ -7,7 +7,7 @@ import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.Nullable;
 
 public class EndermanMeta extends MonsterMeta {
-    public EndermanMeta(Entity entity, MetadataHolder metadata) {
+    public EndermanMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

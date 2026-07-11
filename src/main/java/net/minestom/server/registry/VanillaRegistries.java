@@ -1,14 +1,17 @@
 package net.minestom.server.registry;
 
+import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.dialog.Dialog;
+import net.minestom.server.instance.block.predicate.DataComponentPredicate;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.*;
 import net.minestom.server.entity.metadata.animal.tameable.CatSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
+import net.minestom.server.entity.metadata.cube.SulfurCubeArchetype;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
@@ -27,6 +30,7 @@ final class VanillaRegistries implements Registries {
     private final DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects;
     private final DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects;
     private final DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects;
+    private final DynamicRegistry<Codec<? extends DataComponentPredicate>> componentPredicateTypes;
 
     private final DynamicRegistry<ChatType> chatType;
     private final DynamicRegistry<Dialog> dialog;
@@ -54,6 +58,7 @@ final class VanillaRegistries implements Registries {
     private final DynamicRegistry<ZombieNautilusVariant> zombieNautilusVariant;
     private final DynamicRegistry<WorldClock> worldClock;
     private final DynamicRegistry<Timeline> timeline;
+    private final DynamicRegistry<SulfurCubeArchetype> sulfurCubeArchetype;
 
     VanillaRegistries() {
         // The order of initialization here is relevant, we must load the enchantment util registries before the vanilla data is loaded.
@@ -63,6 +68,7 @@ final class VanillaRegistries implements Registries {
         this.enchantmentValueEffects = ValueEffect.createDefaultRegistry();
         this.enchantmentEntityEffects = EntityEffect.createDefaultRegistry();
         this.enchantmentLocationEffects = LocationEffect.createDefaultRegistry();
+        this.componentPredicateTypes = DataComponentPredicate.createDefaultRegistry();
 
         this.chatType = ChatType.createDefaultRegistry();
         this.dialog = Dialog.createDefaultRegistry(this);
@@ -90,6 +96,7 @@ final class VanillaRegistries implements Registries {
         this.worldClock = WorldClock.createDefaultRegistry();
         this.timeline = Timeline.createDefaultRegistry(this);
         this.dimensionType = DimensionType.createDefaultRegistry(this); // depends on timelines
+        this.sulfurCubeArchetype = SulfurCubeArchetype.createDefaultRegistry(this);
 
         // Quite a hack because materials are a static registry, and can be loaded before but are cyclic on components.
         // So we break the loop and bind them here
@@ -229,6 +236,11 @@ final class VanillaRegistries implements Registries {
     }
 
     @Override
+    public DynamicRegistry<SulfurCubeArchetype> sulfurCubeArchetype() {
+        return sulfurCubeArchetype;
+    }
+
+    @Override
     public DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
         return enchantmentLevelBasedValues;
     }
@@ -246,5 +258,10 @@ final class VanillaRegistries implements Registries {
     @Override
     public DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
         return enchantmentLocationEffects;
+    }
+
+    @Override
+    public DynamicRegistry<Codec<? extends DataComponentPredicate>> componentPredicateTypes() {
+        return componentPredicateTypes;
     }
 }

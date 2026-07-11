@@ -14,9 +14,8 @@ public class EntityMetaTest {
         List<String> list = new ArrayList<>();
         for (var field : EntityTypes.class.getDeclaredFields()) {
             final EntityType entityType = (EntityType) field.get(this);
-            final String name = entityType.name();
-            if (MetadataHolder.ENTITY_META_SUPPLIER.get(name) == null) {
-                list.add(name);
+            if (MetadataHolder.ENTITY_META_SUPPLIER.get(entityType) == null) {
+                list.add(entityType.name());
             }
         }
         assertTrue(list.isEmpty(), "Missing meta for: " + list);

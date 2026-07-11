@@ -6,6 +6,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.registry.Registries;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
 import java.lang.ref.WeakReference;
+import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Consumer;
@@ -235,6 +237,12 @@ public class NetworkBufferTest {
         assertEquals(50L, buffer.read(LONG));
 
         assertEquals(9, buffer.readIndex());
+
+        // Ensure that the backing array gets modified
+        buffer.writeIndex(0);
+        buffer.write(LONG, 0L);
+        buffer.write(BYTE, (byte) 0);
+        assertArrayEquals(new byte[]{0, 0, 0, 0, 0, 0, 0, 0, 0}, array);
     }
 
     @Test
@@ -292,6 +300,158 @@ public class NetworkBufferTest {
     }
 
     @Test
+    public void readOnlyResizable() {
+        var buffer = NetworkBuffer.resizableBuffer(16);
+        buffer.write(INT, 42);
+
+        var readOnly = buffer.readOnly();
+        assertNotSame(buffer, readOnly);
+        assertTrue(readOnly.isReadOnly());
+        assertFalse(buffer.isReadOnly());
+
+        // Check that data is readable and identical
+        assertEquals(42, readOnly.read(INT));
+
+        // Mutating operations on read-only buffer should fail
+        assertThrows(IllegalArgumentException.class, () -> readOnly.write(INT, 24));
+        assertThrows(IllegalArgumentException.class, () -> readOnly.writeAt(0, INT, 24));
+        assertThrows(IllegalArgumentException.class, () -> readOnly.ensureWritable(4));
+        assertThrows(IllegalArgumentException.class, () -> readOnly.resize(32));
+        assertThrows(IllegalArgumentException.class, readOnly::compact);
+
+        // Verify that the original buffer's indices/content are unaffected by readOnly read
+        assertEquals(4, buffer.writeIndex());
+        assertEquals(0, buffer.readIndex());
+        assertEquals(42, buffer.read(INT));
+    }
+
+    @Test
+    public void readOnlyStatic() {
+        var buffer = NetworkBuffer.staticBuffer(16);
+        buffer.write(INT, 100);
+
+        var readOnly = buffer.readOnly();
+        assertTrue(readOnly.isReadOnly());
+        assertEquals(100, readOnly.read(INT));
+
+        assertThrows(IllegalArgumentException.class, () -> readOnly.write(INT, 200));
+    }
+
+    @Test
+    public void readOnlyWrappedWritableSegment() {
+        try (var arena = Arena.ofConfined()) {
+            final MemorySegment segment = arena.allocate(16);
+            var buffer = NetworkBuffer.wrap(segment, 0L, 0L);
+            buffer.write(INT, 500);
+
+            var readOnly = buffer.readOnly();
+            assertTrue(readOnly.isReadOnly());
+            assertEquals(500, readOnly.read(INT));
+
+            // Verify mutating backing segment through readOnly throws
+            assertThrows(IllegalArgumentException.class, () -> readOnly.write(INT, 600));
+            assertThrows(IllegalArgumentException.class, () -> readOnly.writeAt(0, INT, 600));
+
+            // Verify the backing segment was not modified by the failed writes
+            assertEquals(500, buffer.readAt(0, INT));
+
+            // Verify original writeable buffer is still modifiable and modifies backing segment
+            buffer.writeAt(0, INT, 600);
+            assertEquals(600, buffer.readAt(0, INT));
+        }
+    }
+
+    @Test
+    public void readOnlyWrappedReadOnlySegment() {
+        try (var arena = Arena.ofConfined()) {
+            final MemorySegment segment = arena.allocate(16);
+            segment.set(ValueLayout.JAVA_INT_UNALIGNED.withOrder(ByteOrder.BIG_ENDIAN), 0, 777);
+
+            final MemorySegment readOnlySegment = segment.asReadOnly();
+            var buffer = NetworkBuffer.wrap(readOnlySegment, 0L, 4L);
+            assertTrue(buffer.isReadOnly());
+
+            var readOnly = buffer.readOnly();
+            assertTrue(readOnly.isReadOnly());
+            assertEquals(777, readOnly.read(INT));
+
+            assertThrows(IllegalArgumentException.class, () -> readOnly.write(INT, 888));
+        }
+    }
+
+    @Test
+    public void sliceBasic() {
+        var buffer = NetworkBuffer.staticBuffer(16);
+        buffer.write(INT, 10);
+        buffer.write(INT, 20);
+        buffer.write(INT, 30);
+        buffer.write(INT, 40);
+
+        // Slice containing elements 20 and 30
+        var slice = buffer.slice(4, 8, 0, 8);
+        assertEquals(8, slice.capacity());
+        assertEquals(0, slice.readIndex());
+        assertEquals(8, slice.writeIndex());
+
+        // Read from slice
+        assertEquals(20, slice.read(INT));
+        assertEquals(30, slice.read(INT));
+        assertEquals(8, slice.readIndex());
+
+        // Write relative to slice offset
+        slice.writeAt(4, INT, 99);
+        assertEquals(99, slice.readAt(4, INT));
+        assertEquals(99, buffer.readAt(8, INT));
+    }
+
+    @Test
+    public void sliceReadOnly() {
+        var buffer = NetworkBuffer.staticBuffer(16);
+        buffer.write(INT, 10);
+
+        // Slicing a read only buffer
+        var readOnlyBuffer = buffer.readOnly();
+        var slice1 = readOnlyBuffer.slice(0, 4, 0, 4);
+        assertTrue(slice1.isReadOnly());
+        assertEquals(10, slice1.read(INT));
+        assertThrows(IllegalArgumentException.class, () -> slice1.write(INT, 20));
+
+        // Slicing a writable buffer and then making the slice read only
+        var slice2 = buffer.slice(0, 4, 0, 4).readOnly();
+        assertTrue(slice2.isReadOnly());
+        assertEquals(10, slice2.read(INT));
+        assertThrows(IllegalArgumentException.class, () -> slice2.write(INT, 20));
+    }
+
+    @Test
+    public void sliceDummy() {
+        var dummy = NetworkBufferImpl.dummy(null);
+        assertThrows(IllegalArgumentException.class, () -> dummy.slice(0, 0, 0, 0));
+    }
+
+    @Test
+    public void sliceOutOfBounds() {
+        var buffer = NetworkBuffer.staticBuffer(16);
+        assertThrows(IndexOutOfBoundsException.class, () -> buffer.slice(10, 8, 0, 8));
+        assertThrows(IndexOutOfBoundsException.class, () -> buffer.slice(-1, 8, 0, 8));
+        assertThrows(IndexOutOfBoundsException.class, () -> buffer.slice(0, -1, 0, 0));
+    }
+
+    @Test
+    public void sliceRegistries() {
+        var registries = Registries.vanilla();
+        var buffer = NetworkBuffer.staticBuffer(16, registries);
+
+        var slice = buffer.slice(0, 16, 0, 16);
+        assertSame(registries, slice.registries());
+
+        // Changing registry on slice doesn't affect parent
+        slice.registries(null);
+        assertNull(slice.registries());
+        assertSame(registries, buffer.registries());
+    }
+
+    @Test
     public void sizeOfPrimitives() {
         assertEquals(1, BYTE.sizeOf((byte) 1));
         assertEquals(2, SHORT.sizeOf((short) 1));
@@ -333,11 +493,11 @@ public class NetworkBufferTest {
             }
         };
 
-        assertThrows(UnsupportedOperationException.class, () -> fn.apply(buffer -> buffer.resize(2)).sizeOf(1));
-        assertThrows(UnsupportedOperationException.class, () -> fn.apply(buffer -> buffer.read(INT)).sizeOf(1));
-        assertThrows(UnsupportedOperationException.class, () -> fn.apply(buffer -> buffer.readAt(0, INT)).sizeOf(1));
-        assertThrows(UnsupportedOperationException.class, () -> fn.apply(NetworkBuffer::compact).sizeOf(1));
-        assertThrows(UnsupportedOperationException.class, () -> fn.apply(buffer -> buffer.copy(0, 0, 0, 0)).sizeOf(1));
+        assertThrows(IllegalArgumentException.class, () -> fn.apply(buffer -> buffer.resize(2)).sizeOf(1));
+        assertThrows(IllegalArgumentException.class, () -> fn.apply(buffer -> buffer.read(INT)).sizeOf(1));
+        assertThrows(IllegalArgumentException.class, () -> fn.apply(buffer -> buffer.readAt(0, INT)).sizeOf(1));
+        assertThrows(IllegalArgumentException.class, () -> fn.apply(NetworkBuffer::compact).sizeOf(1));
+        assertThrows(IllegalArgumentException.class, () -> fn.apply(buffer -> buffer.copy(0, 0, 0, 0)).sizeOf(1));
     }
 
     @Test

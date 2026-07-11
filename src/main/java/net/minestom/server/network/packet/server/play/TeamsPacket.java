@@ -1,20 +1,22 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.ComponentHolder;
+import net.minestom.server.color.TeamColor;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.UnaryOperator;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.STRING;
+import static net.minestom.server.network.NetworkBuffer.Tagged;
 
 /**
  * The packet creates or updates teams
@@ -23,7 +25,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
     public static final int MAX_MEMBERS = 16384;
 
     private static final NetworkBuffer.Type<Action> ACTION_NETWORK_TYPE = Tagged(
-            NetworkBuffer.BYTE, action -> (byte) action.id(),
+            NetworkBuffer.BYTE, Action::id,
             Map.of(
                     (byte) 0, CreateTeamAction.SERIALIZER,
                     (byte) 1, RemoveTeamAction.SERIALIZER,
@@ -54,122 +56,110 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         );
     }
 
-    public sealed interface Action permits CreateTeamAction, RemoveTeamAction, UpdateTeamAction, AddEntitiesToTeamAction, RemoveEntitiesToTeamAction {
-        int id();
+    public record Settings(
+            Component displayName,
+            Component teamPrefix,
+            Component teamSuffix,
+            NameTagVisibility nameTagVisibility,
+            CollisionRule collisionRule,
+            @Nullable TeamColor color,
+            byte friendlyFlags
+    ) implements ComponentHolder<Settings> {
+        public static final NetworkBuffer.Type<Settings> SERIALIZER = NetworkBufferTemplate.template(
+                NetworkBuffer.COMPONENT, Settings::displayName,
+                NetworkBuffer.COMPONENT, Settings::teamPrefix,
+                NetworkBuffer.COMPONENT, Settings::teamSuffix,
+                NameTagVisibility.NETWORK_TYPE, Settings::nameTagVisibility,
+                CollisionRule.NETWORK_TYPE, Settings::collisionRule,
+                TeamColor.NETWORK_TYPE.optional(), Settings::color,
+                NetworkBuffer.BYTE, Settings::friendlyFlags,
+                Settings::new);
+
+        @Override
+        public Collection<Component> components() {
+            return List.of(this.displayName, this.teamPrefix, this.teamSuffix);
+        }
+
+        @Override
+        public Settings copyWithOperator(UnaryOperator<Component> operator) {
+            return new Settings(
+                    operator.apply(this.displayName),
+                    operator.apply(this.teamPrefix),
+                    operator.apply(this.teamSuffix),
+                    this.nameTagVisibility,
+                    this.collisionRule,
+                    this.color,
+                    this.friendlyFlags
+            );
+        }
     }
 
-    public record CreateTeamAction(Component displayName, byte friendlyFlags,
-                                   NameTagVisibility nameTagVisibility, CollisionRule collisionRule,
-                                   NamedTextColor teamColor, Component teamPrefix, Component teamSuffix,
-                                   List<String> entities) implements Action, ComponentHolder<CreateTeamAction> {
+    public sealed interface Action permits CreateTeamAction, RemoveTeamAction, UpdateTeamAction, AddEntitiesToTeamAction, RemoveEntitiesToTeamAction {
+        @ApiStatus.Internal
+        @ApiStatus.OverrideOnly
+        byte id();
+    }
+
+    public record CreateTeamAction(
+            Settings settings,
+            List<String> entities
+    ) implements Action, ComponentHolder<CreateTeamAction> {
         public CreateTeamAction {
             entities = List.copyOf(entities);
         }
 
-        public static final NetworkBuffer.Type<CreateTeamAction> SERIALIZER = new Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, CreateTeamAction value) {
-                buffer.write(COMPONENT, value.displayName);
-                buffer.write(BYTE, value.friendlyFlags);
-                buffer.write(NameTagVisibility.NETWORK_TYPE, value.nameTagVisibility);
-                buffer.write(CollisionRule.NETWORK_TYPE, value.collisionRule);
-                buffer.write(VAR_INT, AdventurePacketConvertor.getNamedTextColorValue(value.teamColor));
-                buffer.write(COMPONENT, value.teamPrefix);
-                buffer.write(COMPONENT, value.teamSuffix);
-                buffer.write(STRING.list(), value.entities);
-            }
-
-            @Override
-            public CreateTeamAction read(NetworkBuffer buffer) {
-                return new CreateTeamAction(buffer.read(COMPONENT), buffer.read(BYTE),
-                        buffer.read(NameTagVisibility.NETWORK_TYPE), buffer.read(CollisionRule.NETWORK_TYPE),
-                        AdventurePacketConvertor.getNamedTextColor(buffer.read(VAR_INT)), buffer.read(COMPONENT), buffer.read(COMPONENT),
-                        buffer.read(STRING.list(MAX_MEMBERS)));
-            }
-        };
+        public static final NetworkBuffer.Type<CreateTeamAction> SERIALIZER = NetworkBufferTemplate.template(
+                Settings.SERIALIZER, CreateTeamAction::settings,
+                STRING.list(MAX_MEMBERS), CreateTeamAction::entities,
+                CreateTeamAction::new
+        );
 
         @Override
-        public int id() {
+        public byte id() {
             return 0;
         }
 
         @Override
         public Collection<Component> components() {
-            return List.of(this.displayName, this.teamPrefix, this.teamSuffix);
+            return settings.components();
         }
 
         @Override
         public CreateTeamAction copyWithOperator(UnaryOperator<Component> operator) {
-            return new CreateTeamAction(
-                    operator.apply(this.displayName),
-                    this.friendlyFlags,
-                    this.nameTagVisibility,
-                    this.collisionRule,
-                    this.teamColor,
-                    operator.apply(this.teamPrefix),
-                    operator.apply(this.teamSuffix),
-                    entities
-            );
+            return new CreateTeamAction(settings.copyWithOperator(operator), entities);
         }
     }
 
     public record RemoveTeamAction() implements Action {
-        public static final NetworkBuffer.Type<RemoveTeamAction> SERIALIZER = NetworkBufferTemplate.template(new RemoveTeamAction());
+        public static final NetworkBuffer.Type<RemoveTeamAction> SERIALIZER = NetworkBufferTemplate.template(
+                new RemoveTeamAction());
 
         @Override
-        public int id() {
+        public byte id() {
             return 1;
         }
     }
 
-    public record UpdateTeamAction(Component displayName, byte friendlyFlags,
-                                   NameTagVisibility nameTagVisibility, CollisionRule collisionRule,
-                                   NamedTextColor teamColor,
-                                   Component teamPrefix,
-                                   Component teamSuffix) implements Action, ComponentHolder<UpdateTeamAction> {
+    public record UpdateTeamAction(Settings settings) implements Action, ComponentHolder<UpdateTeamAction> {
 
-        public static final NetworkBuffer.Type<UpdateTeamAction> SERIALIZER = new Type<>() {
-            @Override
-            public void write(NetworkBuffer buffer, UpdateTeamAction value) {
-                buffer.write(COMPONENT, value.displayName);
-                buffer.write(BYTE, value.friendlyFlags);
-                buffer.write(NameTagVisibility.NETWORK_TYPE, value.nameTagVisibility);
-                buffer.write(CollisionRule.NETWORK_TYPE, value.collisionRule);
-                buffer.write(VAR_INT, AdventurePacketConvertor.getNamedTextColorValue(value.teamColor));
-                buffer.write(COMPONENT, value.teamPrefix);
-                buffer.write(COMPONENT, value.teamSuffix);
-            }
-
-            @Override
-            public UpdateTeamAction read(NetworkBuffer buffer) {
-                return new UpdateTeamAction(buffer.read(COMPONENT), buffer.read(BYTE),
-                        buffer.read(NameTagVisibility.NETWORK_TYPE), buffer.read(CollisionRule.NETWORK_TYPE),
-                        AdventurePacketConvertor.getNamedTextColor(buffer.read(VAR_INT)),
-                        buffer.read(COMPONENT), buffer.read(COMPONENT));
-            }
-        };
+        public static final NetworkBuffer.Type<UpdateTeamAction> SERIALIZER = NetworkBufferTemplate.template(
+                Settings.SERIALIZER, UpdateTeamAction::settings,
+                UpdateTeamAction::new
+        );
 
         @Override
-        public int id() {
+        public byte id() {
             return 2;
         }
 
         @Override
         public Collection<Component> components() {
-            return List.of(this.displayName, this.teamPrefix, this.teamSuffix);
+            return settings.components();
         }
 
         @Override
         public UpdateTeamAction copyWithOperator(UnaryOperator<Component> operator) {
-            return new UpdateTeamAction(
-                    operator.apply(this.displayName),
-                    this.friendlyFlags,
-                    this.nameTagVisibility,
-                    this.collisionRule,
-                    this.teamColor,
-                    operator.apply(this.teamPrefix),
-                    operator.apply(this.teamSuffix)
-            );
+            return new UpdateTeamAction(settings.copyWithOperator(operator));
         }
     }
 
@@ -188,7 +178,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         );
 
         @Override
-        public int id() {
+        public byte id() {
             return 3;
         }
     }
@@ -208,7 +198,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         );
 
         @Override
-        public int id() {
+        public byte id() {
             return 4;
         }
     }
@@ -234,7 +224,8 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
          */
         HIDE_FOR_OWN_TEAM("hideForOwnTeam");
 
-        public static final NetworkBuffer.Type<NameTagVisibility> NETWORK_TYPE = NetworkBuffer.Enum(NameTagVisibility.class);
+        public static final NetworkBuffer.Type<NameTagVisibility> NETWORK_TYPE = NetworkBuffer.Enum(
+                NameTagVisibility.class);
 
         /**
          * The identifier for the client

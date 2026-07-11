@@ -97,7 +97,7 @@ final class EntityView {
             }
         }
         entity.updateOldViewer(player);
-        final Set<Entity> passengers = entity.getPassengers();
+        final List<Entity> passengers = entity.getPassengers();
         if (!passengers.isEmpty()) {
             for (Entity passenger : passengers) {
                 if (passenger != player) hideEntityFromPlayer(passenger, player);
