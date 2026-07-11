@@ -389,6 +389,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final Vec globalVelocity = PositionUtils.getVelocityWithRelativeFlags(this.velocity, velocity, flags);
 
         final Runnable endCallback = () -> {
+            final float previousHeadRotation = this.headRotation;
             this.previousPosition = this.position;
             setPositionInternal(globalPosition, globalPosition.yaw());
             this.velocity = globalVelocity;
@@ -396,8 +397,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             if (this instanceof Player player)
                 player.synchronizePositionAfterTeleport(position, velocity, flags, shouldConfirm);
             else synchronizePosition();
-            if (!globalPosition.sameView(previousPosition))
-                synchronizeView();
+            if (headRotation != previousHeadRotation)
+                sendPacketToViewers(new EntityHeadLookPacket(getEntityId(), headRotation));
         };
 
         if (chunks != null && chunks.length > 0) {

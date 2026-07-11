@@ -69,7 +69,7 @@ public class EntityViewDirectionIntegrationTest {
 
         env.tick();
 
-        rotationTracker.assertCount(2);
+        rotationTracker.assertCount(1);
         headLookTracker.assertCount(2);
     }
 

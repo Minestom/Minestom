@@ -4,7 +4,6 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.EntityHeadLookPacket;
 import net.minestom.server.network.packet.server.play.EntityPositionSyncPacket;
-import net.minestom.server.network.packet.server.play.EntityRotationPacket;
 import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
@@ -66,10 +65,7 @@ public class EntityTeleportIntegrationTest {
                 packet -> assertEquals(teleportPosition, packet.position()));
         // Verify broadcast packet(s)
 
-        viewerTracker.assertCount(3);
-        viewerTracker.assertCount(1, EntityPositionSyncPacket.class::isInstance);
-        viewerTracker.assertCount(1, EntityRotationPacket.class::isInstance);
-        viewerTracker.assertCount(1, EntityHeadLookPacket.class::isInstance);
+        viewerTracker.assertCount(2);
         viewerTracker.assertAnyMatch(packet -> {
             if (!(packet instanceof EntityPositionSyncPacket syncPacket)) return false;
             assertEquals(player.getEntityId(), syncPacket.entityId());
@@ -78,16 +74,33 @@ public class EntityTeleportIntegrationTest {
             return true;
         });
         viewerTracker.assertAnyMatch(packet -> {
-            if (!(packet instanceof EntityRotationPacket rotationPacket)) return false;
-            assertEquals(player.getEntityId(), rotationPacket.entityId());
-            assertEquals(teleportPosition.yaw(), rotationPacket.yaw());
-            assertEquals(teleportPosition.pitch(), rotationPacket.pitch());
-            return true;
-        });
-        viewerTracker.assertAnyMatch(packet -> {
             if (!(packet instanceof EntityHeadLookPacket headLookPacket)) return false;
             assertEquals(player.getEntityId(), headLookPacket.entityId());
             assertEquals(teleportPosition.yaw(), headLookPacket.yaw());
+            return true;
+        });
+    }
+
+    @Test
+    public void teleportResetsIndependentHeadRotation(Env env) {
+        var instance = env.createFlatInstance();
+        var entity = new Entity(EntityTypes.ZOMBIE);
+        entity.setInstance(instance, new Pos(0, 42, 0)).join();
+
+        var connection = env.createConnection();
+        connection.connect(instance, new Pos(0, 42, 0));
+        entity.setView(0, 0, 90);
+
+        var tracker = connection.trackIncoming(ServerPacket.class);
+        entity.teleport(new Pos(1, 42, 1)).join();
+
+        tracker.assertCount(2);
+        tracker.assertCount(1, EntityPositionSyncPacket.class::isInstance);
+        tracker.assertCount(1, EntityHeadLookPacket.class::isInstance);
+        tracker.assertAnyMatch(packet -> {
+            if (!(packet instanceof EntityHeadLookPacket headLookPacket)) return false;
+            assertEquals(entity.getEntityId(), headLookPacket.entityId());
+            assertEquals(0, headLookPacket.yaw());
             return true;
         });
     }
