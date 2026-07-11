@@ -4,9 +4,9 @@ import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -27,7 +27,7 @@ public sealed interface PigVariant extends PigVariants permits PigVariantImpl {
      */
     @ApiStatus.Internal
     static DynamicRegistry<PigVariant> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("pig_variant"), REGISTRY_CODEC, RegistryData.Resource.PIG_VARIANTS);
+        return DynamicRegistry.create(BuiltinRegistries.PIG_VARIANT, REGISTRY_CODEC);
     }
 
     static PigVariant create(Model model, Key assetId, Key babyAssetId) {

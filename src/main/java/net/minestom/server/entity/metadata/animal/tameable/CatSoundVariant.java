@@ -1,12 +1,11 @@
 package net.minestom.server.entity.metadata.animal.tameable;
 
-import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.ApiStatus;
@@ -30,7 +29,7 @@ public sealed interface CatSoundVariant extends CatSoundVariants permits CatSoun
      */
     @ApiStatus.Internal
     static DynamicRegistry<CatSoundVariant> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("cat_sound_variant"), REGISTRY_CODEC, RegistryData.Resource.CAT_SOUND_VARIANTS);
+        return DynamicRegistry.create(BuiltinRegistries.CAT_SOUND_VARIANT, REGISTRY_CODEC);
     }
 
     static CatSoundVariant create(

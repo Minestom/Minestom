@@ -2,13 +2,15 @@ package net.minestom.server.instance.gamerule;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
+import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.RegistryKey;
 
 import java.util.Objects;
 
 record GameRuleImpl<T>(Key key, int id, T defaultValue) implements GameRule<T> {
-    static final Registry<GameRule<?>> REGISTRY = RegistryData.createStaticRegistry(Key.key("game_rule"), GameRuleImpl::parse);
+    static final Registry<GameRule<?>> REGISTRY = RegistryData.createStaticRegistry(BuiltinRegistries.GAME_RULE, GameRuleImpl::parse);
 
     // default is typed as String
     static GameRule<?> parse(@KeyPattern String namespace, RegistryData.Properties properties) {
@@ -22,7 +24,7 @@ record GameRuleImpl<T>(Key key, int id, T defaultValue) implements GameRule<T> {
     }
 
     @SuppressWarnings("unchecked")
-    static <T> GameRule<T> get(@KeyPattern String key) {
-        return (GameRule<T>) Objects.requireNonNull(REGISTRY.get(Key.key(key)));
+    static <T> GameRule<T> get(RegistryKey<GameRule<T>> key) {
+        return (GameRule<T>) Objects.requireNonNull(REGISTRY.get(key.key()));
     }
 }

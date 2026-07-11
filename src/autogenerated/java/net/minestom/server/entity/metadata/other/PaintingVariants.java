@@ -9,9 +9,9 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface PaintingVariants permits PaintingVariant {
-    RegistryKey<PaintingVariant> WITHER = RegistryKey.unsafeOf("wither");
-
     RegistryKey<PaintingVariant> BOUQUET = RegistryKey.unsafeOf("bouquet");
+
+    RegistryKey<PaintingVariant> WITHER = RegistryKey.unsafeOf("wither");
 
     RegistryKey<PaintingVariant> ALBAN = RegistryKey.unsafeOf("alban");
 
@@ -23,25 +23,25 @@ sealed interface PaintingVariants permits PaintingVariant {
 
     RegistryKey<PaintingVariant> FINDING = RegistryKey.unsafeOf("finding");
 
+    RegistryKey<PaintingVariant> BAROQUE = RegistryKey.unsafeOf("baroque");
+
     RegistryKey<PaintingVariant> ORB = RegistryKey.unsafeOf("orb");
 
     RegistryKey<PaintingVariant> ENDBOSS = RegistryKey.unsafeOf("endboss");
-
-    RegistryKey<PaintingVariant> BAROQUE = RegistryKey.unsafeOf("baroque");
 
     RegistryKey<PaintingVariant> AZTEC2 = RegistryKey.unsafeOf("aztec2");
 
     RegistryKey<PaintingVariant> SUNFLOWERS = RegistryKey.unsafeOf("sunflowers");
 
-    RegistryKey<PaintingVariant> WASTELAND = RegistryKey.unsafeOf("wasteland");
-
     RegistryKey<PaintingVariant> CHANGING = RegistryKey.unsafeOf("changing");
+
+    RegistryKey<PaintingVariant> WASTELAND = RegistryKey.unsafeOf("wasteland");
 
     RegistryKey<PaintingVariant> DONKEY_KONG = RegistryKey.unsafeOf("donkey_kong");
 
-    RegistryKey<PaintingVariant> POOL = RegistryKey.unsafeOf("pool");
-
     RegistryKey<PaintingVariant> BUST = RegistryKey.unsafeOf("bust");
+
+    RegistryKey<PaintingVariant> POOL = RegistryKey.unsafeOf("pool");
 
     RegistryKey<PaintingVariant> PIGSCENE = RegistryKey.unsafeOf("pigscene");
 
@@ -61,9 +61,9 @@ sealed interface PaintingVariants permits PaintingVariant {
 
     RegistryKey<PaintingVariant> PRAIRIE_RIDE = RegistryKey.unsafeOf("prairie_ride");
 
-    RegistryKey<PaintingVariant> PASSAGE = RegistryKey.unsafeOf("passage");
-
     RegistryKey<PaintingVariant> FERN = RegistryKey.unsafeOf("fern");
+
+    RegistryKey<PaintingVariant> PASSAGE = RegistryKey.unsafeOf("passage");
 
     RegistryKey<PaintingVariant> LOWMIST = RegistryKey.unsafeOf("lowmist");
 
@@ -89,9 +89,9 @@ sealed interface PaintingVariants permits PaintingVariant {
 
     RegistryKey<PaintingVariant> GRAHAM = RegistryKey.unsafeOf("graham");
 
-    RegistryKey<PaintingVariant> MEDITATIVE = RegistryKey.unsafeOf("meditative");
-
     RegistryKey<PaintingVariant> DENNIS = RegistryKey.unsafeOf("dennis");
+
+    RegistryKey<PaintingVariant> MEDITATIVE = RegistryKey.unsafeOf("meditative");
 
     RegistryKey<PaintingVariant> KEBAB = RegistryKey.unsafeOf("kebab");
 

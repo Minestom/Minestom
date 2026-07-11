@@ -1,6 +1,5 @@
 package net.minestom.server.entity.metadata.cube;
 
-import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.entity.attribute.Attribute;
@@ -39,9 +38,7 @@ public sealed interface SulfurCubeArchetype extends SulfurCubeArchetypes permits
     @ApiStatus.Internal
     static DynamicRegistry<SulfurCubeArchetype> createDefaultRegistry(Registries registries) {
         return DynamicRegistry.create(
-                Key.key("sulfur_cube_archetype"),
-                REGISTRY_CODEC, registries,
-                RegistryData.Resource.SULFUR_CUBE_ARCHETYPES);
+                BuiltinRegistries.SULFUR_CUBE_ARCHETYPE, REGISTRY_CODEC, registries);
     }
 
     static SulfurCubeArchetype create(

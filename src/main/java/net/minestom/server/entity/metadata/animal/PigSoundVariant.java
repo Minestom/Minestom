@@ -1,12 +1,11 @@
 package net.minestom.server.entity.metadata.animal;
 
-import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.ApiStatus;
@@ -30,7 +29,7 @@ public sealed interface PigSoundVariant extends PigSoundVariants permits PigSoun
      */
     @ApiStatus.Internal
     static DynamicRegistry<PigSoundVariant> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("pig_sound_variant"), REGISTRY_CODEC, RegistryData.Resource.PIG_SOUND_VARIANTS);
+        return DynamicRegistry.create(BuiltinRegistries.PIG_SOUND_VARIANT, REGISTRY_CODEC);
     }
 
     static PigSoundVariant create(

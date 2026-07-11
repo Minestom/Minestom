@@ -21,9 +21,9 @@ sealed interface WolfVariants permits WolfVariant {
 
     RegistryKey<WolfVariant> ASHEN = RegistryKey.unsafeOf("ashen");
 
-    RegistryKey<WolfVariant> WOODS = RegistryKey.unsafeOf("woods");
-
     RegistryKey<WolfVariant> RUSTY = RegistryKey.unsafeOf("rusty");
+
+    RegistryKey<WolfVariant> WOODS = RegistryKey.unsafeOf("woods");
 
     RegistryKey<WolfVariant> PALE = RegistryKey.unsafeOf("pale");
 }

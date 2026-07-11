@@ -1,20 +1,19 @@
 package net.minestom.server.world.timeline;
 
-import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.EaseFunction;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.validate.Check;
-import net.minestom.server.world.clock.ClockTimeMarker;
-import net.minestom.server.world.clock.WorldClock;
 import net.minestom.server.world.attribute.EnvironmentAttribute;
 import net.minestom.server.world.attribute.EnvironmentAttribute.Modifier;
+import net.minestom.server.world.clock.ClockTimeMarker;
+import net.minestom.server.world.clock.WorldClock;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
@@ -59,8 +58,7 @@ public sealed interface Timeline extends Timelines permits TimelineImpl {
     /// @see net.minestom.server.MinecraftServer to get an existing instance of the registry
     @ApiStatus.Internal
     static DynamicRegistry<Timeline> createDefaultRegistry(Registries registries) {
-        return DynamicRegistry.create(Key.key("timeline"),
-                REGISTRY_CODEC, registries, RegistryData.Resource.TIMELINES);
+        return DynamicRegistry.create(BuiltinRegistries.TIMELINE, REGISTRY_CODEC, registries);
     }
 
     record Track<T, Arg>(

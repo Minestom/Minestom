@@ -1,16 +1,9 @@
 package net.minestom.codegen;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.palantir.javapoet.AnnotationSpec;
-import com.palantir.javapoet.ClassName;
-import com.palantir.javapoet.CodeBlock;
-import com.palantir.javapoet.JavaFile;
-import com.palantir.javapoet.TypeSpec;
+import com.google.gson.*;
+import com.palantir.javapoet.*;
 import net.minestom.data.MinestomData;
+import org.jetbrains.annotations.Nullable;
 
 import javax.lang.model.SourceVersion;
 import java.io.IOException;
@@ -19,11 +12,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.StreamSupport;
 
 final class Codegen {
@@ -40,11 +29,16 @@ final class Codegen {
     }
 
     InputStream resource(String name) {
-        return Objects.requireNonNull(MinestomData.resource(name), "Cannot find resource: %s".formatted(name));
+        return Objects.requireNonNull(MinestomData.resource(name + ".json"), "Cannot find resource: %s.json".formatted(name));
     }
 
     JsonObject objectResource(String name) {
         return parse(resource(name), JsonObject.class);
+    }
+
+    @Nullable JsonObject optionalObjectResource(String name) {
+        final InputStream resource = MinestomData.resource(name + ".json");
+        return resource != null ? parse(resource, JsonObject.class) : null;
     }
 
     JsonArray arrayResource(String name) {
@@ -68,6 +62,7 @@ final class Codegen {
         String constant = namespaceShort(namespace)
                 .replaceFirst("brigadier:", "")
                 .replace(".", "_")
+                .replace("/", "_")
                 .toUpperCase(Locale.ROOT);
         if (!SourceVersion.isName(constant)) {
             constant = "_" + constant;

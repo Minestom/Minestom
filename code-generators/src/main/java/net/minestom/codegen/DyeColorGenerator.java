@@ -88,7 +88,7 @@ record DyeColorGenerator(Codegen codegen) {
                         .build()
         ));
 
-        for (JsonObject dyeColorObject : codegen.orderedObjects("dye_colors.json")) {
+        for (JsonObject dyeColorObject : codegen.orderedObjects("dye_colors")) {
             String dyeColorName = dyeColorObject.get("name").getAsString();
             dyeColorEnum.addEnumConstant(codegen.constantName(dyeColorName), TypeSpec.anonymousClassBuilder(
                             "new $T(0x$L), new $T(0x$L), new $T(0x$L), $L",

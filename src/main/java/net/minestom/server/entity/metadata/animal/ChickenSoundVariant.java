@@ -1,12 +1,11 @@
 package net.minestom.server.entity.metadata.animal;
 
-import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.ApiStatus;
@@ -30,7 +29,7 @@ public sealed interface ChickenSoundVariant extends ChickenSoundVariants permits
      */
     @ApiStatus.Internal
     static DynamicRegistry<ChickenSoundVariant> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("chicken_sound_variant"), REGISTRY_CODEC, RegistryData.Resource.CHICKEN_SOUND_VARIANTS);
+        return DynamicRegistry.create(BuiltinRegistries.CHICKEN_SOUND_VARIANT, REGISTRY_CODEC);
     }
 
     static ChickenSoundVariant create(
