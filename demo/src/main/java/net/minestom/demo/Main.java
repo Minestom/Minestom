@@ -38,15 +38,16 @@ import java.util.Objects;
 
 public class Main {
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         System.setProperty("minestom.new-socket-write-lock", "true");
+        System.setProperty("minestom.registry.unsafe-ops", "true");
         MinecraftServer.setCompressionThreshold(0);
 
         MinecraftServer minecraftServer = MinecraftServer.init(new Auth.Offline());
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerBlockPlacementRule(new DripstonePlacementRule());
-        var beds = Block.values().stream().filter(block -> BlockEntityType.BED.equals(block.registry().blockEntityType())).toList();
+        var beds = Block.values().stream().filter(block -> block.key().value().contains("bed")).toList();
         beds.forEach(block -> blockManager.registerBlockPlacementRule(new BedPlacementRule(block)));
         blockManager.registerHandler(TestBlockHandler.INSTANCE.getKey(), () -> TestBlockHandler.INSTANCE);
 
@@ -94,10 +95,9 @@ public class Main {
         commandManager.register(new SleepCommand());
         commandManager.register(new MinecartCommand());
         commandManager.register(new BelowNameCommand());
+        commandManager.register(new TestBiomeAmbientParticleCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
-
-        MinecraftServer.getBenchmarkManager().enable(Duration.of(10, TimeUnit.SECOND));
 
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> System.out.println("Good night"));
 
@@ -125,7 +125,7 @@ public class Main {
             if (event.getConnection() != null) {
                 String ip = event.getConnection().getServerAddress();
                 builder = builder
-                        .sample("IP test: " + event.getConnection().getRemoteAddress().toString())
+                        .sample("IP test: " + event.getConnection().getRemoteAddress())
                         .sample("Connection Info:")
                         .sample(Component.text('-', NamedTextColor.DARK_GRAY)
                                 .append(Component.text(" IP: ", NamedTextColor.GRAY))

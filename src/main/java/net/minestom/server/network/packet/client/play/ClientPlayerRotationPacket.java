@@ -9,7 +9,7 @@ import static net.minestom.server.network.NetworkBuffer.FLOAT;
 import static net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket.FLAG_HORIZONTAL_COLLISION;
 import static net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket.FLAG_ON_GROUND;
 
-public record ClientPlayerRotationPacket(float yaw, float pitch, byte flags) implements ClientPacket {
+public record ClientPlayerRotationPacket(float yaw, float pitch, byte flags) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientPlayerRotationPacket> SERIALIZER = NetworkBufferTemplate.template(
             FLOAT, ClientPlayerRotationPacket::yaw,
             FLOAT, ClientPlayerRotationPacket::pitch,

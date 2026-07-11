@@ -40,6 +40,10 @@ public sealed interface Biome extends Biomes permits BiomeImpl {
         return new Builder();
     }
 
+    static Builder builder(Biome existing) {
+        return new Builder(existing);
+    }
+
     /**
      * <p>Creates a new registry for biomes, loading the vanilla trim biomes.</p>
      *
@@ -96,10 +100,20 @@ public sealed interface Biome extends Biomes permits BiomeImpl {
         private float temperature = 0.8f;
         private TemperatureModifier temperatureModifier = TemperatureModifier.NONE;
         private float downfall = 0.4f;
-        private EnvironmentAttributeMap.Builder attributes = EnvironmentAttributeMap.builder();
+        private final EnvironmentAttributeMap.Builder attributes;
         private BiomeEffects effects = BiomeEffects.DEFAULT;
 
         private Builder() {
+            attributes = EnvironmentAttributeMap.builder();
+        }
+
+        private Builder(Biome existing) {
+            hasPrecipitation = existing.hasPrecipitation();
+            temperature = existing.temperature();
+            temperatureModifier = existing.temperatureModifier();
+            downfall = existing.downfall();
+            attributes = EnvironmentAttributeMap.builder(existing.attributes());
+            effects = existing.effects();
         }
 
         @Contract(value = "_ -> this")

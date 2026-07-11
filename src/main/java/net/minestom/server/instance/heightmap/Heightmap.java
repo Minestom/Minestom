@@ -48,14 +48,17 @@ public abstract class Heightmap {
 
     public void refresh(int startY) {
         if (!needsRefresh) return;
-        synchronized (chunk) {
+        chunk.lockReadLock();
+        try {
             for (int x = 0; x < CHUNK_SIZE_X; x++) {
                 for (int z = 0; z < CHUNK_SIZE_Z; z++) {
                     refresh(x, z, startY);
                 }
             }
+            needsRefresh = false;
+        } finally {
+            chunk.unlockReadLock();
         }
-        needsRefresh = false;
     }
 
     public void refresh(int x, int z, int startY) {
@@ -147,7 +150,7 @@ public abstract class Heightmap {
      *                     container.
      * @return array of encoded heights.
      */
-    static long[] encode(short[] heights, int bitsPerEntry) {
+    public static long[] encode(short[] heights, int bitsPerEntry) {
         final int entriesPerLong = 64 / bitsPerEntry;
         // ceil(HeightsCount / entriesPerLong)
         final int len = (heights.length + entriesPerLong - 1) / entriesPerLong;

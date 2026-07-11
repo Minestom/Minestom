@@ -13,7 +13,6 @@ import java.util.List;
 
 import static net.minestom.server.command.builder.arguments.ArgumentType.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 @EnvTest
 public class CommandSuggestionIntegrationTest {
@@ -68,9 +67,7 @@ public class CommandSuggestionIntegrationTest {
         player.addPacketToQueue(new ClientTabCompletePacket(1, "foo 1"));
         player.interpretPacketQueue();
 
-        listener.assertSingle(tabCompletePacket -> {
-            assertEquals(List.of(new TabCompletePacket.Match("suggestion", null)), tabCompletePacket.matches());
-        });
+        listener.assertSingle(tabCompletePacket -> assertEquals(List.of(new TabCompletePacket.Match("suggestion", null)), tabCompletePacket.matches()));
     }
 
     @Test
@@ -83,12 +80,8 @@ public class CommandSuggestionIntegrationTest {
 
         var subCommand = new Command("bar");
 
-        var wordArg1 = Word("wordArg1").setSuggestionCallback((sender, context, suggestion) -> {
-            suggestion.addEntry(new SuggestionEntry("suggestionA"));
-        });
-        var wordArg2 = Word("wordArg2").setSuggestionCallback((sender, context, suggestion) -> {
-                    suggestion.addEntry(new SuggestionEntry("suggestionB"));
-                });
+        var wordArg1 = Word("wordArg1").setSuggestionCallback((sender, context, suggestion) -> suggestion.addEntry(new SuggestionEntry("suggestionA")));
+        var wordArg2 = Word("wordArg2").setSuggestionCallback((sender, context, suggestion) -> suggestion.addEntry(new SuggestionEntry("suggestionB")));
 
         subCommand.addSyntax((sender, context) -> {}, wordArg1, wordArg2);
 
@@ -102,9 +95,7 @@ public class CommandSuggestionIntegrationTest {
         player.addPacketToQueue(new ClientTabCompletePacket(1, "foo bar "));
         player.interpretPacketQueue();
 
-        listener.assertSingle(tabCompletePacket -> {
-            assertEquals(List.of(new TabCompletePacket.Match("suggestionA", null)), tabCompletePacket.matches());
-        });
+        listener.assertSingle(tabCompletePacket -> assertEquals(List.of(new TabCompletePacket.Match("suggestionA", null)), tabCompletePacket.matches()));
     }
 
     @Test
@@ -115,12 +106,8 @@ public class CommandSuggestionIntegrationTest {
 
         var command = new Command("foo");
 
-        var wordArg1 = Word("wordArg1").setSuggestionCallback((sender, context, suggestion) -> {
-            suggestion.addEntry(new SuggestionEntry("suggestionA"));
-        });
-        var wordArg2 = Word("wordArg2").setSuggestionCallback((sender, context, suggestion) -> {
-            suggestion.addEntry(new SuggestionEntry("suggestionB"));
-        });
+        var wordArg1 = Word("wordArg1").setSuggestionCallback((sender, context, suggestion) -> suggestion.addEntry(new SuggestionEntry("suggestionA")));
+        var wordArg2 = Word("wordArg2").setSuggestionCallback((sender, context, suggestion) -> suggestion.addEntry(new SuggestionEntry("suggestionB")));
 
         command.addSyntax((sender,context)->{}, Literal("literal1"), wordArg1);
 
@@ -132,8 +119,6 @@ public class CommandSuggestionIntegrationTest {
         player.addPacketToQueue(new ClientTabCompletePacket(1, "foo literal2 "));
         player.interpretPacketQueue();
 
-        listener.assertSingle(tabCompletePacket -> {
-            assertEquals(List.of(new TabCompletePacket.Match("suggestionB", null)), tabCompletePacket.matches());
-        });
+        listener.assertSingle(tabCompletePacket -> assertEquals(List.of(new TabCompletePacket.Match("suggestionB", null)), tabCompletePacket.matches()));
     }
 }

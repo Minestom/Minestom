@@ -8,7 +8,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import org.jetbrains.annotations.Nullable;
 
 public class VillagerMeta extends AbstractVillagerMeta {
-    public VillagerMeta(Entity entity, MetadataHolder metadata) {
+    public VillagerMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -18,6 +18,14 @@ public class VillagerMeta extends AbstractVillagerMeta {
 
     public void setVillagerData(VillagerData data) {
         metadata.set(MetadataDef.Villager.VARIANT, data);
+    }
+
+    public boolean isFinalized() {
+        return metadata.get(MetadataDef.Villager.IS_FINALIZED);
+    }
+
+    public void setFinalized(boolean value) {
+        metadata.set(MetadataDef.Villager.IS_FINALIZED, value);
     }
 
     @Override

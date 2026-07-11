@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.object.ObjectContents;
 import net.minestom.server.adventure.MinestomAdventure;
 import org.junit.jupiter.api.Test;
 
@@ -78,5 +79,35 @@ class ComponentCodecsTest {
                 ));
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void readObjectFallback() {
+        var input = CompoundBinaryTag.builder()
+                .putString("type", "object")
+                .putString("sprite", "missing")
+                .putString("fallback", "Missing")
+                .build();
+
+        var actual = ComponentCodecs.COMPONENT.decode(Transcoder.NBT, input).orElseThrow();
+        var expected = Component.object()
+                .contents(ObjectContents.sprite(Key.key("missing")))
+                .fallback(Component.text("Missing"))
+                .build();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void writeObjectFallback() {
+        var component = Component.object()
+                .contents(ObjectContents.sprite(Key.key("missing")))
+                .fallback(Component.text("Missing"))
+                .build();
+
+        var nbt = ComponentCodecs.COMPONENT.encode(Transcoder.NBT, component).orElseThrow();
+        var actual = ComponentCodecs.COMPONENT.decode(Transcoder.NBT, nbt).orElseThrow();
+
+        assertEquals(component, actual);
     }
 }

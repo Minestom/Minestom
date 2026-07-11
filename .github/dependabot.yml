@@ -1,7 +1,7 @@
 version: 2
 
 updates:
-    # For the master branch we want to not include major updates
+  # For the master branch we want to not include major updates
   - package-ecosystem: "gradle"
     directory: "/"
     schedule:
@@ -17,8 +17,8 @@ updates:
           - "patch"
     ignore:
       - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
-  # GH actions are often non breaking, just keep them up to date.
+        update-types: [ "version-update:semver-major" ]
+  # GH actions are often non-breaking, just keep them up to date.
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

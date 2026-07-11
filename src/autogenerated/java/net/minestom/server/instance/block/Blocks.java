@@ -323,6 +323,8 @@ sealed interface Blocks permits Block {
 
     Block DANDELION = BlockImpl.get("dandelion");
 
+    Block GOLDEN_DANDELION = BlockImpl.get("golden_dandelion");
+
     Block TORCHFLOWER = BlockImpl.get("torchflower");
 
     Block POPPY = BlockImpl.get("poppy");
@@ -852,6 +854,8 @@ sealed interface Blocks permits Block {
     Block POTTED_FERN = BlockImpl.get("potted_fern");
 
     Block POTTED_DANDELION = BlockImpl.get("potted_dandelion");
+
+    Block POTTED_GOLDEN_DANDELION = BlockImpl.get("potted_golden_dandelion");
 
     Block POTTED_POPPY = BlockImpl.get("potted_poppy");
 
@@ -1999,6 +2003,60 @@ sealed interface Blocks permits Block {
 
     Block CHISELED_TUFF_BRICKS = BlockImpl.get("chiseled_tuff_bricks");
 
+    Block SULFUR = BlockImpl.get("sulfur");
+
+    Block POTENT_SULFUR = BlockImpl.get("potent_sulfur");
+
+    Block SULFUR_SLAB = BlockImpl.get("sulfur_slab");
+
+    Block SULFUR_STAIRS = BlockImpl.get("sulfur_stairs");
+
+    Block SULFUR_WALL = BlockImpl.get("sulfur_wall");
+
+    Block POLISHED_SULFUR = BlockImpl.get("polished_sulfur");
+
+    Block POLISHED_SULFUR_SLAB = BlockImpl.get("polished_sulfur_slab");
+
+    Block POLISHED_SULFUR_STAIRS = BlockImpl.get("polished_sulfur_stairs");
+
+    Block POLISHED_SULFUR_WALL = BlockImpl.get("polished_sulfur_wall");
+
+    Block SULFUR_BRICKS = BlockImpl.get("sulfur_bricks");
+
+    Block SULFUR_BRICK_SLAB = BlockImpl.get("sulfur_brick_slab");
+
+    Block SULFUR_BRICK_STAIRS = BlockImpl.get("sulfur_brick_stairs");
+
+    Block SULFUR_BRICK_WALL = BlockImpl.get("sulfur_brick_wall");
+
+    Block CHISELED_SULFUR = BlockImpl.get("chiseled_sulfur");
+
+    Block CINNABAR = BlockImpl.get("cinnabar");
+
+    Block CINNABAR_SLAB = BlockImpl.get("cinnabar_slab");
+
+    Block CINNABAR_STAIRS = BlockImpl.get("cinnabar_stairs");
+
+    Block CINNABAR_WALL = BlockImpl.get("cinnabar_wall");
+
+    Block POLISHED_CINNABAR = BlockImpl.get("polished_cinnabar");
+
+    Block POLISHED_CINNABAR_SLAB = BlockImpl.get("polished_cinnabar_slab");
+
+    Block POLISHED_CINNABAR_STAIRS = BlockImpl.get("polished_cinnabar_stairs");
+
+    Block POLISHED_CINNABAR_WALL = BlockImpl.get("polished_cinnabar_wall");
+
+    Block CINNABAR_BRICKS = BlockImpl.get("cinnabar_bricks");
+
+    Block CINNABAR_BRICK_SLAB = BlockImpl.get("cinnabar_brick_slab");
+
+    Block CINNABAR_BRICK_STAIRS = BlockImpl.get("cinnabar_brick_stairs");
+
+    Block CINNABAR_BRICK_WALL = BlockImpl.get("cinnabar_brick_wall");
+
+    Block CHISELED_CINNABAR = BlockImpl.get("chiseled_cinnabar");
+
     Block CALCITE = BlockImpl.get("calcite");
 
     Block TINTED_GLASS = BlockImpl.get("tinted_glass");
@@ -2025,113 +2083,113 @@ sealed interface Blocks permits Block {
 
     Block OXIDIZED_COPPER = BlockImpl.get("oxidized_copper");
 
+    Block WAXED_COPPER_BLOCK = BlockImpl.get("waxed_copper_block");
+
+    Block WAXED_EXPOSED_COPPER = BlockImpl.get("waxed_exposed_copper");
+
+    Block WAXED_WEATHERED_COPPER = BlockImpl.get("waxed_weathered_copper");
+
+    Block WAXED_OXIDIZED_COPPER = BlockImpl.get("waxed_oxidized_copper");
+
     Block COPPER_ORE = BlockImpl.get("copper_ore");
 
     Block DEEPSLATE_COPPER_ORE = BlockImpl.get("deepslate_copper_ore");
 
-    Block OXIDIZED_CUT_COPPER = BlockImpl.get("oxidized_cut_copper");
-
-    Block WEATHERED_CUT_COPPER = BlockImpl.get("weathered_cut_copper");
+    Block CUT_COPPER = BlockImpl.get("cut_copper");
 
     Block EXPOSED_CUT_COPPER = BlockImpl.get("exposed_cut_copper");
 
-    Block CUT_COPPER = BlockImpl.get("cut_copper");
+    Block WEATHERED_CUT_COPPER = BlockImpl.get("weathered_cut_copper");
 
-    Block OXIDIZED_CHISELED_COPPER = BlockImpl.get("oxidized_chiseled_copper");
-
-    Block WEATHERED_CHISELED_COPPER = BlockImpl.get("weathered_chiseled_copper");
-
-    Block EXPOSED_CHISELED_COPPER = BlockImpl.get("exposed_chiseled_copper");
-
-    Block CHISELED_COPPER = BlockImpl.get("chiseled_copper");
-
-    Block WAXED_OXIDIZED_CHISELED_COPPER = BlockImpl.get("waxed_oxidized_chiseled_copper");
-
-    Block WAXED_WEATHERED_CHISELED_COPPER = BlockImpl.get("waxed_weathered_chiseled_copper");
-
-    Block WAXED_EXPOSED_CHISELED_COPPER = BlockImpl.get("waxed_exposed_chiseled_copper");
-
-    Block WAXED_CHISELED_COPPER = BlockImpl.get("waxed_chiseled_copper");
-
-    Block OXIDIZED_CUT_COPPER_STAIRS = BlockImpl.get("oxidized_cut_copper_stairs");
-
-    Block WEATHERED_CUT_COPPER_STAIRS = BlockImpl.get("weathered_cut_copper_stairs");
-
-    Block EXPOSED_CUT_COPPER_STAIRS = BlockImpl.get("exposed_cut_copper_stairs");
-
-    Block CUT_COPPER_STAIRS = BlockImpl.get("cut_copper_stairs");
-
-    Block OXIDIZED_CUT_COPPER_SLAB = BlockImpl.get("oxidized_cut_copper_slab");
-
-    Block WEATHERED_CUT_COPPER_SLAB = BlockImpl.get("weathered_cut_copper_slab");
-
-    Block EXPOSED_CUT_COPPER_SLAB = BlockImpl.get("exposed_cut_copper_slab");
-
-    Block CUT_COPPER_SLAB = BlockImpl.get("cut_copper_slab");
-
-    Block WAXED_COPPER_BLOCK = BlockImpl.get("waxed_copper_block");
-
-    Block WAXED_WEATHERED_COPPER = BlockImpl.get("waxed_weathered_copper");
-
-    Block WAXED_EXPOSED_COPPER = BlockImpl.get("waxed_exposed_copper");
-
-    Block WAXED_OXIDIZED_COPPER = BlockImpl.get("waxed_oxidized_copper");
-
-    Block WAXED_OXIDIZED_CUT_COPPER = BlockImpl.get("waxed_oxidized_cut_copper");
-
-    Block WAXED_WEATHERED_CUT_COPPER = BlockImpl.get("waxed_weathered_cut_copper");
-
-    Block WAXED_EXPOSED_CUT_COPPER = BlockImpl.get("waxed_exposed_cut_copper");
+    Block OXIDIZED_CUT_COPPER = BlockImpl.get("oxidized_cut_copper");
 
     Block WAXED_CUT_COPPER = BlockImpl.get("waxed_cut_copper");
 
-    Block WAXED_OXIDIZED_CUT_COPPER_STAIRS = BlockImpl.get("waxed_oxidized_cut_copper_stairs");
+    Block WAXED_EXPOSED_CUT_COPPER = BlockImpl.get("waxed_exposed_cut_copper");
 
-    Block WAXED_WEATHERED_CUT_COPPER_STAIRS = BlockImpl.get("waxed_weathered_cut_copper_stairs");
+    Block WAXED_WEATHERED_CUT_COPPER = BlockImpl.get("waxed_weathered_cut_copper");
 
-    Block WAXED_EXPOSED_CUT_COPPER_STAIRS = BlockImpl.get("waxed_exposed_cut_copper_stairs");
+    Block WAXED_OXIDIZED_CUT_COPPER = BlockImpl.get("waxed_oxidized_cut_copper");
+
+    Block CHISELED_COPPER = BlockImpl.get("chiseled_copper");
+
+    Block EXPOSED_CHISELED_COPPER = BlockImpl.get("exposed_chiseled_copper");
+
+    Block WEATHERED_CHISELED_COPPER = BlockImpl.get("weathered_chiseled_copper");
+
+    Block OXIDIZED_CHISELED_COPPER = BlockImpl.get("oxidized_chiseled_copper");
+
+    Block WAXED_CHISELED_COPPER = BlockImpl.get("waxed_chiseled_copper");
+
+    Block WAXED_EXPOSED_CHISELED_COPPER = BlockImpl.get("waxed_exposed_chiseled_copper");
+
+    Block WAXED_WEATHERED_CHISELED_COPPER = BlockImpl.get("waxed_weathered_chiseled_copper");
+
+    Block WAXED_OXIDIZED_CHISELED_COPPER = BlockImpl.get("waxed_oxidized_chiseled_copper");
+
+    Block CUT_COPPER_STAIRS = BlockImpl.get("cut_copper_stairs");
+
+    Block EXPOSED_CUT_COPPER_STAIRS = BlockImpl.get("exposed_cut_copper_stairs");
+
+    Block WEATHERED_CUT_COPPER_STAIRS = BlockImpl.get("weathered_cut_copper_stairs");
+
+    Block OXIDIZED_CUT_COPPER_STAIRS = BlockImpl.get("oxidized_cut_copper_stairs");
 
     Block WAXED_CUT_COPPER_STAIRS = BlockImpl.get("waxed_cut_copper_stairs");
 
-    Block WAXED_OXIDIZED_CUT_COPPER_SLAB = BlockImpl.get("waxed_oxidized_cut_copper_slab");
+    Block WAXED_EXPOSED_CUT_COPPER_STAIRS = BlockImpl.get("waxed_exposed_cut_copper_stairs");
 
-    Block WAXED_WEATHERED_CUT_COPPER_SLAB = BlockImpl.get("waxed_weathered_cut_copper_slab");
+    Block WAXED_WEATHERED_CUT_COPPER_STAIRS = BlockImpl.get("waxed_weathered_cut_copper_stairs");
+
+    Block WAXED_OXIDIZED_CUT_COPPER_STAIRS = BlockImpl.get("waxed_oxidized_cut_copper_stairs");
+
+    Block CUT_COPPER_SLAB = BlockImpl.get("cut_copper_slab");
+
+    Block EXPOSED_CUT_COPPER_SLAB = BlockImpl.get("exposed_cut_copper_slab");
+
+    Block WEATHERED_CUT_COPPER_SLAB = BlockImpl.get("weathered_cut_copper_slab");
+
+    Block OXIDIZED_CUT_COPPER_SLAB = BlockImpl.get("oxidized_cut_copper_slab");
+
+    Block WAXED_CUT_COPPER_SLAB = BlockImpl.get("waxed_cut_copper_slab");
 
     Block WAXED_EXPOSED_CUT_COPPER_SLAB = BlockImpl.get("waxed_exposed_cut_copper_slab");
 
-    Block WAXED_CUT_COPPER_SLAB = BlockImpl.get("waxed_cut_copper_slab");
+    Block WAXED_WEATHERED_CUT_COPPER_SLAB = BlockImpl.get("waxed_weathered_cut_copper_slab");
+
+    Block WAXED_OXIDIZED_CUT_COPPER_SLAB = BlockImpl.get("waxed_oxidized_cut_copper_slab");
 
     Block COPPER_DOOR = BlockImpl.get("copper_door");
 
     Block EXPOSED_COPPER_DOOR = BlockImpl.get("exposed_copper_door");
 
-    Block OXIDIZED_COPPER_DOOR = BlockImpl.get("oxidized_copper_door");
-
     Block WEATHERED_COPPER_DOOR = BlockImpl.get("weathered_copper_door");
+
+    Block OXIDIZED_COPPER_DOOR = BlockImpl.get("oxidized_copper_door");
 
     Block WAXED_COPPER_DOOR = BlockImpl.get("waxed_copper_door");
 
     Block WAXED_EXPOSED_COPPER_DOOR = BlockImpl.get("waxed_exposed_copper_door");
 
-    Block WAXED_OXIDIZED_COPPER_DOOR = BlockImpl.get("waxed_oxidized_copper_door");
-
     Block WAXED_WEATHERED_COPPER_DOOR = BlockImpl.get("waxed_weathered_copper_door");
+
+    Block WAXED_OXIDIZED_COPPER_DOOR = BlockImpl.get("waxed_oxidized_copper_door");
 
     Block COPPER_TRAPDOOR = BlockImpl.get("copper_trapdoor");
 
     Block EXPOSED_COPPER_TRAPDOOR = BlockImpl.get("exposed_copper_trapdoor");
 
-    Block OXIDIZED_COPPER_TRAPDOOR = BlockImpl.get("oxidized_copper_trapdoor");
-
     Block WEATHERED_COPPER_TRAPDOOR = BlockImpl.get("weathered_copper_trapdoor");
+
+    Block OXIDIZED_COPPER_TRAPDOOR = BlockImpl.get("oxidized_copper_trapdoor");
 
     Block WAXED_COPPER_TRAPDOOR = BlockImpl.get("waxed_copper_trapdoor");
 
     Block WAXED_EXPOSED_COPPER_TRAPDOOR = BlockImpl.get("waxed_exposed_copper_trapdoor");
 
-    Block WAXED_OXIDIZED_COPPER_TRAPDOOR = BlockImpl.get("waxed_oxidized_copper_trapdoor");
-
     Block WAXED_WEATHERED_COPPER_TRAPDOOR = BlockImpl.get("waxed_weathered_copper_trapdoor");
+
+    Block WAXED_OXIDIZED_COPPER_TRAPDOOR = BlockImpl.get("waxed_oxidized_copper_trapdoor");
 
     Block COPPER_GRATE = BlockImpl.get("copper_grate");
 
@@ -2213,9 +2271,11 @@ sealed interface Blocks permits Block {
 
     Block WAXED_OXIDIZED_LIGHTNING_ROD = BlockImpl.get("waxed_oxidized_lightning_rod");
 
+    Block DRIPSTONE_BLOCK = BlockImpl.get("dripstone_block");
+
     Block POINTED_DRIPSTONE = BlockImpl.get("pointed_dripstone");
 
-    Block DRIPSTONE_BLOCK = BlockImpl.get("dripstone_block");
+    Block SULFUR_SPIKE = BlockImpl.get("sulfur_spike");
 
     Block CAVE_VINES = BlockImpl.get("cave_vines");
 

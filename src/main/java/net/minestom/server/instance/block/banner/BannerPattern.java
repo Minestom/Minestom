@@ -1,6 +1,7 @@
 package net.minestom.server.instance.block.banner;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.translation.Translatable;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
@@ -12,7 +13,8 @@ import net.minestom.server.registry.RegistryData;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
-public sealed interface BannerPattern extends Holder.Direct<BannerPattern>, BannerPatterns permits BannerPatternImpl {
+public sealed interface BannerPattern extends Holder.Direct<BannerPattern>, BannerPatterns,
+        Translatable permits BannerPatternImpl {
     NetworkBuffer.Type<BannerPattern> REGISTRY_NETWORK_TYPE = NetworkBufferTemplate.template(
             NetworkBuffer.KEY, BannerPattern::assetId,
             NetworkBuffer.STRING, BannerPattern::translationKey,
@@ -48,6 +50,7 @@ public sealed interface BannerPattern extends Holder.Direct<BannerPattern>, Bann
 
     Key assetId();
 
+    @Override
     String translationKey();
 
     final class Builder {

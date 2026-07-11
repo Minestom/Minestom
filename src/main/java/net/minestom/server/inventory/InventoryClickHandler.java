@@ -20,9 +20,10 @@ public sealed interface InventoryClickHandler permits AbstractInventory {
 
     /**
      * Parses a click. This delegates to each individual implementation method.
+     *
      * @param player the player who clicked
-     * @param click the click that occurred
-     * @return whether or not the click was a success
+     * @param click  the click that occurred
+     * @return whether the click was a success
      */
     default boolean handleClick(Player player, Click click) {
         // Maps a click back into the click handler interface.
@@ -38,7 +39,7 @@ public sealed interface InventoryClickHandler permits AbstractInventory {
             case Click.Double(int slot) -> doubleClick(player, slot);
 
             case Click.LeftDrag(List<Integer> slots) -> dragging(player, slots, 2);
-            case Click.RightDrag(List<Integer> slots) -> dragging(player, slots,  6);
+            case Click.RightDrag(List<Integer> slots) -> dragging(player, slots, 6);
             case Click.MiddleDrag(List<Integer> slots) -> dragging(player, slots, 10);
 
             case Click.LeftDropCursor() -> drop(player, true, -999);

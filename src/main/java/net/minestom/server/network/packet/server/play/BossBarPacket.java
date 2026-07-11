@@ -36,7 +36,7 @@ public record BossBarPacket(UUID uuid,
     };
 
     @Override
-    public Collection<Component> components() {
+    public Collection<? extends Component> components() {
         return this.action instanceof ComponentHolder<?> holder
                 ? holder.components()
                 : List.of();

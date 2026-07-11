@@ -6,6 +6,8 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+
 import static net.minestom.server.network.NetworkBuffer.BYTE_ARRAY;
 import static net.minestom.server.network.NetworkBuffer.COMPONENT;
 
@@ -15,4 +17,20 @@ public record ServerDataPacket(Component motd, byte @Nullable [] iconBase64) imp
             BYTE_ARRAY.optional(), ServerDataPacket::iconBase64,
             ServerDataPacket::new);
 
+    public ServerDataPacket {
+        iconBase64 = iconBase64 != null ? iconBase64.clone() : null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof ServerDataPacket(Component motd1, byte[] base64))) return false;
+        return motd().equals(motd1) && Arrays.equals(iconBase64(), base64);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = motd().hashCode();
+        result = 31 * result + Arrays.hashCode(iconBase64());
+        return result;
+    }
 }

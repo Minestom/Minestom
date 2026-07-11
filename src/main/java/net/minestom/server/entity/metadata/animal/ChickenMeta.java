@@ -9,7 +9,7 @@ import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.Nullable;
 
 public class ChickenMeta extends AnimalMeta {
-    public ChickenMeta(Entity entity, MetadataHolder metadata) {
+    public ChickenMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -35,6 +35,8 @@ public class ChickenMeta extends AnimalMeta {
     protected <T> @Nullable T get(DataComponent<T> component) {
         if (component == DataComponents.CHICKEN_VARIANT)
             return (T) getVariant();
+        if (component == DataComponents.CHICKEN_SOUND_VARIANT)
+            return (T) metadata.get(MetadataDef.Chicken.SOUND_VARIANT);
         return super.get(component);
     }
 
@@ -43,6 +45,8 @@ public class ChickenMeta extends AnimalMeta {
     protected <T> void set(DataComponent<T> component, T value) {
         if (component == DataComponents.CHICKEN_VARIANT)
             setVariant((RegistryKey<ChickenVariant>) value);
+        else if (component == DataComponents.CHICKEN_SOUND_VARIANT)
+            metadata.set(MetadataDef.Chicken.SOUND_VARIANT, (RegistryKey<ChickenSoundVariant>) value);
         else super.set(component, value);
     }
 

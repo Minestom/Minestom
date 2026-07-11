@@ -2,6 +2,7 @@ package net.minestom.server.item;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
+import net.kyori.adventure.translation.Translatable;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.component.DataComponents;
@@ -16,7 +17,7 @@ import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Collection;
 
-public sealed interface Material extends StaticProtocolObject<Material>, Materials permits MaterialImpl {
+public sealed interface Material extends StaticProtocolObject<Material>, Materials, Translatable permits MaterialImpl {
 
     NetworkBuffer.Type<Material> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Material::fromId, Material::id);
     Codec<Material> CODEC = Codec.KEY.transform(Material::fromKey, Material::key);
@@ -51,6 +52,11 @@ public sealed interface Material extends StaticProtocolObject<Material>, Materia
 
     default boolean isArmor() {
         return registry().isArmor();
+    }
+
+    @Override
+    default String translationKey() {
+        return registry().translationKey();
     }
 
     default int maxStackSize() {

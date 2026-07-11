@@ -129,6 +129,32 @@ public interface Transcoder<D> {
     D createDouble(double value);
 
     /**
+     * Attempts to unwrap a number from the value {@link D}
+     *
+     * @param value the value to unwrap
+     * @return the result
+     */
+    Result<Number> getNumber(D value);
+
+    /**
+     * Creates a number representation of {@link D}
+     *
+     * @param value the number primitive
+     * @return the representation of value in {@link D}
+     */
+    default D createNumber(Number value) {
+        return switch (value) {
+            case Byte n -> createByte(n);
+            case Short n -> createShort(n);
+            case Integer n -> createInt(n);
+            case Long n -> createLong(n);
+            case Double n -> createDouble(n);
+            case Float n -> createFloat(n);
+            default -> createDouble(value.doubleValue());
+        };
+    }
+
+    /**
      * Attempts to unwrap a string from the value {@link D}
      * @param value the value to unwrap
      * @return the result
@@ -202,10 +228,10 @@ public interface Transcoder<D> {
             return listResult.cast();
         final byte[] byteArray = new byte[list.size()];
         for (int i = 0; i < list.size(); i++) {
-            final Result<Byte> byteResult = getByte(list.get(i));
-            if (!(byteResult instanceof Result.Ok(Byte byteValue)))
-                return byteResult.cast();
-            byteArray[i] = byteValue;
+            final Result<Number> numberResult = getNumber(list.get(i));
+            if (!(numberResult instanceof Result.Ok(Number number)))
+                return new Result.Error<>("Not a byte: " + value);
+            byteArray[i] = number.byteValue();
         }
         return new Result.Ok<>(byteArray);
     }
@@ -232,10 +258,10 @@ public interface Transcoder<D> {
             return listResult.cast();
         final int[] intArray = new int[list.size()];
         for (int i = 0; i < list.size(); i++) {
-            final Result<Integer> intResult = getInt(list.get(i));
-            if (!(intResult instanceof Result.Ok(Integer intValue)))
-                return intResult.cast();
-            intArray[i] = intValue;
+            final Result<Number> numberResult = getNumber(list.get(i));
+            if (!(numberResult instanceof Result.Ok(Number number)))
+                return new Result.Error<>("Not an int: " + value);
+            intArray[i] = number.intValue();
         }
         return new Result.Ok<>(intArray);
     }
@@ -262,10 +288,10 @@ public interface Transcoder<D> {
             return listResult.cast();
         final long[] longArray = new long[list.size()];
         for (int i = 0; i < list.size(); i++) {
-            final Result<Long> longResult = getLong(list.get(i));
-            if (!(longResult instanceof Result.Ok(Long longValue)))
-                return longResult.cast();
-            longArray[i] = longValue;
+            final Result<Number> numberResult = getNumber(list.get(i));
+            if (!(numberResult instanceof Result.Ok(Number number)))
+                return new Result.Error<>("Not a long: " + value);
+            longArray[i] = number.longValue();
         }
         return new Result.Ok<>(longArray);
     }

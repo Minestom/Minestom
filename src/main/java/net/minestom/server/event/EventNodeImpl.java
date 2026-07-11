@@ -36,10 +36,10 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
 
     final String name;
     final EventFilter<T, ?> filter;
-    final BiPredicate<T, Object> predicate;
+    final @Nullable BiPredicate<T, Object> predicate;
     final Class<T> eventType;
     volatile int priority;
-    volatile EventNodeImpl<? super T> parent;
+    volatile @Nullable EventNodeImpl<? super T> parent;
 
     EventNodeImpl(String name,
                   EventFilter<T, ?> filter,
@@ -334,7 +334,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     @SuppressWarnings("unchecked")
     final class Handle<E extends Event> implements ListenerHandle<E> {
         private final Class<E> eventType;
-        private Consumer<E> listener = null;
+        private @Nullable Consumer<E> listener = null;
         private volatile boolean updated;
 
         Handle(Class<E> eventType) {

@@ -74,13 +74,13 @@ public class PlayerSocketConnection extends PlayerConnection {
     private boolean attemptedProxyProtocolDetection = false;
 
     //Could be null. Only used for Mojang Auth
-    private volatile EncryptionContext encryptionContext;
+    private volatile @Nullable EncryptionContext encryptionContext;
     private byte[] nonce = new byte[4];
 
     // Data from client packets
-    private String loginUsername;
-    private GameProfile gameProfile;
-    private String serverAddress;
+    private @Nullable String loginUsername;
+    private @Nullable GameProfile gameProfile;
+    private @Nullable String serverAddress;
     private int serverPort;
     private int protocolVersion;
 
@@ -359,8 +359,8 @@ public class PlayerSocketConnection extends PlayerConnection {
                 }
             }
             // Translation
-            if (MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION && packet instanceof ServerPacket.ComponentHolding) {
-                packet = ((ServerPacket.ComponentHolding) packet).copyWithOperator(component ->
+            if (ServerFlag.AUTOMATIC_COMPONENT_TRANSLATION && packet instanceof ServerPacket.ComponentHolding translatablePacket) {
+                packet = translatablePacket.copyWithOperator(component ->
                         MinestomAdventure.COMPONENT_TRANSLATOR.apply(component, Objects.requireNonNullElseGet(player.getLocale(), MinestomAdventure::getDefaultLocale)));
             }
         }
@@ -389,10 +389,6 @@ public class PlayerSocketConnection extends PlayerConnection {
                         yield true;
                     }
                 }
-                case LazyPacket lazyPacket -> {
-                    PacketWriting.writeFramedPacket(buffer, state, lazyPacket.packet(), compressionThreshold);
-                    yield true;
-                }
                 case BufferedPacket bufferedPacket -> {
                     final NetworkBuffer rawBuffer = bufferedPacket.buffer();
                     final long index = bufferedPacket.index();
@@ -416,7 +412,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         return true;
     }
 
-    private NetworkBuffer writeLeftover = null;
+    private @Nullable NetworkBuffer writeLeftover = null;
 
     public void flushSync() throws IOException {
         // Write leftover if any
@@ -478,6 +474,15 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     public Thread writeThread() {
         return writeThread;
+    }
+
+    @ApiStatus.Internal
+    public void cleanup() {
+        final var writeLeftover = this.writeLeftover;
+        if (writeLeftover != null) {
+            PacketVanilla.PACKET_POOL.add(writeLeftover);
+            this.writeLeftover = null;
+        }
     }
 
     record EncryptionContext(Cipher encrypt, Cipher decrypt) {
