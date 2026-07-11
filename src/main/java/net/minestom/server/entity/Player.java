@@ -1618,28 +1618,38 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         playerMeta.setDisplayedSkinParts(settings.displayedSkinParts());
         playerMeta.setMainHand(settings.mainHand());
         if (isInPlayState) playerMeta.setNotifyAboutChanges(true);
+        // Update view distance
+        final Instance instance = this.instance;
+        if (instance == null) return;
+        final int viewDistance = instance.viewDistance();
+        updateViewDistance(previous.viewDistance(), viewDistance, viewDistance);
+    }
 
-        final byte previousViewDistance = previous.viewDistance();
-        final byte newViewDistance = settings.viewDistance();
-        // Check to see if we're in an instance first, as this method is called when first logging in since the client sends the Settings packet during configuration
-        if (instance != null) {
-            // Load/unload chunks if necessary due to view distance changes
-            if (previousViewDistance < newViewDistance) {
-                // View distance expanded, send chunks
-                ChunkRange.chunksInRange(position.chunkX(), position.chunkZ(), newViewDistance, (chunkX, chunkZ) -> {
-                    if (Math.abs(chunkX - position.chunkX()) > previousViewDistance || Math.abs(chunkZ - position.chunkZ()) > previousViewDistance) {
-                        chunkAdder.accept(chunkX, chunkZ);
-                    }
-                });
-            } else if (previousViewDistance > newViewDistance) {
-                // View distance shrunk, unload chunks
-                ChunkRange.chunksInRange(position.chunkX(), position.chunkZ(), previousViewDistance, (chunkX, chunkZ) -> {
-                    if (Math.abs(chunkX - position.chunkX()) > newViewDistance || Math.abs(chunkZ - position.chunkZ()) > newViewDistance) {
-                        chunkRemover.accept(chunkX, chunkZ);
-                    }
-                });
-            }
-            // Else previous and current are equal, do nothing
+    @ApiStatus.Internal
+    public void updateViewDistance(int oldInstanceViewDistance, int newInstanceViewDistance) {
+        updateViewDistance(settings.viewDistance(), oldInstanceViewDistance, newInstanceViewDistance);
+    }
+
+    private void updateViewDistance(int oldSettingsViewDistance, int oldInstanceViewDistance, int newInstanceViewDistance) {
+        final int previousEffective = Math.min(oldSettingsViewDistance, oldInstanceViewDistance) + 1;
+        final int newEffective = Math.min(settings.viewDistance(), newInstanceViewDistance) + 1;
+        if (previousEffective == newEffective) return;
+
+        final int centerX = position.chunkX(), centerZ = position.chunkZ();
+        if (previousEffective < newEffective) {
+            // View distance expanded, send chunks
+            ChunkRange.chunksInRange(centerX, centerZ, newEffective, (chunkX, chunkZ) -> {
+                if (Math.abs(chunkX - centerX) > previousEffective || Math.abs(chunkZ - centerZ) > previousEffective) {
+                    chunkAdder.accept(chunkX, chunkZ);
+                }
+            });
+        } else {
+            // View distance shrunk, unload chunks
+            ChunkRange.chunksInRange(centerX, centerZ, previousEffective, (chunkX, chunkZ) -> {
+                if (Math.abs(chunkX - centerX) > newEffective || Math.abs(chunkZ - centerZ) > newEffective) {
+                    chunkRemover.accept(chunkX, chunkZ);
+                }
+            });
         }
     }
 

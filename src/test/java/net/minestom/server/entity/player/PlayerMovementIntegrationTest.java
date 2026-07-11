@@ -149,34 +149,191 @@ public class PlayerMovementIntegrationTest {
 
     @Test
     public void testSettingsViewDistanceExpansionAndShrink(Env env) {
-        int startingViewDistance = 8;
-        byte endViewDistance = 12;
-        byte finalViewDistance = 10;
         var instance = env.createFlatInstance();
+        // Keep the client view distances used here below the instance's so they are not capped; refreshSettings,
+        // like spawn and movement, bounds chunks by min(viewDistance, instanceViewDistance) + 1
+        instance.viewDistance(32);
         var connection = env.createConnection();
-        Pos startingPlayerPos = new Pos(0, 42, 0);
-        var player = connection.connect(instance, startingPlayerPos);
+        var player = connection.connect(instance, new Pos(0, 42, 0));
 
-        int chunkDifference = ChunkRange.chunksCount(endViewDistance) - ChunkRange.chunksCount(startingViewDistance);
+        // Preload chunks, otherwise our first assertCount call will fail randomly due to chunks being loaded off the main thread
+        int maxEffective = Math.min(12, instance.viewDistance()) + 1;
+        ChunkRange.chunksInRange(0, 0, maxEffective, (chunkX, chunkZ) -> instance.loadChunk(chunkX, chunkZ).join());
 
-        // Preload chunks, otherwise our first tracker.assertCount call will fail randomly due to chunks being loaded off the main thread
-        ChunkRange.chunksInRange(0, 0, endViewDistance, (chunkX, chunkZ) -> instance.loadChunk(chunkX, chunkZ).join());
-
-        var tracker = connection.trackIncoming(ChunkDataPacket.class);
-        player.addPacketToQueue(new ClientSettingsPacket(new ClientSettings(Locale.US, endViewDistance,
+        // Expand the client view distance
+        int beforeExpand = player.effectiveViewDistance();
+        var added = connection.trackIncoming(ChunkDataPacket.class);
+        player.addPacketToQueue(new ClientSettingsPacket(new ClientSettings(Locale.US, (byte) 12,
                 ChatMessageType.FULL, false, (byte) 0, MainHand.RIGHT,
                 false, true, ClientSettings.ParticleSetting.ALL)));
         player.interpretPacketQueue();
-        tracker.assertCount(chunkDifference);
+        added.assertCount(ChunkRange.chunksCount(player.effectiveViewDistance()) - ChunkRange.chunksCount(beforeExpand));
 
-        var tracker1 = connection.trackIncoming(UnloadChunkPacket.class);
-        player.addPacketToQueue(new ClientSettingsPacket(new ClientSettings(Locale.US, finalViewDistance,
+        // Shrink the client view distance
+        int beforeShrink = player.effectiveViewDistance();
+        var removed = connection.trackIncoming(UnloadChunkPacket.class);
+        player.addPacketToQueue(new ClientSettingsPacket(new ClientSettings(Locale.US, (byte) 10,
                 ChatMessageType.FULL, false, (byte) 0, MainHand.RIGHT,
                 false, true, ClientSettings.ParticleSetting.ALL)));
         player.interpretPacketQueue();
+        removed.assertCount(ChunkRange.chunksCount(beforeShrink) - ChunkRange.chunksCount(player.effectiveViewDistance()));
+    }
 
-        int chunkDifference1 = ChunkRange.chunksCount(endViewDistance) - ChunkRange.chunksCount(finalViewDistance);
-        tracker1.assertCount(chunkDifference1);
+    @Test
+    public void testSettingsViewDistanceCappedByInstance(Env env) {
+        var instance = env.createFlatInstance();
+        // Cap the instance's view distance at 4.
+        instance.viewDistance(4);
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+
+        // Preload chunks, otherwise our first assertCount call will fail randomly due to chunks being loaded off the main thread
+        ChunkRange.chunksInRange(0, 0, 13, (chunkX, chunkZ) -> instance.loadChunk(chunkX, chunkZ).join());
+
+        // The default view distance is 8. Capped at instance view distance (4) + 1 = 5.
+        assertEquals(5, player.effectiveViewDistance());
+
+        // Expand settings view distance to 12. Since it is capped by instance view distance 4,
+        // the effective view distance remains 5. No chunk packets should be sent.
+        var added = connection.trackIncoming(ChunkDataPacket.class);
+        var removed = connection.trackIncoming(UnloadChunkPacket.class);
+        player.addPacketToQueue(new ClientSettingsPacket(new ClientSettings(Locale.US, (byte) 12,
+                ChatMessageType.FULL, false, (byte) 0, MainHand.RIGHT,
+                false, true, ClientSettings.ParticleSetting.ALL)));
+        player.interpretPacketQueue();
+        assertEquals(5, player.effectiveViewDistance());
+        added.assertCount(0);
+        removed.assertCount(0);
+
+        // Shrink settings view distance to 3. Capped by min(3, 4) + 1 = 4.
+        // It shrinks from 5 to 4. We expect UnloadChunkPackets.
+        int beforeShrink = player.effectiveViewDistance();
+        var removed2 = connection.trackIncoming(UnloadChunkPacket.class);
+        player.addPacketToQueue(new ClientSettingsPacket(new ClientSettings(Locale.US, (byte) 3,
+                ChatMessageType.FULL, false, (byte) 0, MainHand.RIGHT,
+                false, true, ClientSettings.ParticleSetting.ALL)));
+        player.interpretPacketQueue();
+        assertEquals(4, player.effectiveViewDistance());
+        removed2.assertCount(ChunkRange.chunksCount(beforeShrink) - ChunkRange.chunksCount(player.effectiveViewDistance()));
+
+        // Shrink settings view distance to 2. Capped by min(2, 4) + 1 = 3.
+        // It shrinks from 4 to 3. We expect UnloadChunkPackets.
+        int beforeShrink2 = player.effectiveViewDistance();
+        var removed3 = connection.trackIncoming(UnloadChunkPacket.class);
+        player.addPacketToQueue(new ClientSettingsPacket(new ClientSettings(Locale.US, (byte) 2,
+                ChatMessageType.FULL, false, (byte) 0, MainHand.RIGHT,
+                false, true, ClientSettings.ParticleSetting.ALL)));
+        player.interpretPacketQueue();
+        assertEquals(3, player.effectiveViewDistance());
+        removed3.assertCount(ChunkRange.chunksCount(beforeShrink2) - ChunkRange.chunksCount(player.effectiveViewDistance()));
+
+        // Expand settings view distance back to 8. Effective view distance becomes min(8, 4) + 1 = 5.
+        // It expands from 3 to 5. We expect ChunkDataPackets.
+        int beforeExpand = player.effectiveViewDistance();
+        var added2 = connection.trackIncoming(ChunkDataPacket.class);
+        player.addPacketToQueue(new ClientSettingsPacket(new ClientSettings(Locale.US, (byte) 8,
+                ChatMessageType.FULL, false, (byte) 0, MainHand.RIGHT,
+                false, true, ClientSettings.ParticleSetting.ALL)));
+        player.interpretPacketQueue();
+        assertEquals(5, player.effectiveViewDistance());
+        added2.assertCount(ChunkRange.chunksCount(player.effectiveViewDistance()) - ChunkRange.chunksCount(beforeExpand));
+    }
+
+    @Test
+    public void testDynamicInstanceViewDistanceChange(Env env) {
+        var instance = env.createFlatInstance();
+        // Start with instance view distance of 4
+        instance.viewDistance(4);
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+
+        // Preload chunks up to 13
+        ChunkRange.chunksInRange(0, 0, 13, (chunkX, chunkZ) -> instance.loadChunk(chunkX, chunkZ).join());
+
+        // Default settings view distance = 8. Capped at min(8, 4) + 1 = 5.
+        assertEquals(5, player.effectiveViewDistance());
+
+        // Expand the instance view distance from 4 to 8.
+        // Effective view distance becomes min(8, 8) + 1 = 9.
+        // We expect ChunkDataPackets.
+        var added = connection.trackIncoming(ChunkDataPacket.class);
+        instance.viewDistance(8);
+        assertEquals(9, player.effectiveViewDistance());
+        added.assertCount(ChunkRange.chunksCount(9) - ChunkRange.chunksCount(5));
+
+        // Shrink the instance view distance from 8 to 3.
+        // Effective view distance becomes min(8, 3) + 1 = 4.
+        // We expect UnloadChunkPackets.
+        var removed = connection.trackIncoming(UnloadChunkPacket.class);
+        instance.viewDistance(3);
+        assertEquals(4, player.effectiveViewDistance());
+        removed.assertCount(ChunkRange.chunksCount(9) - ChunkRange.chunksCount(4));
+    }
+
+    @Test
+    public void testDynamicInstanceViewDistanceChangeMultiplePlayers(Env env) {
+        var instance = env.createFlatInstance();
+        instance.viewDistance(4);
+
+        var connection1 = env.createConnection();
+        var p1 = connection1.connect(instance, new Pos(0, 42, 0));
+
+        var connection2 = env.createConnection();
+        var p2 = connection2.connect(instance, new Pos(0, 42, 0));
+
+        // Preload chunks
+        ChunkRange.chunksInRange(0, 0, 13, (chunkX, chunkZ) -> instance.loadChunk(chunkX, chunkZ).join());
+
+        assertEquals(5, p1.effectiveViewDistance());
+        assertEquals(5, p2.effectiveViewDistance());
+
+        var added1 = connection1.trackIncoming(ChunkDataPacket.class);
+        var added2 = connection2.trackIncoming(ChunkDataPacket.class);
+
+        // Expand view distance
+        instance.viewDistance(8);
+
+        assertEquals(9, p1.effectiveViewDistance());
+        assertEquals(9, p2.effectiveViewDistance());
+
+        added1.assertCount(ChunkRange.chunksCount(9) - ChunkRange.chunksCount(5));
+        added2.assertCount(ChunkRange.chunksCount(9) - ChunkRange.chunksCount(5));
+    }
+
+    @Test
+    public void testDynamicInstanceViewDistanceChangeIndependent(Env env) {
+        var instanceA = env.createFlatInstance();
+        instanceA.viewDistance(4);
+
+        var instanceB = env.createFlatInstance();
+        instanceB.viewDistance(4);
+
+        var connectionA = env.createConnection();
+        var pA = connectionA.connect(instanceA, new Pos(0, 42, 0));
+
+        var connectionB = env.createConnection();
+        var pB = connectionB.connect(instanceB, new Pos(0, 42, 0));
+
+        // Preload chunks
+        ChunkRange.chunksInRange(0, 0, 13, (chunkX, chunkZ) -> {
+            instanceA.loadChunk(chunkX, chunkZ).join();
+            instanceB.loadChunk(chunkX, chunkZ).join();
+        });
+
+        assertEquals(5, pA.effectiveViewDistance());
+        assertEquals(5, pB.effectiveViewDistance());
+
+        var addedA = connectionA.trackIncoming(ChunkDataPacket.class);
+        var addedB = connectionB.trackIncoming(ChunkDataPacket.class);
+
+        // Expand view distance of instance A only
+        instanceA.viewDistance(8);
+
+        assertEquals(9, pA.effectiveViewDistance());
+        assertEquals(5, pB.effectiveViewDistance()); // B should remain unchanged
+
+        addedA.assertCount(ChunkRange.chunksCount(9) - ChunkRange.chunksCount(5));
+        addedB.assertCount(0); // B should not receive any chunk packets
     }
 
     @Test
