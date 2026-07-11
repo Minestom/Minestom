@@ -569,6 +569,9 @@
           "name": "STRIDER"
         },
         {
+          "name": "SULFUR_CUBE"
+        },
+        {
           "name": "TADPOLE"
         },
         {
@@ -650,6 +653,9 @@
     },
     {
       "type": "net.minestom.server.entity.MetadataDef"
+    },
+    {
+      "type": "net.minestom.server.entity.MetadataDef$AbstractCubeMob"
     },
     {
       "type": "net.minestom.server.entity.MetadataDef$AgeableMob"
@@ -1085,6 +1091,9 @@
       "glob": "net/minestom/data/sound_event.json"
     },
     {
+      "glob": "net/minestom/data/sulfur_cube_archetype.json"
+    },
+    {
       "glob": "net/minestom/data/tags/attribute.json"
     },
     {
@@ -1179,6 +1188,9 @@
     },
     {
       "glob": "net/minestom/data/tags/sound_event.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/sulfur_cube_archetype.json"
     },
     {
       "glob": "net/minestom/data/tags/timeline.json"

@@ -1,6 +1,5 @@
 package net.minestom.server.command;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
@@ -10,16 +9,13 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CommandPacketTest {
-    static {
-        MinecraftServer.init();
-    }
 
     @Test
     public void singleCommandWithOneSyntax() {
         final Command foo = new Command("foo");
         foo.addSyntax(CommandPacketTest::dummyExecutor, ArgumentType.Integer("bar"));
 
-        final DeclareCommandsPacket packet = GraphConverter.createPacket(Graph.merge(Graph.fromCommand(foo)), null);
+        final DeclareCommandsPacket packet = GraphConverter.createPacket(new CommandManager(), Graph.merge(Graph.fromCommand(foo)), null);
         assertEquals(3, packet.nodes().size());
         final DeclareCommandsPacket.Node root = packet.nodes().get(packet.rootIndex());
         assertNotNull(root);
@@ -233,7 +229,7 @@ public class CommandPacketTest {
     }
 
     static void assertPacketGraph(String expected, Graph... graphs) {
-        var packet = GraphConverter.createPacket(Graph.merge(graphs), null);
+        var packet = GraphConverter.createPacket(new CommandManager(), Graph.merge(graphs), null);
         CommandTestUtils.assertPacket(packet, expected);
     }
 

@@ -11,7 +11,7 @@ import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.Nullable;
 
 public class AxolotlMeta extends AnimalMeta {
-    public AxolotlMeta(Entity entity, MetadataHolder metadata) {
+    public AxolotlMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

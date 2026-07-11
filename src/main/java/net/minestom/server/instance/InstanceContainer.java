@@ -418,7 +418,7 @@ public class InstanceContainer extends Instance {
             Section section = chunk.getSections().get(i);
             return new GeneratorImpl.GenSection(section.blockPalette(), section.biomePalette());
         });
-        var chunkUnit = GeneratorImpl.chunk(MinecraftServer.getBiomeRegistry(), genSections,
+        var chunkUnit = GeneratorImpl.chunk(registries().biome(), genSections,
                 chunk.getChunkX(), chunk.minSection, chunk.getChunkZ());
         try {
             // Generate block/biome palette

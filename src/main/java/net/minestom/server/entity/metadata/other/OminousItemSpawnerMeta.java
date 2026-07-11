@@ -5,9 +5,10 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 public class OminousItemSpawnerMeta extends EntityMeta {
-    public OminousItemSpawnerMeta(Entity entity, MetadataHolder metadata) {
+    public OminousItemSpawnerMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

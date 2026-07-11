@@ -5,10 +5,11 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
+import org.jetbrains.annotations.Nullable;
 
 public class CopperGolemMeta extends AbstractGolemMeta {
 
-    public CopperGolemMeta(Entity entity, MetadataHolder metadata) {
+    public CopperGolemMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

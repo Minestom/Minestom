@@ -62,7 +62,8 @@ public final class Generators {
             new DynamicRegistrySpec("worldgen/biome.json", "net.minestom.server.world.biome", "Biome"),
             new DynamicRegistrySpec("timeline.json", "net.minestom.server.world.timeline", "Timeline"),
             new DynamicRegistrySpec("world_clock.json", "net.minestom.server.world.clock", "WorldClock"),
-            new DynamicRegistrySpec("clock_time_marker.json", "net.minestom.server.world.clock", "ClockTimeMarker")
+            new DynamicRegistrySpec("clock_time_marker.json", "net.minestom.server.world.clock", "ClockTimeMarker"),
+            new DynamicRegistrySpec("sulfur_cube_archetype.json", "net.minestom.server.entity.metadata.cube", "SulfurCubeArchetype")
     );
 
     static void main(String[] args) {

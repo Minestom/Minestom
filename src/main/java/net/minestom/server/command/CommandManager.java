@@ -187,7 +187,7 @@ public final class CommandManager {
      * @return the {@link DeclareCommandsPacket} for {@code player}
      */
     public DeclareCommandsPacket createDeclareCommandsPacket(Player player) {
-        return GraphConverter.createPacket(getGraph(), player);
+        return GraphConverter.createPacket(this, getGraph(), player);
     }
 
     public Set<Command> getCommands() {

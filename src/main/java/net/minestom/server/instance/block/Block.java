@@ -265,6 +265,10 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
         return registry().isLiquid();
     }
 
+    default boolean isFluid() {
+        return registry().isFluid();
+    }
+
     @Override
     default String translationKey() {
         return registry().translationKey();

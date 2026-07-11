@@ -1,20 +1,16 @@
 package net.minestom.server.inventory.click;
 
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minestom.server.MinecraftServer;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static net.minestom.server.inventory.click.ClickUtils.*;
 import static net.minestom.server.network.packet.client.play.ClientClickWindowPacket.ClickType.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ClickPreprocessorTest {
-
-    static {
-        MinecraftServer.init();
-    }
 
     @Test
     public void testPickupType() {

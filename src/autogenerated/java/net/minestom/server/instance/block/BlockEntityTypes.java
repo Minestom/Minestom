@@ -57,8 +57,6 @@ sealed interface BlockEntityTypes permits BlockEntityType {
 
     BlockEntityType SHULKER_BOX = BlockEntityTypeImpl.get("shulker_box");
 
-    BlockEntityType BED = BlockEntityTypeImpl.get("bed");
-
     BlockEntityType CONDUIT = BlockEntityTypeImpl.get("conduit");
 
     BlockEntityType BARREL = BlockEntityTypeImpl.get("barrel");
@@ -104,4 +102,6 @@ sealed interface BlockEntityTypes permits BlockEntityType {
     BlockEntityType TEST_INSTANCE_BLOCK = BlockEntityTypeImpl.get("test_instance_block");
 
     BlockEntityType COPPER_GOLEM_STATUE = BlockEntityTypeImpl.get("copper_golem_statue");
+
+    BlockEntityType POTENT_SULFUR = BlockEntityTypeImpl.get("potent_sulfur");
 }

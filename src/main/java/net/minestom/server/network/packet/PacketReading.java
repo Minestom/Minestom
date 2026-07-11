@@ -168,13 +168,11 @@ public final class PacketReading {
             if (requiredCapacity > buffer.capacity()) return new Result.Failure<>(requiredCapacity);
             else return EMPTY_CLIENT_PACKET;
         }
-        final long readerEnd = readerStart + packetLength;
-        final long writerEnd = buffer.writeIndex();
-        buffer.writeIndex(readerEnd);
         final PacketRegistry<? extends T> registry = parser.stateRegistry(state);
-        final T packet = readFramedPacket(buffer, registry, compressed, maxPacketSize);
+        final long offset = buffer.advanceRead(packetLength); // ensureReadable checked above
+        final NetworkBuffer slice = buffer.slice(offset, packetLength, 0, packetLength).readOnly();
+        final T packet = readFramedPacket(slice, registry, compressed, maxPacketSize);
         final ConnectionState nextState = stateUpdater.apply(packet, state);
-        buffer.index(readerEnd, writerEnd);
         return new Result.Success<>(new ParsedPacket<>(nextState, packet));
     }
 
@@ -197,17 +195,18 @@ public final class PacketReading {
         }
 
         // Decompress the packet into the pooled buffer and read the uncompressed packet from it
-        NetworkBuffer decompressed = PacketVanilla.PACKET_POOL.get();
+        NetworkBuffer poolBuffer = PacketVanilla.PACKET_POOL.get();
         try {
-            if (decompressed.capacity() < dataLength) decompressed.resize(dataLength);
-            decompressed.registries(buffer.registries());
-            final long written = buffer.decompress(buffer.readIndex(), buffer.readableBytes(), decompressed);
+            if (poolBuffer.capacity() < dataLength) poolBuffer.resize(dataLength);
+            final NetworkBuffer slice = poolBuffer.slice(0, dataLength, 0, 0);
+            slice.registries(buffer.registries());
+            final long written = buffer.decompress(buffer.readIndex(), buffer.readableBytes(), slice);
             if (written != dataLength) {
                 throw new DataFormatException("Decompressed length mismatch: expected " + dataLength + ", got " + written);
             }
-            return readPayload(decompressed, registry);
+            return readPayload(slice.readOnly(), registry);
         } finally {
-            PacketVanilla.PACKET_POOL.add(decompressed);
+            PacketVanilla.PACKET_POOL.add(poolBuffer);
         }
     }
 

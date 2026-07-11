@@ -83,6 +83,8 @@ sealed interface DamageTypes permits DamageType {
 
     RegistryKey<DamageType> UNATTRIBUTED_FIREBALL = RegistryKey.unsafeOf("unattributed_fireball");
 
+    RegistryKey<DamageType> SULFUR_CUBE_HOT = RegistryKey.unsafeOf("sulfur_cube_hot");
+
     RegistryKey<DamageType> IN_WALL = RegistryKey.unsafeOf("in_wall");
 
     RegistryKey<DamageType> STARVE = RegistryKey.unsafeOf("starve");
