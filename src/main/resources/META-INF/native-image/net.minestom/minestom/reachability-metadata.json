@@ -707,6 +707,14 @@
       ]
     },
     {
+      "type": "net.minestom.server.network.packet.server.CachedPacket",
+      "fields": [
+        {
+          "name": "packet"
+        }
+      ]
+    },
+    {
       "type": "net.minestom.server.tag.TagRecordTest$1CompoundRecord",
       "methods": [
         {
@@ -1004,6 +1012,9 @@
       "glob": "net/minestom/data/block.json"
     },
     {
+      "glob": "net/minestom/data/block_entity_type.json"
+    },
+    {
       "glob": "net/minestom/data/block_entity_types.json"
     },
     {
@@ -1070,16 +1081,25 @@
       "glob": "net/minestom/data/jukebox_song.json"
     },
     {
+      "glob": "net/minestom/data/mob_effect.json"
+    },
+    {
       "glob": "net/minestom/data/painting_variant.json"
     },
     {
       "glob": "net/minestom/data/particle.json"
     },
     {
+      "glob": "net/minestom/data/particle_type.json"
+    },
+    {
       "glob": "net/minestom/data/pig_sound_variant.json"
     },
     {
       "glob": "net/minestom/data/pig_variant.json"
+    },
+    {
+      "glob": "net/minestom/data/potion.json"
     },
     {
       "glob": "net/minestom/data/potion_effect.json"
@@ -1101,6 +1121,9 @@
     },
     {
       "glob": "net/minestom/data/tags/block.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/block_entity_type.json"
     },
     {
       "glob": "net/minestom/data/tags/block_entity_types.json"
@@ -1169,16 +1192,25 @@
       "glob": "net/minestom/data/tags/jukebox_song.json"
     },
     {
+      "glob": "net/minestom/data/tags/mob_effect.json"
+    },
+    {
       "glob": "net/minestom/data/tags/painting_variant.json"
     },
     {
       "glob": "net/minestom/data/tags/particle.json"
     },
     {
+      "glob": "net/minestom/data/tags/particle_type.json"
+    },
+    {
       "glob": "net/minestom/data/tags/pig_sound_variant.json"
     },
     {
       "glob": "net/minestom/data/tags/pig_variant.json"
+    },
+    {
+      "glob": "net/minestom/data/tags/potion.json"
     },
     {
       "glob": "net/minestom/data/tags/potion_effect.json"
