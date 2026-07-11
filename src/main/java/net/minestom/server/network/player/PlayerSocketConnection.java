@@ -113,10 +113,13 @@ public class PlayerSocketConnection extends PlayerConnection {
         final int length = readBuffer.readChannel(channel);
 
         if (ServerFlag.PROXY_PROTOCOL && !attemptedProxyProtocolDetection) {
+            final ProxyProtocolDecoder.Result result = ProxyProtocolDecoder.parse(remoteAddress, readBuffer);
+            if (result.status() == ProxyProtocolDecoder.Status.NEED_MORE) return;
             attemptedProxyProtocolDetection = true;
-            ProxyProtocolDecoder.ClientInfo clientInfo = ProxyProtocolDecoder.parse(remoteAddress, readBuffer, length);
-            if (clientInfo.proxyUsed()) {
-                this.remoteAddress = clientInfo.clientAddress();
+            if (result.status() == ProxyProtocolDecoder.Status.PRESENT) {
+                this.remoteAddress = result.clientAddress();
+            } else if (ServerFlag.PROXY_PROTOCOL_REQUIRED) {
+                throw new IOException("Missing required PROXY protocol header");
             }
         }
 

@@ -76,6 +76,7 @@ public final class ServerFlag {
     public static final boolean UNSAFE_COLLECTIONS = booleanProperty("minestom.unsafe-collections", false); // Likely to be removed in the future
     public static final boolean TEMPLATE_COMPILER = booleanProperty("minestom.template-compiler", false);
     public static final boolean PROXY_PROTOCOL = booleanProperty("minestom.proxy-protocol", false);
+    public static final boolean PROXY_PROTOCOL_REQUIRED = booleanProperty("minestom.proxy-protocol.required", false);
 
     public static boolean INSIDE_TEST = booleanProperty("minestom.inside-test", false);
 
