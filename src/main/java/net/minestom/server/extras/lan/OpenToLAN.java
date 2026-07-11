@@ -15,30 +15,20 @@ import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static net.minestom.server.ping.ServerListPingType.OPEN_TO_LAN;
 
 /**
  * Utility class to manage opening the server to LAN. Note that this <b>doesn't</b> actually
  * open your server to LAN if it isn't already visible to anyone on your local network.
- * Instead it simply sends the packets needed to trick the Minecraft client into thinking
+ * Instead, it simply sends the packets needed to trick the Minecraft client into thinking
  * that this is a single-player world that has been opened to LAN for it to be displayed on
  * the bottom of the server list.
  *
  * @see <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Server_List_Ping#Ping_via_LAN_(Open_to_LAN_in_Singleplayer)">the Minecraft wiki</a>
  */
 public final class OpenToLAN {
-    private static final InetSocketAddress PING_ADDRESS = new InetSocketAddress("224.0.2.60", 4445);
     private static final Logger LOGGER = LoggerFactory.getLogger(OpenToLAN.class);
-
-    private record State(DatagramSocket socket, Task task, long eventDelayNanos,
-                         AtomicReference<@Nullable Snapshot> snapshot) {
-    }
-
-    private record Snapshot(DatagramPacket packet, long timestampNanos) {
-    }
-
     private static volatile @Nullable State state = null;
 
     private OpenToLAN() {
@@ -59,9 +49,10 @@ public final class OpenToLAN {
      * @param config the configuration
      * @return {@code true} if it was opened successfully, {@code false} otherwise
      */
-    public static boolean open(OpenToLANConfig config) {
+    public static synchronized boolean open(OpenToLANConfig config) {
         Objects.requireNonNull(config, "config");
         if (state != null) return false;
+        final long eventDelayNanos = config.delayBetweenEvent.toNanos();
         final DatagramSocket socket;
         try {
             socket = new DatagramSocket(config.port);
@@ -69,10 +60,16 @@ public final class OpenToLAN {
             LOGGER.warn("Could not bind to the port!", e);
             return false;
         }
-        final Task task = MinecraftServer.getSchedulerManager().buildTask(OpenToLAN::ping)
-                .repeat(config.delayBetweenPings)
-                .schedule();
-        state = new State(socket, task, config.delayBetweenEvent.toNanos(), new AtomicReference<>());
+        final Task task;
+        try {
+            task = MinecraftServer.getSchedulerManager().buildTask(OpenToLAN::ping)
+                    .repeat(config.delayBetweenPings)
+                    .schedule();
+        } catch (RuntimeException exception) {
+            socket.close();
+            throw exception;
+        }
+        state = new State(socket, task, eventDelayNanos);
         return true;
     }
 
@@ -81,7 +78,7 @@ public final class OpenToLAN {
      *
      * @return {@code true} if it was closed, {@code false} if it was already closed
      */
-    public static boolean close() {
+    public static synchronized boolean close() {
         final State current = state;
         if (current == null) return false;
         state = null;
@@ -104,28 +101,46 @@ public final class OpenToLAN {
         if (current == null) return;
         Thread.startVirtualThread(() -> {
             try {
-                if (!MinecraftServer.getServer().isOpen()) return;
-                final DatagramPacket packet = resolvePacket(current);
+                if (state != current || !MinecraftServer.getServer().isOpen()) return;
+                final DatagramPacket packet = current.resolvePacket();
+                if (state != current) return;
                 current.socket.send(packet);
             } catch (IOException e) {
-                LOGGER.warn("Could not send Open to LAN packet!", e);
+                if (state == current) LOGGER.warn("Could not send Open to LAN packet!", e);
             } catch (Exception e) {
                 MinecraftServer.getExceptionManager().handleException(e);
             }
         });
     }
 
-    private static DatagramPacket resolvePacket(State current) {
-        final Snapshot existing = current.snapshot.get();
-        final long now = System.nanoTime();
-        if (existing != null && now - existing.timestampNanos < current.eventDelayNanos) {
-            return existing.packet;
+    private static final class State {
+        private final DatagramSocket socket;
+        private final Task task;
+        private final long eventDelayNanos;
+        private @Nullable Snapshot snapshot;
+
+        private State(DatagramSocket socket, Task task, long eventDelayNanos) {
+            this.socket = socket;
+            this.task = task;
+            this.eventDelayNanos = eventDelayNanos;
+            super();
         }
-        final ServerListPingEvent event = new ServerListPingEvent(OPEN_TO_LAN);
-        EventDispatcher.call(event);
-        final byte[] data = OPEN_TO_LAN.getPingResponse(event.getStatus()).getBytes(StandardCharsets.UTF_8);
-        final DatagramPacket packet = new DatagramPacket(data, data.length, PING_ADDRESS);
-        current.snapshot.set(new Snapshot(packet, now));
-        return packet;
+
+        private synchronized DatagramPacket resolvePacket() {
+            final long now = System.nanoTime();
+            if (snapshot != null && now - snapshot.timestampNanos < eventDelayNanos) {
+                return snapshot.packet;
+            }
+            final ServerListPingEvent event = new ServerListPingEvent(OPEN_TO_LAN);
+            EventDispatcher.call(event);
+            final byte[] data = OPEN_TO_LAN.getPingResponse(event.getStatus()).getBytes(StandardCharsets.UTF_8);
+            final DatagramPacket packet = new DatagramPacket(data, data.length,
+                    new InetSocketAddress("224.0.2.60", 4445));
+            this.snapshot = new Snapshot(packet, now);
+            return packet;
+        }
+
+        private record Snapshot(DatagramPacket packet, long timestampNanos) {
+        }
     }
 }
