@@ -1,11 +1,14 @@
 package net.minestom.server.instance.block;
 
-import it.unimi.dsi.fastutil.objects.*;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.key.KeyPattern;
+import it.unimi.dsi.fastutil.objects.Object2ByteMap;
+import it.unimi.dsi.fastutil.objects.Object2ByteOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.block.BlockUtils;
 import net.minestom.server.utils.collection.ObjectArray;
@@ -46,7 +49,7 @@ record BlockImpl(RegistryData.BlockEntry registry,
         Map<List<PropertyType>, PropertyType[]> propertyLayoutCache = new HashMap<>();
 
         REGISTRY = RegistryData.createStaticRegistry(
-                Key.key("block"),
+                BuiltinRegistries.BLOCK,
                 (namespace, properties) -> {
                     final int blockId = properties.getInt("id");
                     final RegistryData.Properties stateObject = properties.section("states");
@@ -130,8 +133,8 @@ record BlockImpl(RegistryData.BlockEntry registry,
         BLOCK_SCHEMAS = blockSchemas.toList();
     }
 
-    static @UnknownNullability Block get(@KeyPattern String key) {
-        return REGISTRY.get(Key.key(key));
+    static @UnknownNullability Block get(RegistryKey<Block> key) {
+        return REGISTRY.get(key);
     }
 
     static int statesCount() {

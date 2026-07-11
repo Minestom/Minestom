@@ -1,6 +1,5 @@
 package net.minestom.server.instance.block.jukebox;
 
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
@@ -57,7 +56,7 @@ public sealed interface JukeboxSong extends Holder.Direct<JukeboxSong>, JukeboxS
      */
     @ApiStatus.Internal
     static DynamicRegistry<JukeboxSong> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("jukebox_song"), REGISTRY_CODEC, RegistryData.Resource.JUKEBOX_SONGS);
+        return DynamicRegistry.create(BuiltinRegistries.JUKEBOX_SONG, REGISTRY_CODEC);
     }
 
     SoundEvent soundEvent();

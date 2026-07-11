@@ -9,9 +9,9 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface Enchantments permits Enchantment {
-    RegistryKey<Enchantment> VANISHING_CURSE = RegistryKey.unsafeOf("vanishing_curse");
-
     RegistryKey<Enchantment> DEPTH_STRIDER = RegistryKey.unsafeOf("depth_strider");
+
+    RegistryKey<Enchantment> VANISHING_CURSE = RegistryKey.unsafeOf("vanishing_curse");
 
     RegistryKey<Enchantment> EFFICIENCY = RegistryKey.unsafeOf("efficiency");
 
@@ -25,27 +25,27 @@ sealed interface Enchantments permits Enchantment {
 
     RegistryKey<Enchantment> PUNCH = RegistryKey.unsafeOf("punch");
 
-    RegistryKey<Enchantment> RIPTIDE = RegistryKey.unsafeOf("riptide");
-
     RegistryKey<Enchantment> FLAME = RegistryKey.unsafeOf("flame");
+
+    RegistryKey<Enchantment> RIPTIDE = RegistryKey.unsafeOf("riptide");
 
     RegistryKey<Enchantment> BLAST_PROTECTION = RegistryKey.unsafeOf("blast_protection");
 
-    RegistryKey<Enchantment> PROTECTION = RegistryKey.unsafeOf("protection");
-
     RegistryKey<Enchantment> FROST_WALKER = RegistryKey.unsafeOf("frost_walker");
+
+    RegistryKey<Enchantment> PROTECTION = RegistryKey.unsafeOf("protection");
 
     RegistryKey<Enchantment> FIRE_ASPECT = RegistryKey.unsafeOf("fire_aspect");
 
+    RegistryKey<Enchantment> LOYALTY = RegistryKey.unsafeOf("loyalty");
+
     RegistryKey<Enchantment> SWEEPING_EDGE = RegistryKey.unsafeOf("sweeping_edge");
 
-    RegistryKey<Enchantment> LOYALTY = RegistryKey.unsafeOf("loyalty");
+    RegistryKey<Enchantment> FIRE_PROTECTION = RegistryKey.unsafeOf("fire_protection");
 
     RegistryKey<Enchantment> RESPIRATION = RegistryKey.unsafeOf("respiration");
 
     RegistryKey<Enchantment> QUICK_CHARGE = RegistryKey.unsafeOf("quick_charge");
-
-    RegistryKey<Enchantment> FIRE_PROTECTION = RegistryKey.unsafeOf("fire_protection");
 
     RegistryKey<Enchantment> LUCK_OF_THE_SEA = RegistryKey.unsafeOf("luck_of_the_sea");
 
@@ -59,9 +59,9 @@ sealed interface Enchantments permits Enchantment {
 
     RegistryKey<Enchantment> CHANNELING = RegistryKey.unsafeOf("channeling");
 
-    RegistryKey<Enchantment> LOOTING = RegistryKey.unsafeOf("looting");
-
     RegistryKey<Enchantment> FORTUNE = RegistryKey.unsafeOf("fortune");
+
+    RegistryKey<Enchantment> LOOTING = RegistryKey.unsafeOf("looting");
 
     RegistryKey<Enchantment> BREACH = RegistryKey.unsafeOf("breach");
 
@@ -71,25 +71,25 @@ sealed interface Enchantments permits Enchantment {
 
     RegistryKey<Enchantment> MENDING = RegistryKey.unsafeOf("mending");
 
-    RegistryKey<Enchantment> SHARPNESS = RegistryKey.unsafeOf("sharpness");
-
     RegistryKey<Enchantment> FEATHER_FALLING = RegistryKey.unsafeOf("feather_falling");
+
+    RegistryKey<Enchantment> SHARPNESS = RegistryKey.unsafeOf("sharpness");
 
     RegistryKey<Enchantment> KNOCKBACK = RegistryKey.unsafeOf("knockback");
 
     RegistryKey<Enchantment> SMITE = RegistryKey.unsafeOf("smite");
 
-    RegistryKey<Enchantment> PROJECTILE_PROTECTION = RegistryKey.unsafeOf("projectile_protection");
-
     RegistryKey<Enchantment> INFINITY = RegistryKey.unsafeOf("infinity");
+
+    RegistryKey<Enchantment> PROJECTILE_PROTECTION = RegistryKey.unsafeOf("projectile_protection");
 
     RegistryKey<Enchantment> THORNS = RegistryKey.unsafeOf("thorns");
 
-    RegistryKey<Enchantment> MULTISHOT = RegistryKey.unsafeOf("multishot");
+    RegistryKey<Enchantment> AQUA_AFFINITY = RegistryKey.unsafeOf("aqua_affinity");
 
     RegistryKey<Enchantment> LURE = RegistryKey.unsafeOf("lure");
 
-    RegistryKey<Enchantment> AQUA_AFFINITY = RegistryKey.unsafeOf("aqua_affinity");
+    RegistryKey<Enchantment> MULTISHOT = RegistryKey.unsafeOf("multishot");
 
     RegistryKey<Enchantment> SWIFT_SNEAK = RegistryKey.unsafeOf("swift_sneak");
 

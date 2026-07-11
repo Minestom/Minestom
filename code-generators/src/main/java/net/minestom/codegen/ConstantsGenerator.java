@@ -13,7 +13,7 @@ record ConstantsGenerator(Codegen codegen) {
     void generate() {
         ClassName implCN = ClassName.get("net.minestom.server", "MinecraftServer");
         ClassName minecraftConstantsCN = ClassName.get("net.minestom.server", "MinecraftConstants");
-        JsonObject constants = codegen.objectResource("constants.json");
+        JsonObject constants = codegen.objectResource("constants");
 
         TypeSpec.Builder constantsInterface = TypeSpec.interfaceBuilder(minecraftConstantsCN)
                 .addModifiers(Modifier.SEALED)

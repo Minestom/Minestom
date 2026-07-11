@@ -8,11 +8,7 @@ import net.minestom.server.utils.Either;
 import org.intellij.lang.annotations.Subst;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.Objects;
+import java.util.*;
 
 final class RegistryCodecs {
 
@@ -128,8 +124,7 @@ final class RegistryCodecs {
             if (tagKeyResult instanceof Result.Ok(String tagKeyStr)) {
                 if (registry != null && tagKeyStr.startsWith("#")) {
                     final var tagKey = TagKey.<T>ofHash(tagKeyStr);
-                    // During initialization of the registry we allow creating tags that do not exist yet, otherwise we do not.
-                    final var tag = context.init() ? registry.getOrCreateTag(tagKey) : registry.getTag(tagKey);
+                    final var tag = registry.getTag(tagKey);
                     return tag != null ? new Result.Ok<>(tag)
                             : new Result.Error<>("Unknown tag " + tagKey + " for registry " + registry.key());
                 }

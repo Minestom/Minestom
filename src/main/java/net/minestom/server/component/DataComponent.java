@@ -1,11 +1,5 @@
 package net.minestom.server.component;
 
-import java.util.Collection;
-import java.util.function.UnaryOperator;
-
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Nullable;
-
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import net.minestom.server.codec.Codec;
@@ -14,6 +8,11 @@ import net.minestom.server.codec.Encoder;
 import net.minestom.server.item.enchant.EffectComponent;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
+import java.util.function.UnaryOperator;
 
 /**
  * A common type to represent all forms of component in the game. Each group of component types has its own declaration
@@ -26,7 +25,7 @@ import net.minestom.server.registry.StaticProtocolObject;
 public sealed interface DataComponent<T> extends StaticProtocolObject<DataComponent<T>>, Encoder<T>, Decoder<T> permits DataComponentImpl {
 
     NetworkBuffer.Type<DataComponent<?>> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(DataComponent::fromId, DataComponent::id);
-    Codec<DataComponent<?>> CODEC = Codec.STRING.transform(DataComponent::fromKey, DataComponent::name);
+    Codec<DataComponent<?>> CODEC = Codec.KEY.transform(DataComponent::fromKey, DataComponent::key);
 
     NetworkBuffer.Type<DataComponentMap> MAP_NETWORK_TYPE = DataComponentMap.networkType(DataComponent::fromId);
     Codec<DataComponentMap> MAP_NBT_TYPE = DataComponentMap.codec(DataComponent::fromId, DataComponent::fromKey);

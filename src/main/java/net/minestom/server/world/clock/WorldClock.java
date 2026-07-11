@@ -1,12 +1,11 @@
 package net.minestom.server.world.clock;
 
-import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -27,6 +26,6 @@ public sealed interface WorldClock extends WorldClocks permits WorldClockImpl {
      */
     @ApiStatus.Internal
     static DynamicRegistry<WorldClock> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("world_clock"), REGISTRY_CODEC, RegistryData.Resource.WORLD_CLOCKS);
+        return DynamicRegistry.create(BuiltinRegistries.WORLD_CLOCK, REGISTRY_CODEC);
     }
 }

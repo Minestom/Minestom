@@ -15,13 +15,13 @@ sealed interface SulfurCubeArchetypes permits SulfurCubeArchetype {
 
     RegistryKey<SulfurCubeArchetype> EXPLOSIVE = RegistryKey.unsafeOf("explosive");
 
-    RegistryKey<SulfurCubeArchetype> HOT = RegistryKey.unsafeOf("hot");
-
     RegistryKey<SulfurCubeArchetype> BOUNCY = RegistryKey.unsafeOf("bouncy");
 
-    RegistryKey<SulfurCubeArchetype> SLOW_FLAT = RegistryKey.unsafeOf("slow_flat");
+    RegistryKey<SulfurCubeArchetype> HOT = RegistryKey.unsafeOf("hot");
 
     RegistryKey<SulfurCubeArchetype> HIGH_RESISTANCE = RegistryKey.unsafeOf("high_resistance");
+
+    RegistryKey<SulfurCubeArchetype> SLOW_FLAT = RegistryKey.unsafeOf("slow_flat");
 
     RegistryKey<SulfurCubeArchetype> STICKY = RegistryKey.unsafeOf("sticky");
 
