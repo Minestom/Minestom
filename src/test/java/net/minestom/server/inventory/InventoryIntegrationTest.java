@@ -297,4 +297,40 @@ public class InventoryIntegrationTest {
             assertEquals(player.getInventory(), event.getInventory());
         });
     }
+
+    @Test
+    public void bundleActivateTestInventorySizeSlot(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+
+        var listener = env.trackEvent(InventoryBundleItemSelectEvent.class, EventFilter.PLAYER, player);
+        // Window slot 46 corresponds to player inventory size slot (which is 46)
+        player.addPacketToQueue(new ClientSelectBundleItemPacket(46, 42));
+        player.interpretPacketQueue();
+
+        listener.assertSingle(event -> {
+            assertEquals(player.getInventory().getSize(), event.getSlot());
+            assertEquals(player.getInventory(), event.getInventory());
+        });
+    }
+
+    @Test
+    public void bundleActivateTestInventorySizeSlotContainer(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+        final var inventory = new Inventory(InventoryType.CHEST_3_ROW, "title");
+        player.openInventory(inventory);
+
+        var listener = env.trackEvent(InventoryBundleItemSelectEvent.class, EventFilter.PLAYER, player);
+        // Window slot 64 translates to player inventory size slot (which is 46)
+        player.addPacketToQueue(new ClientSelectBundleItemPacket(64, 42));
+        player.interpretPacketQueue();
+
+        listener.assertSingle(event -> {
+            assertEquals(player.getInventory().getSize(), event.getSlot());
+            assertEquals(player.getInventory(), event.getInventory());
+        });
+    }
 }
