@@ -2,10 +2,13 @@ package net.minestom.server.inventory;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.event.EventFilter;
+import net.minestom.server.event.inventory.InventoryBundleItemSelectEvent;
 import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.network.packet.client.play.ClientSelectBundleItemPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.testing.Env;
@@ -239,5 +242,95 @@ public class InventoryIntegrationTest {
 
         player.openInventory(inventory);
         assertTrue(called.get(), "InventoryOpenEvent not fired");
+    }
+
+    @Test
+    public void bundleActivateTestLowerInventory(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+        final var inventory = new Inventory(InventoryType.CHEST_6_ROW, "title");
+        player.openInventory(inventory);
+        // No bundles are set - they might not exist serverside and be sent directly to the client
+
+        var listenerLowerInv = env.trackEvent(InventoryBundleItemSelectEvent.class, EventFilter.PLAYER, player);
+        player.addPacketToQueue(new ClientSelectBundleItemPacket(inventory.getSize() + 2, 42));
+        player.interpretPacketQueue();
+        listenerLowerInv.assertSingle(event -> {
+            assertEquals(11, event.getSlot());
+            assertEquals(player.getInventory(), event.getInventory());
+        });
+    }
+
+    @Test
+    public void bundleActivateTestUpperInventory(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+        final var inventory = new Inventory(InventoryType.CHEST_3_ROW, "title"); // size = 27
+        player.openInventory(inventory);
+
+        var listener = env.trackEvent(InventoryBundleItemSelectEvent.class, EventFilter.PLAYER, player);
+        // Window slot 27 (27 + 0) corresponds to player inventory main slot 9 in Minestom
+        player.addPacketToQueue(new ClientSelectBundleItemPacket(27, 42));
+        player.interpretPacketQueue();
+
+        listener.assertSingle(event -> {
+            assertEquals(9, event.getSlot()); // Expected: slot 9 (main inventory slot 9)
+            assertEquals(player.getInventory(), event.getInventory());
+        });
+    }
+
+    @Test
+    public void bundleActivateTestNoContainerOpen(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+
+        var listener = env.trackEvent(InventoryBundleItemSelectEvent.class, EventFilter.PLAYER, player);
+        // Window slot 36 corresponds to hotbar slot 0 in Minestom (when openInventory == null)
+        player.addPacketToQueue(new ClientSelectBundleItemPacket(36, 42));
+        player.interpretPacketQueue();
+
+        listener.assertSingle(event -> {
+            assertEquals(0, event.getSlot()); // Expected: slot 0 (hotbar slot 0)
+            assertEquals(player.getInventory(), event.getInventory());
+        });
+    }
+
+    @Test
+    public void bundleActivateTestInventorySizeSlot(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+
+        var listener = env.trackEvent(InventoryBundleItemSelectEvent.class, EventFilter.PLAYER, player);
+        // Window slot 46 corresponds to player inventory size slot (which is 46)
+        player.addPacketToQueue(new ClientSelectBundleItemPacket(46, 42));
+        player.interpretPacketQueue();
+
+        listener.assertSingle(event -> {
+            assertEquals(player.getInventory().getSize(), event.getSlot());
+            assertEquals(player.getInventory(), event.getInventory());
+        });
+    }
+
+    @Test
+    public void bundleActivateTestInventorySizeSlotContainer(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+        final var inventory = new Inventory(InventoryType.CHEST_3_ROW, "title");
+        player.openInventory(inventory);
+
+        var listener = env.trackEvent(InventoryBundleItemSelectEvent.class, EventFilter.PLAYER, player);
+        // Window slot 64 translates to player inventory size slot (which is 46)
+        player.addPacketToQueue(new ClientSelectBundleItemPacket(64, 42));
+        player.interpretPacketQueue();
+
+        listener.assertSingle(event -> {
+            assertEquals(player.getInventory().getSize(), event.getSlot());
+            assertEquals(player.getInventory(), event.getInventory());
+        });
     }
 }

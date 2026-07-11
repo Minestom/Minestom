@@ -1,7 +1,7 @@
 package net.minestom.server.scoreboard;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import net.minestom.server.color.TeamColor;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.utils.PacketSendingUtils;
@@ -89,12 +89,12 @@ public final class TeamManager {
      *
      * @param name      The registry name
      * @param prefix    The team prefix
-     * @param teamColor The team format
+     * @param color     The team format
      * @param suffix    The team suffix
      * @return the created {@link Team} with a prefix, teamColor and suffix
      */
-    public Team createTeam(String name, Component prefix, NamedTextColor teamColor, Component suffix) {
-        return this.createBuilder(name).prefix(prefix).teamColor(teamColor).suffix(suffix).updateTeamPacket().build();
+    public Team createTeam(String name, Component prefix, @Nullable TeamColor color, Component suffix) {
+        return this.createBuilder(name).prefix(prefix).teamColor(color).suffix(suffix).updateTeamPacket().build();
     }
 
     /**
@@ -103,12 +103,12 @@ public final class TeamManager {
      * @param name        The registry name
      * @param displayName The display name
      * @param prefix      The team prefix
-     * @param teamColor   The team color
+     * @param color       The team color
      * @param suffix      The team suffix
      * @return the created {@link Team} with a prefix, teamColor, suffix and the display name
      */
-    public Team createTeam(String name, Component displayName, Component prefix, NamedTextColor teamColor, Component suffix) {
-        return this.createBuilder(name).teamDisplayName(displayName).prefix(prefix).teamColor(teamColor).suffix(suffix).updateTeamPacket().build();
+    public Team createTeam(String name, Component displayName, Component prefix, @Nullable TeamColor color, Component suffix) {
+        return this.createBuilder(name).teamDisplayName(displayName).prefix(prefix).teamColor(color).suffix(suffix).updateTeamPacket().build();
     }
 
     /**

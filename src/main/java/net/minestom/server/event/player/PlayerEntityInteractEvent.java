@@ -50,7 +50,6 @@ public class PlayerEntityInteractEvent implements PlayerInstanceEvent {
     /**
      * Gets the position at which the entity was interacted
      *
-     * @see net.minestom.server.network.packet.client.play.ClientInteractEntityPacket.InteractAt
      * @return the interaction position
      */
     public Point getInteractPosition() {

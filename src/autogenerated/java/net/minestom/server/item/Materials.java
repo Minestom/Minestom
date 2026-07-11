@@ -59,6 +59,60 @@ sealed interface Materials permits Material {
 
     Material CHISELED_TUFF_BRICKS = MaterialImpl.get("chiseled_tuff_bricks");
 
+    Material SULFUR = MaterialImpl.get("sulfur");
+
+    Material POTENT_SULFUR = MaterialImpl.get("potent_sulfur");
+
+    Material SULFUR_SLAB = MaterialImpl.get("sulfur_slab");
+
+    Material SULFUR_STAIRS = MaterialImpl.get("sulfur_stairs");
+
+    Material SULFUR_WALL = MaterialImpl.get("sulfur_wall");
+
+    Material POLISHED_SULFUR = MaterialImpl.get("polished_sulfur");
+
+    Material POLISHED_SULFUR_SLAB = MaterialImpl.get("polished_sulfur_slab");
+
+    Material POLISHED_SULFUR_STAIRS = MaterialImpl.get("polished_sulfur_stairs");
+
+    Material POLISHED_SULFUR_WALL = MaterialImpl.get("polished_sulfur_wall");
+
+    Material SULFUR_BRICKS = MaterialImpl.get("sulfur_bricks");
+
+    Material SULFUR_BRICK_SLAB = MaterialImpl.get("sulfur_brick_slab");
+
+    Material SULFUR_BRICK_STAIRS = MaterialImpl.get("sulfur_brick_stairs");
+
+    Material SULFUR_BRICK_WALL = MaterialImpl.get("sulfur_brick_wall");
+
+    Material CHISELED_SULFUR = MaterialImpl.get("chiseled_sulfur");
+
+    Material CINNABAR = MaterialImpl.get("cinnabar");
+
+    Material CINNABAR_SLAB = MaterialImpl.get("cinnabar_slab");
+
+    Material CINNABAR_STAIRS = MaterialImpl.get("cinnabar_stairs");
+
+    Material CINNABAR_WALL = MaterialImpl.get("cinnabar_wall");
+
+    Material POLISHED_CINNABAR = MaterialImpl.get("polished_cinnabar");
+
+    Material POLISHED_CINNABAR_SLAB = MaterialImpl.get("polished_cinnabar_slab");
+
+    Material POLISHED_CINNABAR_STAIRS = MaterialImpl.get("polished_cinnabar_stairs");
+
+    Material POLISHED_CINNABAR_WALL = MaterialImpl.get("polished_cinnabar_wall");
+
+    Material CINNABAR_BRICKS = MaterialImpl.get("cinnabar_bricks");
+
+    Material CINNABAR_BRICK_SLAB = MaterialImpl.get("cinnabar_brick_slab");
+
+    Material CINNABAR_BRICK_STAIRS = MaterialImpl.get("cinnabar_brick_stairs");
+
+    Material CINNABAR_BRICK_WALL = MaterialImpl.get("cinnabar_brick_wall");
+
+    Material CHISELED_CINNABAR = MaterialImpl.get("chiseled_cinnabar");
+
     Material DRIPSTONE_BLOCK = MaterialImpl.get("dripstone_block");
 
     Material GRASS_BLOCK = MaterialImpl.get("grass_block");
@@ -191,49 +245,11 @@ sealed interface Materials permits Material {
 
     Material COPPER_BLOCK = MaterialImpl.get("copper_block");
 
-    Material GOLD_BLOCK = MaterialImpl.get("gold_block");
-
-    Material DIAMOND_BLOCK = MaterialImpl.get("diamond_block");
-
-    Material NETHERITE_BLOCK = MaterialImpl.get("netherite_block");
-
     Material EXPOSED_COPPER = MaterialImpl.get("exposed_copper");
 
     Material WEATHERED_COPPER = MaterialImpl.get("weathered_copper");
 
     Material OXIDIZED_COPPER = MaterialImpl.get("oxidized_copper");
-
-    Material CHISELED_COPPER = MaterialImpl.get("chiseled_copper");
-
-    Material EXPOSED_CHISELED_COPPER = MaterialImpl.get("exposed_chiseled_copper");
-
-    Material WEATHERED_CHISELED_COPPER = MaterialImpl.get("weathered_chiseled_copper");
-
-    Material OXIDIZED_CHISELED_COPPER = MaterialImpl.get("oxidized_chiseled_copper");
-
-    Material CUT_COPPER = MaterialImpl.get("cut_copper");
-
-    Material EXPOSED_CUT_COPPER = MaterialImpl.get("exposed_cut_copper");
-
-    Material WEATHERED_CUT_COPPER = MaterialImpl.get("weathered_cut_copper");
-
-    Material OXIDIZED_CUT_COPPER = MaterialImpl.get("oxidized_cut_copper");
-
-    Material CUT_COPPER_STAIRS = MaterialImpl.get("cut_copper_stairs");
-
-    Material EXPOSED_CUT_COPPER_STAIRS = MaterialImpl.get("exposed_cut_copper_stairs");
-
-    Material WEATHERED_CUT_COPPER_STAIRS = MaterialImpl.get("weathered_cut_copper_stairs");
-
-    Material OXIDIZED_CUT_COPPER_STAIRS = MaterialImpl.get("oxidized_cut_copper_stairs");
-
-    Material CUT_COPPER_SLAB = MaterialImpl.get("cut_copper_slab");
-
-    Material EXPOSED_CUT_COPPER_SLAB = MaterialImpl.get("exposed_cut_copper_slab");
-
-    Material WEATHERED_CUT_COPPER_SLAB = MaterialImpl.get("weathered_cut_copper_slab");
-
-    Material OXIDIZED_CUT_COPPER_SLAB = MaterialImpl.get("oxidized_cut_copper_slab");
 
     Material WAXED_COPPER_BLOCK = MaterialImpl.get("waxed_copper_block");
 
@@ -243,6 +259,20 @@ sealed interface Materials permits Material {
 
     Material WAXED_OXIDIZED_COPPER = MaterialImpl.get("waxed_oxidized_copper");
 
+    Material GOLD_BLOCK = MaterialImpl.get("gold_block");
+
+    Material DIAMOND_BLOCK = MaterialImpl.get("diamond_block");
+
+    Material NETHERITE_BLOCK = MaterialImpl.get("netherite_block");
+
+    Material CHISELED_COPPER = MaterialImpl.get("chiseled_copper");
+
+    Material EXPOSED_CHISELED_COPPER = MaterialImpl.get("exposed_chiseled_copper");
+
+    Material WEATHERED_CHISELED_COPPER = MaterialImpl.get("weathered_chiseled_copper");
+
+    Material OXIDIZED_CHISELED_COPPER = MaterialImpl.get("oxidized_chiseled_copper");
+
     Material WAXED_CHISELED_COPPER = MaterialImpl.get("waxed_chiseled_copper");
 
     Material WAXED_EXPOSED_CHISELED_COPPER = MaterialImpl.get("waxed_exposed_chiseled_copper");
@@ -250,6 +280,14 @@ sealed interface Materials permits Material {
     Material WAXED_WEATHERED_CHISELED_COPPER = MaterialImpl.get("waxed_weathered_chiseled_copper");
 
     Material WAXED_OXIDIZED_CHISELED_COPPER = MaterialImpl.get("waxed_oxidized_chiseled_copper");
+
+    Material CUT_COPPER = MaterialImpl.get("cut_copper");
+
+    Material EXPOSED_CUT_COPPER = MaterialImpl.get("exposed_cut_copper");
+
+    Material WEATHERED_CUT_COPPER = MaterialImpl.get("weathered_cut_copper");
+
+    Material OXIDIZED_CUT_COPPER = MaterialImpl.get("oxidized_cut_copper");
 
     Material WAXED_CUT_COPPER = MaterialImpl.get("waxed_cut_copper");
 
@@ -259,6 +297,14 @@ sealed interface Materials permits Material {
 
     Material WAXED_OXIDIZED_CUT_COPPER = MaterialImpl.get("waxed_oxidized_cut_copper");
 
+    Material CUT_COPPER_STAIRS = MaterialImpl.get("cut_copper_stairs");
+
+    Material EXPOSED_CUT_COPPER_STAIRS = MaterialImpl.get("exposed_cut_copper_stairs");
+
+    Material WEATHERED_CUT_COPPER_STAIRS = MaterialImpl.get("weathered_cut_copper_stairs");
+
+    Material OXIDIZED_CUT_COPPER_STAIRS = MaterialImpl.get("oxidized_cut_copper_stairs");
+
     Material WAXED_CUT_COPPER_STAIRS = MaterialImpl.get("waxed_cut_copper_stairs");
 
     Material WAXED_EXPOSED_CUT_COPPER_STAIRS = MaterialImpl.get("waxed_exposed_cut_copper_stairs");
@@ -266,6 +312,14 @@ sealed interface Materials permits Material {
     Material WAXED_WEATHERED_CUT_COPPER_STAIRS = MaterialImpl.get("waxed_weathered_cut_copper_stairs");
 
     Material WAXED_OXIDIZED_CUT_COPPER_STAIRS = MaterialImpl.get("waxed_oxidized_cut_copper_stairs");
+
+    Material CUT_COPPER_SLAB = MaterialImpl.get("cut_copper_slab");
+
+    Material EXPOSED_CUT_COPPER_SLAB = MaterialImpl.get("exposed_cut_copper_slab");
+
+    Material WEATHERED_CUT_COPPER_SLAB = MaterialImpl.get("weathered_cut_copper_slab");
+
+    Material OXIDIZED_CUT_COPPER_SLAB = MaterialImpl.get("oxidized_cut_copper_slab");
 
     Material WAXED_CUT_COPPER_SLAB = MaterialImpl.get("waxed_cut_copper_slab");
 
@@ -466,6 +520,8 @@ sealed interface Materials permits Material {
     Material BLACK_WOOL = MaterialImpl.get("black_wool");
 
     Material DANDELION = MaterialImpl.get("dandelion");
+
+    Material GOLDEN_DANDELION = MaterialImpl.get("golden_dandelion");
 
     Material OPEN_EYEBLOSSOM = MaterialImpl.get("open_eyeblossom");
 
@@ -2055,6 +2111,8 @@ sealed interface Materials permits Material {
 
     Material AXOLOTL_BUCKET = MaterialImpl.get("axolotl_bucket");
 
+    Material SULFUR_CUBE_BUCKET = MaterialImpl.get("sulfur_cube_bucket");
+
     Material TADPOLE_BUCKET = MaterialImpl.get("tadpole_bucket");
 
     Material BRICK = MaterialImpl.get("brick");
@@ -2338,6 +2396,8 @@ sealed interface Materials permits Material {
     Material MOOSHROOM_SPAWN_EGG = MaterialImpl.get("mooshroom_spawn_egg");
 
     Material SNIFFER_SPAWN_EGG = MaterialImpl.get("sniffer_spawn_egg");
+
+    Material SULFUR_CUBE_SPAWN_EGG = MaterialImpl.get("sulfur_cube_spawn_egg");
 
     Material COPPER_GOLEM_SPAWN_EGG = MaterialImpl.get("copper_golem_spawn_egg");
 
@@ -2631,6 +2691,8 @@ sealed interface Materials permits Material {
 
     Material MUSIC_DISC_BLOCKS = MaterialImpl.get("music_disc_blocks");
 
+    Material MUSIC_DISC_BOUNCE = MaterialImpl.get("music_disc_bounce");
+
     Material MUSIC_DISC_CHIRP = MaterialImpl.get("music_disc_chirp");
 
     Material MUSIC_DISC_CREATOR = MaterialImpl.get("music_disc_creator");
@@ -2846,6 +2908,8 @@ sealed interface Materials permits Material {
     Material AMETHYST_CLUSTER = MaterialImpl.get("amethyst_cluster");
 
     Material POINTED_DRIPSTONE = MaterialImpl.get("pointed_dripstone");
+
+    Material SULFUR_SPIKE = MaterialImpl.get("sulfur_spike");
 
     Material OCHRE_FROGLIGHT = MaterialImpl.get("ochre_froglight");
 

@@ -5,6 +5,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.utils.Rotation;
+import net.minestom.server.utils.validate.Check;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
@@ -15,7 +16,7 @@ public record ClientUpdateStructureBlockPacket(
         Mirror mirror, Rotation rotation,
         String metadata, float integrity,
         long seed, byte flags
-) implements ClientPacket {
+) implements ClientPacket.Play {
 
     public static final NetworkBuffer.Type<ClientUpdateStructureBlockPacket> SERIALIZER = NetworkBufferTemplate.template(
             BLOCK_POSITION, ClientUpdateStructureBlockPacket::location,
@@ -41,6 +42,11 @@ public record ClientUpdateStructureBlockPacket(
      */
     public static final byte SHOW_BOUNDING_BOX = 0x4;
     public static final byte STRICT = 0x8;
+
+    public ClientUpdateStructureBlockPacket {
+        Check.argCondition(name.length() > Short.MAX_VALUE, "Name length cannot be greater than Short.MAX_VALUE");
+        Check.argCondition(metadata.length() > 128, "Metadata length cannot be greater than 128");
+    }
 
     /**
      * Update action, <code>UPDATE_DATA</code> indicates nothing special.

@@ -11,7 +11,7 @@ import net.minestom.server.utils.Range;
 public class ArgumentFloatRange extends ArgumentRange<Range.Float, Float> {
 
     public ArgumentFloatRange(String id) {
-        super(id, -Float.MAX_VALUE, Float.MAX_VALUE, Float::parseFloat, Range.Float::new);
+        super(id, Float::parseFloat, Range.Float::new);
     }
 
     @Override

@@ -1,19 +1,24 @@
 package net.minestom.server.registry;
 
+import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.*;
+import net.minestom.server.entity.metadata.animal.tameable.CatSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
+import net.minestom.server.entity.metadata.cube.SulfurCubeArchetype;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.game.GameEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
+import net.minestom.server.instance.block.predicate.DataComponentPredicate;
 import net.minestom.server.instance.fluid.Fluid;
+import net.minestom.server.instance.gamerule.GameRule;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.armor.TrimPattern;
@@ -23,8 +28,10 @@ import net.minestom.server.message.ChatType;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.potion.PotionEffect;
+import net.minestom.server.potion.PotionType;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
+import net.minestom.server.world.clock.WorldClock;
 import net.minestom.server.world.timeline.Timeline;
 
 import java.util.List;
@@ -63,6 +70,10 @@ public interface Registries {
         return PotionEffect.staticRegistry();
     }
 
+    default Registry<PotionType> potionType() {
+        return PotionType.staticRegistry();
+    }
+
     default Registry<EntityType> entityType() {
         return EntityType.staticRegistry();
     }
@@ -73,6 +84,10 @@ public interface Registries {
 
     default Registry<GameEvent> gameEvent() {
         return GameEvent.staticRegistry();
+    }
+
+    default Registry<GameRule<?>> gameRule() {
+        return GameRule.staticRegistry();
     }
 
     // Dynamic registries
@@ -105,19 +120,31 @@ public interface Registries {
 
     DynamicRegistry<CatVariant> catVariant();
 
+    DynamicRegistry<CatSoundVariant> catSoundVariant();
+
     DynamicRegistry<ChickenVariant> chickenVariant();
 
+    DynamicRegistry<ChickenSoundVariant> chickenSoundVariant();
+
     DynamicRegistry<CowVariant> cowVariant();
+
+    DynamicRegistry<CowSoundVariant> cowSoundVariant();
 
     DynamicRegistry<FrogVariant> frogVariant();
 
     DynamicRegistry<PigVariant> pigVariant();
+
+    DynamicRegistry<PigSoundVariant> pigSoundVariant();
 
     DynamicRegistry<ZombieNautilusVariant> zombieNautilusVariant();
 
     DynamicRegistry<Dialog> dialog();
 
     DynamicRegistry<Timeline> timeline();
+
+    DynamicRegistry<WorldClock> worldClock();
+
+    DynamicRegistry<SulfurCubeArchetype> sulfurCubeArchetype();
 
     // The following are _not_ sent to the client.
 
@@ -128,6 +155,8 @@ public interface Registries {
     DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects();
 
     DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects();
+
+    DynamicRegistry<Codec<? extends DataComponentPredicate>> componentPredicateTypes();
 
     @FunctionalInterface
     interface Selector<T> {
@@ -156,6 +185,10 @@ public interface Registries {
         @Override
         default Registry<EntityType> entityType() {
             return registries().entityType();
+        }
+
+        default Registry<PotionType> potionType() {
+            return registries().potionType();
         }
 
         @Override
@@ -239,13 +272,28 @@ public interface Registries {
         }
 
         @Override
+        default DynamicRegistry<CatSoundVariant> catSoundVariant() {
+            return registries().catSoundVariant();
+        }
+
+        @Override
         default DynamicRegistry<ChickenVariant> chickenVariant() {
             return registries().chickenVariant();
         }
 
         @Override
+        default DynamicRegistry<ChickenSoundVariant> chickenSoundVariant() {
+            return registries().chickenSoundVariant();
+        }
+
+        @Override
         default DynamicRegistry<CowVariant> cowVariant() {
             return registries().cowVariant();
+        }
+
+        @Override
+        default DynamicRegistry<CowSoundVariant> cowSoundVariant() {
+            return registries().cowSoundVariant();
         }
 
         @Override
@@ -256,6 +304,11 @@ public interface Registries {
         @Override
         default DynamicRegistry<PigVariant> pigVariant() {
             return registries().pigVariant();
+        }
+
+        @Override
+        default DynamicRegistry<PigSoundVariant> pigSoundVariant() {
+            return registries().pigSoundVariant();
         }
 
         @Override
@@ -271,6 +324,16 @@ public interface Registries {
         @Override
         default DynamicRegistry<Timeline> timeline() {
             return registries().timeline();
+        }
+
+        @Override
+        default DynamicRegistry<WorldClock> worldClock() {
+            return registries().worldClock();
+        }
+
+        @Override
+        default DynamicRegistry<SulfurCubeArchetype> sulfurCubeArchetype() {
+            return registries().sulfurCubeArchetype();
         }
 
         @Override
@@ -291,6 +354,11 @@ public interface Registries {
         @Override
         default DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
             return registries().enchantmentLocationEffects();
+        }
+
+        @Override
+        default DynamicRegistry<Codec<? extends DataComponentPredicate>> componentPredicateTypes() {
+            return registries().componentPredicateTypes();
         }
     }
 }

@@ -27,7 +27,6 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.collection.ConcurrentMessageQueues;
-import net.minestom.server.utils.validate.Check;
 import org.jctools.queues.MessagePassingQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -211,7 +210,7 @@ public final class ConnectionManager {
             throw new RuntimeException("Error getting replies for login plugin messages", t);
         }
         // Send login success packet (and switch to configuration phase)
-        connection.sendPacket(new LoginSuccessPacket(gameProfile));
+        connection.sendPacket(new LoginSuccessPacket(gameProfile, new UUID(0L, 0L)));
         return gameProfile;
     }
 
@@ -242,7 +241,7 @@ public final class ConnectionManager {
         player.sendPacket(new UpdateEnabledFeaturesPacket(event.getFeatureFlags().stream().map(StaticProtocolObject::name).toList()));
 
         final Instance spawningInstance = event.getSpawningInstance();
-        Check.notNull(spawningInstance, "You need to specify a spawning instance in the AsyncPlayerConfigurationEvent");
+        Objects.requireNonNull(spawningInstance, "You need to specify a spawning instance in the AsyncPlayerConfigurationEvent");
 
         if (event.willClearChat()) player.sendPacket(new ResetChatPacket());
 

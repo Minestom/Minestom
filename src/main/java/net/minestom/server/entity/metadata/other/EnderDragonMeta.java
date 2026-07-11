@@ -4,9 +4,10 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.MobMeta;
+import org.jetbrains.annotations.Nullable;
 
 public class EnderDragonMeta extends MobMeta {
-    public EnderDragonMeta(Entity entity, MetadataHolder metadata) {
+    public EnderDragonMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

@@ -32,10 +32,6 @@ public final class MinestomAdventure {
     public static final Codec<CompoundBinaryTag, String, IOException, IOException> NBT_CODEC
             = Codec.codec(tagStringIO::asCompound, tagStringIO::asString);
 
-    /**
-     * If components should be automatically translated in outgoing packets.
-     */
-    public static boolean AUTOMATIC_COMPONENT_TRANSLATION = false;
     // todo: Need to properly add a translator interface so it can check for presence of a key for the flattener.
     public static BiFunction<Component, Locale, Component> COMPONENT_TRANSLATOR = GlobalTranslator::render;
 

@@ -42,13 +42,19 @@ final class RegistriesImpl {
                 registries.wolfVariant(),
                 registries.wolfSoundVariant(),
                 registries.catVariant(),
+                registries.catSoundVariant(),
                 registries.chickenVariant(),
+                registries.chickenSoundVariant(),
                 registries.cowVariant(),
+                registries.cowSoundVariant(),
                 registries.frogVariant(),
                 registries.pigVariant(),
+                registries.pigSoundVariant(),
                 registries.zombieNautilusVariant(),
+                registries.worldClock(),
                 registries.timeline(),
-                registries.dimensionType()
+                registries.dimensionType(),
+                registries.sulfurCubeArchetype()
         );
     }
 

@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.ClickCallbackManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
+
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.event.EventDispatcher;
@@ -14,8 +15,8 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
+
 import net.minestom.server.listener.manager.PacketListenerManager;
-import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
@@ -55,7 +56,7 @@ final class ServerProcessImpl implements ServerProcess, Registries.Delegating {
 
     private final ConnectionManager connection;
     private final PacketListenerManager packetListener;
-    private final PacketParser<ClientPacket> packetParser;
+    private final PacketParser.Client packetParser;
     private final InstanceManager instance;
     private final BlockManager block;
     private final CommandManager command;
@@ -63,7 +64,6 @@ final class ServerProcessImpl implements ServerProcess, Registries.Delegating {
     private final TeamManager team;
     private final GlobalEventHandler eventHandler;
     private final SchedulerManager scheduler;
-    private final BenchmarkManager benchmark;
     private final AdvancementManager advancement;
     private final BossBarManager bossBar;
     private final ClickCallbackManager clickCallbackManager;
@@ -91,7 +91,6 @@ final class ServerProcessImpl implements ServerProcess, Registries.Delegating {
         this.team = new TeamManager();
         this.eventHandler = new GlobalEventHandler();
         this.scheduler = new SchedulerManager();
-        this.benchmark = new BenchmarkManager();
         this.advancement = new AdvancementManager();
         this.bossBar = new BossBarManager();
         this.clickCallbackManager = new ClickCallbackManager();
@@ -116,6 +115,7 @@ final class ServerProcessImpl implements ServerProcess, Registries.Delegating {
     public Registries registries() {
         return registries;
     }
+
 
     @Override
     public ConnectionManager connection() {
@@ -158,11 +158,6 @@ final class ServerProcessImpl implements ServerProcess, Registries.Delegating {
     }
 
     @Override
-    public BenchmarkManager benchmark() {
-        return benchmark;
-    }
-
-    @Override
     public AdvancementManager advancement() {
         return advancement;
     }
@@ -178,7 +173,7 @@ final class ServerProcessImpl implements ServerProcess, Registries.Delegating {
     }
 
     @Override
-    public PacketParser<ClientPacket> packetParser() {
+    public PacketParser.Client packetParser() {
         return packetParser;
     }
 
@@ -250,7 +245,6 @@ final class ServerProcessImpl implements ServerProcess, Registries.Delegating {
         connection.shutdown();
         server.stop();
         LOGGER.info("Shutting down all thread pools.");
-        benchmark.disable();
         dispatcher.shutdown();
         LOGGER.info("{} server stopped successfully.", brand);
     }

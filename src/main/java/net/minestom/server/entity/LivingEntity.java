@@ -29,7 +29,6 @@ import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.component.AttributeList;
 import net.minestom.server.network.ConnectionState;
-import net.minestom.server.network.packet.server.LazyPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
@@ -450,7 +449,10 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public AttributeInstance getAttribute(Attribute attribute) {
         return attributeModifiers.computeIfAbsent(attribute.name(),
-                s -> new AttributeInstance(attribute, this::onAttributeChanged));
+                s -> {
+                    double defaultValue = entityType.registry().defaultAttributes().getOrDefault(attribute, attribute.defaultValue());
+                    return new AttributeInstance(attribute, defaultValue, new ArrayList<>(), this::onAttributeChanged);
+                });
     }
 
     /**
@@ -497,7 +499,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public double getAttributeValue(Attribute attribute) {
         AttributeInstance instance = attributeModifiers.get(attribute.name());
-        return (instance != null) ? instance.getValue() : attribute.defaultValue();
+        if (instance != null) return instance.getValue();
+        return entityType.registry().defaultAttributes().getOrDefault(attribute, attribute.defaultValue());
     }
 
     /**
@@ -540,10 +543,10 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     @Override
     public void updateNewViewer(Player player) {
         super.updateNewViewer(player);
-        player.sendPacket(new LazyPacket(this::getEquipmentsPacket));
+        player.sendPacket(this.getEquipmentsPacket());
 
         if (shouldSendAttributes())
-            player.sendPacket(new LazyPacket(this::getPropertiesPacket));
+            player.sendPacket(this.getPropertiesPacket());
     }
 
     @Override

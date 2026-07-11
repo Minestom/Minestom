@@ -2,7 +2,6 @@ package net.minestom.server.item;
 
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
@@ -10,12 +9,13 @@ import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.component.CustomData;
 import net.minestom.server.item.component.TooltipDisplay;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -60,7 +60,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
     }
 
     public ItemStackImpl {
-        Check.notNull(material, "Material cannot be null");
+        Objects.requireNonNull(material, "Material cannot be null");
 
         // It is relevant to create the minimal diff of the prototype so that #isSimilar returns consistent
         // results for ItemStacks which would resolve to the same thing. For example, consider two items
@@ -148,8 +148,8 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
     }
 
     @Override
-    public CompoundBinaryTag toItemNBT() {
-        final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
+    public CompoundBinaryTag toItemNBT(Registries registries) {
+        final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, registries);
         return (CompoundBinaryTag) CODEC.encode(coder, this).orElseThrow("Invalid NBT for ItemStack");
     }
 

@@ -5,13 +5,15 @@ import net.minestom.server.network.packet.PacketVanilla;
 import net.minestom.server.network.packet.PacketWriting;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.common.ClientPluginMessagePacket;
+import net.minestom.server.registry.Registries;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.List;
 import java.util.zip.DataFormatException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SocketReadTest {
 
@@ -140,6 +142,33 @@ public class SocketReadTest {
         }
         // 5 = max var-int size
         assertEquals(5, requiredCapacity);
+    }
+
+    @Test
+    public void compressedReadDoesNotPollutePoolRegistries() throws DataFormatException {
+        // Encode a framed packet large enough to actually compress (threshold = 256), keeping
+        // the pool untouched by the test setup so the read is the only relevant consumer.
+        final var packet = new ClientPluginMessagePacket("ch", new byte[2000]);
+        final var encoded = NetworkBuffer.resizableBuffer();
+        PacketWriting.writeFramedPacket(encoded, ConnectionState.PLAY, packet, 256);
+        final int length = (int) encoded.writeIndex();
+        final byte[] framed = new byte[length];
+        encoded.copyTo(0, framed, 0, length);
+
+        // Drain the pool so any buffer we inspect afterwards must have been used by the read.
+        while (PacketVanilla.PACKET_POOL.count() > 0) PacketVanilla.PACKET_POOL.get();
+
+        final Registries sourceRegistries = Registries.vanilla();
+        final var source = NetworkBuffer.wrap(framed, 0, framed.length, sourceRegistries);
+        PacketReading.readClients(source, ConnectionState.PLAY, true);
+
+        final NetworkBuffer pooled = PacketVanilla.PACKET_POOL.get();
+        try {
+            assertNotSame(pooled.registries(), sourceRegistries,
+                    "Decompressed pool buffer must not be polluted with registries");
+        } finally {
+            PacketVanilla.PACKET_POOL.add(pooled);
+        }
     }
 
     private static int getVarIntSize(int input) {

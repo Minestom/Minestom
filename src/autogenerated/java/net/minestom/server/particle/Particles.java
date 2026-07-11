@@ -14,6 +14,20 @@ sealed interface Particles permits Particle {
 
     Particle BUBBLE = ParticleImpl.get("minecraft:bubble");
 
+    Particle SULFUR_BUBBLES = ParticleImpl.get("minecraft:sulfur_bubbles");
+
+    Particle NOXIOUS_GAS = ParticleImpl.get("minecraft:noxious_gas");
+
+    Particle NOXIOUS_GAS_CLOUD = ParticleImpl.get("minecraft:noxious_gas_cloud");
+
+    Particle.Geyser GEYSER = ParticleImpl.get("minecraft:geyser");
+
+    Particle.GeyserBase GEYSER_BASE = ParticleImpl.get("minecraft:geyser_base");
+
+    Particle.GeyserPoof GEYSER_POOF = ParticleImpl.get("minecraft:geyser_poof");
+
+    Particle.GeyserPlume GEYSER_PLUME = ParticleImpl.get("minecraft:geyser_plume");
+
     Particle CLOUD = ParticleImpl.get("minecraft:cloud");
 
     Particle COPPER_FIRE_FLAME = ParticleImpl.get("minecraft:copper_fire_flame");
@@ -105,6 +119,10 @@ sealed interface Particles permits Particle {
     Particle.Vibration VIBRATION = ParticleImpl.get("minecraft:vibration");
 
     Particle.Trail TRAIL = ParticleImpl.get("minecraft:trail");
+
+    Particle PAUSE_MOB_GROWTH = ParticleImpl.get("minecraft:pause_mob_growth");
+
+    Particle RESET_MOB_GROWTH = ParticleImpl.get("minecraft:reset_mob_growth");
 
     Particle ITEM_SLIME = ParticleImpl.get("minecraft:item_slime");
 
@@ -235,4 +253,6 @@ sealed interface Particles permits Particle {
     Particle.BlockCrumble BLOCK_CRUMBLE = ParticleImpl.get("minecraft:block_crumble");
 
     Particle FIREFLY = ParticleImpl.get("minecraft:firefly");
+
+    Particle SULFUR_CUBE_GOO = ParticleImpl.get("minecraft:sulfur_cube_goo");
 }
