@@ -3,9 +3,11 @@ package net.minestom.server.instance.block;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnknownNullability;
 
-public record BlockEntityTypeImpl(Key key, int id) implements BlockEntityType {
+@ApiStatus.Internal
+record BlockEntityTypeImpl(Key key, int id) implements BlockEntityType {
     static final Registry<BlockEntityType> REGISTRY = RegistryData.createStaticRegistry(
             Key.key("block_entity_types"), BlockEntityTypeImpl::new);
 
