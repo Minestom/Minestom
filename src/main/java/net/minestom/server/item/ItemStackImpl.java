@@ -19,7 +19,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 
-record ItemStackImpl(Material material, int amount, DataComponentMap components) implements ItemStack {
+record ItemStackImpl(Material material, int amount, DataComponentMap componentPatch) implements ItemStack {
 
     static NetworkBuffer.Type<ItemStack> networkType(NetworkBuffer.Type<DataComponentMap> componentPatchType) {
         return new NetworkBuffer.Type<>() {
@@ -36,7 +36,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
 
                 buffer.write(NetworkBuffer.VAR_INT, value.amount());
                 buffer.write(NetworkBuffer.VAR_INT, value.material().id());
-                buffer.write(componentPatchType, ((ItemStackImpl) value).components());
+                buffer.write(componentPatchType, ((ItemStackImpl) value).componentPatch());
             }
 
             @Override
@@ -71,8 +71,8 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         // max stack size of 64. If we did not do this, #isSimilar would return false for these two items because of
         // their different patches.
         // It is worth noting that the client would handle both cases perfectly fine.
-        if (components != DataComponentMap.EMPTY) {
-            components = DataComponentMap.diff(material.prototype(), components);
+        if (componentPatch != DataComponentMap.EMPTY) {
+            componentPatch = DataComponentMap.diff(material.prototype(), componentPatch);
         }
 
         // Having items with amount being 0 and material not being air kicks players
@@ -80,18 +80,18 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
     }
 
     @Override
-    public DataComponentMap componentPatch() {
-        return this.components;
+    public DataComponentMap components() {
+        return DataComponentMap.applyPatch(material.prototype(), componentPatch);
     }
 
     @Override
     public <T> @Nullable T get(DataComponent<T> component) {
-        return components.get(material.prototype(), component);
+        return componentPatch.get(material.prototype(), component);
     }
 
     @Override
     public boolean has(DataComponent<?> component) {
-        return components.has(material.prototype(), component);
+        return componentPatch.has(material.prototype(), component);
     }
 
     @Override
@@ -103,18 +103,18 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
 
     @Override
     public ItemStack withMaterial(Material material) {
-        return create(material, Math.max(1, amount), components);
+        return create(material, Math.max(1, amount), componentPatch);
     }
 
     @Override
     public ItemStack withAmount(int amount) {
         if (amount <= 0) return ItemStack.AIR;
-        return create(material, amount, components);
+        return create(material, amount, componentPatch);
     }
 
     @Override
     public <T> ItemStack with(DataComponent<T> component, T value) {
-        return create(material, amount, components.set(component, value));
+        return create(material, amount, componentPatch.set(component, value));
     }
 
     @Override
@@ -122,7 +122,14 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         // We can be slightly smart here. If the component is not present, this will always be a noop.
         // No need to make a new patch with the removal only for it to be removed again when doing a diff.
         if (get(component) == null) return this;
-        return create(material, amount, components.remove(component));
+        return create(material, amount, componentPatch.remove(component));
+    }
+
+    @Override
+    public ItemStack reset(DataComponent<?> component) {
+        final DataComponentMap newComponentPatch = componentPatch.reset(component);
+        if (newComponentPatch == componentPatch) return this;
+        return create(material, amount, newComponentPatch);
     }
 
     @Override
@@ -144,7 +151,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
 
     @Override
     public boolean isSimilar(ItemStack itemStack) {
-        return material == itemStack.material() && components.equals(((ItemStackImpl) itemStack).components);
+        return material == itemStack.material() && componentPatch.equals(((ItemStackImpl) itemStack).componentPatch);
     }
 
     @Override
@@ -156,7 +163,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
     @Override
     @Contract(value = "-> new", pure = true)
     public ItemStack.Builder builder() {
-        return new Builder(material, amount, components.toPatchBuilder());
+        return new Builder(material, amount, componentPatch.toPatchBuilder());
     }
 
     static final class Builder implements ItemStack.Builder {

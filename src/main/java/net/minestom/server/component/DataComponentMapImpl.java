@@ -28,6 +28,10 @@ import java.util.function.IntFunction;
 record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implements DataComponentMap {
     private static final char REMOVAL_PREFIX = '!';
 
+    static DataComponentMap fromMap(Int2ObjectMap<@Nullable Object> components) {
+        return components.isEmpty() ? DataComponentMap.EMPTY : new DataComponentMapImpl(components);
+    }
+
     @Override
     public boolean isEmpty() {
         return components.isEmpty();
@@ -78,6 +82,14 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
     }
 
     @Override
+    public DataComponentMap reset(DataComponent<?> component) {
+        if (!components.containsKey(component.id())) return this;
+        Int2ObjectMap<@Nullable Object> newComponents = new Int2ObjectArrayMap<>(components);
+        newComponents.remove(component.id());
+        return fromMap(newComponents);
+    }
+
+    @Override
     public Collection<DataComponent.Value> entrySet() {
         if (components.isEmpty()) return List.of();
         final List<DataComponent.Value> entries = new ArrayList<>(components.size());
@@ -117,7 +129,7 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
 
         @Override
         public DataComponentMap build() {
-            return new DataComponentMapImpl(new Int2ObjectArrayMap<>(components));
+            return fromMap(new Int2ObjectArrayMap<>(components));
         }
     }
 
@@ -147,8 +159,14 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
         }
 
         @Override
+        public PatchBuilder reset(DataComponent<?> component) {
+            components.remove(component.id());
+            return this;
+        }
+
+        @Override
         public DataComponentMap build() {
-            return new DataComponentMapImpl(new Int2ObjectArrayMap<>(components));
+            return fromMap(new Int2ObjectArrayMap<>(components));
         }
     }
 
@@ -259,7 +277,7 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
                 }
             }
 
-            return new Result.Ok<>(new DataComponentMapImpl(patch));
+            return new Result.Ok<>(fromMap(patch));
         }
 
         @Override
