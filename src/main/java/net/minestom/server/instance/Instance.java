@@ -899,7 +899,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
         if (oldViewDistance == newViewDistance) return;
         this.chunkViewDistance = newViewDistance;
         for (Player player : getPlayers()) {
-            player.updateViewDistance(oldViewDistance);
+            player.updateViewDistance(oldViewDistance, newViewDistance);
         }
     }
 

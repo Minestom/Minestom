@@ -1626,10 +1626,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     }
 
     @ApiStatus.Internal
-    public void updateViewDistance(int oldInstanceViewDistance) {
-        final Instance instance = this.instance;
-        if (instance == null) return;
-        updateViewDistance(settings.viewDistance(), oldInstanceViewDistance, instance.viewDistance());
+    public void updateViewDistance(int oldInstanceViewDistance, int newInstanceViewDistance) {
+        updateViewDistance(settings.viewDistance(), oldInstanceViewDistance, newInstanceViewDistance);
     }
 
     private void updateViewDistance(int oldSettingsViewDistance, int oldInstanceViewDistance, int newInstanceViewDistance) {
