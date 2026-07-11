@@ -976,6 +976,7 @@ public final class RegistryData {
             return getList(name);
         }
 
+        @Nullable
         Properties section(String name);
 
         boolean containsKey(String name);

@@ -26,8 +26,10 @@ public class BlockTest {
         block = block.withNbt(nbt);
         assertTrue(block.hasNbt());
         assertEquals(block.nbt(), nbt);
+        assertSame(block, block.withNbt(nbt));
 
         block = block.withNbt(null);
+        assertSame(Block.CHEST, block);
         assertFalse(block.hasNbt());
         assertNull(block.nbt());
 

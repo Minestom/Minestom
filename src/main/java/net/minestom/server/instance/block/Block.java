@@ -77,13 +77,14 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
         public <D> Result<D> encodeToMap(Transcoder<D> coder, Block value, Transcoder.MapBuilder<D> map) {
             if (value == null) return new Result.Error<>("null");
             map.put("Name", coder.createString(value.key().asMinimalString()));
-            if (value.properties().isEmpty()) {
+            final var properties = value.properties();
+            if (properties.isEmpty()) {
                 return new Result.Ok<>(map.build());
             }
             Map<String, String> defaultProperties = value.defaultState().properties();
             Transcoder.MapBuilder<D> propertiesBuilder = coder.createMap();
             boolean nonDefaultPropertyExists = false;
-            for (Map.Entry<String, String> entry : value.properties().entrySet()) {
+            for (Map.Entry<String, String> entry : properties.entrySet()) {
                 if (defaultProperties.getOrDefault(entry.getKey(), "").equals(entry.getValue()))
                     continue; // Skip default values
                 propertiesBuilder.put(entry.getKey(), coder.createString(entry.getValue()));
