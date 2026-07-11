@@ -1,5 +1,6 @@
 package net.minestom.server.registry;
 
+import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.EntityType;
@@ -9,11 +10,13 @@ import net.minestom.server.entity.metadata.animal.tameable.CatSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
+import net.minestom.server.entity.metadata.cube.SulfurCubeArchetype;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.game.GameEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
+import net.minestom.server.instance.block.predicate.DataComponentPredicate;
 import net.minestom.server.instance.fluid.Fluid;
 import net.minestom.server.instance.gamerule.GameRule;
 import net.minestom.server.item.Material;
@@ -25,6 +28,7 @@ import net.minestom.server.message.ChatType;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.potion.PotionEffect;
+import net.minestom.server.potion.PotionType;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import net.minestom.server.world.clock.WorldClock;
@@ -64,6 +68,10 @@ public interface Registries {
 
     default Registry<PotionEffect> potionEffect() {
         return PotionEffect.staticRegistry();
+    }
+
+    default Registry<PotionType> potionType() {
+        return PotionType.staticRegistry();
     }
 
     default Registry<EntityType> entityType() {
@@ -136,6 +144,8 @@ public interface Registries {
 
     DynamicRegistry<WorldClock> worldClock();
 
+    DynamicRegistry<SulfurCubeArchetype> sulfurCubeArchetype();
+
     // The following are _not_ sent to the client.
 
     DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues();
@@ -145,6 +155,8 @@ public interface Registries {
     DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects();
 
     DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects();
+
+    DynamicRegistry<Codec<? extends DataComponentPredicate>> componentPredicateTypes();
 
     @FunctionalInterface
     interface Selector<T> {
@@ -173,6 +185,10 @@ public interface Registries {
         @Override
         default Registry<EntityType> entityType() {
             return registries().entityType();
+        }
+
+        default Registry<PotionType> potionType() {
+            return registries().potionType();
         }
 
         @Override
@@ -316,6 +332,11 @@ public interface Registries {
         }
 
         @Override
+        default DynamicRegistry<SulfurCubeArchetype> sulfurCubeArchetype() {
+            return registries().sulfurCubeArchetype();
+        }
+
+        @Override
         default DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
             return registries().enchantmentLevelBasedValues();
         }
@@ -333,6 +354,11 @@ public interface Registries {
         @Override
         default DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
             return registries().enchantmentLocationEffects();
+        }
+
+        @Override
+        default DynamicRegistry<Codec<? extends DataComponentPredicate>> componentPredicateTypes() {
+            return registries().componentPredicateTypes();
         }
     }
 }

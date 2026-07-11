@@ -38,7 +38,7 @@ public class ArgumentParser {
         ARGUMENT_FUNCTION_MAP.put("stringarray", ArgumentStringArray::new);
         ARGUMENT_FUNCTION_MAP.put("command", ArgumentCommand::new);
         // TODO enum
-        ARGUMENT_FUNCTION_MAP.put("color", ArgumentColor::new);
+        ARGUMENT_FUNCTION_MAP.put("color", ArgumentTeamColor::new);
         ARGUMENT_FUNCTION_MAP.put("time", ArgumentTime::new);
         ARGUMENT_FUNCTION_MAP.put("particle", ArgumentParticle::new);
         ARGUMENT_FUNCTION_MAP.put("resourcelocation", ArgumentResourceLocation::new);

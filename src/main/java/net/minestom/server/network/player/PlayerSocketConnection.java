@@ -379,10 +379,6 @@ public class PlayerSocketConnection extends PlayerConnection {
                         yield true;
                     }
                 }
-                case LazyPacket lazyPacket -> {
-                    PacketWriting.writeFramedPacket(buffer, state, lazyPacket.packet(), compressionThreshold);
-                    yield true;
-                }
                 case BufferedPacket bufferedPacket -> {
                     final NetworkBuffer rawBuffer = bufferedPacket.buffer();
                     final long index = bufferedPacket.index();

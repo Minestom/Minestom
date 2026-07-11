@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 public class SheepMeta extends AnimalMeta {
     private static final DyeColor[] DYE_VALUES = DyeColor.values();
 
-    public SheepMeta(Entity entity, MetadataHolder metadata) {
+    public SheepMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

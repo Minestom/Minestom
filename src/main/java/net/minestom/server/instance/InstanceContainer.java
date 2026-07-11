@@ -1,6 +1,8 @@
 package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
+import it.unimi.dsi.fastutil.longs.LongArrayList;
+import it.unimi.dsi.fastutil.longs.LongList;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
@@ -25,6 +27,7 @@ import net.minestom.server.instance.generator.GeneratorImpl;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
+import net.minestom.server.network.packet.server.play.MultiBlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.network.packet.server.play.WorldEventPacket;
@@ -237,8 +240,8 @@ public class InstanceContainer extends Instance {
         final int y = blockPosition.blockY();
         final int z = blockPosition.blockZ();
         if (block.isAir()) {
-            // The player probably have a wrong version of this chunk section, send it
-            chunk.sendChunk(player);
+            // The player has a wrong version of this block; correct just that block instead of resending the chunk.
+            player.sendPacket(new BlockChangePacket(blockPosition, block));
             return false;
         }
         PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, this, block, Block.AIR, blockPosition.asBlockVec(), blockFace);
@@ -415,7 +418,7 @@ public class InstanceContainer extends Instance {
             Section section = chunk.getSections().get(i);
             return new GeneratorImpl.GenSection(section.blockPalette(), section.biomePalette());
         });
-        var chunkUnit = GeneratorImpl.chunk(MinecraftServer.getBiomeRegistry(), genSections,
+        var chunkUnit = GeneratorImpl.chunk(registries().biome(), genSections,
                 chunk.getChunkX(), chunk.minSection, chunk.getChunkZ());
         try {
             // Generate block/biome palette
@@ -439,9 +442,10 @@ public class InstanceContainer extends Instance {
                         final Chunk forkChunk = start.chunkX() == chunkX && start.chunkZ() == chunkZ ? chunk : getChunkAt(start);
                         if (forkChunk != null) {
                             applyFork(forkChunk, sectionModifier);
-                            // Update players
+                            // Refresh the cached chunk packet, then push the fork's changes as a per-section update instead of a chunk resend.
                             forkChunk.invalidate();
-                            forkChunk.sendChunk();
+                            if (!forkChunk.getViewers().isEmpty()) // if we have viewers send the updates
+                                sendForkSectionUpdate(forkChunk, sectionModifier);
                         } else {
                             final long index = CoordConversion.chunkIndex(start);
                             this.generationForks.compute(index, (i, sectionModifiers) -> {
@@ -485,6 +489,30 @@ public class InstanceContainer extends Instance {
         } finally {
             chunk.unlockWriteLock();
         }
+    }
+
+    // Sends a fork's section changes to viewers as a single multi-block update instead of a full chunk resend.
+    private void sendForkSectionUpdate(Chunk forkChunk, GeneratorImpl.SectionModifierImpl sectionModifier) {
+        final int section = CoordConversion.globalToChunk(sectionModifier.start().blockY());
+        final LongList packed = new LongArrayList();
+        sectionModifier.genSection().blocks().getAllPresent((x, y, z, value) ->
+                packed.add(CoordConversion.encodeSectionBlockChange(CoordConversion.sectionBlockIndex(x, y, z), value - 1)));
+        for (var entry : sectionModifier.genSection().specials().int2ObjectEntrySet()) {
+            final Block block = entry.getValue();
+            final BlockEntityType blockEntityType = block.registry().blockEntityType();
+            if (blockEntityType != null) {
+                final int index = entry.getIntKey();
+                final int x = CoordConversion.chunkBlockIndexGetX(index);
+                final int y = CoordConversion.chunkBlockIndexGetY(index) + sectionModifier.start().blockY();
+                final int z = CoordConversion.chunkBlockIndexGetZ(index);
+                final Point blockPosition = new BlockVec(x + forkChunk.getChunkX() * 16, y, z + forkChunk.getChunkZ() * 16);
+                final CompoundBinaryTag data = BlockUtils.extractClientNbt(block);
+                forkChunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, blockEntityType, data));
+            }
+        }
+        if (packed.isEmpty()) return;
+        forkChunk.sendPacketToViewers(new MultiBlockChangePacket(
+                forkChunk.getChunkX(), section, forkChunk.getChunkZ(), packed.toLongArray()));
     }
 
     private void applyGenerationData(Chunk chunk, GeneratorImpl.SectionModifierImpl section) {

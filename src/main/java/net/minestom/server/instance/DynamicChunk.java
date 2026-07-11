@@ -3,12 +3,12 @@ package net.minestom.server.instance;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.LongArrayBinaryTag;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.instance.heightmap.MotionBlockingHeightmap;
 import net.minestom.server.instance.heightmap.WorldSurfaceHeightmap;
@@ -19,7 +19,6 @@ import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
-import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.snapshot.ChunkSnapshot;
 import net.minestom.server.snapshot.SnapshotImpl;
@@ -56,13 +55,12 @@ public class DynamicChunk extends Chunk {
     protected final Int2ObjectOpenHashMap<Block> tickableMap = new Int2ObjectOpenHashMap<>(0);
 
     final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
-    private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
 
     public DynamicChunk(Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ, true);
         // Required to be here because the super call populates the min and max section.
         var sectionsTemp = new Section[maxSection - minSection];
-        Arrays.setAll(sectionsTemp, value -> new Section());
+        Arrays.setAll(sectionsTemp, _ -> new Section());
         this.sections = List.of(sectionsTemp);
     }
 
@@ -139,7 +137,7 @@ public class DynamicChunk extends Chunk {
         this.chunkCache.invalidate();
         Section section = getSectionAt(y);
 
-        var id = BIOME_REGISTRY.getId(biome);
+        var id = instance.registries().biome().getId(biome);
         if (id == -1) throw new IllegalStateException("Biome has not been registered: " + biome.key());
 
         section.biomePalette().set(
@@ -221,7 +219,7 @@ public class DynamicChunk extends Chunk {
         final int id = section.biomePalette()
                 .get(globalToSectionRelative(x) / 4, globalToSectionRelative(y) / 4, globalToSectionRelative(z) / 4);
 
-        RegistryKey<Biome> biome = BIOME_REGISTRY.getKey(id);
+        RegistryKey<Biome> biome = instance.registries().biome().getKey(id);
         Check.notNull(biome, "Biome with id {0} is not registered", id);
         return biome;
     }
@@ -266,12 +264,13 @@ public class DynamicChunk extends Chunk {
 
         lockReadLock();
         try {
-            NetworkBuffer.Type<ChunkData.Section> sectionSerializer = ChunkData.Section.networkType(MinecraftServer.getBiomeRegistry().size());
+            NetworkBuffer.Type<ChunkData.Section> sectionSerializer = ChunkData.Section.networkType(instance.registries().biome().size());
             final byte[] data = NetworkBuffer.makeArray(networkBuffer -> {
                 for (Section section : sections) {
-                    final short blockCount = (short) section.blockPalette().count();
-                    final short liquidCount = (short) (blockCount > 0 ? 1 : 0); //TODO(26.1) proper fluid count
-                    networkBuffer.write(sectionSerializer, new ChunkData.Section(blockCount, liquidCount, section.blockPalette(), section.biomePalette()));
+                    final Palette blockPalette = section.blockPalette();
+                    final short blockCount = (short) blockPalette.count();
+                    final short fluidCount = (short) countFluids(blockPalette);
+                    networkBuffer.write(sectionSerializer, new ChunkData.Section(blockCount, fluidCount, blockPalette, section.biomePalette()));
                 }
             });
 
@@ -282,6 +281,22 @@ public class DynamicChunk extends Chunk {
         } finally {
             unlockReadLock();
         }
+    }
+
+    // blocks with a non-empty fluid (liquids or waterlogged)
+    private static int countFluids(Palette blockPalette) {
+        final int single = blockPalette.singleValue();
+        if (single != -1) return isFluid(single) ? blockPalette.count() : 0;
+        final int[] count = {0};
+        blockPalette.getAllPresent((_, _, _, stateId) -> {
+            if (isFluid(stateId)) count[0]++;
+        });
+        return count[0];
+    }
+
+    private static boolean isFluid(int blockStateId) {
+        final Block block = Block.fromStateId(blockStateId);
+        return block != null && block.isFluid();
     }
 
     UpdateLightPacket createLightPacket() {
@@ -347,6 +362,6 @@ public class DynamicChunk extends Chunk {
         final int[] entityIds = ArrayUtils.mapToIntArray(entities, Entity::getEntityId);
         return new SnapshotImpl.Chunk(minSection, chunkX, chunkZ,
                 clonedSections, entries.clone(), entityIds, updater.reference(instance),
-                tagHandler().readableCopy());
+                instance.registries().biome(), tagHandler().readableCopy());
     }
 }

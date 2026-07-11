@@ -47,7 +47,7 @@ public class Main {
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerBlockPlacementRule(new DripstonePlacementRule());
-        var beds = Block.values().stream().filter(block -> BlockEntityType.BED.equals(block.registry().blockEntityType())).toList();
+        var beds = Block.values().stream().filter(block -> block.key().value().contains("bed")).toList();
         beds.forEach(block -> blockManager.registerBlockPlacementRule(new BedPlacementRule(block)));
         blockManager.registerHandler(TestBlockHandler.INSTANCE.getKey(), () -> TestBlockHandler.INSTANCE);
 
@@ -98,8 +98,6 @@ public class Main {
         commandManager.register(new TestBiomeAmbientParticleCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
-
-        MinecraftServer.getBenchmarkManager().enable(Duration.of(10, TimeUnit.SECOND));
 
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> System.out.println("Good night"));
 

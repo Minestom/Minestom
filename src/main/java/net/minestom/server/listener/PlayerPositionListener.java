@@ -3,6 +3,7 @@ package net.minestom.server.listener;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.RelativeFlags;
 import net.minestom.server.event.EventDispatcher;
@@ -14,8 +15,7 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.ApiStatus;
 
 public class PlayerPositionListener {
-    private static final double MAX_COORDINATE = 30_000_000;
-    private static final Component KICK_MESSAGE = Component.text("You moved too far away!");
+    static final Component KICK_MESSAGE = Component.text("You moved too far away!");
 
     public static void playerPacketListener(ClientPlayerPositionStatusPacket packet, Player player) {
         // TODO: Should we expose horizontal collision here and the methods below?
@@ -49,9 +49,10 @@ public class PlayerPositionListener {
     private static void processMovement(Player player, Pos packetPosition, boolean onGround) {
         // Prevent the player from moving too far
         // Doubles close to max size can cause overflow, or simply have precision issues
-        if (Math.abs(packetPosition.x()) > MAX_COORDINATE ||
-                Math.abs(packetPosition.y()) > MAX_COORDINATE ||
-                Math.abs(packetPosition.z()) > MAX_COORDINATE) {
+        if (!Double.isFinite(packetPosition.x()) || !Double.isFinite(packetPosition.y()) || !Double.isFinite(packetPosition.z()) ||
+                Math.abs(packetPosition.x()) > Entity.MAX_COORDINATE ||
+                Math.abs(packetPosition.y()) > Entity.MAX_COORDINATE ||
+                Math.abs(packetPosition.z()) > Entity.MAX_COORDINATE) {
             player.kick(KICK_MESSAGE);
             return;
         }

@@ -5,9 +5,10 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
+import org.jetbrains.annotations.Nullable;
 
 public class ArmorStandMeta extends LivingEntityMeta {
-    public ArmorStandMeta(Entity entity, MetadataHolder metadata) {
+    public ArmorStandMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

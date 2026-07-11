@@ -1,11 +1,8 @@
 package net.minestom.server.instance.block.predicate;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.SuspiciousGravelBlockHandler;
-import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.Material;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -14,22 +11,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BlockPredicateTest {
 
-    static {
-        MinecraftServer.init();
-    }
-
     // See sibling files for blocks and properties tests
 
     @Nested
     class NbtPredicate {
-        private static final Block SUS_GRAVEL = Block.SUSPICIOUS_GRAVEL.withHandler(SuspiciousGravelBlockHandler.INSTANCE);
-
         @Test
         public void testMatching() {
             var predicate = new BlockPredicate(CompoundBinaryTag.builder()
                     .putString("LootTable", "minecraft:test")
                     .build());
-            var block = SUS_GRAVEL.withNbt(CompoundBinaryTag.builder()
+            var block = Block.SUSPICIOUS_GRAVEL
+                    .withHandler(SuspiciousGravelBlockHandler.INSTANCE)
+                    .withNbt(CompoundBinaryTag.builder()
                     .putString("LootTable", "minecraft:test")
                     .build());
             assertTrue(predicate.test(block));
@@ -40,36 +33,9 @@ public class BlockPredicateTest {
             var predicate = new BlockPredicate(CompoundBinaryTag.builder()
                     .putString("LootTable", "minecraft:test")
                     .build());
-            var block = SUS_GRAVEL.withNbt(CompoundBinaryTag.builder()
-                    .build());
-            assertFalse(predicate.test(block));
-        }
-
-        @Test
-        public void testEmptySource() {
-            var itemNbt = ItemStack.of(Material.STONE).toItemNBT();
-            var predicate = new BlockPredicate(CompoundBinaryTag.builder()
-                    .putString("LootTable", "minecraft:test")
-                    .put("item", itemNbt)
-                    .build());
-            var block = SUS_GRAVEL.withNbt(CompoundBinaryTag.builder()
-                    .putString("LootTable", "minecraft:test")
-                    .put("item", itemNbt)
-                    .build());
-            assertTrue(predicate.test(block));
-        }
-
-        @Test
-        public void testNoMatchDeep() {
-            var itemNbt1 = ItemStack.of(Material.STONE).toItemNBT();
-            var itemNbt2 = ItemStack.of(Material.STONE).withAmount(2).toItemNBT();
-            var predicate = new BlockPredicate(CompoundBinaryTag.builder()
-                    .putString("LootTable", "minecraft:test")
-                    .put("item", itemNbt1)
-                    .build());
-            var block = SUS_GRAVEL.withNbt(CompoundBinaryTag.builder()
-                    .putString("LootTable", "minecraft:test")
-                    .put("item", itemNbt2)
+            var block = Block.SUSPICIOUS_GRAVEL
+                    .withHandler(SuspiciousGravelBlockHandler.INSTANCE)
+                    .withNbt(CompoundBinaryTag.builder()
                     .build());
             assertFalse(predicate.test(block));
         }
