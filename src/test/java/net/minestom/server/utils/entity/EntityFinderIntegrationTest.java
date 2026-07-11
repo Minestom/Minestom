@@ -87,7 +87,7 @@ public class EntityFinderIntegrationTest {
         var far = spawnZombie(instance, 50);
 
         var finder = createFinder(EntityFinder.TargetSelector.ALL_ENTITIES)
-                .setDistance(new Range.Double(5, Float.MAX_VALUE));
+                .setDistance(new Range.Double(5.0, (double) Float.MAX_VALUE));
 
         assertEquals(List.of(far), finder.find(instance, null));
     }
@@ -111,7 +111,7 @@ public class EntityFinderIntegrationTest {
         var far = spawnZombie(instance, 50);
 
         var finder = createFinder(EntityFinder.TargetSelector.ALL_ENTITIES)
-                .setDistance(new Range.Double(-10, 5));
+                .setDistance(new Range.Double(-10.0, 5.0));
 
         assertEquals(List.of(near), finder.find(instance, null));
     }

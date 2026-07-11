@@ -24,6 +24,7 @@ import net.minestom.server.item.Material;
 import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.component.*;
 import net.minestom.server.item.instrument.Instrument;
+import net.minestom.server.item.predicate.ItemPredicate;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.player.ResolvableProfile;
 import net.minestom.server.registry.*;
@@ -115,8 +116,7 @@ public class DataComponents {
     public static final DataComponent<ItemBlockState> BLOCK_STATE = register("block_state", ItemBlockState.NETWORK_TYPE, ItemBlockState.CODEC);
     public static final DataComponent<List<Bee>> BEES = register("bees", Bee.NETWORK_TYPE.list(Short.MAX_VALUE), Bee.CODEC.list(), List::copyOf);
     public static final DataComponent<ItemStack> SULFUR_CUBE_CONTENT = register("sulfur_cube_content", ItemStackTemplate.NETWORK_TYPE, ItemStackTemplate.CODEC);
-    // Lock is an item predicate which we do not support, but can be user-represented as a compound tag (an empty tag would match everything).
-    public static final DataComponent<CustomData> LOCK = register("lock", null, CustomData.CODEC);
+    public static final DataComponent<ItemPredicate> LOCK = register("lock", null, ItemPredicate.CODEC);
     public static final DataComponent<SeededContainerLoot> CONTAINER_LOOT = register("container_loot", null, SeededContainerLoot.CODEC);
     public static final DataComponent<SoundEvent> BREAK_SOUND = register("break_sound", SoundEvent.NETWORK_TYPE, SoundEvent.CODEC);
     public static final DataComponent<VillagerType> VILLAGER_VARIANT = register("villager/variant", VillagerType.NETWORK_TYPE, VillagerType.CODEC);

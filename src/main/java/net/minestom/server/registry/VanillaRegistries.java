@@ -1,8 +1,10 @@
 package net.minestom.server.registry;
 
+import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.dialog.Dialog;
+import net.minestom.server.instance.block.predicate.DataComponentPredicate;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.*;
 import net.minestom.server.entity.metadata.animal.tameable.CatSoundVariant;
@@ -28,6 +30,7 @@ final class VanillaRegistries implements Registries {
     private final DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects;
     private final DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects;
     private final DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects;
+    private final DynamicRegistry<Codec<? extends DataComponentPredicate>> componentPredicateTypes;
 
     private final DynamicRegistry<ChatType> chatType;
     private final DynamicRegistry<Dialog> dialog;
@@ -65,6 +68,7 @@ final class VanillaRegistries implements Registries {
         this.enchantmentValueEffects = ValueEffect.createDefaultRegistry();
         this.enchantmentEntityEffects = EntityEffect.createDefaultRegistry();
         this.enchantmentLocationEffects = LocationEffect.createDefaultRegistry();
+        this.componentPredicateTypes = DataComponentPredicate.createDefaultRegistry();
 
         this.chatType = ChatType.createDefaultRegistry();
         this.dialog = Dialog.createDefaultRegistry(this);
@@ -254,5 +258,10 @@ final class VanillaRegistries implements Registries {
     @Override
     public DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
         return enchantmentLocationEffects;
+    }
+
+    @Override
+    public DynamicRegistry<Codec<? extends DataComponentPredicate>> componentPredicateTypes() {
+        return componentPredicateTypes;
     }
 }

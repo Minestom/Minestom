@@ -146,8 +146,8 @@ public class EntityFinder {
 
         // Distance argument
         if (distance != null) {
-            final double minDistanceSquared = MathUtils.square(Math.max(distance.min(), 0));
-            final double maxDistanceSquared = MathUtils.square(distance.max());
+            final double minDistanceSquared = MathUtils.square(Math.max(distance.min() == null ? 0.0 : distance.min(), 0));
+            final double maxDistanceSquared = MathUtils.square(distance.max() == null ? Double.MAX_VALUE : distance.max());
 
             result = result.stream()
                     .filter(entity -> MathUtils.isBetween(entity.getDistanceSquared(pos), minDistanceSquared, maxDistanceSquared))
@@ -194,8 +194,8 @@ public class EntityFinder {
 
         // Level
         if (level != null) {
-            final int minLevel = level.min();
-            final int maxLevel = level.max();
+            final int minLevel = level.min() == null ? 0 : level.min();
+            final int maxLevel = level.max() == null ? Integer.MAX_VALUE : level.max();
             result = result.stream()
                     .filter(Player.class::isInstance)
                     .filter(entity -> MathUtils.isBetween(((Player) entity).getLevel(), minLevel, maxLevel))

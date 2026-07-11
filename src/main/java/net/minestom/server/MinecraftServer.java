@@ -4,6 +4,7 @@ import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.ClickCallbackManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.dialog.Dialog;
@@ -20,6 +21,7 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
+import net.minestom.server.instance.block.predicate.DataComponentPredicate;
 import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.item.enchant.*;
@@ -358,6 +360,10 @@ public final class MinecraftServer implements MinecraftConstants {
 
     public static DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
         return serverProcess.enchantmentLocationEffects();
+    }
+
+    public static DynamicRegistry<Codec<? extends DataComponentPredicate>> componentPredicateTypes() {
+        return process().componentPredicateTypes();
     }
 
     public static Server getServer() {
