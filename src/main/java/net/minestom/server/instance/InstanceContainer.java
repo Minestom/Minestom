@@ -444,7 +444,8 @@ public class InstanceContainer extends Instance {
                             applyFork(forkChunk, sectionModifier);
                             // Refresh the cached chunk packet, then push the fork's changes as a per-section update instead of a chunk resend.
                             forkChunk.invalidate();
-                            sendForkSectionUpdate(forkChunk, sectionModifier);
+                            if (!forkChunk.getViewers().isEmpty()) // if we have viewers send the updates
+                                sendForkSectionUpdate(forkChunk, sectionModifier);
                         } else {
                             final long index = CoordConversion.chunkIndex(start);
                             this.generationForks.compute(index, (i, sectionModifiers) -> {
@@ -497,12 +498,17 @@ public class InstanceContainer extends Instance {
         sectionModifier.genSection().blocks().getAllPresent((x, y, z, value) ->
                 packed.add(CoordConversion.encodeSectionBlockChange(CoordConversion.sectionBlockIndex(x, y, z), value - 1)));
         for (var entry : sectionModifier.genSection().specials().int2ObjectEntrySet()) {
-            final int index = entry.getIntKey();
-            final int sectionBlockIndex = CoordConversion.sectionBlockIndex(
-                    CoordConversion.chunkBlockIndexGetX(index),
-                    CoordConversion.chunkBlockIndexGetY(index),
-                    CoordConversion.chunkBlockIndexGetZ(index));
-            packed.add(CoordConversion.encodeSectionBlockChange(sectionBlockIndex, entry.getValue().stateId()));
+            final Block block = entry.getValue();
+            final BlockEntityType blockEntityType = block.registry().blockEntityType();
+            if (blockEntityType != null) {
+                final int index = entry.getIntKey();
+                final int x = CoordConversion.chunkBlockIndexGetX(index);
+                final int y = CoordConversion.chunkBlockIndexGetY(index) + sectionModifier.start().blockY();
+                final int z = CoordConversion.chunkBlockIndexGetZ(index);
+                final Point blockPosition = new BlockVec(x + forkChunk.getChunkX() * 16, y, z + forkChunk.getChunkZ() * 16);
+                final CompoundBinaryTag data = BlockUtils.extractClientNbt(block);
+                forkChunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, blockEntityType, data));
+            }
         }
         if (packed.isEmpty()) return;
         forkChunk.sendPacketToViewers(new MultiBlockChangePacket(

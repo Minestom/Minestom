@@ -2,16 +2,21 @@ package net.minestom.server.instance.batch;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.ints.IntArraySet;
-import it.unimi.dsi.fastutil.ints.IntSet;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongList;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.Block;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.instance.block.BlockEntityType;
+import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.network.packet.server.play.MultiBlockChangePacket;
+import net.minestom.server.utils.block.BlockUtils;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import org.jetbrains.annotations.Nullable;
@@ -183,15 +188,13 @@ public class ChunkBatch implements Batch<ChunkCallback> {
                 return;
             }
 
-            final IntSet sections = new IntArraySet();
             chunk.lockWriteLock();
             try {
                 synchronized (blocks) {
                     for (var entry : blocks.int2ObjectEntrySet()) {
                         final int position = entry.getIntKey();
                         final Block block = entry.getValue();
-                        final int section = apply(chunk, position, block, inverse);
-                        sections.add(section);
+                        apply(chunk, position, block, inverse);
                     }
                 }
             } finally {
@@ -199,9 +202,9 @@ public class ChunkBatch implements Batch<ChunkCallback> {
             }
 
             if (inverse != null) inverse.readyLatch.countDown();
-            updateChunk(instance, chunk, sections, callback, safeCallback);
+            updateChunk(instance, chunk, callback, safeCallback);
         } catch (Exception e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
         }
     }
 
@@ -211,9 +214,8 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      * @param chunk The chunk to apply the change
      * @param index the block position computed using {@link CoordConversion#chunkBlockIndex(int, int, int)}
      * @param block the block to place
-     * @return The chunk section which the block was placed
      */
-    private int apply(Chunk chunk, int index, Block block, @Nullable ChunkBatch inverse) {
+    private void apply(Chunk chunk, int index, Block block, @Nullable ChunkBatch inverse) {
         final int x = CoordConversion.chunkBlockIndexGetX(index);
         final int y = CoordConversion.chunkBlockIndexGetY(index);
         final int z = CoordConversion.chunkBlockIndexGetZ(index);
@@ -222,15 +224,14 @@ public class ChunkBatch implements Batch<ChunkCallback> {
             inverse.setBlock(x, y, z, prevBlock);
         }
         chunk.setBlock(x, y, z, block);
-        return CoordConversion.globalToChunk(y);
     }
 
     /**
      * Updates the given chunk for all of its viewers, and executes the callback.
      */
-    private void updateChunk(Instance instance, Chunk chunk, IntSet updatedSections, @Nullable ChunkCallback callback, boolean safeCallback) {
+    private void updateChunk(Instance instance, Chunk chunk, @Nullable ChunkCallback callback, boolean safeCallback) {
         // Refresh chunk for viewers
-        if (options.shouldSendUpdate()) {
+        if (options.shouldSendUpdate() && !chunk.getViewers().isEmpty()) {
             if (options.isFullChunk()) {
                 chunk.sendChunk();
             } else {
@@ -246,7 +247,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
 
         if (callback != null) {
             if (safeCallback) {
-                instance.scheduleNextTick(inst -> callback.accept(chunk));
+                instance.scheduleNextTick(_ -> callback.accept(chunk));
             } else {
                 callback.accept(chunk);
             }
@@ -267,6 +268,14 @@ public class ChunkBatch implements Batch<ChunkCallback> {
                 final long packed = CoordConversion.encodeSectionBlockChange(
                         x, CoordConversion.globalToSectionRelative(y), z, entry.getValue().stateId());
                 bySection.computeIfAbsent(CoordConversion.globalToChunk(y), _ -> new LongArrayList()).add(packed);
+
+                final Block block = entry.getValue();
+                final BlockEntityType blockEntityType = block.registry().blockEntityType();
+                if (blockEntityType != null) {
+                    final Point blockPosition = new BlockVec(x + chunkX * 16, y, z + chunkZ * 16);
+                    final CompoundBinaryTag data = BlockUtils.extractClientNbt(block);
+                    chunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, blockEntityType, data));
+                }
             }
         }
         for (var entry : bySection.int2ObjectEntrySet()) {
