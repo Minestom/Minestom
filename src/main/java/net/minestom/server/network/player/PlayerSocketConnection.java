@@ -71,6 +71,7 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     private final SocketChannel channel;
     private SocketAddress remoteAddress;
+    private boolean attemptedProxyProtocolDetection = false;
 
     //Could be null. Only used for Mojang Auth
     private volatile @Nullable EncryptionContext encryptionContext;
@@ -110,6 +111,18 @@ public class PlayerSocketConnection extends PlayerConnection {
         NetworkBuffer readBuffer = this.readBuffer;
         final long writeIndex = readBuffer.writeIndex();
         final int length = readBuffer.readChannel(channel);
+
+        if (ServerFlag.PROXY_PROTOCOL && !attemptedProxyProtocolDetection) {
+            final ProxyProtocolDecoder.Result result = ProxyProtocolDecoder.parse(remoteAddress, readBuffer);
+            if (result.status() == ProxyProtocolDecoder.Status.NEED_MORE) return;
+            attemptedProxyProtocolDetection = true;
+            if (result.status() == ProxyProtocolDecoder.Status.PRESENT) {
+                this.remoteAddress = result.clientAddress();
+            } else if (ServerFlag.PROXY_PROTOCOL_REQUIRED) {
+                throw new IOException("Missing required PROXY protocol header");
+            }
+        }
+
         // Decrypt newly read data
         final EncryptionContext encryptionContext = this.encryptionContext;
         if (encryptionContext != null) {
