@@ -28,6 +28,10 @@ import java.util.function.IntFunction;
 record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implements DataComponentMap {
     private static final char REMOVAL_PREFIX = '!';
 
+    static DataComponentMap fromMap(Int2ObjectMap<@Nullable Object> components) {
+        return components.isEmpty() ? DataComponentMap.EMPTY : new DataComponentMapImpl(components);
+    }
+
     @Override
     public boolean isEmpty() {
         return components.isEmpty();
@@ -82,7 +86,7 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
         if (!components.containsKey(component.id())) return this;
         Int2ObjectMap<@Nullable Object> newComponents = new Int2ObjectArrayMap<>(components);
         newComponents.remove(component.id());
-        return newComponents.isEmpty() ? DataComponentMap.EMPTY : new DataComponentMapImpl(newComponents);
+        return fromMap(newComponents);
     }
 
     @Override
@@ -125,7 +129,7 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
 
         @Override
         public DataComponentMap build() {
-            return components.isEmpty() ? DataComponentMap.EMPTY : new DataComponentMapImpl(new Int2ObjectArrayMap<>(components));
+            return fromMap(new Int2ObjectArrayMap<>(components));
         }
     }
 
@@ -162,7 +166,7 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
 
         @Override
         public DataComponentMap build() {
-            return components.isEmpty() ? DataComponentMap.EMPTY : new DataComponentMapImpl(new Int2ObjectArrayMap<>(components));
+            return fromMap(new Int2ObjectArrayMap<>(components));
         }
     }
 
@@ -273,7 +277,7 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
                 }
             }
 
-            return new Result.Ok<>(patch.isEmpty() ? EMPTY : new DataComponentMapImpl(patch));
+            return new Result.Ok<>(fromMap(patch));
         }
 
         @Override

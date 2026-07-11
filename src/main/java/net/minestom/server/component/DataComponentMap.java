@@ -88,7 +88,7 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
             }
         }
 
-        return diff.isEmpty() ? EMPTY : new DataComponentMapImpl(diff);
+        return DataComponentMapImpl.fromMap(diff);
     }
 
     static DataComponentMap applyPatch(DataComponentMap prototype, DataComponentMap patch) {
@@ -104,7 +104,7 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
                 result.put(entry.getIntKey(), entry.getValue());
             }
         }
-        return result.isEmpty() ? EMPTY : new DataComponentMapImpl(result);
+        return DataComponentMapImpl.fromMap(result);
     }
 
     boolean isEmpty();
@@ -154,6 +154,15 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
      */
     DataComponentMap remove(DataComponent<?> component);
 
+    /**
+     * Removes the explicit override for a component from this patch.
+     *
+     * <p>This operation is only meaningful for component patches. When the patch is applied to a prototype,
+     * the component will resolve to the prototype value.</p>
+     *
+     * @param component the component whose override should be reset
+     * @return a new patch without an override for the component, or this patch if none was present
+     */
     DataComponentMap reset(DataComponent<?> component);
 
     Collection<DataComponent.Value> entrySet();
@@ -183,6 +192,12 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
 
         PatchBuilder remove(DataComponent<?> component);
 
+        /**
+         * Removes the explicit override for a component from this patch builder.
+         *
+         * @param component the component whose override should be reset
+         * @return this builder
+         */
         PatchBuilder reset(DataComponent<?> component);
 
         DataComponentMap build();

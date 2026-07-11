@@ -140,6 +140,11 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
     @Contract(pure = true)
     DataComponentMap componentPatch();
 
+    /**
+     * Returns the resolved component map, including material defaults and explicit overrides.
+     *
+     * @return the complete resolved component map
+     */
     @Contract(pure = true)
     DataComponentMap components();
 
@@ -216,7 +221,7 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
      * Returns a new ItemStack with the given component reset to the material default.
      *
      * @param component The component to reset
-     * @return A new ItemStack without an explicit patch for the given component
+     * @return A new ItemStack without an explicit override for the given component
      */
     @Contract(value = "_, -> new", pure = true)
     ItemStack reset(DataComponent<?> component);
