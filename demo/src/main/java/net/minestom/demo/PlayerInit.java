@@ -48,6 +48,7 @@ import net.minestom.server.item.ItemAnimation;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.Bee;
+import net.minestom.server.item.component.TypedCustomData;
 import net.minestom.server.item.component.BlockPredicates;
 import net.minestom.server.item.component.BlockPredicates;
 import net.minestom.server.item.component.CustomData;
@@ -139,7 +140,7 @@ public class PlayerInit {
                                 new BlockPredicate(RegistryTag.direct(Block.OAK_SIGN), PropertiesPredicate.exact("rotation", "1"), null, DataComponentPredicates.EMPTY),
                                 new BlockPredicate(CompoundBinaryTag.builder().put("Owner", StringBinaryTag.stringBinaryTag("test")).build()),
                                 new BlockPredicate(
-                                        DataComponentMap.builder().set(DataComponents.BEES, List.of(new Bee(CustomData.EMPTY, 10, 5))).build()
+                                        DataComponentMap.builder().set(DataComponents.BEES, List.of(new Bee(new TypedCustomData<>(EntityType.BEE, CompoundBinaryTag.empty()), 10, 5))).build()
                                 ),
                                 new BlockPredicate(ComponentPredicateSet.EMPTY.add(new DataComponentPredicate.CustomData(CompoundBinaryTag.builder().put("Owner", StringBinaryTag.stringBinaryTag("test")).build())))
                         )))
