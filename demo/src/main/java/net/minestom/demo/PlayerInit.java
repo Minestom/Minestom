@@ -138,11 +138,13 @@ public class PlayerInit {
                         .amount(64)
                         .set(DataComponents.CAN_PLACE_ON, new BlockPredicates(List.of(
                                 new BlockPredicate(RegistryTag.direct(Block.OAK_SIGN), PropertiesPredicate.exact("rotation", "1"), null, DataComponentPredicates.EMPTY),
-                                new BlockPredicate(CompoundBinaryTag.builder().put("Owner", StringBinaryTag.stringBinaryTag("test")).build()),
-                                new BlockPredicate(
-                                        DataComponentMap.builder().set(DataComponents.BEES, List.of(new Bee(new TypedCustomData<>(EntityType.BEE, CompoundBinaryTag.empty()), 10, 5))).build()
+                                new BlockPredicate(RegistryTag.direct(Block.PLAYER_HEAD, Block.PLAYER_WALL_HEAD), null, new NbtPredicate(CompoundBinaryTag.builder().put("Owner", StringBinaryTag.stringBinaryTag("test")).build())),
+                                new BlockPredicate(RegistryTag.direct(Block.BEEHIVE, Block.BEE_NEST), null, null,
+                                        new DataComponentPredicates(DataComponentMap.builder().set(DataComponents.BEES, List.of(new Bee(new TypedCustomData<>(EntityType.BEE, CompoundBinaryTag.empty()), 10, 5))).build(), ComponentPredicateSet.EMPTY)
                                 ),
-                                new BlockPredicate(ComponentPredicateSet.EMPTY.add(new DataComponentPredicate.CustomData(CompoundBinaryTag.builder().put("Owner", StringBinaryTag.stringBinaryTag("test")).build())))
+                                new BlockPredicate(RegistryTag.direct(Block.PLAYER_HEAD, Block.PLAYER_WALL_HEAD), null, null,
+                                        new DataComponentPredicates(DataComponentMap.EMPTY, ComponentPredicateSet.EMPTY.add(new DataComponentPredicate.CustomData(CompoundBinaryTag.builder().put("Owner", StringBinaryTag.stringBinaryTag("test")).build())))
+                                )
                         )))
                         .set(DataComponents.CAN_BREAK, new BlockPredicates(new BlockPredicate(Block.DIAMOND_ORE)))
                         .build();
