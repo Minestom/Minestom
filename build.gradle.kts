@@ -70,7 +70,6 @@ graalvmNative {
         metadataCopy {
             inputTaskNames.add("test")
             outputDirectories.add("src/main/resources/META-INF/native-image/net.minestom/minestom")
-            mergeWithExisting.set(true)
         }
     }
     binaries {
