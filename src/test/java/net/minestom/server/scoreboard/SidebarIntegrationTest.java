@@ -153,6 +153,45 @@ public class SidebarIntegrationTest {
     }
 
     @Test
+    public void perLineNumberFormat(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 40, 0));
+
+        Sidebar sidebar = Sidebar.create(Component.text("Title"));
+        sidebar.addViewer(player);
+        sidebar.update(Component.text("a"), Component.text("b"));
+
+        final NumberFormat styled = NumberFormat.styled(Component.text("style"));
+        var scoreCollector = connection.trackIncoming(UpdateScorePacket.class);
+        sidebar.setNumberFormat(1, styled);
+        assertEquals(styled, sidebar.getNumberFormat(1));
+        assertNull(sidebar.getNumberFormat(0));
+        scoreCollector.assertSingle(packet -> {
+            assertEquals(Component.text("b"), packet.displayName());
+            assertEquals(styled, packet.numberFormat());
+        });
+
+        scoreCollector = connection.trackIncoming(UpdateScorePacket.class);
+        sidebar.update(Component.text("a"), Component.text("updated"), Component.text("c"));
+        var packets = scoreCollector.collect();
+        assertEquals(2, packets.size());
+        assertEquals(styled, packets.get(0).numberFormat());
+        assertNull(packets.get(1).numberFormat());
+
+        scoreCollector = connection.trackIncoming(UpdateScorePacket.class);
+        sidebar.setNumberFormat(10, NumberFormat.blank());
+        scoreCollector.assertEmpty();
+
+        scoreCollector = connection.trackIncoming(UpdateScorePacket.class);
+        sidebar.setNumberFormat(1, null);
+        scoreCollector.assertSingle(packet -> assertNull(packet.numberFormat()));
+
+        assertThrows(IllegalArgumentException.class, () -> sidebar.setNumberFormat(Sidebar.MAX_LINES, null));
+        assertThrows(IllegalArgumentException.class, () -> sidebar.getNumberFormat(-1));
+    }
+
+    @Test
     public void maxLines(Env ignored) {
         Sidebar sidebar = Sidebar.create(Component.text("Title"));
         List<Component> lines = IntStream.range(0, Sidebar.MAX_LINES + 1)

@@ -4,19 +4,21 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.Viewable;
 import net.minestom.server.entity.Player;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /// A sidebar displaying up to [#MAX_LINES] lines of text, ordered top to bottom.
 ///
-/// Scores are hidden and managed internally; if you need visible scores or per-line
-/// number formats, use an [Objective] directly. The backing objective is accessible
-/// through [#getObjective()].
+/// Scores are hidden and managed internally; how a line's score is displayed
+/// can be customized with [#setNumberFormat(int, NumberFormat)]. For anything
+/// further, the backing objective is accessible through [#getObjective()].
 ///
 /// ```java
 /// Sidebar sidebar = Sidebar.create(Component.text("Title"));
@@ -36,11 +38,13 @@ public final class Sidebar implements Viewable {
 
     private final Objective objective;
     private final List<Component> lines;
+    private final @Nullable NumberFormat[] numberFormats;
 
     private Sidebar(Component title) {
         this.objective = Objective.create(OBJECTIVE_PREFIX + COUNTER.incrementAndGet(), title);
         this.objective.setDefaultNumberFormat(NumberFormat.blank());
         this.lines = new ArrayList<>();
+        this.numberFormats = new NumberFormat[MAX_LINES];
     }
 
     /// Creates a new sidebar with no lines.
@@ -137,7 +141,7 @@ public final class Sidebar implements Viewable {
         for (int i = 0; i < newLines.size(); i++) {
             final Component content = newLines.get(i);
             if (i < lines.size() && lines.get(i).equals(content)) continue;
-            objective.updateEntry(LINE_PREFIX + i, new ScoreEntry(MAX_LINES - i, content, null));
+            objective.updateEntry(LINE_PREFIX + i, new ScoreEntry(MAX_LINES - i, content, numberFormats[i]));
         }
         for (int i = newLines.size(); i < lines.size(); i++) {
             objective.removeEntry(LINE_PREFIX + i);
@@ -155,11 +159,37 @@ public final class Sidebar implements Viewable {
         Check.argCondition(index < 0 || index >= lines.size(), "No line at index {0}", index);
         if (lines.get(index).equals(content)) return;
         lines.set(index, content);
-        objective.updateEntry(LINE_PREFIX + index, new ScoreEntry(MAX_LINES - index, content, null));
+        objective.updateEntry(LINE_PREFIX + index, new ScoreEntry(MAX_LINES - index, content, numberFormats[index]));
+    }
+
+    /// Gets the number format of a line index.
+    ///
+    /// @param index the line index, from 0 at the top
+    /// @return the number format, or null if the line's score is hidden
+    /// @throws IllegalArgumentException if `index` is not within [#MAX_LINES]
+    public synchronized @Nullable NumberFormat getNumberFormat(int index) {
+        Check.argCondition(index < 0 || index >= MAX_LINES, "No line at index {0}", index);
+        return numberFormats[index];
+    }
+
+    /// Sets the number format of a line index, controlling how the line's score is displayed.
+    /// The format is kept for the index across [#update(List)] calls, and may be set
+    /// before a line exists at the index.
+    ///
+    /// @param index        the line index, from 0 at the top
+    /// @param numberFormat the new number format, or null to hide the score
+    /// @throws IllegalArgumentException if `index` is not within [#MAX_LINES]
+    public synchronized void setNumberFormat(int index, @Nullable NumberFormat numberFormat) {
+        Check.argCondition(index < 0 || index >= MAX_LINES, "No line at index {0}", index);
+        if (Objects.equals(numberFormats[index], numberFormat)) return;
+        numberFormats[index] = numberFormat;
+        if (index < lines.size()) {
+            objective.updateEntry(LINE_PREFIX + index, new ScoreEntry(MAX_LINES - index, lines.get(index), numberFormat));
+        }
     }
 
     /// Gets the objective backing this sidebar, for advanced customization
-    /// such as per-line number formats.
+    /// such as displaying it in a team color slot.
     ///
     /// @return the backing objective
     public Objective getObjective() {
