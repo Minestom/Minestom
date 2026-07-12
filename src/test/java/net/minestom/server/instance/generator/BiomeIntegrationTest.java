@@ -1,5 +1,6 @@
 package net.minestom.server.instance.generator;
 
+import net.minestom.server.instance.Section;
 import net.minestom.server.instance.generator.GeneratorImpl.GenSection;
 import net.minestom.server.world.biome.Biome;
 import net.minestom.testing.Env;
@@ -30,7 +31,10 @@ public class BiomeIntegrationTest {
         final int chunkZ = -2;
         final int sectionCount = maxSection - minSection;
         GenSection[] sections = new GenSection[sectionCount];
-        Arrays.setAll(sections, i -> new GenSection());
+        Arrays.setAll(sections, i -> {
+            Section section = new Section();
+            return new GenSection(section.blockPalette(), section.biomePalette());
+        });
         var chunkUnits = GeneratorImpl.chunk(env.process().biome(), sections, chunkX, minSection, chunkZ);
         Generator generator = unit -> {
             var modifier = unit.modifier();
