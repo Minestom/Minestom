@@ -12,6 +12,8 @@ import net.minestom.server.world.timeline.Timeline;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
+import java.util.Comparator;
+
 /**
  * <a href="https://minecraft.wiki/w/Dimension_type">Dimension type</a>
  */
@@ -69,7 +71,10 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
      */
     @ApiStatus.Internal
     static DynamicRegistry<DimensionType> createDefaultRegistry(Registries registries) {
-        return DynamicRegistry.create(BuiltinRegistries.DIMENSION_TYPE, REGISTRY_CODEC, registries);
+        // Emit entries in vanilla (alphabetical by id) order so the network ids assigned to dimension
+        // types match a vanilla/Paper server.
+        return DynamicRegistry.create(BuiltinRegistries.DIMENSION_TYPE, REGISTRY_CODEC, registries,
+                Comparator.naturalOrder(), null);
     }
 
     boolean hasFixedTime();
