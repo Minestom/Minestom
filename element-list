@@ -36,6 +36,7 @@ net.minestom.server.entity.metadata.ambient
 net.minestom.server.entity.metadata.animal
 net.minestom.server.entity.metadata.animal.tameable
 net.minestom.server.entity.metadata.avatar
+net.minestom.server.entity.metadata.cube
 net.minestom.server.entity.metadata.display
 net.minestom.server.entity.metadata.flying
 net.minestom.server.entity.metadata.golem
@@ -93,6 +94,7 @@ net.minestom.server.item.component
 net.minestom.server.item.crossbow
 net.minestom.server.item.enchant
 net.minestom.server.item.instrument
+net.minestom.server.item.predicate
 net.minestom.server.listener
 net.minestom.server.listener.common
 net.minestom.server.listener.manager
