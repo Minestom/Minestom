@@ -9,11 +9,11 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface Timelines permits Timeline {
-    RegistryKey<Timeline> VILLAGER_SCHEDULE = RegistryKey.unsafeOf("villager_schedule");
+    RegistryKey<Timeline> DAY = RegistryKey.unsafeOf("day");
 
     RegistryKey<Timeline> EARLY_GAME = RegistryKey.unsafeOf("early_game");
 
-    RegistryKey<Timeline> DAY = RegistryKey.unsafeOf("day");
-
     RegistryKey<Timeline> MOON = RegistryKey.unsafeOf("moon");
+
+    RegistryKey<Timeline> VILLAGER_SCHEDULE = RegistryKey.unsafeOf("villager_schedule");
 }

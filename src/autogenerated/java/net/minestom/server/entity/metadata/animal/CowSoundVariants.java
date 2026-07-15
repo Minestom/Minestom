@@ -9,7 +9,7 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface CowSoundVariants permits CowSoundVariant {
-    RegistryKey<CowSoundVariant> MOODY = RegistryKey.unsafeOf("moody");
-
     RegistryKey<CowSoundVariant> CLASSIC = RegistryKey.unsafeOf("classic");
+
+    RegistryKey<CowSoundVariant> MOODY = RegistryKey.unsafeOf("moody");
 }

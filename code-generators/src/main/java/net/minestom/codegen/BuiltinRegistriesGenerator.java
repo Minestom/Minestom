@@ -42,11 +42,24 @@ record BuiltinRegistriesGenerator(Codegen codegen) {
                     final ClassName valueClass = ClassName.get(spec.packageName(), spec.typeName());
                     final ParameterizedTypeName typedRegistry = ParameterizedTypeName.get(registryClass, valueClass);
                     final ParameterizedTypeName typedRegistryKey = ParameterizedTypeName.get(registryKeyClass, typedRegistry);
-                    constants.addField(FieldSpec.builder(typedRegistryKey, codegen.constantName(spec.key()))
+                    final String constantName = codegen.constantName(spec.constantName());
+                    constants.addField(FieldSpec.builder(typedRegistryKey, constantName)
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             .initializer("$T.unsafeOf($S)", registryKeyClass, codegen.namespaceShort(spec.key()))
                             .addJavadoc("The registry key for {@link $T}.\n", valueClass)
                             .build());
+                    final String compatibilityName = codegen.constantName(spec.key());
+                    if (!constantName.equals(compatibilityName)) {
+                        constants.addField(FieldSpec.builder(typedRegistryKey, compatibilityName)
+                                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                                .addAnnotation(AnnotationSpec.builder(Deprecated.class)
+                                        .addMember("forRemoval", "$L", true)
+                                        .build())
+                                .initializer("$L", constantName)
+                                .addJavadoc("Compatibility alias for {@link #$L}.\n\n", constantName)
+                                .addJavadoc("@deprecated use {@link #$L}\n", constantName)
+                                .build());
+                    }
                 });
 
         addRegistry(constants, registryKeyClass, registryClass,
@@ -66,6 +79,10 @@ record BuiltinRegistriesGenerator(Codegen codegen) {
     }
 
     private record RegistrySpec(String key, String packageName, String typeName) {
+        private String constantName() {
+            return key.substring(key.lastIndexOf('/') + 1);
+        }
+
         private static RegistrySpec of(Generators.StaticRegistrySpec spec) {
             return new RegistrySpec(spec.key(), spec.packageName(), spec.registryTypeName());
         }

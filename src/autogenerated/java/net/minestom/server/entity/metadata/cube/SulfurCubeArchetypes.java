@@ -9,27 +9,27 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface SulfurCubeArchetypes permits SulfurCubeArchetype {
+    RegistryKey<SulfurCubeArchetype> BOUNCY = RegistryKey.unsafeOf("bouncy");
+
+    RegistryKey<SulfurCubeArchetype> EXPLOSIVE = RegistryKey.unsafeOf("explosive");
+
     RegistryKey<SulfurCubeArchetype> FAST_FLAT = RegistryKey.unsafeOf("fast_flat");
 
     RegistryKey<SulfurCubeArchetype> FAST_SLIDING = RegistryKey.unsafeOf("fast_sliding");
 
-    RegistryKey<SulfurCubeArchetype> EXPLOSIVE = RegistryKey.unsafeOf("explosive");
-
-    RegistryKey<SulfurCubeArchetype> BOUNCY = RegistryKey.unsafeOf("bouncy");
+    RegistryKey<SulfurCubeArchetype> HIGH_RESISTANCE = RegistryKey.unsafeOf("high_resistance");
 
     RegistryKey<SulfurCubeArchetype> HOT = RegistryKey.unsafeOf("hot");
 
-    RegistryKey<SulfurCubeArchetype> HIGH_RESISTANCE = RegistryKey.unsafeOf("high_resistance");
-
-    RegistryKey<SulfurCubeArchetype> SLOW_FLAT = RegistryKey.unsafeOf("slow_flat");
-
-    RegistryKey<SulfurCubeArchetype> STICKY = RegistryKey.unsafeOf("sticky");
-
     RegistryKey<SulfurCubeArchetype> LIGHT = RegistryKey.unsafeOf("light");
 
-    RegistryKey<SulfurCubeArchetype> SLOW_SLIDING = RegistryKey.unsafeOf("slow_sliding");
+    RegistryKey<SulfurCubeArchetype> REGULAR = RegistryKey.unsafeOf("regular");
 
     RegistryKey<SulfurCubeArchetype> SLOW_BOUNCY = RegistryKey.unsafeOf("slow_bouncy");
 
-    RegistryKey<SulfurCubeArchetype> REGULAR = RegistryKey.unsafeOf("regular");
+    RegistryKey<SulfurCubeArchetype> SLOW_FLAT = RegistryKey.unsafeOf("slow_flat");
+
+    RegistryKey<SulfurCubeArchetype> SLOW_SLIDING = RegistryKey.unsafeOf("slow_sliding");
+
+    RegistryKey<SulfurCubeArchetype> STICKY = RegistryKey.unsafeOf("sticky");
 }

@@ -13,13 +13,13 @@ sealed interface ClockTimeMarkers permits ClockTimeMarker {
 
     RegistryKey<ClockTimeMarker> DAY = RegistryKey.unsafeOf("day");
 
-    RegistryKey<ClockTimeMarker> NOON = RegistryKey.unsafeOf("noon");
+    RegistryKey<ClockTimeMarker> MIDNIGHT = RegistryKey.unsafeOf("midnight");
 
     RegistryKey<ClockTimeMarker> NIGHT = RegistryKey.unsafeOf("night");
 
-    RegistryKey<ClockTimeMarker> MIDNIGHT = RegistryKey.unsafeOf("midnight");
-
-    RegistryKey<ClockTimeMarker> WAKE_UP_FROM_SLEEP = RegistryKey.unsafeOf("wake_up_from_sleep");
+    RegistryKey<ClockTimeMarker> NOON = RegistryKey.unsafeOf("noon");
 
     RegistryKey<ClockTimeMarker> ROLL_VILLAGE_SIEGE = RegistryKey.unsafeOf("roll_village_siege");
+
+    RegistryKey<ClockTimeMarker> WAKE_UP_FROM_SLEEP = RegistryKey.unsafeOf("wake_up_from_sleep");
 }

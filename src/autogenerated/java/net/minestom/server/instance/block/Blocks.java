@@ -7,2395 +7,2395 @@ package net.minestom.server.instance.block;
  */
 @SuppressWarnings("unused")
 sealed interface Blocks permits Block {
-    Block AIR = BlockImpl.get(BlockKeys.AIR);
+    Block AIR = BlockImpl.get(BlockKey.AIR);
 
-    Block STONE = BlockImpl.get(BlockKeys.STONE);
+    Block STONE = BlockImpl.get(BlockKey.STONE);
 
-    Block GRANITE = BlockImpl.get(BlockKeys.GRANITE);
+    Block GRANITE = BlockImpl.get(BlockKey.GRANITE);
 
-    Block POLISHED_GRANITE = BlockImpl.get(BlockKeys.POLISHED_GRANITE);
+    Block POLISHED_GRANITE = BlockImpl.get(BlockKey.POLISHED_GRANITE);
 
-    Block DIORITE = BlockImpl.get(BlockKeys.DIORITE);
+    Block DIORITE = BlockImpl.get(BlockKey.DIORITE);
 
-    Block POLISHED_DIORITE = BlockImpl.get(BlockKeys.POLISHED_DIORITE);
+    Block POLISHED_DIORITE = BlockImpl.get(BlockKey.POLISHED_DIORITE);
 
-    Block ANDESITE = BlockImpl.get(BlockKeys.ANDESITE);
+    Block ANDESITE = BlockImpl.get(BlockKey.ANDESITE);
 
-    Block POLISHED_ANDESITE = BlockImpl.get(BlockKeys.POLISHED_ANDESITE);
+    Block POLISHED_ANDESITE = BlockImpl.get(BlockKey.POLISHED_ANDESITE);
 
-    Block GRASS_BLOCK = BlockImpl.get(BlockKeys.GRASS_BLOCK);
+    Block GRASS_BLOCK = BlockImpl.get(BlockKey.GRASS_BLOCK);
 
-    Block DIRT = BlockImpl.get(BlockKeys.DIRT);
+    Block DIRT = BlockImpl.get(BlockKey.DIRT);
 
-    Block COARSE_DIRT = BlockImpl.get(BlockKeys.COARSE_DIRT);
+    Block COARSE_DIRT = BlockImpl.get(BlockKey.COARSE_DIRT);
 
-    Block PODZOL = BlockImpl.get(BlockKeys.PODZOL);
+    Block PODZOL = BlockImpl.get(BlockKey.PODZOL);
 
-    Block COBBLESTONE = BlockImpl.get(BlockKeys.COBBLESTONE);
+    Block COBBLESTONE = BlockImpl.get(BlockKey.COBBLESTONE);
 
-    Block OAK_PLANKS = BlockImpl.get(BlockKeys.OAK_PLANKS);
+    Block OAK_PLANKS = BlockImpl.get(BlockKey.OAK_PLANKS);
 
-    Block SPRUCE_PLANKS = BlockImpl.get(BlockKeys.SPRUCE_PLANKS);
+    Block SPRUCE_PLANKS = BlockImpl.get(BlockKey.SPRUCE_PLANKS);
 
-    Block BIRCH_PLANKS = BlockImpl.get(BlockKeys.BIRCH_PLANKS);
+    Block BIRCH_PLANKS = BlockImpl.get(BlockKey.BIRCH_PLANKS);
 
-    Block JUNGLE_PLANKS = BlockImpl.get(BlockKeys.JUNGLE_PLANKS);
+    Block JUNGLE_PLANKS = BlockImpl.get(BlockKey.JUNGLE_PLANKS);
 
-    Block ACACIA_PLANKS = BlockImpl.get(BlockKeys.ACACIA_PLANKS);
+    Block ACACIA_PLANKS = BlockImpl.get(BlockKey.ACACIA_PLANKS);
 
-    Block CHERRY_PLANKS = BlockImpl.get(BlockKeys.CHERRY_PLANKS);
+    Block CHERRY_PLANKS = BlockImpl.get(BlockKey.CHERRY_PLANKS);
 
-    Block DARK_OAK_PLANKS = BlockImpl.get(BlockKeys.DARK_OAK_PLANKS);
+    Block DARK_OAK_PLANKS = BlockImpl.get(BlockKey.DARK_OAK_PLANKS);
 
-    Block PALE_OAK_WOOD = BlockImpl.get(BlockKeys.PALE_OAK_WOOD);
+    Block PALE_OAK_WOOD = BlockImpl.get(BlockKey.PALE_OAK_WOOD);
 
-    Block PALE_OAK_PLANKS = BlockImpl.get(BlockKeys.PALE_OAK_PLANKS);
+    Block PALE_OAK_PLANKS = BlockImpl.get(BlockKey.PALE_OAK_PLANKS);
 
-    Block MANGROVE_PLANKS = BlockImpl.get(BlockKeys.MANGROVE_PLANKS);
+    Block MANGROVE_PLANKS = BlockImpl.get(BlockKey.MANGROVE_PLANKS);
 
-    Block BAMBOO_PLANKS = BlockImpl.get(BlockKeys.BAMBOO_PLANKS);
+    Block BAMBOO_PLANKS = BlockImpl.get(BlockKey.BAMBOO_PLANKS);
 
-    Block BAMBOO_MOSAIC = BlockImpl.get(BlockKeys.BAMBOO_MOSAIC);
+    Block BAMBOO_MOSAIC = BlockImpl.get(BlockKey.BAMBOO_MOSAIC);
 
-    Block OAK_SAPLING = BlockImpl.get(BlockKeys.OAK_SAPLING);
+    Block OAK_SAPLING = BlockImpl.get(BlockKey.OAK_SAPLING);
 
-    Block SPRUCE_SAPLING = BlockImpl.get(BlockKeys.SPRUCE_SAPLING);
+    Block SPRUCE_SAPLING = BlockImpl.get(BlockKey.SPRUCE_SAPLING);
 
-    Block BIRCH_SAPLING = BlockImpl.get(BlockKeys.BIRCH_SAPLING);
+    Block BIRCH_SAPLING = BlockImpl.get(BlockKey.BIRCH_SAPLING);
 
-    Block JUNGLE_SAPLING = BlockImpl.get(BlockKeys.JUNGLE_SAPLING);
+    Block JUNGLE_SAPLING = BlockImpl.get(BlockKey.JUNGLE_SAPLING);
 
-    Block ACACIA_SAPLING = BlockImpl.get(BlockKeys.ACACIA_SAPLING);
+    Block ACACIA_SAPLING = BlockImpl.get(BlockKey.ACACIA_SAPLING);
 
-    Block CHERRY_SAPLING = BlockImpl.get(BlockKeys.CHERRY_SAPLING);
+    Block CHERRY_SAPLING = BlockImpl.get(BlockKey.CHERRY_SAPLING);
 
-    Block DARK_OAK_SAPLING = BlockImpl.get(BlockKeys.DARK_OAK_SAPLING);
+    Block DARK_OAK_SAPLING = BlockImpl.get(BlockKey.DARK_OAK_SAPLING);
 
-    Block PALE_OAK_SAPLING = BlockImpl.get(BlockKeys.PALE_OAK_SAPLING);
+    Block PALE_OAK_SAPLING = BlockImpl.get(BlockKey.PALE_OAK_SAPLING);
 
-    Block MANGROVE_PROPAGULE = BlockImpl.get(BlockKeys.MANGROVE_PROPAGULE);
+    Block MANGROVE_PROPAGULE = BlockImpl.get(BlockKey.MANGROVE_PROPAGULE);
 
-    Block BEDROCK = BlockImpl.get(BlockKeys.BEDROCK);
+    Block BEDROCK = BlockImpl.get(BlockKey.BEDROCK);
 
-    Block WATER = BlockImpl.get(BlockKeys.WATER);
+    Block WATER = BlockImpl.get(BlockKey.WATER);
 
-    Block LAVA = BlockImpl.get(BlockKeys.LAVA);
+    Block LAVA = BlockImpl.get(BlockKey.LAVA);
 
-    Block SAND = BlockImpl.get(BlockKeys.SAND);
+    Block SAND = BlockImpl.get(BlockKey.SAND);
 
-    Block SUSPICIOUS_SAND = BlockImpl.get(BlockKeys.SUSPICIOUS_SAND);
+    Block SUSPICIOUS_SAND = BlockImpl.get(BlockKey.SUSPICIOUS_SAND);
 
-    Block RED_SAND = BlockImpl.get(BlockKeys.RED_SAND);
+    Block RED_SAND = BlockImpl.get(BlockKey.RED_SAND);
 
-    Block GRAVEL = BlockImpl.get(BlockKeys.GRAVEL);
+    Block GRAVEL = BlockImpl.get(BlockKey.GRAVEL);
 
-    Block SUSPICIOUS_GRAVEL = BlockImpl.get(BlockKeys.SUSPICIOUS_GRAVEL);
+    Block SUSPICIOUS_GRAVEL = BlockImpl.get(BlockKey.SUSPICIOUS_GRAVEL);
 
-    Block GOLD_ORE = BlockImpl.get(BlockKeys.GOLD_ORE);
+    Block GOLD_ORE = BlockImpl.get(BlockKey.GOLD_ORE);
 
-    Block DEEPSLATE_GOLD_ORE = BlockImpl.get(BlockKeys.DEEPSLATE_GOLD_ORE);
+    Block DEEPSLATE_GOLD_ORE = BlockImpl.get(BlockKey.DEEPSLATE_GOLD_ORE);
 
-    Block IRON_ORE = BlockImpl.get(BlockKeys.IRON_ORE);
+    Block IRON_ORE = BlockImpl.get(BlockKey.IRON_ORE);
 
-    Block DEEPSLATE_IRON_ORE = BlockImpl.get(BlockKeys.DEEPSLATE_IRON_ORE);
+    Block DEEPSLATE_IRON_ORE = BlockImpl.get(BlockKey.DEEPSLATE_IRON_ORE);
 
-    Block COAL_ORE = BlockImpl.get(BlockKeys.COAL_ORE);
+    Block COAL_ORE = BlockImpl.get(BlockKey.COAL_ORE);
 
-    Block DEEPSLATE_COAL_ORE = BlockImpl.get(BlockKeys.DEEPSLATE_COAL_ORE);
+    Block DEEPSLATE_COAL_ORE = BlockImpl.get(BlockKey.DEEPSLATE_COAL_ORE);
 
-    Block NETHER_GOLD_ORE = BlockImpl.get(BlockKeys.NETHER_GOLD_ORE);
+    Block NETHER_GOLD_ORE = BlockImpl.get(BlockKey.NETHER_GOLD_ORE);
 
-    Block OAK_LOG = BlockImpl.get(BlockKeys.OAK_LOG);
+    Block OAK_LOG = BlockImpl.get(BlockKey.OAK_LOG);
 
-    Block SPRUCE_LOG = BlockImpl.get(BlockKeys.SPRUCE_LOG);
+    Block SPRUCE_LOG = BlockImpl.get(BlockKey.SPRUCE_LOG);
 
-    Block BIRCH_LOG = BlockImpl.get(BlockKeys.BIRCH_LOG);
+    Block BIRCH_LOG = BlockImpl.get(BlockKey.BIRCH_LOG);
 
-    Block JUNGLE_LOG = BlockImpl.get(BlockKeys.JUNGLE_LOG);
+    Block JUNGLE_LOG = BlockImpl.get(BlockKey.JUNGLE_LOG);
 
-    Block ACACIA_LOG = BlockImpl.get(BlockKeys.ACACIA_LOG);
+    Block ACACIA_LOG = BlockImpl.get(BlockKey.ACACIA_LOG);
 
-    Block CHERRY_LOG = BlockImpl.get(BlockKeys.CHERRY_LOG);
+    Block CHERRY_LOG = BlockImpl.get(BlockKey.CHERRY_LOG);
 
-    Block DARK_OAK_LOG = BlockImpl.get(BlockKeys.DARK_OAK_LOG);
+    Block DARK_OAK_LOG = BlockImpl.get(BlockKey.DARK_OAK_LOG);
 
-    Block PALE_OAK_LOG = BlockImpl.get(BlockKeys.PALE_OAK_LOG);
+    Block PALE_OAK_LOG = BlockImpl.get(BlockKey.PALE_OAK_LOG);
 
-    Block MANGROVE_LOG = BlockImpl.get(BlockKeys.MANGROVE_LOG);
+    Block MANGROVE_LOG = BlockImpl.get(BlockKey.MANGROVE_LOG);
 
-    Block MANGROVE_ROOTS = BlockImpl.get(BlockKeys.MANGROVE_ROOTS);
+    Block MANGROVE_ROOTS = BlockImpl.get(BlockKey.MANGROVE_ROOTS);
 
-    Block MUDDY_MANGROVE_ROOTS = BlockImpl.get(BlockKeys.MUDDY_MANGROVE_ROOTS);
+    Block MUDDY_MANGROVE_ROOTS = BlockImpl.get(BlockKey.MUDDY_MANGROVE_ROOTS);
 
-    Block BAMBOO_BLOCK = BlockImpl.get(BlockKeys.BAMBOO_BLOCK);
+    Block BAMBOO_BLOCK = BlockImpl.get(BlockKey.BAMBOO_BLOCK);
 
-    Block STRIPPED_SPRUCE_LOG = BlockImpl.get(BlockKeys.STRIPPED_SPRUCE_LOG);
+    Block STRIPPED_SPRUCE_LOG = BlockImpl.get(BlockKey.STRIPPED_SPRUCE_LOG);
 
-    Block STRIPPED_BIRCH_LOG = BlockImpl.get(BlockKeys.STRIPPED_BIRCH_LOG);
+    Block STRIPPED_BIRCH_LOG = BlockImpl.get(BlockKey.STRIPPED_BIRCH_LOG);
 
-    Block STRIPPED_JUNGLE_LOG = BlockImpl.get(BlockKeys.STRIPPED_JUNGLE_LOG);
+    Block STRIPPED_JUNGLE_LOG = BlockImpl.get(BlockKey.STRIPPED_JUNGLE_LOG);
 
-    Block STRIPPED_ACACIA_LOG = BlockImpl.get(BlockKeys.STRIPPED_ACACIA_LOG);
+    Block STRIPPED_ACACIA_LOG = BlockImpl.get(BlockKey.STRIPPED_ACACIA_LOG);
 
-    Block STRIPPED_CHERRY_LOG = BlockImpl.get(BlockKeys.STRIPPED_CHERRY_LOG);
+    Block STRIPPED_CHERRY_LOG = BlockImpl.get(BlockKey.STRIPPED_CHERRY_LOG);
 
-    Block STRIPPED_DARK_OAK_LOG = BlockImpl.get(BlockKeys.STRIPPED_DARK_OAK_LOG);
+    Block STRIPPED_DARK_OAK_LOG = BlockImpl.get(BlockKey.STRIPPED_DARK_OAK_LOG);
 
-    Block STRIPPED_PALE_OAK_LOG = BlockImpl.get(BlockKeys.STRIPPED_PALE_OAK_LOG);
+    Block STRIPPED_PALE_OAK_LOG = BlockImpl.get(BlockKey.STRIPPED_PALE_OAK_LOG);
 
-    Block STRIPPED_OAK_LOG = BlockImpl.get(BlockKeys.STRIPPED_OAK_LOG);
+    Block STRIPPED_OAK_LOG = BlockImpl.get(BlockKey.STRIPPED_OAK_LOG);
 
-    Block STRIPPED_MANGROVE_LOG = BlockImpl.get(BlockKeys.STRIPPED_MANGROVE_LOG);
+    Block STRIPPED_MANGROVE_LOG = BlockImpl.get(BlockKey.STRIPPED_MANGROVE_LOG);
 
-    Block STRIPPED_BAMBOO_BLOCK = BlockImpl.get(BlockKeys.STRIPPED_BAMBOO_BLOCK);
+    Block STRIPPED_BAMBOO_BLOCK = BlockImpl.get(BlockKey.STRIPPED_BAMBOO_BLOCK);
 
-    Block OAK_WOOD = BlockImpl.get(BlockKeys.OAK_WOOD);
+    Block OAK_WOOD = BlockImpl.get(BlockKey.OAK_WOOD);
 
-    Block SPRUCE_WOOD = BlockImpl.get(BlockKeys.SPRUCE_WOOD);
+    Block SPRUCE_WOOD = BlockImpl.get(BlockKey.SPRUCE_WOOD);
 
-    Block BIRCH_WOOD = BlockImpl.get(BlockKeys.BIRCH_WOOD);
+    Block BIRCH_WOOD = BlockImpl.get(BlockKey.BIRCH_WOOD);
 
-    Block JUNGLE_WOOD = BlockImpl.get(BlockKeys.JUNGLE_WOOD);
+    Block JUNGLE_WOOD = BlockImpl.get(BlockKey.JUNGLE_WOOD);
 
-    Block ACACIA_WOOD = BlockImpl.get(BlockKeys.ACACIA_WOOD);
+    Block ACACIA_WOOD = BlockImpl.get(BlockKey.ACACIA_WOOD);
 
-    Block CHERRY_WOOD = BlockImpl.get(BlockKeys.CHERRY_WOOD);
+    Block CHERRY_WOOD = BlockImpl.get(BlockKey.CHERRY_WOOD);
 
-    Block DARK_OAK_WOOD = BlockImpl.get(BlockKeys.DARK_OAK_WOOD);
+    Block DARK_OAK_WOOD = BlockImpl.get(BlockKey.DARK_OAK_WOOD);
 
-    Block MANGROVE_WOOD = BlockImpl.get(BlockKeys.MANGROVE_WOOD);
+    Block MANGROVE_WOOD = BlockImpl.get(BlockKey.MANGROVE_WOOD);
 
-    Block STRIPPED_OAK_WOOD = BlockImpl.get(BlockKeys.STRIPPED_OAK_WOOD);
+    Block STRIPPED_OAK_WOOD = BlockImpl.get(BlockKey.STRIPPED_OAK_WOOD);
 
-    Block STRIPPED_SPRUCE_WOOD = BlockImpl.get(BlockKeys.STRIPPED_SPRUCE_WOOD);
+    Block STRIPPED_SPRUCE_WOOD = BlockImpl.get(BlockKey.STRIPPED_SPRUCE_WOOD);
 
-    Block STRIPPED_BIRCH_WOOD = BlockImpl.get(BlockKeys.STRIPPED_BIRCH_WOOD);
+    Block STRIPPED_BIRCH_WOOD = BlockImpl.get(BlockKey.STRIPPED_BIRCH_WOOD);
 
-    Block STRIPPED_JUNGLE_WOOD = BlockImpl.get(BlockKeys.STRIPPED_JUNGLE_WOOD);
+    Block STRIPPED_JUNGLE_WOOD = BlockImpl.get(BlockKey.STRIPPED_JUNGLE_WOOD);
 
-    Block STRIPPED_ACACIA_WOOD = BlockImpl.get(BlockKeys.STRIPPED_ACACIA_WOOD);
+    Block STRIPPED_ACACIA_WOOD = BlockImpl.get(BlockKey.STRIPPED_ACACIA_WOOD);
 
-    Block STRIPPED_CHERRY_WOOD = BlockImpl.get(BlockKeys.STRIPPED_CHERRY_WOOD);
+    Block STRIPPED_CHERRY_WOOD = BlockImpl.get(BlockKey.STRIPPED_CHERRY_WOOD);
 
-    Block STRIPPED_DARK_OAK_WOOD = BlockImpl.get(BlockKeys.STRIPPED_DARK_OAK_WOOD);
+    Block STRIPPED_DARK_OAK_WOOD = BlockImpl.get(BlockKey.STRIPPED_DARK_OAK_WOOD);
 
-    Block STRIPPED_PALE_OAK_WOOD = BlockImpl.get(BlockKeys.STRIPPED_PALE_OAK_WOOD);
+    Block STRIPPED_PALE_OAK_WOOD = BlockImpl.get(BlockKey.STRIPPED_PALE_OAK_WOOD);
 
-    Block STRIPPED_MANGROVE_WOOD = BlockImpl.get(BlockKeys.STRIPPED_MANGROVE_WOOD);
+    Block STRIPPED_MANGROVE_WOOD = BlockImpl.get(BlockKey.STRIPPED_MANGROVE_WOOD);
 
-    Block OAK_LEAVES = BlockImpl.get(BlockKeys.OAK_LEAVES);
+    Block OAK_LEAVES = BlockImpl.get(BlockKey.OAK_LEAVES);
 
-    Block SPRUCE_LEAVES = BlockImpl.get(BlockKeys.SPRUCE_LEAVES);
+    Block SPRUCE_LEAVES = BlockImpl.get(BlockKey.SPRUCE_LEAVES);
 
-    Block BIRCH_LEAVES = BlockImpl.get(BlockKeys.BIRCH_LEAVES);
+    Block BIRCH_LEAVES = BlockImpl.get(BlockKey.BIRCH_LEAVES);
 
-    Block JUNGLE_LEAVES = BlockImpl.get(BlockKeys.JUNGLE_LEAVES);
+    Block JUNGLE_LEAVES = BlockImpl.get(BlockKey.JUNGLE_LEAVES);
 
-    Block ACACIA_LEAVES = BlockImpl.get(BlockKeys.ACACIA_LEAVES);
+    Block ACACIA_LEAVES = BlockImpl.get(BlockKey.ACACIA_LEAVES);
 
-    Block CHERRY_LEAVES = BlockImpl.get(BlockKeys.CHERRY_LEAVES);
+    Block CHERRY_LEAVES = BlockImpl.get(BlockKey.CHERRY_LEAVES);
 
-    Block DARK_OAK_LEAVES = BlockImpl.get(BlockKeys.DARK_OAK_LEAVES);
+    Block DARK_OAK_LEAVES = BlockImpl.get(BlockKey.DARK_OAK_LEAVES);
 
-    Block PALE_OAK_LEAVES = BlockImpl.get(BlockKeys.PALE_OAK_LEAVES);
+    Block PALE_OAK_LEAVES = BlockImpl.get(BlockKey.PALE_OAK_LEAVES);
 
-    Block MANGROVE_LEAVES = BlockImpl.get(BlockKeys.MANGROVE_LEAVES);
+    Block MANGROVE_LEAVES = BlockImpl.get(BlockKey.MANGROVE_LEAVES);
 
-    Block AZALEA_LEAVES = BlockImpl.get(BlockKeys.AZALEA_LEAVES);
+    Block AZALEA_LEAVES = BlockImpl.get(BlockKey.AZALEA_LEAVES);
 
-    Block FLOWERING_AZALEA_LEAVES = BlockImpl.get(BlockKeys.FLOWERING_AZALEA_LEAVES);
+    Block FLOWERING_AZALEA_LEAVES = BlockImpl.get(BlockKey.FLOWERING_AZALEA_LEAVES);
 
-    Block SPONGE = BlockImpl.get(BlockKeys.SPONGE);
+    Block SPONGE = BlockImpl.get(BlockKey.SPONGE);
 
-    Block WET_SPONGE = BlockImpl.get(BlockKeys.WET_SPONGE);
+    Block WET_SPONGE = BlockImpl.get(BlockKey.WET_SPONGE);
 
-    Block GLASS = BlockImpl.get(BlockKeys.GLASS);
+    Block GLASS = BlockImpl.get(BlockKey.GLASS);
 
-    Block LAPIS_ORE = BlockImpl.get(BlockKeys.LAPIS_ORE);
+    Block LAPIS_ORE = BlockImpl.get(BlockKey.LAPIS_ORE);
 
-    Block DEEPSLATE_LAPIS_ORE = BlockImpl.get(BlockKeys.DEEPSLATE_LAPIS_ORE);
+    Block DEEPSLATE_LAPIS_ORE = BlockImpl.get(BlockKey.DEEPSLATE_LAPIS_ORE);
 
-    Block LAPIS_BLOCK = BlockImpl.get(BlockKeys.LAPIS_BLOCK);
+    Block LAPIS_BLOCK = BlockImpl.get(BlockKey.LAPIS_BLOCK);
 
-    Block DISPENSER = BlockImpl.get(BlockKeys.DISPENSER);
+    Block DISPENSER = BlockImpl.get(BlockKey.DISPENSER);
 
-    Block SANDSTONE = BlockImpl.get(BlockKeys.SANDSTONE);
+    Block SANDSTONE = BlockImpl.get(BlockKey.SANDSTONE);
 
-    Block CHISELED_SANDSTONE = BlockImpl.get(BlockKeys.CHISELED_SANDSTONE);
+    Block CHISELED_SANDSTONE = BlockImpl.get(BlockKey.CHISELED_SANDSTONE);
 
-    Block CUT_SANDSTONE = BlockImpl.get(BlockKeys.CUT_SANDSTONE);
+    Block CUT_SANDSTONE = BlockImpl.get(BlockKey.CUT_SANDSTONE);
 
-    Block NOTE_BLOCK = BlockImpl.get(BlockKeys.NOTE_BLOCK);
+    Block NOTE_BLOCK = BlockImpl.get(BlockKey.NOTE_BLOCK);
 
-    Block WHITE_BED = BlockImpl.get(BlockKeys.WHITE_BED);
+    Block WHITE_BED = BlockImpl.get(BlockKey.WHITE_BED);
 
-    Block ORANGE_BED = BlockImpl.get(BlockKeys.ORANGE_BED);
+    Block ORANGE_BED = BlockImpl.get(BlockKey.ORANGE_BED);
 
-    Block MAGENTA_BED = BlockImpl.get(BlockKeys.MAGENTA_BED);
+    Block MAGENTA_BED = BlockImpl.get(BlockKey.MAGENTA_BED);
 
-    Block LIGHT_BLUE_BED = BlockImpl.get(BlockKeys.LIGHT_BLUE_BED);
+    Block LIGHT_BLUE_BED = BlockImpl.get(BlockKey.LIGHT_BLUE_BED);
 
-    Block YELLOW_BED = BlockImpl.get(BlockKeys.YELLOW_BED);
+    Block YELLOW_BED = BlockImpl.get(BlockKey.YELLOW_BED);
 
-    Block LIME_BED = BlockImpl.get(BlockKeys.LIME_BED);
+    Block LIME_BED = BlockImpl.get(BlockKey.LIME_BED);
 
-    Block PINK_BED = BlockImpl.get(BlockKeys.PINK_BED);
+    Block PINK_BED = BlockImpl.get(BlockKey.PINK_BED);
 
-    Block GRAY_BED = BlockImpl.get(BlockKeys.GRAY_BED);
+    Block GRAY_BED = BlockImpl.get(BlockKey.GRAY_BED);
 
-    Block LIGHT_GRAY_BED = BlockImpl.get(BlockKeys.LIGHT_GRAY_BED);
+    Block LIGHT_GRAY_BED = BlockImpl.get(BlockKey.LIGHT_GRAY_BED);
 
-    Block CYAN_BED = BlockImpl.get(BlockKeys.CYAN_BED);
+    Block CYAN_BED = BlockImpl.get(BlockKey.CYAN_BED);
 
-    Block PURPLE_BED = BlockImpl.get(BlockKeys.PURPLE_BED);
+    Block PURPLE_BED = BlockImpl.get(BlockKey.PURPLE_BED);
 
-    Block BLUE_BED = BlockImpl.get(BlockKeys.BLUE_BED);
+    Block BLUE_BED = BlockImpl.get(BlockKey.BLUE_BED);
 
-    Block BROWN_BED = BlockImpl.get(BlockKeys.BROWN_BED);
+    Block BROWN_BED = BlockImpl.get(BlockKey.BROWN_BED);
 
-    Block GREEN_BED = BlockImpl.get(BlockKeys.GREEN_BED);
+    Block GREEN_BED = BlockImpl.get(BlockKey.GREEN_BED);
 
-    Block RED_BED = BlockImpl.get(BlockKeys.RED_BED);
+    Block RED_BED = BlockImpl.get(BlockKey.RED_BED);
 
-    Block BLACK_BED = BlockImpl.get(BlockKeys.BLACK_BED);
+    Block BLACK_BED = BlockImpl.get(BlockKey.BLACK_BED);
 
-    Block POWERED_RAIL = BlockImpl.get(BlockKeys.POWERED_RAIL);
+    Block POWERED_RAIL = BlockImpl.get(BlockKey.POWERED_RAIL);
 
-    Block DETECTOR_RAIL = BlockImpl.get(BlockKeys.DETECTOR_RAIL);
+    Block DETECTOR_RAIL = BlockImpl.get(BlockKey.DETECTOR_RAIL);
 
-    Block STICKY_PISTON = BlockImpl.get(BlockKeys.STICKY_PISTON);
+    Block STICKY_PISTON = BlockImpl.get(BlockKey.STICKY_PISTON);
 
-    Block COBWEB = BlockImpl.get(BlockKeys.COBWEB);
+    Block COBWEB = BlockImpl.get(BlockKey.COBWEB);
 
-    Block SHORT_GRASS = BlockImpl.get(BlockKeys.SHORT_GRASS);
+    Block SHORT_GRASS = BlockImpl.get(BlockKey.SHORT_GRASS);
 
-    Block FERN = BlockImpl.get(BlockKeys.FERN);
+    Block FERN = BlockImpl.get(BlockKey.FERN);
 
-    Block DEAD_BUSH = BlockImpl.get(BlockKeys.DEAD_BUSH);
+    Block DEAD_BUSH = BlockImpl.get(BlockKey.DEAD_BUSH);
 
-    Block BUSH = BlockImpl.get(BlockKeys.BUSH);
+    Block BUSH = BlockImpl.get(BlockKey.BUSH);
 
-    Block SHORT_DRY_GRASS = BlockImpl.get(BlockKeys.SHORT_DRY_GRASS);
+    Block SHORT_DRY_GRASS = BlockImpl.get(BlockKey.SHORT_DRY_GRASS);
 
-    Block TALL_DRY_GRASS = BlockImpl.get(BlockKeys.TALL_DRY_GRASS);
+    Block TALL_DRY_GRASS = BlockImpl.get(BlockKey.TALL_DRY_GRASS);
 
-    Block SEAGRASS = BlockImpl.get(BlockKeys.SEAGRASS);
+    Block SEAGRASS = BlockImpl.get(BlockKey.SEAGRASS);
 
-    Block TALL_SEAGRASS = BlockImpl.get(BlockKeys.TALL_SEAGRASS);
+    Block TALL_SEAGRASS = BlockImpl.get(BlockKey.TALL_SEAGRASS);
 
-    Block PISTON = BlockImpl.get(BlockKeys.PISTON);
+    Block PISTON = BlockImpl.get(BlockKey.PISTON);
 
-    Block PISTON_HEAD = BlockImpl.get(BlockKeys.PISTON_HEAD);
+    Block PISTON_HEAD = BlockImpl.get(BlockKey.PISTON_HEAD);
 
-    Block WHITE_WOOL = BlockImpl.get(BlockKeys.WHITE_WOOL);
+    Block WHITE_WOOL = BlockImpl.get(BlockKey.WHITE_WOOL);
 
-    Block ORANGE_WOOL = BlockImpl.get(BlockKeys.ORANGE_WOOL);
+    Block ORANGE_WOOL = BlockImpl.get(BlockKey.ORANGE_WOOL);
 
-    Block MAGENTA_WOOL = BlockImpl.get(BlockKeys.MAGENTA_WOOL);
+    Block MAGENTA_WOOL = BlockImpl.get(BlockKey.MAGENTA_WOOL);
 
-    Block LIGHT_BLUE_WOOL = BlockImpl.get(BlockKeys.LIGHT_BLUE_WOOL);
+    Block LIGHT_BLUE_WOOL = BlockImpl.get(BlockKey.LIGHT_BLUE_WOOL);
 
-    Block YELLOW_WOOL = BlockImpl.get(BlockKeys.YELLOW_WOOL);
+    Block YELLOW_WOOL = BlockImpl.get(BlockKey.YELLOW_WOOL);
 
-    Block LIME_WOOL = BlockImpl.get(BlockKeys.LIME_WOOL);
+    Block LIME_WOOL = BlockImpl.get(BlockKey.LIME_WOOL);
 
-    Block PINK_WOOL = BlockImpl.get(BlockKeys.PINK_WOOL);
+    Block PINK_WOOL = BlockImpl.get(BlockKey.PINK_WOOL);
 
-    Block GRAY_WOOL = BlockImpl.get(BlockKeys.GRAY_WOOL);
+    Block GRAY_WOOL = BlockImpl.get(BlockKey.GRAY_WOOL);
 
-    Block LIGHT_GRAY_WOOL = BlockImpl.get(BlockKeys.LIGHT_GRAY_WOOL);
+    Block LIGHT_GRAY_WOOL = BlockImpl.get(BlockKey.LIGHT_GRAY_WOOL);
 
-    Block CYAN_WOOL = BlockImpl.get(BlockKeys.CYAN_WOOL);
+    Block CYAN_WOOL = BlockImpl.get(BlockKey.CYAN_WOOL);
 
-    Block PURPLE_WOOL = BlockImpl.get(BlockKeys.PURPLE_WOOL);
+    Block PURPLE_WOOL = BlockImpl.get(BlockKey.PURPLE_WOOL);
 
-    Block BLUE_WOOL = BlockImpl.get(BlockKeys.BLUE_WOOL);
+    Block BLUE_WOOL = BlockImpl.get(BlockKey.BLUE_WOOL);
 
-    Block BROWN_WOOL = BlockImpl.get(BlockKeys.BROWN_WOOL);
+    Block BROWN_WOOL = BlockImpl.get(BlockKey.BROWN_WOOL);
 
-    Block GREEN_WOOL = BlockImpl.get(BlockKeys.GREEN_WOOL);
+    Block GREEN_WOOL = BlockImpl.get(BlockKey.GREEN_WOOL);
 
-    Block RED_WOOL = BlockImpl.get(BlockKeys.RED_WOOL);
+    Block RED_WOOL = BlockImpl.get(BlockKey.RED_WOOL);
 
-    Block BLACK_WOOL = BlockImpl.get(BlockKeys.BLACK_WOOL);
+    Block BLACK_WOOL = BlockImpl.get(BlockKey.BLACK_WOOL);
 
-    Block MOVING_PISTON = BlockImpl.get(BlockKeys.MOVING_PISTON);
+    Block MOVING_PISTON = BlockImpl.get(BlockKey.MOVING_PISTON);
 
-    Block DANDELION = BlockImpl.get(BlockKeys.DANDELION);
+    Block DANDELION = BlockImpl.get(BlockKey.DANDELION);
 
-    Block GOLDEN_DANDELION = BlockImpl.get(BlockKeys.GOLDEN_DANDELION);
+    Block GOLDEN_DANDELION = BlockImpl.get(BlockKey.GOLDEN_DANDELION);
 
-    Block TORCHFLOWER = BlockImpl.get(BlockKeys.TORCHFLOWER);
+    Block TORCHFLOWER = BlockImpl.get(BlockKey.TORCHFLOWER);
 
-    Block POPPY = BlockImpl.get(BlockKeys.POPPY);
+    Block POPPY = BlockImpl.get(BlockKey.POPPY);
 
-    Block BLUE_ORCHID = BlockImpl.get(BlockKeys.BLUE_ORCHID);
+    Block BLUE_ORCHID = BlockImpl.get(BlockKey.BLUE_ORCHID);
 
-    Block ALLIUM = BlockImpl.get(BlockKeys.ALLIUM);
+    Block ALLIUM = BlockImpl.get(BlockKey.ALLIUM);
 
-    Block AZURE_BLUET = BlockImpl.get(BlockKeys.AZURE_BLUET);
+    Block AZURE_BLUET = BlockImpl.get(BlockKey.AZURE_BLUET);
 
-    Block RED_TULIP = BlockImpl.get(BlockKeys.RED_TULIP);
+    Block RED_TULIP = BlockImpl.get(BlockKey.RED_TULIP);
 
-    Block ORANGE_TULIP = BlockImpl.get(BlockKeys.ORANGE_TULIP);
+    Block ORANGE_TULIP = BlockImpl.get(BlockKey.ORANGE_TULIP);
 
-    Block WHITE_TULIP = BlockImpl.get(BlockKeys.WHITE_TULIP);
+    Block WHITE_TULIP = BlockImpl.get(BlockKey.WHITE_TULIP);
 
-    Block PINK_TULIP = BlockImpl.get(BlockKeys.PINK_TULIP);
+    Block PINK_TULIP = BlockImpl.get(BlockKey.PINK_TULIP);
 
-    Block OXEYE_DAISY = BlockImpl.get(BlockKeys.OXEYE_DAISY);
+    Block OXEYE_DAISY = BlockImpl.get(BlockKey.OXEYE_DAISY);
 
-    Block CORNFLOWER = BlockImpl.get(BlockKeys.CORNFLOWER);
+    Block CORNFLOWER = BlockImpl.get(BlockKey.CORNFLOWER);
 
-    Block WITHER_ROSE = BlockImpl.get(BlockKeys.WITHER_ROSE);
+    Block WITHER_ROSE = BlockImpl.get(BlockKey.WITHER_ROSE);
 
-    Block LILY_OF_THE_VALLEY = BlockImpl.get(BlockKeys.LILY_OF_THE_VALLEY);
+    Block LILY_OF_THE_VALLEY = BlockImpl.get(BlockKey.LILY_OF_THE_VALLEY);
 
-    Block BROWN_MUSHROOM = BlockImpl.get(BlockKeys.BROWN_MUSHROOM);
+    Block BROWN_MUSHROOM = BlockImpl.get(BlockKey.BROWN_MUSHROOM);
 
-    Block RED_MUSHROOM = BlockImpl.get(BlockKeys.RED_MUSHROOM);
+    Block RED_MUSHROOM = BlockImpl.get(BlockKey.RED_MUSHROOM);
 
-    Block GOLD_BLOCK = BlockImpl.get(BlockKeys.GOLD_BLOCK);
+    Block GOLD_BLOCK = BlockImpl.get(BlockKey.GOLD_BLOCK);
 
-    Block IRON_BLOCK = BlockImpl.get(BlockKeys.IRON_BLOCK);
+    Block IRON_BLOCK = BlockImpl.get(BlockKey.IRON_BLOCK);
 
-    Block BRICKS = BlockImpl.get(BlockKeys.BRICKS);
+    Block BRICKS = BlockImpl.get(BlockKey.BRICKS);
 
-    Block TNT = BlockImpl.get(BlockKeys.TNT);
+    Block TNT = BlockImpl.get(BlockKey.TNT);
 
-    Block BOOKSHELF = BlockImpl.get(BlockKeys.BOOKSHELF);
+    Block BOOKSHELF = BlockImpl.get(BlockKey.BOOKSHELF);
 
-    Block CHISELED_BOOKSHELF = BlockImpl.get(BlockKeys.CHISELED_BOOKSHELF);
+    Block CHISELED_BOOKSHELF = BlockImpl.get(BlockKey.CHISELED_BOOKSHELF);
 
-    Block ACACIA_SHELF = BlockImpl.get(BlockKeys.ACACIA_SHELF);
+    Block ACACIA_SHELF = BlockImpl.get(BlockKey.ACACIA_SHELF);
 
-    Block BAMBOO_SHELF = BlockImpl.get(BlockKeys.BAMBOO_SHELF);
+    Block BAMBOO_SHELF = BlockImpl.get(BlockKey.BAMBOO_SHELF);
 
-    Block BIRCH_SHELF = BlockImpl.get(BlockKeys.BIRCH_SHELF);
+    Block BIRCH_SHELF = BlockImpl.get(BlockKey.BIRCH_SHELF);
 
-    Block CHERRY_SHELF = BlockImpl.get(BlockKeys.CHERRY_SHELF);
+    Block CHERRY_SHELF = BlockImpl.get(BlockKey.CHERRY_SHELF);
 
-    Block CRIMSON_SHELF = BlockImpl.get(BlockKeys.CRIMSON_SHELF);
+    Block CRIMSON_SHELF = BlockImpl.get(BlockKey.CRIMSON_SHELF);
 
-    Block DARK_OAK_SHELF = BlockImpl.get(BlockKeys.DARK_OAK_SHELF);
+    Block DARK_OAK_SHELF = BlockImpl.get(BlockKey.DARK_OAK_SHELF);
 
-    Block JUNGLE_SHELF = BlockImpl.get(BlockKeys.JUNGLE_SHELF);
+    Block JUNGLE_SHELF = BlockImpl.get(BlockKey.JUNGLE_SHELF);
 
-    Block MANGROVE_SHELF = BlockImpl.get(BlockKeys.MANGROVE_SHELF);
+    Block MANGROVE_SHELF = BlockImpl.get(BlockKey.MANGROVE_SHELF);
 
-    Block OAK_SHELF = BlockImpl.get(BlockKeys.OAK_SHELF);
+    Block OAK_SHELF = BlockImpl.get(BlockKey.OAK_SHELF);
 
-    Block PALE_OAK_SHELF = BlockImpl.get(BlockKeys.PALE_OAK_SHELF);
+    Block PALE_OAK_SHELF = BlockImpl.get(BlockKey.PALE_OAK_SHELF);
 
-    Block SPRUCE_SHELF = BlockImpl.get(BlockKeys.SPRUCE_SHELF);
+    Block SPRUCE_SHELF = BlockImpl.get(BlockKey.SPRUCE_SHELF);
 
-    Block WARPED_SHELF = BlockImpl.get(BlockKeys.WARPED_SHELF);
+    Block WARPED_SHELF = BlockImpl.get(BlockKey.WARPED_SHELF);
 
-    Block MOSSY_COBBLESTONE = BlockImpl.get(BlockKeys.MOSSY_COBBLESTONE);
+    Block MOSSY_COBBLESTONE = BlockImpl.get(BlockKey.MOSSY_COBBLESTONE);
 
-    Block OBSIDIAN = BlockImpl.get(BlockKeys.OBSIDIAN);
+    Block OBSIDIAN = BlockImpl.get(BlockKey.OBSIDIAN);
 
-    Block TORCH = BlockImpl.get(BlockKeys.TORCH);
+    Block TORCH = BlockImpl.get(BlockKey.TORCH);
 
-    Block WALL_TORCH = BlockImpl.get(BlockKeys.WALL_TORCH);
+    Block WALL_TORCH = BlockImpl.get(BlockKey.WALL_TORCH);
 
-    Block FIRE = BlockImpl.get(BlockKeys.FIRE);
+    Block FIRE = BlockImpl.get(BlockKey.FIRE);
 
-    Block SOUL_FIRE = BlockImpl.get(BlockKeys.SOUL_FIRE);
+    Block SOUL_FIRE = BlockImpl.get(BlockKey.SOUL_FIRE);
 
-    Block SPAWNER = BlockImpl.get(BlockKeys.SPAWNER);
+    Block SPAWNER = BlockImpl.get(BlockKey.SPAWNER);
 
-    Block CREAKING_HEART = BlockImpl.get(BlockKeys.CREAKING_HEART);
+    Block CREAKING_HEART = BlockImpl.get(BlockKey.CREAKING_HEART);
 
-    Block OAK_STAIRS = BlockImpl.get(BlockKeys.OAK_STAIRS);
+    Block OAK_STAIRS = BlockImpl.get(BlockKey.OAK_STAIRS);
 
-    Block CHEST = BlockImpl.get(BlockKeys.CHEST);
+    Block CHEST = BlockImpl.get(BlockKey.CHEST);
 
-    Block REDSTONE_WIRE = BlockImpl.get(BlockKeys.REDSTONE_WIRE);
+    Block REDSTONE_WIRE = BlockImpl.get(BlockKey.REDSTONE_WIRE);
 
-    Block DIAMOND_ORE = BlockImpl.get(BlockKeys.DIAMOND_ORE);
+    Block DIAMOND_ORE = BlockImpl.get(BlockKey.DIAMOND_ORE);
 
-    Block DEEPSLATE_DIAMOND_ORE = BlockImpl.get(BlockKeys.DEEPSLATE_DIAMOND_ORE);
+    Block DEEPSLATE_DIAMOND_ORE = BlockImpl.get(BlockKey.DEEPSLATE_DIAMOND_ORE);
 
-    Block DIAMOND_BLOCK = BlockImpl.get(BlockKeys.DIAMOND_BLOCK);
+    Block DIAMOND_BLOCK = BlockImpl.get(BlockKey.DIAMOND_BLOCK);
 
-    Block CRAFTING_TABLE = BlockImpl.get(BlockKeys.CRAFTING_TABLE);
+    Block CRAFTING_TABLE = BlockImpl.get(BlockKey.CRAFTING_TABLE);
 
-    Block WHEAT = BlockImpl.get(BlockKeys.WHEAT);
+    Block WHEAT = BlockImpl.get(BlockKey.WHEAT);
 
-    Block FARMLAND = BlockImpl.get(BlockKeys.FARMLAND);
+    Block FARMLAND = BlockImpl.get(BlockKey.FARMLAND);
 
-    Block FURNACE = BlockImpl.get(BlockKeys.FURNACE);
+    Block FURNACE = BlockImpl.get(BlockKey.FURNACE);
 
-    Block OAK_SIGN = BlockImpl.get(BlockKeys.OAK_SIGN);
+    Block OAK_SIGN = BlockImpl.get(BlockKey.OAK_SIGN);
 
-    Block SPRUCE_SIGN = BlockImpl.get(BlockKeys.SPRUCE_SIGN);
+    Block SPRUCE_SIGN = BlockImpl.get(BlockKey.SPRUCE_SIGN);
 
-    Block BIRCH_SIGN = BlockImpl.get(BlockKeys.BIRCH_SIGN);
+    Block BIRCH_SIGN = BlockImpl.get(BlockKey.BIRCH_SIGN);
 
-    Block ACACIA_SIGN = BlockImpl.get(BlockKeys.ACACIA_SIGN);
+    Block ACACIA_SIGN = BlockImpl.get(BlockKey.ACACIA_SIGN);
 
-    Block CHERRY_SIGN = BlockImpl.get(BlockKeys.CHERRY_SIGN);
+    Block CHERRY_SIGN = BlockImpl.get(BlockKey.CHERRY_SIGN);
 
-    Block JUNGLE_SIGN = BlockImpl.get(BlockKeys.JUNGLE_SIGN);
+    Block JUNGLE_SIGN = BlockImpl.get(BlockKey.JUNGLE_SIGN);
 
-    Block DARK_OAK_SIGN = BlockImpl.get(BlockKeys.DARK_OAK_SIGN);
+    Block DARK_OAK_SIGN = BlockImpl.get(BlockKey.DARK_OAK_SIGN);
 
-    Block PALE_OAK_SIGN = BlockImpl.get(BlockKeys.PALE_OAK_SIGN);
+    Block PALE_OAK_SIGN = BlockImpl.get(BlockKey.PALE_OAK_SIGN);
 
-    Block MANGROVE_SIGN = BlockImpl.get(BlockKeys.MANGROVE_SIGN);
+    Block MANGROVE_SIGN = BlockImpl.get(BlockKey.MANGROVE_SIGN);
 
-    Block BAMBOO_SIGN = BlockImpl.get(BlockKeys.BAMBOO_SIGN);
+    Block BAMBOO_SIGN = BlockImpl.get(BlockKey.BAMBOO_SIGN);
 
-    Block OAK_DOOR = BlockImpl.get(BlockKeys.OAK_DOOR);
+    Block OAK_DOOR = BlockImpl.get(BlockKey.OAK_DOOR);
 
-    Block LADDER = BlockImpl.get(BlockKeys.LADDER);
+    Block LADDER = BlockImpl.get(BlockKey.LADDER);
 
-    Block RAIL = BlockImpl.get(BlockKeys.RAIL);
+    Block RAIL = BlockImpl.get(BlockKey.RAIL);
 
-    Block COBBLESTONE_STAIRS = BlockImpl.get(BlockKeys.COBBLESTONE_STAIRS);
+    Block COBBLESTONE_STAIRS = BlockImpl.get(BlockKey.COBBLESTONE_STAIRS);
 
-    Block OAK_WALL_SIGN = BlockImpl.get(BlockKeys.OAK_WALL_SIGN);
+    Block OAK_WALL_SIGN = BlockImpl.get(BlockKey.OAK_WALL_SIGN);
 
-    Block SPRUCE_WALL_SIGN = BlockImpl.get(BlockKeys.SPRUCE_WALL_SIGN);
+    Block SPRUCE_WALL_SIGN = BlockImpl.get(BlockKey.SPRUCE_WALL_SIGN);
 
-    Block BIRCH_WALL_SIGN = BlockImpl.get(BlockKeys.BIRCH_WALL_SIGN);
+    Block BIRCH_WALL_SIGN = BlockImpl.get(BlockKey.BIRCH_WALL_SIGN);
 
-    Block ACACIA_WALL_SIGN = BlockImpl.get(BlockKeys.ACACIA_WALL_SIGN);
+    Block ACACIA_WALL_SIGN = BlockImpl.get(BlockKey.ACACIA_WALL_SIGN);
 
-    Block CHERRY_WALL_SIGN = BlockImpl.get(BlockKeys.CHERRY_WALL_SIGN);
+    Block CHERRY_WALL_SIGN = BlockImpl.get(BlockKey.CHERRY_WALL_SIGN);
 
-    Block JUNGLE_WALL_SIGN = BlockImpl.get(BlockKeys.JUNGLE_WALL_SIGN);
+    Block JUNGLE_WALL_SIGN = BlockImpl.get(BlockKey.JUNGLE_WALL_SIGN);
 
-    Block DARK_OAK_WALL_SIGN = BlockImpl.get(BlockKeys.DARK_OAK_WALL_SIGN);
+    Block DARK_OAK_WALL_SIGN = BlockImpl.get(BlockKey.DARK_OAK_WALL_SIGN);
 
-    Block PALE_OAK_WALL_SIGN = BlockImpl.get(BlockKeys.PALE_OAK_WALL_SIGN);
+    Block PALE_OAK_WALL_SIGN = BlockImpl.get(BlockKey.PALE_OAK_WALL_SIGN);
 
-    Block MANGROVE_WALL_SIGN = BlockImpl.get(BlockKeys.MANGROVE_WALL_SIGN);
+    Block MANGROVE_WALL_SIGN = BlockImpl.get(BlockKey.MANGROVE_WALL_SIGN);
 
-    Block BAMBOO_WALL_SIGN = BlockImpl.get(BlockKeys.BAMBOO_WALL_SIGN);
+    Block BAMBOO_WALL_SIGN = BlockImpl.get(BlockKey.BAMBOO_WALL_SIGN);
 
-    Block OAK_HANGING_SIGN = BlockImpl.get(BlockKeys.OAK_HANGING_SIGN);
+    Block OAK_HANGING_SIGN = BlockImpl.get(BlockKey.OAK_HANGING_SIGN);
 
-    Block SPRUCE_HANGING_SIGN = BlockImpl.get(BlockKeys.SPRUCE_HANGING_SIGN);
+    Block SPRUCE_HANGING_SIGN = BlockImpl.get(BlockKey.SPRUCE_HANGING_SIGN);
 
-    Block BIRCH_HANGING_SIGN = BlockImpl.get(BlockKeys.BIRCH_HANGING_SIGN);
+    Block BIRCH_HANGING_SIGN = BlockImpl.get(BlockKey.BIRCH_HANGING_SIGN);
 
-    Block ACACIA_HANGING_SIGN = BlockImpl.get(BlockKeys.ACACIA_HANGING_SIGN);
+    Block ACACIA_HANGING_SIGN = BlockImpl.get(BlockKey.ACACIA_HANGING_SIGN);
 
-    Block CHERRY_HANGING_SIGN = BlockImpl.get(BlockKeys.CHERRY_HANGING_SIGN);
+    Block CHERRY_HANGING_SIGN = BlockImpl.get(BlockKey.CHERRY_HANGING_SIGN);
 
-    Block JUNGLE_HANGING_SIGN = BlockImpl.get(BlockKeys.JUNGLE_HANGING_SIGN);
+    Block JUNGLE_HANGING_SIGN = BlockImpl.get(BlockKey.JUNGLE_HANGING_SIGN);
 
-    Block DARK_OAK_HANGING_SIGN = BlockImpl.get(BlockKeys.DARK_OAK_HANGING_SIGN);
+    Block DARK_OAK_HANGING_SIGN = BlockImpl.get(BlockKey.DARK_OAK_HANGING_SIGN);
 
-    Block PALE_OAK_HANGING_SIGN = BlockImpl.get(BlockKeys.PALE_OAK_HANGING_SIGN);
+    Block PALE_OAK_HANGING_SIGN = BlockImpl.get(BlockKey.PALE_OAK_HANGING_SIGN);
 
-    Block CRIMSON_HANGING_SIGN = BlockImpl.get(BlockKeys.CRIMSON_HANGING_SIGN);
+    Block CRIMSON_HANGING_SIGN = BlockImpl.get(BlockKey.CRIMSON_HANGING_SIGN);
 
-    Block WARPED_HANGING_SIGN = BlockImpl.get(BlockKeys.WARPED_HANGING_SIGN);
+    Block WARPED_HANGING_SIGN = BlockImpl.get(BlockKey.WARPED_HANGING_SIGN);
 
-    Block MANGROVE_HANGING_SIGN = BlockImpl.get(BlockKeys.MANGROVE_HANGING_SIGN);
+    Block MANGROVE_HANGING_SIGN = BlockImpl.get(BlockKey.MANGROVE_HANGING_SIGN);
 
-    Block BAMBOO_HANGING_SIGN = BlockImpl.get(BlockKeys.BAMBOO_HANGING_SIGN);
+    Block BAMBOO_HANGING_SIGN = BlockImpl.get(BlockKey.BAMBOO_HANGING_SIGN);
 
-    Block OAK_WALL_HANGING_SIGN = BlockImpl.get(BlockKeys.OAK_WALL_HANGING_SIGN);
+    Block OAK_WALL_HANGING_SIGN = BlockImpl.get(BlockKey.OAK_WALL_HANGING_SIGN);
 
-    Block SPRUCE_WALL_HANGING_SIGN = BlockImpl.get(BlockKeys.SPRUCE_WALL_HANGING_SIGN);
+    Block SPRUCE_WALL_HANGING_SIGN = BlockImpl.get(BlockKey.SPRUCE_WALL_HANGING_SIGN);
 
-    Block BIRCH_WALL_HANGING_SIGN = BlockImpl.get(BlockKeys.BIRCH_WALL_HANGING_SIGN);
+    Block BIRCH_WALL_HANGING_SIGN = BlockImpl.get(BlockKey.BIRCH_WALL_HANGING_SIGN);
 
-    Block ACACIA_WALL_HANGING_SIGN = BlockImpl.get(BlockKeys.ACACIA_WALL_HANGING_SIGN);
+    Block ACACIA_WALL_HANGING_SIGN = BlockImpl.get(BlockKey.ACACIA_WALL_HANGING_SIGN);
 
-    Block CHERRY_WALL_HANGING_SIGN = BlockImpl.get(BlockKeys.CHERRY_WALL_HANGING_SIGN);
+    Block CHERRY_WALL_HANGING_SIGN = BlockImpl.get(BlockKey.CHERRY_WALL_HANGING_SIGN);
 
-    Block JUNGLE_WALL_HANGING_SIGN = BlockImpl.get(BlockKeys.JUNGLE_WALL_HANGING_SIGN);
+    Block JUNGLE_WALL_HANGING_SIGN = BlockImpl.get(BlockKey.JUNGLE_WALL_HANGING_SIGN);
 
-    Block DARK_OAK_WALL_HANGING_SIGN = BlockImpl.get(BlockKeys.DARK_OAK_WALL_HANGING_SIGN);
+    Block DARK_OAK_WALL_HANGING_SIGN = BlockImpl.get(BlockKey.DARK_OAK_WALL_HANGING_SIGN);
 
-    Block PALE_OAK_WALL_HANGING_SIGN = BlockImpl.get(BlockKeys.PALE_OAK_WALL_HANGING_SIGN);
+    Block PALE_OAK_WALL_HANGING_SIGN = BlockImpl.get(BlockKey.PALE_OAK_WALL_HANGING_SIGN);
 
-    Block MANGROVE_WALL_HANGING_SIGN = BlockImpl.get(BlockKeys.MANGROVE_WALL_HANGING_SIGN);
+    Block MANGROVE_WALL_HANGING_SIGN = BlockImpl.get(BlockKey.MANGROVE_WALL_HANGING_SIGN);
 
-    Block CRIMSON_WALL_HANGING_SIGN = BlockImpl.get(BlockKeys.CRIMSON_WALL_HANGING_SIGN);
+    Block CRIMSON_WALL_HANGING_SIGN = BlockImpl.get(BlockKey.CRIMSON_WALL_HANGING_SIGN);
 
-    Block WARPED_WALL_HANGING_SIGN = BlockImpl.get(BlockKeys.WARPED_WALL_HANGING_SIGN);
+    Block WARPED_WALL_HANGING_SIGN = BlockImpl.get(BlockKey.WARPED_WALL_HANGING_SIGN);
 
-    Block BAMBOO_WALL_HANGING_SIGN = BlockImpl.get(BlockKeys.BAMBOO_WALL_HANGING_SIGN);
+    Block BAMBOO_WALL_HANGING_SIGN = BlockImpl.get(BlockKey.BAMBOO_WALL_HANGING_SIGN);
 
-    Block LEVER = BlockImpl.get(BlockKeys.LEVER);
+    Block LEVER = BlockImpl.get(BlockKey.LEVER);
 
-    Block STONE_PRESSURE_PLATE = BlockImpl.get(BlockKeys.STONE_PRESSURE_PLATE);
+    Block STONE_PRESSURE_PLATE = BlockImpl.get(BlockKey.STONE_PRESSURE_PLATE);
 
-    Block IRON_DOOR = BlockImpl.get(BlockKeys.IRON_DOOR);
+    Block IRON_DOOR = BlockImpl.get(BlockKey.IRON_DOOR);
 
-    Block OAK_PRESSURE_PLATE = BlockImpl.get(BlockKeys.OAK_PRESSURE_PLATE);
+    Block OAK_PRESSURE_PLATE = BlockImpl.get(BlockKey.OAK_PRESSURE_PLATE);
 
-    Block SPRUCE_PRESSURE_PLATE = BlockImpl.get(BlockKeys.SPRUCE_PRESSURE_PLATE);
+    Block SPRUCE_PRESSURE_PLATE = BlockImpl.get(BlockKey.SPRUCE_PRESSURE_PLATE);
 
-    Block BIRCH_PRESSURE_PLATE = BlockImpl.get(BlockKeys.BIRCH_PRESSURE_PLATE);
+    Block BIRCH_PRESSURE_PLATE = BlockImpl.get(BlockKey.BIRCH_PRESSURE_PLATE);
 
-    Block JUNGLE_PRESSURE_PLATE = BlockImpl.get(BlockKeys.JUNGLE_PRESSURE_PLATE);
+    Block JUNGLE_PRESSURE_PLATE = BlockImpl.get(BlockKey.JUNGLE_PRESSURE_PLATE);
 
-    Block ACACIA_PRESSURE_PLATE = BlockImpl.get(BlockKeys.ACACIA_PRESSURE_PLATE);
+    Block ACACIA_PRESSURE_PLATE = BlockImpl.get(BlockKey.ACACIA_PRESSURE_PLATE);
 
-    Block CHERRY_PRESSURE_PLATE = BlockImpl.get(BlockKeys.CHERRY_PRESSURE_PLATE);
+    Block CHERRY_PRESSURE_PLATE = BlockImpl.get(BlockKey.CHERRY_PRESSURE_PLATE);
 
-    Block DARK_OAK_PRESSURE_PLATE = BlockImpl.get(BlockKeys.DARK_OAK_PRESSURE_PLATE);
+    Block DARK_OAK_PRESSURE_PLATE = BlockImpl.get(BlockKey.DARK_OAK_PRESSURE_PLATE);
 
-    Block PALE_OAK_PRESSURE_PLATE = BlockImpl.get(BlockKeys.PALE_OAK_PRESSURE_PLATE);
+    Block PALE_OAK_PRESSURE_PLATE = BlockImpl.get(BlockKey.PALE_OAK_PRESSURE_PLATE);
 
-    Block MANGROVE_PRESSURE_PLATE = BlockImpl.get(BlockKeys.MANGROVE_PRESSURE_PLATE);
+    Block MANGROVE_PRESSURE_PLATE = BlockImpl.get(BlockKey.MANGROVE_PRESSURE_PLATE);
 
-    Block BAMBOO_PRESSURE_PLATE = BlockImpl.get(BlockKeys.BAMBOO_PRESSURE_PLATE);
+    Block BAMBOO_PRESSURE_PLATE = BlockImpl.get(BlockKey.BAMBOO_PRESSURE_PLATE);
 
-    Block REDSTONE_ORE = BlockImpl.get(BlockKeys.REDSTONE_ORE);
+    Block REDSTONE_ORE = BlockImpl.get(BlockKey.REDSTONE_ORE);
 
-    Block DEEPSLATE_REDSTONE_ORE = BlockImpl.get(BlockKeys.DEEPSLATE_REDSTONE_ORE);
+    Block DEEPSLATE_REDSTONE_ORE = BlockImpl.get(BlockKey.DEEPSLATE_REDSTONE_ORE);
 
-    Block REDSTONE_TORCH = BlockImpl.get(BlockKeys.REDSTONE_TORCH);
+    Block REDSTONE_TORCH = BlockImpl.get(BlockKey.REDSTONE_TORCH);
 
-    Block REDSTONE_WALL_TORCH = BlockImpl.get(BlockKeys.REDSTONE_WALL_TORCH);
+    Block REDSTONE_WALL_TORCH = BlockImpl.get(BlockKey.REDSTONE_WALL_TORCH);
 
-    Block STONE_BUTTON = BlockImpl.get(BlockKeys.STONE_BUTTON);
+    Block STONE_BUTTON = BlockImpl.get(BlockKey.STONE_BUTTON);
 
-    Block SNOW = BlockImpl.get(BlockKeys.SNOW);
+    Block SNOW = BlockImpl.get(BlockKey.SNOW);
 
-    Block ICE = BlockImpl.get(BlockKeys.ICE);
+    Block ICE = BlockImpl.get(BlockKey.ICE);
 
-    Block SNOW_BLOCK = BlockImpl.get(BlockKeys.SNOW_BLOCK);
+    Block SNOW_BLOCK = BlockImpl.get(BlockKey.SNOW_BLOCK);
 
-    Block CACTUS = BlockImpl.get(BlockKeys.CACTUS);
+    Block CACTUS = BlockImpl.get(BlockKey.CACTUS);
 
-    Block CACTUS_FLOWER = BlockImpl.get(BlockKeys.CACTUS_FLOWER);
+    Block CACTUS_FLOWER = BlockImpl.get(BlockKey.CACTUS_FLOWER);
 
-    Block CLAY = BlockImpl.get(BlockKeys.CLAY);
+    Block CLAY = BlockImpl.get(BlockKey.CLAY);
 
-    Block SUGAR_CANE = BlockImpl.get(BlockKeys.SUGAR_CANE);
+    Block SUGAR_CANE = BlockImpl.get(BlockKey.SUGAR_CANE);
 
-    Block JUKEBOX = BlockImpl.get(BlockKeys.JUKEBOX);
+    Block JUKEBOX = BlockImpl.get(BlockKey.JUKEBOX);
 
-    Block OAK_FENCE = BlockImpl.get(BlockKeys.OAK_FENCE);
+    Block OAK_FENCE = BlockImpl.get(BlockKey.OAK_FENCE);
 
-    Block NETHERRACK = BlockImpl.get(BlockKeys.NETHERRACK);
+    Block NETHERRACK = BlockImpl.get(BlockKey.NETHERRACK);
 
-    Block SOUL_SAND = BlockImpl.get(BlockKeys.SOUL_SAND);
+    Block SOUL_SAND = BlockImpl.get(BlockKey.SOUL_SAND);
 
-    Block SOUL_SOIL = BlockImpl.get(BlockKeys.SOUL_SOIL);
+    Block SOUL_SOIL = BlockImpl.get(BlockKey.SOUL_SOIL);
 
-    Block BASALT = BlockImpl.get(BlockKeys.BASALT);
+    Block BASALT = BlockImpl.get(BlockKey.BASALT);
 
-    Block POLISHED_BASALT = BlockImpl.get(BlockKeys.POLISHED_BASALT);
+    Block POLISHED_BASALT = BlockImpl.get(BlockKey.POLISHED_BASALT);
 
-    Block SOUL_TORCH = BlockImpl.get(BlockKeys.SOUL_TORCH);
+    Block SOUL_TORCH = BlockImpl.get(BlockKey.SOUL_TORCH);
 
-    Block SOUL_WALL_TORCH = BlockImpl.get(BlockKeys.SOUL_WALL_TORCH);
+    Block SOUL_WALL_TORCH = BlockImpl.get(BlockKey.SOUL_WALL_TORCH);
 
-    Block COPPER_TORCH = BlockImpl.get(BlockKeys.COPPER_TORCH);
+    Block COPPER_TORCH = BlockImpl.get(BlockKey.COPPER_TORCH);
 
-    Block COPPER_WALL_TORCH = BlockImpl.get(BlockKeys.COPPER_WALL_TORCH);
+    Block COPPER_WALL_TORCH = BlockImpl.get(BlockKey.COPPER_WALL_TORCH);
 
-    Block GLOWSTONE = BlockImpl.get(BlockKeys.GLOWSTONE);
+    Block GLOWSTONE = BlockImpl.get(BlockKey.GLOWSTONE);
 
-    Block NETHER_PORTAL = BlockImpl.get(BlockKeys.NETHER_PORTAL);
+    Block NETHER_PORTAL = BlockImpl.get(BlockKey.NETHER_PORTAL);
 
-    Block CARVED_PUMPKIN = BlockImpl.get(BlockKeys.CARVED_PUMPKIN);
+    Block CARVED_PUMPKIN = BlockImpl.get(BlockKey.CARVED_PUMPKIN);
 
-    Block JACK_O_LANTERN = BlockImpl.get(BlockKeys.JACK_O_LANTERN);
+    Block JACK_O_LANTERN = BlockImpl.get(BlockKey.JACK_O_LANTERN);
 
-    Block CAKE = BlockImpl.get(BlockKeys.CAKE);
+    Block CAKE = BlockImpl.get(BlockKey.CAKE);
 
-    Block REPEATER = BlockImpl.get(BlockKeys.REPEATER);
+    Block REPEATER = BlockImpl.get(BlockKey.REPEATER);
 
-    Block WHITE_STAINED_GLASS = BlockImpl.get(BlockKeys.WHITE_STAINED_GLASS);
+    Block WHITE_STAINED_GLASS = BlockImpl.get(BlockKey.WHITE_STAINED_GLASS);
 
-    Block ORANGE_STAINED_GLASS = BlockImpl.get(BlockKeys.ORANGE_STAINED_GLASS);
+    Block ORANGE_STAINED_GLASS = BlockImpl.get(BlockKey.ORANGE_STAINED_GLASS);
 
-    Block MAGENTA_STAINED_GLASS = BlockImpl.get(BlockKeys.MAGENTA_STAINED_GLASS);
+    Block MAGENTA_STAINED_GLASS = BlockImpl.get(BlockKey.MAGENTA_STAINED_GLASS);
 
-    Block LIGHT_BLUE_STAINED_GLASS = BlockImpl.get(BlockKeys.LIGHT_BLUE_STAINED_GLASS);
+    Block LIGHT_BLUE_STAINED_GLASS = BlockImpl.get(BlockKey.LIGHT_BLUE_STAINED_GLASS);
 
-    Block YELLOW_STAINED_GLASS = BlockImpl.get(BlockKeys.YELLOW_STAINED_GLASS);
+    Block YELLOW_STAINED_GLASS = BlockImpl.get(BlockKey.YELLOW_STAINED_GLASS);
 
-    Block LIME_STAINED_GLASS = BlockImpl.get(BlockKeys.LIME_STAINED_GLASS);
+    Block LIME_STAINED_GLASS = BlockImpl.get(BlockKey.LIME_STAINED_GLASS);
 
-    Block PINK_STAINED_GLASS = BlockImpl.get(BlockKeys.PINK_STAINED_GLASS);
+    Block PINK_STAINED_GLASS = BlockImpl.get(BlockKey.PINK_STAINED_GLASS);
 
-    Block GRAY_STAINED_GLASS = BlockImpl.get(BlockKeys.GRAY_STAINED_GLASS);
+    Block GRAY_STAINED_GLASS = BlockImpl.get(BlockKey.GRAY_STAINED_GLASS);
 
-    Block LIGHT_GRAY_STAINED_GLASS = BlockImpl.get(BlockKeys.LIGHT_GRAY_STAINED_GLASS);
+    Block LIGHT_GRAY_STAINED_GLASS = BlockImpl.get(BlockKey.LIGHT_GRAY_STAINED_GLASS);
 
-    Block CYAN_STAINED_GLASS = BlockImpl.get(BlockKeys.CYAN_STAINED_GLASS);
+    Block CYAN_STAINED_GLASS = BlockImpl.get(BlockKey.CYAN_STAINED_GLASS);
 
-    Block PURPLE_STAINED_GLASS = BlockImpl.get(BlockKeys.PURPLE_STAINED_GLASS);
+    Block PURPLE_STAINED_GLASS = BlockImpl.get(BlockKey.PURPLE_STAINED_GLASS);
 
-    Block BLUE_STAINED_GLASS = BlockImpl.get(BlockKeys.BLUE_STAINED_GLASS);
+    Block BLUE_STAINED_GLASS = BlockImpl.get(BlockKey.BLUE_STAINED_GLASS);
 
-    Block BROWN_STAINED_GLASS = BlockImpl.get(BlockKeys.BROWN_STAINED_GLASS);
+    Block BROWN_STAINED_GLASS = BlockImpl.get(BlockKey.BROWN_STAINED_GLASS);
 
-    Block GREEN_STAINED_GLASS = BlockImpl.get(BlockKeys.GREEN_STAINED_GLASS);
+    Block GREEN_STAINED_GLASS = BlockImpl.get(BlockKey.GREEN_STAINED_GLASS);
 
-    Block RED_STAINED_GLASS = BlockImpl.get(BlockKeys.RED_STAINED_GLASS);
+    Block RED_STAINED_GLASS = BlockImpl.get(BlockKey.RED_STAINED_GLASS);
 
-    Block BLACK_STAINED_GLASS = BlockImpl.get(BlockKeys.BLACK_STAINED_GLASS);
+    Block BLACK_STAINED_GLASS = BlockImpl.get(BlockKey.BLACK_STAINED_GLASS);
 
-    Block OAK_TRAPDOOR = BlockImpl.get(BlockKeys.OAK_TRAPDOOR);
+    Block OAK_TRAPDOOR = BlockImpl.get(BlockKey.OAK_TRAPDOOR);
 
-    Block SPRUCE_TRAPDOOR = BlockImpl.get(BlockKeys.SPRUCE_TRAPDOOR);
+    Block SPRUCE_TRAPDOOR = BlockImpl.get(BlockKey.SPRUCE_TRAPDOOR);
 
-    Block BIRCH_TRAPDOOR = BlockImpl.get(BlockKeys.BIRCH_TRAPDOOR);
+    Block BIRCH_TRAPDOOR = BlockImpl.get(BlockKey.BIRCH_TRAPDOOR);
 
-    Block JUNGLE_TRAPDOOR = BlockImpl.get(BlockKeys.JUNGLE_TRAPDOOR);
+    Block JUNGLE_TRAPDOOR = BlockImpl.get(BlockKey.JUNGLE_TRAPDOOR);
 
-    Block ACACIA_TRAPDOOR = BlockImpl.get(BlockKeys.ACACIA_TRAPDOOR);
+    Block ACACIA_TRAPDOOR = BlockImpl.get(BlockKey.ACACIA_TRAPDOOR);
 
-    Block CHERRY_TRAPDOOR = BlockImpl.get(BlockKeys.CHERRY_TRAPDOOR);
+    Block CHERRY_TRAPDOOR = BlockImpl.get(BlockKey.CHERRY_TRAPDOOR);
 
-    Block DARK_OAK_TRAPDOOR = BlockImpl.get(BlockKeys.DARK_OAK_TRAPDOOR);
+    Block DARK_OAK_TRAPDOOR = BlockImpl.get(BlockKey.DARK_OAK_TRAPDOOR);
 
-    Block PALE_OAK_TRAPDOOR = BlockImpl.get(BlockKeys.PALE_OAK_TRAPDOOR);
+    Block PALE_OAK_TRAPDOOR = BlockImpl.get(BlockKey.PALE_OAK_TRAPDOOR);
 
-    Block MANGROVE_TRAPDOOR = BlockImpl.get(BlockKeys.MANGROVE_TRAPDOOR);
+    Block MANGROVE_TRAPDOOR = BlockImpl.get(BlockKey.MANGROVE_TRAPDOOR);
 
-    Block BAMBOO_TRAPDOOR = BlockImpl.get(BlockKeys.BAMBOO_TRAPDOOR);
+    Block BAMBOO_TRAPDOOR = BlockImpl.get(BlockKey.BAMBOO_TRAPDOOR);
 
-    Block STONE_BRICKS = BlockImpl.get(BlockKeys.STONE_BRICKS);
+    Block STONE_BRICKS = BlockImpl.get(BlockKey.STONE_BRICKS);
 
-    Block MOSSY_STONE_BRICKS = BlockImpl.get(BlockKeys.MOSSY_STONE_BRICKS);
+    Block MOSSY_STONE_BRICKS = BlockImpl.get(BlockKey.MOSSY_STONE_BRICKS);
 
-    Block CRACKED_STONE_BRICKS = BlockImpl.get(BlockKeys.CRACKED_STONE_BRICKS);
+    Block CRACKED_STONE_BRICKS = BlockImpl.get(BlockKey.CRACKED_STONE_BRICKS);
 
-    Block CHISELED_STONE_BRICKS = BlockImpl.get(BlockKeys.CHISELED_STONE_BRICKS);
+    Block CHISELED_STONE_BRICKS = BlockImpl.get(BlockKey.CHISELED_STONE_BRICKS);
 
-    Block PACKED_MUD = BlockImpl.get(BlockKeys.PACKED_MUD);
+    Block PACKED_MUD = BlockImpl.get(BlockKey.PACKED_MUD);
 
-    Block MUD_BRICKS = BlockImpl.get(BlockKeys.MUD_BRICKS);
+    Block MUD_BRICKS = BlockImpl.get(BlockKey.MUD_BRICKS);
 
-    Block INFESTED_STONE = BlockImpl.get(BlockKeys.INFESTED_STONE);
+    Block INFESTED_STONE = BlockImpl.get(BlockKey.INFESTED_STONE);
 
-    Block INFESTED_COBBLESTONE = BlockImpl.get(BlockKeys.INFESTED_COBBLESTONE);
+    Block INFESTED_COBBLESTONE = BlockImpl.get(BlockKey.INFESTED_COBBLESTONE);
 
-    Block INFESTED_STONE_BRICKS = BlockImpl.get(BlockKeys.INFESTED_STONE_BRICKS);
+    Block INFESTED_STONE_BRICKS = BlockImpl.get(BlockKey.INFESTED_STONE_BRICKS);
 
-    Block INFESTED_MOSSY_STONE_BRICKS = BlockImpl.get(BlockKeys.INFESTED_MOSSY_STONE_BRICKS);
+    Block INFESTED_MOSSY_STONE_BRICKS = BlockImpl.get(BlockKey.INFESTED_MOSSY_STONE_BRICKS);
 
-    Block INFESTED_CRACKED_STONE_BRICKS = BlockImpl.get(BlockKeys.INFESTED_CRACKED_STONE_BRICKS);
+    Block INFESTED_CRACKED_STONE_BRICKS = BlockImpl.get(BlockKey.INFESTED_CRACKED_STONE_BRICKS);
 
-    Block INFESTED_CHISELED_STONE_BRICKS = BlockImpl.get(BlockKeys.INFESTED_CHISELED_STONE_BRICKS);
+    Block INFESTED_CHISELED_STONE_BRICKS = BlockImpl.get(BlockKey.INFESTED_CHISELED_STONE_BRICKS);
 
-    Block BROWN_MUSHROOM_BLOCK = BlockImpl.get(BlockKeys.BROWN_MUSHROOM_BLOCK);
+    Block BROWN_MUSHROOM_BLOCK = BlockImpl.get(BlockKey.BROWN_MUSHROOM_BLOCK);
 
-    Block RED_MUSHROOM_BLOCK = BlockImpl.get(BlockKeys.RED_MUSHROOM_BLOCK);
+    Block RED_MUSHROOM_BLOCK = BlockImpl.get(BlockKey.RED_MUSHROOM_BLOCK);
 
-    Block MUSHROOM_STEM = BlockImpl.get(BlockKeys.MUSHROOM_STEM);
+    Block MUSHROOM_STEM = BlockImpl.get(BlockKey.MUSHROOM_STEM);
 
-    Block IRON_BARS = BlockImpl.get(BlockKeys.IRON_BARS);
+    Block IRON_BARS = BlockImpl.get(BlockKey.IRON_BARS);
 
-    Block COPPER_BARS = BlockImpl.get(BlockKeys.COPPER_BARS);
+    Block COPPER_BARS = BlockImpl.get(BlockKey.COPPER_BARS);
 
-    Block EXPOSED_COPPER_BARS = BlockImpl.get(BlockKeys.EXPOSED_COPPER_BARS);
+    Block EXPOSED_COPPER_BARS = BlockImpl.get(BlockKey.EXPOSED_COPPER_BARS);
 
-    Block WEATHERED_COPPER_BARS = BlockImpl.get(BlockKeys.WEATHERED_COPPER_BARS);
+    Block WEATHERED_COPPER_BARS = BlockImpl.get(BlockKey.WEATHERED_COPPER_BARS);
 
-    Block OXIDIZED_COPPER_BARS = BlockImpl.get(BlockKeys.OXIDIZED_COPPER_BARS);
+    Block OXIDIZED_COPPER_BARS = BlockImpl.get(BlockKey.OXIDIZED_COPPER_BARS);
 
-    Block WAXED_COPPER_BARS = BlockImpl.get(BlockKeys.WAXED_COPPER_BARS);
+    Block WAXED_COPPER_BARS = BlockImpl.get(BlockKey.WAXED_COPPER_BARS);
 
-    Block WAXED_EXPOSED_COPPER_BARS = BlockImpl.get(BlockKeys.WAXED_EXPOSED_COPPER_BARS);
+    Block WAXED_EXPOSED_COPPER_BARS = BlockImpl.get(BlockKey.WAXED_EXPOSED_COPPER_BARS);
 
-    Block WAXED_WEATHERED_COPPER_BARS = BlockImpl.get(BlockKeys.WAXED_WEATHERED_COPPER_BARS);
+    Block WAXED_WEATHERED_COPPER_BARS = BlockImpl.get(BlockKey.WAXED_WEATHERED_COPPER_BARS);
 
-    Block WAXED_OXIDIZED_COPPER_BARS = BlockImpl.get(BlockKeys.WAXED_OXIDIZED_COPPER_BARS);
+    Block WAXED_OXIDIZED_COPPER_BARS = BlockImpl.get(BlockKey.WAXED_OXIDIZED_COPPER_BARS);
 
-    Block IRON_CHAIN = BlockImpl.get(BlockKeys.IRON_CHAIN);
+    Block IRON_CHAIN = BlockImpl.get(BlockKey.IRON_CHAIN);
 
-    Block COPPER_CHAIN = BlockImpl.get(BlockKeys.COPPER_CHAIN);
+    Block COPPER_CHAIN = BlockImpl.get(BlockKey.COPPER_CHAIN);
 
-    Block EXPOSED_COPPER_CHAIN = BlockImpl.get(BlockKeys.EXPOSED_COPPER_CHAIN);
+    Block EXPOSED_COPPER_CHAIN = BlockImpl.get(BlockKey.EXPOSED_COPPER_CHAIN);
 
-    Block WEATHERED_COPPER_CHAIN = BlockImpl.get(BlockKeys.WEATHERED_COPPER_CHAIN);
+    Block WEATHERED_COPPER_CHAIN = BlockImpl.get(BlockKey.WEATHERED_COPPER_CHAIN);
 
-    Block OXIDIZED_COPPER_CHAIN = BlockImpl.get(BlockKeys.OXIDIZED_COPPER_CHAIN);
+    Block OXIDIZED_COPPER_CHAIN = BlockImpl.get(BlockKey.OXIDIZED_COPPER_CHAIN);
 
-    Block WAXED_COPPER_CHAIN = BlockImpl.get(BlockKeys.WAXED_COPPER_CHAIN);
+    Block WAXED_COPPER_CHAIN = BlockImpl.get(BlockKey.WAXED_COPPER_CHAIN);
 
-    Block WAXED_EXPOSED_COPPER_CHAIN = BlockImpl.get(BlockKeys.WAXED_EXPOSED_COPPER_CHAIN);
+    Block WAXED_EXPOSED_COPPER_CHAIN = BlockImpl.get(BlockKey.WAXED_EXPOSED_COPPER_CHAIN);
 
-    Block WAXED_WEATHERED_COPPER_CHAIN = BlockImpl.get(BlockKeys.WAXED_WEATHERED_COPPER_CHAIN);
+    Block WAXED_WEATHERED_COPPER_CHAIN = BlockImpl.get(BlockKey.WAXED_WEATHERED_COPPER_CHAIN);
 
-    Block WAXED_OXIDIZED_COPPER_CHAIN = BlockImpl.get(BlockKeys.WAXED_OXIDIZED_COPPER_CHAIN);
+    Block WAXED_OXIDIZED_COPPER_CHAIN = BlockImpl.get(BlockKey.WAXED_OXIDIZED_COPPER_CHAIN);
 
-    Block GLASS_PANE = BlockImpl.get(BlockKeys.GLASS_PANE);
+    Block GLASS_PANE = BlockImpl.get(BlockKey.GLASS_PANE);
 
-    Block PUMPKIN = BlockImpl.get(BlockKeys.PUMPKIN);
+    Block PUMPKIN = BlockImpl.get(BlockKey.PUMPKIN);
 
-    Block MELON = BlockImpl.get(BlockKeys.MELON);
+    Block MELON = BlockImpl.get(BlockKey.MELON);
 
-    Block ATTACHED_PUMPKIN_STEM = BlockImpl.get(BlockKeys.ATTACHED_PUMPKIN_STEM);
+    Block ATTACHED_PUMPKIN_STEM = BlockImpl.get(BlockKey.ATTACHED_PUMPKIN_STEM);
 
-    Block ATTACHED_MELON_STEM = BlockImpl.get(BlockKeys.ATTACHED_MELON_STEM);
+    Block ATTACHED_MELON_STEM = BlockImpl.get(BlockKey.ATTACHED_MELON_STEM);
 
-    Block PUMPKIN_STEM = BlockImpl.get(BlockKeys.PUMPKIN_STEM);
+    Block PUMPKIN_STEM = BlockImpl.get(BlockKey.PUMPKIN_STEM);
 
-    Block MELON_STEM = BlockImpl.get(BlockKeys.MELON_STEM);
+    Block MELON_STEM = BlockImpl.get(BlockKey.MELON_STEM);
 
-    Block VINE = BlockImpl.get(BlockKeys.VINE);
+    Block VINE = BlockImpl.get(BlockKey.VINE);
 
-    Block GLOW_LICHEN = BlockImpl.get(BlockKeys.GLOW_LICHEN);
+    Block GLOW_LICHEN = BlockImpl.get(BlockKey.GLOW_LICHEN);
 
-    Block RESIN_CLUMP = BlockImpl.get(BlockKeys.RESIN_CLUMP);
+    Block RESIN_CLUMP = BlockImpl.get(BlockKey.RESIN_CLUMP);
 
-    Block OAK_FENCE_GATE = BlockImpl.get(BlockKeys.OAK_FENCE_GATE);
+    Block OAK_FENCE_GATE = BlockImpl.get(BlockKey.OAK_FENCE_GATE);
 
-    Block BRICK_STAIRS = BlockImpl.get(BlockKeys.BRICK_STAIRS);
+    Block BRICK_STAIRS = BlockImpl.get(BlockKey.BRICK_STAIRS);
 
-    Block STONE_BRICK_STAIRS = BlockImpl.get(BlockKeys.STONE_BRICK_STAIRS);
+    Block STONE_BRICK_STAIRS = BlockImpl.get(BlockKey.STONE_BRICK_STAIRS);
 
-    Block MUD_BRICK_STAIRS = BlockImpl.get(BlockKeys.MUD_BRICK_STAIRS);
+    Block MUD_BRICK_STAIRS = BlockImpl.get(BlockKey.MUD_BRICK_STAIRS);
 
-    Block MYCELIUM = BlockImpl.get(BlockKeys.MYCELIUM);
+    Block MYCELIUM = BlockImpl.get(BlockKey.MYCELIUM);
 
-    Block LILY_PAD = BlockImpl.get(BlockKeys.LILY_PAD);
+    Block LILY_PAD = BlockImpl.get(BlockKey.LILY_PAD);
 
-    Block RESIN_BLOCK = BlockImpl.get(BlockKeys.RESIN_BLOCK);
+    Block RESIN_BLOCK = BlockImpl.get(BlockKey.RESIN_BLOCK);
 
-    Block RESIN_BRICKS = BlockImpl.get(BlockKeys.RESIN_BRICKS);
+    Block RESIN_BRICKS = BlockImpl.get(BlockKey.RESIN_BRICKS);
 
-    Block RESIN_BRICK_STAIRS = BlockImpl.get(BlockKeys.RESIN_BRICK_STAIRS);
+    Block RESIN_BRICK_STAIRS = BlockImpl.get(BlockKey.RESIN_BRICK_STAIRS);
 
-    Block RESIN_BRICK_SLAB = BlockImpl.get(BlockKeys.RESIN_BRICK_SLAB);
+    Block RESIN_BRICK_SLAB = BlockImpl.get(BlockKey.RESIN_BRICK_SLAB);
 
-    Block RESIN_BRICK_WALL = BlockImpl.get(BlockKeys.RESIN_BRICK_WALL);
+    Block RESIN_BRICK_WALL = BlockImpl.get(BlockKey.RESIN_BRICK_WALL);
 
-    Block CHISELED_RESIN_BRICKS = BlockImpl.get(BlockKeys.CHISELED_RESIN_BRICKS);
+    Block CHISELED_RESIN_BRICKS = BlockImpl.get(BlockKey.CHISELED_RESIN_BRICKS);
 
-    Block NETHER_BRICKS = BlockImpl.get(BlockKeys.NETHER_BRICKS);
+    Block NETHER_BRICKS = BlockImpl.get(BlockKey.NETHER_BRICKS);
 
-    Block NETHER_BRICK_FENCE = BlockImpl.get(BlockKeys.NETHER_BRICK_FENCE);
+    Block NETHER_BRICK_FENCE = BlockImpl.get(BlockKey.NETHER_BRICK_FENCE);
 
-    Block NETHER_BRICK_STAIRS = BlockImpl.get(BlockKeys.NETHER_BRICK_STAIRS);
+    Block NETHER_BRICK_STAIRS = BlockImpl.get(BlockKey.NETHER_BRICK_STAIRS);
 
-    Block NETHER_WART = BlockImpl.get(BlockKeys.NETHER_WART);
+    Block NETHER_WART = BlockImpl.get(BlockKey.NETHER_WART);
 
-    Block ENCHANTING_TABLE = BlockImpl.get(BlockKeys.ENCHANTING_TABLE);
+    Block ENCHANTING_TABLE = BlockImpl.get(BlockKey.ENCHANTING_TABLE);
 
-    Block BREWING_STAND = BlockImpl.get(BlockKeys.BREWING_STAND);
+    Block BREWING_STAND = BlockImpl.get(BlockKey.BREWING_STAND);
 
-    Block CAULDRON = BlockImpl.get(BlockKeys.CAULDRON);
+    Block CAULDRON = BlockImpl.get(BlockKey.CAULDRON);
 
-    Block WATER_CAULDRON = BlockImpl.get(BlockKeys.WATER_CAULDRON);
+    Block WATER_CAULDRON = BlockImpl.get(BlockKey.WATER_CAULDRON);
 
-    Block LAVA_CAULDRON = BlockImpl.get(BlockKeys.LAVA_CAULDRON);
+    Block LAVA_CAULDRON = BlockImpl.get(BlockKey.LAVA_CAULDRON);
 
-    Block POWDER_SNOW_CAULDRON = BlockImpl.get(BlockKeys.POWDER_SNOW_CAULDRON);
+    Block POWDER_SNOW_CAULDRON = BlockImpl.get(BlockKey.POWDER_SNOW_CAULDRON);
 
-    Block END_PORTAL = BlockImpl.get(BlockKeys.END_PORTAL);
+    Block END_PORTAL = BlockImpl.get(BlockKey.END_PORTAL);
 
-    Block END_PORTAL_FRAME = BlockImpl.get(BlockKeys.END_PORTAL_FRAME);
+    Block END_PORTAL_FRAME = BlockImpl.get(BlockKey.END_PORTAL_FRAME);
 
-    Block END_STONE = BlockImpl.get(BlockKeys.END_STONE);
+    Block END_STONE = BlockImpl.get(BlockKey.END_STONE);
 
-    Block DRAGON_EGG = BlockImpl.get(BlockKeys.DRAGON_EGG);
+    Block DRAGON_EGG = BlockImpl.get(BlockKey.DRAGON_EGG);
 
-    Block REDSTONE_LAMP = BlockImpl.get(BlockKeys.REDSTONE_LAMP);
+    Block REDSTONE_LAMP = BlockImpl.get(BlockKey.REDSTONE_LAMP);
 
-    Block COCOA = BlockImpl.get(BlockKeys.COCOA);
+    Block COCOA = BlockImpl.get(BlockKey.COCOA);
 
-    Block SANDSTONE_STAIRS = BlockImpl.get(BlockKeys.SANDSTONE_STAIRS);
+    Block SANDSTONE_STAIRS = BlockImpl.get(BlockKey.SANDSTONE_STAIRS);
 
-    Block EMERALD_ORE = BlockImpl.get(BlockKeys.EMERALD_ORE);
+    Block EMERALD_ORE = BlockImpl.get(BlockKey.EMERALD_ORE);
 
-    Block DEEPSLATE_EMERALD_ORE = BlockImpl.get(BlockKeys.DEEPSLATE_EMERALD_ORE);
+    Block DEEPSLATE_EMERALD_ORE = BlockImpl.get(BlockKey.DEEPSLATE_EMERALD_ORE);
 
-    Block ENDER_CHEST = BlockImpl.get(BlockKeys.ENDER_CHEST);
+    Block ENDER_CHEST = BlockImpl.get(BlockKey.ENDER_CHEST);
 
-    Block TRIPWIRE_HOOK = BlockImpl.get(BlockKeys.TRIPWIRE_HOOK);
+    Block TRIPWIRE_HOOK = BlockImpl.get(BlockKey.TRIPWIRE_HOOK);
 
-    Block TRIPWIRE = BlockImpl.get(BlockKeys.TRIPWIRE);
+    Block TRIPWIRE = BlockImpl.get(BlockKey.TRIPWIRE);
 
-    Block EMERALD_BLOCK = BlockImpl.get(BlockKeys.EMERALD_BLOCK);
+    Block EMERALD_BLOCK = BlockImpl.get(BlockKey.EMERALD_BLOCK);
 
-    Block SPRUCE_STAIRS = BlockImpl.get(BlockKeys.SPRUCE_STAIRS);
+    Block SPRUCE_STAIRS = BlockImpl.get(BlockKey.SPRUCE_STAIRS);
 
-    Block BIRCH_STAIRS = BlockImpl.get(BlockKeys.BIRCH_STAIRS);
+    Block BIRCH_STAIRS = BlockImpl.get(BlockKey.BIRCH_STAIRS);
 
-    Block JUNGLE_STAIRS = BlockImpl.get(BlockKeys.JUNGLE_STAIRS);
+    Block JUNGLE_STAIRS = BlockImpl.get(BlockKey.JUNGLE_STAIRS);
 
-    Block COMMAND_BLOCK = BlockImpl.get(BlockKeys.COMMAND_BLOCK);
+    Block COMMAND_BLOCK = BlockImpl.get(BlockKey.COMMAND_BLOCK);
 
-    Block BEACON = BlockImpl.get(BlockKeys.BEACON);
+    Block BEACON = BlockImpl.get(BlockKey.BEACON);
 
-    Block COBBLESTONE_WALL = BlockImpl.get(BlockKeys.COBBLESTONE_WALL);
+    Block COBBLESTONE_WALL = BlockImpl.get(BlockKey.COBBLESTONE_WALL);
 
-    Block MOSSY_COBBLESTONE_WALL = BlockImpl.get(BlockKeys.MOSSY_COBBLESTONE_WALL);
+    Block MOSSY_COBBLESTONE_WALL = BlockImpl.get(BlockKey.MOSSY_COBBLESTONE_WALL);
 
-    Block FLOWER_POT = BlockImpl.get(BlockKeys.FLOWER_POT);
+    Block FLOWER_POT = BlockImpl.get(BlockKey.FLOWER_POT);
 
-    Block POTTED_TORCHFLOWER = BlockImpl.get(BlockKeys.POTTED_TORCHFLOWER);
+    Block POTTED_TORCHFLOWER = BlockImpl.get(BlockKey.POTTED_TORCHFLOWER);
 
-    Block POTTED_OAK_SAPLING = BlockImpl.get(BlockKeys.POTTED_OAK_SAPLING);
+    Block POTTED_OAK_SAPLING = BlockImpl.get(BlockKey.POTTED_OAK_SAPLING);
 
-    Block POTTED_SPRUCE_SAPLING = BlockImpl.get(BlockKeys.POTTED_SPRUCE_SAPLING);
+    Block POTTED_SPRUCE_SAPLING = BlockImpl.get(BlockKey.POTTED_SPRUCE_SAPLING);
 
-    Block POTTED_BIRCH_SAPLING = BlockImpl.get(BlockKeys.POTTED_BIRCH_SAPLING);
+    Block POTTED_BIRCH_SAPLING = BlockImpl.get(BlockKey.POTTED_BIRCH_SAPLING);
 
-    Block POTTED_JUNGLE_SAPLING = BlockImpl.get(BlockKeys.POTTED_JUNGLE_SAPLING);
+    Block POTTED_JUNGLE_SAPLING = BlockImpl.get(BlockKey.POTTED_JUNGLE_SAPLING);
 
-    Block POTTED_ACACIA_SAPLING = BlockImpl.get(BlockKeys.POTTED_ACACIA_SAPLING);
+    Block POTTED_ACACIA_SAPLING = BlockImpl.get(BlockKey.POTTED_ACACIA_SAPLING);
 
-    Block POTTED_CHERRY_SAPLING = BlockImpl.get(BlockKeys.POTTED_CHERRY_SAPLING);
+    Block POTTED_CHERRY_SAPLING = BlockImpl.get(BlockKey.POTTED_CHERRY_SAPLING);
 
-    Block POTTED_DARK_OAK_SAPLING = BlockImpl.get(BlockKeys.POTTED_DARK_OAK_SAPLING);
+    Block POTTED_DARK_OAK_SAPLING = BlockImpl.get(BlockKey.POTTED_DARK_OAK_SAPLING);
 
-    Block POTTED_PALE_OAK_SAPLING = BlockImpl.get(BlockKeys.POTTED_PALE_OAK_SAPLING);
+    Block POTTED_PALE_OAK_SAPLING = BlockImpl.get(BlockKey.POTTED_PALE_OAK_SAPLING);
 
-    Block POTTED_MANGROVE_PROPAGULE = BlockImpl.get(BlockKeys.POTTED_MANGROVE_PROPAGULE);
+    Block POTTED_MANGROVE_PROPAGULE = BlockImpl.get(BlockKey.POTTED_MANGROVE_PROPAGULE);
 
-    Block POTTED_FERN = BlockImpl.get(BlockKeys.POTTED_FERN);
+    Block POTTED_FERN = BlockImpl.get(BlockKey.POTTED_FERN);
 
-    Block POTTED_DANDELION = BlockImpl.get(BlockKeys.POTTED_DANDELION);
+    Block POTTED_DANDELION = BlockImpl.get(BlockKey.POTTED_DANDELION);
 
-    Block POTTED_GOLDEN_DANDELION = BlockImpl.get(BlockKeys.POTTED_GOLDEN_DANDELION);
+    Block POTTED_GOLDEN_DANDELION = BlockImpl.get(BlockKey.POTTED_GOLDEN_DANDELION);
 
-    Block POTTED_POPPY = BlockImpl.get(BlockKeys.POTTED_POPPY);
+    Block POTTED_POPPY = BlockImpl.get(BlockKey.POTTED_POPPY);
 
-    Block POTTED_BLUE_ORCHID = BlockImpl.get(BlockKeys.POTTED_BLUE_ORCHID);
+    Block POTTED_BLUE_ORCHID = BlockImpl.get(BlockKey.POTTED_BLUE_ORCHID);
 
-    Block POTTED_ALLIUM = BlockImpl.get(BlockKeys.POTTED_ALLIUM);
+    Block POTTED_ALLIUM = BlockImpl.get(BlockKey.POTTED_ALLIUM);
 
-    Block POTTED_AZURE_BLUET = BlockImpl.get(BlockKeys.POTTED_AZURE_BLUET);
+    Block POTTED_AZURE_BLUET = BlockImpl.get(BlockKey.POTTED_AZURE_BLUET);
 
-    Block POTTED_RED_TULIP = BlockImpl.get(BlockKeys.POTTED_RED_TULIP);
+    Block POTTED_RED_TULIP = BlockImpl.get(BlockKey.POTTED_RED_TULIP);
 
-    Block POTTED_ORANGE_TULIP = BlockImpl.get(BlockKeys.POTTED_ORANGE_TULIP);
+    Block POTTED_ORANGE_TULIP = BlockImpl.get(BlockKey.POTTED_ORANGE_TULIP);
 
-    Block POTTED_WHITE_TULIP = BlockImpl.get(BlockKeys.POTTED_WHITE_TULIP);
+    Block POTTED_WHITE_TULIP = BlockImpl.get(BlockKey.POTTED_WHITE_TULIP);
 
-    Block POTTED_PINK_TULIP = BlockImpl.get(BlockKeys.POTTED_PINK_TULIP);
+    Block POTTED_PINK_TULIP = BlockImpl.get(BlockKey.POTTED_PINK_TULIP);
 
-    Block POTTED_OXEYE_DAISY = BlockImpl.get(BlockKeys.POTTED_OXEYE_DAISY);
+    Block POTTED_OXEYE_DAISY = BlockImpl.get(BlockKey.POTTED_OXEYE_DAISY);
 
-    Block POTTED_CORNFLOWER = BlockImpl.get(BlockKeys.POTTED_CORNFLOWER);
+    Block POTTED_CORNFLOWER = BlockImpl.get(BlockKey.POTTED_CORNFLOWER);
 
-    Block POTTED_LILY_OF_THE_VALLEY = BlockImpl.get(BlockKeys.POTTED_LILY_OF_THE_VALLEY);
+    Block POTTED_LILY_OF_THE_VALLEY = BlockImpl.get(BlockKey.POTTED_LILY_OF_THE_VALLEY);
 
-    Block POTTED_WITHER_ROSE = BlockImpl.get(BlockKeys.POTTED_WITHER_ROSE);
+    Block POTTED_WITHER_ROSE = BlockImpl.get(BlockKey.POTTED_WITHER_ROSE);
 
-    Block POTTED_RED_MUSHROOM = BlockImpl.get(BlockKeys.POTTED_RED_MUSHROOM);
+    Block POTTED_RED_MUSHROOM = BlockImpl.get(BlockKey.POTTED_RED_MUSHROOM);
 
-    Block POTTED_BROWN_MUSHROOM = BlockImpl.get(BlockKeys.POTTED_BROWN_MUSHROOM);
+    Block POTTED_BROWN_MUSHROOM = BlockImpl.get(BlockKey.POTTED_BROWN_MUSHROOM);
 
-    Block POTTED_DEAD_BUSH = BlockImpl.get(BlockKeys.POTTED_DEAD_BUSH);
+    Block POTTED_DEAD_BUSH = BlockImpl.get(BlockKey.POTTED_DEAD_BUSH);
 
-    Block POTTED_CACTUS = BlockImpl.get(BlockKeys.POTTED_CACTUS);
+    Block POTTED_CACTUS = BlockImpl.get(BlockKey.POTTED_CACTUS);
 
-    Block CARROTS = BlockImpl.get(BlockKeys.CARROTS);
+    Block CARROTS = BlockImpl.get(BlockKey.CARROTS);
 
-    Block POTATOES = BlockImpl.get(BlockKeys.POTATOES);
+    Block POTATOES = BlockImpl.get(BlockKey.POTATOES);
 
-    Block OAK_BUTTON = BlockImpl.get(BlockKeys.OAK_BUTTON);
+    Block OAK_BUTTON = BlockImpl.get(BlockKey.OAK_BUTTON);
 
-    Block SPRUCE_BUTTON = BlockImpl.get(BlockKeys.SPRUCE_BUTTON);
+    Block SPRUCE_BUTTON = BlockImpl.get(BlockKey.SPRUCE_BUTTON);
 
-    Block BIRCH_BUTTON = BlockImpl.get(BlockKeys.BIRCH_BUTTON);
+    Block BIRCH_BUTTON = BlockImpl.get(BlockKey.BIRCH_BUTTON);
 
-    Block JUNGLE_BUTTON = BlockImpl.get(BlockKeys.JUNGLE_BUTTON);
+    Block JUNGLE_BUTTON = BlockImpl.get(BlockKey.JUNGLE_BUTTON);
 
-    Block ACACIA_BUTTON = BlockImpl.get(BlockKeys.ACACIA_BUTTON);
+    Block ACACIA_BUTTON = BlockImpl.get(BlockKey.ACACIA_BUTTON);
 
-    Block CHERRY_BUTTON = BlockImpl.get(BlockKeys.CHERRY_BUTTON);
+    Block CHERRY_BUTTON = BlockImpl.get(BlockKey.CHERRY_BUTTON);
 
-    Block DARK_OAK_BUTTON = BlockImpl.get(BlockKeys.DARK_OAK_BUTTON);
+    Block DARK_OAK_BUTTON = BlockImpl.get(BlockKey.DARK_OAK_BUTTON);
 
-    Block PALE_OAK_BUTTON = BlockImpl.get(BlockKeys.PALE_OAK_BUTTON);
+    Block PALE_OAK_BUTTON = BlockImpl.get(BlockKey.PALE_OAK_BUTTON);
 
-    Block MANGROVE_BUTTON = BlockImpl.get(BlockKeys.MANGROVE_BUTTON);
+    Block MANGROVE_BUTTON = BlockImpl.get(BlockKey.MANGROVE_BUTTON);
 
-    Block BAMBOO_BUTTON = BlockImpl.get(BlockKeys.BAMBOO_BUTTON);
+    Block BAMBOO_BUTTON = BlockImpl.get(BlockKey.BAMBOO_BUTTON);
 
-    Block SKELETON_SKULL = BlockImpl.get(BlockKeys.SKELETON_SKULL);
+    Block SKELETON_SKULL = BlockImpl.get(BlockKey.SKELETON_SKULL);
 
-    Block SKELETON_WALL_SKULL = BlockImpl.get(BlockKeys.SKELETON_WALL_SKULL);
+    Block SKELETON_WALL_SKULL = BlockImpl.get(BlockKey.SKELETON_WALL_SKULL);
 
-    Block WITHER_SKELETON_SKULL = BlockImpl.get(BlockKeys.WITHER_SKELETON_SKULL);
+    Block WITHER_SKELETON_SKULL = BlockImpl.get(BlockKey.WITHER_SKELETON_SKULL);
 
-    Block WITHER_SKELETON_WALL_SKULL = BlockImpl.get(BlockKeys.WITHER_SKELETON_WALL_SKULL);
+    Block WITHER_SKELETON_WALL_SKULL = BlockImpl.get(BlockKey.WITHER_SKELETON_WALL_SKULL);
 
-    Block ZOMBIE_HEAD = BlockImpl.get(BlockKeys.ZOMBIE_HEAD);
+    Block ZOMBIE_HEAD = BlockImpl.get(BlockKey.ZOMBIE_HEAD);
 
-    Block ZOMBIE_WALL_HEAD = BlockImpl.get(BlockKeys.ZOMBIE_WALL_HEAD);
+    Block ZOMBIE_WALL_HEAD = BlockImpl.get(BlockKey.ZOMBIE_WALL_HEAD);
 
-    Block PLAYER_HEAD = BlockImpl.get(BlockKeys.PLAYER_HEAD);
+    Block PLAYER_HEAD = BlockImpl.get(BlockKey.PLAYER_HEAD);
 
-    Block PLAYER_WALL_HEAD = BlockImpl.get(BlockKeys.PLAYER_WALL_HEAD);
+    Block PLAYER_WALL_HEAD = BlockImpl.get(BlockKey.PLAYER_WALL_HEAD);
 
-    Block CREEPER_HEAD = BlockImpl.get(BlockKeys.CREEPER_HEAD);
+    Block CREEPER_HEAD = BlockImpl.get(BlockKey.CREEPER_HEAD);
 
-    Block CREEPER_WALL_HEAD = BlockImpl.get(BlockKeys.CREEPER_WALL_HEAD);
+    Block CREEPER_WALL_HEAD = BlockImpl.get(BlockKey.CREEPER_WALL_HEAD);
 
-    Block DRAGON_HEAD = BlockImpl.get(BlockKeys.DRAGON_HEAD);
+    Block DRAGON_HEAD = BlockImpl.get(BlockKey.DRAGON_HEAD);
 
-    Block DRAGON_WALL_HEAD = BlockImpl.get(BlockKeys.DRAGON_WALL_HEAD);
+    Block DRAGON_WALL_HEAD = BlockImpl.get(BlockKey.DRAGON_WALL_HEAD);
 
-    Block PIGLIN_HEAD = BlockImpl.get(BlockKeys.PIGLIN_HEAD);
+    Block PIGLIN_HEAD = BlockImpl.get(BlockKey.PIGLIN_HEAD);
 
-    Block PIGLIN_WALL_HEAD = BlockImpl.get(BlockKeys.PIGLIN_WALL_HEAD);
+    Block PIGLIN_WALL_HEAD = BlockImpl.get(BlockKey.PIGLIN_WALL_HEAD);
 
-    Block ANVIL = BlockImpl.get(BlockKeys.ANVIL);
+    Block ANVIL = BlockImpl.get(BlockKey.ANVIL);
 
-    Block CHIPPED_ANVIL = BlockImpl.get(BlockKeys.CHIPPED_ANVIL);
+    Block CHIPPED_ANVIL = BlockImpl.get(BlockKey.CHIPPED_ANVIL);
 
-    Block DAMAGED_ANVIL = BlockImpl.get(BlockKeys.DAMAGED_ANVIL);
+    Block DAMAGED_ANVIL = BlockImpl.get(BlockKey.DAMAGED_ANVIL);
 
-    Block TRAPPED_CHEST = BlockImpl.get(BlockKeys.TRAPPED_CHEST);
+    Block TRAPPED_CHEST = BlockImpl.get(BlockKey.TRAPPED_CHEST);
 
-    Block LIGHT_WEIGHTED_PRESSURE_PLATE = BlockImpl.get(BlockKeys.LIGHT_WEIGHTED_PRESSURE_PLATE);
+    Block LIGHT_WEIGHTED_PRESSURE_PLATE = BlockImpl.get(BlockKey.LIGHT_WEIGHTED_PRESSURE_PLATE);
 
-    Block HEAVY_WEIGHTED_PRESSURE_PLATE = BlockImpl.get(BlockKeys.HEAVY_WEIGHTED_PRESSURE_PLATE);
+    Block HEAVY_WEIGHTED_PRESSURE_PLATE = BlockImpl.get(BlockKey.HEAVY_WEIGHTED_PRESSURE_PLATE);
 
-    Block COMPARATOR = BlockImpl.get(BlockKeys.COMPARATOR);
+    Block COMPARATOR = BlockImpl.get(BlockKey.COMPARATOR);
 
-    Block DAYLIGHT_DETECTOR = BlockImpl.get(BlockKeys.DAYLIGHT_DETECTOR);
+    Block DAYLIGHT_DETECTOR = BlockImpl.get(BlockKey.DAYLIGHT_DETECTOR);
 
-    Block REDSTONE_BLOCK = BlockImpl.get(BlockKeys.REDSTONE_BLOCK);
+    Block REDSTONE_BLOCK = BlockImpl.get(BlockKey.REDSTONE_BLOCK);
 
-    Block NETHER_QUARTZ_ORE = BlockImpl.get(BlockKeys.NETHER_QUARTZ_ORE);
+    Block NETHER_QUARTZ_ORE = BlockImpl.get(BlockKey.NETHER_QUARTZ_ORE);
 
-    Block HOPPER = BlockImpl.get(BlockKeys.HOPPER);
+    Block HOPPER = BlockImpl.get(BlockKey.HOPPER);
 
-    Block QUARTZ_BLOCK = BlockImpl.get(BlockKeys.QUARTZ_BLOCK);
+    Block QUARTZ_BLOCK = BlockImpl.get(BlockKey.QUARTZ_BLOCK);
 
-    Block CHISELED_QUARTZ_BLOCK = BlockImpl.get(BlockKeys.CHISELED_QUARTZ_BLOCK);
+    Block CHISELED_QUARTZ_BLOCK = BlockImpl.get(BlockKey.CHISELED_QUARTZ_BLOCK);
 
-    Block QUARTZ_PILLAR = BlockImpl.get(BlockKeys.QUARTZ_PILLAR);
+    Block QUARTZ_PILLAR = BlockImpl.get(BlockKey.QUARTZ_PILLAR);
 
-    Block QUARTZ_STAIRS = BlockImpl.get(BlockKeys.QUARTZ_STAIRS);
+    Block QUARTZ_STAIRS = BlockImpl.get(BlockKey.QUARTZ_STAIRS);
 
-    Block ACTIVATOR_RAIL = BlockImpl.get(BlockKeys.ACTIVATOR_RAIL);
+    Block ACTIVATOR_RAIL = BlockImpl.get(BlockKey.ACTIVATOR_RAIL);
 
-    Block DROPPER = BlockImpl.get(BlockKeys.DROPPER);
+    Block DROPPER = BlockImpl.get(BlockKey.DROPPER);
 
-    Block WHITE_TERRACOTTA = BlockImpl.get(BlockKeys.WHITE_TERRACOTTA);
+    Block WHITE_TERRACOTTA = BlockImpl.get(BlockKey.WHITE_TERRACOTTA);
 
-    Block ORANGE_TERRACOTTA = BlockImpl.get(BlockKeys.ORANGE_TERRACOTTA);
+    Block ORANGE_TERRACOTTA = BlockImpl.get(BlockKey.ORANGE_TERRACOTTA);
 
-    Block MAGENTA_TERRACOTTA = BlockImpl.get(BlockKeys.MAGENTA_TERRACOTTA);
+    Block MAGENTA_TERRACOTTA = BlockImpl.get(BlockKey.MAGENTA_TERRACOTTA);
 
-    Block LIGHT_BLUE_TERRACOTTA = BlockImpl.get(BlockKeys.LIGHT_BLUE_TERRACOTTA);
+    Block LIGHT_BLUE_TERRACOTTA = BlockImpl.get(BlockKey.LIGHT_BLUE_TERRACOTTA);
 
-    Block YELLOW_TERRACOTTA = BlockImpl.get(BlockKeys.YELLOW_TERRACOTTA);
+    Block YELLOW_TERRACOTTA = BlockImpl.get(BlockKey.YELLOW_TERRACOTTA);
 
-    Block LIME_TERRACOTTA = BlockImpl.get(BlockKeys.LIME_TERRACOTTA);
+    Block LIME_TERRACOTTA = BlockImpl.get(BlockKey.LIME_TERRACOTTA);
 
-    Block PINK_TERRACOTTA = BlockImpl.get(BlockKeys.PINK_TERRACOTTA);
+    Block PINK_TERRACOTTA = BlockImpl.get(BlockKey.PINK_TERRACOTTA);
 
-    Block GRAY_TERRACOTTA = BlockImpl.get(BlockKeys.GRAY_TERRACOTTA);
+    Block GRAY_TERRACOTTA = BlockImpl.get(BlockKey.GRAY_TERRACOTTA);
 
-    Block LIGHT_GRAY_TERRACOTTA = BlockImpl.get(BlockKeys.LIGHT_GRAY_TERRACOTTA);
+    Block LIGHT_GRAY_TERRACOTTA = BlockImpl.get(BlockKey.LIGHT_GRAY_TERRACOTTA);
 
-    Block CYAN_TERRACOTTA = BlockImpl.get(BlockKeys.CYAN_TERRACOTTA);
+    Block CYAN_TERRACOTTA = BlockImpl.get(BlockKey.CYAN_TERRACOTTA);
 
-    Block PURPLE_TERRACOTTA = BlockImpl.get(BlockKeys.PURPLE_TERRACOTTA);
+    Block PURPLE_TERRACOTTA = BlockImpl.get(BlockKey.PURPLE_TERRACOTTA);
 
-    Block BLUE_TERRACOTTA = BlockImpl.get(BlockKeys.BLUE_TERRACOTTA);
+    Block BLUE_TERRACOTTA = BlockImpl.get(BlockKey.BLUE_TERRACOTTA);
 
-    Block BROWN_TERRACOTTA = BlockImpl.get(BlockKeys.BROWN_TERRACOTTA);
+    Block BROWN_TERRACOTTA = BlockImpl.get(BlockKey.BROWN_TERRACOTTA);
 
-    Block GREEN_TERRACOTTA = BlockImpl.get(BlockKeys.GREEN_TERRACOTTA);
+    Block GREEN_TERRACOTTA = BlockImpl.get(BlockKey.GREEN_TERRACOTTA);
 
-    Block RED_TERRACOTTA = BlockImpl.get(BlockKeys.RED_TERRACOTTA);
+    Block RED_TERRACOTTA = BlockImpl.get(BlockKey.RED_TERRACOTTA);
 
-    Block BLACK_TERRACOTTA = BlockImpl.get(BlockKeys.BLACK_TERRACOTTA);
+    Block BLACK_TERRACOTTA = BlockImpl.get(BlockKey.BLACK_TERRACOTTA);
 
-    Block WHITE_STAINED_GLASS_PANE = BlockImpl.get(BlockKeys.WHITE_STAINED_GLASS_PANE);
+    Block WHITE_STAINED_GLASS_PANE = BlockImpl.get(BlockKey.WHITE_STAINED_GLASS_PANE);
 
-    Block ORANGE_STAINED_GLASS_PANE = BlockImpl.get(BlockKeys.ORANGE_STAINED_GLASS_PANE);
+    Block ORANGE_STAINED_GLASS_PANE = BlockImpl.get(BlockKey.ORANGE_STAINED_GLASS_PANE);
 
-    Block MAGENTA_STAINED_GLASS_PANE = BlockImpl.get(BlockKeys.MAGENTA_STAINED_GLASS_PANE);
+    Block MAGENTA_STAINED_GLASS_PANE = BlockImpl.get(BlockKey.MAGENTA_STAINED_GLASS_PANE);
 
-    Block LIGHT_BLUE_STAINED_GLASS_PANE = BlockImpl.get(BlockKeys.LIGHT_BLUE_STAINED_GLASS_PANE);
+    Block LIGHT_BLUE_STAINED_GLASS_PANE = BlockImpl.get(BlockKey.LIGHT_BLUE_STAINED_GLASS_PANE);
 
-    Block YELLOW_STAINED_GLASS_PANE = BlockImpl.get(BlockKeys.YELLOW_STAINED_GLASS_PANE);
+    Block YELLOW_STAINED_GLASS_PANE = BlockImpl.get(BlockKey.YELLOW_STAINED_GLASS_PANE);
 
-    Block LIME_STAINED_GLASS_PANE = BlockImpl.get(BlockKeys.LIME_STAINED_GLASS_PANE);
+    Block LIME_STAINED_GLASS_PANE = BlockImpl.get(BlockKey.LIME_STAINED_GLASS_PANE);
 
-    Block PINK_STAINED_GLASS_PANE = BlockImpl.get(BlockKeys.PINK_STAINED_GLASS_PANE);
+    Block PINK_STAINED_GLASS_PANE = BlockImpl.get(BlockKey.PINK_STAINED_GLASS_PANE);
 
-    Block GRAY_STAINED_GLASS_PANE = BlockImpl.get(BlockKeys.GRAY_STAINED_GLASS_PANE);
+    Block GRAY_STAINED_GLASS_PANE = BlockImpl.get(BlockKey.GRAY_STAINED_GLASS_PANE);
 
-    Block LIGHT_GRAY_STAINED_GLASS_PANE = BlockImpl.get(BlockKeys.LIGHT_GRAY_STAINED_GLASS_PANE);
+    Block LIGHT_GRAY_STAINED_GLASS_PANE = BlockImpl.get(BlockKey.LIGHT_GRAY_STAINED_GLASS_PANE);
 
-    Block CYAN_STAINED_GLASS_PANE = BlockImpl.get(BlockKeys.CYAN_STAINED_GLASS_PANE);
+    Block CYAN_STAINED_GLASS_PANE = BlockImpl.get(BlockKey.CYAN_STAINED_GLASS_PANE);
 
-    Block PURPLE_STAINED_GLASS_PANE = BlockImpl.get(BlockKeys.PURPLE_STAINED_GLASS_PANE);
+    Block PURPLE_STAINED_GLASS_PANE = BlockImpl.get(BlockKey.PURPLE_STAINED_GLASS_PANE);
 
-    Block BLUE_STAINED_GLASS_PANE = BlockImpl.get(BlockKeys.BLUE_STAINED_GLASS_PANE);
+    Block BLUE_STAINED_GLASS_PANE = BlockImpl.get(BlockKey.BLUE_STAINED_GLASS_PANE);
 
-    Block BROWN_STAINED_GLASS_PANE = BlockImpl.get(BlockKeys.BROWN_STAINED_GLASS_PANE);
+    Block BROWN_STAINED_GLASS_PANE = BlockImpl.get(BlockKey.BROWN_STAINED_GLASS_PANE);
 
-    Block GREEN_STAINED_GLASS_PANE = BlockImpl.get(BlockKeys.GREEN_STAINED_GLASS_PANE);
+    Block GREEN_STAINED_GLASS_PANE = BlockImpl.get(BlockKey.GREEN_STAINED_GLASS_PANE);
 
-    Block RED_STAINED_GLASS_PANE = BlockImpl.get(BlockKeys.RED_STAINED_GLASS_PANE);
+    Block RED_STAINED_GLASS_PANE = BlockImpl.get(BlockKey.RED_STAINED_GLASS_PANE);
 
-    Block BLACK_STAINED_GLASS_PANE = BlockImpl.get(BlockKeys.BLACK_STAINED_GLASS_PANE);
+    Block BLACK_STAINED_GLASS_PANE = BlockImpl.get(BlockKey.BLACK_STAINED_GLASS_PANE);
 
-    Block ACACIA_STAIRS = BlockImpl.get(BlockKeys.ACACIA_STAIRS);
+    Block ACACIA_STAIRS = BlockImpl.get(BlockKey.ACACIA_STAIRS);
 
-    Block CHERRY_STAIRS = BlockImpl.get(BlockKeys.CHERRY_STAIRS);
+    Block CHERRY_STAIRS = BlockImpl.get(BlockKey.CHERRY_STAIRS);
 
-    Block DARK_OAK_STAIRS = BlockImpl.get(BlockKeys.DARK_OAK_STAIRS);
+    Block DARK_OAK_STAIRS = BlockImpl.get(BlockKey.DARK_OAK_STAIRS);
 
-    Block PALE_OAK_STAIRS = BlockImpl.get(BlockKeys.PALE_OAK_STAIRS);
+    Block PALE_OAK_STAIRS = BlockImpl.get(BlockKey.PALE_OAK_STAIRS);
 
-    Block MANGROVE_STAIRS = BlockImpl.get(BlockKeys.MANGROVE_STAIRS);
+    Block MANGROVE_STAIRS = BlockImpl.get(BlockKey.MANGROVE_STAIRS);
 
-    Block BAMBOO_STAIRS = BlockImpl.get(BlockKeys.BAMBOO_STAIRS);
+    Block BAMBOO_STAIRS = BlockImpl.get(BlockKey.BAMBOO_STAIRS);
 
-    Block BAMBOO_MOSAIC_STAIRS = BlockImpl.get(BlockKeys.BAMBOO_MOSAIC_STAIRS);
+    Block BAMBOO_MOSAIC_STAIRS = BlockImpl.get(BlockKey.BAMBOO_MOSAIC_STAIRS);
 
-    Block SLIME_BLOCK = BlockImpl.get(BlockKeys.SLIME_BLOCK);
+    Block SLIME_BLOCK = BlockImpl.get(BlockKey.SLIME_BLOCK);
 
-    Block BARRIER = BlockImpl.get(BlockKeys.BARRIER);
+    Block BARRIER = BlockImpl.get(BlockKey.BARRIER);
 
-    Block LIGHT = BlockImpl.get(BlockKeys.LIGHT);
+    Block LIGHT = BlockImpl.get(BlockKey.LIGHT);
 
-    Block IRON_TRAPDOOR = BlockImpl.get(BlockKeys.IRON_TRAPDOOR);
+    Block IRON_TRAPDOOR = BlockImpl.get(BlockKey.IRON_TRAPDOOR);
 
-    Block PRISMARINE = BlockImpl.get(BlockKeys.PRISMARINE);
+    Block PRISMARINE = BlockImpl.get(BlockKey.PRISMARINE);
 
-    Block PRISMARINE_BRICKS = BlockImpl.get(BlockKeys.PRISMARINE_BRICKS);
+    Block PRISMARINE_BRICKS = BlockImpl.get(BlockKey.PRISMARINE_BRICKS);
 
-    Block DARK_PRISMARINE = BlockImpl.get(BlockKeys.DARK_PRISMARINE);
+    Block DARK_PRISMARINE = BlockImpl.get(BlockKey.DARK_PRISMARINE);
 
-    Block PRISMARINE_STAIRS = BlockImpl.get(BlockKeys.PRISMARINE_STAIRS);
+    Block PRISMARINE_STAIRS = BlockImpl.get(BlockKey.PRISMARINE_STAIRS);
 
-    Block PRISMARINE_BRICK_STAIRS = BlockImpl.get(BlockKeys.PRISMARINE_BRICK_STAIRS);
+    Block PRISMARINE_BRICK_STAIRS = BlockImpl.get(BlockKey.PRISMARINE_BRICK_STAIRS);
 
-    Block DARK_PRISMARINE_STAIRS = BlockImpl.get(BlockKeys.DARK_PRISMARINE_STAIRS);
+    Block DARK_PRISMARINE_STAIRS = BlockImpl.get(BlockKey.DARK_PRISMARINE_STAIRS);
 
-    Block PRISMARINE_SLAB = BlockImpl.get(BlockKeys.PRISMARINE_SLAB);
+    Block PRISMARINE_SLAB = BlockImpl.get(BlockKey.PRISMARINE_SLAB);
 
-    Block PRISMARINE_BRICK_SLAB = BlockImpl.get(BlockKeys.PRISMARINE_BRICK_SLAB);
+    Block PRISMARINE_BRICK_SLAB = BlockImpl.get(BlockKey.PRISMARINE_BRICK_SLAB);
 
-    Block DARK_PRISMARINE_SLAB = BlockImpl.get(BlockKeys.DARK_PRISMARINE_SLAB);
+    Block DARK_PRISMARINE_SLAB = BlockImpl.get(BlockKey.DARK_PRISMARINE_SLAB);
 
-    Block SEA_LANTERN = BlockImpl.get(BlockKeys.SEA_LANTERN);
+    Block SEA_LANTERN = BlockImpl.get(BlockKey.SEA_LANTERN);
 
-    Block HAY_BLOCK = BlockImpl.get(BlockKeys.HAY_BLOCK);
+    Block HAY_BLOCK = BlockImpl.get(BlockKey.HAY_BLOCK);
 
-    Block WHITE_CARPET = BlockImpl.get(BlockKeys.WHITE_CARPET);
+    Block WHITE_CARPET = BlockImpl.get(BlockKey.WHITE_CARPET);
 
-    Block ORANGE_CARPET = BlockImpl.get(BlockKeys.ORANGE_CARPET);
+    Block ORANGE_CARPET = BlockImpl.get(BlockKey.ORANGE_CARPET);
 
-    Block MAGENTA_CARPET = BlockImpl.get(BlockKeys.MAGENTA_CARPET);
+    Block MAGENTA_CARPET = BlockImpl.get(BlockKey.MAGENTA_CARPET);
 
-    Block LIGHT_BLUE_CARPET = BlockImpl.get(BlockKeys.LIGHT_BLUE_CARPET);
+    Block LIGHT_BLUE_CARPET = BlockImpl.get(BlockKey.LIGHT_BLUE_CARPET);
 
-    Block YELLOW_CARPET = BlockImpl.get(BlockKeys.YELLOW_CARPET);
+    Block YELLOW_CARPET = BlockImpl.get(BlockKey.YELLOW_CARPET);
 
-    Block LIME_CARPET = BlockImpl.get(BlockKeys.LIME_CARPET);
+    Block LIME_CARPET = BlockImpl.get(BlockKey.LIME_CARPET);
 
-    Block PINK_CARPET = BlockImpl.get(BlockKeys.PINK_CARPET);
+    Block PINK_CARPET = BlockImpl.get(BlockKey.PINK_CARPET);
 
-    Block GRAY_CARPET = BlockImpl.get(BlockKeys.GRAY_CARPET);
+    Block GRAY_CARPET = BlockImpl.get(BlockKey.GRAY_CARPET);
 
-    Block LIGHT_GRAY_CARPET = BlockImpl.get(BlockKeys.LIGHT_GRAY_CARPET);
+    Block LIGHT_GRAY_CARPET = BlockImpl.get(BlockKey.LIGHT_GRAY_CARPET);
 
-    Block CYAN_CARPET = BlockImpl.get(BlockKeys.CYAN_CARPET);
+    Block CYAN_CARPET = BlockImpl.get(BlockKey.CYAN_CARPET);
 
-    Block PURPLE_CARPET = BlockImpl.get(BlockKeys.PURPLE_CARPET);
+    Block PURPLE_CARPET = BlockImpl.get(BlockKey.PURPLE_CARPET);
 
-    Block BLUE_CARPET = BlockImpl.get(BlockKeys.BLUE_CARPET);
+    Block BLUE_CARPET = BlockImpl.get(BlockKey.BLUE_CARPET);
 
-    Block BROWN_CARPET = BlockImpl.get(BlockKeys.BROWN_CARPET);
+    Block BROWN_CARPET = BlockImpl.get(BlockKey.BROWN_CARPET);
 
-    Block GREEN_CARPET = BlockImpl.get(BlockKeys.GREEN_CARPET);
+    Block GREEN_CARPET = BlockImpl.get(BlockKey.GREEN_CARPET);
 
-    Block RED_CARPET = BlockImpl.get(BlockKeys.RED_CARPET);
+    Block RED_CARPET = BlockImpl.get(BlockKey.RED_CARPET);
 
-    Block BLACK_CARPET = BlockImpl.get(BlockKeys.BLACK_CARPET);
+    Block BLACK_CARPET = BlockImpl.get(BlockKey.BLACK_CARPET);
 
-    Block TERRACOTTA = BlockImpl.get(BlockKeys.TERRACOTTA);
+    Block TERRACOTTA = BlockImpl.get(BlockKey.TERRACOTTA);
 
-    Block COAL_BLOCK = BlockImpl.get(BlockKeys.COAL_BLOCK);
+    Block COAL_BLOCK = BlockImpl.get(BlockKey.COAL_BLOCK);
 
-    Block PACKED_ICE = BlockImpl.get(BlockKeys.PACKED_ICE);
+    Block PACKED_ICE = BlockImpl.get(BlockKey.PACKED_ICE);
 
-    Block SUNFLOWER = BlockImpl.get(BlockKeys.SUNFLOWER);
+    Block SUNFLOWER = BlockImpl.get(BlockKey.SUNFLOWER);
 
-    Block LILAC = BlockImpl.get(BlockKeys.LILAC);
+    Block LILAC = BlockImpl.get(BlockKey.LILAC);
 
-    Block ROSE_BUSH = BlockImpl.get(BlockKeys.ROSE_BUSH);
+    Block ROSE_BUSH = BlockImpl.get(BlockKey.ROSE_BUSH);
 
-    Block PEONY = BlockImpl.get(BlockKeys.PEONY);
+    Block PEONY = BlockImpl.get(BlockKey.PEONY);
 
-    Block TALL_GRASS = BlockImpl.get(BlockKeys.TALL_GRASS);
+    Block TALL_GRASS = BlockImpl.get(BlockKey.TALL_GRASS);
 
-    Block LARGE_FERN = BlockImpl.get(BlockKeys.LARGE_FERN);
+    Block LARGE_FERN = BlockImpl.get(BlockKey.LARGE_FERN);
 
-    Block WHITE_BANNER = BlockImpl.get(BlockKeys.WHITE_BANNER);
+    Block WHITE_BANNER = BlockImpl.get(BlockKey.WHITE_BANNER);
 
-    Block ORANGE_BANNER = BlockImpl.get(BlockKeys.ORANGE_BANNER);
+    Block ORANGE_BANNER = BlockImpl.get(BlockKey.ORANGE_BANNER);
 
-    Block MAGENTA_BANNER = BlockImpl.get(BlockKeys.MAGENTA_BANNER);
+    Block MAGENTA_BANNER = BlockImpl.get(BlockKey.MAGENTA_BANNER);
 
-    Block LIGHT_BLUE_BANNER = BlockImpl.get(BlockKeys.LIGHT_BLUE_BANNER);
+    Block LIGHT_BLUE_BANNER = BlockImpl.get(BlockKey.LIGHT_BLUE_BANNER);
 
-    Block YELLOW_BANNER = BlockImpl.get(BlockKeys.YELLOW_BANNER);
+    Block YELLOW_BANNER = BlockImpl.get(BlockKey.YELLOW_BANNER);
 
-    Block LIME_BANNER = BlockImpl.get(BlockKeys.LIME_BANNER);
+    Block LIME_BANNER = BlockImpl.get(BlockKey.LIME_BANNER);
 
-    Block PINK_BANNER = BlockImpl.get(BlockKeys.PINK_BANNER);
+    Block PINK_BANNER = BlockImpl.get(BlockKey.PINK_BANNER);
 
-    Block GRAY_BANNER = BlockImpl.get(BlockKeys.GRAY_BANNER);
+    Block GRAY_BANNER = BlockImpl.get(BlockKey.GRAY_BANNER);
 
-    Block LIGHT_GRAY_BANNER = BlockImpl.get(BlockKeys.LIGHT_GRAY_BANNER);
+    Block LIGHT_GRAY_BANNER = BlockImpl.get(BlockKey.LIGHT_GRAY_BANNER);
 
-    Block CYAN_BANNER = BlockImpl.get(BlockKeys.CYAN_BANNER);
+    Block CYAN_BANNER = BlockImpl.get(BlockKey.CYAN_BANNER);
 
-    Block PURPLE_BANNER = BlockImpl.get(BlockKeys.PURPLE_BANNER);
+    Block PURPLE_BANNER = BlockImpl.get(BlockKey.PURPLE_BANNER);
 
-    Block BLUE_BANNER = BlockImpl.get(BlockKeys.BLUE_BANNER);
+    Block BLUE_BANNER = BlockImpl.get(BlockKey.BLUE_BANNER);
 
-    Block BROWN_BANNER = BlockImpl.get(BlockKeys.BROWN_BANNER);
+    Block BROWN_BANNER = BlockImpl.get(BlockKey.BROWN_BANNER);
 
-    Block GREEN_BANNER = BlockImpl.get(BlockKeys.GREEN_BANNER);
+    Block GREEN_BANNER = BlockImpl.get(BlockKey.GREEN_BANNER);
 
-    Block RED_BANNER = BlockImpl.get(BlockKeys.RED_BANNER);
+    Block RED_BANNER = BlockImpl.get(BlockKey.RED_BANNER);
 
-    Block BLACK_BANNER = BlockImpl.get(BlockKeys.BLACK_BANNER);
+    Block BLACK_BANNER = BlockImpl.get(BlockKey.BLACK_BANNER);
 
-    Block WHITE_WALL_BANNER = BlockImpl.get(BlockKeys.WHITE_WALL_BANNER);
+    Block WHITE_WALL_BANNER = BlockImpl.get(BlockKey.WHITE_WALL_BANNER);
 
-    Block ORANGE_WALL_BANNER = BlockImpl.get(BlockKeys.ORANGE_WALL_BANNER);
+    Block ORANGE_WALL_BANNER = BlockImpl.get(BlockKey.ORANGE_WALL_BANNER);
 
-    Block MAGENTA_WALL_BANNER = BlockImpl.get(BlockKeys.MAGENTA_WALL_BANNER);
+    Block MAGENTA_WALL_BANNER = BlockImpl.get(BlockKey.MAGENTA_WALL_BANNER);
 
-    Block LIGHT_BLUE_WALL_BANNER = BlockImpl.get(BlockKeys.LIGHT_BLUE_WALL_BANNER);
+    Block LIGHT_BLUE_WALL_BANNER = BlockImpl.get(BlockKey.LIGHT_BLUE_WALL_BANNER);
 
-    Block YELLOW_WALL_BANNER = BlockImpl.get(BlockKeys.YELLOW_WALL_BANNER);
+    Block YELLOW_WALL_BANNER = BlockImpl.get(BlockKey.YELLOW_WALL_BANNER);
 
-    Block LIME_WALL_BANNER = BlockImpl.get(BlockKeys.LIME_WALL_BANNER);
+    Block LIME_WALL_BANNER = BlockImpl.get(BlockKey.LIME_WALL_BANNER);
 
-    Block PINK_WALL_BANNER = BlockImpl.get(BlockKeys.PINK_WALL_BANNER);
+    Block PINK_WALL_BANNER = BlockImpl.get(BlockKey.PINK_WALL_BANNER);
 
-    Block GRAY_WALL_BANNER = BlockImpl.get(BlockKeys.GRAY_WALL_BANNER);
+    Block GRAY_WALL_BANNER = BlockImpl.get(BlockKey.GRAY_WALL_BANNER);
 
-    Block LIGHT_GRAY_WALL_BANNER = BlockImpl.get(BlockKeys.LIGHT_GRAY_WALL_BANNER);
+    Block LIGHT_GRAY_WALL_BANNER = BlockImpl.get(BlockKey.LIGHT_GRAY_WALL_BANNER);
 
-    Block CYAN_WALL_BANNER = BlockImpl.get(BlockKeys.CYAN_WALL_BANNER);
+    Block CYAN_WALL_BANNER = BlockImpl.get(BlockKey.CYAN_WALL_BANNER);
 
-    Block PURPLE_WALL_BANNER = BlockImpl.get(BlockKeys.PURPLE_WALL_BANNER);
+    Block PURPLE_WALL_BANNER = BlockImpl.get(BlockKey.PURPLE_WALL_BANNER);
 
-    Block BLUE_WALL_BANNER = BlockImpl.get(BlockKeys.BLUE_WALL_BANNER);
+    Block BLUE_WALL_BANNER = BlockImpl.get(BlockKey.BLUE_WALL_BANNER);
 
-    Block BROWN_WALL_BANNER = BlockImpl.get(BlockKeys.BROWN_WALL_BANNER);
+    Block BROWN_WALL_BANNER = BlockImpl.get(BlockKey.BROWN_WALL_BANNER);
 
-    Block GREEN_WALL_BANNER = BlockImpl.get(BlockKeys.GREEN_WALL_BANNER);
+    Block GREEN_WALL_BANNER = BlockImpl.get(BlockKey.GREEN_WALL_BANNER);
 
-    Block RED_WALL_BANNER = BlockImpl.get(BlockKeys.RED_WALL_BANNER);
+    Block RED_WALL_BANNER = BlockImpl.get(BlockKey.RED_WALL_BANNER);
 
-    Block BLACK_WALL_BANNER = BlockImpl.get(BlockKeys.BLACK_WALL_BANNER);
+    Block BLACK_WALL_BANNER = BlockImpl.get(BlockKey.BLACK_WALL_BANNER);
 
-    Block RED_SANDSTONE = BlockImpl.get(BlockKeys.RED_SANDSTONE);
+    Block RED_SANDSTONE = BlockImpl.get(BlockKey.RED_SANDSTONE);
 
-    Block CHISELED_RED_SANDSTONE = BlockImpl.get(BlockKeys.CHISELED_RED_SANDSTONE);
+    Block CHISELED_RED_SANDSTONE = BlockImpl.get(BlockKey.CHISELED_RED_SANDSTONE);
 
-    Block CUT_RED_SANDSTONE = BlockImpl.get(BlockKeys.CUT_RED_SANDSTONE);
+    Block CUT_RED_SANDSTONE = BlockImpl.get(BlockKey.CUT_RED_SANDSTONE);
 
-    Block RED_SANDSTONE_STAIRS = BlockImpl.get(BlockKeys.RED_SANDSTONE_STAIRS);
+    Block RED_SANDSTONE_STAIRS = BlockImpl.get(BlockKey.RED_SANDSTONE_STAIRS);
 
-    Block OAK_SLAB = BlockImpl.get(BlockKeys.OAK_SLAB);
+    Block OAK_SLAB = BlockImpl.get(BlockKey.OAK_SLAB);
 
-    Block SPRUCE_SLAB = BlockImpl.get(BlockKeys.SPRUCE_SLAB);
+    Block SPRUCE_SLAB = BlockImpl.get(BlockKey.SPRUCE_SLAB);
 
-    Block BIRCH_SLAB = BlockImpl.get(BlockKeys.BIRCH_SLAB);
+    Block BIRCH_SLAB = BlockImpl.get(BlockKey.BIRCH_SLAB);
 
-    Block JUNGLE_SLAB = BlockImpl.get(BlockKeys.JUNGLE_SLAB);
+    Block JUNGLE_SLAB = BlockImpl.get(BlockKey.JUNGLE_SLAB);
 
-    Block ACACIA_SLAB = BlockImpl.get(BlockKeys.ACACIA_SLAB);
+    Block ACACIA_SLAB = BlockImpl.get(BlockKey.ACACIA_SLAB);
 
-    Block CHERRY_SLAB = BlockImpl.get(BlockKeys.CHERRY_SLAB);
+    Block CHERRY_SLAB = BlockImpl.get(BlockKey.CHERRY_SLAB);
 
-    Block DARK_OAK_SLAB = BlockImpl.get(BlockKeys.DARK_OAK_SLAB);
+    Block DARK_OAK_SLAB = BlockImpl.get(BlockKey.DARK_OAK_SLAB);
 
-    Block PALE_OAK_SLAB = BlockImpl.get(BlockKeys.PALE_OAK_SLAB);
+    Block PALE_OAK_SLAB = BlockImpl.get(BlockKey.PALE_OAK_SLAB);
 
-    Block MANGROVE_SLAB = BlockImpl.get(BlockKeys.MANGROVE_SLAB);
+    Block MANGROVE_SLAB = BlockImpl.get(BlockKey.MANGROVE_SLAB);
 
-    Block BAMBOO_SLAB = BlockImpl.get(BlockKeys.BAMBOO_SLAB);
+    Block BAMBOO_SLAB = BlockImpl.get(BlockKey.BAMBOO_SLAB);
 
-    Block BAMBOO_MOSAIC_SLAB = BlockImpl.get(BlockKeys.BAMBOO_MOSAIC_SLAB);
+    Block BAMBOO_MOSAIC_SLAB = BlockImpl.get(BlockKey.BAMBOO_MOSAIC_SLAB);
 
-    Block STONE_SLAB = BlockImpl.get(BlockKeys.STONE_SLAB);
+    Block STONE_SLAB = BlockImpl.get(BlockKey.STONE_SLAB);
 
-    Block SMOOTH_STONE_SLAB = BlockImpl.get(BlockKeys.SMOOTH_STONE_SLAB);
+    Block SMOOTH_STONE_SLAB = BlockImpl.get(BlockKey.SMOOTH_STONE_SLAB);
 
-    Block SANDSTONE_SLAB = BlockImpl.get(BlockKeys.SANDSTONE_SLAB);
+    Block SANDSTONE_SLAB = BlockImpl.get(BlockKey.SANDSTONE_SLAB);
 
-    Block CUT_SANDSTONE_SLAB = BlockImpl.get(BlockKeys.CUT_SANDSTONE_SLAB);
+    Block CUT_SANDSTONE_SLAB = BlockImpl.get(BlockKey.CUT_SANDSTONE_SLAB);
 
-    Block PETRIFIED_OAK_SLAB = BlockImpl.get(BlockKeys.PETRIFIED_OAK_SLAB);
+    Block PETRIFIED_OAK_SLAB = BlockImpl.get(BlockKey.PETRIFIED_OAK_SLAB);
 
-    Block COBBLESTONE_SLAB = BlockImpl.get(BlockKeys.COBBLESTONE_SLAB);
+    Block COBBLESTONE_SLAB = BlockImpl.get(BlockKey.COBBLESTONE_SLAB);
 
-    Block BRICK_SLAB = BlockImpl.get(BlockKeys.BRICK_SLAB);
+    Block BRICK_SLAB = BlockImpl.get(BlockKey.BRICK_SLAB);
 
-    Block STONE_BRICK_SLAB = BlockImpl.get(BlockKeys.STONE_BRICK_SLAB);
+    Block STONE_BRICK_SLAB = BlockImpl.get(BlockKey.STONE_BRICK_SLAB);
 
-    Block MUD_BRICK_SLAB = BlockImpl.get(BlockKeys.MUD_BRICK_SLAB);
+    Block MUD_BRICK_SLAB = BlockImpl.get(BlockKey.MUD_BRICK_SLAB);
 
-    Block NETHER_BRICK_SLAB = BlockImpl.get(BlockKeys.NETHER_BRICK_SLAB);
+    Block NETHER_BRICK_SLAB = BlockImpl.get(BlockKey.NETHER_BRICK_SLAB);
 
-    Block QUARTZ_SLAB = BlockImpl.get(BlockKeys.QUARTZ_SLAB);
+    Block QUARTZ_SLAB = BlockImpl.get(BlockKey.QUARTZ_SLAB);
 
-    Block RED_SANDSTONE_SLAB = BlockImpl.get(BlockKeys.RED_SANDSTONE_SLAB);
+    Block RED_SANDSTONE_SLAB = BlockImpl.get(BlockKey.RED_SANDSTONE_SLAB);
 
-    Block CUT_RED_SANDSTONE_SLAB = BlockImpl.get(BlockKeys.CUT_RED_SANDSTONE_SLAB);
+    Block CUT_RED_SANDSTONE_SLAB = BlockImpl.get(BlockKey.CUT_RED_SANDSTONE_SLAB);
 
-    Block PURPUR_SLAB = BlockImpl.get(BlockKeys.PURPUR_SLAB);
+    Block PURPUR_SLAB = BlockImpl.get(BlockKey.PURPUR_SLAB);
 
-    Block SMOOTH_STONE = BlockImpl.get(BlockKeys.SMOOTH_STONE);
+    Block SMOOTH_STONE = BlockImpl.get(BlockKey.SMOOTH_STONE);
 
-    Block SMOOTH_SANDSTONE = BlockImpl.get(BlockKeys.SMOOTH_SANDSTONE);
+    Block SMOOTH_SANDSTONE = BlockImpl.get(BlockKey.SMOOTH_SANDSTONE);
 
-    Block SMOOTH_QUARTZ = BlockImpl.get(BlockKeys.SMOOTH_QUARTZ);
+    Block SMOOTH_QUARTZ = BlockImpl.get(BlockKey.SMOOTH_QUARTZ);
 
-    Block SMOOTH_RED_SANDSTONE = BlockImpl.get(BlockKeys.SMOOTH_RED_SANDSTONE);
+    Block SMOOTH_RED_SANDSTONE = BlockImpl.get(BlockKey.SMOOTH_RED_SANDSTONE);
 
-    Block SPRUCE_FENCE_GATE = BlockImpl.get(BlockKeys.SPRUCE_FENCE_GATE);
+    Block SPRUCE_FENCE_GATE = BlockImpl.get(BlockKey.SPRUCE_FENCE_GATE);
 
-    Block BIRCH_FENCE_GATE = BlockImpl.get(BlockKeys.BIRCH_FENCE_GATE);
+    Block BIRCH_FENCE_GATE = BlockImpl.get(BlockKey.BIRCH_FENCE_GATE);
 
-    Block JUNGLE_FENCE_GATE = BlockImpl.get(BlockKeys.JUNGLE_FENCE_GATE);
+    Block JUNGLE_FENCE_GATE = BlockImpl.get(BlockKey.JUNGLE_FENCE_GATE);
 
-    Block ACACIA_FENCE_GATE = BlockImpl.get(BlockKeys.ACACIA_FENCE_GATE);
+    Block ACACIA_FENCE_GATE = BlockImpl.get(BlockKey.ACACIA_FENCE_GATE);
 
-    Block CHERRY_FENCE_GATE = BlockImpl.get(BlockKeys.CHERRY_FENCE_GATE);
+    Block CHERRY_FENCE_GATE = BlockImpl.get(BlockKey.CHERRY_FENCE_GATE);
 
-    Block DARK_OAK_FENCE_GATE = BlockImpl.get(BlockKeys.DARK_OAK_FENCE_GATE);
+    Block DARK_OAK_FENCE_GATE = BlockImpl.get(BlockKey.DARK_OAK_FENCE_GATE);
 
-    Block PALE_OAK_FENCE_GATE = BlockImpl.get(BlockKeys.PALE_OAK_FENCE_GATE);
+    Block PALE_OAK_FENCE_GATE = BlockImpl.get(BlockKey.PALE_OAK_FENCE_GATE);
 
-    Block MANGROVE_FENCE_GATE = BlockImpl.get(BlockKeys.MANGROVE_FENCE_GATE);
+    Block MANGROVE_FENCE_GATE = BlockImpl.get(BlockKey.MANGROVE_FENCE_GATE);
 
-    Block BAMBOO_FENCE_GATE = BlockImpl.get(BlockKeys.BAMBOO_FENCE_GATE);
+    Block BAMBOO_FENCE_GATE = BlockImpl.get(BlockKey.BAMBOO_FENCE_GATE);
 
-    Block SPRUCE_FENCE = BlockImpl.get(BlockKeys.SPRUCE_FENCE);
+    Block SPRUCE_FENCE = BlockImpl.get(BlockKey.SPRUCE_FENCE);
 
-    Block BIRCH_FENCE = BlockImpl.get(BlockKeys.BIRCH_FENCE);
+    Block BIRCH_FENCE = BlockImpl.get(BlockKey.BIRCH_FENCE);
 
-    Block JUNGLE_FENCE = BlockImpl.get(BlockKeys.JUNGLE_FENCE);
+    Block JUNGLE_FENCE = BlockImpl.get(BlockKey.JUNGLE_FENCE);
 
-    Block ACACIA_FENCE = BlockImpl.get(BlockKeys.ACACIA_FENCE);
+    Block ACACIA_FENCE = BlockImpl.get(BlockKey.ACACIA_FENCE);
 
-    Block CHERRY_FENCE = BlockImpl.get(BlockKeys.CHERRY_FENCE);
+    Block CHERRY_FENCE = BlockImpl.get(BlockKey.CHERRY_FENCE);
 
-    Block DARK_OAK_FENCE = BlockImpl.get(BlockKeys.DARK_OAK_FENCE);
+    Block DARK_OAK_FENCE = BlockImpl.get(BlockKey.DARK_OAK_FENCE);
 
-    Block PALE_OAK_FENCE = BlockImpl.get(BlockKeys.PALE_OAK_FENCE);
+    Block PALE_OAK_FENCE = BlockImpl.get(BlockKey.PALE_OAK_FENCE);
 
-    Block MANGROVE_FENCE = BlockImpl.get(BlockKeys.MANGROVE_FENCE);
+    Block MANGROVE_FENCE = BlockImpl.get(BlockKey.MANGROVE_FENCE);
 
-    Block BAMBOO_FENCE = BlockImpl.get(BlockKeys.BAMBOO_FENCE);
+    Block BAMBOO_FENCE = BlockImpl.get(BlockKey.BAMBOO_FENCE);
 
-    Block SPRUCE_DOOR = BlockImpl.get(BlockKeys.SPRUCE_DOOR);
+    Block SPRUCE_DOOR = BlockImpl.get(BlockKey.SPRUCE_DOOR);
 
-    Block BIRCH_DOOR = BlockImpl.get(BlockKeys.BIRCH_DOOR);
+    Block BIRCH_DOOR = BlockImpl.get(BlockKey.BIRCH_DOOR);
 
-    Block JUNGLE_DOOR = BlockImpl.get(BlockKeys.JUNGLE_DOOR);
+    Block JUNGLE_DOOR = BlockImpl.get(BlockKey.JUNGLE_DOOR);
 
-    Block ACACIA_DOOR = BlockImpl.get(BlockKeys.ACACIA_DOOR);
+    Block ACACIA_DOOR = BlockImpl.get(BlockKey.ACACIA_DOOR);
 
-    Block CHERRY_DOOR = BlockImpl.get(BlockKeys.CHERRY_DOOR);
+    Block CHERRY_DOOR = BlockImpl.get(BlockKey.CHERRY_DOOR);
 
-    Block DARK_OAK_DOOR = BlockImpl.get(BlockKeys.DARK_OAK_DOOR);
+    Block DARK_OAK_DOOR = BlockImpl.get(BlockKey.DARK_OAK_DOOR);
 
-    Block PALE_OAK_DOOR = BlockImpl.get(BlockKeys.PALE_OAK_DOOR);
+    Block PALE_OAK_DOOR = BlockImpl.get(BlockKey.PALE_OAK_DOOR);
 
-    Block MANGROVE_DOOR = BlockImpl.get(BlockKeys.MANGROVE_DOOR);
+    Block MANGROVE_DOOR = BlockImpl.get(BlockKey.MANGROVE_DOOR);
 
-    Block BAMBOO_DOOR = BlockImpl.get(BlockKeys.BAMBOO_DOOR);
+    Block BAMBOO_DOOR = BlockImpl.get(BlockKey.BAMBOO_DOOR);
 
-    Block END_ROD = BlockImpl.get(BlockKeys.END_ROD);
+    Block END_ROD = BlockImpl.get(BlockKey.END_ROD);
 
-    Block CHORUS_PLANT = BlockImpl.get(BlockKeys.CHORUS_PLANT);
+    Block CHORUS_PLANT = BlockImpl.get(BlockKey.CHORUS_PLANT);
 
-    Block CHORUS_FLOWER = BlockImpl.get(BlockKeys.CHORUS_FLOWER);
+    Block CHORUS_FLOWER = BlockImpl.get(BlockKey.CHORUS_FLOWER);
 
-    Block PURPUR_BLOCK = BlockImpl.get(BlockKeys.PURPUR_BLOCK);
+    Block PURPUR_BLOCK = BlockImpl.get(BlockKey.PURPUR_BLOCK);
 
-    Block PURPUR_PILLAR = BlockImpl.get(BlockKeys.PURPUR_PILLAR);
+    Block PURPUR_PILLAR = BlockImpl.get(BlockKey.PURPUR_PILLAR);
 
-    Block PURPUR_STAIRS = BlockImpl.get(BlockKeys.PURPUR_STAIRS);
+    Block PURPUR_STAIRS = BlockImpl.get(BlockKey.PURPUR_STAIRS);
 
-    Block END_STONE_BRICKS = BlockImpl.get(BlockKeys.END_STONE_BRICKS);
+    Block END_STONE_BRICKS = BlockImpl.get(BlockKey.END_STONE_BRICKS);
 
-    Block TORCHFLOWER_CROP = BlockImpl.get(BlockKeys.TORCHFLOWER_CROP);
+    Block TORCHFLOWER_CROP = BlockImpl.get(BlockKey.TORCHFLOWER_CROP);
 
-    Block PITCHER_CROP = BlockImpl.get(BlockKeys.PITCHER_CROP);
+    Block PITCHER_CROP = BlockImpl.get(BlockKey.PITCHER_CROP);
 
-    Block PITCHER_PLANT = BlockImpl.get(BlockKeys.PITCHER_PLANT);
+    Block PITCHER_PLANT = BlockImpl.get(BlockKey.PITCHER_PLANT);
 
-    Block BEETROOTS = BlockImpl.get(BlockKeys.BEETROOTS);
+    Block BEETROOTS = BlockImpl.get(BlockKey.BEETROOTS);
 
-    Block DIRT_PATH = BlockImpl.get(BlockKeys.DIRT_PATH);
+    Block DIRT_PATH = BlockImpl.get(BlockKey.DIRT_PATH);
 
-    Block END_GATEWAY = BlockImpl.get(BlockKeys.END_GATEWAY);
+    Block END_GATEWAY = BlockImpl.get(BlockKey.END_GATEWAY);
 
-    Block REPEATING_COMMAND_BLOCK = BlockImpl.get(BlockKeys.REPEATING_COMMAND_BLOCK);
+    Block REPEATING_COMMAND_BLOCK = BlockImpl.get(BlockKey.REPEATING_COMMAND_BLOCK);
 
-    Block CHAIN_COMMAND_BLOCK = BlockImpl.get(BlockKeys.CHAIN_COMMAND_BLOCK);
+    Block CHAIN_COMMAND_BLOCK = BlockImpl.get(BlockKey.CHAIN_COMMAND_BLOCK);
 
-    Block FROSTED_ICE = BlockImpl.get(BlockKeys.FROSTED_ICE);
+    Block FROSTED_ICE = BlockImpl.get(BlockKey.FROSTED_ICE);
 
-    Block MAGMA_BLOCK = BlockImpl.get(BlockKeys.MAGMA_BLOCK);
+    Block MAGMA_BLOCK = BlockImpl.get(BlockKey.MAGMA_BLOCK);
 
-    Block NETHER_WART_BLOCK = BlockImpl.get(BlockKeys.NETHER_WART_BLOCK);
+    Block NETHER_WART_BLOCK = BlockImpl.get(BlockKey.NETHER_WART_BLOCK);
 
-    Block RED_NETHER_BRICKS = BlockImpl.get(BlockKeys.RED_NETHER_BRICKS);
+    Block RED_NETHER_BRICKS = BlockImpl.get(BlockKey.RED_NETHER_BRICKS);
 
-    Block BONE_BLOCK = BlockImpl.get(BlockKeys.BONE_BLOCK);
+    Block BONE_BLOCK = BlockImpl.get(BlockKey.BONE_BLOCK);
 
-    Block STRUCTURE_VOID = BlockImpl.get(BlockKeys.STRUCTURE_VOID);
+    Block STRUCTURE_VOID = BlockImpl.get(BlockKey.STRUCTURE_VOID);
 
-    Block OBSERVER = BlockImpl.get(BlockKeys.OBSERVER);
+    Block OBSERVER = BlockImpl.get(BlockKey.OBSERVER);
 
-    Block SHULKER_BOX = BlockImpl.get(BlockKeys.SHULKER_BOX);
+    Block SHULKER_BOX = BlockImpl.get(BlockKey.SHULKER_BOX);
 
-    Block WHITE_SHULKER_BOX = BlockImpl.get(BlockKeys.WHITE_SHULKER_BOX);
+    Block WHITE_SHULKER_BOX = BlockImpl.get(BlockKey.WHITE_SHULKER_BOX);
 
-    Block ORANGE_SHULKER_BOX = BlockImpl.get(BlockKeys.ORANGE_SHULKER_BOX);
+    Block ORANGE_SHULKER_BOX = BlockImpl.get(BlockKey.ORANGE_SHULKER_BOX);
 
-    Block MAGENTA_SHULKER_BOX = BlockImpl.get(BlockKeys.MAGENTA_SHULKER_BOX);
+    Block MAGENTA_SHULKER_BOX = BlockImpl.get(BlockKey.MAGENTA_SHULKER_BOX);
 
-    Block LIGHT_BLUE_SHULKER_BOX = BlockImpl.get(BlockKeys.LIGHT_BLUE_SHULKER_BOX);
+    Block LIGHT_BLUE_SHULKER_BOX = BlockImpl.get(BlockKey.LIGHT_BLUE_SHULKER_BOX);
 
-    Block YELLOW_SHULKER_BOX = BlockImpl.get(BlockKeys.YELLOW_SHULKER_BOX);
+    Block YELLOW_SHULKER_BOX = BlockImpl.get(BlockKey.YELLOW_SHULKER_BOX);
 
-    Block LIME_SHULKER_BOX = BlockImpl.get(BlockKeys.LIME_SHULKER_BOX);
+    Block LIME_SHULKER_BOX = BlockImpl.get(BlockKey.LIME_SHULKER_BOX);
 
-    Block PINK_SHULKER_BOX = BlockImpl.get(BlockKeys.PINK_SHULKER_BOX);
+    Block PINK_SHULKER_BOX = BlockImpl.get(BlockKey.PINK_SHULKER_BOX);
 
-    Block GRAY_SHULKER_BOX = BlockImpl.get(BlockKeys.GRAY_SHULKER_BOX);
+    Block GRAY_SHULKER_BOX = BlockImpl.get(BlockKey.GRAY_SHULKER_BOX);
 
-    Block LIGHT_GRAY_SHULKER_BOX = BlockImpl.get(BlockKeys.LIGHT_GRAY_SHULKER_BOX);
+    Block LIGHT_GRAY_SHULKER_BOX = BlockImpl.get(BlockKey.LIGHT_GRAY_SHULKER_BOX);
 
-    Block CYAN_SHULKER_BOX = BlockImpl.get(BlockKeys.CYAN_SHULKER_BOX);
+    Block CYAN_SHULKER_BOX = BlockImpl.get(BlockKey.CYAN_SHULKER_BOX);
 
-    Block PURPLE_SHULKER_BOX = BlockImpl.get(BlockKeys.PURPLE_SHULKER_BOX);
+    Block PURPLE_SHULKER_BOX = BlockImpl.get(BlockKey.PURPLE_SHULKER_BOX);
 
-    Block BLUE_SHULKER_BOX = BlockImpl.get(BlockKeys.BLUE_SHULKER_BOX);
+    Block BLUE_SHULKER_BOX = BlockImpl.get(BlockKey.BLUE_SHULKER_BOX);
 
-    Block BROWN_SHULKER_BOX = BlockImpl.get(BlockKeys.BROWN_SHULKER_BOX);
+    Block BROWN_SHULKER_BOX = BlockImpl.get(BlockKey.BROWN_SHULKER_BOX);
 
-    Block GREEN_SHULKER_BOX = BlockImpl.get(BlockKeys.GREEN_SHULKER_BOX);
+    Block GREEN_SHULKER_BOX = BlockImpl.get(BlockKey.GREEN_SHULKER_BOX);
 
-    Block RED_SHULKER_BOX = BlockImpl.get(BlockKeys.RED_SHULKER_BOX);
+    Block RED_SHULKER_BOX = BlockImpl.get(BlockKey.RED_SHULKER_BOX);
 
-    Block BLACK_SHULKER_BOX = BlockImpl.get(BlockKeys.BLACK_SHULKER_BOX);
+    Block BLACK_SHULKER_BOX = BlockImpl.get(BlockKey.BLACK_SHULKER_BOX);
 
-    Block WHITE_GLAZED_TERRACOTTA = BlockImpl.get(BlockKeys.WHITE_GLAZED_TERRACOTTA);
+    Block WHITE_GLAZED_TERRACOTTA = BlockImpl.get(BlockKey.WHITE_GLAZED_TERRACOTTA);
 
-    Block ORANGE_GLAZED_TERRACOTTA = BlockImpl.get(BlockKeys.ORANGE_GLAZED_TERRACOTTA);
+    Block ORANGE_GLAZED_TERRACOTTA = BlockImpl.get(BlockKey.ORANGE_GLAZED_TERRACOTTA);
 
-    Block MAGENTA_GLAZED_TERRACOTTA = BlockImpl.get(BlockKeys.MAGENTA_GLAZED_TERRACOTTA);
+    Block MAGENTA_GLAZED_TERRACOTTA = BlockImpl.get(BlockKey.MAGENTA_GLAZED_TERRACOTTA);
 
-    Block LIGHT_BLUE_GLAZED_TERRACOTTA = BlockImpl.get(BlockKeys.LIGHT_BLUE_GLAZED_TERRACOTTA);
+    Block LIGHT_BLUE_GLAZED_TERRACOTTA = BlockImpl.get(BlockKey.LIGHT_BLUE_GLAZED_TERRACOTTA);
 
-    Block YELLOW_GLAZED_TERRACOTTA = BlockImpl.get(BlockKeys.YELLOW_GLAZED_TERRACOTTA);
+    Block YELLOW_GLAZED_TERRACOTTA = BlockImpl.get(BlockKey.YELLOW_GLAZED_TERRACOTTA);
 
-    Block LIME_GLAZED_TERRACOTTA = BlockImpl.get(BlockKeys.LIME_GLAZED_TERRACOTTA);
+    Block LIME_GLAZED_TERRACOTTA = BlockImpl.get(BlockKey.LIME_GLAZED_TERRACOTTA);
 
-    Block PINK_GLAZED_TERRACOTTA = BlockImpl.get(BlockKeys.PINK_GLAZED_TERRACOTTA);
+    Block PINK_GLAZED_TERRACOTTA = BlockImpl.get(BlockKey.PINK_GLAZED_TERRACOTTA);
 
-    Block GRAY_GLAZED_TERRACOTTA = BlockImpl.get(BlockKeys.GRAY_GLAZED_TERRACOTTA);
+    Block GRAY_GLAZED_TERRACOTTA = BlockImpl.get(BlockKey.GRAY_GLAZED_TERRACOTTA);
 
-    Block LIGHT_GRAY_GLAZED_TERRACOTTA = BlockImpl.get(BlockKeys.LIGHT_GRAY_GLAZED_TERRACOTTA);
+    Block LIGHT_GRAY_GLAZED_TERRACOTTA = BlockImpl.get(BlockKey.LIGHT_GRAY_GLAZED_TERRACOTTA);
 
-    Block CYAN_GLAZED_TERRACOTTA = BlockImpl.get(BlockKeys.CYAN_GLAZED_TERRACOTTA);
+    Block CYAN_GLAZED_TERRACOTTA = BlockImpl.get(BlockKey.CYAN_GLAZED_TERRACOTTA);
 
-    Block PURPLE_GLAZED_TERRACOTTA = BlockImpl.get(BlockKeys.PURPLE_GLAZED_TERRACOTTA);
+    Block PURPLE_GLAZED_TERRACOTTA = BlockImpl.get(BlockKey.PURPLE_GLAZED_TERRACOTTA);
 
-    Block BLUE_GLAZED_TERRACOTTA = BlockImpl.get(BlockKeys.BLUE_GLAZED_TERRACOTTA);
+    Block BLUE_GLAZED_TERRACOTTA = BlockImpl.get(BlockKey.BLUE_GLAZED_TERRACOTTA);
 
-    Block BROWN_GLAZED_TERRACOTTA = BlockImpl.get(BlockKeys.BROWN_GLAZED_TERRACOTTA);
+    Block BROWN_GLAZED_TERRACOTTA = BlockImpl.get(BlockKey.BROWN_GLAZED_TERRACOTTA);
 
-    Block GREEN_GLAZED_TERRACOTTA = BlockImpl.get(BlockKeys.GREEN_GLAZED_TERRACOTTA);
+    Block GREEN_GLAZED_TERRACOTTA = BlockImpl.get(BlockKey.GREEN_GLAZED_TERRACOTTA);
 
-    Block RED_GLAZED_TERRACOTTA = BlockImpl.get(BlockKeys.RED_GLAZED_TERRACOTTA);
+    Block RED_GLAZED_TERRACOTTA = BlockImpl.get(BlockKey.RED_GLAZED_TERRACOTTA);
 
-    Block BLACK_GLAZED_TERRACOTTA = BlockImpl.get(BlockKeys.BLACK_GLAZED_TERRACOTTA);
+    Block BLACK_GLAZED_TERRACOTTA = BlockImpl.get(BlockKey.BLACK_GLAZED_TERRACOTTA);
 
-    Block WHITE_CONCRETE = BlockImpl.get(BlockKeys.WHITE_CONCRETE);
+    Block WHITE_CONCRETE = BlockImpl.get(BlockKey.WHITE_CONCRETE);
 
-    Block ORANGE_CONCRETE = BlockImpl.get(BlockKeys.ORANGE_CONCRETE);
+    Block ORANGE_CONCRETE = BlockImpl.get(BlockKey.ORANGE_CONCRETE);
 
-    Block MAGENTA_CONCRETE = BlockImpl.get(BlockKeys.MAGENTA_CONCRETE);
+    Block MAGENTA_CONCRETE = BlockImpl.get(BlockKey.MAGENTA_CONCRETE);
 
-    Block LIGHT_BLUE_CONCRETE = BlockImpl.get(BlockKeys.LIGHT_BLUE_CONCRETE);
+    Block LIGHT_BLUE_CONCRETE = BlockImpl.get(BlockKey.LIGHT_BLUE_CONCRETE);
 
-    Block YELLOW_CONCRETE = BlockImpl.get(BlockKeys.YELLOW_CONCRETE);
+    Block YELLOW_CONCRETE = BlockImpl.get(BlockKey.YELLOW_CONCRETE);
 
-    Block LIME_CONCRETE = BlockImpl.get(BlockKeys.LIME_CONCRETE);
+    Block LIME_CONCRETE = BlockImpl.get(BlockKey.LIME_CONCRETE);
 
-    Block PINK_CONCRETE = BlockImpl.get(BlockKeys.PINK_CONCRETE);
+    Block PINK_CONCRETE = BlockImpl.get(BlockKey.PINK_CONCRETE);
 
-    Block GRAY_CONCRETE = BlockImpl.get(BlockKeys.GRAY_CONCRETE);
+    Block GRAY_CONCRETE = BlockImpl.get(BlockKey.GRAY_CONCRETE);
 
-    Block LIGHT_GRAY_CONCRETE = BlockImpl.get(BlockKeys.LIGHT_GRAY_CONCRETE);
+    Block LIGHT_GRAY_CONCRETE = BlockImpl.get(BlockKey.LIGHT_GRAY_CONCRETE);
 
-    Block CYAN_CONCRETE = BlockImpl.get(BlockKeys.CYAN_CONCRETE);
+    Block CYAN_CONCRETE = BlockImpl.get(BlockKey.CYAN_CONCRETE);
 
-    Block PURPLE_CONCRETE = BlockImpl.get(BlockKeys.PURPLE_CONCRETE);
+    Block PURPLE_CONCRETE = BlockImpl.get(BlockKey.PURPLE_CONCRETE);
 
-    Block BLUE_CONCRETE = BlockImpl.get(BlockKeys.BLUE_CONCRETE);
+    Block BLUE_CONCRETE = BlockImpl.get(BlockKey.BLUE_CONCRETE);
 
-    Block BROWN_CONCRETE = BlockImpl.get(BlockKeys.BROWN_CONCRETE);
+    Block BROWN_CONCRETE = BlockImpl.get(BlockKey.BROWN_CONCRETE);
 
-    Block GREEN_CONCRETE = BlockImpl.get(BlockKeys.GREEN_CONCRETE);
+    Block GREEN_CONCRETE = BlockImpl.get(BlockKey.GREEN_CONCRETE);
 
-    Block RED_CONCRETE = BlockImpl.get(BlockKeys.RED_CONCRETE);
+    Block RED_CONCRETE = BlockImpl.get(BlockKey.RED_CONCRETE);
 
-    Block BLACK_CONCRETE = BlockImpl.get(BlockKeys.BLACK_CONCRETE);
+    Block BLACK_CONCRETE = BlockImpl.get(BlockKey.BLACK_CONCRETE);
 
-    Block WHITE_CONCRETE_POWDER = BlockImpl.get(BlockKeys.WHITE_CONCRETE_POWDER);
+    Block WHITE_CONCRETE_POWDER = BlockImpl.get(BlockKey.WHITE_CONCRETE_POWDER);
 
-    Block ORANGE_CONCRETE_POWDER = BlockImpl.get(BlockKeys.ORANGE_CONCRETE_POWDER);
+    Block ORANGE_CONCRETE_POWDER = BlockImpl.get(BlockKey.ORANGE_CONCRETE_POWDER);
 
-    Block MAGENTA_CONCRETE_POWDER = BlockImpl.get(BlockKeys.MAGENTA_CONCRETE_POWDER);
+    Block MAGENTA_CONCRETE_POWDER = BlockImpl.get(BlockKey.MAGENTA_CONCRETE_POWDER);
 
-    Block LIGHT_BLUE_CONCRETE_POWDER = BlockImpl.get(BlockKeys.LIGHT_BLUE_CONCRETE_POWDER);
+    Block LIGHT_BLUE_CONCRETE_POWDER = BlockImpl.get(BlockKey.LIGHT_BLUE_CONCRETE_POWDER);
 
-    Block YELLOW_CONCRETE_POWDER = BlockImpl.get(BlockKeys.YELLOW_CONCRETE_POWDER);
+    Block YELLOW_CONCRETE_POWDER = BlockImpl.get(BlockKey.YELLOW_CONCRETE_POWDER);
 
-    Block LIME_CONCRETE_POWDER = BlockImpl.get(BlockKeys.LIME_CONCRETE_POWDER);
+    Block LIME_CONCRETE_POWDER = BlockImpl.get(BlockKey.LIME_CONCRETE_POWDER);
 
-    Block PINK_CONCRETE_POWDER = BlockImpl.get(BlockKeys.PINK_CONCRETE_POWDER);
+    Block PINK_CONCRETE_POWDER = BlockImpl.get(BlockKey.PINK_CONCRETE_POWDER);
 
-    Block GRAY_CONCRETE_POWDER = BlockImpl.get(BlockKeys.GRAY_CONCRETE_POWDER);
+    Block GRAY_CONCRETE_POWDER = BlockImpl.get(BlockKey.GRAY_CONCRETE_POWDER);
 
-    Block LIGHT_GRAY_CONCRETE_POWDER = BlockImpl.get(BlockKeys.LIGHT_GRAY_CONCRETE_POWDER);
+    Block LIGHT_GRAY_CONCRETE_POWDER = BlockImpl.get(BlockKey.LIGHT_GRAY_CONCRETE_POWDER);
 
-    Block CYAN_CONCRETE_POWDER = BlockImpl.get(BlockKeys.CYAN_CONCRETE_POWDER);
+    Block CYAN_CONCRETE_POWDER = BlockImpl.get(BlockKey.CYAN_CONCRETE_POWDER);
 
-    Block PURPLE_CONCRETE_POWDER = BlockImpl.get(BlockKeys.PURPLE_CONCRETE_POWDER);
+    Block PURPLE_CONCRETE_POWDER = BlockImpl.get(BlockKey.PURPLE_CONCRETE_POWDER);
 
-    Block BLUE_CONCRETE_POWDER = BlockImpl.get(BlockKeys.BLUE_CONCRETE_POWDER);
+    Block BLUE_CONCRETE_POWDER = BlockImpl.get(BlockKey.BLUE_CONCRETE_POWDER);
 
-    Block BROWN_CONCRETE_POWDER = BlockImpl.get(BlockKeys.BROWN_CONCRETE_POWDER);
+    Block BROWN_CONCRETE_POWDER = BlockImpl.get(BlockKey.BROWN_CONCRETE_POWDER);
 
-    Block GREEN_CONCRETE_POWDER = BlockImpl.get(BlockKeys.GREEN_CONCRETE_POWDER);
+    Block GREEN_CONCRETE_POWDER = BlockImpl.get(BlockKey.GREEN_CONCRETE_POWDER);
 
-    Block RED_CONCRETE_POWDER = BlockImpl.get(BlockKeys.RED_CONCRETE_POWDER);
+    Block RED_CONCRETE_POWDER = BlockImpl.get(BlockKey.RED_CONCRETE_POWDER);
 
-    Block BLACK_CONCRETE_POWDER = BlockImpl.get(BlockKeys.BLACK_CONCRETE_POWDER);
+    Block BLACK_CONCRETE_POWDER = BlockImpl.get(BlockKey.BLACK_CONCRETE_POWDER);
 
-    Block KELP = BlockImpl.get(BlockKeys.KELP);
+    Block KELP = BlockImpl.get(BlockKey.KELP);
 
-    Block KELP_PLANT = BlockImpl.get(BlockKeys.KELP_PLANT);
+    Block KELP_PLANT = BlockImpl.get(BlockKey.KELP_PLANT);
 
-    Block DRIED_KELP_BLOCK = BlockImpl.get(BlockKeys.DRIED_KELP_BLOCK);
+    Block DRIED_KELP_BLOCK = BlockImpl.get(BlockKey.DRIED_KELP_BLOCK);
 
-    Block TURTLE_EGG = BlockImpl.get(BlockKeys.TURTLE_EGG);
+    Block TURTLE_EGG = BlockImpl.get(BlockKey.TURTLE_EGG);
 
-    Block SNIFFER_EGG = BlockImpl.get(BlockKeys.SNIFFER_EGG);
+    Block SNIFFER_EGG = BlockImpl.get(BlockKey.SNIFFER_EGG);
 
-    Block DRIED_GHAST = BlockImpl.get(BlockKeys.DRIED_GHAST);
+    Block DRIED_GHAST = BlockImpl.get(BlockKey.DRIED_GHAST);
 
-    Block DEAD_TUBE_CORAL_BLOCK = BlockImpl.get(BlockKeys.DEAD_TUBE_CORAL_BLOCK);
+    Block DEAD_TUBE_CORAL_BLOCK = BlockImpl.get(BlockKey.DEAD_TUBE_CORAL_BLOCK);
 
-    Block DEAD_BRAIN_CORAL_BLOCK = BlockImpl.get(BlockKeys.DEAD_BRAIN_CORAL_BLOCK);
+    Block DEAD_BRAIN_CORAL_BLOCK = BlockImpl.get(BlockKey.DEAD_BRAIN_CORAL_BLOCK);
 
-    Block DEAD_BUBBLE_CORAL_BLOCK = BlockImpl.get(BlockKeys.DEAD_BUBBLE_CORAL_BLOCK);
+    Block DEAD_BUBBLE_CORAL_BLOCK = BlockImpl.get(BlockKey.DEAD_BUBBLE_CORAL_BLOCK);
 
-    Block DEAD_FIRE_CORAL_BLOCK = BlockImpl.get(BlockKeys.DEAD_FIRE_CORAL_BLOCK);
+    Block DEAD_FIRE_CORAL_BLOCK = BlockImpl.get(BlockKey.DEAD_FIRE_CORAL_BLOCK);
 
-    Block DEAD_HORN_CORAL_BLOCK = BlockImpl.get(BlockKeys.DEAD_HORN_CORAL_BLOCK);
+    Block DEAD_HORN_CORAL_BLOCK = BlockImpl.get(BlockKey.DEAD_HORN_CORAL_BLOCK);
 
-    Block TUBE_CORAL_BLOCK = BlockImpl.get(BlockKeys.TUBE_CORAL_BLOCK);
+    Block TUBE_CORAL_BLOCK = BlockImpl.get(BlockKey.TUBE_CORAL_BLOCK);
 
-    Block BRAIN_CORAL_BLOCK = BlockImpl.get(BlockKeys.BRAIN_CORAL_BLOCK);
+    Block BRAIN_CORAL_BLOCK = BlockImpl.get(BlockKey.BRAIN_CORAL_BLOCK);
 
-    Block BUBBLE_CORAL_BLOCK = BlockImpl.get(BlockKeys.BUBBLE_CORAL_BLOCK);
+    Block BUBBLE_CORAL_BLOCK = BlockImpl.get(BlockKey.BUBBLE_CORAL_BLOCK);
 
-    Block FIRE_CORAL_BLOCK = BlockImpl.get(BlockKeys.FIRE_CORAL_BLOCK);
+    Block FIRE_CORAL_BLOCK = BlockImpl.get(BlockKey.FIRE_CORAL_BLOCK);
 
-    Block HORN_CORAL_BLOCK = BlockImpl.get(BlockKeys.HORN_CORAL_BLOCK);
+    Block HORN_CORAL_BLOCK = BlockImpl.get(BlockKey.HORN_CORAL_BLOCK);
 
-    Block DEAD_TUBE_CORAL = BlockImpl.get(BlockKeys.DEAD_TUBE_CORAL);
+    Block DEAD_TUBE_CORAL = BlockImpl.get(BlockKey.DEAD_TUBE_CORAL);
 
-    Block DEAD_BRAIN_CORAL = BlockImpl.get(BlockKeys.DEAD_BRAIN_CORAL);
+    Block DEAD_BRAIN_CORAL = BlockImpl.get(BlockKey.DEAD_BRAIN_CORAL);
 
-    Block DEAD_BUBBLE_CORAL = BlockImpl.get(BlockKeys.DEAD_BUBBLE_CORAL);
+    Block DEAD_BUBBLE_CORAL = BlockImpl.get(BlockKey.DEAD_BUBBLE_CORAL);
 
-    Block DEAD_FIRE_CORAL = BlockImpl.get(BlockKeys.DEAD_FIRE_CORAL);
+    Block DEAD_FIRE_CORAL = BlockImpl.get(BlockKey.DEAD_FIRE_CORAL);
 
-    Block DEAD_HORN_CORAL = BlockImpl.get(BlockKeys.DEAD_HORN_CORAL);
+    Block DEAD_HORN_CORAL = BlockImpl.get(BlockKey.DEAD_HORN_CORAL);
 
-    Block TUBE_CORAL = BlockImpl.get(BlockKeys.TUBE_CORAL);
+    Block TUBE_CORAL = BlockImpl.get(BlockKey.TUBE_CORAL);
 
-    Block BRAIN_CORAL = BlockImpl.get(BlockKeys.BRAIN_CORAL);
+    Block BRAIN_CORAL = BlockImpl.get(BlockKey.BRAIN_CORAL);
 
-    Block BUBBLE_CORAL = BlockImpl.get(BlockKeys.BUBBLE_CORAL);
+    Block BUBBLE_CORAL = BlockImpl.get(BlockKey.BUBBLE_CORAL);
 
-    Block FIRE_CORAL = BlockImpl.get(BlockKeys.FIRE_CORAL);
+    Block FIRE_CORAL = BlockImpl.get(BlockKey.FIRE_CORAL);
 
-    Block HORN_CORAL = BlockImpl.get(BlockKeys.HORN_CORAL);
+    Block HORN_CORAL = BlockImpl.get(BlockKey.HORN_CORAL);
 
-    Block DEAD_TUBE_CORAL_FAN = BlockImpl.get(BlockKeys.DEAD_TUBE_CORAL_FAN);
+    Block DEAD_TUBE_CORAL_FAN = BlockImpl.get(BlockKey.DEAD_TUBE_CORAL_FAN);
 
-    Block DEAD_BRAIN_CORAL_FAN = BlockImpl.get(BlockKeys.DEAD_BRAIN_CORAL_FAN);
+    Block DEAD_BRAIN_CORAL_FAN = BlockImpl.get(BlockKey.DEAD_BRAIN_CORAL_FAN);
 
-    Block DEAD_BUBBLE_CORAL_FAN = BlockImpl.get(BlockKeys.DEAD_BUBBLE_CORAL_FAN);
+    Block DEAD_BUBBLE_CORAL_FAN = BlockImpl.get(BlockKey.DEAD_BUBBLE_CORAL_FAN);
 
-    Block DEAD_FIRE_CORAL_FAN = BlockImpl.get(BlockKeys.DEAD_FIRE_CORAL_FAN);
+    Block DEAD_FIRE_CORAL_FAN = BlockImpl.get(BlockKey.DEAD_FIRE_CORAL_FAN);
 
-    Block DEAD_HORN_CORAL_FAN = BlockImpl.get(BlockKeys.DEAD_HORN_CORAL_FAN);
+    Block DEAD_HORN_CORAL_FAN = BlockImpl.get(BlockKey.DEAD_HORN_CORAL_FAN);
 
-    Block TUBE_CORAL_FAN = BlockImpl.get(BlockKeys.TUBE_CORAL_FAN);
+    Block TUBE_CORAL_FAN = BlockImpl.get(BlockKey.TUBE_CORAL_FAN);
 
-    Block BRAIN_CORAL_FAN = BlockImpl.get(BlockKeys.BRAIN_CORAL_FAN);
+    Block BRAIN_CORAL_FAN = BlockImpl.get(BlockKey.BRAIN_CORAL_FAN);
 
-    Block BUBBLE_CORAL_FAN = BlockImpl.get(BlockKeys.BUBBLE_CORAL_FAN);
+    Block BUBBLE_CORAL_FAN = BlockImpl.get(BlockKey.BUBBLE_CORAL_FAN);
 
-    Block FIRE_CORAL_FAN = BlockImpl.get(BlockKeys.FIRE_CORAL_FAN);
+    Block FIRE_CORAL_FAN = BlockImpl.get(BlockKey.FIRE_CORAL_FAN);
 
-    Block HORN_CORAL_FAN = BlockImpl.get(BlockKeys.HORN_CORAL_FAN);
+    Block HORN_CORAL_FAN = BlockImpl.get(BlockKey.HORN_CORAL_FAN);
 
-    Block DEAD_TUBE_CORAL_WALL_FAN = BlockImpl.get(BlockKeys.DEAD_TUBE_CORAL_WALL_FAN);
+    Block DEAD_TUBE_CORAL_WALL_FAN = BlockImpl.get(BlockKey.DEAD_TUBE_CORAL_WALL_FAN);
 
-    Block DEAD_BRAIN_CORAL_WALL_FAN = BlockImpl.get(BlockKeys.DEAD_BRAIN_CORAL_WALL_FAN);
+    Block DEAD_BRAIN_CORAL_WALL_FAN = BlockImpl.get(BlockKey.DEAD_BRAIN_CORAL_WALL_FAN);
 
-    Block DEAD_BUBBLE_CORAL_WALL_FAN = BlockImpl.get(BlockKeys.DEAD_BUBBLE_CORAL_WALL_FAN);
+    Block DEAD_BUBBLE_CORAL_WALL_FAN = BlockImpl.get(BlockKey.DEAD_BUBBLE_CORAL_WALL_FAN);
 
-    Block DEAD_FIRE_CORAL_WALL_FAN = BlockImpl.get(BlockKeys.DEAD_FIRE_CORAL_WALL_FAN);
+    Block DEAD_FIRE_CORAL_WALL_FAN = BlockImpl.get(BlockKey.DEAD_FIRE_CORAL_WALL_FAN);
 
-    Block DEAD_HORN_CORAL_WALL_FAN = BlockImpl.get(BlockKeys.DEAD_HORN_CORAL_WALL_FAN);
+    Block DEAD_HORN_CORAL_WALL_FAN = BlockImpl.get(BlockKey.DEAD_HORN_CORAL_WALL_FAN);
 
-    Block TUBE_CORAL_WALL_FAN = BlockImpl.get(BlockKeys.TUBE_CORAL_WALL_FAN);
+    Block TUBE_CORAL_WALL_FAN = BlockImpl.get(BlockKey.TUBE_CORAL_WALL_FAN);
 
-    Block BRAIN_CORAL_WALL_FAN = BlockImpl.get(BlockKeys.BRAIN_CORAL_WALL_FAN);
+    Block BRAIN_CORAL_WALL_FAN = BlockImpl.get(BlockKey.BRAIN_CORAL_WALL_FAN);
 
-    Block BUBBLE_CORAL_WALL_FAN = BlockImpl.get(BlockKeys.BUBBLE_CORAL_WALL_FAN);
+    Block BUBBLE_CORAL_WALL_FAN = BlockImpl.get(BlockKey.BUBBLE_CORAL_WALL_FAN);
 
-    Block FIRE_CORAL_WALL_FAN = BlockImpl.get(BlockKeys.FIRE_CORAL_WALL_FAN);
+    Block FIRE_CORAL_WALL_FAN = BlockImpl.get(BlockKey.FIRE_CORAL_WALL_FAN);
 
-    Block HORN_CORAL_WALL_FAN = BlockImpl.get(BlockKeys.HORN_CORAL_WALL_FAN);
+    Block HORN_CORAL_WALL_FAN = BlockImpl.get(BlockKey.HORN_CORAL_WALL_FAN);
 
-    Block SEA_PICKLE = BlockImpl.get(BlockKeys.SEA_PICKLE);
+    Block SEA_PICKLE = BlockImpl.get(BlockKey.SEA_PICKLE);
 
-    Block BLUE_ICE = BlockImpl.get(BlockKeys.BLUE_ICE);
+    Block BLUE_ICE = BlockImpl.get(BlockKey.BLUE_ICE);
 
-    Block CONDUIT = BlockImpl.get(BlockKeys.CONDUIT);
+    Block CONDUIT = BlockImpl.get(BlockKey.CONDUIT);
 
-    Block BAMBOO_SAPLING = BlockImpl.get(BlockKeys.BAMBOO_SAPLING);
+    Block BAMBOO_SAPLING = BlockImpl.get(BlockKey.BAMBOO_SAPLING);
 
-    Block BAMBOO = BlockImpl.get(BlockKeys.BAMBOO);
+    Block BAMBOO = BlockImpl.get(BlockKey.BAMBOO);
 
-    Block POTTED_BAMBOO = BlockImpl.get(BlockKeys.POTTED_BAMBOO);
+    Block POTTED_BAMBOO = BlockImpl.get(BlockKey.POTTED_BAMBOO);
 
-    Block VOID_AIR = BlockImpl.get(BlockKeys.VOID_AIR);
+    Block VOID_AIR = BlockImpl.get(BlockKey.VOID_AIR);
 
-    Block CAVE_AIR = BlockImpl.get(BlockKeys.CAVE_AIR);
+    Block CAVE_AIR = BlockImpl.get(BlockKey.CAVE_AIR);
 
-    Block BUBBLE_COLUMN = BlockImpl.get(BlockKeys.BUBBLE_COLUMN);
+    Block BUBBLE_COLUMN = BlockImpl.get(BlockKey.BUBBLE_COLUMN);
 
-    Block POLISHED_GRANITE_STAIRS = BlockImpl.get(BlockKeys.POLISHED_GRANITE_STAIRS);
+    Block POLISHED_GRANITE_STAIRS = BlockImpl.get(BlockKey.POLISHED_GRANITE_STAIRS);
 
-    Block SMOOTH_RED_SANDSTONE_STAIRS = BlockImpl.get(BlockKeys.SMOOTH_RED_SANDSTONE_STAIRS);
+    Block SMOOTH_RED_SANDSTONE_STAIRS = BlockImpl.get(BlockKey.SMOOTH_RED_SANDSTONE_STAIRS);
 
-    Block MOSSY_STONE_BRICK_STAIRS = BlockImpl.get(BlockKeys.MOSSY_STONE_BRICK_STAIRS);
+    Block MOSSY_STONE_BRICK_STAIRS = BlockImpl.get(BlockKey.MOSSY_STONE_BRICK_STAIRS);
 
-    Block POLISHED_DIORITE_STAIRS = BlockImpl.get(BlockKeys.POLISHED_DIORITE_STAIRS);
+    Block POLISHED_DIORITE_STAIRS = BlockImpl.get(BlockKey.POLISHED_DIORITE_STAIRS);
 
-    Block MOSSY_COBBLESTONE_STAIRS = BlockImpl.get(BlockKeys.MOSSY_COBBLESTONE_STAIRS);
+    Block MOSSY_COBBLESTONE_STAIRS = BlockImpl.get(BlockKey.MOSSY_COBBLESTONE_STAIRS);
 
-    Block END_STONE_BRICK_STAIRS = BlockImpl.get(BlockKeys.END_STONE_BRICK_STAIRS);
+    Block END_STONE_BRICK_STAIRS = BlockImpl.get(BlockKey.END_STONE_BRICK_STAIRS);
 
-    Block STONE_STAIRS = BlockImpl.get(BlockKeys.STONE_STAIRS);
+    Block STONE_STAIRS = BlockImpl.get(BlockKey.STONE_STAIRS);
 
-    Block SMOOTH_SANDSTONE_STAIRS = BlockImpl.get(BlockKeys.SMOOTH_SANDSTONE_STAIRS);
+    Block SMOOTH_SANDSTONE_STAIRS = BlockImpl.get(BlockKey.SMOOTH_SANDSTONE_STAIRS);
 
-    Block SMOOTH_QUARTZ_STAIRS = BlockImpl.get(BlockKeys.SMOOTH_QUARTZ_STAIRS);
+    Block SMOOTH_QUARTZ_STAIRS = BlockImpl.get(BlockKey.SMOOTH_QUARTZ_STAIRS);
 
-    Block GRANITE_STAIRS = BlockImpl.get(BlockKeys.GRANITE_STAIRS);
+    Block GRANITE_STAIRS = BlockImpl.get(BlockKey.GRANITE_STAIRS);
 
-    Block ANDESITE_STAIRS = BlockImpl.get(BlockKeys.ANDESITE_STAIRS);
+    Block ANDESITE_STAIRS = BlockImpl.get(BlockKey.ANDESITE_STAIRS);
 
-    Block RED_NETHER_BRICK_STAIRS = BlockImpl.get(BlockKeys.RED_NETHER_BRICK_STAIRS);
+    Block RED_NETHER_BRICK_STAIRS = BlockImpl.get(BlockKey.RED_NETHER_BRICK_STAIRS);
 
-    Block POLISHED_ANDESITE_STAIRS = BlockImpl.get(BlockKeys.POLISHED_ANDESITE_STAIRS);
+    Block POLISHED_ANDESITE_STAIRS = BlockImpl.get(BlockKey.POLISHED_ANDESITE_STAIRS);
 
-    Block DIORITE_STAIRS = BlockImpl.get(BlockKeys.DIORITE_STAIRS);
+    Block DIORITE_STAIRS = BlockImpl.get(BlockKey.DIORITE_STAIRS);
 
-    Block POLISHED_GRANITE_SLAB = BlockImpl.get(BlockKeys.POLISHED_GRANITE_SLAB);
+    Block POLISHED_GRANITE_SLAB = BlockImpl.get(BlockKey.POLISHED_GRANITE_SLAB);
 
-    Block SMOOTH_RED_SANDSTONE_SLAB = BlockImpl.get(BlockKeys.SMOOTH_RED_SANDSTONE_SLAB);
+    Block SMOOTH_RED_SANDSTONE_SLAB = BlockImpl.get(BlockKey.SMOOTH_RED_SANDSTONE_SLAB);
 
-    Block MOSSY_STONE_BRICK_SLAB = BlockImpl.get(BlockKeys.MOSSY_STONE_BRICK_SLAB);
+    Block MOSSY_STONE_BRICK_SLAB = BlockImpl.get(BlockKey.MOSSY_STONE_BRICK_SLAB);
 
-    Block POLISHED_DIORITE_SLAB = BlockImpl.get(BlockKeys.POLISHED_DIORITE_SLAB);
+    Block POLISHED_DIORITE_SLAB = BlockImpl.get(BlockKey.POLISHED_DIORITE_SLAB);
 
-    Block MOSSY_COBBLESTONE_SLAB = BlockImpl.get(BlockKeys.MOSSY_COBBLESTONE_SLAB);
+    Block MOSSY_COBBLESTONE_SLAB = BlockImpl.get(BlockKey.MOSSY_COBBLESTONE_SLAB);
 
-    Block END_STONE_BRICK_SLAB = BlockImpl.get(BlockKeys.END_STONE_BRICK_SLAB);
+    Block END_STONE_BRICK_SLAB = BlockImpl.get(BlockKey.END_STONE_BRICK_SLAB);
 
-    Block SMOOTH_SANDSTONE_SLAB = BlockImpl.get(BlockKeys.SMOOTH_SANDSTONE_SLAB);
+    Block SMOOTH_SANDSTONE_SLAB = BlockImpl.get(BlockKey.SMOOTH_SANDSTONE_SLAB);
 
-    Block SMOOTH_QUARTZ_SLAB = BlockImpl.get(BlockKeys.SMOOTH_QUARTZ_SLAB);
+    Block SMOOTH_QUARTZ_SLAB = BlockImpl.get(BlockKey.SMOOTH_QUARTZ_SLAB);
 
-    Block GRANITE_SLAB = BlockImpl.get(BlockKeys.GRANITE_SLAB);
+    Block GRANITE_SLAB = BlockImpl.get(BlockKey.GRANITE_SLAB);
 
-    Block ANDESITE_SLAB = BlockImpl.get(BlockKeys.ANDESITE_SLAB);
+    Block ANDESITE_SLAB = BlockImpl.get(BlockKey.ANDESITE_SLAB);
 
-    Block RED_NETHER_BRICK_SLAB = BlockImpl.get(BlockKeys.RED_NETHER_BRICK_SLAB);
+    Block RED_NETHER_BRICK_SLAB = BlockImpl.get(BlockKey.RED_NETHER_BRICK_SLAB);
 
-    Block POLISHED_ANDESITE_SLAB = BlockImpl.get(BlockKeys.POLISHED_ANDESITE_SLAB);
+    Block POLISHED_ANDESITE_SLAB = BlockImpl.get(BlockKey.POLISHED_ANDESITE_SLAB);
 
-    Block DIORITE_SLAB = BlockImpl.get(BlockKeys.DIORITE_SLAB);
+    Block DIORITE_SLAB = BlockImpl.get(BlockKey.DIORITE_SLAB);
 
-    Block BRICK_WALL = BlockImpl.get(BlockKeys.BRICK_WALL);
+    Block BRICK_WALL = BlockImpl.get(BlockKey.BRICK_WALL);
 
-    Block PRISMARINE_WALL = BlockImpl.get(BlockKeys.PRISMARINE_WALL);
+    Block PRISMARINE_WALL = BlockImpl.get(BlockKey.PRISMARINE_WALL);
 
-    Block RED_SANDSTONE_WALL = BlockImpl.get(BlockKeys.RED_SANDSTONE_WALL);
+    Block RED_SANDSTONE_WALL = BlockImpl.get(BlockKey.RED_SANDSTONE_WALL);
 
-    Block MOSSY_STONE_BRICK_WALL = BlockImpl.get(BlockKeys.MOSSY_STONE_BRICK_WALL);
+    Block MOSSY_STONE_BRICK_WALL = BlockImpl.get(BlockKey.MOSSY_STONE_BRICK_WALL);
 
-    Block GRANITE_WALL = BlockImpl.get(BlockKeys.GRANITE_WALL);
+    Block GRANITE_WALL = BlockImpl.get(BlockKey.GRANITE_WALL);
 
-    Block STONE_BRICK_WALL = BlockImpl.get(BlockKeys.STONE_BRICK_WALL);
+    Block STONE_BRICK_WALL = BlockImpl.get(BlockKey.STONE_BRICK_WALL);
 
-    Block MUD_BRICK_WALL = BlockImpl.get(BlockKeys.MUD_BRICK_WALL);
+    Block MUD_BRICK_WALL = BlockImpl.get(BlockKey.MUD_BRICK_WALL);
 
-    Block NETHER_BRICK_WALL = BlockImpl.get(BlockKeys.NETHER_BRICK_WALL);
+    Block NETHER_BRICK_WALL = BlockImpl.get(BlockKey.NETHER_BRICK_WALL);
 
-    Block ANDESITE_WALL = BlockImpl.get(BlockKeys.ANDESITE_WALL);
+    Block ANDESITE_WALL = BlockImpl.get(BlockKey.ANDESITE_WALL);
 
-    Block RED_NETHER_BRICK_WALL = BlockImpl.get(BlockKeys.RED_NETHER_BRICK_WALL);
+    Block RED_NETHER_BRICK_WALL = BlockImpl.get(BlockKey.RED_NETHER_BRICK_WALL);
 
-    Block SANDSTONE_WALL = BlockImpl.get(BlockKeys.SANDSTONE_WALL);
+    Block SANDSTONE_WALL = BlockImpl.get(BlockKey.SANDSTONE_WALL);
 
-    Block END_STONE_BRICK_WALL = BlockImpl.get(BlockKeys.END_STONE_BRICK_WALL);
+    Block END_STONE_BRICK_WALL = BlockImpl.get(BlockKey.END_STONE_BRICK_WALL);
 
-    Block DIORITE_WALL = BlockImpl.get(BlockKeys.DIORITE_WALL);
+    Block DIORITE_WALL = BlockImpl.get(BlockKey.DIORITE_WALL);
 
-    Block SCAFFOLDING = BlockImpl.get(BlockKeys.SCAFFOLDING);
+    Block SCAFFOLDING = BlockImpl.get(BlockKey.SCAFFOLDING);
 
-    Block LOOM = BlockImpl.get(BlockKeys.LOOM);
+    Block LOOM = BlockImpl.get(BlockKey.LOOM);
 
-    Block BARREL = BlockImpl.get(BlockKeys.BARREL);
+    Block BARREL = BlockImpl.get(BlockKey.BARREL);
 
-    Block SMOKER = BlockImpl.get(BlockKeys.SMOKER);
+    Block SMOKER = BlockImpl.get(BlockKey.SMOKER);
 
-    Block BLAST_FURNACE = BlockImpl.get(BlockKeys.BLAST_FURNACE);
+    Block BLAST_FURNACE = BlockImpl.get(BlockKey.BLAST_FURNACE);
 
-    Block CARTOGRAPHY_TABLE = BlockImpl.get(BlockKeys.CARTOGRAPHY_TABLE);
+    Block CARTOGRAPHY_TABLE = BlockImpl.get(BlockKey.CARTOGRAPHY_TABLE);
 
-    Block FLETCHING_TABLE = BlockImpl.get(BlockKeys.FLETCHING_TABLE);
+    Block FLETCHING_TABLE = BlockImpl.get(BlockKey.FLETCHING_TABLE);
 
-    Block GRINDSTONE = BlockImpl.get(BlockKeys.GRINDSTONE);
+    Block GRINDSTONE = BlockImpl.get(BlockKey.GRINDSTONE);
 
-    Block LECTERN = BlockImpl.get(BlockKeys.LECTERN);
+    Block LECTERN = BlockImpl.get(BlockKey.LECTERN);
 
-    Block SMITHING_TABLE = BlockImpl.get(BlockKeys.SMITHING_TABLE);
+    Block SMITHING_TABLE = BlockImpl.get(BlockKey.SMITHING_TABLE);
 
-    Block STONECUTTER = BlockImpl.get(BlockKeys.STONECUTTER);
+    Block STONECUTTER = BlockImpl.get(BlockKey.STONECUTTER);
 
-    Block BELL = BlockImpl.get(BlockKeys.BELL);
+    Block BELL = BlockImpl.get(BlockKey.BELL);
 
-    Block LANTERN = BlockImpl.get(BlockKeys.LANTERN);
+    Block LANTERN = BlockImpl.get(BlockKey.LANTERN);
 
-    Block SOUL_LANTERN = BlockImpl.get(BlockKeys.SOUL_LANTERN);
+    Block SOUL_LANTERN = BlockImpl.get(BlockKey.SOUL_LANTERN);
 
-    Block COPPER_LANTERN = BlockImpl.get(BlockKeys.COPPER_LANTERN);
+    Block COPPER_LANTERN = BlockImpl.get(BlockKey.COPPER_LANTERN);
 
-    Block EXPOSED_COPPER_LANTERN = BlockImpl.get(BlockKeys.EXPOSED_COPPER_LANTERN);
+    Block EXPOSED_COPPER_LANTERN = BlockImpl.get(BlockKey.EXPOSED_COPPER_LANTERN);
 
-    Block WEATHERED_COPPER_LANTERN = BlockImpl.get(BlockKeys.WEATHERED_COPPER_LANTERN);
+    Block WEATHERED_COPPER_LANTERN = BlockImpl.get(BlockKey.WEATHERED_COPPER_LANTERN);
 
-    Block OXIDIZED_COPPER_LANTERN = BlockImpl.get(BlockKeys.OXIDIZED_COPPER_LANTERN);
+    Block OXIDIZED_COPPER_LANTERN = BlockImpl.get(BlockKey.OXIDIZED_COPPER_LANTERN);
 
-    Block WAXED_COPPER_LANTERN = BlockImpl.get(BlockKeys.WAXED_COPPER_LANTERN);
+    Block WAXED_COPPER_LANTERN = BlockImpl.get(BlockKey.WAXED_COPPER_LANTERN);
 
-    Block WAXED_EXPOSED_COPPER_LANTERN = BlockImpl.get(BlockKeys.WAXED_EXPOSED_COPPER_LANTERN);
+    Block WAXED_EXPOSED_COPPER_LANTERN = BlockImpl.get(BlockKey.WAXED_EXPOSED_COPPER_LANTERN);
 
-    Block WAXED_WEATHERED_COPPER_LANTERN = BlockImpl.get(BlockKeys.WAXED_WEATHERED_COPPER_LANTERN);
+    Block WAXED_WEATHERED_COPPER_LANTERN = BlockImpl.get(BlockKey.WAXED_WEATHERED_COPPER_LANTERN);
 
-    Block WAXED_OXIDIZED_COPPER_LANTERN = BlockImpl.get(BlockKeys.WAXED_OXIDIZED_COPPER_LANTERN);
+    Block WAXED_OXIDIZED_COPPER_LANTERN = BlockImpl.get(BlockKey.WAXED_OXIDIZED_COPPER_LANTERN);
 
-    Block CAMPFIRE = BlockImpl.get(BlockKeys.CAMPFIRE);
+    Block CAMPFIRE = BlockImpl.get(BlockKey.CAMPFIRE);
 
-    Block SOUL_CAMPFIRE = BlockImpl.get(BlockKeys.SOUL_CAMPFIRE);
+    Block SOUL_CAMPFIRE = BlockImpl.get(BlockKey.SOUL_CAMPFIRE);
 
-    Block SWEET_BERRY_BUSH = BlockImpl.get(BlockKeys.SWEET_BERRY_BUSH);
+    Block SWEET_BERRY_BUSH = BlockImpl.get(BlockKey.SWEET_BERRY_BUSH);
 
-    Block WARPED_STEM = BlockImpl.get(BlockKeys.WARPED_STEM);
+    Block WARPED_STEM = BlockImpl.get(BlockKey.WARPED_STEM);
 
-    Block STRIPPED_WARPED_STEM = BlockImpl.get(BlockKeys.STRIPPED_WARPED_STEM);
+    Block STRIPPED_WARPED_STEM = BlockImpl.get(BlockKey.STRIPPED_WARPED_STEM);
 
-    Block WARPED_HYPHAE = BlockImpl.get(BlockKeys.WARPED_HYPHAE);
+    Block WARPED_HYPHAE = BlockImpl.get(BlockKey.WARPED_HYPHAE);
 
-    Block STRIPPED_WARPED_HYPHAE = BlockImpl.get(BlockKeys.STRIPPED_WARPED_HYPHAE);
+    Block STRIPPED_WARPED_HYPHAE = BlockImpl.get(BlockKey.STRIPPED_WARPED_HYPHAE);
 
-    Block WARPED_NYLIUM = BlockImpl.get(BlockKeys.WARPED_NYLIUM);
+    Block WARPED_NYLIUM = BlockImpl.get(BlockKey.WARPED_NYLIUM);
 
-    Block WARPED_FUNGUS = BlockImpl.get(BlockKeys.WARPED_FUNGUS);
+    Block WARPED_FUNGUS = BlockImpl.get(BlockKey.WARPED_FUNGUS);
 
-    Block WARPED_WART_BLOCK = BlockImpl.get(BlockKeys.WARPED_WART_BLOCK);
+    Block WARPED_WART_BLOCK = BlockImpl.get(BlockKey.WARPED_WART_BLOCK);
 
-    Block WARPED_ROOTS = BlockImpl.get(BlockKeys.WARPED_ROOTS);
+    Block WARPED_ROOTS = BlockImpl.get(BlockKey.WARPED_ROOTS);
 
-    Block NETHER_SPROUTS = BlockImpl.get(BlockKeys.NETHER_SPROUTS);
+    Block NETHER_SPROUTS = BlockImpl.get(BlockKey.NETHER_SPROUTS);
 
-    Block CRIMSON_STEM = BlockImpl.get(BlockKeys.CRIMSON_STEM);
+    Block CRIMSON_STEM = BlockImpl.get(BlockKey.CRIMSON_STEM);
 
-    Block STRIPPED_CRIMSON_STEM = BlockImpl.get(BlockKeys.STRIPPED_CRIMSON_STEM);
+    Block STRIPPED_CRIMSON_STEM = BlockImpl.get(BlockKey.STRIPPED_CRIMSON_STEM);
 
-    Block CRIMSON_HYPHAE = BlockImpl.get(BlockKeys.CRIMSON_HYPHAE);
+    Block CRIMSON_HYPHAE = BlockImpl.get(BlockKey.CRIMSON_HYPHAE);
 
-    Block STRIPPED_CRIMSON_HYPHAE = BlockImpl.get(BlockKeys.STRIPPED_CRIMSON_HYPHAE);
+    Block STRIPPED_CRIMSON_HYPHAE = BlockImpl.get(BlockKey.STRIPPED_CRIMSON_HYPHAE);
 
-    Block CRIMSON_NYLIUM = BlockImpl.get(BlockKeys.CRIMSON_NYLIUM);
+    Block CRIMSON_NYLIUM = BlockImpl.get(BlockKey.CRIMSON_NYLIUM);
 
-    Block CRIMSON_FUNGUS = BlockImpl.get(BlockKeys.CRIMSON_FUNGUS);
+    Block CRIMSON_FUNGUS = BlockImpl.get(BlockKey.CRIMSON_FUNGUS);
 
-    Block SHROOMLIGHT = BlockImpl.get(BlockKeys.SHROOMLIGHT);
+    Block SHROOMLIGHT = BlockImpl.get(BlockKey.SHROOMLIGHT);
 
-    Block WEEPING_VINES = BlockImpl.get(BlockKeys.WEEPING_VINES);
+    Block WEEPING_VINES = BlockImpl.get(BlockKey.WEEPING_VINES);
 
-    Block WEEPING_VINES_PLANT = BlockImpl.get(BlockKeys.WEEPING_VINES_PLANT);
+    Block WEEPING_VINES_PLANT = BlockImpl.get(BlockKey.WEEPING_VINES_PLANT);
 
-    Block TWISTING_VINES = BlockImpl.get(BlockKeys.TWISTING_VINES);
+    Block TWISTING_VINES = BlockImpl.get(BlockKey.TWISTING_VINES);
 
-    Block TWISTING_VINES_PLANT = BlockImpl.get(BlockKeys.TWISTING_VINES_PLANT);
+    Block TWISTING_VINES_PLANT = BlockImpl.get(BlockKey.TWISTING_VINES_PLANT);
 
-    Block CRIMSON_ROOTS = BlockImpl.get(BlockKeys.CRIMSON_ROOTS);
+    Block CRIMSON_ROOTS = BlockImpl.get(BlockKey.CRIMSON_ROOTS);
 
-    Block CRIMSON_PLANKS = BlockImpl.get(BlockKeys.CRIMSON_PLANKS);
+    Block CRIMSON_PLANKS = BlockImpl.get(BlockKey.CRIMSON_PLANKS);
 
-    Block WARPED_PLANKS = BlockImpl.get(BlockKeys.WARPED_PLANKS);
+    Block WARPED_PLANKS = BlockImpl.get(BlockKey.WARPED_PLANKS);
 
-    Block CRIMSON_SLAB = BlockImpl.get(BlockKeys.CRIMSON_SLAB);
+    Block CRIMSON_SLAB = BlockImpl.get(BlockKey.CRIMSON_SLAB);
 
-    Block WARPED_SLAB = BlockImpl.get(BlockKeys.WARPED_SLAB);
+    Block WARPED_SLAB = BlockImpl.get(BlockKey.WARPED_SLAB);
 
-    Block CRIMSON_PRESSURE_PLATE = BlockImpl.get(BlockKeys.CRIMSON_PRESSURE_PLATE);
+    Block CRIMSON_PRESSURE_PLATE = BlockImpl.get(BlockKey.CRIMSON_PRESSURE_PLATE);
 
-    Block WARPED_PRESSURE_PLATE = BlockImpl.get(BlockKeys.WARPED_PRESSURE_PLATE);
+    Block WARPED_PRESSURE_PLATE = BlockImpl.get(BlockKey.WARPED_PRESSURE_PLATE);
 
-    Block CRIMSON_FENCE = BlockImpl.get(BlockKeys.CRIMSON_FENCE);
+    Block CRIMSON_FENCE = BlockImpl.get(BlockKey.CRIMSON_FENCE);
 
-    Block WARPED_FENCE = BlockImpl.get(BlockKeys.WARPED_FENCE);
+    Block WARPED_FENCE = BlockImpl.get(BlockKey.WARPED_FENCE);
 
-    Block CRIMSON_TRAPDOOR = BlockImpl.get(BlockKeys.CRIMSON_TRAPDOOR);
+    Block CRIMSON_TRAPDOOR = BlockImpl.get(BlockKey.CRIMSON_TRAPDOOR);
 
-    Block WARPED_TRAPDOOR = BlockImpl.get(BlockKeys.WARPED_TRAPDOOR);
+    Block WARPED_TRAPDOOR = BlockImpl.get(BlockKey.WARPED_TRAPDOOR);
 
-    Block CRIMSON_FENCE_GATE = BlockImpl.get(BlockKeys.CRIMSON_FENCE_GATE);
+    Block CRIMSON_FENCE_GATE = BlockImpl.get(BlockKey.CRIMSON_FENCE_GATE);
 
-    Block WARPED_FENCE_GATE = BlockImpl.get(BlockKeys.WARPED_FENCE_GATE);
+    Block WARPED_FENCE_GATE = BlockImpl.get(BlockKey.WARPED_FENCE_GATE);
 
-    Block CRIMSON_STAIRS = BlockImpl.get(BlockKeys.CRIMSON_STAIRS);
+    Block CRIMSON_STAIRS = BlockImpl.get(BlockKey.CRIMSON_STAIRS);
 
-    Block WARPED_STAIRS = BlockImpl.get(BlockKeys.WARPED_STAIRS);
+    Block WARPED_STAIRS = BlockImpl.get(BlockKey.WARPED_STAIRS);
 
-    Block CRIMSON_BUTTON = BlockImpl.get(BlockKeys.CRIMSON_BUTTON);
+    Block CRIMSON_BUTTON = BlockImpl.get(BlockKey.CRIMSON_BUTTON);
 
-    Block WARPED_BUTTON = BlockImpl.get(BlockKeys.WARPED_BUTTON);
+    Block WARPED_BUTTON = BlockImpl.get(BlockKey.WARPED_BUTTON);
 
-    Block CRIMSON_DOOR = BlockImpl.get(BlockKeys.CRIMSON_DOOR);
+    Block CRIMSON_DOOR = BlockImpl.get(BlockKey.CRIMSON_DOOR);
 
-    Block WARPED_DOOR = BlockImpl.get(BlockKeys.WARPED_DOOR);
+    Block WARPED_DOOR = BlockImpl.get(BlockKey.WARPED_DOOR);
 
-    Block CRIMSON_SIGN = BlockImpl.get(BlockKeys.CRIMSON_SIGN);
+    Block CRIMSON_SIGN = BlockImpl.get(BlockKey.CRIMSON_SIGN);
 
-    Block WARPED_SIGN = BlockImpl.get(BlockKeys.WARPED_SIGN);
+    Block WARPED_SIGN = BlockImpl.get(BlockKey.WARPED_SIGN);
 
-    Block CRIMSON_WALL_SIGN = BlockImpl.get(BlockKeys.CRIMSON_WALL_SIGN);
+    Block CRIMSON_WALL_SIGN = BlockImpl.get(BlockKey.CRIMSON_WALL_SIGN);
 
-    Block WARPED_WALL_SIGN = BlockImpl.get(BlockKeys.WARPED_WALL_SIGN);
+    Block WARPED_WALL_SIGN = BlockImpl.get(BlockKey.WARPED_WALL_SIGN);
 
-    Block STRUCTURE_BLOCK = BlockImpl.get(BlockKeys.STRUCTURE_BLOCK);
+    Block STRUCTURE_BLOCK = BlockImpl.get(BlockKey.STRUCTURE_BLOCK);
 
-    Block JIGSAW = BlockImpl.get(BlockKeys.JIGSAW);
+    Block JIGSAW = BlockImpl.get(BlockKey.JIGSAW);
 
-    Block TEST_BLOCK = BlockImpl.get(BlockKeys.TEST_BLOCK);
+    Block TEST_BLOCK = BlockImpl.get(BlockKey.TEST_BLOCK);
 
-    Block TEST_INSTANCE_BLOCK = BlockImpl.get(BlockKeys.TEST_INSTANCE_BLOCK);
+    Block TEST_INSTANCE_BLOCK = BlockImpl.get(BlockKey.TEST_INSTANCE_BLOCK);
 
-    Block COMPOSTER = BlockImpl.get(BlockKeys.COMPOSTER);
+    Block COMPOSTER = BlockImpl.get(BlockKey.COMPOSTER);
 
-    Block TARGET = BlockImpl.get(BlockKeys.TARGET);
+    Block TARGET = BlockImpl.get(BlockKey.TARGET);
 
-    Block BEE_NEST = BlockImpl.get(BlockKeys.BEE_NEST);
+    Block BEE_NEST = BlockImpl.get(BlockKey.BEE_NEST);
 
-    Block BEEHIVE = BlockImpl.get(BlockKeys.BEEHIVE);
+    Block BEEHIVE = BlockImpl.get(BlockKey.BEEHIVE);
 
-    Block HONEY_BLOCK = BlockImpl.get(BlockKeys.HONEY_BLOCK);
+    Block HONEY_BLOCK = BlockImpl.get(BlockKey.HONEY_BLOCK);
 
-    Block HONEYCOMB_BLOCK = BlockImpl.get(BlockKeys.HONEYCOMB_BLOCK);
+    Block HONEYCOMB_BLOCK = BlockImpl.get(BlockKey.HONEYCOMB_BLOCK);
 
-    Block NETHERITE_BLOCK = BlockImpl.get(BlockKeys.NETHERITE_BLOCK);
+    Block NETHERITE_BLOCK = BlockImpl.get(BlockKey.NETHERITE_BLOCK);
 
-    Block ANCIENT_DEBRIS = BlockImpl.get(BlockKeys.ANCIENT_DEBRIS);
+    Block ANCIENT_DEBRIS = BlockImpl.get(BlockKey.ANCIENT_DEBRIS);
 
-    Block CRYING_OBSIDIAN = BlockImpl.get(BlockKeys.CRYING_OBSIDIAN);
+    Block CRYING_OBSIDIAN = BlockImpl.get(BlockKey.CRYING_OBSIDIAN);
 
-    Block RESPAWN_ANCHOR = BlockImpl.get(BlockKeys.RESPAWN_ANCHOR);
+    Block RESPAWN_ANCHOR = BlockImpl.get(BlockKey.RESPAWN_ANCHOR);
 
-    Block POTTED_CRIMSON_FUNGUS = BlockImpl.get(BlockKeys.POTTED_CRIMSON_FUNGUS);
+    Block POTTED_CRIMSON_FUNGUS = BlockImpl.get(BlockKey.POTTED_CRIMSON_FUNGUS);
 
-    Block POTTED_WARPED_FUNGUS = BlockImpl.get(BlockKeys.POTTED_WARPED_FUNGUS);
+    Block POTTED_WARPED_FUNGUS = BlockImpl.get(BlockKey.POTTED_WARPED_FUNGUS);
 
-    Block POTTED_CRIMSON_ROOTS = BlockImpl.get(BlockKeys.POTTED_CRIMSON_ROOTS);
+    Block POTTED_CRIMSON_ROOTS = BlockImpl.get(BlockKey.POTTED_CRIMSON_ROOTS);
 
-    Block POTTED_WARPED_ROOTS = BlockImpl.get(BlockKeys.POTTED_WARPED_ROOTS);
+    Block POTTED_WARPED_ROOTS = BlockImpl.get(BlockKey.POTTED_WARPED_ROOTS);
 
-    Block LODESTONE = BlockImpl.get(BlockKeys.LODESTONE);
+    Block LODESTONE = BlockImpl.get(BlockKey.LODESTONE);
 
-    Block BLACKSTONE = BlockImpl.get(BlockKeys.BLACKSTONE);
+    Block BLACKSTONE = BlockImpl.get(BlockKey.BLACKSTONE);
 
-    Block BLACKSTONE_STAIRS = BlockImpl.get(BlockKeys.BLACKSTONE_STAIRS);
+    Block BLACKSTONE_STAIRS = BlockImpl.get(BlockKey.BLACKSTONE_STAIRS);
 
-    Block BLACKSTONE_WALL = BlockImpl.get(BlockKeys.BLACKSTONE_WALL);
+    Block BLACKSTONE_WALL = BlockImpl.get(BlockKey.BLACKSTONE_WALL);
 
-    Block BLACKSTONE_SLAB = BlockImpl.get(BlockKeys.BLACKSTONE_SLAB);
+    Block BLACKSTONE_SLAB = BlockImpl.get(BlockKey.BLACKSTONE_SLAB);
 
-    Block POLISHED_BLACKSTONE = BlockImpl.get(BlockKeys.POLISHED_BLACKSTONE);
+    Block POLISHED_BLACKSTONE = BlockImpl.get(BlockKey.POLISHED_BLACKSTONE);
 
-    Block POLISHED_BLACKSTONE_BRICKS = BlockImpl.get(BlockKeys.POLISHED_BLACKSTONE_BRICKS);
+    Block POLISHED_BLACKSTONE_BRICKS = BlockImpl.get(BlockKey.POLISHED_BLACKSTONE_BRICKS);
 
-    Block CRACKED_POLISHED_BLACKSTONE_BRICKS = BlockImpl.get(BlockKeys.CRACKED_POLISHED_BLACKSTONE_BRICKS);
+    Block CRACKED_POLISHED_BLACKSTONE_BRICKS = BlockImpl.get(BlockKey.CRACKED_POLISHED_BLACKSTONE_BRICKS);
 
-    Block CHISELED_POLISHED_BLACKSTONE = BlockImpl.get(BlockKeys.CHISELED_POLISHED_BLACKSTONE);
+    Block CHISELED_POLISHED_BLACKSTONE = BlockImpl.get(BlockKey.CHISELED_POLISHED_BLACKSTONE);
 
-    Block POLISHED_BLACKSTONE_BRICK_SLAB = BlockImpl.get(BlockKeys.POLISHED_BLACKSTONE_BRICK_SLAB);
+    Block POLISHED_BLACKSTONE_BRICK_SLAB = BlockImpl.get(BlockKey.POLISHED_BLACKSTONE_BRICK_SLAB);
 
-    Block POLISHED_BLACKSTONE_BRICK_STAIRS = BlockImpl.get(BlockKeys.POLISHED_BLACKSTONE_BRICK_STAIRS);
+    Block POLISHED_BLACKSTONE_BRICK_STAIRS = BlockImpl.get(BlockKey.POLISHED_BLACKSTONE_BRICK_STAIRS);
 
-    Block POLISHED_BLACKSTONE_BRICK_WALL = BlockImpl.get(BlockKeys.POLISHED_BLACKSTONE_BRICK_WALL);
+    Block POLISHED_BLACKSTONE_BRICK_WALL = BlockImpl.get(BlockKey.POLISHED_BLACKSTONE_BRICK_WALL);
 
-    Block GILDED_BLACKSTONE = BlockImpl.get(BlockKeys.GILDED_BLACKSTONE);
+    Block GILDED_BLACKSTONE = BlockImpl.get(BlockKey.GILDED_BLACKSTONE);
 
-    Block POLISHED_BLACKSTONE_STAIRS = BlockImpl.get(BlockKeys.POLISHED_BLACKSTONE_STAIRS);
+    Block POLISHED_BLACKSTONE_STAIRS = BlockImpl.get(BlockKey.POLISHED_BLACKSTONE_STAIRS);
 
-    Block POLISHED_BLACKSTONE_SLAB = BlockImpl.get(BlockKeys.POLISHED_BLACKSTONE_SLAB);
+    Block POLISHED_BLACKSTONE_SLAB = BlockImpl.get(BlockKey.POLISHED_BLACKSTONE_SLAB);
 
-    Block POLISHED_BLACKSTONE_PRESSURE_PLATE = BlockImpl.get(BlockKeys.POLISHED_BLACKSTONE_PRESSURE_PLATE);
+    Block POLISHED_BLACKSTONE_PRESSURE_PLATE = BlockImpl.get(BlockKey.POLISHED_BLACKSTONE_PRESSURE_PLATE);
 
-    Block POLISHED_BLACKSTONE_BUTTON = BlockImpl.get(BlockKeys.POLISHED_BLACKSTONE_BUTTON);
+    Block POLISHED_BLACKSTONE_BUTTON = BlockImpl.get(BlockKey.POLISHED_BLACKSTONE_BUTTON);
 
-    Block POLISHED_BLACKSTONE_WALL = BlockImpl.get(BlockKeys.POLISHED_BLACKSTONE_WALL);
+    Block POLISHED_BLACKSTONE_WALL = BlockImpl.get(BlockKey.POLISHED_BLACKSTONE_WALL);
 
-    Block CHISELED_NETHER_BRICKS = BlockImpl.get(BlockKeys.CHISELED_NETHER_BRICKS);
+    Block CHISELED_NETHER_BRICKS = BlockImpl.get(BlockKey.CHISELED_NETHER_BRICKS);
 
-    Block CRACKED_NETHER_BRICKS = BlockImpl.get(BlockKeys.CRACKED_NETHER_BRICKS);
+    Block CRACKED_NETHER_BRICKS = BlockImpl.get(BlockKey.CRACKED_NETHER_BRICKS);
 
-    Block QUARTZ_BRICKS = BlockImpl.get(BlockKeys.QUARTZ_BRICKS);
+    Block QUARTZ_BRICKS = BlockImpl.get(BlockKey.QUARTZ_BRICKS);
 
-    Block CANDLE = BlockImpl.get(BlockKeys.CANDLE);
+    Block CANDLE = BlockImpl.get(BlockKey.CANDLE);
 
-    Block WHITE_CANDLE = BlockImpl.get(BlockKeys.WHITE_CANDLE);
+    Block WHITE_CANDLE = BlockImpl.get(BlockKey.WHITE_CANDLE);
 
-    Block ORANGE_CANDLE = BlockImpl.get(BlockKeys.ORANGE_CANDLE);
+    Block ORANGE_CANDLE = BlockImpl.get(BlockKey.ORANGE_CANDLE);
 
-    Block MAGENTA_CANDLE = BlockImpl.get(BlockKeys.MAGENTA_CANDLE);
+    Block MAGENTA_CANDLE = BlockImpl.get(BlockKey.MAGENTA_CANDLE);
 
-    Block LIGHT_BLUE_CANDLE = BlockImpl.get(BlockKeys.LIGHT_BLUE_CANDLE);
+    Block LIGHT_BLUE_CANDLE = BlockImpl.get(BlockKey.LIGHT_BLUE_CANDLE);
 
-    Block YELLOW_CANDLE = BlockImpl.get(BlockKeys.YELLOW_CANDLE);
+    Block YELLOW_CANDLE = BlockImpl.get(BlockKey.YELLOW_CANDLE);
 
-    Block LIME_CANDLE = BlockImpl.get(BlockKeys.LIME_CANDLE);
+    Block LIME_CANDLE = BlockImpl.get(BlockKey.LIME_CANDLE);
 
-    Block PINK_CANDLE = BlockImpl.get(BlockKeys.PINK_CANDLE);
+    Block PINK_CANDLE = BlockImpl.get(BlockKey.PINK_CANDLE);
 
-    Block GRAY_CANDLE = BlockImpl.get(BlockKeys.GRAY_CANDLE);
+    Block GRAY_CANDLE = BlockImpl.get(BlockKey.GRAY_CANDLE);
 
-    Block LIGHT_GRAY_CANDLE = BlockImpl.get(BlockKeys.LIGHT_GRAY_CANDLE);
+    Block LIGHT_GRAY_CANDLE = BlockImpl.get(BlockKey.LIGHT_GRAY_CANDLE);
 
-    Block CYAN_CANDLE = BlockImpl.get(BlockKeys.CYAN_CANDLE);
+    Block CYAN_CANDLE = BlockImpl.get(BlockKey.CYAN_CANDLE);
 
-    Block PURPLE_CANDLE = BlockImpl.get(BlockKeys.PURPLE_CANDLE);
+    Block PURPLE_CANDLE = BlockImpl.get(BlockKey.PURPLE_CANDLE);
 
-    Block BLUE_CANDLE = BlockImpl.get(BlockKeys.BLUE_CANDLE);
+    Block BLUE_CANDLE = BlockImpl.get(BlockKey.BLUE_CANDLE);
 
-    Block BROWN_CANDLE = BlockImpl.get(BlockKeys.BROWN_CANDLE);
+    Block BROWN_CANDLE = BlockImpl.get(BlockKey.BROWN_CANDLE);
 
-    Block GREEN_CANDLE = BlockImpl.get(BlockKeys.GREEN_CANDLE);
+    Block GREEN_CANDLE = BlockImpl.get(BlockKey.GREEN_CANDLE);
 
-    Block RED_CANDLE = BlockImpl.get(BlockKeys.RED_CANDLE);
+    Block RED_CANDLE = BlockImpl.get(BlockKey.RED_CANDLE);
 
-    Block BLACK_CANDLE = BlockImpl.get(BlockKeys.BLACK_CANDLE);
+    Block BLACK_CANDLE = BlockImpl.get(BlockKey.BLACK_CANDLE);
 
-    Block CANDLE_CAKE = BlockImpl.get(BlockKeys.CANDLE_CAKE);
+    Block CANDLE_CAKE = BlockImpl.get(BlockKey.CANDLE_CAKE);
 
-    Block WHITE_CANDLE_CAKE = BlockImpl.get(BlockKeys.WHITE_CANDLE_CAKE);
+    Block WHITE_CANDLE_CAKE = BlockImpl.get(BlockKey.WHITE_CANDLE_CAKE);
 
-    Block ORANGE_CANDLE_CAKE = BlockImpl.get(BlockKeys.ORANGE_CANDLE_CAKE);
+    Block ORANGE_CANDLE_CAKE = BlockImpl.get(BlockKey.ORANGE_CANDLE_CAKE);
 
-    Block MAGENTA_CANDLE_CAKE = BlockImpl.get(BlockKeys.MAGENTA_CANDLE_CAKE);
+    Block MAGENTA_CANDLE_CAKE = BlockImpl.get(BlockKey.MAGENTA_CANDLE_CAKE);
 
-    Block LIGHT_BLUE_CANDLE_CAKE = BlockImpl.get(BlockKeys.LIGHT_BLUE_CANDLE_CAKE);
+    Block LIGHT_BLUE_CANDLE_CAKE = BlockImpl.get(BlockKey.LIGHT_BLUE_CANDLE_CAKE);
 
-    Block YELLOW_CANDLE_CAKE = BlockImpl.get(BlockKeys.YELLOW_CANDLE_CAKE);
+    Block YELLOW_CANDLE_CAKE = BlockImpl.get(BlockKey.YELLOW_CANDLE_CAKE);
 
-    Block LIME_CANDLE_CAKE = BlockImpl.get(BlockKeys.LIME_CANDLE_CAKE);
+    Block LIME_CANDLE_CAKE = BlockImpl.get(BlockKey.LIME_CANDLE_CAKE);
 
-    Block PINK_CANDLE_CAKE = BlockImpl.get(BlockKeys.PINK_CANDLE_CAKE);
+    Block PINK_CANDLE_CAKE = BlockImpl.get(BlockKey.PINK_CANDLE_CAKE);
 
-    Block GRAY_CANDLE_CAKE = BlockImpl.get(BlockKeys.GRAY_CANDLE_CAKE);
+    Block GRAY_CANDLE_CAKE = BlockImpl.get(BlockKey.GRAY_CANDLE_CAKE);
 
-    Block LIGHT_GRAY_CANDLE_CAKE = BlockImpl.get(BlockKeys.LIGHT_GRAY_CANDLE_CAKE);
+    Block LIGHT_GRAY_CANDLE_CAKE = BlockImpl.get(BlockKey.LIGHT_GRAY_CANDLE_CAKE);
 
-    Block CYAN_CANDLE_CAKE = BlockImpl.get(BlockKeys.CYAN_CANDLE_CAKE);
+    Block CYAN_CANDLE_CAKE = BlockImpl.get(BlockKey.CYAN_CANDLE_CAKE);
 
-    Block PURPLE_CANDLE_CAKE = BlockImpl.get(BlockKeys.PURPLE_CANDLE_CAKE);
+    Block PURPLE_CANDLE_CAKE = BlockImpl.get(BlockKey.PURPLE_CANDLE_CAKE);
 
-    Block BLUE_CANDLE_CAKE = BlockImpl.get(BlockKeys.BLUE_CANDLE_CAKE);
+    Block BLUE_CANDLE_CAKE = BlockImpl.get(BlockKey.BLUE_CANDLE_CAKE);
 
-    Block BROWN_CANDLE_CAKE = BlockImpl.get(BlockKeys.BROWN_CANDLE_CAKE);
+    Block BROWN_CANDLE_CAKE = BlockImpl.get(BlockKey.BROWN_CANDLE_CAKE);
 
-    Block GREEN_CANDLE_CAKE = BlockImpl.get(BlockKeys.GREEN_CANDLE_CAKE);
+    Block GREEN_CANDLE_CAKE = BlockImpl.get(BlockKey.GREEN_CANDLE_CAKE);
 
-    Block RED_CANDLE_CAKE = BlockImpl.get(BlockKeys.RED_CANDLE_CAKE);
+    Block RED_CANDLE_CAKE = BlockImpl.get(BlockKey.RED_CANDLE_CAKE);
 
-    Block BLACK_CANDLE_CAKE = BlockImpl.get(BlockKeys.BLACK_CANDLE_CAKE);
+    Block BLACK_CANDLE_CAKE = BlockImpl.get(BlockKey.BLACK_CANDLE_CAKE);
 
-    Block AMETHYST_BLOCK = BlockImpl.get(BlockKeys.AMETHYST_BLOCK);
+    Block AMETHYST_BLOCK = BlockImpl.get(BlockKey.AMETHYST_BLOCK);
 
-    Block BUDDING_AMETHYST = BlockImpl.get(BlockKeys.BUDDING_AMETHYST);
+    Block BUDDING_AMETHYST = BlockImpl.get(BlockKey.BUDDING_AMETHYST);
 
-    Block AMETHYST_CLUSTER = BlockImpl.get(BlockKeys.AMETHYST_CLUSTER);
+    Block AMETHYST_CLUSTER = BlockImpl.get(BlockKey.AMETHYST_CLUSTER);
 
-    Block LARGE_AMETHYST_BUD = BlockImpl.get(BlockKeys.LARGE_AMETHYST_BUD);
+    Block LARGE_AMETHYST_BUD = BlockImpl.get(BlockKey.LARGE_AMETHYST_BUD);
 
-    Block MEDIUM_AMETHYST_BUD = BlockImpl.get(BlockKeys.MEDIUM_AMETHYST_BUD);
+    Block MEDIUM_AMETHYST_BUD = BlockImpl.get(BlockKey.MEDIUM_AMETHYST_BUD);
 
-    Block SMALL_AMETHYST_BUD = BlockImpl.get(BlockKeys.SMALL_AMETHYST_BUD);
+    Block SMALL_AMETHYST_BUD = BlockImpl.get(BlockKey.SMALL_AMETHYST_BUD);
 
-    Block TUFF = BlockImpl.get(BlockKeys.TUFF);
+    Block TUFF = BlockImpl.get(BlockKey.TUFF);
 
-    Block TUFF_SLAB = BlockImpl.get(BlockKeys.TUFF_SLAB);
+    Block TUFF_SLAB = BlockImpl.get(BlockKey.TUFF_SLAB);
 
-    Block TUFF_STAIRS = BlockImpl.get(BlockKeys.TUFF_STAIRS);
+    Block TUFF_STAIRS = BlockImpl.get(BlockKey.TUFF_STAIRS);
 
-    Block TUFF_WALL = BlockImpl.get(BlockKeys.TUFF_WALL);
+    Block TUFF_WALL = BlockImpl.get(BlockKey.TUFF_WALL);
 
-    Block POLISHED_TUFF = BlockImpl.get(BlockKeys.POLISHED_TUFF);
+    Block POLISHED_TUFF = BlockImpl.get(BlockKey.POLISHED_TUFF);
 
-    Block POLISHED_TUFF_SLAB = BlockImpl.get(BlockKeys.POLISHED_TUFF_SLAB);
+    Block POLISHED_TUFF_SLAB = BlockImpl.get(BlockKey.POLISHED_TUFF_SLAB);
 
-    Block POLISHED_TUFF_STAIRS = BlockImpl.get(BlockKeys.POLISHED_TUFF_STAIRS);
+    Block POLISHED_TUFF_STAIRS = BlockImpl.get(BlockKey.POLISHED_TUFF_STAIRS);
 
-    Block POLISHED_TUFF_WALL = BlockImpl.get(BlockKeys.POLISHED_TUFF_WALL);
+    Block POLISHED_TUFF_WALL = BlockImpl.get(BlockKey.POLISHED_TUFF_WALL);
 
-    Block CHISELED_TUFF = BlockImpl.get(BlockKeys.CHISELED_TUFF);
+    Block CHISELED_TUFF = BlockImpl.get(BlockKey.CHISELED_TUFF);
 
-    Block TUFF_BRICKS = BlockImpl.get(BlockKeys.TUFF_BRICKS);
+    Block TUFF_BRICKS = BlockImpl.get(BlockKey.TUFF_BRICKS);
 
-    Block TUFF_BRICK_SLAB = BlockImpl.get(BlockKeys.TUFF_BRICK_SLAB);
+    Block TUFF_BRICK_SLAB = BlockImpl.get(BlockKey.TUFF_BRICK_SLAB);
 
-    Block TUFF_BRICK_STAIRS = BlockImpl.get(BlockKeys.TUFF_BRICK_STAIRS);
+    Block TUFF_BRICK_STAIRS = BlockImpl.get(BlockKey.TUFF_BRICK_STAIRS);
 
-    Block TUFF_BRICK_WALL = BlockImpl.get(BlockKeys.TUFF_BRICK_WALL);
+    Block TUFF_BRICK_WALL = BlockImpl.get(BlockKey.TUFF_BRICK_WALL);
 
-    Block CHISELED_TUFF_BRICKS = BlockImpl.get(BlockKeys.CHISELED_TUFF_BRICKS);
+    Block CHISELED_TUFF_BRICKS = BlockImpl.get(BlockKey.CHISELED_TUFF_BRICKS);
 
-    Block SULFUR = BlockImpl.get(BlockKeys.SULFUR);
+    Block SULFUR = BlockImpl.get(BlockKey.SULFUR);
 
-    Block POTENT_SULFUR = BlockImpl.get(BlockKeys.POTENT_SULFUR);
+    Block POTENT_SULFUR = BlockImpl.get(BlockKey.POTENT_SULFUR);
 
-    Block SULFUR_SLAB = BlockImpl.get(BlockKeys.SULFUR_SLAB);
+    Block SULFUR_SLAB = BlockImpl.get(BlockKey.SULFUR_SLAB);
 
-    Block SULFUR_STAIRS = BlockImpl.get(BlockKeys.SULFUR_STAIRS);
+    Block SULFUR_STAIRS = BlockImpl.get(BlockKey.SULFUR_STAIRS);
 
-    Block SULFUR_WALL = BlockImpl.get(BlockKeys.SULFUR_WALL);
+    Block SULFUR_WALL = BlockImpl.get(BlockKey.SULFUR_WALL);
 
-    Block POLISHED_SULFUR = BlockImpl.get(BlockKeys.POLISHED_SULFUR);
+    Block POLISHED_SULFUR = BlockImpl.get(BlockKey.POLISHED_SULFUR);
 
-    Block POLISHED_SULFUR_SLAB = BlockImpl.get(BlockKeys.POLISHED_SULFUR_SLAB);
+    Block POLISHED_SULFUR_SLAB = BlockImpl.get(BlockKey.POLISHED_SULFUR_SLAB);
 
-    Block POLISHED_SULFUR_STAIRS = BlockImpl.get(BlockKeys.POLISHED_SULFUR_STAIRS);
+    Block POLISHED_SULFUR_STAIRS = BlockImpl.get(BlockKey.POLISHED_SULFUR_STAIRS);
 
-    Block POLISHED_SULFUR_WALL = BlockImpl.get(BlockKeys.POLISHED_SULFUR_WALL);
+    Block POLISHED_SULFUR_WALL = BlockImpl.get(BlockKey.POLISHED_SULFUR_WALL);
 
-    Block SULFUR_BRICKS = BlockImpl.get(BlockKeys.SULFUR_BRICKS);
+    Block SULFUR_BRICKS = BlockImpl.get(BlockKey.SULFUR_BRICKS);
 
-    Block SULFUR_BRICK_SLAB = BlockImpl.get(BlockKeys.SULFUR_BRICK_SLAB);
+    Block SULFUR_BRICK_SLAB = BlockImpl.get(BlockKey.SULFUR_BRICK_SLAB);
 
-    Block SULFUR_BRICK_STAIRS = BlockImpl.get(BlockKeys.SULFUR_BRICK_STAIRS);
+    Block SULFUR_BRICK_STAIRS = BlockImpl.get(BlockKey.SULFUR_BRICK_STAIRS);
 
-    Block SULFUR_BRICK_WALL = BlockImpl.get(BlockKeys.SULFUR_BRICK_WALL);
+    Block SULFUR_BRICK_WALL = BlockImpl.get(BlockKey.SULFUR_BRICK_WALL);
 
-    Block CHISELED_SULFUR = BlockImpl.get(BlockKeys.CHISELED_SULFUR);
+    Block CHISELED_SULFUR = BlockImpl.get(BlockKey.CHISELED_SULFUR);
 
-    Block CINNABAR = BlockImpl.get(BlockKeys.CINNABAR);
+    Block CINNABAR = BlockImpl.get(BlockKey.CINNABAR);
 
-    Block CINNABAR_SLAB = BlockImpl.get(BlockKeys.CINNABAR_SLAB);
+    Block CINNABAR_SLAB = BlockImpl.get(BlockKey.CINNABAR_SLAB);
 
-    Block CINNABAR_STAIRS = BlockImpl.get(BlockKeys.CINNABAR_STAIRS);
+    Block CINNABAR_STAIRS = BlockImpl.get(BlockKey.CINNABAR_STAIRS);
 
-    Block CINNABAR_WALL = BlockImpl.get(BlockKeys.CINNABAR_WALL);
+    Block CINNABAR_WALL = BlockImpl.get(BlockKey.CINNABAR_WALL);
 
-    Block POLISHED_CINNABAR = BlockImpl.get(BlockKeys.POLISHED_CINNABAR);
+    Block POLISHED_CINNABAR = BlockImpl.get(BlockKey.POLISHED_CINNABAR);
 
-    Block POLISHED_CINNABAR_SLAB = BlockImpl.get(BlockKeys.POLISHED_CINNABAR_SLAB);
+    Block POLISHED_CINNABAR_SLAB = BlockImpl.get(BlockKey.POLISHED_CINNABAR_SLAB);
 
-    Block POLISHED_CINNABAR_STAIRS = BlockImpl.get(BlockKeys.POLISHED_CINNABAR_STAIRS);
+    Block POLISHED_CINNABAR_STAIRS = BlockImpl.get(BlockKey.POLISHED_CINNABAR_STAIRS);
 
-    Block POLISHED_CINNABAR_WALL = BlockImpl.get(BlockKeys.POLISHED_CINNABAR_WALL);
+    Block POLISHED_CINNABAR_WALL = BlockImpl.get(BlockKey.POLISHED_CINNABAR_WALL);
 
-    Block CINNABAR_BRICKS = BlockImpl.get(BlockKeys.CINNABAR_BRICKS);
+    Block CINNABAR_BRICKS = BlockImpl.get(BlockKey.CINNABAR_BRICKS);
 
-    Block CINNABAR_BRICK_SLAB = BlockImpl.get(BlockKeys.CINNABAR_BRICK_SLAB);
+    Block CINNABAR_BRICK_SLAB = BlockImpl.get(BlockKey.CINNABAR_BRICK_SLAB);
 
-    Block CINNABAR_BRICK_STAIRS = BlockImpl.get(BlockKeys.CINNABAR_BRICK_STAIRS);
+    Block CINNABAR_BRICK_STAIRS = BlockImpl.get(BlockKey.CINNABAR_BRICK_STAIRS);
 
-    Block CINNABAR_BRICK_WALL = BlockImpl.get(BlockKeys.CINNABAR_BRICK_WALL);
+    Block CINNABAR_BRICK_WALL = BlockImpl.get(BlockKey.CINNABAR_BRICK_WALL);
 
-    Block CHISELED_CINNABAR = BlockImpl.get(BlockKeys.CHISELED_CINNABAR);
+    Block CHISELED_CINNABAR = BlockImpl.get(BlockKey.CHISELED_CINNABAR);
 
-    Block CALCITE = BlockImpl.get(BlockKeys.CALCITE);
+    Block CALCITE = BlockImpl.get(BlockKey.CALCITE);
 
-    Block TINTED_GLASS = BlockImpl.get(BlockKeys.TINTED_GLASS);
+    Block TINTED_GLASS = BlockImpl.get(BlockKey.TINTED_GLASS);
 
-    Block POWDER_SNOW = BlockImpl.get(BlockKeys.POWDER_SNOW);
+    Block POWDER_SNOW = BlockImpl.get(BlockKey.POWDER_SNOW);
 
-    Block SCULK_SENSOR = BlockImpl.get(BlockKeys.SCULK_SENSOR);
+    Block SCULK_SENSOR = BlockImpl.get(BlockKey.SCULK_SENSOR);
 
-    Block CALIBRATED_SCULK_SENSOR = BlockImpl.get(BlockKeys.CALIBRATED_SCULK_SENSOR);
+    Block CALIBRATED_SCULK_SENSOR = BlockImpl.get(BlockKey.CALIBRATED_SCULK_SENSOR);
 
-    Block SCULK = BlockImpl.get(BlockKeys.SCULK);
+    Block SCULK = BlockImpl.get(BlockKey.SCULK);
 
-    Block SCULK_VEIN = BlockImpl.get(BlockKeys.SCULK_VEIN);
+    Block SCULK_VEIN = BlockImpl.get(BlockKey.SCULK_VEIN);
 
-    Block SCULK_CATALYST = BlockImpl.get(BlockKeys.SCULK_CATALYST);
+    Block SCULK_CATALYST = BlockImpl.get(BlockKey.SCULK_CATALYST);
 
-    Block SCULK_SHRIEKER = BlockImpl.get(BlockKeys.SCULK_SHRIEKER);
+    Block SCULK_SHRIEKER = BlockImpl.get(BlockKey.SCULK_SHRIEKER);
 
-    Block COPPER_BLOCK = BlockImpl.get(BlockKeys.COPPER_BLOCK);
+    Block COPPER_BLOCK = BlockImpl.get(BlockKey.COPPER_BLOCK);
 
-    Block EXPOSED_COPPER = BlockImpl.get(BlockKeys.EXPOSED_COPPER);
+    Block EXPOSED_COPPER = BlockImpl.get(BlockKey.EXPOSED_COPPER);
 
-    Block WEATHERED_COPPER = BlockImpl.get(BlockKeys.WEATHERED_COPPER);
+    Block WEATHERED_COPPER = BlockImpl.get(BlockKey.WEATHERED_COPPER);
 
-    Block OXIDIZED_COPPER = BlockImpl.get(BlockKeys.OXIDIZED_COPPER);
+    Block OXIDIZED_COPPER = BlockImpl.get(BlockKey.OXIDIZED_COPPER);
 
-    Block WAXED_COPPER_BLOCK = BlockImpl.get(BlockKeys.WAXED_COPPER_BLOCK);
+    Block WAXED_COPPER_BLOCK = BlockImpl.get(BlockKey.WAXED_COPPER_BLOCK);
 
-    Block WAXED_EXPOSED_COPPER = BlockImpl.get(BlockKeys.WAXED_EXPOSED_COPPER);
+    Block WAXED_EXPOSED_COPPER = BlockImpl.get(BlockKey.WAXED_EXPOSED_COPPER);
 
-    Block WAXED_WEATHERED_COPPER = BlockImpl.get(BlockKeys.WAXED_WEATHERED_COPPER);
+    Block WAXED_WEATHERED_COPPER = BlockImpl.get(BlockKey.WAXED_WEATHERED_COPPER);
 
-    Block WAXED_OXIDIZED_COPPER = BlockImpl.get(BlockKeys.WAXED_OXIDIZED_COPPER);
+    Block WAXED_OXIDIZED_COPPER = BlockImpl.get(BlockKey.WAXED_OXIDIZED_COPPER);
 
-    Block COPPER_ORE = BlockImpl.get(BlockKeys.COPPER_ORE);
+    Block COPPER_ORE = BlockImpl.get(BlockKey.COPPER_ORE);
 
-    Block DEEPSLATE_COPPER_ORE = BlockImpl.get(BlockKeys.DEEPSLATE_COPPER_ORE);
+    Block DEEPSLATE_COPPER_ORE = BlockImpl.get(BlockKey.DEEPSLATE_COPPER_ORE);
 
-    Block CUT_COPPER = BlockImpl.get(BlockKeys.CUT_COPPER);
+    Block CUT_COPPER = BlockImpl.get(BlockKey.CUT_COPPER);
 
-    Block EXPOSED_CUT_COPPER = BlockImpl.get(BlockKeys.EXPOSED_CUT_COPPER);
+    Block EXPOSED_CUT_COPPER = BlockImpl.get(BlockKey.EXPOSED_CUT_COPPER);
 
-    Block WEATHERED_CUT_COPPER = BlockImpl.get(BlockKeys.WEATHERED_CUT_COPPER);
+    Block WEATHERED_CUT_COPPER = BlockImpl.get(BlockKey.WEATHERED_CUT_COPPER);
 
-    Block OXIDIZED_CUT_COPPER = BlockImpl.get(BlockKeys.OXIDIZED_CUT_COPPER);
+    Block OXIDIZED_CUT_COPPER = BlockImpl.get(BlockKey.OXIDIZED_CUT_COPPER);
 
-    Block WAXED_CUT_COPPER = BlockImpl.get(BlockKeys.WAXED_CUT_COPPER);
+    Block WAXED_CUT_COPPER = BlockImpl.get(BlockKey.WAXED_CUT_COPPER);
 
-    Block WAXED_EXPOSED_CUT_COPPER = BlockImpl.get(BlockKeys.WAXED_EXPOSED_CUT_COPPER);
+    Block WAXED_EXPOSED_CUT_COPPER = BlockImpl.get(BlockKey.WAXED_EXPOSED_CUT_COPPER);
 
-    Block WAXED_WEATHERED_CUT_COPPER = BlockImpl.get(BlockKeys.WAXED_WEATHERED_CUT_COPPER);
+    Block WAXED_WEATHERED_CUT_COPPER = BlockImpl.get(BlockKey.WAXED_WEATHERED_CUT_COPPER);
 
-    Block WAXED_OXIDIZED_CUT_COPPER = BlockImpl.get(BlockKeys.WAXED_OXIDIZED_CUT_COPPER);
+    Block WAXED_OXIDIZED_CUT_COPPER = BlockImpl.get(BlockKey.WAXED_OXIDIZED_CUT_COPPER);
 
-    Block CHISELED_COPPER = BlockImpl.get(BlockKeys.CHISELED_COPPER);
+    Block CHISELED_COPPER = BlockImpl.get(BlockKey.CHISELED_COPPER);
 
-    Block EXPOSED_CHISELED_COPPER = BlockImpl.get(BlockKeys.EXPOSED_CHISELED_COPPER);
+    Block EXPOSED_CHISELED_COPPER = BlockImpl.get(BlockKey.EXPOSED_CHISELED_COPPER);
 
-    Block WEATHERED_CHISELED_COPPER = BlockImpl.get(BlockKeys.WEATHERED_CHISELED_COPPER);
+    Block WEATHERED_CHISELED_COPPER = BlockImpl.get(BlockKey.WEATHERED_CHISELED_COPPER);
 
-    Block OXIDIZED_CHISELED_COPPER = BlockImpl.get(BlockKeys.OXIDIZED_CHISELED_COPPER);
+    Block OXIDIZED_CHISELED_COPPER = BlockImpl.get(BlockKey.OXIDIZED_CHISELED_COPPER);
 
-    Block WAXED_CHISELED_COPPER = BlockImpl.get(BlockKeys.WAXED_CHISELED_COPPER);
+    Block WAXED_CHISELED_COPPER = BlockImpl.get(BlockKey.WAXED_CHISELED_COPPER);
 
-    Block WAXED_EXPOSED_CHISELED_COPPER = BlockImpl.get(BlockKeys.WAXED_EXPOSED_CHISELED_COPPER);
+    Block WAXED_EXPOSED_CHISELED_COPPER = BlockImpl.get(BlockKey.WAXED_EXPOSED_CHISELED_COPPER);
 
-    Block WAXED_WEATHERED_CHISELED_COPPER = BlockImpl.get(BlockKeys.WAXED_WEATHERED_CHISELED_COPPER);
+    Block WAXED_WEATHERED_CHISELED_COPPER = BlockImpl.get(BlockKey.WAXED_WEATHERED_CHISELED_COPPER);
 
-    Block WAXED_OXIDIZED_CHISELED_COPPER = BlockImpl.get(BlockKeys.WAXED_OXIDIZED_CHISELED_COPPER);
+    Block WAXED_OXIDIZED_CHISELED_COPPER = BlockImpl.get(BlockKey.WAXED_OXIDIZED_CHISELED_COPPER);
 
-    Block CUT_COPPER_STAIRS = BlockImpl.get(BlockKeys.CUT_COPPER_STAIRS);
+    Block CUT_COPPER_STAIRS = BlockImpl.get(BlockKey.CUT_COPPER_STAIRS);
 
-    Block EXPOSED_CUT_COPPER_STAIRS = BlockImpl.get(BlockKeys.EXPOSED_CUT_COPPER_STAIRS);
+    Block EXPOSED_CUT_COPPER_STAIRS = BlockImpl.get(BlockKey.EXPOSED_CUT_COPPER_STAIRS);
 
-    Block WEATHERED_CUT_COPPER_STAIRS = BlockImpl.get(BlockKeys.WEATHERED_CUT_COPPER_STAIRS);
+    Block WEATHERED_CUT_COPPER_STAIRS = BlockImpl.get(BlockKey.WEATHERED_CUT_COPPER_STAIRS);
 
-    Block OXIDIZED_CUT_COPPER_STAIRS = BlockImpl.get(BlockKeys.OXIDIZED_CUT_COPPER_STAIRS);
+    Block OXIDIZED_CUT_COPPER_STAIRS = BlockImpl.get(BlockKey.OXIDIZED_CUT_COPPER_STAIRS);
 
-    Block WAXED_CUT_COPPER_STAIRS = BlockImpl.get(BlockKeys.WAXED_CUT_COPPER_STAIRS);
+    Block WAXED_CUT_COPPER_STAIRS = BlockImpl.get(BlockKey.WAXED_CUT_COPPER_STAIRS);
 
-    Block WAXED_EXPOSED_CUT_COPPER_STAIRS = BlockImpl.get(BlockKeys.WAXED_EXPOSED_CUT_COPPER_STAIRS);
+    Block WAXED_EXPOSED_CUT_COPPER_STAIRS = BlockImpl.get(BlockKey.WAXED_EXPOSED_CUT_COPPER_STAIRS);
 
-    Block WAXED_WEATHERED_CUT_COPPER_STAIRS = BlockImpl.get(BlockKeys.WAXED_WEATHERED_CUT_COPPER_STAIRS);
+    Block WAXED_WEATHERED_CUT_COPPER_STAIRS = BlockImpl.get(BlockKey.WAXED_WEATHERED_CUT_COPPER_STAIRS);
 
-    Block WAXED_OXIDIZED_CUT_COPPER_STAIRS = BlockImpl.get(BlockKeys.WAXED_OXIDIZED_CUT_COPPER_STAIRS);
+    Block WAXED_OXIDIZED_CUT_COPPER_STAIRS = BlockImpl.get(BlockKey.WAXED_OXIDIZED_CUT_COPPER_STAIRS);
 
-    Block CUT_COPPER_SLAB = BlockImpl.get(BlockKeys.CUT_COPPER_SLAB);
+    Block CUT_COPPER_SLAB = BlockImpl.get(BlockKey.CUT_COPPER_SLAB);
 
-    Block EXPOSED_CUT_COPPER_SLAB = BlockImpl.get(BlockKeys.EXPOSED_CUT_COPPER_SLAB);
+    Block EXPOSED_CUT_COPPER_SLAB = BlockImpl.get(BlockKey.EXPOSED_CUT_COPPER_SLAB);
 
-    Block WEATHERED_CUT_COPPER_SLAB = BlockImpl.get(BlockKeys.WEATHERED_CUT_COPPER_SLAB);
+    Block WEATHERED_CUT_COPPER_SLAB = BlockImpl.get(BlockKey.WEATHERED_CUT_COPPER_SLAB);
 
-    Block OXIDIZED_CUT_COPPER_SLAB = BlockImpl.get(BlockKeys.OXIDIZED_CUT_COPPER_SLAB);
+    Block OXIDIZED_CUT_COPPER_SLAB = BlockImpl.get(BlockKey.OXIDIZED_CUT_COPPER_SLAB);
 
-    Block WAXED_CUT_COPPER_SLAB = BlockImpl.get(BlockKeys.WAXED_CUT_COPPER_SLAB);
+    Block WAXED_CUT_COPPER_SLAB = BlockImpl.get(BlockKey.WAXED_CUT_COPPER_SLAB);
 
-    Block WAXED_EXPOSED_CUT_COPPER_SLAB = BlockImpl.get(BlockKeys.WAXED_EXPOSED_CUT_COPPER_SLAB);
+    Block WAXED_EXPOSED_CUT_COPPER_SLAB = BlockImpl.get(BlockKey.WAXED_EXPOSED_CUT_COPPER_SLAB);
 
-    Block WAXED_WEATHERED_CUT_COPPER_SLAB = BlockImpl.get(BlockKeys.WAXED_WEATHERED_CUT_COPPER_SLAB);
+    Block WAXED_WEATHERED_CUT_COPPER_SLAB = BlockImpl.get(BlockKey.WAXED_WEATHERED_CUT_COPPER_SLAB);
 
-    Block WAXED_OXIDIZED_CUT_COPPER_SLAB = BlockImpl.get(BlockKeys.WAXED_OXIDIZED_CUT_COPPER_SLAB);
+    Block WAXED_OXIDIZED_CUT_COPPER_SLAB = BlockImpl.get(BlockKey.WAXED_OXIDIZED_CUT_COPPER_SLAB);
 
-    Block COPPER_DOOR = BlockImpl.get(BlockKeys.COPPER_DOOR);
+    Block COPPER_DOOR = BlockImpl.get(BlockKey.COPPER_DOOR);
 
-    Block EXPOSED_COPPER_DOOR = BlockImpl.get(BlockKeys.EXPOSED_COPPER_DOOR);
+    Block EXPOSED_COPPER_DOOR = BlockImpl.get(BlockKey.EXPOSED_COPPER_DOOR);
 
-    Block WEATHERED_COPPER_DOOR = BlockImpl.get(BlockKeys.WEATHERED_COPPER_DOOR);
+    Block WEATHERED_COPPER_DOOR = BlockImpl.get(BlockKey.WEATHERED_COPPER_DOOR);
 
-    Block OXIDIZED_COPPER_DOOR = BlockImpl.get(BlockKeys.OXIDIZED_COPPER_DOOR);
+    Block OXIDIZED_COPPER_DOOR = BlockImpl.get(BlockKey.OXIDIZED_COPPER_DOOR);
 
-    Block WAXED_COPPER_DOOR = BlockImpl.get(BlockKeys.WAXED_COPPER_DOOR);
+    Block WAXED_COPPER_DOOR = BlockImpl.get(BlockKey.WAXED_COPPER_DOOR);
 
-    Block WAXED_EXPOSED_COPPER_DOOR = BlockImpl.get(BlockKeys.WAXED_EXPOSED_COPPER_DOOR);
+    Block WAXED_EXPOSED_COPPER_DOOR = BlockImpl.get(BlockKey.WAXED_EXPOSED_COPPER_DOOR);
 
-    Block WAXED_WEATHERED_COPPER_DOOR = BlockImpl.get(BlockKeys.WAXED_WEATHERED_COPPER_DOOR);
+    Block WAXED_WEATHERED_COPPER_DOOR = BlockImpl.get(BlockKey.WAXED_WEATHERED_COPPER_DOOR);
 
-    Block WAXED_OXIDIZED_COPPER_DOOR = BlockImpl.get(BlockKeys.WAXED_OXIDIZED_COPPER_DOOR);
+    Block WAXED_OXIDIZED_COPPER_DOOR = BlockImpl.get(BlockKey.WAXED_OXIDIZED_COPPER_DOOR);
 
-    Block COPPER_TRAPDOOR = BlockImpl.get(BlockKeys.COPPER_TRAPDOOR);
+    Block COPPER_TRAPDOOR = BlockImpl.get(BlockKey.COPPER_TRAPDOOR);
 
-    Block EXPOSED_COPPER_TRAPDOOR = BlockImpl.get(BlockKeys.EXPOSED_COPPER_TRAPDOOR);
+    Block EXPOSED_COPPER_TRAPDOOR = BlockImpl.get(BlockKey.EXPOSED_COPPER_TRAPDOOR);
 
-    Block WEATHERED_COPPER_TRAPDOOR = BlockImpl.get(BlockKeys.WEATHERED_COPPER_TRAPDOOR);
+    Block WEATHERED_COPPER_TRAPDOOR = BlockImpl.get(BlockKey.WEATHERED_COPPER_TRAPDOOR);
 
-    Block OXIDIZED_COPPER_TRAPDOOR = BlockImpl.get(BlockKeys.OXIDIZED_COPPER_TRAPDOOR);
+    Block OXIDIZED_COPPER_TRAPDOOR = BlockImpl.get(BlockKey.OXIDIZED_COPPER_TRAPDOOR);
 
-    Block WAXED_COPPER_TRAPDOOR = BlockImpl.get(BlockKeys.WAXED_COPPER_TRAPDOOR);
+    Block WAXED_COPPER_TRAPDOOR = BlockImpl.get(BlockKey.WAXED_COPPER_TRAPDOOR);
 
-    Block WAXED_EXPOSED_COPPER_TRAPDOOR = BlockImpl.get(BlockKeys.WAXED_EXPOSED_COPPER_TRAPDOOR);
+    Block WAXED_EXPOSED_COPPER_TRAPDOOR = BlockImpl.get(BlockKey.WAXED_EXPOSED_COPPER_TRAPDOOR);
 
-    Block WAXED_WEATHERED_COPPER_TRAPDOOR = BlockImpl.get(BlockKeys.WAXED_WEATHERED_COPPER_TRAPDOOR);
+    Block WAXED_WEATHERED_COPPER_TRAPDOOR = BlockImpl.get(BlockKey.WAXED_WEATHERED_COPPER_TRAPDOOR);
 
-    Block WAXED_OXIDIZED_COPPER_TRAPDOOR = BlockImpl.get(BlockKeys.WAXED_OXIDIZED_COPPER_TRAPDOOR);
+    Block WAXED_OXIDIZED_COPPER_TRAPDOOR = BlockImpl.get(BlockKey.WAXED_OXIDIZED_COPPER_TRAPDOOR);
 
-    Block COPPER_GRATE = BlockImpl.get(BlockKeys.COPPER_GRATE);
+    Block COPPER_GRATE = BlockImpl.get(BlockKey.COPPER_GRATE);
 
-    Block EXPOSED_COPPER_GRATE = BlockImpl.get(BlockKeys.EXPOSED_COPPER_GRATE);
+    Block EXPOSED_COPPER_GRATE = BlockImpl.get(BlockKey.EXPOSED_COPPER_GRATE);
 
-    Block WEATHERED_COPPER_GRATE = BlockImpl.get(BlockKeys.WEATHERED_COPPER_GRATE);
+    Block WEATHERED_COPPER_GRATE = BlockImpl.get(BlockKey.WEATHERED_COPPER_GRATE);
 
-    Block OXIDIZED_COPPER_GRATE = BlockImpl.get(BlockKeys.OXIDIZED_COPPER_GRATE);
+    Block OXIDIZED_COPPER_GRATE = BlockImpl.get(BlockKey.OXIDIZED_COPPER_GRATE);
 
-    Block WAXED_COPPER_GRATE = BlockImpl.get(BlockKeys.WAXED_COPPER_GRATE);
+    Block WAXED_COPPER_GRATE = BlockImpl.get(BlockKey.WAXED_COPPER_GRATE);
 
-    Block WAXED_EXPOSED_COPPER_GRATE = BlockImpl.get(BlockKeys.WAXED_EXPOSED_COPPER_GRATE);
+    Block WAXED_EXPOSED_COPPER_GRATE = BlockImpl.get(BlockKey.WAXED_EXPOSED_COPPER_GRATE);
 
-    Block WAXED_WEATHERED_COPPER_GRATE = BlockImpl.get(BlockKeys.WAXED_WEATHERED_COPPER_GRATE);
+    Block WAXED_WEATHERED_COPPER_GRATE = BlockImpl.get(BlockKey.WAXED_WEATHERED_COPPER_GRATE);
 
-    Block WAXED_OXIDIZED_COPPER_GRATE = BlockImpl.get(BlockKeys.WAXED_OXIDIZED_COPPER_GRATE);
+    Block WAXED_OXIDIZED_COPPER_GRATE = BlockImpl.get(BlockKey.WAXED_OXIDIZED_COPPER_GRATE);
 
-    Block COPPER_BULB = BlockImpl.get(BlockKeys.COPPER_BULB);
+    Block COPPER_BULB = BlockImpl.get(BlockKey.COPPER_BULB);
 
-    Block EXPOSED_COPPER_BULB = BlockImpl.get(BlockKeys.EXPOSED_COPPER_BULB);
+    Block EXPOSED_COPPER_BULB = BlockImpl.get(BlockKey.EXPOSED_COPPER_BULB);
 
-    Block WEATHERED_COPPER_BULB = BlockImpl.get(BlockKeys.WEATHERED_COPPER_BULB);
+    Block WEATHERED_COPPER_BULB = BlockImpl.get(BlockKey.WEATHERED_COPPER_BULB);
 
-    Block OXIDIZED_COPPER_BULB = BlockImpl.get(BlockKeys.OXIDIZED_COPPER_BULB);
+    Block OXIDIZED_COPPER_BULB = BlockImpl.get(BlockKey.OXIDIZED_COPPER_BULB);
 
-    Block WAXED_COPPER_BULB = BlockImpl.get(BlockKeys.WAXED_COPPER_BULB);
+    Block WAXED_COPPER_BULB = BlockImpl.get(BlockKey.WAXED_COPPER_BULB);
 
-    Block WAXED_EXPOSED_COPPER_BULB = BlockImpl.get(BlockKeys.WAXED_EXPOSED_COPPER_BULB);
+    Block WAXED_EXPOSED_COPPER_BULB = BlockImpl.get(BlockKey.WAXED_EXPOSED_COPPER_BULB);
 
-    Block WAXED_WEATHERED_COPPER_BULB = BlockImpl.get(BlockKeys.WAXED_WEATHERED_COPPER_BULB);
+    Block WAXED_WEATHERED_COPPER_BULB = BlockImpl.get(BlockKey.WAXED_WEATHERED_COPPER_BULB);
 
-    Block WAXED_OXIDIZED_COPPER_BULB = BlockImpl.get(BlockKeys.WAXED_OXIDIZED_COPPER_BULB);
+    Block WAXED_OXIDIZED_COPPER_BULB = BlockImpl.get(BlockKey.WAXED_OXIDIZED_COPPER_BULB);
 
-    Block COPPER_CHEST = BlockImpl.get(BlockKeys.COPPER_CHEST);
+    Block COPPER_CHEST = BlockImpl.get(BlockKey.COPPER_CHEST);
 
-    Block EXPOSED_COPPER_CHEST = BlockImpl.get(BlockKeys.EXPOSED_COPPER_CHEST);
+    Block EXPOSED_COPPER_CHEST = BlockImpl.get(BlockKey.EXPOSED_COPPER_CHEST);
 
-    Block WEATHERED_COPPER_CHEST = BlockImpl.get(BlockKeys.WEATHERED_COPPER_CHEST);
+    Block WEATHERED_COPPER_CHEST = BlockImpl.get(BlockKey.WEATHERED_COPPER_CHEST);
 
-    Block OXIDIZED_COPPER_CHEST = BlockImpl.get(BlockKeys.OXIDIZED_COPPER_CHEST);
+    Block OXIDIZED_COPPER_CHEST = BlockImpl.get(BlockKey.OXIDIZED_COPPER_CHEST);
 
-    Block WAXED_COPPER_CHEST = BlockImpl.get(BlockKeys.WAXED_COPPER_CHEST);
+    Block WAXED_COPPER_CHEST = BlockImpl.get(BlockKey.WAXED_COPPER_CHEST);
 
-    Block WAXED_EXPOSED_COPPER_CHEST = BlockImpl.get(BlockKeys.WAXED_EXPOSED_COPPER_CHEST);
+    Block WAXED_EXPOSED_COPPER_CHEST = BlockImpl.get(BlockKey.WAXED_EXPOSED_COPPER_CHEST);
 
-    Block WAXED_WEATHERED_COPPER_CHEST = BlockImpl.get(BlockKeys.WAXED_WEATHERED_COPPER_CHEST);
+    Block WAXED_WEATHERED_COPPER_CHEST = BlockImpl.get(BlockKey.WAXED_WEATHERED_COPPER_CHEST);
 
-    Block WAXED_OXIDIZED_COPPER_CHEST = BlockImpl.get(BlockKeys.WAXED_OXIDIZED_COPPER_CHEST);
+    Block WAXED_OXIDIZED_COPPER_CHEST = BlockImpl.get(BlockKey.WAXED_OXIDIZED_COPPER_CHEST);
 
-    Block COPPER_GOLEM_STATUE = BlockImpl.get(BlockKeys.COPPER_GOLEM_STATUE);
+    Block COPPER_GOLEM_STATUE = BlockImpl.get(BlockKey.COPPER_GOLEM_STATUE);
 
-    Block EXPOSED_COPPER_GOLEM_STATUE = BlockImpl.get(BlockKeys.EXPOSED_COPPER_GOLEM_STATUE);
+    Block EXPOSED_COPPER_GOLEM_STATUE = BlockImpl.get(BlockKey.EXPOSED_COPPER_GOLEM_STATUE);
 
-    Block WEATHERED_COPPER_GOLEM_STATUE = BlockImpl.get(BlockKeys.WEATHERED_COPPER_GOLEM_STATUE);
+    Block WEATHERED_COPPER_GOLEM_STATUE = BlockImpl.get(BlockKey.WEATHERED_COPPER_GOLEM_STATUE);
 
-    Block OXIDIZED_COPPER_GOLEM_STATUE = BlockImpl.get(BlockKeys.OXIDIZED_COPPER_GOLEM_STATUE);
+    Block OXIDIZED_COPPER_GOLEM_STATUE = BlockImpl.get(BlockKey.OXIDIZED_COPPER_GOLEM_STATUE);
 
-    Block WAXED_COPPER_GOLEM_STATUE = BlockImpl.get(BlockKeys.WAXED_COPPER_GOLEM_STATUE);
+    Block WAXED_COPPER_GOLEM_STATUE = BlockImpl.get(BlockKey.WAXED_COPPER_GOLEM_STATUE);
 
-    Block WAXED_EXPOSED_COPPER_GOLEM_STATUE = BlockImpl.get(BlockKeys.WAXED_EXPOSED_COPPER_GOLEM_STATUE);
+    Block WAXED_EXPOSED_COPPER_GOLEM_STATUE = BlockImpl.get(BlockKey.WAXED_EXPOSED_COPPER_GOLEM_STATUE);
 
-    Block WAXED_WEATHERED_COPPER_GOLEM_STATUE = BlockImpl.get(BlockKeys.WAXED_WEATHERED_COPPER_GOLEM_STATUE);
+    Block WAXED_WEATHERED_COPPER_GOLEM_STATUE = BlockImpl.get(BlockKey.WAXED_WEATHERED_COPPER_GOLEM_STATUE);
 
-    Block WAXED_OXIDIZED_COPPER_GOLEM_STATUE = BlockImpl.get(BlockKeys.WAXED_OXIDIZED_COPPER_GOLEM_STATUE);
+    Block WAXED_OXIDIZED_COPPER_GOLEM_STATUE = BlockImpl.get(BlockKey.WAXED_OXIDIZED_COPPER_GOLEM_STATUE);
 
-    Block LIGHTNING_ROD = BlockImpl.get(BlockKeys.LIGHTNING_ROD);
+    Block LIGHTNING_ROD = BlockImpl.get(BlockKey.LIGHTNING_ROD);
 
-    Block EXPOSED_LIGHTNING_ROD = BlockImpl.get(BlockKeys.EXPOSED_LIGHTNING_ROD);
+    Block EXPOSED_LIGHTNING_ROD = BlockImpl.get(BlockKey.EXPOSED_LIGHTNING_ROD);
 
-    Block WEATHERED_LIGHTNING_ROD = BlockImpl.get(BlockKeys.WEATHERED_LIGHTNING_ROD);
+    Block WEATHERED_LIGHTNING_ROD = BlockImpl.get(BlockKey.WEATHERED_LIGHTNING_ROD);
 
-    Block OXIDIZED_LIGHTNING_ROD = BlockImpl.get(BlockKeys.OXIDIZED_LIGHTNING_ROD);
+    Block OXIDIZED_LIGHTNING_ROD = BlockImpl.get(BlockKey.OXIDIZED_LIGHTNING_ROD);
 
-    Block WAXED_LIGHTNING_ROD = BlockImpl.get(BlockKeys.WAXED_LIGHTNING_ROD);
+    Block WAXED_LIGHTNING_ROD = BlockImpl.get(BlockKey.WAXED_LIGHTNING_ROD);
 
-    Block WAXED_EXPOSED_LIGHTNING_ROD = BlockImpl.get(BlockKeys.WAXED_EXPOSED_LIGHTNING_ROD);
+    Block WAXED_EXPOSED_LIGHTNING_ROD = BlockImpl.get(BlockKey.WAXED_EXPOSED_LIGHTNING_ROD);
 
-    Block WAXED_WEATHERED_LIGHTNING_ROD = BlockImpl.get(BlockKeys.WAXED_WEATHERED_LIGHTNING_ROD);
+    Block WAXED_WEATHERED_LIGHTNING_ROD = BlockImpl.get(BlockKey.WAXED_WEATHERED_LIGHTNING_ROD);
 
-    Block WAXED_OXIDIZED_LIGHTNING_ROD = BlockImpl.get(BlockKeys.WAXED_OXIDIZED_LIGHTNING_ROD);
+    Block WAXED_OXIDIZED_LIGHTNING_ROD = BlockImpl.get(BlockKey.WAXED_OXIDIZED_LIGHTNING_ROD);
 
-    Block DRIPSTONE_BLOCK = BlockImpl.get(BlockKeys.DRIPSTONE_BLOCK);
+    Block DRIPSTONE_BLOCK = BlockImpl.get(BlockKey.DRIPSTONE_BLOCK);
 
-    Block POINTED_DRIPSTONE = BlockImpl.get(BlockKeys.POINTED_DRIPSTONE);
+    Block POINTED_DRIPSTONE = BlockImpl.get(BlockKey.POINTED_DRIPSTONE);
 
-    Block SULFUR_SPIKE = BlockImpl.get(BlockKeys.SULFUR_SPIKE);
+    Block SULFUR_SPIKE = BlockImpl.get(BlockKey.SULFUR_SPIKE);
 
-    Block CAVE_VINES = BlockImpl.get(BlockKeys.CAVE_VINES);
+    Block CAVE_VINES = BlockImpl.get(BlockKey.CAVE_VINES);
 
-    Block CAVE_VINES_PLANT = BlockImpl.get(BlockKeys.CAVE_VINES_PLANT);
+    Block CAVE_VINES_PLANT = BlockImpl.get(BlockKey.CAVE_VINES_PLANT);
 
-    Block SPORE_BLOSSOM = BlockImpl.get(BlockKeys.SPORE_BLOSSOM);
+    Block SPORE_BLOSSOM = BlockImpl.get(BlockKey.SPORE_BLOSSOM);
 
-    Block AZALEA = BlockImpl.get(BlockKeys.AZALEA);
+    Block AZALEA = BlockImpl.get(BlockKey.AZALEA);
 
-    Block FLOWERING_AZALEA = BlockImpl.get(BlockKeys.FLOWERING_AZALEA);
+    Block FLOWERING_AZALEA = BlockImpl.get(BlockKey.FLOWERING_AZALEA);
 
-    Block MOSS_CARPET = BlockImpl.get(BlockKeys.MOSS_CARPET);
+    Block MOSS_CARPET = BlockImpl.get(BlockKey.MOSS_CARPET);
 
-    Block PINK_PETALS = BlockImpl.get(BlockKeys.PINK_PETALS);
+    Block PINK_PETALS = BlockImpl.get(BlockKey.PINK_PETALS);
 
-    Block WILDFLOWERS = BlockImpl.get(BlockKeys.WILDFLOWERS);
+    Block WILDFLOWERS = BlockImpl.get(BlockKey.WILDFLOWERS);
 
-    Block LEAF_LITTER = BlockImpl.get(BlockKeys.LEAF_LITTER);
+    Block LEAF_LITTER = BlockImpl.get(BlockKey.LEAF_LITTER);
 
-    Block MOSS_BLOCK = BlockImpl.get(BlockKeys.MOSS_BLOCK);
+    Block MOSS_BLOCK = BlockImpl.get(BlockKey.MOSS_BLOCK);
 
-    Block BIG_DRIPLEAF = BlockImpl.get(BlockKeys.BIG_DRIPLEAF);
+    Block BIG_DRIPLEAF = BlockImpl.get(BlockKey.BIG_DRIPLEAF);
 
-    Block BIG_DRIPLEAF_STEM = BlockImpl.get(BlockKeys.BIG_DRIPLEAF_STEM);
+    Block BIG_DRIPLEAF_STEM = BlockImpl.get(BlockKey.BIG_DRIPLEAF_STEM);
 
-    Block SMALL_DRIPLEAF = BlockImpl.get(BlockKeys.SMALL_DRIPLEAF);
+    Block SMALL_DRIPLEAF = BlockImpl.get(BlockKey.SMALL_DRIPLEAF);
 
-    Block HANGING_ROOTS = BlockImpl.get(BlockKeys.HANGING_ROOTS);
+    Block HANGING_ROOTS = BlockImpl.get(BlockKey.HANGING_ROOTS);
 
-    Block ROOTED_DIRT = BlockImpl.get(BlockKeys.ROOTED_DIRT);
+    Block ROOTED_DIRT = BlockImpl.get(BlockKey.ROOTED_DIRT);
 
-    Block MUD = BlockImpl.get(BlockKeys.MUD);
+    Block MUD = BlockImpl.get(BlockKey.MUD);
 
-    Block DEEPSLATE = BlockImpl.get(BlockKeys.DEEPSLATE);
+    Block DEEPSLATE = BlockImpl.get(BlockKey.DEEPSLATE);
 
-    Block COBBLED_DEEPSLATE = BlockImpl.get(BlockKeys.COBBLED_DEEPSLATE);
+    Block COBBLED_DEEPSLATE = BlockImpl.get(BlockKey.COBBLED_DEEPSLATE);
 
-    Block COBBLED_DEEPSLATE_STAIRS = BlockImpl.get(BlockKeys.COBBLED_DEEPSLATE_STAIRS);
+    Block COBBLED_DEEPSLATE_STAIRS = BlockImpl.get(BlockKey.COBBLED_DEEPSLATE_STAIRS);
 
-    Block COBBLED_DEEPSLATE_SLAB = BlockImpl.get(BlockKeys.COBBLED_DEEPSLATE_SLAB);
+    Block COBBLED_DEEPSLATE_SLAB = BlockImpl.get(BlockKey.COBBLED_DEEPSLATE_SLAB);
 
-    Block COBBLED_DEEPSLATE_WALL = BlockImpl.get(BlockKeys.COBBLED_DEEPSLATE_WALL);
+    Block COBBLED_DEEPSLATE_WALL = BlockImpl.get(BlockKey.COBBLED_DEEPSLATE_WALL);
 
-    Block POLISHED_DEEPSLATE = BlockImpl.get(BlockKeys.POLISHED_DEEPSLATE);
+    Block POLISHED_DEEPSLATE = BlockImpl.get(BlockKey.POLISHED_DEEPSLATE);
 
-    Block POLISHED_DEEPSLATE_STAIRS = BlockImpl.get(BlockKeys.POLISHED_DEEPSLATE_STAIRS);
+    Block POLISHED_DEEPSLATE_STAIRS = BlockImpl.get(BlockKey.POLISHED_DEEPSLATE_STAIRS);
 
-    Block POLISHED_DEEPSLATE_SLAB = BlockImpl.get(BlockKeys.POLISHED_DEEPSLATE_SLAB);
+    Block POLISHED_DEEPSLATE_SLAB = BlockImpl.get(BlockKey.POLISHED_DEEPSLATE_SLAB);
 
-    Block POLISHED_DEEPSLATE_WALL = BlockImpl.get(BlockKeys.POLISHED_DEEPSLATE_WALL);
+    Block POLISHED_DEEPSLATE_WALL = BlockImpl.get(BlockKey.POLISHED_DEEPSLATE_WALL);
 
-    Block DEEPSLATE_TILES = BlockImpl.get(BlockKeys.DEEPSLATE_TILES);
+    Block DEEPSLATE_TILES = BlockImpl.get(BlockKey.DEEPSLATE_TILES);
 
-    Block DEEPSLATE_TILE_STAIRS = BlockImpl.get(BlockKeys.DEEPSLATE_TILE_STAIRS);
+    Block DEEPSLATE_TILE_STAIRS = BlockImpl.get(BlockKey.DEEPSLATE_TILE_STAIRS);
 
-    Block DEEPSLATE_TILE_SLAB = BlockImpl.get(BlockKeys.DEEPSLATE_TILE_SLAB);
+    Block DEEPSLATE_TILE_SLAB = BlockImpl.get(BlockKey.DEEPSLATE_TILE_SLAB);
 
-    Block DEEPSLATE_TILE_WALL = BlockImpl.get(BlockKeys.DEEPSLATE_TILE_WALL);
+    Block DEEPSLATE_TILE_WALL = BlockImpl.get(BlockKey.DEEPSLATE_TILE_WALL);
 
-    Block DEEPSLATE_BRICKS = BlockImpl.get(BlockKeys.DEEPSLATE_BRICKS);
+    Block DEEPSLATE_BRICKS = BlockImpl.get(BlockKey.DEEPSLATE_BRICKS);
 
-    Block DEEPSLATE_BRICK_STAIRS = BlockImpl.get(BlockKeys.DEEPSLATE_BRICK_STAIRS);
+    Block DEEPSLATE_BRICK_STAIRS = BlockImpl.get(BlockKey.DEEPSLATE_BRICK_STAIRS);
 
-    Block DEEPSLATE_BRICK_SLAB = BlockImpl.get(BlockKeys.DEEPSLATE_BRICK_SLAB);
+    Block DEEPSLATE_BRICK_SLAB = BlockImpl.get(BlockKey.DEEPSLATE_BRICK_SLAB);
 
-    Block DEEPSLATE_BRICK_WALL = BlockImpl.get(BlockKeys.DEEPSLATE_BRICK_WALL);
+    Block DEEPSLATE_BRICK_WALL = BlockImpl.get(BlockKey.DEEPSLATE_BRICK_WALL);
 
-    Block CHISELED_DEEPSLATE = BlockImpl.get(BlockKeys.CHISELED_DEEPSLATE);
+    Block CHISELED_DEEPSLATE = BlockImpl.get(BlockKey.CHISELED_DEEPSLATE);
 
-    Block CRACKED_DEEPSLATE_BRICKS = BlockImpl.get(BlockKeys.CRACKED_DEEPSLATE_BRICKS);
+    Block CRACKED_DEEPSLATE_BRICKS = BlockImpl.get(BlockKey.CRACKED_DEEPSLATE_BRICKS);
 
-    Block CRACKED_DEEPSLATE_TILES = BlockImpl.get(BlockKeys.CRACKED_DEEPSLATE_TILES);
+    Block CRACKED_DEEPSLATE_TILES = BlockImpl.get(BlockKey.CRACKED_DEEPSLATE_TILES);
 
-    Block INFESTED_DEEPSLATE = BlockImpl.get(BlockKeys.INFESTED_DEEPSLATE);
+    Block INFESTED_DEEPSLATE = BlockImpl.get(BlockKey.INFESTED_DEEPSLATE);
 
-    Block SMOOTH_BASALT = BlockImpl.get(BlockKeys.SMOOTH_BASALT);
+    Block SMOOTH_BASALT = BlockImpl.get(BlockKey.SMOOTH_BASALT);
 
-    Block RAW_IRON_BLOCK = BlockImpl.get(BlockKeys.RAW_IRON_BLOCK);
+    Block RAW_IRON_BLOCK = BlockImpl.get(BlockKey.RAW_IRON_BLOCK);
 
-    Block RAW_COPPER_BLOCK = BlockImpl.get(BlockKeys.RAW_COPPER_BLOCK);
+    Block RAW_COPPER_BLOCK = BlockImpl.get(BlockKey.RAW_COPPER_BLOCK);
 
-    Block RAW_GOLD_BLOCK = BlockImpl.get(BlockKeys.RAW_GOLD_BLOCK);
+    Block RAW_GOLD_BLOCK = BlockImpl.get(BlockKey.RAW_GOLD_BLOCK);
 
-    Block POTTED_AZALEA_BUSH = BlockImpl.get(BlockKeys.POTTED_AZALEA_BUSH);
+    Block POTTED_AZALEA_BUSH = BlockImpl.get(BlockKey.POTTED_AZALEA_BUSH);
 
-    Block POTTED_FLOWERING_AZALEA_BUSH = BlockImpl.get(BlockKeys.POTTED_FLOWERING_AZALEA_BUSH);
+    Block POTTED_FLOWERING_AZALEA_BUSH = BlockImpl.get(BlockKey.POTTED_FLOWERING_AZALEA_BUSH);
 
-    Block OCHRE_FROGLIGHT = BlockImpl.get(BlockKeys.OCHRE_FROGLIGHT);
+    Block OCHRE_FROGLIGHT = BlockImpl.get(BlockKey.OCHRE_FROGLIGHT);
 
-    Block VERDANT_FROGLIGHT = BlockImpl.get(BlockKeys.VERDANT_FROGLIGHT);
+    Block VERDANT_FROGLIGHT = BlockImpl.get(BlockKey.VERDANT_FROGLIGHT);
 
-    Block PEARLESCENT_FROGLIGHT = BlockImpl.get(BlockKeys.PEARLESCENT_FROGLIGHT);
+    Block PEARLESCENT_FROGLIGHT = BlockImpl.get(BlockKey.PEARLESCENT_FROGLIGHT);
 
-    Block FROGSPAWN = BlockImpl.get(BlockKeys.FROGSPAWN);
+    Block FROGSPAWN = BlockImpl.get(BlockKey.FROGSPAWN);
 
-    Block REINFORCED_DEEPSLATE = BlockImpl.get(BlockKeys.REINFORCED_DEEPSLATE);
+    Block REINFORCED_DEEPSLATE = BlockImpl.get(BlockKey.REINFORCED_DEEPSLATE);
 
-    Block DECORATED_POT = BlockImpl.get(BlockKeys.DECORATED_POT);
+    Block DECORATED_POT = BlockImpl.get(BlockKey.DECORATED_POT);
 
-    Block CRAFTER = BlockImpl.get(BlockKeys.CRAFTER);
+    Block CRAFTER = BlockImpl.get(BlockKey.CRAFTER);
 
-    Block TRIAL_SPAWNER = BlockImpl.get(BlockKeys.TRIAL_SPAWNER);
+    Block TRIAL_SPAWNER = BlockImpl.get(BlockKey.TRIAL_SPAWNER);
 
-    Block VAULT = BlockImpl.get(BlockKeys.VAULT);
+    Block VAULT = BlockImpl.get(BlockKey.VAULT);
 
-    Block HEAVY_CORE = BlockImpl.get(BlockKeys.HEAVY_CORE);
+    Block HEAVY_CORE = BlockImpl.get(BlockKey.HEAVY_CORE);
 
-    Block PALE_MOSS_BLOCK = BlockImpl.get(BlockKeys.PALE_MOSS_BLOCK);
+    Block PALE_MOSS_BLOCK = BlockImpl.get(BlockKey.PALE_MOSS_BLOCK);
 
-    Block PALE_MOSS_CARPET = BlockImpl.get(BlockKeys.PALE_MOSS_CARPET);
+    Block PALE_MOSS_CARPET = BlockImpl.get(BlockKey.PALE_MOSS_CARPET);
 
-    Block PALE_HANGING_MOSS = BlockImpl.get(BlockKeys.PALE_HANGING_MOSS);
+    Block PALE_HANGING_MOSS = BlockImpl.get(BlockKey.PALE_HANGING_MOSS);
 
-    Block OPEN_EYEBLOSSOM = BlockImpl.get(BlockKeys.OPEN_EYEBLOSSOM);
+    Block OPEN_EYEBLOSSOM = BlockImpl.get(BlockKey.OPEN_EYEBLOSSOM);
 
-    Block CLOSED_EYEBLOSSOM = BlockImpl.get(BlockKeys.CLOSED_EYEBLOSSOM);
+    Block CLOSED_EYEBLOSSOM = BlockImpl.get(BlockKey.CLOSED_EYEBLOSSOM);
 
-    Block POTTED_OPEN_EYEBLOSSOM = BlockImpl.get(BlockKeys.POTTED_OPEN_EYEBLOSSOM);
+    Block POTTED_OPEN_EYEBLOSSOM = BlockImpl.get(BlockKey.POTTED_OPEN_EYEBLOSSOM);
 
-    Block POTTED_CLOSED_EYEBLOSSOM = BlockImpl.get(BlockKeys.POTTED_CLOSED_EYEBLOSSOM);
+    Block POTTED_CLOSED_EYEBLOSSOM = BlockImpl.get(BlockKey.POTTED_CLOSED_EYEBLOSSOM);
 
-    Block FIREFLY_BUSH = BlockImpl.get(BlockKeys.FIREFLY_BUSH);
+    Block FIREFLY_BUSH = BlockImpl.get(BlockKey.FIREFLY_BUSH);
 }

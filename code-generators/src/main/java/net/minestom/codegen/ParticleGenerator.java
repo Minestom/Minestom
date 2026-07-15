@@ -19,6 +19,7 @@ record ParticleGenerator(Codegen codegen) {
         ClassName particleCN = ClassName.get("net.minestom.server.particle", "Particle");
         ClassName particleImplCN = ClassName.get("net.minestom.server.particle", "ParticleImpl");
         ClassName particlesCN = ClassName.get("net.minestom.server.particle", "Particles");
+        ClassName particleKeyCN = ClassName.get("net.minestom.server.particle", "ParticleKey");
         ClassName particleKeysCN = ClassName.get("net.minestom.server.particle", "ParticleKeys");
         ClassName registryKeyCN = ClassName.get("net.minestom.server.registry", "RegistryKey");
 
@@ -26,7 +27,7 @@ record ParticleGenerator(Codegen codegen) {
                 .addModifiers(Modifier.SEALED)
                 .addPermittedSubclass(particleCN)
                 .addJavadoc(codegen.constantsJavadoc(particleCN));
-        TypeSpec.Builder particleKeysInterface = TypeSpec.interfaceBuilder(particleKeysCN)
+        TypeSpec.Builder particleKeyInterface = TypeSpec.interfaceBuilder(particleKeyCN)
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(ApiStatus.NonExtendable.class)
                 .addAnnotation(codegen.suppressUnused())
@@ -43,9 +44,9 @@ record ParticleGenerator(Codegen codegen) {
 
             particlesInterface.addField(FieldSpec.builder(fieldCN, codegen.constantName(key))
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                    .initializer("$T.get($T.$L)", particleImplCN, particleKeysCN, codegen.constantName(key))
+                    .initializer("$T.get($T.$L)", particleImplCN, particleKeyCN, codegen.constantName(key))
                     .build());
-            particleKeysInterface.addField(FieldSpec.builder(
+            particleKeyInterface.addField(FieldSpec.builder(
                             ParameterizedTypeName.get(registryKeyCN, fieldCN), codegen.constantName(key))
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                     .initializer("$T.unsafeOf($S)", registryKeyCN, namespacedName)
@@ -53,9 +54,10 @@ record ParticleGenerator(Codegen codegen) {
         }
 
         codegen.write(codegen.javaFile("net.minestom.server.particle", particlesInterface.build()),
-                codegen.javaFile("net.minestom.server.particle", particleKeysInterface.build()));
+                codegen.javaFile("net.minestom.server.particle", particleKeyInterface.build()));
 
         final RegistryGenerator registryGenerator = new RegistryGenerator(codegen);
+        registryGenerator.generateCompatibilityAlias(particleKeyCN, particleKeysCN);
         registryGenerator.generateTags("particle_type", particleCN);
     }
 

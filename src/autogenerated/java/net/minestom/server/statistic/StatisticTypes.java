@@ -7,157 +7,157 @@ package net.minestom.server.statistic;
  */
 @SuppressWarnings("unused")
 sealed interface StatisticTypes permits StatisticType {
-    StatisticType LEAVE_GAME = StatisticTypeImpl.get(StatisticTypeKeys.LEAVE_GAME);
+    StatisticType LEAVE_GAME = StatisticTypeImpl.get(StatisticTypeKey.LEAVE_GAME);
 
-    StatisticType PLAY_TIME = StatisticTypeImpl.get(StatisticTypeKeys.PLAY_TIME);
+    StatisticType PLAY_TIME = StatisticTypeImpl.get(StatisticTypeKey.PLAY_TIME);
 
-    StatisticType TOTAL_WORLD_TIME = StatisticTypeImpl.get(StatisticTypeKeys.TOTAL_WORLD_TIME);
+    StatisticType TOTAL_WORLD_TIME = StatisticTypeImpl.get(StatisticTypeKey.TOTAL_WORLD_TIME);
 
-    StatisticType TIME_SINCE_DEATH = StatisticTypeImpl.get(StatisticTypeKeys.TIME_SINCE_DEATH);
+    StatisticType TIME_SINCE_DEATH = StatisticTypeImpl.get(StatisticTypeKey.TIME_SINCE_DEATH);
 
-    StatisticType TIME_SINCE_REST = StatisticTypeImpl.get(StatisticTypeKeys.TIME_SINCE_REST);
+    StatisticType TIME_SINCE_REST = StatisticTypeImpl.get(StatisticTypeKey.TIME_SINCE_REST);
 
-    StatisticType SNEAK_TIME = StatisticTypeImpl.get(StatisticTypeKeys.SNEAK_TIME);
+    StatisticType SNEAK_TIME = StatisticTypeImpl.get(StatisticTypeKey.SNEAK_TIME);
 
-    StatisticType WALK_ONE_CM = StatisticTypeImpl.get(StatisticTypeKeys.WALK_ONE_CM);
+    StatisticType WALK_ONE_CM = StatisticTypeImpl.get(StatisticTypeKey.WALK_ONE_CM);
 
-    StatisticType CROUCH_ONE_CM = StatisticTypeImpl.get(StatisticTypeKeys.CROUCH_ONE_CM);
+    StatisticType CROUCH_ONE_CM = StatisticTypeImpl.get(StatisticTypeKey.CROUCH_ONE_CM);
 
-    StatisticType SPRINT_ONE_CM = StatisticTypeImpl.get(StatisticTypeKeys.SPRINT_ONE_CM);
+    StatisticType SPRINT_ONE_CM = StatisticTypeImpl.get(StatisticTypeKey.SPRINT_ONE_CM);
 
-    StatisticType WALK_ON_WATER_ONE_CM = StatisticTypeImpl.get(StatisticTypeKeys.WALK_ON_WATER_ONE_CM);
+    StatisticType WALK_ON_WATER_ONE_CM = StatisticTypeImpl.get(StatisticTypeKey.WALK_ON_WATER_ONE_CM);
 
-    StatisticType FALL_ONE_CM = StatisticTypeImpl.get(StatisticTypeKeys.FALL_ONE_CM);
+    StatisticType FALL_ONE_CM = StatisticTypeImpl.get(StatisticTypeKey.FALL_ONE_CM);
 
-    StatisticType CLIMB_ONE_CM = StatisticTypeImpl.get(StatisticTypeKeys.CLIMB_ONE_CM);
+    StatisticType CLIMB_ONE_CM = StatisticTypeImpl.get(StatisticTypeKey.CLIMB_ONE_CM);
 
-    StatisticType FLY_ONE_CM = StatisticTypeImpl.get(StatisticTypeKeys.FLY_ONE_CM);
+    StatisticType FLY_ONE_CM = StatisticTypeImpl.get(StatisticTypeKey.FLY_ONE_CM);
 
-    StatisticType WALK_UNDER_WATER_ONE_CM = StatisticTypeImpl.get(StatisticTypeKeys.WALK_UNDER_WATER_ONE_CM);
+    StatisticType WALK_UNDER_WATER_ONE_CM = StatisticTypeImpl.get(StatisticTypeKey.WALK_UNDER_WATER_ONE_CM);
 
-    StatisticType MINECART_ONE_CM = StatisticTypeImpl.get(StatisticTypeKeys.MINECART_ONE_CM);
+    StatisticType MINECART_ONE_CM = StatisticTypeImpl.get(StatisticTypeKey.MINECART_ONE_CM);
 
-    StatisticType BOAT_ONE_CM = StatisticTypeImpl.get(StatisticTypeKeys.BOAT_ONE_CM);
+    StatisticType BOAT_ONE_CM = StatisticTypeImpl.get(StatisticTypeKey.BOAT_ONE_CM);
 
-    StatisticType PIG_ONE_CM = StatisticTypeImpl.get(StatisticTypeKeys.PIG_ONE_CM);
+    StatisticType PIG_ONE_CM = StatisticTypeImpl.get(StatisticTypeKey.PIG_ONE_CM);
 
-    StatisticType HAPPY_GHAST_ONE_CM = StatisticTypeImpl.get(StatisticTypeKeys.HAPPY_GHAST_ONE_CM);
+    StatisticType HAPPY_GHAST_ONE_CM = StatisticTypeImpl.get(StatisticTypeKey.HAPPY_GHAST_ONE_CM);
 
-    StatisticType HORSE_ONE_CM = StatisticTypeImpl.get(StatisticTypeKeys.HORSE_ONE_CM);
+    StatisticType HORSE_ONE_CM = StatisticTypeImpl.get(StatisticTypeKey.HORSE_ONE_CM);
 
-    StatisticType AVIATE_ONE_CM = StatisticTypeImpl.get(StatisticTypeKeys.AVIATE_ONE_CM);
+    StatisticType AVIATE_ONE_CM = StatisticTypeImpl.get(StatisticTypeKey.AVIATE_ONE_CM);
 
-    StatisticType SWIM_ONE_CM = StatisticTypeImpl.get(StatisticTypeKeys.SWIM_ONE_CM);
+    StatisticType SWIM_ONE_CM = StatisticTypeImpl.get(StatisticTypeKey.SWIM_ONE_CM);
 
-    StatisticType STRIDER_ONE_CM = StatisticTypeImpl.get(StatisticTypeKeys.STRIDER_ONE_CM);
+    StatisticType STRIDER_ONE_CM = StatisticTypeImpl.get(StatisticTypeKey.STRIDER_ONE_CM);
 
-    StatisticType NAUTILUS_ONE_CM = StatisticTypeImpl.get(StatisticTypeKeys.NAUTILUS_ONE_CM);
+    StatisticType NAUTILUS_ONE_CM = StatisticTypeImpl.get(StatisticTypeKey.NAUTILUS_ONE_CM);
 
-    StatisticType JUMP = StatisticTypeImpl.get(StatisticTypeKeys.JUMP);
+    StatisticType JUMP = StatisticTypeImpl.get(StatisticTypeKey.JUMP);
 
-    StatisticType DROP = StatisticTypeImpl.get(StatisticTypeKeys.DROP);
+    StatisticType DROP = StatisticTypeImpl.get(StatisticTypeKey.DROP);
 
-    StatisticType DAMAGE_DEALT = StatisticTypeImpl.get(StatisticTypeKeys.DAMAGE_DEALT);
+    StatisticType DAMAGE_DEALT = StatisticTypeImpl.get(StatisticTypeKey.DAMAGE_DEALT);
 
-    StatisticType DAMAGE_DEALT_ABSORBED = StatisticTypeImpl.get(StatisticTypeKeys.DAMAGE_DEALT_ABSORBED);
+    StatisticType DAMAGE_DEALT_ABSORBED = StatisticTypeImpl.get(StatisticTypeKey.DAMAGE_DEALT_ABSORBED);
 
-    StatisticType DAMAGE_DEALT_RESISTED = StatisticTypeImpl.get(StatisticTypeKeys.DAMAGE_DEALT_RESISTED);
+    StatisticType DAMAGE_DEALT_RESISTED = StatisticTypeImpl.get(StatisticTypeKey.DAMAGE_DEALT_RESISTED);
 
-    StatisticType DAMAGE_TAKEN = StatisticTypeImpl.get(StatisticTypeKeys.DAMAGE_TAKEN);
+    StatisticType DAMAGE_TAKEN = StatisticTypeImpl.get(StatisticTypeKey.DAMAGE_TAKEN);
 
-    StatisticType DAMAGE_BLOCKED_BY_SHIELD = StatisticTypeImpl.get(StatisticTypeKeys.DAMAGE_BLOCKED_BY_SHIELD);
+    StatisticType DAMAGE_BLOCKED_BY_SHIELD = StatisticTypeImpl.get(StatisticTypeKey.DAMAGE_BLOCKED_BY_SHIELD);
 
-    StatisticType DAMAGE_ABSORBED = StatisticTypeImpl.get(StatisticTypeKeys.DAMAGE_ABSORBED);
+    StatisticType DAMAGE_ABSORBED = StatisticTypeImpl.get(StatisticTypeKey.DAMAGE_ABSORBED);
 
-    StatisticType DAMAGE_RESISTED = StatisticTypeImpl.get(StatisticTypeKeys.DAMAGE_RESISTED);
+    StatisticType DAMAGE_RESISTED = StatisticTypeImpl.get(StatisticTypeKey.DAMAGE_RESISTED);
 
-    StatisticType DEATHS = StatisticTypeImpl.get(StatisticTypeKeys.DEATHS);
+    StatisticType DEATHS = StatisticTypeImpl.get(StatisticTypeKey.DEATHS);
 
-    StatisticType MOB_KILLS = StatisticTypeImpl.get(StatisticTypeKeys.MOB_KILLS);
+    StatisticType MOB_KILLS = StatisticTypeImpl.get(StatisticTypeKey.MOB_KILLS);
 
-    StatisticType ANIMALS_BRED = StatisticTypeImpl.get(StatisticTypeKeys.ANIMALS_BRED);
+    StatisticType ANIMALS_BRED = StatisticTypeImpl.get(StatisticTypeKey.ANIMALS_BRED);
 
-    StatisticType PLAYER_KILLS = StatisticTypeImpl.get(StatisticTypeKeys.PLAYER_KILLS);
+    StatisticType PLAYER_KILLS = StatisticTypeImpl.get(StatisticTypeKey.PLAYER_KILLS);
 
-    StatisticType FISH_CAUGHT = StatisticTypeImpl.get(StatisticTypeKeys.FISH_CAUGHT);
+    StatisticType FISH_CAUGHT = StatisticTypeImpl.get(StatisticTypeKey.FISH_CAUGHT);
 
-    StatisticType TALKED_TO_VILLAGER = StatisticTypeImpl.get(StatisticTypeKeys.TALKED_TO_VILLAGER);
+    StatisticType TALKED_TO_VILLAGER = StatisticTypeImpl.get(StatisticTypeKey.TALKED_TO_VILLAGER);
 
-    StatisticType TRADED_WITH_VILLAGER = StatisticTypeImpl.get(StatisticTypeKeys.TRADED_WITH_VILLAGER);
+    StatisticType TRADED_WITH_VILLAGER = StatisticTypeImpl.get(StatisticTypeKey.TRADED_WITH_VILLAGER);
 
-    StatisticType EAT_CAKE_SLICE = StatisticTypeImpl.get(StatisticTypeKeys.EAT_CAKE_SLICE);
+    StatisticType EAT_CAKE_SLICE = StatisticTypeImpl.get(StatisticTypeKey.EAT_CAKE_SLICE);
 
-    StatisticType FILL_CAULDRON = StatisticTypeImpl.get(StatisticTypeKeys.FILL_CAULDRON);
+    StatisticType FILL_CAULDRON = StatisticTypeImpl.get(StatisticTypeKey.FILL_CAULDRON);
 
-    StatisticType USE_CAULDRON = StatisticTypeImpl.get(StatisticTypeKeys.USE_CAULDRON);
+    StatisticType USE_CAULDRON = StatisticTypeImpl.get(StatisticTypeKey.USE_CAULDRON);
 
-    StatisticType CLEAN_ARMOR = StatisticTypeImpl.get(StatisticTypeKeys.CLEAN_ARMOR);
+    StatisticType CLEAN_ARMOR = StatisticTypeImpl.get(StatisticTypeKey.CLEAN_ARMOR);
 
-    StatisticType CLEAN_BANNER = StatisticTypeImpl.get(StatisticTypeKeys.CLEAN_BANNER);
+    StatisticType CLEAN_BANNER = StatisticTypeImpl.get(StatisticTypeKey.CLEAN_BANNER);
 
-    StatisticType CLEAN_SHULKER_BOX = StatisticTypeImpl.get(StatisticTypeKeys.CLEAN_SHULKER_BOX);
+    StatisticType CLEAN_SHULKER_BOX = StatisticTypeImpl.get(StatisticTypeKey.CLEAN_SHULKER_BOX);
 
-    StatisticType INTERACT_WITH_BREWINGSTAND = StatisticTypeImpl.get(StatisticTypeKeys.INTERACT_WITH_BREWINGSTAND);
+    StatisticType INTERACT_WITH_BREWINGSTAND = StatisticTypeImpl.get(StatisticTypeKey.INTERACT_WITH_BREWINGSTAND);
 
-    StatisticType INTERACT_WITH_BEACON = StatisticTypeImpl.get(StatisticTypeKeys.INTERACT_WITH_BEACON);
+    StatisticType INTERACT_WITH_BEACON = StatisticTypeImpl.get(StatisticTypeKey.INTERACT_WITH_BEACON);
 
-    StatisticType INSPECT_DROPPER = StatisticTypeImpl.get(StatisticTypeKeys.INSPECT_DROPPER);
+    StatisticType INSPECT_DROPPER = StatisticTypeImpl.get(StatisticTypeKey.INSPECT_DROPPER);
 
-    StatisticType INSPECT_HOPPER = StatisticTypeImpl.get(StatisticTypeKeys.INSPECT_HOPPER);
+    StatisticType INSPECT_HOPPER = StatisticTypeImpl.get(StatisticTypeKey.INSPECT_HOPPER);
 
-    StatisticType INSPECT_DISPENSER = StatisticTypeImpl.get(StatisticTypeKeys.INSPECT_DISPENSER);
+    StatisticType INSPECT_DISPENSER = StatisticTypeImpl.get(StatisticTypeKey.INSPECT_DISPENSER);
 
-    StatisticType PLAY_NOTEBLOCK = StatisticTypeImpl.get(StatisticTypeKeys.PLAY_NOTEBLOCK);
+    StatisticType PLAY_NOTEBLOCK = StatisticTypeImpl.get(StatisticTypeKey.PLAY_NOTEBLOCK);
 
-    StatisticType TUNE_NOTEBLOCK = StatisticTypeImpl.get(StatisticTypeKeys.TUNE_NOTEBLOCK);
+    StatisticType TUNE_NOTEBLOCK = StatisticTypeImpl.get(StatisticTypeKey.TUNE_NOTEBLOCK);
 
-    StatisticType POT_FLOWER = StatisticTypeImpl.get(StatisticTypeKeys.POT_FLOWER);
+    StatisticType POT_FLOWER = StatisticTypeImpl.get(StatisticTypeKey.POT_FLOWER);
 
-    StatisticType TRIGGER_TRAPPED_CHEST = StatisticTypeImpl.get(StatisticTypeKeys.TRIGGER_TRAPPED_CHEST);
+    StatisticType TRIGGER_TRAPPED_CHEST = StatisticTypeImpl.get(StatisticTypeKey.TRIGGER_TRAPPED_CHEST);
 
-    StatisticType OPEN_ENDERCHEST = StatisticTypeImpl.get(StatisticTypeKeys.OPEN_ENDERCHEST);
+    StatisticType OPEN_ENDERCHEST = StatisticTypeImpl.get(StatisticTypeKey.OPEN_ENDERCHEST);
 
-    StatisticType ENCHANT_ITEM = StatisticTypeImpl.get(StatisticTypeKeys.ENCHANT_ITEM);
+    StatisticType ENCHANT_ITEM = StatisticTypeImpl.get(StatisticTypeKey.ENCHANT_ITEM);
 
-    StatisticType PLAY_RECORD = StatisticTypeImpl.get(StatisticTypeKeys.PLAY_RECORD);
+    StatisticType PLAY_RECORD = StatisticTypeImpl.get(StatisticTypeKey.PLAY_RECORD);
 
-    StatisticType INTERACT_WITH_FURNACE = StatisticTypeImpl.get(StatisticTypeKeys.INTERACT_WITH_FURNACE);
+    StatisticType INTERACT_WITH_FURNACE = StatisticTypeImpl.get(StatisticTypeKey.INTERACT_WITH_FURNACE);
 
-    StatisticType INTERACT_WITH_CRAFTING_TABLE = StatisticTypeImpl.get(StatisticTypeKeys.INTERACT_WITH_CRAFTING_TABLE);
+    StatisticType INTERACT_WITH_CRAFTING_TABLE = StatisticTypeImpl.get(StatisticTypeKey.INTERACT_WITH_CRAFTING_TABLE);
 
-    StatisticType OPEN_CHEST = StatisticTypeImpl.get(StatisticTypeKeys.OPEN_CHEST);
+    StatisticType OPEN_CHEST = StatisticTypeImpl.get(StatisticTypeKey.OPEN_CHEST);
 
-    StatisticType SLEEP_IN_BED = StatisticTypeImpl.get(StatisticTypeKeys.SLEEP_IN_BED);
+    StatisticType SLEEP_IN_BED = StatisticTypeImpl.get(StatisticTypeKey.SLEEP_IN_BED);
 
-    StatisticType OPEN_SHULKER_BOX = StatisticTypeImpl.get(StatisticTypeKeys.OPEN_SHULKER_BOX);
+    StatisticType OPEN_SHULKER_BOX = StatisticTypeImpl.get(StatisticTypeKey.OPEN_SHULKER_BOX);
 
-    StatisticType OPEN_BARREL = StatisticTypeImpl.get(StatisticTypeKeys.OPEN_BARREL);
+    StatisticType OPEN_BARREL = StatisticTypeImpl.get(StatisticTypeKey.OPEN_BARREL);
 
-    StatisticType INTERACT_WITH_BLAST_FURNACE = StatisticTypeImpl.get(StatisticTypeKeys.INTERACT_WITH_BLAST_FURNACE);
+    StatisticType INTERACT_WITH_BLAST_FURNACE = StatisticTypeImpl.get(StatisticTypeKey.INTERACT_WITH_BLAST_FURNACE);
 
-    StatisticType INTERACT_WITH_SMOKER = StatisticTypeImpl.get(StatisticTypeKeys.INTERACT_WITH_SMOKER);
+    StatisticType INTERACT_WITH_SMOKER = StatisticTypeImpl.get(StatisticTypeKey.INTERACT_WITH_SMOKER);
 
-    StatisticType INTERACT_WITH_LECTERN = StatisticTypeImpl.get(StatisticTypeKeys.INTERACT_WITH_LECTERN);
+    StatisticType INTERACT_WITH_LECTERN = StatisticTypeImpl.get(StatisticTypeKey.INTERACT_WITH_LECTERN);
 
-    StatisticType INTERACT_WITH_CAMPFIRE = StatisticTypeImpl.get(StatisticTypeKeys.INTERACT_WITH_CAMPFIRE);
+    StatisticType INTERACT_WITH_CAMPFIRE = StatisticTypeImpl.get(StatisticTypeKey.INTERACT_WITH_CAMPFIRE);
 
-    StatisticType INTERACT_WITH_CARTOGRAPHY_TABLE = StatisticTypeImpl.get(StatisticTypeKeys.INTERACT_WITH_CARTOGRAPHY_TABLE);
+    StatisticType INTERACT_WITH_CARTOGRAPHY_TABLE = StatisticTypeImpl.get(StatisticTypeKey.INTERACT_WITH_CARTOGRAPHY_TABLE);
 
-    StatisticType INTERACT_WITH_LOOM = StatisticTypeImpl.get(StatisticTypeKeys.INTERACT_WITH_LOOM);
+    StatisticType INTERACT_WITH_LOOM = StatisticTypeImpl.get(StatisticTypeKey.INTERACT_WITH_LOOM);
 
-    StatisticType INTERACT_WITH_STONECUTTER = StatisticTypeImpl.get(StatisticTypeKeys.INTERACT_WITH_STONECUTTER);
+    StatisticType INTERACT_WITH_STONECUTTER = StatisticTypeImpl.get(StatisticTypeKey.INTERACT_WITH_STONECUTTER);
 
-    StatisticType BELL_RING = StatisticTypeImpl.get(StatisticTypeKeys.BELL_RING);
+    StatisticType BELL_RING = StatisticTypeImpl.get(StatisticTypeKey.BELL_RING);
 
-    StatisticType RAID_TRIGGER = StatisticTypeImpl.get(StatisticTypeKeys.RAID_TRIGGER);
+    StatisticType RAID_TRIGGER = StatisticTypeImpl.get(StatisticTypeKey.RAID_TRIGGER);
 
-    StatisticType RAID_WIN = StatisticTypeImpl.get(StatisticTypeKeys.RAID_WIN);
+    StatisticType RAID_WIN = StatisticTypeImpl.get(StatisticTypeKey.RAID_WIN);
 
-    StatisticType INTERACT_WITH_ANVIL = StatisticTypeImpl.get(StatisticTypeKeys.INTERACT_WITH_ANVIL);
+    StatisticType INTERACT_WITH_ANVIL = StatisticTypeImpl.get(StatisticTypeKey.INTERACT_WITH_ANVIL);
 
-    StatisticType INTERACT_WITH_GRINDSTONE = StatisticTypeImpl.get(StatisticTypeKeys.INTERACT_WITH_GRINDSTONE);
+    StatisticType INTERACT_WITH_GRINDSTONE = StatisticTypeImpl.get(StatisticTypeKey.INTERACT_WITH_GRINDSTONE);
 
-    StatisticType TARGET_HIT = StatisticTypeImpl.get(StatisticTypeKeys.TARGET_HIT);
+    StatisticType TARGET_HIT = StatisticTypeImpl.get(StatisticTypeKey.TARGET_HIT);
 
-    StatisticType INTERACT_WITH_SMITHING_TABLE = StatisticTypeImpl.get(StatisticTypeKeys.INTERACT_WITH_SMITHING_TABLE);
+    StatisticType INTERACT_WITH_SMITHING_TABLE = StatisticTypeImpl.get(StatisticTypeKey.INTERACT_WITH_SMITHING_TABLE);
 }

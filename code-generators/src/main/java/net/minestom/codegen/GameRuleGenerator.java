@@ -17,6 +17,7 @@ record GameRuleGenerator(Codegen codegen) {
     static final ClassName GAME_RULE_CN = ClassName.get(PACKAGE, "GameRule");
     static final ClassName GAME_RULE_IMPL_CN = ClassName.get(PACKAGE, "GameRuleImpl");
     static final ClassName GAME_RULES_CN = ClassName.get(PACKAGE, "GameRules");
+    static final ClassName GAME_RULE_KEY_CN = ClassName.get(PACKAGE, "GameRuleKey");
     static final ClassName GAME_RULE_KEYS_CN = ClassName.get(PACKAGE, "GameRuleKeys");
 
     public GameRuleGenerator {
@@ -31,7 +32,7 @@ record GameRuleGenerator(Codegen codegen) {
                 .addModifiers(Modifier.SEALED)
                 .addPermittedSubclass(GAME_RULE_CN)
                 .addJavadoc(codegen.constantsJavadoc(GAME_RULE_CN));
-        TypeSpec.Builder gameRuleKeysInterface = TypeSpec.interfaceBuilder(GAME_RULE_KEYS_CN)
+        TypeSpec.Builder gameRuleKeyInterface = TypeSpec.interfaceBuilder(GAME_RULE_KEY_CN)
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(ApiStatus.NonExtendable.class)
                 .addAnnotation(codegen.suppressUnused())
@@ -56,14 +57,16 @@ record GameRuleGenerator(Codegen codegen) {
 
             gameRulesInterface.addField(FieldSpec.builder(fieldCN, fieldName)
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                    .initializer("$T.get($T.$L)", GAME_RULE_IMPL_CN, GAME_RULE_KEYS_CN, fieldName).build());
-            gameRuleKeysInterface.addField(FieldSpec.builder(registryKeyType, fieldName)
+                    .initializer("$T.get($T.$L)", GAME_RULE_IMPL_CN, GAME_RULE_KEY_CN, fieldName).build());
+            gameRuleKeyInterface.addField(FieldSpec.builder(registryKeyType, fieldName)
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                     .initializer("$T.unsafeOf($S)", registryKeyClass, namespacedName).build());
         }
 
         codegen.write(codegen.javaFile(PACKAGE, gameRulesInterface.build()),
-                codegen.javaFile(PACKAGE, gameRuleKeysInterface.build()));
-        new RegistryGenerator(codegen).generateTags("game_rule", GAME_RULE_CN);
+                codegen.javaFile(PACKAGE, gameRuleKeyInterface.build()));
+        final RegistryGenerator registryGenerator = new RegistryGenerator(codegen);
+        registryGenerator.generateCompatibilityAlias(GAME_RULE_KEY_CN, GAME_RULE_KEYS_CN);
+        registryGenerator.generateTags("game_rule", GAME_RULE_CN);
     }
 }
