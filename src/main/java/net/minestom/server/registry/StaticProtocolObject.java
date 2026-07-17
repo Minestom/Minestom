@@ -1,6 +1,7 @@
 package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Key;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @param <T> the registry value type
  */
+@ApiStatus.NonExtendable
 public interface StaticProtocolObject<T> extends RegistryKey<T> {
 
     @Contract(pure = true)
