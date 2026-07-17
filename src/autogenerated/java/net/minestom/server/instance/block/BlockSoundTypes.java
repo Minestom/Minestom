@@ -7,257 +7,257 @@ package net.minestom.server.instance.block;
  */
 @SuppressWarnings("unused")
 sealed interface BlockSoundTypes permits BlockSoundType {
-    BlockSoundType AMETHYST = BlockSoundImpl.get(BlockSoundTypeKey.AMETHYST);
+    BlockSoundType AMETHYST = BlockSoundImpl.get(BlockSoundTypeKeys.AMETHYST);
 
-    BlockSoundType AMETHYST_CLUSTER = BlockSoundImpl.get(BlockSoundTypeKey.AMETHYST_CLUSTER);
+    BlockSoundType AMETHYST_CLUSTER = BlockSoundImpl.get(BlockSoundTypeKeys.AMETHYST_CLUSTER);
 
-    BlockSoundType ANCIENT_DEBRIS = BlockSoundImpl.get(BlockSoundTypeKey.ANCIENT_DEBRIS);
+    BlockSoundType ANCIENT_DEBRIS = BlockSoundImpl.get(BlockSoundTypeKeys.ANCIENT_DEBRIS);
 
-    BlockSoundType ANVIL = BlockSoundImpl.get(BlockSoundTypeKey.ANVIL);
+    BlockSoundType ANVIL = BlockSoundImpl.get(BlockSoundTypeKeys.ANVIL);
 
-    BlockSoundType AZALEA = BlockSoundImpl.get(BlockSoundTypeKey.AZALEA);
+    BlockSoundType AZALEA = BlockSoundImpl.get(BlockSoundTypeKeys.AZALEA);
 
-    BlockSoundType AZALEA_LEAVES = BlockSoundImpl.get(BlockSoundTypeKey.AZALEA_LEAVES);
+    BlockSoundType AZALEA_LEAVES = BlockSoundImpl.get(BlockSoundTypeKeys.AZALEA_LEAVES);
 
-    BlockSoundType BAMBOO = BlockSoundImpl.get(BlockSoundTypeKey.BAMBOO);
+    BlockSoundType BAMBOO = BlockSoundImpl.get(BlockSoundTypeKeys.BAMBOO);
 
-    BlockSoundType BAMBOO_SAPLING = BlockSoundImpl.get(BlockSoundTypeKey.BAMBOO_SAPLING);
+    BlockSoundType BAMBOO_SAPLING = BlockSoundImpl.get(BlockSoundTypeKeys.BAMBOO_SAPLING);
 
-    BlockSoundType BAMBOO_WOOD = BlockSoundImpl.get(BlockSoundTypeKey.BAMBOO_WOOD);
+    BlockSoundType BAMBOO_WOOD = BlockSoundImpl.get(BlockSoundTypeKeys.BAMBOO_WOOD);
 
-    BlockSoundType BAMBOO_WOOD_HANGING_SIGN = BlockSoundImpl.get(BlockSoundTypeKey.BAMBOO_WOOD_HANGING_SIGN);
+    BlockSoundType BAMBOO_WOOD_HANGING_SIGN = BlockSoundImpl.get(BlockSoundTypeKeys.BAMBOO_WOOD_HANGING_SIGN);
 
-    BlockSoundType BASALT = BlockSoundImpl.get(BlockSoundTypeKey.BASALT);
+    BlockSoundType BASALT = BlockSoundImpl.get(BlockSoundTypeKeys.BASALT);
 
-    BlockSoundType BIG_DRIPLEAF = BlockSoundImpl.get(BlockSoundTypeKey.BIG_DRIPLEAF);
+    BlockSoundType BIG_DRIPLEAF = BlockSoundImpl.get(BlockSoundTypeKeys.BIG_DRIPLEAF);
 
-    BlockSoundType BONE_BLOCK = BlockSoundImpl.get(BlockSoundTypeKey.BONE_BLOCK);
+    BlockSoundType BONE_BLOCK = BlockSoundImpl.get(BlockSoundTypeKeys.BONE_BLOCK);
 
-    BlockSoundType CACTUS_FLOWER = BlockSoundImpl.get(BlockSoundTypeKey.CACTUS_FLOWER);
+    BlockSoundType CACTUS_FLOWER = BlockSoundImpl.get(BlockSoundTypeKeys.CACTUS_FLOWER);
 
-    BlockSoundType CALCITE = BlockSoundImpl.get(BlockSoundTypeKey.CALCITE);
+    BlockSoundType CALCITE = BlockSoundImpl.get(BlockSoundTypeKeys.CALCITE);
 
-    BlockSoundType CANDLE = BlockSoundImpl.get(BlockSoundTypeKey.CANDLE);
+    BlockSoundType CANDLE = BlockSoundImpl.get(BlockSoundTypeKeys.CANDLE);
 
-    BlockSoundType CAVE_VINES = BlockSoundImpl.get(BlockSoundTypeKey.CAVE_VINES);
+    BlockSoundType CAVE_VINES = BlockSoundImpl.get(BlockSoundTypeKeys.CAVE_VINES);
 
-    BlockSoundType CHAIN = BlockSoundImpl.get(BlockSoundTypeKey.CHAIN);
+    BlockSoundType CHAIN = BlockSoundImpl.get(BlockSoundTypeKeys.CHAIN);
 
-    BlockSoundType CHERRY_LEAVES = BlockSoundImpl.get(BlockSoundTypeKey.CHERRY_LEAVES);
+    BlockSoundType CHERRY_LEAVES = BlockSoundImpl.get(BlockSoundTypeKeys.CHERRY_LEAVES);
 
-    BlockSoundType CHERRY_SAPLING = BlockSoundImpl.get(BlockSoundTypeKey.CHERRY_SAPLING);
+    BlockSoundType CHERRY_SAPLING = BlockSoundImpl.get(BlockSoundTypeKeys.CHERRY_SAPLING);
 
-    BlockSoundType CHERRY_WOOD = BlockSoundImpl.get(BlockSoundTypeKey.CHERRY_WOOD);
+    BlockSoundType CHERRY_WOOD = BlockSoundImpl.get(BlockSoundTypeKeys.CHERRY_WOOD);
 
-    BlockSoundType CHERRY_WOOD_HANGING_SIGN = BlockSoundImpl.get(BlockSoundTypeKey.CHERRY_WOOD_HANGING_SIGN);
+    BlockSoundType CHERRY_WOOD_HANGING_SIGN = BlockSoundImpl.get(BlockSoundTypeKeys.CHERRY_WOOD_HANGING_SIGN);
 
-    BlockSoundType CHISELED_BOOKSHELF = BlockSoundImpl.get(BlockSoundTypeKey.CHISELED_BOOKSHELF);
+    BlockSoundType CHISELED_BOOKSHELF = BlockSoundImpl.get(BlockSoundTypeKeys.CHISELED_BOOKSHELF);
 
-    BlockSoundType CINNABAR = BlockSoundImpl.get(BlockSoundTypeKey.CINNABAR);
+    BlockSoundType CINNABAR = BlockSoundImpl.get(BlockSoundTypeKeys.CINNABAR);
 
-    BlockSoundType COBWEB = BlockSoundImpl.get(BlockSoundTypeKey.COBWEB);
+    BlockSoundType COBWEB = BlockSoundImpl.get(BlockSoundTypeKeys.COBWEB);
 
-    BlockSoundType COPPER = BlockSoundImpl.get(BlockSoundTypeKey.COPPER);
+    BlockSoundType COPPER = BlockSoundImpl.get(BlockSoundTypeKeys.COPPER);
 
-    BlockSoundType COPPER_BULB = BlockSoundImpl.get(BlockSoundTypeKey.COPPER_BULB);
+    BlockSoundType COPPER_BULB = BlockSoundImpl.get(BlockSoundTypeKeys.COPPER_BULB);
 
-    BlockSoundType COPPER_GOLEM_STATUE = BlockSoundImpl.get(BlockSoundTypeKey.COPPER_GOLEM_STATUE);
+    BlockSoundType COPPER_GOLEM_STATUE = BlockSoundImpl.get(BlockSoundTypeKeys.COPPER_GOLEM_STATUE);
 
-    BlockSoundType COPPER_GRATE = BlockSoundImpl.get(BlockSoundTypeKey.COPPER_GRATE);
+    BlockSoundType COPPER_GRATE = BlockSoundImpl.get(BlockSoundTypeKeys.COPPER_GRATE);
 
-    BlockSoundType CORAL_BLOCK = BlockSoundImpl.get(BlockSoundTypeKey.CORAL_BLOCK);
+    BlockSoundType CORAL_BLOCK = BlockSoundImpl.get(BlockSoundTypeKeys.CORAL_BLOCK);
 
-    BlockSoundType CREAKING_HEART = BlockSoundImpl.get(BlockSoundTypeKey.CREAKING_HEART);
+    BlockSoundType CREAKING_HEART = BlockSoundImpl.get(BlockSoundTypeKeys.CREAKING_HEART);
 
-    BlockSoundType CROP = BlockSoundImpl.get(BlockSoundTypeKey.CROP);
+    BlockSoundType CROP = BlockSoundImpl.get(BlockSoundTypeKeys.CROP);
 
-    BlockSoundType DECORATED_POT = BlockSoundImpl.get(BlockSoundTypeKey.DECORATED_POT);
+    BlockSoundType DECORATED_POT = BlockSoundImpl.get(BlockSoundTypeKeys.DECORATED_POT);
 
-    BlockSoundType DECORATED_POT_CRACKED = BlockSoundImpl.get(BlockSoundTypeKey.DECORATED_POT_CRACKED);
+    BlockSoundType DECORATED_POT_CRACKED = BlockSoundImpl.get(BlockSoundTypeKeys.DECORATED_POT_CRACKED);
 
-    BlockSoundType DEEPSLATE = BlockSoundImpl.get(BlockSoundTypeKey.DEEPSLATE);
+    BlockSoundType DEEPSLATE = BlockSoundImpl.get(BlockSoundTypeKeys.DEEPSLATE);
 
-    BlockSoundType DEEPSLATE_BRICKS = BlockSoundImpl.get(BlockSoundTypeKey.DEEPSLATE_BRICKS);
+    BlockSoundType DEEPSLATE_BRICKS = BlockSoundImpl.get(BlockSoundTypeKeys.DEEPSLATE_BRICKS);
 
-    BlockSoundType DEEPSLATE_TILES = BlockSoundImpl.get(BlockSoundTypeKey.DEEPSLATE_TILES);
+    BlockSoundType DEEPSLATE_TILES = BlockSoundImpl.get(BlockSoundTypeKeys.DEEPSLATE_TILES);
 
-    BlockSoundType DRIED_GHAST = BlockSoundImpl.get(BlockSoundTypeKey.DRIED_GHAST);
+    BlockSoundType DRIED_GHAST = BlockSoundImpl.get(BlockSoundTypeKeys.DRIED_GHAST);
 
-    BlockSoundType DRIPSTONE_BLOCK = BlockSoundImpl.get(BlockSoundTypeKey.DRIPSTONE_BLOCK);
+    BlockSoundType DRIPSTONE_BLOCK = BlockSoundImpl.get(BlockSoundTypeKeys.DRIPSTONE_BLOCK);
 
-    BlockSoundType EMPTY = BlockSoundImpl.get(BlockSoundTypeKey.EMPTY);
+    BlockSoundType EMPTY = BlockSoundImpl.get(BlockSoundTypeKeys.EMPTY);
 
-    BlockSoundType FLOWERING_AZALEA = BlockSoundImpl.get(BlockSoundTypeKey.FLOWERING_AZALEA);
+    BlockSoundType FLOWERING_AZALEA = BlockSoundImpl.get(BlockSoundTypeKeys.FLOWERING_AZALEA);
 
-    BlockSoundType FROGLIGHT = BlockSoundImpl.get(BlockSoundTypeKey.FROGLIGHT);
+    BlockSoundType FROGLIGHT = BlockSoundImpl.get(BlockSoundTypeKeys.FROGLIGHT);
 
-    BlockSoundType FROGSPAWN = BlockSoundImpl.get(BlockSoundTypeKey.FROGSPAWN);
+    BlockSoundType FROGSPAWN = BlockSoundImpl.get(BlockSoundTypeKeys.FROGSPAWN);
 
-    BlockSoundType FUNGUS = BlockSoundImpl.get(BlockSoundTypeKey.FUNGUS);
+    BlockSoundType FUNGUS = BlockSoundImpl.get(BlockSoundTypeKeys.FUNGUS);
 
-    BlockSoundType GILDED_BLACKSTONE = BlockSoundImpl.get(BlockSoundTypeKey.GILDED_BLACKSTONE);
+    BlockSoundType GILDED_BLACKSTONE = BlockSoundImpl.get(BlockSoundTypeKeys.GILDED_BLACKSTONE);
 
-    BlockSoundType GLASS = BlockSoundImpl.get(BlockSoundTypeKey.GLASS);
+    BlockSoundType GLASS = BlockSoundImpl.get(BlockSoundTypeKeys.GLASS);
 
-    BlockSoundType GLOW_LICHEN = BlockSoundImpl.get(BlockSoundTypeKey.GLOW_LICHEN);
+    BlockSoundType GLOW_LICHEN = BlockSoundImpl.get(BlockSoundTypeKeys.GLOW_LICHEN);
 
-    BlockSoundType GRASS = BlockSoundImpl.get(BlockSoundTypeKey.GRASS);
+    BlockSoundType GRASS = BlockSoundImpl.get(BlockSoundTypeKeys.GRASS);
 
-    BlockSoundType GRAVEL = BlockSoundImpl.get(BlockSoundTypeKey.GRAVEL);
+    BlockSoundType GRAVEL = BlockSoundImpl.get(BlockSoundTypeKeys.GRAVEL);
 
-    BlockSoundType HANGING_ROOTS = BlockSoundImpl.get(BlockSoundTypeKey.HANGING_ROOTS);
+    BlockSoundType HANGING_ROOTS = BlockSoundImpl.get(BlockSoundTypeKeys.HANGING_ROOTS);
 
-    BlockSoundType HANGING_SIGN = BlockSoundImpl.get(BlockSoundTypeKey.HANGING_SIGN);
+    BlockSoundType HANGING_SIGN = BlockSoundImpl.get(BlockSoundTypeKeys.HANGING_SIGN);
 
-    BlockSoundType HARD_CROP = BlockSoundImpl.get(BlockSoundTypeKey.HARD_CROP);
+    BlockSoundType HARD_CROP = BlockSoundImpl.get(BlockSoundTypeKeys.HARD_CROP);
 
-    BlockSoundType HEAVY_CORE = BlockSoundImpl.get(BlockSoundTypeKey.HEAVY_CORE);
+    BlockSoundType HEAVY_CORE = BlockSoundImpl.get(BlockSoundTypeKeys.HEAVY_CORE);
 
-    BlockSoundType HONEY_BLOCK = BlockSoundImpl.get(BlockSoundTypeKey.HONEY_BLOCK);
+    BlockSoundType HONEY_BLOCK = BlockSoundImpl.get(BlockSoundTypeKeys.HONEY_BLOCK);
 
-    BlockSoundType IRON = BlockSoundImpl.get(BlockSoundTypeKey.IRON);
+    BlockSoundType IRON = BlockSoundImpl.get(BlockSoundTypeKeys.IRON);
 
-    BlockSoundType LADDER = BlockSoundImpl.get(BlockSoundTypeKey.LADDER);
+    BlockSoundType LADDER = BlockSoundImpl.get(BlockSoundTypeKeys.LADDER);
 
-    BlockSoundType LANTERN = BlockSoundImpl.get(BlockSoundTypeKey.LANTERN);
+    BlockSoundType LANTERN = BlockSoundImpl.get(BlockSoundTypeKeys.LANTERN);
 
-    BlockSoundType LARGE_AMETHYST_BUD = BlockSoundImpl.get(BlockSoundTypeKey.LARGE_AMETHYST_BUD);
+    BlockSoundType LARGE_AMETHYST_BUD = BlockSoundImpl.get(BlockSoundTypeKeys.LARGE_AMETHYST_BUD);
 
-    BlockSoundType LEAF_LITTER = BlockSoundImpl.get(BlockSoundTypeKey.LEAF_LITTER);
+    BlockSoundType LEAF_LITTER = BlockSoundImpl.get(BlockSoundTypeKeys.LEAF_LITTER);
 
-    BlockSoundType LILY_PAD = BlockSoundImpl.get(BlockSoundTypeKey.LILY_PAD);
+    BlockSoundType LILY_PAD = BlockSoundImpl.get(BlockSoundTypeKeys.LILY_PAD);
 
-    BlockSoundType LODESTONE = BlockSoundImpl.get(BlockSoundTypeKey.LODESTONE);
+    BlockSoundType LODESTONE = BlockSoundImpl.get(BlockSoundTypeKeys.LODESTONE);
 
-    BlockSoundType MANGROVE_ROOTS = BlockSoundImpl.get(BlockSoundTypeKey.MANGROVE_ROOTS);
+    BlockSoundType MANGROVE_ROOTS = BlockSoundImpl.get(BlockSoundTypeKeys.MANGROVE_ROOTS);
 
-    BlockSoundType MEDIUM_AMETHYST_BUD = BlockSoundImpl.get(BlockSoundTypeKey.MEDIUM_AMETHYST_BUD);
+    BlockSoundType MEDIUM_AMETHYST_BUD = BlockSoundImpl.get(BlockSoundTypeKeys.MEDIUM_AMETHYST_BUD);
 
-    BlockSoundType METAL = BlockSoundImpl.get(BlockSoundTypeKey.METAL);
+    BlockSoundType METAL = BlockSoundImpl.get(BlockSoundTypeKeys.METAL);
 
-    BlockSoundType MOSS = BlockSoundImpl.get(BlockSoundTypeKey.MOSS);
+    BlockSoundType MOSS = BlockSoundImpl.get(BlockSoundTypeKeys.MOSS);
 
-    BlockSoundType MOSS_CARPET = BlockSoundImpl.get(BlockSoundTypeKey.MOSS_CARPET);
+    BlockSoundType MOSS_CARPET = BlockSoundImpl.get(BlockSoundTypeKeys.MOSS_CARPET);
 
-    BlockSoundType MUD = BlockSoundImpl.get(BlockSoundTypeKey.MUD);
+    BlockSoundType MUD = BlockSoundImpl.get(BlockSoundTypeKeys.MUD);
 
-    BlockSoundType MUD_BRICKS = BlockSoundImpl.get(BlockSoundTypeKey.MUD_BRICKS);
+    BlockSoundType MUD_BRICKS = BlockSoundImpl.get(BlockSoundTypeKeys.MUD_BRICKS);
 
-    BlockSoundType MUDDY_MANGROVE_ROOTS = BlockSoundImpl.get(BlockSoundTypeKey.MUDDY_MANGROVE_ROOTS);
+    BlockSoundType MUDDY_MANGROVE_ROOTS = BlockSoundImpl.get(BlockSoundTypeKeys.MUDDY_MANGROVE_ROOTS);
 
-    BlockSoundType NETHER_BRICKS = BlockSoundImpl.get(BlockSoundTypeKey.NETHER_BRICKS);
+    BlockSoundType NETHER_BRICKS = BlockSoundImpl.get(BlockSoundTypeKeys.NETHER_BRICKS);
 
-    BlockSoundType NETHER_GOLD_ORE = BlockSoundImpl.get(BlockSoundTypeKey.NETHER_GOLD_ORE);
+    BlockSoundType NETHER_GOLD_ORE = BlockSoundImpl.get(BlockSoundTypeKeys.NETHER_GOLD_ORE);
 
-    BlockSoundType NETHER_ORE = BlockSoundImpl.get(BlockSoundTypeKey.NETHER_ORE);
+    BlockSoundType NETHER_ORE = BlockSoundImpl.get(BlockSoundTypeKeys.NETHER_ORE);
 
-    BlockSoundType NETHER_SPROUTS = BlockSoundImpl.get(BlockSoundTypeKey.NETHER_SPROUTS);
+    BlockSoundType NETHER_SPROUTS = BlockSoundImpl.get(BlockSoundTypeKeys.NETHER_SPROUTS);
 
-    BlockSoundType NETHER_WART = BlockSoundImpl.get(BlockSoundTypeKey.NETHER_WART);
+    BlockSoundType NETHER_WART = BlockSoundImpl.get(BlockSoundTypeKeys.NETHER_WART);
 
-    BlockSoundType NETHER_WOOD = BlockSoundImpl.get(BlockSoundTypeKey.NETHER_WOOD);
+    BlockSoundType NETHER_WOOD = BlockSoundImpl.get(BlockSoundTypeKeys.NETHER_WOOD);
 
-    BlockSoundType NETHER_WOOD_HANGING_SIGN = BlockSoundImpl.get(BlockSoundTypeKey.NETHER_WOOD_HANGING_SIGN);
+    BlockSoundType NETHER_WOOD_HANGING_SIGN = BlockSoundImpl.get(BlockSoundTypeKeys.NETHER_WOOD_HANGING_SIGN);
 
-    BlockSoundType NETHERITE_BLOCK = BlockSoundImpl.get(BlockSoundTypeKey.NETHERITE_BLOCK);
+    BlockSoundType NETHERITE_BLOCK = BlockSoundImpl.get(BlockSoundTypeKeys.NETHERITE_BLOCK);
 
-    BlockSoundType NETHERRACK = BlockSoundImpl.get(BlockSoundTypeKey.NETHERRACK);
+    BlockSoundType NETHERRACK = BlockSoundImpl.get(BlockSoundTypeKeys.NETHERRACK);
 
-    BlockSoundType NYLIUM = BlockSoundImpl.get(BlockSoundTypeKey.NYLIUM);
+    BlockSoundType NYLIUM = BlockSoundImpl.get(BlockSoundTypeKeys.NYLIUM);
 
-    BlockSoundType PACKED_MUD = BlockSoundImpl.get(BlockSoundTypeKey.PACKED_MUD);
+    BlockSoundType PACKED_MUD = BlockSoundImpl.get(BlockSoundTypeKeys.PACKED_MUD);
 
-    BlockSoundType PINK_PETALS = BlockSoundImpl.get(BlockSoundTypeKey.PINK_PETALS);
+    BlockSoundType PINK_PETALS = BlockSoundImpl.get(BlockSoundTypeKeys.PINK_PETALS);
 
-    BlockSoundType POINTED_DRIPSTONE = BlockSoundImpl.get(BlockSoundTypeKey.POINTED_DRIPSTONE);
+    BlockSoundType POINTED_DRIPSTONE = BlockSoundImpl.get(BlockSoundTypeKeys.POINTED_DRIPSTONE);
 
-    BlockSoundType POLISHED_DEEPSLATE = BlockSoundImpl.get(BlockSoundTypeKey.POLISHED_DEEPSLATE);
+    BlockSoundType POLISHED_DEEPSLATE = BlockSoundImpl.get(BlockSoundTypeKeys.POLISHED_DEEPSLATE);
 
-    BlockSoundType POLISHED_TUFF = BlockSoundImpl.get(BlockSoundTypeKey.POLISHED_TUFF);
+    BlockSoundType POLISHED_TUFF = BlockSoundImpl.get(BlockSoundTypeKeys.POLISHED_TUFF);
 
-    BlockSoundType POTENT_SULFUR = BlockSoundImpl.get(BlockSoundTypeKey.POTENT_SULFUR);
+    BlockSoundType POTENT_SULFUR = BlockSoundImpl.get(BlockSoundTypeKeys.POTENT_SULFUR);
 
-    BlockSoundType POWDER_SNOW = BlockSoundImpl.get(BlockSoundTypeKey.POWDER_SNOW);
+    BlockSoundType POWDER_SNOW = BlockSoundImpl.get(BlockSoundTypeKeys.POWDER_SNOW);
 
-    BlockSoundType RESIN = BlockSoundImpl.get(BlockSoundTypeKey.RESIN);
+    BlockSoundType RESIN = BlockSoundImpl.get(BlockSoundTypeKeys.RESIN);
 
-    BlockSoundType RESIN_BRICKS = BlockSoundImpl.get(BlockSoundTypeKey.RESIN_BRICKS);
+    BlockSoundType RESIN_BRICKS = BlockSoundImpl.get(BlockSoundTypeKeys.RESIN_BRICKS);
 
-    BlockSoundType ROOTED_DIRT = BlockSoundImpl.get(BlockSoundTypeKey.ROOTED_DIRT);
+    BlockSoundType ROOTED_DIRT = BlockSoundImpl.get(BlockSoundTypeKeys.ROOTED_DIRT);
 
-    BlockSoundType ROOTS = BlockSoundImpl.get(BlockSoundTypeKey.ROOTS);
+    BlockSoundType ROOTS = BlockSoundImpl.get(BlockSoundTypeKeys.ROOTS);
 
-    BlockSoundType SAND = BlockSoundImpl.get(BlockSoundTypeKey.SAND);
+    BlockSoundType SAND = BlockSoundImpl.get(BlockSoundTypeKeys.SAND);
 
-    BlockSoundType SCAFFOLDING = BlockSoundImpl.get(BlockSoundTypeKey.SCAFFOLDING);
+    BlockSoundType SCAFFOLDING = BlockSoundImpl.get(BlockSoundTypeKeys.SCAFFOLDING);
 
-    BlockSoundType SCULK = BlockSoundImpl.get(BlockSoundTypeKey.SCULK);
+    BlockSoundType SCULK = BlockSoundImpl.get(BlockSoundTypeKeys.SCULK);
 
-    BlockSoundType SCULK_CATALYST = BlockSoundImpl.get(BlockSoundTypeKey.SCULK_CATALYST);
+    BlockSoundType SCULK_CATALYST = BlockSoundImpl.get(BlockSoundTypeKeys.SCULK_CATALYST);
 
-    BlockSoundType SCULK_SENSOR = BlockSoundImpl.get(BlockSoundTypeKey.SCULK_SENSOR);
+    BlockSoundType SCULK_SENSOR = BlockSoundImpl.get(BlockSoundTypeKeys.SCULK_SENSOR);
 
-    BlockSoundType SCULK_SHRIEKER = BlockSoundImpl.get(BlockSoundTypeKey.SCULK_SHRIEKER);
+    BlockSoundType SCULK_SHRIEKER = BlockSoundImpl.get(BlockSoundTypeKeys.SCULK_SHRIEKER);
 
-    BlockSoundType SCULK_VEIN = BlockSoundImpl.get(BlockSoundTypeKey.SCULK_VEIN);
+    BlockSoundType SCULK_VEIN = BlockSoundImpl.get(BlockSoundTypeKeys.SCULK_VEIN);
 
-    BlockSoundType SHELF = BlockSoundImpl.get(BlockSoundTypeKey.SHELF);
+    BlockSoundType SHELF = BlockSoundImpl.get(BlockSoundTypeKeys.SHELF);
 
-    BlockSoundType SHROOMLIGHT = BlockSoundImpl.get(BlockSoundTypeKey.SHROOMLIGHT);
+    BlockSoundType SHROOMLIGHT = BlockSoundImpl.get(BlockSoundTypeKeys.SHROOMLIGHT);
 
-    BlockSoundType SLIME_BLOCK = BlockSoundImpl.get(BlockSoundTypeKey.SLIME_BLOCK);
+    BlockSoundType SLIME_BLOCK = BlockSoundImpl.get(BlockSoundTypeKeys.SLIME_BLOCK);
 
-    BlockSoundType SMALL_AMETHYST_BUD = BlockSoundImpl.get(BlockSoundTypeKey.SMALL_AMETHYST_BUD);
+    BlockSoundType SMALL_AMETHYST_BUD = BlockSoundImpl.get(BlockSoundTypeKeys.SMALL_AMETHYST_BUD);
 
-    BlockSoundType SMALL_DRIPLEAF = BlockSoundImpl.get(BlockSoundTypeKey.SMALL_DRIPLEAF);
+    BlockSoundType SMALL_DRIPLEAF = BlockSoundImpl.get(BlockSoundTypeKeys.SMALL_DRIPLEAF);
 
-    BlockSoundType SNOW = BlockSoundImpl.get(BlockSoundTypeKey.SNOW);
+    BlockSoundType SNOW = BlockSoundImpl.get(BlockSoundTypeKeys.SNOW);
 
-    BlockSoundType SOUL_SAND = BlockSoundImpl.get(BlockSoundTypeKey.SOUL_SAND);
+    BlockSoundType SOUL_SAND = BlockSoundImpl.get(BlockSoundTypeKeys.SOUL_SAND);
 
-    BlockSoundType SOUL_SOIL = BlockSoundImpl.get(BlockSoundTypeKey.SOUL_SOIL);
+    BlockSoundType SOUL_SOIL = BlockSoundImpl.get(BlockSoundTypeKeys.SOUL_SOIL);
 
-    BlockSoundType SPAWNER = BlockSoundImpl.get(BlockSoundTypeKey.SPAWNER);
+    BlockSoundType SPAWNER = BlockSoundImpl.get(BlockSoundTypeKeys.SPAWNER);
 
-    BlockSoundType SPONGE = BlockSoundImpl.get(BlockSoundTypeKey.SPONGE);
+    BlockSoundType SPONGE = BlockSoundImpl.get(BlockSoundTypeKeys.SPONGE);
 
-    BlockSoundType SPORE_BLOSSOM = BlockSoundImpl.get(BlockSoundTypeKey.SPORE_BLOSSOM);
+    BlockSoundType SPORE_BLOSSOM = BlockSoundImpl.get(BlockSoundTypeKeys.SPORE_BLOSSOM);
 
-    BlockSoundType STEM = BlockSoundImpl.get(BlockSoundTypeKey.STEM);
+    BlockSoundType STEM = BlockSoundImpl.get(BlockSoundTypeKeys.STEM);
 
-    BlockSoundType STONE = BlockSoundImpl.get(BlockSoundTypeKey.STONE);
+    BlockSoundType STONE = BlockSoundImpl.get(BlockSoundTypeKeys.STONE);
 
-    BlockSoundType SULFUR = BlockSoundImpl.get(BlockSoundTypeKey.SULFUR);
+    BlockSoundType SULFUR = BlockSoundImpl.get(BlockSoundTypeKeys.SULFUR);
 
-    BlockSoundType SULFUR_SPIKE = BlockSoundImpl.get(BlockSoundTypeKey.SULFUR_SPIKE);
+    BlockSoundType SULFUR_SPIKE = BlockSoundImpl.get(BlockSoundTypeKeys.SULFUR_SPIKE);
 
-    BlockSoundType SUSPICIOUS_GRAVEL = BlockSoundImpl.get(BlockSoundTypeKey.SUSPICIOUS_GRAVEL);
+    BlockSoundType SUSPICIOUS_GRAVEL = BlockSoundImpl.get(BlockSoundTypeKeys.SUSPICIOUS_GRAVEL);
 
-    BlockSoundType SUSPICIOUS_SAND = BlockSoundImpl.get(BlockSoundTypeKey.SUSPICIOUS_SAND);
+    BlockSoundType SUSPICIOUS_SAND = BlockSoundImpl.get(BlockSoundTypeKeys.SUSPICIOUS_SAND);
 
-    BlockSoundType SWEET_BERRY_BUSH = BlockSoundImpl.get(BlockSoundTypeKey.SWEET_BERRY_BUSH);
+    BlockSoundType SWEET_BERRY_BUSH = BlockSoundImpl.get(BlockSoundTypeKeys.SWEET_BERRY_BUSH);
 
-    BlockSoundType TRIAL_SPAWNER = BlockSoundImpl.get(BlockSoundTypeKey.TRIAL_SPAWNER);
+    BlockSoundType TRIAL_SPAWNER = BlockSoundImpl.get(BlockSoundTypeKeys.TRIAL_SPAWNER);
 
-    BlockSoundType TUFF = BlockSoundImpl.get(BlockSoundTypeKey.TUFF);
+    BlockSoundType TUFF = BlockSoundImpl.get(BlockSoundTypeKeys.TUFF);
 
-    BlockSoundType TUFF_BRICKS = BlockSoundImpl.get(BlockSoundTypeKey.TUFF_BRICKS);
+    BlockSoundType TUFF_BRICKS = BlockSoundImpl.get(BlockSoundTypeKeys.TUFF_BRICKS);
 
-    BlockSoundType TWISTING_VINES = BlockSoundImpl.get(BlockSoundTypeKey.TWISTING_VINES);
+    BlockSoundType TWISTING_VINES = BlockSoundImpl.get(BlockSoundTypeKeys.TWISTING_VINES);
 
-    BlockSoundType VAULT = BlockSoundImpl.get(BlockSoundTypeKey.VAULT);
+    BlockSoundType VAULT = BlockSoundImpl.get(BlockSoundTypeKeys.VAULT);
 
-    BlockSoundType VINE = BlockSoundImpl.get(BlockSoundTypeKey.VINE);
+    BlockSoundType VINE = BlockSoundImpl.get(BlockSoundTypeKeys.VINE);
 
-    BlockSoundType WART_BLOCK = BlockSoundImpl.get(BlockSoundTypeKey.WART_BLOCK);
+    BlockSoundType WART_BLOCK = BlockSoundImpl.get(BlockSoundTypeKeys.WART_BLOCK);
 
-    BlockSoundType WEEPING_VINES = BlockSoundImpl.get(BlockSoundTypeKey.WEEPING_VINES);
+    BlockSoundType WEEPING_VINES = BlockSoundImpl.get(BlockSoundTypeKeys.WEEPING_VINES);
 
-    BlockSoundType WET_GRASS = BlockSoundImpl.get(BlockSoundTypeKey.WET_GRASS);
+    BlockSoundType WET_GRASS = BlockSoundImpl.get(BlockSoundTypeKeys.WET_GRASS);
 
-    BlockSoundType WET_SPONGE = BlockSoundImpl.get(BlockSoundTypeKey.WET_SPONGE);
+    BlockSoundType WET_SPONGE = BlockSoundImpl.get(BlockSoundTypeKeys.WET_SPONGE);
 
-    BlockSoundType WOOD = BlockSoundImpl.get(BlockSoundTypeKey.WOOD);
+    BlockSoundType WOOD = BlockSoundImpl.get(BlockSoundTypeKeys.WOOD);
 
-    BlockSoundType WOOL = BlockSoundImpl.get(BlockSoundTypeKey.WOOL);
+    BlockSoundType WOOL = BlockSoundImpl.get(BlockSoundTypeKeys.WOOL);
 }

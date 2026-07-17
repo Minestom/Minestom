@@ -7,101 +7,101 @@ package net.minestom.server.instance.block;
  */
 @SuppressWarnings("unused")
 sealed interface BlockEntityTypes permits BlockEntityType {
-    BlockEntityType FURNACE = BlockEntityTypeImpl.get(BlockEntityTypeKey.FURNACE);
+    BlockEntityType FURNACE = BlockEntityTypeImpl.get(BlockEntityTypeKeys.FURNACE);
 
-    BlockEntityType CHEST = BlockEntityTypeImpl.get(BlockEntityTypeKey.CHEST);
+    BlockEntityType CHEST = BlockEntityTypeImpl.get(BlockEntityTypeKeys.CHEST);
 
-    BlockEntityType TRAPPED_CHEST = BlockEntityTypeImpl.get(BlockEntityTypeKey.TRAPPED_CHEST);
+    BlockEntityType TRAPPED_CHEST = BlockEntityTypeImpl.get(BlockEntityTypeKeys.TRAPPED_CHEST);
 
-    BlockEntityType ENDER_CHEST = BlockEntityTypeImpl.get(BlockEntityTypeKey.ENDER_CHEST);
+    BlockEntityType ENDER_CHEST = BlockEntityTypeImpl.get(BlockEntityTypeKeys.ENDER_CHEST);
 
-    BlockEntityType JUKEBOX = BlockEntityTypeImpl.get(BlockEntityTypeKey.JUKEBOX);
+    BlockEntityType JUKEBOX = BlockEntityTypeImpl.get(BlockEntityTypeKeys.JUKEBOX);
 
-    BlockEntityType DISPENSER = BlockEntityTypeImpl.get(BlockEntityTypeKey.DISPENSER);
+    BlockEntityType DISPENSER = BlockEntityTypeImpl.get(BlockEntityTypeKeys.DISPENSER);
 
-    BlockEntityType DROPPER = BlockEntityTypeImpl.get(BlockEntityTypeKey.DROPPER);
+    BlockEntityType DROPPER = BlockEntityTypeImpl.get(BlockEntityTypeKeys.DROPPER);
 
-    BlockEntityType SIGN = BlockEntityTypeImpl.get(BlockEntityTypeKey.SIGN);
+    BlockEntityType SIGN = BlockEntityTypeImpl.get(BlockEntityTypeKeys.SIGN);
 
-    BlockEntityType HANGING_SIGN = BlockEntityTypeImpl.get(BlockEntityTypeKey.HANGING_SIGN);
+    BlockEntityType HANGING_SIGN = BlockEntityTypeImpl.get(BlockEntityTypeKeys.HANGING_SIGN);
 
-    BlockEntityType MOB_SPAWNER = BlockEntityTypeImpl.get(BlockEntityTypeKey.MOB_SPAWNER);
+    BlockEntityType MOB_SPAWNER = BlockEntityTypeImpl.get(BlockEntityTypeKeys.MOB_SPAWNER);
 
-    BlockEntityType CREAKING_HEART = BlockEntityTypeImpl.get(BlockEntityTypeKey.CREAKING_HEART);
+    BlockEntityType CREAKING_HEART = BlockEntityTypeImpl.get(BlockEntityTypeKeys.CREAKING_HEART);
 
-    BlockEntityType PISTON = BlockEntityTypeImpl.get(BlockEntityTypeKey.PISTON);
+    BlockEntityType PISTON = BlockEntityTypeImpl.get(BlockEntityTypeKeys.PISTON);
 
-    BlockEntityType BREWING_STAND = BlockEntityTypeImpl.get(BlockEntityTypeKey.BREWING_STAND);
+    BlockEntityType BREWING_STAND = BlockEntityTypeImpl.get(BlockEntityTypeKeys.BREWING_STAND);
 
-    BlockEntityType ENCHANTING_TABLE = BlockEntityTypeImpl.get(BlockEntityTypeKey.ENCHANTING_TABLE);
+    BlockEntityType ENCHANTING_TABLE = BlockEntityTypeImpl.get(BlockEntityTypeKeys.ENCHANTING_TABLE);
 
-    BlockEntityType END_PORTAL = BlockEntityTypeImpl.get(BlockEntityTypeKey.END_PORTAL);
+    BlockEntityType END_PORTAL = BlockEntityTypeImpl.get(BlockEntityTypeKeys.END_PORTAL);
 
-    BlockEntityType BEACON = BlockEntityTypeImpl.get(BlockEntityTypeKey.BEACON);
+    BlockEntityType BEACON = BlockEntityTypeImpl.get(BlockEntityTypeKeys.BEACON);
 
-    BlockEntityType SKULL = BlockEntityTypeImpl.get(BlockEntityTypeKey.SKULL);
+    BlockEntityType SKULL = BlockEntityTypeImpl.get(BlockEntityTypeKeys.SKULL);
 
-    BlockEntityType DAYLIGHT_DETECTOR = BlockEntityTypeImpl.get(BlockEntityTypeKey.DAYLIGHT_DETECTOR);
+    BlockEntityType DAYLIGHT_DETECTOR = BlockEntityTypeImpl.get(BlockEntityTypeKeys.DAYLIGHT_DETECTOR);
 
-    BlockEntityType HOPPER = BlockEntityTypeImpl.get(BlockEntityTypeKey.HOPPER);
+    BlockEntityType HOPPER = BlockEntityTypeImpl.get(BlockEntityTypeKeys.HOPPER);
 
-    BlockEntityType COMPARATOR = BlockEntityTypeImpl.get(BlockEntityTypeKey.COMPARATOR);
+    BlockEntityType COMPARATOR = BlockEntityTypeImpl.get(BlockEntityTypeKeys.COMPARATOR);
 
-    BlockEntityType BANNER = BlockEntityTypeImpl.get(BlockEntityTypeKey.BANNER);
+    BlockEntityType BANNER = BlockEntityTypeImpl.get(BlockEntityTypeKeys.BANNER);
 
-    BlockEntityType STRUCTURE_BLOCK = BlockEntityTypeImpl.get(BlockEntityTypeKey.STRUCTURE_BLOCK);
+    BlockEntityType STRUCTURE_BLOCK = BlockEntityTypeImpl.get(BlockEntityTypeKeys.STRUCTURE_BLOCK);
 
-    BlockEntityType END_GATEWAY = BlockEntityTypeImpl.get(BlockEntityTypeKey.END_GATEWAY);
+    BlockEntityType END_GATEWAY = BlockEntityTypeImpl.get(BlockEntityTypeKeys.END_GATEWAY);
 
-    BlockEntityType COMMAND_BLOCK = BlockEntityTypeImpl.get(BlockEntityTypeKey.COMMAND_BLOCK);
+    BlockEntityType COMMAND_BLOCK = BlockEntityTypeImpl.get(BlockEntityTypeKeys.COMMAND_BLOCK);
 
-    BlockEntityType SHULKER_BOX = BlockEntityTypeImpl.get(BlockEntityTypeKey.SHULKER_BOX);
+    BlockEntityType SHULKER_BOX = BlockEntityTypeImpl.get(BlockEntityTypeKeys.SHULKER_BOX);
 
-    BlockEntityType CONDUIT = BlockEntityTypeImpl.get(BlockEntityTypeKey.CONDUIT);
+    BlockEntityType CONDUIT = BlockEntityTypeImpl.get(BlockEntityTypeKeys.CONDUIT);
 
-    BlockEntityType BARREL = BlockEntityTypeImpl.get(BlockEntityTypeKey.BARREL);
+    BlockEntityType BARREL = BlockEntityTypeImpl.get(BlockEntityTypeKeys.BARREL);
 
-    BlockEntityType SMOKER = BlockEntityTypeImpl.get(BlockEntityTypeKey.SMOKER);
+    BlockEntityType SMOKER = BlockEntityTypeImpl.get(BlockEntityTypeKeys.SMOKER);
 
-    BlockEntityType BLAST_FURNACE = BlockEntityTypeImpl.get(BlockEntityTypeKey.BLAST_FURNACE);
+    BlockEntityType BLAST_FURNACE = BlockEntityTypeImpl.get(BlockEntityTypeKeys.BLAST_FURNACE);
 
-    BlockEntityType LECTERN = BlockEntityTypeImpl.get(BlockEntityTypeKey.LECTERN);
+    BlockEntityType LECTERN = BlockEntityTypeImpl.get(BlockEntityTypeKeys.LECTERN);
 
-    BlockEntityType BELL = BlockEntityTypeImpl.get(BlockEntityTypeKey.BELL);
+    BlockEntityType BELL = BlockEntityTypeImpl.get(BlockEntityTypeKeys.BELL);
 
-    BlockEntityType JIGSAW = BlockEntityTypeImpl.get(BlockEntityTypeKey.JIGSAW);
+    BlockEntityType JIGSAW = BlockEntityTypeImpl.get(BlockEntityTypeKeys.JIGSAW);
 
-    BlockEntityType CAMPFIRE = BlockEntityTypeImpl.get(BlockEntityTypeKey.CAMPFIRE);
+    BlockEntityType CAMPFIRE = BlockEntityTypeImpl.get(BlockEntityTypeKeys.CAMPFIRE);
 
-    BlockEntityType BEEHIVE = BlockEntityTypeImpl.get(BlockEntityTypeKey.BEEHIVE);
+    BlockEntityType BEEHIVE = BlockEntityTypeImpl.get(BlockEntityTypeKeys.BEEHIVE);
 
-    BlockEntityType SCULK_SENSOR = BlockEntityTypeImpl.get(BlockEntityTypeKey.SCULK_SENSOR);
+    BlockEntityType SCULK_SENSOR = BlockEntityTypeImpl.get(BlockEntityTypeKeys.SCULK_SENSOR);
 
-    BlockEntityType CALIBRATED_SCULK_SENSOR = BlockEntityTypeImpl.get(BlockEntityTypeKey.CALIBRATED_SCULK_SENSOR);
+    BlockEntityType CALIBRATED_SCULK_SENSOR = BlockEntityTypeImpl.get(BlockEntityTypeKeys.CALIBRATED_SCULK_SENSOR);
 
-    BlockEntityType SCULK_CATALYST = BlockEntityTypeImpl.get(BlockEntityTypeKey.SCULK_CATALYST);
+    BlockEntityType SCULK_CATALYST = BlockEntityTypeImpl.get(BlockEntityTypeKeys.SCULK_CATALYST);
 
-    BlockEntityType SCULK_SHRIEKER = BlockEntityTypeImpl.get(BlockEntityTypeKey.SCULK_SHRIEKER);
+    BlockEntityType SCULK_SHRIEKER = BlockEntityTypeImpl.get(BlockEntityTypeKeys.SCULK_SHRIEKER);
 
-    BlockEntityType CHISELED_BOOKSHELF = BlockEntityTypeImpl.get(BlockEntityTypeKey.CHISELED_BOOKSHELF);
+    BlockEntityType CHISELED_BOOKSHELF = BlockEntityTypeImpl.get(BlockEntityTypeKeys.CHISELED_BOOKSHELF);
 
-    BlockEntityType SHELF = BlockEntityTypeImpl.get(BlockEntityTypeKey.SHELF);
+    BlockEntityType SHELF = BlockEntityTypeImpl.get(BlockEntityTypeKeys.SHELF);
 
-    BlockEntityType BRUSHABLE_BLOCK = BlockEntityTypeImpl.get(BlockEntityTypeKey.BRUSHABLE_BLOCK);
+    BlockEntityType BRUSHABLE_BLOCK = BlockEntityTypeImpl.get(BlockEntityTypeKeys.BRUSHABLE_BLOCK);
 
-    BlockEntityType DECORATED_POT = BlockEntityTypeImpl.get(BlockEntityTypeKey.DECORATED_POT);
+    BlockEntityType DECORATED_POT = BlockEntityTypeImpl.get(BlockEntityTypeKeys.DECORATED_POT);
 
-    BlockEntityType CRAFTER = BlockEntityTypeImpl.get(BlockEntityTypeKey.CRAFTER);
+    BlockEntityType CRAFTER = BlockEntityTypeImpl.get(BlockEntityTypeKeys.CRAFTER);
 
-    BlockEntityType TRIAL_SPAWNER = BlockEntityTypeImpl.get(BlockEntityTypeKey.TRIAL_SPAWNER);
+    BlockEntityType TRIAL_SPAWNER = BlockEntityTypeImpl.get(BlockEntityTypeKeys.TRIAL_SPAWNER);
 
-    BlockEntityType VAULT = BlockEntityTypeImpl.get(BlockEntityTypeKey.VAULT);
+    BlockEntityType VAULT = BlockEntityTypeImpl.get(BlockEntityTypeKeys.VAULT);
 
-    BlockEntityType TEST_BLOCK = BlockEntityTypeImpl.get(BlockEntityTypeKey.TEST_BLOCK);
+    BlockEntityType TEST_BLOCK = BlockEntityTypeImpl.get(BlockEntityTypeKeys.TEST_BLOCK);
 
-    BlockEntityType TEST_INSTANCE_BLOCK = BlockEntityTypeImpl.get(BlockEntityTypeKey.TEST_INSTANCE_BLOCK);
+    BlockEntityType TEST_INSTANCE_BLOCK = BlockEntityTypeImpl.get(BlockEntityTypeKeys.TEST_INSTANCE_BLOCK);
 
-    BlockEntityType COPPER_GOLEM_STATUE = BlockEntityTypeImpl.get(BlockEntityTypeKey.COPPER_GOLEM_STATUE);
+    BlockEntityType COPPER_GOLEM_STATUE = BlockEntityTypeImpl.get(BlockEntityTypeKeys.COPPER_GOLEM_STATUE);
 
-    BlockEntityType POTENT_SULFUR = BlockEntityTypeImpl.get(BlockEntityTypeKey.POTENT_SULFUR);
+    BlockEntityType POTENT_SULFUR = BlockEntityTypeImpl.get(BlockEntityTypeKeys.POTENT_SULFUR);
 }

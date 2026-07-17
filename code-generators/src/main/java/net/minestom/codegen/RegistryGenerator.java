@@ -16,10 +16,8 @@ record RegistryGenerator(Codegen codegen) {
     void generate(Generators.StaticRegistrySpec spec) {
         ClassName typeClass = ClassName.get(spec.packageName(), spec.typeName());
         ClassName loaderClass = ClassName.get(spec.packageName(), spec.loaderName());
-        ClassName keysClass = ClassName.get(spec.packageName(), spec.typeName() + "Key");
+        ClassName keysClass = ClassName.get(spec.packageName(), spec.typeName() + "Keys");
         generateKeys(spec.key(), typeClass, keysClass, true);
-        final ClassName compatibilityKeysClass = ClassName.get(spec.packageName(), spec.typeName() + "Keys");
-        generateCompatibilityAlias(keysClass, compatibilityKeysClass);
         generateConstants(
                 spec.key(),
                 typeClass,
@@ -60,30 +58,13 @@ record RegistryGenerator(Codegen codegen) {
         if (tags == null) return;
 
         final ClassName tagKeyClass = ClassName.get("net.minestom.server.registry", "TagKey");
-        final ClassName generatedClass = ClassName.get(typeClass.packageName(), typeClass.simpleName() + "Tag");
+        final ClassName generatedClass = ClassName.get(typeClass.packageName(), typeClass.simpleName() + "Tags");
         final TypeSpec.Builder constants = constantsBuilder(typeClass, generatedClass, true);
         final ParameterizedTypeName fieldType = ParameterizedTypeName.get(tagKeyClass, typeClass);
         addFields(tags, constants, fieldType,
                 namespace -> CodeBlock.of("$T.unsafeOf($S)", tagKeyClass, codegen.namespaceShort(namespace)),
                 FieldOrder.NATURAL);
         codegen.write(codegen.javaFile(generatedClass.packageName(), constants.build()));
-
-        generateCompatibilityAlias(generatedClass,
-                ClassName.get(typeClass.packageName(), typeClass.simpleName() + "Tags"));
-    }
-
-    void generateCompatibilityAlias(ClassName canonicalClass, ClassName compatibilityClass) {
-        final TypeSpec.Builder compatibilityConstants = TypeSpec.interfaceBuilder(compatibilityClass)
-                .addModifiers(Modifier.PUBLIC)
-                .addSuperinterface(canonicalClass)
-                .addAnnotation(codegen.suppressUnused())
-                .addAnnotation(ApiStatus.NonExtendable.class)
-                .addAnnotation(AnnotationSpec.builder(Deprecated.class)
-                        .addMember("forRemoval", "$L", true)
-                        .build())
-                .addJavadoc("Compatibility alias for {@link $T}.\n\n", canonicalClass)
-                .addJavadoc("@deprecated use {@link $T}\n", canonicalClass);
-        codegen.write(codegen.javaFile(compatibilityClass.packageName(), compatibilityConstants.build()));
     }
 
     private void generateConstants(String key, ClassName permittedType, ClassName generatedClass,

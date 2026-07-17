@@ -7,13 +7,13 @@ package net.minestom.server.instance.fluid;
  */
 @SuppressWarnings("unused")
 sealed interface Fluids permits Fluid {
-    Fluid EMPTY = FluidImpl.get(FluidKey.EMPTY);
+    Fluid EMPTY = FluidImpl.get(FluidKeys.EMPTY);
 
-    Fluid FLOWING_WATER = FluidImpl.get(FluidKey.FLOWING_WATER);
+    Fluid FLOWING_WATER = FluidImpl.get(FluidKeys.FLOWING_WATER);
 
-    Fluid WATER = FluidImpl.get(FluidKey.WATER);
+    Fluid WATER = FluidImpl.get(FluidKeys.WATER);
 
-    Fluid FLOWING_LAVA = FluidImpl.get(FluidKey.FLOWING_LAVA);
+    Fluid FLOWING_LAVA = FluidImpl.get(FluidKeys.FLOWING_LAVA);
 
-    Fluid LAVA = FluidImpl.get(FluidKey.LAVA);
+    Fluid LAVA = FluidImpl.get(FluidKeys.LAVA);
 }

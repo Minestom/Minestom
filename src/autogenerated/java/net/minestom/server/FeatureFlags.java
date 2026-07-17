@@ -7,11 +7,11 @@ package net.minestom.server;
  */
 @SuppressWarnings("unused")
 sealed interface FeatureFlags permits FeatureFlag {
-    FeatureFlag REDSTONE_EXPERIMENTS = FeatureFlagImpl.get(FeatureFlagKey.REDSTONE_EXPERIMENTS);
+    FeatureFlag REDSTONE_EXPERIMENTS = FeatureFlagImpl.get(FeatureFlagKeys.REDSTONE_EXPERIMENTS);
 
-    FeatureFlag VANILLA = FeatureFlagImpl.get(FeatureFlagKey.VANILLA);
+    FeatureFlag VANILLA = FeatureFlagImpl.get(FeatureFlagKeys.VANILLA);
 
-    FeatureFlag TRADE_REBALANCE = FeatureFlagImpl.get(FeatureFlagKey.TRADE_REBALANCE);
+    FeatureFlag TRADE_REBALANCE = FeatureFlagImpl.get(FeatureFlagKeys.TRADE_REBALANCE);
 
-    FeatureFlag MINECART_IMPROVEMENTS = FeatureFlagImpl.get(FeatureFlagKey.MINECART_IMPROVEMENTS);
+    FeatureFlag MINECART_IMPROVEMENTS = FeatureFlagImpl.get(FeatureFlagKeys.MINECART_IMPROVEMENTS);
 }

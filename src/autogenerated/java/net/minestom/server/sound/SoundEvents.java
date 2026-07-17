@@ -7,3939 +7,3939 @@ package net.minestom.server.sound;
  */
 @SuppressWarnings("unused")
 sealed interface SoundEvents permits SoundEvent {
-    SoundEvent ENTITY_ALLAY_AMBIENT_WITH_ITEM = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ALLAY_AMBIENT_WITH_ITEM);
+    SoundEvent ENTITY_ALLAY_AMBIENT_WITH_ITEM = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ALLAY_AMBIENT_WITH_ITEM);
 
-    SoundEvent ENTITY_ALLAY_AMBIENT_WITHOUT_ITEM = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ALLAY_AMBIENT_WITHOUT_ITEM);
+    SoundEvent ENTITY_ALLAY_AMBIENT_WITHOUT_ITEM = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ALLAY_AMBIENT_WITHOUT_ITEM);
 
-    SoundEvent ENTITY_ALLAY_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ALLAY_DEATH);
+    SoundEvent ENTITY_ALLAY_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ALLAY_DEATH);
 
-    SoundEvent ENTITY_ALLAY_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ALLAY_HURT);
+    SoundEvent ENTITY_ALLAY_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ALLAY_HURT);
 
-    SoundEvent ENTITY_ALLAY_ITEM_GIVEN = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ALLAY_ITEM_GIVEN);
+    SoundEvent ENTITY_ALLAY_ITEM_GIVEN = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ALLAY_ITEM_GIVEN);
 
-    SoundEvent ENTITY_ALLAY_ITEM_TAKEN = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ALLAY_ITEM_TAKEN);
+    SoundEvent ENTITY_ALLAY_ITEM_TAKEN = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ALLAY_ITEM_TAKEN);
 
-    SoundEvent ENTITY_ALLAY_ITEM_THROWN = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ALLAY_ITEM_THROWN);
+    SoundEvent ENTITY_ALLAY_ITEM_THROWN = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ALLAY_ITEM_THROWN);
 
-    SoundEvent AMBIENT_CAVE = BuiltinSoundEvent.get(SoundEventKey.AMBIENT_CAVE);
+    SoundEvent AMBIENT_CAVE = BuiltinSoundEvent.get(SoundEventKeys.AMBIENT_CAVE);
 
-    SoundEvent AMBIENT_BASALT_DELTAS_ADDITIONS = BuiltinSoundEvent.get(SoundEventKey.AMBIENT_BASALT_DELTAS_ADDITIONS);
+    SoundEvent AMBIENT_BASALT_DELTAS_ADDITIONS = BuiltinSoundEvent.get(SoundEventKeys.AMBIENT_BASALT_DELTAS_ADDITIONS);
 
-    SoundEvent AMBIENT_BASALT_DELTAS_LOOP = BuiltinSoundEvent.get(SoundEventKey.AMBIENT_BASALT_DELTAS_LOOP);
+    SoundEvent AMBIENT_BASALT_DELTAS_LOOP = BuiltinSoundEvent.get(SoundEventKeys.AMBIENT_BASALT_DELTAS_LOOP);
 
-    SoundEvent AMBIENT_BASALT_DELTAS_MOOD = BuiltinSoundEvent.get(SoundEventKey.AMBIENT_BASALT_DELTAS_MOOD);
+    SoundEvent AMBIENT_BASALT_DELTAS_MOOD = BuiltinSoundEvent.get(SoundEventKeys.AMBIENT_BASALT_DELTAS_MOOD);
 
-    SoundEvent AMBIENT_CRIMSON_FOREST_ADDITIONS = BuiltinSoundEvent.get(SoundEventKey.AMBIENT_CRIMSON_FOREST_ADDITIONS);
+    SoundEvent AMBIENT_CRIMSON_FOREST_ADDITIONS = BuiltinSoundEvent.get(SoundEventKeys.AMBIENT_CRIMSON_FOREST_ADDITIONS);
 
-    SoundEvent AMBIENT_CRIMSON_FOREST_LOOP = BuiltinSoundEvent.get(SoundEventKey.AMBIENT_CRIMSON_FOREST_LOOP);
+    SoundEvent AMBIENT_CRIMSON_FOREST_LOOP = BuiltinSoundEvent.get(SoundEventKeys.AMBIENT_CRIMSON_FOREST_LOOP);
 
-    SoundEvent AMBIENT_CRIMSON_FOREST_MOOD = BuiltinSoundEvent.get(SoundEventKey.AMBIENT_CRIMSON_FOREST_MOOD);
+    SoundEvent AMBIENT_CRIMSON_FOREST_MOOD = BuiltinSoundEvent.get(SoundEventKeys.AMBIENT_CRIMSON_FOREST_MOOD);
 
-    SoundEvent AMBIENT_NETHER_WASTES_ADDITIONS = BuiltinSoundEvent.get(SoundEventKey.AMBIENT_NETHER_WASTES_ADDITIONS);
+    SoundEvent AMBIENT_NETHER_WASTES_ADDITIONS = BuiltinSoundEvent.get(SoundEventKeys.AMBIENT_NETHER_WASTES_ADDITIONS);
 
-    SoundEvent AMBIENT_NETHER_WASTES_LOOP = BuiltinSoundEvent.get(SoundEventKey.AMBIENT_NETHER_WASTES_LOOP);
+    SoundEvent AMBIENT_NETHER_WASTES_LOOP = BuiltinSoundEvent.get(SoundEventKeys.AMBIENT_NETHER_WASTES_LOOP);
 
-    SoundEvent AMBIENT_NETHER_WASTES_MOOD = BuiltinSoundEvent.get(SoundEventKey.AMBIENT_NETHER_WASTES_MOOD);
+    SoundEvent AMBIENT_NETHER_WASTES_MOOD = BuiltinSoundEvent.get(SoundEventKeys.AMBIENT_NETHER_WASTES_MOOD);
 
-    SoundEvent AMBIENT_SOUL_SAND_VALLEY_ADDITIONS = BuiltinSoundEvent.get(SoundEventKey.AMBIENT_SOUL_SAND_VALLEY_ADDITIONS);
+    SoundEvent AMBIENT_SOUL_SAND_VALLEY_ADDITIONS = BuiltinSoundEvent.get(SoundEventKeys.AMBIENT_SOUL_SAND_VALLEY_ADDITIONS);
 
-    SoundEvent AMBIENT_SOUL_SAND_VALLEY_LOOP = BuiltinSoundEvent.get(SoundEventKey.AMBIENT_SOUL_SAND_VALLEY_LOOP);
+    SoundEvent AMBIENT_SOUL_SAND_VALLEY_LOOP = BuiltinSoundEvent.get(SoundEventKeys.AMBIENT_SOUL_SAND_VALLEY_LOOP);
 
-    SoundEvent AMBIENT_SOUL_SAND_VALLEY_MOOD = BuiltinSoundEvent.get(SoundEventKey.AMBIENT_SOUL_SAND_VALLEY_MOOD);
+    SoundEvent AMBIENT_SOUL_SAND_VALLEY_MOOD = BuiltinSoundEvent.get(SoundEventKeys.AMBIENT_SOUL_SAND_VALLEY_MOOD);
 
-    SoundEvent AMBIENT_WARPED_FOREST_ADDITIONS = BuiltinSoundEvent.get(SoundEventKey.AMBIENT_WARPED_FOREST_ADDITIONS);
+    SoundEvent AMBIENT_WARPED_FOREST_ADDITIONS = BuiltinSoundEvent.get(SoundEventKeys.AMBIENT_WARPED_FOREST_ADDITIONS);
 
-    SoundEvent AMBIENT_WARPED_FOREST_LOOP = BuiltinSoundEvent.get(SoundEventKey.AMBIENT_WARPED_FOREST_LOOP);
+    SoundEvent AMBIENT_WARPED_FOREST_LOOP = BuiltinSoundEvent.get(SoundEventKeys.AMBIENT_WARPED_FOREST_LOOP);
 
-    SoundEvent AMBIENT_WARPED_FOREST_MOOD = BuiltinSoundEvent.get(SoundEventKey.AMBIENT_WARPED_FOREST_MOOD);
+    SoundEvent AMBIENT_WARPED_FOREST_MOOD = BuiltinSoundEvent.get(SoundEventKeys.AMBIENT_WARPED_FOREST_MOOD);
 
-    SoundEvent AMBIENT_UNDERWATER_ENTER = BuiltinSoundEvent.get(SoundEventKey.AMBIENT_UNDERWATER_ENTER);
+    SoundEvent AMBIENT_UNDERWATER_ENTER = BuiltinSoundEvent.get(SoundEventKeys.AMBIENT_UNDERWATER_ENTER);
 
-    SoundEvent AMBIENT_UNDERWATER_EXIT = BuiltinSoundEvent.get(SoundEventKey.AMBIENT_UNDERWATER_EXIT);
+    SoundEvent AMBIENT_UNDERWATER_EXIT = BuiltinSoundEvent.get(SoundEventKeys.AMBIENT_UNDERWATER_EXIT);
 
-    SoundEvent AMBIENT_UNDERWATER_LOOP = BuiltinSoundEvent.get(SoundEventKey.AMBIENT_UNDERWATER_LOOP);
+    SoundEvent AMBIENT_UNDERWATER_LOOP = BuiltinSoundEvent.get(SoundEventKeys.AMBIENT_UNDERWATER_LOOP);
 
-    SoundEvent AMBIENT_UNDERWATER_LOOP_ADDITIONS = BuiltinSoundEvent.get(SoundEventKey.AMBIENT_UNDERWATER_LOOP_ADDITIONS);
+    SoundEvent AMBIENT_UNDERWATER_LOOP_ADDITIONS = BuiltinSoundEvent.get(SoundEventKeys.AMBIENT_UNDERWATER_LOOP_ADDITIONS);
 
-    SoundEvent AMBIENT_UNDERWATER_LOOP_ADDITIONS_RARE = BuiltinSoundEvent.get(SoundEventKey.AMBIENT_UNDERWATER_LOOP_ADDITIONS_RARE);
+    SoundEvent AMBIENT_UNDERWATER_LOOP_ADDITIONS_RARE = BuiltinSoundEvent.get(SoundEventKeys.AMBIENT_UNDERWATER_LOOP_ADDITIONS_RARE);
 
-    SoundEvent AMBIENT_UNDERWATER_LOOP_ADDITIONS_ULTRA_RARE = BuiltinSoundEvent.get(SoundEventKey.AMBIENT_UNDERWATER_LOOP_ADDITIONS_ULTRA_RARE);
+    SoundEvent AMBIENT_UNDERWATER_LOOP_ADDITIONS_ULTRA_RARE = BuiltinSoundEvent.get(SoundEventKeys.AMBIENT_UNDERWATER_LOOP_ADDITIONS_ULTRA_RARE);
 
-    SoundEvent BLOCK_AMETHYST_BLOCK_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_AMETHYST_BLOCK_BREAK);
+    SoundEvent BLOCK_AMETHYST_BLOCK_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_AMETHYST_BLOCK_BREAK);
 
-    SoundEvent BLOCK_AMETHYST_BLOCK_CHIME = BuiltinSoundEvent.get(SoundEventKey.BLOCK_AMETHYST_BLOCK_CHIME);
+    SoundEvent BLOCK_AMETHYST_BLOCK_CHIME = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_AMETHYST_BLOCK_CHIME);
 
-    SoundEvent BLOCK_AMETHYST_BLOCK_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_AMETHYST_BLOCK_FALL);
+    SoundEvent BLOCK_AMETHYST_BLOCK_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_AMETHYST_BLOCK_FALL);
 
-    SoundEvent BLOCK_AMETHYST_BLOCK_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_AMETHYST_BLOCK_HIT);
+    SoundEvent BLOCK_AMETHYST_BLOCK_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_AMETHYST_BLOCK_HIT);
 
-    SoundEvent BLOCK_AMETHYST_BLOCK_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_AMETHYST_BLOCK_PLACE);
+    SoundEvent BLOCK_AMETHYST_BLOCK_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_AMETHYST_BLOCK_PLACE);
 
-    SoundEvent BLOCK_AMETHYST_BLOCK_RESONATE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_AMETHYST_BLOCK_RESONATE);
+    SoundEvent BLOCK_AMETHYST_BLOCK_RESONATE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_AMETHYST_BLOCK_RESONATE);
 
-    SoundEvent BLOCK_AMETHYST_BLOCK_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_AMETHYST_BLOCK_STEP);
+    SoundEvent BLOCK_AMETHYST_BLOCK_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_AMETHYST_BLOCK_STEP);
 
-    SoundEvent BLOCK_AMETHYST_CLUSTER_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_AMETHYST_CLUSTER_BREAK);
+    SoundEvent BLOCK_AMETHYST_CLUSTER_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_AMETHYST_CLUSTER_BREAK);
 
-    SoundEvent BLOCK_AMETHYST_CLUSTER_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_AMETHYST_CLUSTER_FALL);
+    SoundEvent BLOCK_AMETHYST_CLUSTER_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_AMETHYST_CLUSTER_FALL);
 
-    SoundEvent BLOCK_AMETHYST_CLUSTER_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_AMETHYST_CLUSTER_HIT);
+    SoundEvent BLOCK_AMETHYST_CLUSTER_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_AMETHYST_CLUSTER_HIT);
 
-    SoundEvent BLOCK_AMETHYST_CLUSTER_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_AMETHYST_CLUSTER_PLACE);
+    SoundEvent BLOCK_AMETHYST_CLUSTER_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_AMETHYST_CLUSTER_PLACE);
 
-    SoundEvent BLOCK_AMETHYST_CLUSTER_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_AMETHYST_CLUSTER_STEP);
+    SoundEvent BLOCK_AMETHYST_CLUSTER_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_AMETHYST_CLUSTER_STEP);
 
-    SoundEvent BLOCK_ANCIENT_DEBRIS_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_ANCIENT_DEBRIS_BREAK);
+    SoundEvent BLOCK_ANCIENT_DEBRIS_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_ANCIENT_DEBRIS_BREAK);
 
-    SoundEvent BLOCK_ANCIENT_DEBRIS_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_ANCIENT_DEBRIS_STEP);
+    SoundEvent BLOCK_ANCIENT_DEBRIS_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_ANCIENT_DEBRIS_STEP);
 
-    SoundEvent BLOCK_ANCIENT_DEBRIS_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_ANCIENT_DEBRIS_PLACE);
+    SoundEvent BLOCK_ANCIENT_DEBRIS_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_ANCIENT_DEBRIS_PLACE);
 
-    SoundEvent BLOCK_ANCIENT_DEBRIS_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_ANCIENT_DEBRIS_HIT);
+    SoundEvent BLOCK_ANCIENT_DEBRIS_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_ANCIENT_DEBRIS_HIT);
 
-    SoundEvent BLOCK_ANCIENT_DEBRIS_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_ANCIENT_DEBRIS_FALL);
+    SoundEvent BLOCK_ANCIENT_DEBRIS_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_ANCIENT_DEBRIS_FALL);
 
-    SoundEvent BLOCK_ANVIL_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_ANVIL_BREAK);
+    SoundEvent BLOCK_ANVIL_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_ANVIL_BREAK);
 
-    SoundEvent BLOCK_ANVIL_DESTROY = BuiltinSoundEvent.get(SoundEventKey.BLOCK_ANVIL_DESTROY);
+    SoundEvent BLOCK_ANVIL_DESTROY = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_ANVIL_DESTROY);
 
-    SoundEvent BLOCK_ANVIL_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_ANVIL_FALL);
+    SoundEvent BLOCK_ANVIL_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_ANVIL_FALL);
 
-    SoundEvent BLOCK_ANVIL_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_ANVIL_HIT);
+    SoundEvent BLOCK_ANVIL_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_ANVIL_HIT);
 
-    SoundEvent BLOCK_ANVIL_LAND = BuiltinSoundEvent.get(SoundEventKey.BLOCK_ANVIL_LAND);
+    SoundEvent BLOCK_ANVIL_LAND = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_ANVIL_LAND);
 
-    SoundEvent BLOCK_ANVIL_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_ANVIL_PLACE);
+    SoundEvent BLOCK_ANVIL_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_ANVIL_PLACE);
 
-    SoundEvent BLOCK_ANVIL_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_ANVIL_STEP);
+    SoundEvent BLOCK_ANVIL_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_ANVIL_STEP);
 
-    SoundEvent BLOCK_ANVIL_USE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_ANVIL_USE);
+    SoundEvent BLOCK_ANVIL_USE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_ANVIL_USE);
 
-    SoundEvent ENTITY_ARMADILLO_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ARMADILLO_EAT);
+    SoundEvent ENTITY_ARMADILLO_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ARMADILLO_EAT);
 
-    SoundEvent ENTITY_ARMADILLO_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ARMADILLO_HURT);
+    SoundEvent ENTITY_ARMADILLO_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ARMADILLO_HURT);
 
-    SoundEvent ENTITY_ARMADILLO_HURT_REDUCED = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ARMADILLO_HURT_REDUCED);
+    SoundEvent ENTITY_ARMADILLO_HURT_REDUCED = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ARMADILLO_HURT_REDUCED);
 
-    SoundEvent ENTITY_ARMADILLO_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ARMADILLO_AMBIENT);
+    SoundEvent ENTITY_ARMADILLO_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ARMADILLO_AMBIENT);
 
-    SoundEvent ENTITY_ARMADILLO_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ARMADILLO_STEP);
+    SoundEvent ENTITY_ARMADILLO_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ARMADILLO_STEP);
 
-    SoundEvent ENTITY_ARMADILLO_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ARMADILLO_DEATH);
+    SoundEvent ENTITY_ARMADILLO_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ARMADILLO_DEATH);
 
-    SoundEvent ENTITY_ARMADILLO_ROLL = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ARMADILLO_ROLL);
+    SoundEvent ENTITY_ARMADILLO_ROLL = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ARMADILLO_ROLL);
 
-    SoundEvent ENTITY_ARMADILLO_LAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ARMADILLO_LAND);
+    SoundEvent ENTITY_ARMADILLO_LAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ARMADILLO_LAND);
 
-    SoundEvent ENTITY_ARMADILLO_SCUTE_DROP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ARMADILLO_SCUTE_DROP);
+    SoundEvent ENTITY_ARMADILLO_SCUTE_DROP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ARMADILLO_SCUTE_DROP);
 
-    SoundEvent ENTITY_ARMADILLO_UNROLL_FINISH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ARMADILLO_UNROLL_FINISH);
+    SoundEvent ENTITY_ARMADILLO_UNROLL_FINISH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ARMADILLO_UNROLL_FINISH);
 
-    SoundEvent ENTITY_ARMADILLO_PEEK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ARMADILLO_PEEK);
+    SoundEvent ENTITY_ARMADILLO_PEEK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ARMADILLO_PEEK);
 
-    SoundEvent ENTITY_ARMADILLO_UNROLL_START = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ARMADILLO_UNROLL_START);
+    SoundEvent ENTITY_ARMADILLO_UNROLL_START = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ARMADILLO_UNROLL_START);
 
-    SoundEvent ENTITY_ARMADILLO_BRUSH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ARMADILLO_BRUSH);
+    SoundEvent ENTITY_ARMADILLO_BRUSH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ARMADILLO_BRUSH);
 
-    SoundEvent ITEM_ARMOR_EQUIP_CHAIN = BuiltinSoundEvent.get(SoundEventKey.ITEM_ARMOR_EQUIP_CHAIN);
+    SoundEvent ITEM_ARMOR_EQUIP_CHAIN = BuiltinSoundEvent.get(SoundEventKeys.ITEM_ARMOR_EQUIP_CHAIN);
 
-    SoundEvent ITEM_ARMOR_EQUIP_DIAMOND = BuiltinSoundEvent.get(SoundEventKey.ITEM_ARMOR_EQUIP_DIAMOND);
+    SoundEvent ITEM_ARMOR_EQUIP_DIAMOND = BuiltinSoundEvent.get(SoundEventKeys.ITEM_ARMOR_EQUIP_DIAMOND);
 
-    SoundEvent ITEM_ARMOR_EQUIP_ELYTRA = BuiltinSoundEvent.get(SoundEventKey.ITEM_ARMOR_EQUIP_ELYTRA);
+    SoundEvent ITEM_ARMOR_EQUIP_ELYTRA = BuiltinSoundEvent.get(SoundEventKeys.ITEM_ARMOR_EQUIP_ELYTRA);
 
-    SoundEvent ITEM_ARMOR_EQUIP_GENERIC = BuiltinSoundEvent.get(SoundEventKey.ITEM_ARMOR_EQUIP_GENERIC);
+    SoundEvent ITEM_ARMOR_EQUIP_GENERIC = BuiltinSoundEvent.get(SoundEventKeys.ITEM_ARMOR_EQUIP_GENERIC);
 
-    SoundEvent ITEM_ARMOR_EQUIP_GOLD = BuiltinSoundEvent.get(SoundEventKey.ITEM_ARMOR_EQUIP_GOLD);
+    SoundEvent ITEM_ARMOR_EQUIP_GOLD = BuiltinSoundEvent.get(SoundEventKeys.ITEM_ARMOR_EQUIP_GOLD);
 
-    SoundEvent ITEM_ARMOR_EQUIP_IRON = BuiltinSoundEvent.get(SoundEventKey.ITEM_ARMOR_EQUIP_IRON);
+    SoundEvent ITEM_ARMOR_EQUIP_IRON = BuiltinSoundEvent.get(SoundEventKeys.ITEM_ARMOR_EQUIP_IRON);
 
-    SoundEvent ITEM_ARMOR_EQUIP_LEATHER = BuiltinSoundEvent.get(SoundEventKey.ITEM_ARMOR_EQUIP_LEATHER);
+    SoundEvent ITEM_ARMOR_EQUIP_LEATHER = BuiltinSoundEvent.get(SoundEventKeys.ITEM_ARMOR_EQUIP_LEATHER);
 
-    SoundEvent ITEM_ARMOR_EQUIP_COPPER = BuiltinSoundEvent.get(SoundEventKey.ITEM_ARMOR_EQUIP_COPPER);
+    SoundEvent ITEM_ARMOR_EQUIP_COPPER = BuiltinSoundEvent.get(SoundEventKeys.ITEM_ARMOR_EQUIP_COPPER);
 
-    SoundEvent ITEM_ARMOR_EQUIP_NETHERITE = BuiltinSoundEvent.get(SoundEventKey.ITEM_ARMOR_EQUIP_NETHERITE);
+    SoundEvent ITEM_ARMOR_EQUIP_NETHERITE = BuiltinSoundEvent.get(SoundEventKeys.ITEM_ARMOR_EQUIP_NETHERITE);
 
-    SoundEvent ITEM_ARMOR_EQUIP_TURTLE = BuiltinSoundEvent.get(SoundEventKey.ITEM_ARMOR_EQUIP_TURTLE);
+    SoundEvent ITEM_ARMOR_EQUIP_TURTLE = BuiltinSoundEvent.get(SoundEventKeys.ITEM_ARMOR_EQUIP_TURTLE);
 
-    SoundEvent ITEM_ARMOR_EQUIP_WOLF = BuiltinSoundEvent.get(SoundEventKey.ITEM_ARMOR_EQUIP_WOLF);
+    SoundEvent ITEM_ARMOR_EQUIP_WOLF = BuiltinSoundEvent.get(SoundEventKeys.ITEM_ARMOR_EQUIP_WOLF);
 
-    SoundEvent ITEM_ARMOR_UNEQUIP_WOLF = BuiltinSoundEvent.get(SoundEventKey.ITEM_ARMOR_UNEQUIP_WOLF);
+    SoundEvent ITEM_ARMOR_UNEQUIP_WOLF = BuiltinSoundEvent.get(SoundEventKeys.ITEM_ARMOR_UNEQUIP_WOLF);
 
-    SoundEvent ITEM_ARMOR_EQUIP_NAUTILUS = BuiltinSoundEvent.get(SoundEventKey.ITEM_ARMOR_EQUIP_NAUTILUS);
+    SoundEvent ITEM_ARMOR_EQUIP_NAUTILUS = BuiltinSoundEvent.get(SoundEventKeys.ITEM_ARMOR_EQUIP_NAUTILUS);
 
-    SoundEvent ITEM_ARMOR_UNEQUIP_NAUTILUS = BuiltinSoundEvent.get(SoundEventKey.ITEM_ARMOR_UNEQUIP_NAUTILUS);
+    SoundEvent ITEM_ARMOR_UNEQUIP_NAUTILUS = BuiltinSoundEvent.get(SoundEventKeys.ITEM_ARMOR_UNEQUIP_NAUTILUS);
 
-    SoundEvent ENTITY_ARMOR_STAND_BREAK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ARMOR_STAND_BREAK);
+    SoundEvent ENTITY_ARMOR_STAND_BREAK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ARMOR_STAND_BREAK);
 
-    SoundEvent ENTITY_ARMOR_STAND_FALL = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ARMOR_STAND_FALL);
+    SoundEvent ENTITY_ARMOR_STAND_FALL = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ARMOR_STAND_FALL);
 
-    SoundEvent ENTITY_ARMOR_STAND_HIT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ARMOR_STAND_HIT);
+    SoundEvent ENTITY_ARMOR_STAND_HIT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ARMOR_STAND_HIT);
 
-    SoundEvent ENTITY_ARMOR_STAND_PLACE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ARMOR_STAND_PLACE);
+    SoundEvent ENTITY_ARMOR_STAND_PLACE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ARMOR_STAND_PLACE);
 
-    SoundEvent ENTITY_ARROW_HIT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ARROW_HIT);
+    SoundEvent ENTITY_ARROW_HIT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ARROW_HIT);
 
-    SoundEvent ENTITY_ARROW_HIT_PLAYER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ARROW_HIT_PLAYER);
+    SoundEvent ENTITY_ARROW_HIT_PLAYER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ARROW_HIT_PLAYER);
 
-    SoundEvent ENTITY_ARROW_SHOOT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ARROW_SHOOT);
+    SoundEvent ENTITY_ARROW_SHOOT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ARROW_SHOOT);
 
-    SoundEvent ITEM_AXE_STRIP = BuiltinSoundEvent.get(SoundEventKey.ITEM_AXE_STRIP);
+    SoundEvent ITEM_AXE_STRIP = BuiltinSoundEvent.get(SoundEventKeys.ITEM_AXE_STRIP);
 
-    SoundEvent ITEM_AXE_SCRAPE = BuiltinSoundEvent.get(SoundEventKey.ITEM_AXE_SCRAPE);
+    SoundEvent ITEM_AXE_SCRAPE = BuiltinSoundEvent.get(SoundEventKeys.ITEM_AXE_SCRAPE);
 
-    SoundEvent ITEM_AXE_WAX_OFF = BuiltinSoundEvent.get(SoundEventKey.ITEM_AXE_WAX_OFF);
+    SoundEvent ITEM_AXE_WAX_OFF = BuiltinSoundEvent.get(SoundEventKeys.ITEM_AXE_WAX_OFF);
 
-    SoundEvent ENTITY_AXOLOTL_ATTACK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_AXOLOTL_ATTACK);
+    SoundEvent ENTITY_AXOLOTL_ATTACK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_AXOLOTL_ATTACK);
 
-    SoundEvent ENTITY_AXOLOTL_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_AXOLOTL_DEATH);
+    SoundEvent ENTITY_AXOLOTL_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_AXOLOTL_DEATH);
 
-    SoundEvent ENTITY_AXOLOTL_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_AXOLOTL_HURT);
+    SoundEvent ENTITY_AXOLOTL_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_AXOLOTL_HURT);
 
-    SoundEvent ENTITY_AXOLOTL_IDLE_AIR = BuiltinSoundEvent.get(SoundEventKey.ENTITY_AXOLOTL_IDLE_AIR);
+    SoundEvent ENTITY_AXOLOTL_IDLE_AIR = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_AXOLOTL_IDLE_AIR);
 
-    SoundEvent ENTITY_AXOLOTL_IDLE_WATER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_AXOLOTL_IDLE_WATER);
+    SoundEvent ENTITY_AXOLOTL_IDLE_WATER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_AXOLOTL_IDLE_WATER);
 
-    SoundEvent ENTITY_AXOLOTL_SPLASH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_AXOLOTL_SPLASH);
+    SoundEvent ENTITY_AXOLOTL_SPLASH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_AXOLOTL_SPLASH);
 
-    SoundEvent ENTITY_AXOLOTL_SWIM = BuiltinSoundEvent.get(SoundEventKey.ENTITY_AXOLOTL_SWIM);
+    SoundEvent ENTITY_AXOLOTL_SWIM = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_AXOLOTL_SWIM);
 
-    SoundEvent BLOCK_AZALEA_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_AZALEA_BREAK);
+    SoundEvent BLOCK_AZALEA_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_AZALEA_BREAK);
 
-    SoundEvent BLOCK_AZALEA_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_AZALEA_FALL);
+    SoundEvent BLOCK_AZALEA_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_AZALEA_FALL);
 
-    SoundEvent BLOCK_AZALEA_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_AZALEA_HIT);
+    SoundEvent BLOCK_AZALEA_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_AZALEA_HIT);
 
-    SoundEvent BLOCK_AZALEA_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_AZALEA_PLACE);
+    SoundEvent BLOCK_AZALEA_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_AZALEA_PLACE);
 
-    SoundEvent BLOCK_AZALEA_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_AZALEA_STEP);
+    SoundEvent BLOCK_AZALEA_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_AZALEA_STEP);
 
-    SoundEvent BLOCK_AZALEA_LEAVES_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_AZALEA_LEAVES_BREAK);
+    SoundEvent BLOCK_AZALEA_LEAVES_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_AZALEA_LEAVES_BREAK);
 
-    SoundEvent BLOCK_AZALEA_LEAVES_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_AZALEA_LEAVES_FALL);
+    SoundEvent BLOCK_AZALEA_LEAVES_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_AZALEA_LEAVES_FALL);
 
-    SoundEvent BLOCK_AZALEA_LEAVES_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_AZALEA_LEAVES_HIT);
+    SoundEvent BLOCK_AZALEA_LEAVES_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_AZALEA_LEAVES_HIT);
 
-    SoundEvent BLOCK_AZALEA_LEAVES_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_AZALEA_LEAVES_PLACE);
+    SoundEvent BLOCK_AZALEA_LEAVES_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_AZALEA_LEAVES_PLACE);
 
-    SoundEvent BLOCK_AZALEA_LEAVES_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_AZALEA_LEAVES_STEP);
+    SoundEvent BLOCK_AZALEA_LEAVES_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_AZALEA_LEAVES_STEP);
 
-    SoundEvent ENTITY_BABY_NAUTILUS_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_NAUTILUS_AMBIENT);
+    SoundEvent ENTITY_BABY_NAUTILUS_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_NAUTILUS_AMBIENT);
 
-    SoundEvent ENTITY_BABY_NAUTILUS_AMBIENT_LAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_NAUTILUS_AMBIENT_LAND);
+    SoundEvent ENTITY_BABY_NAUTILUS_AMBIENT_LAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_NAUTILUS_AMBIENT_LAND);
 
-    SoundEvent ENTITY_BABY_NAUTILUS_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_NAUTILUS_DEATH);
+    SoundEvent ENTITY_BABY_NAUTILUS_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_NAUTILUS_DEATH);
 
-    SoundEvent ENTITY_BABY_NAUTILUS_DEATH_LAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_NAUTILUS_DEATH_LAND);
+    SoundEvent ENTITY_BABY_NAUTILUS_DEATH_LAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_NAUTILUS_DEATH_LAND);
 
-    SoundEvent ENTITY_BABY_NAUTILUS_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_NAUTILUS_EAT);
+    SoundEvent ENTITY_BABY_NAUTILUS_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_NAUTILUS_EAT);
 
-    SoundEvent ENTITY_BABY_NAUTILUS_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_NAUTILUS_HURT);
+    SoundEvent ENTITY_BABY_NAUTILUS_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_NAUTILUS_HURT);
 
-    SoundEvent ENTITY_BABY_NAUTILUS_HURT_LAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_NAUTILUS_HURT_LAND);
+    SoundEvent ENTITY_BABY_NAUTILUS_HURT_LAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_NAUTILUS_HURT_LAND);
 
-    SoundEvent ENTITY_NAUTILUS_RIDING = BuiltinSoundEvent.get(SoundEventKey.ENTITY_NAUTILUS_RIDING);
+    SoundEvent ENTITY_NAUTILUS_RIDING = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_NAUTILUS_RIDING);
 
-    SoundEvent ENTITY_BABY_NAUTILUS_SWIM = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_NAUTILUS_SWIM);
+    SoundEvent ENTITY_BABY_NAUTILUS_SWIM = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_NAUTILUS_SWIM);
 
-    SoundEvent BLOCK_BAMBOO_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_BREAK);
+    SoundEvent BLOCK_BAMBOO_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_BREAK);
 
-    SoundEvent BLOCK_BAMBOO_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_FALL);
+    SoundEvent BLOCK_BAMBOO_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_FALL);
 
-    SoundEvent BLOCK_BAMBOO_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_HIT);
+    SoundEvent BLOCK_BAMBOO_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_HIT);
 
-    SoundEvent BLOCK_BAMBOO_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_PLACE);
+    SoundEvent BLOCK_BAMBOO_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_PLACE);
 
-    SoundEvent BLOCK_BAMBOO_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_STEP);
+    SoundEvent BLOCK_BAMBOO_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_STEP);
 
-    SoundEvent BLOCK_BAMBOO_SAPLING_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_SAPLING_BREAK);
+    SoundEvent BLOCK_BAMBOO_SAPLING_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_SAPLING_BREAK);
 
-    SoundEvent BLOCK_BAMBOO_SAPLING_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_SAPLING_HIT);
+    SoundEvent BLOCK_BAMBOO_SAPLING_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_SAPLING_HIT);
 
-    SoundEvent BLOCK_BAMBOO_SAPLING_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_SAPLING_PLACE);
+    SoundEvent BLOCK_BAMBOO_SAPLING_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_SAPLING_PLACE);
 
-    SoundEvent BLOCK_BAMBOO_WOOD_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_WOOD_BREAK);
+    SoundEvent BLOCK_BAMBOO_WOOD_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_WOOD_BREAK);
 
-    SoundEvent BLOCK_BAMBOO_WOOD_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_WOOD_FALL);
+    SoundEvent BLOCK_BAMBOO_WOOD_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_WOOD_FALL);
 
-    SoundEvent BLOCK_BAMBOO_WOOD_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_WOOD_HIT);
+    SoundEvent BLOCK_BAMBOO_WOOD_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_WOOD_HIT);
 
-    SoundEvent BLOCK_BAMBOO_WOOD_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_WOOD_PLACE);
+    SoundEvent BLOCK_BAMBOO_WOOD_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_WOOD_PLACE);
 
-    SoundEvent BLOCK_BAMBOO_WOOD_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_WOOD_STEP);
+    SoundEvent BLOCK_BAMBOO_WOOD_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_WOOD_STEP);
 
-    SoundEvent BLOCK_BAMBOO_WOOD_DOOR_CLOSE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_WOOD_DOOR_CLOSE);
+    SoundEvent BLOCK_BAMBOO_WOOD_DOOR_CLOSE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_WOOD_DOOR_CLOSE);
 
-    SoundEvent BLOCK_BAMBOO_WOOD_DOOR_OPEN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_WOOD_DOOR_OPEN);
+    SoundEvent BLOCK_BAMBOO_WOOD_DOOR_OPEN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_WOOD_DOOR_OPEN);
 
-    SoundEvent BLOCK_BAMBOO_WOOD_TRAPDOOR_CLOSE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_WOOD_TRAPDOOR_CLOSE);
+    SoundEvent BLOCK_BAMBOO_WOOD_TRAPDOOR_CLOSE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_WOOD_TRAPDOOR_CLOSE);
 
-    SoundEvent BLOCK_BAMBOO_WOOD_TRAPDOOR_OPEN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_WOOD_TRAPDOOR_OPEN);
+    SoundEvent BLOCK_BAMBOO_WOOD_TRAPDOOR_OPEN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_WOOD_TRAPDOOR_OPEN);
 
-    SoundEvent BLOCK_BAMBOO_WOOD_BUTTON_CLICK_OFF = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_WOOD_BUTTON_CLICK_OFF);
+    SoundEvent BLOCK_BAMBOO_WOOD_BUTTON_CLICK_OFF = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_WOOD_BUTTON_CLICK_OFF);
 
-    SoundEvent BLOCK_BAMBOO_WOOD_BUTTON_CLICK_ON = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_WOOD_BUTTON_CLICK_ON);
+    SoundEvent BLOCK_BAMBOO_WOOD_BUTTON_CLICK_ON = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_WOOD_BUTTON_CLICK_ON);
 
-    SoundEvent BLOCK_BAMBOO_WOOD_PRESSURE_PLATE_CLICK_OFF = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_WOOD_PRESSURE_PLATE_CLICK_OFF);
+    SoundEvent BLOCK_BAMBOO_WOOD_PRESSURE_PLATE_CLICK_OFF = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_WOOD_PRESSURE_PLATE_CLICK_OFF);
 
-    SoundEvent BLOCK_BAMBOO_WOOD_PRESSURE_PLATE_CLICK_ON = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_WOOD_PRESSURE_PLATE_CLICK_ON);
+    SoundEvent BLOCK_BAMBOO_WOOD_PRESSURE_PLATE_CLICK_ON = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_WOOD_PRESSURE_PLATE_CLICK_ON);
 
-    SoundEvent BLOCK_BAMBOO_WOOD_FENCE_GATE_CLOSE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_WOOD_FENCE_GATE_CLOSE);
+    SoundEvent BLOCK_BAMBOO_WOOD_FENCE_GATE_CLOSE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_WOOD_FENCE_GATE_CLOSE);
 
-    SoundEvent BLOCK_BAMBOO_WOOD_FENCE_GATE_OPEN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_WOOD_FENCE_GATE_OPEN);
+    SoundEvent BLOCK_BAMBOO_WOOD_FENCE_GATE_OPEN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_WOOD_FENCE_GATE_OPEN);
 
-    SoundEvent BLOCK_BARREL_CLOSE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BARREL_CLOSE);
+    SoundEvent BLOCK_BARREL_CLOSE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BARREL_CLOSE);
 
-    SoundEvent BLOCK_BARREL_OPEN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BARREL_OPEN);
+    SoundEvent BLOCK_BARREL_OPEN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BARREL_OPEN);
 
-    SoundEvent BLOCK_BASALT_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BASALT_BREAK);
+    SoundEvent BLOCK_BASALT_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BASALT_BREAK);
 
-    SoundEvent BLOCK_BASALT_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BASALT_STEP);
+    SoundEvent BLOCK_BASALT_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BASALT_STEP);
 
-    SoundEvent BLOCK_BASALT_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BASALT_PLACE);
+    SoundEvent BLOCK_BASALT_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BASALT_PLACE);
 
-    SoundEvent BLOCK_BASALT_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BASALT_HIT);
+    SoundEvent BLOCK_BASALT_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BASALT_HIT);
 
-    SoundEvent BLOCK_BASALT_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BASALT_FALL);
+    SoundEvent BLOCK_BASALT_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BASALT_FALL);
 
-    SoundEvent ENTITY_BAT_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BAT_AMBIENT);
+    SoundEvent ENTITY_BAT_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BAT_AMBIENT);
 
-    SoundEvent ENTITY_BAT_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BAT_DEATH);
+    SoundEvent ENTITY_BAT_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BAT_DEATH);
 
-    SoundEvent ENTITY_BAT_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BAT_HURT);
+    SoundEvent ENTITY_BAT_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BAT_HURT);
 
-    SoundEvent ENTITY_BAT_LOOP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BAT_LOOP);
+    SoundEvent ENTITY_BAT_LOOP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BAT_LOOP);
 
-    SoundEvent ENTITY_BAT_TAKEOFF = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BAT_TAKEOFF);
+    SoundEvent ENTITY_BAT_TAKEOFF = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BAT_TAKEOFF);
 
-    SoundEvent BLOCK_BEACON_ACTIVATE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BEACON_ACTIVATE);
+    SoundEvent BLOCK_BEACON_ACTIVATE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BEACON_ACTIVATE);
 
-    SoundEvent BLOCK_BEACON_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BEACON_AMBIENT);
+    SoundEvent BLOCK_BEACON_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BEACON_AMBIENT);
 
-    SoundEvent BLOCK_BEACON_DEACTIVATE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BEACON_DEACTIVATE);
+    SoundEvent BLOCK_BEACON_DEACTIVATE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BEACON_DEACTIVATE);
 
-    SoundEvent BLOCK_BEACON_POWER_SELECT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BEACON_POWER_SELECT);
+    SoundEvent BLOCK_BEACON_POWER_SELECT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BEACON_POWER_SELECT);
 
-    SoundEvent ENTITY_BEE_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BEE_DEATH);
+    SoundEvent ENTITY_BEE_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BEE_DEATH);
 
-    SoundEvent ENTITY_BEE_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BEE_HURT);
+    SoundEvent ENTITY_BEE_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BEE_HURT);
 
-    SoundEvent ENTITY_BEE_LOOP_AGGRESSIVE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BEE_LOOP_AGGRESSIVE);
+    SoundEvent ENTITY_BEE_LOOP_AGGRESSIVE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BEE_LOOP_AGGRESSIVE);
 
-    SoundEvent ENTITY_BEE_LOOP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BEE_LOOP);
+    SoundEvent ENTITY_BEE_LOOP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BEE_LOOP);
 
-    SoundEvent ENTITY_BEE_STING = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BEE_STING);
+    SoundEvent ENTITY_BEE_STING = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BEE_STING);
 
-    SoundEvent ENTITY_BEE_POLLINATE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BEE_POLLINATE);
+    SoundEvent ENTITY_BEE_POLLINATE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BEE_POLLINATE);
 
-    SoundEvent BLOCK_BEEHIVE_DRIP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BEEHIVE_DRIP);
+    SoundEvent BLOCK_BEEHIVE_DRIP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BEEHIVE_DRIP);
 
-    SoundEvent BLOCK_BEEHIVE_ENTER = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BEEHIVE_ENTER);
+    SoundEvent BLOCK_BEEHIVE_ENTER = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BEEHIVE_ENTER);
 
-    SoundEvent BLOCK_BEEHIVE_EXIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BEEHIVE_EXIT);
+    SoundEvent BLOCK_BEEHIVE_EXIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BEEHIVE_EXIT);
 
-    SoundEvent BLOCK_BEEHIVE_SHEAR = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BEEHIVE_SHEAR);
+    SoundEvent BLOCK_BEEHIVE_SHEAR = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BEEHIVE_SHEAR);
 
-    SoundEvent BLOCK_BEEHIVE_WORK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BEEHIVE_WORK);
+    SoundEvent BLOCK_BEEHIVE_WORK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BEEHIVE_WORK);
 
-    SoundEvent BLOCK_BELL_USE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BELL_USE);
+    SoundEvent BLOCK_BELL_USE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BELL_USE);
 
-    SoundEvent BLOCK_BELL_RESONATE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BELL_RESONATE);
+    SoundEvent BLOCK_BELL_RESONATE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BELL_RESONATE);
 
-    SoundEvent BLOCK_BIG_DRIPLEAF_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BIG_DRIPLEAF_BREAK);
+    SoundEvent BLOCK_BIG_DRIPLEAF_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BIG_DRIPLEAF_BREAK);
 
-    SoundEvent BLOCK_BIG_DRIPLEAF_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BIG_DRIPLEAF_FALL);
+    SoundEvent BLOCK_BIG_DRIPLEAF_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BIG_DRIPLEAF_FALL);
 
-    SoundEvent BLOCK_BIG_DRIPLEAF_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BIG_DRIPLEAF_HIT);
+    SoundEvent BLOCK_BIG_DRIPLEAF_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BIG_DRIPLEAF_HIT);
 
-    SoundEvent BLOCK_BIG_DRIPLEAF_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BIG_DRIPLEAF_PLACE);
+    SoundEvent BLOCK_BIG_DRIPLEAF_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BIG_DRIPLEAF_PLACE);
 
-    SoundEvent BLOCK_BIG_DRIPLEAF_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BIG_DRIPLEAF_STEP);
+    SoundEvent BLOCK_BIG_DRIPLEAF_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BIG_DRIPLEAF_STEP);
 
-    SoundEvent ENTITY_BLAZE_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BLAZE_AMBIENT);
+    SoundEvent ENTITY_BLAZE_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BLAZE_AMBIENT);
 
-    SoundEvent ENTITY_BLAZE_BURN = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BLAZE_BURN);
+    SoundEvent ENTITY_BLAZE_BURN = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BLAZE_BURN);
 
-    SoundEvent ENTITY_BLAZE_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BLAZE_DEATH);
+    SoundEvent ENTITY_BLAZE_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BLAZE_DEATH);
 
-    SoundEvent ENTITY_BLAZE_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BLAZE_HURT);
+    SoundEvent ENTITY_BLAZE_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BLAZE_HURT);
 
-    SoundEvent ENTITY_BLAZE_SHOOT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BLAZE_SHOOT);
+    SoundEvent ENTITY_BLAZE_SHOOT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BLAZE_SHOOT);
 
-    SoundEvent ENTITY_BOAT_PADDLE_LAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BOAT_PADDLE_LAND);
+    SoundEvent ENTITY_BOAT_PADDLE_LAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BOAT_PADDLE_LAND);
 
-    SoundEvent ENTITY_BOAT_PADDLE_WATER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BOAT_PADDLE_WATER);
+    SoundEvent ENTITY_BOAT_PADDLE_WATER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BOAT_PADDLE_WATER);
 
-    SoundEvent ENTITY_BOGGED_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BOGGED_AMBIENT);
+    SoundEvent ENTITY_BOGGED_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BOGGED_AMBIENT);
 
-    SoundEvent ENTITY_BOGGED_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BOGGED_DEATH);
+    SoundEvent ENTITY_BOGGED_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BOGGED_DEATH);
 
-    SoundEvent ENTITY_BOGGED_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BOGGED_HURT);
+    SoundEvent ENTITY_BOGGED_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BOGGED_HURT);
 
-    SoundEvent ENTITY_BOGGED_SHEAR = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BOGGED_SHEAR);
+    SoundEvent ENTITY_BOGGED_SHEAR = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BOGGED_SHEAR);
 
-    SoundEvent ENTITY_BOGGED_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BOGGED_STEP);
+    SoundEvent ENTITY_BOGGED_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BOGGED_STEP);
 
-    SoundEvent BLOCK_BONE_BLOCK_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BONE_BLOCK_BREAK);
+    SoundEvent BLOCK_BONE_BLOCK_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BONE_BLOCK_BREAK);
 
-    SoundEvent BLOCK_BONE_BLOCK_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BONE_BLOCK_FALL);
+    SoundEvent BLOCK_BONE_BLOCK_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BONE_BLOCK_FALL);
 
-    SoundEvent BLOCK_BONE_BLOCK_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BONE_BLOCK_HIT);
+    SoundEvent BLOCK_BONE_BLOCK_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BONE_BLOCK_HIT);
 
-    SoundEvent BLOCK_BONE_BLOCK_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BONE_BLOCK_PLACE);
+    SoundEvent BLOCK_BONE_BLOCK_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BONE_BLOCK_PLACE);
 
-    SoundEvent BLOCK_BONE_BLOCK_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BONE_BLOCK_STEP);
+    SoundEvent BLOCK_BONE_BLOCK_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BONE_BLOCK_STEP);
 
-    SoundEvent ITEM_BONE_MEAL_USE = BuiltinSoundEvent.get(SoundEventKey.ITEM_BONE_MEAL_USE);
+    SoundEvent ITEM_BONE_MEAL_USE = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BONE_MEAL_USE);
 
-    SoundEvent ITEM_BOOK_PAGE_TURN = BuiltinSoundEvent.get(SoundEventKey.ITEM_BOOK_PAGE_TURN);
+    SoundEvent ITEM_BOOK_PAGE_TURN = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BOOK_PAGE_TURN);
 
-    SoundEvent ITEM_BOOK_PUT = BuiltinSoundEvent.get(SoundEventKey.ITEM_BOOK_PUT);
+    SoundEvent ITEM_BOOK_PUT = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BOOK_PUT);
 
-    SoundEvent BLOCK_BLASTFURNACE_FIRE_CRACKLE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BLASTFURNACE_FIRE_CRACKLE);
+    SoundEvent BLOCK_BLASTFURNACE_FIRE_CRACKLE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BLASTFURNACE_FIRE_CRACKLE);
 
-    SoundEvent ITEM_BOTTLE_EMPTY = BuiltinSoundEvent.get(SoundEventKey.ITEM_BOTTLE_EMPTY);
+    SoundEvent ITEM_BOTTLE_EMPTY = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BOTTLE_EMPTY);
 
-    SoundEvent ITEM_BOTTLE_FILL = BuiltinSoundEvent.get(SoundEventKey.ITEM_BOTTLE_FILL);
+    SoundEvent ITEM_BOTTLE_FILL = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BOTTLE_FILL);
 
-    SoundEvent ITEM_BOTTLE_FILL_DRAGONBREATH = BuiltinSoundEvent.get(SoundEventKey.ITEM_BOTTLE_FILL_DRAGONBREATH);
+    SoundEvent ITEM_BOTTLE_FILL_DRAGONBREATH = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BOTTLE_FILL_DRAGONBREATH);
 
-    SoundEvent ENTITY_BREEZE_CHARGE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BREEZE_CHARGE);
+    SoundEvent ENTITY_BREEZE_CHARGE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BREEZE_CHARGE);
 
-    SoundEvent ENTITY_BREEZE_DEFLECT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BREEZE_DEFLECT);
+    SoundEvent ENTITY_BREEZE_DEFLECT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BREEZE_DEFLECT);
 
-    SoundEvent ENTITY_BREEZE_INHALE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BREEZE_INHALE);
+    SoundEvent ENTITY_BREEZE_INHALE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BREEZE_INHALE);
 
-    SoundEvent ENTITY_BREEZE_IDLE_GROUND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BREEZE_IDLE_GROUND);
+    SoundEvent ENTITY_BREEZE_IDLE_GROUND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BREEZE_IDLE_GROUND);
 
-    SoundEvent ENTITY_BREEZE_IDLE_AIR = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BREEZE_IDLE_AIR);
+    SoundEvent ENTITY_BREEZE_IDLE_AIR = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BREEZE_IDLE_AIR);
 
-    SoundEvent ENTITY_BREEZE_SHOOT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BREEZE_SHOOT);
+    SoundEvent ENTITY_BREEZE_SHOOT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BREEZE_SHOOT);
 
-    SoundEvent ENTITY_BREEZE_JUMP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BREEZE_JUMP);
+    SoundEvent ENTITY_BREEZE_JUMP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BREEZE_JUMP);
 
-    SoundEvent ENTITY_BREEZE_LAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BREEZE_LAND);
+    SoundEvent ENTITY_BREEZE_LAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BREEZE_LAND);
 
-    SoundEvent ENTITY_BREEZE_SLIDE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BREEZE_SLIDE);
+    SoundEvent ENTITY_BREEZE_SLIDE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BREEZE_SLIDE);
 
-    SoundEvent ENTITY_BREEZE_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BREEZE_DEATH);
+    SoundEvent ENTITY_BREEZE_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BREEZE_DEATH);
 
-    SoundEvent ENTITY_BREEZE_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BREEZE_HURT);
+    SoundEvent ENTITY_BREEZE_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BREEZE_HURT);
 
-    SoundEvent ENTITY_BREEZE_WHIRL = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BREEZE_WHIRL);
+    SoundEvent ENTITY_BREEZE_WHIRL = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BREEZE_WHIRL);
 
-    SoundEvent ENTITY_BREEZE_WIND_BURST = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BREEZE_WIND_BURST);
+    SoundEvent ENTITY_BREEZE_WIND_BURST = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BREEZE_WIND_BURST);
 
-    SoundEvent BLOCK_BREWING_STAND_BREW = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BREWING_STAND_BREW);
+    SoundEvent BLOCK_BREWING_STAND_BREW = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BREWING_STAND_BREW);
 
-    SoundEvent ITEM_BRUSH_BRUSHING_GENERIC = BuiltinSoundEvent.get(SoundEventKey.ITEM_BRUSH_BRUSHING_GENERIC);
+    SoundEvent ITEM_BRUSH_BRUSHING_GENERIC = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BRUSH_BRUSHING_GENERIC);
 
-    SoundEvent ITEM_BRUSH_BRUSHING_SAND = BuiltinSoundEvent.get(SoundEventKey.ITEM_BRUSH_BRUSHING_SAND);
+    SoundEvent ITEM_BRUSH_BRUSHING_SAND = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BRUSH_BRUSHING_SAND);
 
-    SoundEvent ITEM_BRUSH_BRUSHING_GRAVEL = BuiltinSoundEvent.get(SoundEventKey.ITEM_BRUSH_BRUSHING_GRAVEL);
+    SoundEvent ITEM_BRUSH_BRUSHING_GRAVEL = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BRUSH_BRUSHING_GRAVEL);
 
-    SoundEvent ITEM_BRUSH_BRUSHING_SAND_COMPLETE = BuiltinSoundEvent.get(SoundEventKey.ITEM_BRUSH_BRUSHING_SAND_COMPLETE);
+    SoundEvent ITEM_BRUSH_BRUSHING_SAND_COMPLETE = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BRUSH_BRUSHING_SAND_COMPLETE);
 
-    SoundEvent ITEM_BRUSH_BRUSHING_GRAVEL_COMPLETE = BuiltinSoundEvent.get(SoundEventKey.ITEM_BRUSH_BRUSHING_GRAVEL_COMPLETE);
+    SoundEvent ITEM_BRUSH_BRUSHING_GRAVEL_COMPLETE = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BRUSH_BRUSHING_GRAVEL_COMPLETE);
 
-    SoundEvent BLOCK_BUBBLE_COLUMN_BUBBLE_POP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BUBBLE_COLUMN_BUBBLE_POP);
+    SoundEvent BLOCK_BUBBLE_COLUMN_BUBBLE_POP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BUBBLE_COLUMN_BUBBLE_POP);
 
-    SoundEvent BLOCK_BUBBLE_COLUMN_UPWARDS_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BUBBLE_COLUMN_UPWARDS_AMBIENT);
+    SoundEvent BLOCK_BUBBLE_COLUMN_UPWARDS_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BUBBLE_COLUMN_UPWARDS_AMBIENT);
 
-    SoundEvent BLOCK_BUBBLE_COLUMN_UPWARDS_INSIDE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BUBBLE_COLUMN_UPWARDS_INSIDE);
+    SoundEvent BLOCK_BUBBLE_COLUMN_UPWARDS_INSIDE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BUBBLE_COLUMN_UPWARDS_INSIDE);
 
-    SoundEvent BLOCK_BUBBLE_COLUMN_WHIRLPOOL_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BUBBLE_COLUMN_WHIRLPOOL_AMBIENT);
+    SoundEvent BLOCK_BUBBLE_COLUMN_WHIRLPOOL_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BUBBLE_COLUMN_WHIRLPOOL_AMBIENT);
 
-    SoundEvent BLOCK_BUBBLE_COLUMN_WHIRLPOOL_INSIDE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BUBBLE_COLUMN_WHIRLPOOL_INSIDE);
+    SoundEvent BLOCK_BUBBLE_COLUMN_WHIRLPOOL_INSIDE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BUBBLE_COLUMN_WHIRLPOOL_INSIDE);
 
-    SoundEvent UI_HUD_BUBBLE_POP = BuiltinSoundEvent.get(SoundEventKey.UI_HUD_BUBBLE_POP);
+    SoundEvent UI_HUD_BUBBLE_POP = BuiltinSoundEvent.get(SoundEventKeys.UI_HUD_BUBBLE_POP);
 
-    SoundEvent ITEM_BUCKET_EMPTY = BuiltinSoundEvent.get(SoundEventKey.ITEM_BUCKET_EMPTY);
+    SoundEvent ITEM_BUCKET_EMPTY = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BUCKET_EMPTY);
 
-    SoundEvent ITEM_BUCKET_EMPTY_AXOLOTL = BuiltinSoundEvent.get(SoundEventKey.ITEM_BUCKET_EMPTY_AXOLOTL);
+    SoundEvent ITEM_BUCKET_EMPTY_AXOLOTL = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BUCKET_EMPTY_AXOLOTL);
 
-    SoundEvent ITEM_BUCKET_EMPTY_FISH = BuiltinSoundEvent.get(SoundEventKey.ITEM_BUCKET_EMPTY_FISH);
+    SoundEvent ITEM_BUCKET_EMPTY_FISH = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BUCKET_EMPTY_FISH);
 
-    SoundEvent ITEM_BUCKET_EMPTY_LAVA = BuiltinSoundEvent.get(SoundEventKey.ITEM_BUCKET_EMPTY_LAVA);
+    SoundEvent ITEM_BUCKET_EMPTY_LAVA = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BUCKET_EMPTY_LAVA);
 
-    SoundEvent ITEM_BUCKET_EMPTY_POWDER_SNOW = BuiltinSoundEvent.get(SoundEventKey.ITEM_BUCKET_EMPTY_POWDER_SNOW);
+    SoundEvent ITEM_BUCKET_EMPTY_POWDER_SNOW = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BUCKET_EMPTY_POWDER_SNOW);
 
-    SoundEvent ITEM_BUCKET_EMPTY_SULFUR_CUBE = BuiltinSoundEvent.get(SoundEventKey.ITEM_BUCKET_EMPTY_SULFUR_CUBE);
+    SoundEvent ITEM_BUCKET_EMPTY_SULFUR_CUBE = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BUCKET_EMPTY_SULFUR_CUBE);
 
-    SoundEvent ITEM_BUCKET_EMPTY_TADPOLE = BuiltinSoundEvent.get(SoundEventKey.ITEM_BUCKET_EMPTY_TADPOLE);
+    SoundEvent ITEM_BUCKET_EMPTY_TADPOLE = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BUCKET_EMPTY_TADPOLE);
 
-    SoundEvent ITEM_BUCKET_FILL = BuiltinSoundEvent.get(SoundEventKey.ITEM_BUCKET_FILL);
+    SoundEvent ITEM_BUCKET_FILL = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BUCKET_FILL);
 
-    SoundEvent ITEM_BUCKET_FILL_AXOLOTL = BuiltinSoundEvent.get(SoundEventKey.ITEM_BUCKET_FILL_AXOLOTL);
+    SoundEvent ITEM_BUCKET_FILL_AXOLOTL = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BUCKET_FILL_AXOLOTL);
 
-    SoundEvent ITEM_BUCKET_FILL_FISH = BuiltinSoundEvent.get(SoundEventKey.ITEM_BUCKET_FILL_FISH);
+    SoundEvent ITEM_BUCKET_FILL_FISH = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BUCKET_FILL_FISH);
 
-    SoundEvent ITEM_BUCKET_FILL_LAVA = BuiltinSoundEvent.get(SoundEventKey.ITEM_BUCKET_FILL_LAVA);
+    SoundEvent ITEM_BUCKET_FILL_LAVA = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BUCKET_FILL_LAVA);
 
-    SoundEvent ITEM_BUCKET_FILL_POWDER_SNOW = BuiltinSoundEvent.get(SoundEventKey.ITEM_BUCKET_FILL_POWDER_SNOW);
+    SoundEvent ITEM_BUCKET_FILL_POWDER_SNOW = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BUCKET_FILL_POWDER_SNOW);
 
-    SoundEvent ITEM_BUCKET_FILL_SULFUR_CUBE = BuiltinSoundEvent.get(SoundEventKey.ITEM_BUCKET_FILL_SULFUR_CUBE);
+    SoundEvent ITEM_BUCKET_FILL_SULFUR_CUBE = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BUCKET_FILL_SULFUR_CUBE);
 
-    SoundEvent ITEM_BUCKET_FILL_TADPOLE = BuiltinSoundEvent.get(SoundEventKey.ITEM_BUCKET_FILL_TADPOLE);
+    SoundEvent ITEM_BUCKET_FILL_TADPOLE = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BUCKET_FILL_TADPOLE);
 
-    SoundEvent ITEM_BUNDLE_DROP_CONTENTS = BuiltinSoundEvent.get(SoundEventKey.ITEM_BUNDLE_DROP_CONTENTS);
+    SoundEvent ITEM_BUNDLE_DROP_CONTENTS = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BUNDLE_DROP_CONTENTS);
 
-    SoundEvent ITEM_BUNDLE_INSERT = BuiltinSoundEvent.get(SoundEventKey.ITEM_BUNDLE_INSERT);
+    SoundEvent ITEM_BUNDLE_INSERT = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BUNDLE_INSERT);
 
-    SoundEvent ITEM_BUNDLE_INSERT_FAIL = BuiltinSoundEvent.get(SoundEventKey.ITEM_BUNDLE_INSERT_FAIL);
+    SoundEvent ITEM_BUNDLE_INSERT_FAIL = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BUNDLE_INSERT_FAIL);
 
-    SoundEvent ITEM_BUNDLE_REMOVE_ONE = BuiltinSoundEvent.get(SoundEventKey.ITEM_BUNDLE_REMOVE_ONE);
+    SoundEvent ITEM_BUNDLE_REMOVE_ONE = BuiltinSoundEvent.get(SoundEventKeys.ITEM_BUNDLE_REMOVE_ONE);
 
-    SoundEvent BLOCK_CACTUS_FLOWER_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CACTUS_FLOWER_BREAK);
+    SoundEvent BLOCK_CACTUS_FLOWER_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CACTUS_FLOWER_BREAK);
 
-    SoundEvent BLOCK_CACTUS_FLOWER_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CACTUS_FLOWER_PLACE);
+    SoundEvent BLOCK_CACTUS_FLOWER_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CACTUS_FLOWER_PLACE);
 
-    SoundEvent BLOCK_CAKE_ADD_CANDLE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CAKE_ADD_CANDLE);
+    SoundEvent BLOCK_CAKE_ADD_CANDLE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CAKE_ADD_CANDLE);
 
-    SoundEvent BLOCK_CALCITE_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CALCITE_BREAK);
+    SoundEvent BLOCK_CALCITE_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CALCITE_BREAK);
 
-    SoundEvent BLOCK_CALCITE_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CALCITE_STEP);
+    SoundEvent BLOCK_CALCITE_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CALCITE_STEP);
 
-    SoundEvent BLOCK_CALCITE_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CALCITE_PLACE);
+    SoundEvent BLOCK_CALCITE_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CALCITE_PLACE);
 
-    SoundEvent BLOCK_CALCITE_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CALCITE_HIT);
+    SoundEvent BLOCK_CALCITE_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CALCITE_HIT);
 
-    SoundEvent BLOCK_CALCITE_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CALCITE_FALL);
+    SoundEvent BLOCK_CALCITE_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CALCITE_FALL);
 
-    SoundEvent ENTITY_CAMEL_HUSK_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAMEL_HUSK_AMBIENT);
+    SoundEvent ENTITY_CAMEL_HUSK_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAMEL_HUSK_AMBIENT);
 
-    SoundEvent ENTITY_CAMEL_HUSK_DASH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAMEL_HUSK_DASH);
+    SoundEvent ENTITY_CAMEL_HUSK_DASH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAMEL_HUSK_DASH);
 
-    SoundEvent ENTITY_CAMEL_HUSK_DASH_READY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAMEL_HUSK_DASH_READY);
+    SoundEvent ENTITY_CAMEL_HUSK_DASH_READY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAMEL_HUSK_DASH_READY);
 
-    SoundEvent ENTITY_CAMEL_HUSK_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAMEL_HUSK_DEATH);
+    SoundEvent ENTITY_CAMEL_HUSK_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAMEL_HUSK_DEATH);
 
-    SoundEvent ENTITY_CAMEL_HUSK_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAMEL_HUSK_EAT);
+    SoundEvent ENTITY_CAMEL_HUSK_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAMEL_HUSK_EAT);
 
-    SoundEvent ENTITY_CAMEL_HUSK_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAMEL_HUSK_HURT);
+    SoundEvent ENTITY_CAMEL_HUSK_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAMEL_HUSK_HURT);
 
-    SoundEvent ENTITY_CAMEL_HUSK_SADDLE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAMEL_HUSK_SADDLE);
+    SoundEvent ENTITY_CAMEL_HUSK_SADDLE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAMEL_HUSK_SADDLE);
 
-    SoundEvent ENTITY_CAMEL_HUSK_SIT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAMEL_HUSK_SIT);
+    SoundEvent ENTITY_CAMEL_HUSK_SIT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAMEL_HUSK_SIT);
 
-    SoundEvent ENTITY_CAMEL_HUSK_STAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAMEL_HUSK_STAND);
+    SoundEvent ENTITY_CAMEL_HUSK_STAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAMEL_HUSK_STAND);
 
-    SoundEvent ENTITY_CAMEL_HUSK_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAMEL_HUSK_STEP);
+    SoundEvent ENTITY_CAMEL_HUSK_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAMEL_HUSK_STEP);
 
-    SoundEvent ENTITY_CAMEL_HUSK_STEP_SAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAMEL_HUSK_STEP_SAND);
+    SoundEvent ENTITY_CAMEL_HUSK_STEP_SAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAMEL_HUSK_STEP_SAND);
 
-    SoundEvent ENTITY_CAMEL_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAMEL_AMBIENT);
+    SoundEvent ENTITY_CAMEL_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAMEL_AMBIENT);
 
-    SoundEvent ENTITY_CAMEL_DASH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAMEL_DASH);
+    SoundEvent ENTITY_CAMEL_DASH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAMEL_DASH);
 
-    SoundEvent ENTITY_CAMEL_DASH_READY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAMEL_DASH_READY);
+    SoundEvent ENTITY_CAMEL_DASH_READY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAMEL_DASH_READY);
 
-    SoundEvent ENTITY_CAMEL_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAMEL_DEATH);
+    SoundEvent ENTITY_CAMEL_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAMEL_DEATH);
 
-    SoundEvent ENTITY_CAMEL_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAMEL_EAT);
+    SoundEvent ENTITY_CAMEL_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAMEL_EAT);
 
-    SoundEvent ENTITY_CAMEL_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAMEL_HURT);
+    SoundEvent ENTITY_CAMEL_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAMEL_HURT);
 
-    SoundEvent ENTITY_CAMEL_SADDLE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAMEL_SADDLE);
+    SoundEvent ENTITY_CAMEL_SADDLE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAMEL_SADDLE);
 
-    SoundEvent ENTITY_CAMEL_SIT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAMEL_SIT);
+    SoundEvent ENTITY_CAMEL_SIT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAMEL_SIT);
 
-    SoundEvent ENTITY_CAMEL_STAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAMEL_STAND);
+    SoundEvent ENTITY_CAMEL_STAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAMEL_STAND);
 
-    SoundEvent ENTITY_CAMEL_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAMEL_STEP);
+    SoundEvent ENTITY_CAMEL_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAMEL_STEP);
 
-    SoundEvent ENTITY_CAMEL_STEP_SAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAMEL_STEP_SAND);
+    SoundEvent ENTITY_CAMEL_STEP_SAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAMEL_STEP_SAND);
 
-    SoundEvent BLOCK_CAMPFIRE_CRACKLE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CAMPFIRE_CRACKLE);
+    SoundEvent BLOCK_CAMPFIRE_CRACKLE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CAMPFIRE_CRACKLE);
 
-    SoundEvent BLOCK_CANDLE_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CANDLE_AMBIENT);
+    SoundEvent BLOCK_CANDLE_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CANDLE_AMBIENT);
 
-    SoundEvent BLOCK_CANDLE_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CANDLE_BREAK);
+    SoundEvent BLOCK_CANDLE_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CANDLE_BREAK);
 
-    SoundEvent BLOCK_CANDLE_EXTINGUISH = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CANDLE_EXTINGUISH);
+    SoundEvent BLOCK_CANDLE_EXTINGUISH = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CANDLE_EXTINGUISH);
 
-    SoundEvent BLOCK_CANDLE_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CANDLE_FALL);
+    SoundEvent BLOCK_CANDLE_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CANDLE_FALL);
 
-    SoundEvent BLOCK_CANDLE_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CANDLE_HIT);
+    SoundEvent BLOCK_CANDLE_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CANDLE_HIT);
 
-    SoundEvent BLOCK_CANDLE_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CANDLE_PLACE);
+    SoundEvent BLOCK_CANDLE_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CANDLE_PLACE);
 
-    SoundEvent BLOCK_CANDLE_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CANDLE_STEP);
+    SoundEvent BLOCK_CANDLE_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CANDLE_STEP);
 
-    SoundEvent ENTITY_BABY_CAT_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_CAT_AMBIENT);
+    SoundEvent ENTITY_BABY_CAT_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_CAT_AMBIENT);
 
-    SoundEvent ENTITY_BABY_CAT_STRAY_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_CAT_STRAY_AMBIENT);
+    SoundEvent ENTITY_BABY_CAT_STRAY_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_CAT_STRAY_AMBIENT);
 
-    SoundEvent ENTITY_BABY_CAT_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_CAT_DEATH);
+    SoundEvent ENTITY_BABY_CAT_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_CAT_DEATH);
 
-    SoundEvent ENTITY_BABY_CAT_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_CAT_EAT);
+    SoundEvent ENTITY_BABY_CAT_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_CAT_EAT);
 
-    SoundEvent ENTITY_BABY_CAT_HISS = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_CAT_HISS);
+    SoundEvent ENTITY_BABY_CAT_HISS = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_CAT_HISS);
 
-    SoundEvent ENTITY_BABY_CAT_BEG_FOR_FOOD = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_CAT_BEG_FOR_FOOD);
+    SoundEvent ENTITY_BABY_CAT_BEG_FOR_FOOD = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_CAT_BEG_FOR_FOOD);
 
-    SoundEvent ENTITY_BABY_CAT_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_CAT_HURT);
+    SoundEvent ENTITY_BABY_CAT_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_CAT_HURT);
 
-    SoundEvent ENTITY_BABY_CAT_PURR = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_CAT_PURR);
+    SoundEvent ENTITY_BABY_CAT_PURR = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_CAT_PURR);
 
-    SoundEvent ENTITY_BABY_CAT_PURREOW = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_CAT_PURREOW);
+    SoundEvent ENTITY_BABY_CAT_PURREOW = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_CAT_PURREOW);
 
-    SoundEvent ENTITY_CAT_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAT_AMBIENT);
+    SoundEvent ENTITY_CAT_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAT_AMBIENT);
 
-    SoundEvent ENTITY_CAT_STRAY_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAT_STRAY_AMBIENT);
+    SoundEvent ENTITY_CAT_STRAY_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAT_STRAY_AMBIENT);
 
-    SoundEvent ENTITY_CAT_HISS = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAT_HISS);
+    SoundEvent ENTITY_CAT_HISS = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAT_HISS);
 
-    SoundEvent ENTITY_CAT_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAT_HURT);
+    SoundEvent ENTITY_CAT_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAT_HURT);
 
-    SoundEvent ENTITY_CAT_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAT_DEATH);
+    SoundEvent ENTITY_CAT_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAT_DEATH);
 
-    SoundEvent ENTITY_CAT_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAT_EAT);
+    SoundEvent ENTITY_CAT_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAT_EAT);
 
-    SoundEvent ENTITY_CAT_BEG_FOR_FOOD = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAT_BEG_FOR_FOOD);
+    SoundEvent ENTITY_CAT_BEG_FOR_FOOD = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAT_BEG_FOR_FOOD);
 
-    SoundEvent ENTITY_CAT_PURR = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAT_PURR);
+    SoundEvent ENTITY_CAT_PURR = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAT_PURR);
 
-    SoundEvent ENTITY_CAT_PURREOW = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAT_PURREOW);
+    SoundEvent ENTITY_CAT_PURREOW = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAT_PURREOW);
 
-    SoundEvent ENTITY_CAT_ROYAL_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAT_ROYAL_AMBIENT);
+    SoundEvent ENTITY_CAT_ROYAL_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAT_ROYAL_AMBIENT);
 
-    SoundEvent ENTITY_CAT_ROYAL_STRAY_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAT_ROYAL_STRAY_AMBIENT);
+    SoundEvent ENTITY_CAT_ROYAL_STRAY_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAT_ROYAL_STRAY_AMBIENT);
 
-    SoundEvent ENTITY_CAT_ROYAL_HISS = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAT_ROYAL_HISS);
+    SoundEvent ENTITY_CAT_ROYAL_HISS = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAT_ROYAL_HISS);
 
-    SoundEvent ENTITY_CAT_ROYAL_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAT_ROYAL_HURT);
+    SoundEvent ENTITY_CAT_ROYAL_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAT_ROYAL_HURT);
 
-    SoundEvent ENTITY_CAT_ROYAL_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAT_ROYAL_DEATH);
+    SoundEvent ENTITY_CAT_ROYAL_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAT_ROYAL_DEATH);
 
-    SoundEvent ENTITY_CAT_ROYAL_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAT_ROYAL_EAT);
+    SoundEvent ENTITY_CAT_ROYAL_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAT_ROYAL_EAT);
 
-    SoundEvent ENTITY_CAT_ROYAL_BEG_FOR_FOOD = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAT_ROYAL_BEG_FOR_FOOD);
+    SoundEvent ENTITY_CAT_ROYAL_BEG_FOR_FOOD = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAT_ROYAL_BEG_FOR_FOOD);
 
-    SoundEvent ENTITY_CAT_ROYAL_PURR = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAT_ROYAL_PURR);
+    SoundEvent ENTITY_CAT_ROYAL_PURR = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAT_ROYAL_PURR);
 
-    SoundEvent ENTITY_CAT_ROYAL_PURREOW = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CAT_ROYAL_PURREOW);
+    SoundEvent ENTITY_CAT_ROYAL_PURREOW = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CAT_ROYAL_PURREOW);
 
-    SoundEvent BLOCK_CAVE_VINES_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CAVE_VINES_BREAK);
+    SoundEvent BLOCK_CAVE_VINES_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CAVE_VINES_BREAK);
 
-    SoundEvent BLOCK_CAVE_VINES_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CAVE_VINES_FALL);
+    SoundEvent BLOCK_CAVE_VINES_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CAVE_VINES_FALL);
 
-    SoundEvent BLOCK_CAVE_VINES_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CAVE_VINES_HIT);
+    SoundEvent BLOCK_CAVE_VINES_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CAVE_VINES_HIT);
 
-    SoundEvent BLOCK_CAVE_VINES_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CAVE_VINES_PLACE);
+    SoundEvent BLOCK_CAVE_VINES_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CAVE_VINES_PLACE);
 
-    SoundEvent BLOCK_CAVE_VINES_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CAVE_VINES_STEP);
+    SoundEvent BLOCK_CAVE_VINES_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CAVE_VINES_STEP);
 
-    SoundEvent BLOCK_CAVE_VINES_PICK_BERRIES = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CAVE_VINES_PICK_BERRIES);
+    SoundEvent BLOCK_CAVE_VINES_PICK_BERRIES = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CAVE_VINES_PICK_BERRIES);
 
-    SoundEvent BLOCK_CHAIN_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHAIN_BREAK);
+    SoundEvent BLOCK_CHAIN_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHAIN_BREAK);
 
-    SoundEvent BLOCK_CHAIN_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHAIN_FALL);
+    SoundEvent BLOCK_CHAIN_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHAIN_FALL);
 
-    SoundEvent BLOCK_CHAIN_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHAIN_HIT);
+    SoundEvent BLOCK_CHAIN_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHAIN_HIT);
 
-    SoundEvent BLOCK_CHAIN_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHAIN_PLACE);
+    SoundEvent BLOCK_CHAIN_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHAIN_PLACE);
 
-    SoundEvent BLOCK_CHAIN_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHAIN_STEP);
+    SoundEvent BLOCK_CHAIN_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHAIN_STEP);
 
-    SoundEvent BLOCK_CHERRY_WOOD_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_WOOD_BREAK);
+    SoundEvent BLOCK_CHERRY_WOOD_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_WOOD_BREAK);
 
-    SoundEvent BLOCK_CHERRY_WOOD_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_WOOD_FALL);
+    SoundEvent BLOCK_CHERRY_WOOD_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_WOOD_FALL);
 
-    SoundEvent BLOCK_CHERRY_WOOD_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_WOOD_HIT);
+    SoundEvent BLOCK_CHERRY_WOOD_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_WOOD_HIT);
 
-    SoundEvent BLOCK_CHERRY_WOOD_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_WOOD_PLACE);
+    SoundEvent BLOCK_CHERRY_WOOD_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_WOOD_PLACE);
 
-    SoundEvent BLOCK_CHERRY_WOOD_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_WOOD_STEP);
+    SoundEvent BLOCK_CHERRY_WOOD_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_WOOD_STEP);
 
-    SoundEvent BLOCK_CHERRY_SAPLING_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_SAPLING_BREAK);
+    SoundEvent BLOCK_CHERRY_SAPLING_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_SAPLING_BREAK);
 
-    SoundEvent BLOCK_CHERRY_SAPLING_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_SAPLING_FALL);
+    SoundEvent BLOCK_CHERRY_SAPLING_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_SAPLING_FALL);
 
-    SoundEvent BLOCK_CHERRY_SAPLING_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_SAPLING_HIT);
+    SoundEvent BLOCK_CHERRY_SAPLING_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_SAPLING_HIT);
 
-    SoundEvent BLOCK_CHERRY_SAPLING_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_SAPLING_PLACE);
+    SoundEvent BLOCK_CHERRY_SAPLING_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_SAPLING_PLACE);
 
-    SoundEvent BLOCK_CHERRY_SAPLING_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_SAPLING_STEP);
+    SoundEvent BLOCK_CHERRY_SAPLING_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_SAPLING_STEP);
 
-    SoundEvent BLOCK_CHERRY_LEAVES_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_LEAVES_BREAK);
+    SoundEvent BLOCK_CHERRY_LEAVES_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_LEAVES_BREAK);
 
-    SoundEvent BLOCK_CHERRY_LEAVES_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_LEAVES_FALL);
+    SoundEvent BLOCK_CHERRY_LEAVES_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_LEAVES_FALL);
 
-    SoundEvent BLOCK_CHERRY_LEAVES_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_LEAVES_HIT);
+    SoundEvent BLOCK_CHERRY_LEAVES_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_LEAVES_HIT);
 
-    SoundEvent BLOCK_CHERRY_LEAVES_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_LEAVES_PLACE);
+    SoundEvent BLOCK_CHERRY_LEAVES_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_LEAVES_PLACE);
 
-    SoundEvent BLOCK_CHERRY_LEAVES_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_LEAVES_STEP);
+    SoundEvent BLOCK_CHERRY_LEAVES_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_LEAVES_STEP);
 
-    SoundEvent BLOCK_CHERRY_WOOD_HANGING_SIGN_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_WOOD_HANGING_SIGN_STEP);
+    SoundEvent BLOCK_CHERRY_WOOD_HANGING_SIGN_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_WOOD_HANGING_SIGN_STEP);
 
-    SoundEvent BLOCK_CHERRY_WOOD_HANGING_SIGN_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_WOOD_HANGING_SIGN_BREAK);
+    SoundEvent BLOCK_CHERRY_WOOD_HANGING_SIGN_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_WOOD_HANGING_SIGN_BREAK);
 
-    SoundEvent BLOCK_CHERRY_WOOD_HANGING_SIGN_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_WOOD_HANGING_SIGN_FALL);
+    SoundEvent BLOCK_CHERRY_WOOD_HANGING_SIGN_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_WOOD_HANGING_SIGN_FALL);
 
-    SoundEvent BLOCK_CHERRY_WOOD_HANGING_SIGN_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_WOOD_HANGING_SIGN_HIT);
+    SoundEvent BLOCK_CHERRY_WOOD_HANGING_SIGN_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_WOOD_HANGING_SIGN_HIT);
 
-    SoundEvent BLOCK_CHERRY_WOOD_HANGING_SIGN_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_WOOD_HANGING_SIGN_PLACE);
+    SoundEvent BLOCK_CHERRY_WOOD_HANGING_SIGN_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_WOOD_HANGING_SIGN_PLACE);
 
-    SoundEvent BLOCK_CHERRY_WOOD_DOOR_CLOSE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_WOOD_DOOR_CLOSE);
+    SoundEvent BLOCK_CHERRY_WOOD_DOOR_CLOSE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_WOOD_DOOR_CLOSE);
 
-    SoundEvent BLOCK_CHERRY_WOOD_DOOR_OPEN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_WOOD_DOOR_OPEN);
+    SoundEvent BLOCK_CHERRY_WOOD_DOOR_OPEN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_WOOD_DOOR_OPEN);
 
-    SoundEvent BLOCK_CHERRY_WOOD_TRAPDOOR_CLOSE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_WOOD_TRAPDOOR_CLOSE);
+    SoundEvent BLOCK_CHERRY_WOOD_TRAPDOOR_CLOSE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_WOOD_TRAPDOOR_CLOSE);
 
-    SoundEvent BLOCK_CHERRY_WOOD_TRAPDOOR_OPEN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_WOOD_TRAPDOOR_OPEN);
+    SoundEvent BLOCK_CHERRY_WOOD_TRAPDOOR_OPEN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_WOOD_TRAPDOOR_OPEN);
 
-    SoundEvent BLOCK_CHERRY_WOOD_BUTTON_CLICK_OFF = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_WOOD_BUTTON_CLICK_OFF);
+    SoundEvent BLOCK_CHERRY_WOOD_BUTTON_CLICK_OFF = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_WOOD_BUTTON_CLICK_OFF);
 
-    SoundEvent BLOCK_CHERRY_WOOD_BUTTON_CLICK_ON = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_WOOD_BUTTON_CLICK_ON);
+    SoundEvent BLOCK_CHERRY_WOOD_BUTTON_CLICK_ON = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_WOOD_BUTTON_CLICK_ON);
 
-    SoundEvent BLOCK_CHERRY_WOOD_PRESSURE_PLATE_CLICK_OFF = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_WOOD_PRESSURE_PLATE_CLICK_OFF);
+    SoundEvent BLOCK_CHERRY_WOOD_PRESSURE_PLATE_CLICK_OFF = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_WOOD_PRESSURE_PLATE_CLICK_OFF);
 
-    SoundEvent BLOCK_CHERRY_WOOD_PRESSURE_PLATE_CLICK_ON = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_WOOD_PRESSURE_PLATE_CLICK_ON);
+    SoundEvent BLOCK_CHERRY_WOOD_PRESSURE_PLATE_CLICK_ON = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_WOOD_PRESSURE_PLATE_CLICK_ON);
 
-    SoundEvent BLOCK_CHERRY_WOOD_FENCE_GATE_CLOSE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_WOOD_FENCE_GATE_CLOSE);
+    SoundEvent BLOCK_CHERRY_WOOD_FENCE_GATE_CLOSE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_WOOD_FENCE_GATE_CLOSE);
 
-    SoundEvent BLOCK_CHERRY_WOOD_FENCE_GATE_OPEN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHERRY_WOOD_FENCE_GATE_OPEN);
+    SoundEvent BLOCK_CHERRY_WOOD_FENCE_GATE_OPEN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHERRY_WOOD_FENCE_GATE_OPEN);
 
-    SoundEvent BLOCK_CHEST_CLOSE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHEST_CLOSE);
+    SoundEvent BLOCK_CHEST_CLOSE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHEST_CLOSE);
 
-    SoundEvent BLOCK_CHEST_LOCKED = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHEST_LOCKED);
+    SoundEvent BLOCK_CHEST_LOCKED = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHEST_LOCKED);
 
-    SoundEvent BLOCK_CHEST_OPEN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHEST_OPEN);
+    SoundEvent BLOCK_CHEST_OPEN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHEST_OPEN);
 
-    SoundEvent ENTITY_BABY_CHICKEN_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_CHICKEN_AMBIENT);
+    SoundEvent ENTITY_BABY_CHICKEN_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_CHICKEN_AMBIENT);
 
-    SoundEvent ENTITY_BABY_CHICKEN_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_CHICKEN_DEATH);
+    SoundEvent ENTITY_BABY_CHICKEN_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_CHICKEN_DEATH);
 
-    SoundEvent ENTITY_CHICKEN_EGG = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CHICKEN_EGG);
+    SoundEvent ENTITY_CHICKEN_EGG = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CHICKEN_EGG);
 
-    SoundEvent ENTITY_BABY_CHICKEN_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_CHICKEN_HURT);
+    SoundEvent ENTITY_BABY_CHICKEN_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_CHICKEN_HURT);
 
-    SoundEvent ENTITY_CHICKEN_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CHICKEN_STEP);
+    SoundEvent ENTITY_CHICKEN_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CHICKEN_STEP);
 
-    SoundEvent ENTITY_BABY_CHICKEN_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_CHICKEN_STEP);
+    SoundEvent ENTITY_BABY_CHICKEN_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_CHICKEN_STEP);
 
-    SoundEvent ENTITY_CHICKEN_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CHICKEN_AMBIENT);
+    SoundEvent ENTITY_CHICKEN_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CHICKEN_AMBIENT);
 
-    SoundEvent ENTITY_CHICKEN_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CHICKEN_HURT);
+    SoundEvent ENTITY_CHICKEN_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CHICKEN_HURT);
 
-    SoundEvent ENTITY_CHICKEN_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CHICKEN_DEATH);
+    SoundEvent ENTITY_CHICKEN_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CHICKEN_DEATH);
 
-    SoundEvent ENTITY_CHICKEN_PICKY_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CHICKEN_PICKY_AMBIENT);
+    SoundEvent ENTITY_CHICKEN_PICKY_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CHICKEN_PICKY_AMBIENT);
 
-    SoundEvent ENTITY_CHICKEN_PICKY_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CHICKEN_PICKY_HURT);
+    SoundEvent ENTITY_CHICKEN_PICKY_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CHICKEN_PICKY_HURT);
 
-    SoundEvent ENTITY_CHICKEN_PICKY_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CHICKEN_PICKY_DEATH);
+    SoundEvent ENTITY_CHICKEN_PICKY_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CHICKEN_PICKY_DEATH);
 
-    SoundEvent BLOCK_CHISELED_BOOKSHELF_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHISELED_BOOKSHELF_BREAK);
+    SoundEvent BLOCK_CHISELED_BOOKSHELF_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHISELED_BOOKSHELF_BREAK);
 
-    SoundEvent BLOCK_CHISELED_BOOKSHELF_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHISELED_BOOKSHELF_FALL);
+    SoundEvent BLOCK_CHISELED_BOOKSHELF_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHISELED_BOOKSHELF_FALL);
 
-    SoundEvent BLOCK_CHISELED_BOOKSHELF_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHISELED_BOOKSHELF_HIT);
+    SoundEvent BLOCK_CHISELED_BOOKSHELF_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHISELED_BOOKSHELF_HIT);
 
-    SoundEvent BLOCK_CHISELED_BOOKSHELF_INSERT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHISELED_BOOKSHELF_INSERT);
+    SoundEvent BLOCK_CHISELED_BOOKSHELF_INSERT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHISELED_BOOKSHELF_INSERT);
 
-    SoundEvent BLOCK_CHISELED_BOOKSHELF_INSERT_ENCHANTED = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHISELED_BOOKSHELF_INSERT_ENCHANTED);
+    SoundEvent BLOCK_CHISELED_BOOKSHELF_INSERT_ENCHANTED = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHISELED_BOOKSHELF_INSERT_ENCHANTED);
 
-    SoundEvent BLOCK_CHISELED_BOOKSHELF_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHISELED_BOOKSHELF_STEP);
+    SoundEvent BLOCK_CHISELED_BOOKSHELF_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHISELED_BOOKSHELF_STEP);
 
-    SoundEvent BLOCK_CHISELED_BOOKSHELF_PICKUP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHISELED_BOOKSHELF_PICKUP);
+    SoundEvent BLOCK_CHISELED_BOOKSHELF_PICKUP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHISELED_BOOKSHELF_PICKUP);
 
-    SoundEvent BLOCK_CHISELED_BOOKSHELF_PICKUP_ENCHANTED = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHISELED_BOOKSHELF_PICKUP_ENCHANTED);
+    SoundEvent BLOCK_CHISELED_BOOKSHELF_PICKUP_ENCHANTED = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHISELED_BOOKSHELF_PICKUP_ENCHANTED);
 
-    SoundEvent BLOCK_CHISELED_BOOKSHELF_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHISELED_BOOKSHELF_PLACE);
+    SoundEvent BLOCK_CHISELED_BOOKSHELF_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHISELED_BOOKSHELF_PLACE);
 
-    SoundEvent BLOCK_CHORUS_FLOWER_DEATH = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHORUS_FLOWER_DEATH);
+    SoundEvent BLOCK_CHORUS_FLOWER_DEATH = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHORUS_FLOWER_DEATH);
 
-    SoundEvent BLOCK_CHORUS_FLOWER_GROW = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CHORUS_FLOWER_GROW);
+    SoundEvent BLOCK_CHORUS_FLOWER_GROW = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CHORUS_FLOWER_GROW);
 
-    SoundEvent ITEM_CHORUS_FRUIT_TELEPORT = BuiltinSoundEvent.get(SoundEventKey.ITEM_CHORUS_FRUIT_TELEPORT);
+    SoundEvent ITEM_CHORUS_FRUIT_TELEPORT = BuiltinSoundEvent.get(SoundEventKeys.ITEM_CHORUS_FRUIT_TELEPORT);
 
-    SoundEvent BLOCK_COBWEB_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COBWEB_BREAK);
+    SoundEvent BLOCK_COBWEB_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COBWEB_BREAK);
 
-    SoundEvent BLOCK_COBWEB_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COBWEB_STEP);
+    SoundEvent BLOCK_COBWEB_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COBWEB_STEP);
 
-    SoundEvent BLOCK_COBWEB_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COBWEB_PLACE);
+    SoundEvent BLOCK_COBWEB_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COBWEB_PLACE);
 
-    SoundEvent BLOCK_COBWEB_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COBWEB_HIT);
+    SoundEvent BLOCK_COBWEB_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COBWEB_HIT);
 
-    SoundEvent BLOCK_COBWEB_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COBWEB_FALL);
+    SoundEvent BLOCK_COBWEB_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COBWEB_FALL);
 
-    SoundEvent ENTITY_COD_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COD_AMBIENT);
+    SoundEvent ENTITY_COD_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COD_AMBIENT);
 
-    SoundEvent ENTITY_COD_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COD_DEATH);
+    SoundEvent ENTITY_COD_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COD_DEATH);
 
-    SoundEvent ENTITY_COD_FLOP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COD_FLOP);
+    SoundEvent ENTITY_COD_FLOP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COD_FLOP);
 
-    SoundEvent ENTITY_COD_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COD_HURT);
+    SoundEvent ENTITY_COD_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COD_HURT);
 
-    SoundEvent BLOCK_COMPARATOR_CLICK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COMPARATOR_CLICK);
+    SoundEvent BLOCK_COMPARATOR_CLICK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COMPARATOR_CLICK);
 
-    SoundEvent BLOCK_COMPOSTER_EMPTY = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COMPOSTER_EMPTY);
+    SoundEvent BLOCK_COMPOSTER_EMPTY = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COMPOSTER_EMPTY);
 
-    SoundEvent BLOCK_COMPOSTER_FILL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COMPOSTER_FILL);
+    SoundEvent BLOCK_COMPOSTER_FILL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COMPOSTER_FILL);
 
-    SoundEvent BLOCK_COMPOSTER_FILL_SUCCESS = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COMPOSTER_FILL_SUCCESS);
+    SoundEvent BLOCK_COMPOSTER_FILL_SUCCESS = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COMPOSTER_FILL_SUCCESS);
 
-    SoundEvent BLOCK_COMPOSTER_READY = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COMPOSTER_READY);
+    SoundEvent BLOCK_COMPOSTER_READY = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COMPOSTER_READY);
 
-    SoundEvent BLOCK_CONDUIT_ACTIVATE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CONDUIT_ACTIVATE);
+    SoundEvent BLOCK_CONDUIT_ACTIVATE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CONDUIT_ACTIVATE);
 
-    SoundEvent BLOCK_CONDUIT_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CONDUIT_AMBIENT);
+    SoundEvent BLOCK_CONDUIT_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CONDUIT_AMBIENT);
 
-    SoundEvent BLOCK_CONDUIT_AMBIENT_SHORT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CONDUIT_AMBIENT_SHORT);
+    SoundEvent BLOCK_CONDUIT_AMBIENT_SHORT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CONDUIT_AMBIENT_SHORT);
 
-    SoundEvent BLOCK_CONDUIT_ATTACK_TARGET = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CONDUIT_ATTACK_TARGET);
+    SoundEvent BLOCK_CONDUIT_ATTACK_TARGET = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CONDUIT_ATTACK_TARGET);
 
-    SoundEvent BLOCK_CONDUIT_DEACTIVATE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CONDUIT_DEACTIVATE);
+    SoundEvent BLOCK_CONDUIT_DEACTIVATE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CONDUIT_DEACTIVATE);
 
-    SoundEvent BLOCK_COPPER_BULB_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_BULB_BREAK);
+    SoundEvent BLOCK_COPPER_BULB_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_BULB_BREAK);
 
-    SoundEvent BLOCK_COPPER_BULB_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_BULB_STEP);
+    SoundEvent BLOCK_COPPER_BULB_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_BULB_STEP);
 
-    SoundEvent BLOCK_COPPER_BULB_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_BULB_PLACE);
+    SoundEvent BLOCK_COPPER_BULB_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_BULB_PLACE);
 
-    SoundEvent BLOCK_COPPER_BULB_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_BULB_HIT);
+    SoundEvent BLOCK_COPPER_BULB_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_BULB_HIT);
 
-    SoundEvent BLOCK_COPPER_BULB_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_BULB_FALL);
+    SoundEvent BLOCK_COPPER_BULB_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_BULB_FALL);
 
-    SoundEvent BLOCK_COPPER_BULB_TURN_ON = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_BULB_TURN_ON);
+    SoundEvent BLOCK_COPPER_BULB_TURN_ON = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_BULB_TURN_ON);
 
-    SoundEvent BLOCK_COPPER_BULB_TURN_OFF = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_BULB_TURN_OFF);
+    SoundEvent BLOCK_COPPER_BULB_TURN_OFF = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_BULB_TURN_OFF);
 
-    SoundEvent BLOCK_COPPER_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_BREAK);
+    SoundEvent BLOCK_COPPER_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_BREAK);
 
-    SoundEvent BLOCK_COPPER_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_STEP);
+    SoundEvent BLOCK_COPPER_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_STEP);
 
-    SoundEvent BLOCK_COPPER_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_PLACE);
+    SoundEvent BLOCK_COPPER_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_PLACE);
 
-    SoundEvent BLOCK_COPPER_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_HIT);
+    SoundEvent BLOCK_COPPER_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_HIT);
 
-    SoundEvent BLOCK_COPPER_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_FALL);
+    SoundEvent BLOCK_COPPER_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_FALL);
 
-    SoundEvent BLOCK_COPPER_CHEST_CLOSE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_CHEST_CLOSE);
+    SoundEvent BLOCK_COPPER_CHEST_CLOSE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_CHEST_CLOSE);
 
-    SoundEvent BLOCK_COPPER_CHEST_OPEN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_CHEST_OPEN);
+    SoundEvent BLOCK_COPPER_CHEST_OPEN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_CHEST_OPEN);
 
-    SoundEvent BLOCK_COPPER_CHEST_WEATHERED_CLOSE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_CHEST_WEATHERED_CLOSE);
+    SoundEvent BLOCK_COPPER_CHEST_WEATHERED_CLOSE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_CHEST_WEATHERED_CLOSE);
 
-    SoundEvent BLOCK_COPPER_CHEST_WEATHERED_OPEN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_CHEST_WEATHERED_OPEN);
+    SoundEvent BLOCK_COPPER_CHEST_WEATHERED_OPEN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_CHEST_WEATHERED_OPEN);
 
-    SoundEvent BLOCK_COPPER_CHEST_OXIDIZED_CLOSE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_CHEST_OXIDIZED_CLOSE);
+    SoundEvent BLOCK_COPPER_CHEST_OXIDIZED_CLOSE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_CHEST_OXIDIZED_CLOSE);
 
-    SoundEvent BLOCK_COPPER_CHEST_OXIDIZED_OPEN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_CHEST_OXIDIZED_OPEN);
+    SoundEvent BLOCK_COPPER_CHEST_OXIDIZED_OPEN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_CHEST_OXIDIZED_OPEN);
 
-    SoundEvent BLOCK_COPPER_DOOR_CLOSE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_DOOR_CLOSE);
+    SoundEvent BLOCK_COPPER_DOOR_CLOSE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_DOOR_CLOSE);
 
-    SoundEvent BLOCK_COPPER_DOOR_OPEN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_DOOR_OPEN);
+    SoundEvent BLOCK_COPPER_DOOR_OPEN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_DOOR_OPEN);
 
-    SoundEvent ENTITY_COPPER_GOLEM_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COPPER_GOLEM_STEP);
+    SoundEvent ENTITY_COPPER_GOLEM_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COPPER_GOLEM_STEP);
 
-    SoundEvent ENTITY_COPPER_GOLEM_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COPPER_GOLEM_HURT);
+    SoundEvent ENTITY_COPPER_GOLEM_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COPPER_GOLEM_HURT);
 
-    SoundEvent ENTITY_COPPER_GOLEM_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COPPER_GOLEM_DEATH);
+    SoundEvent ENTITY_COPPER_GOLEM_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COPPER_GOLEM_DEATH);
 
-    SoundEvent ENTITY_COPPER_GOLEM_WEATHERED_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COPPER_GOLEM_WEATHERED_STEP);
+    SoundEvent ENTITY_COPPER_GOLEM_WEATHERED_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COPPER_GOLEM_WEATHERED_STEP);
 
-    SoundEvent ENTITY_COPPER_GOLEM_WEATHERED_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COPPER_GOLEM_WEATHERED_HURT);
+    SoundEvent ENTITY_COPPER_GOLEM_WEATHERED_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COPPER_GOLEM_WEATHERED_HURT);
 
-    SoundEvent ENTITY_COPPER_GOLEM_WEATHERED_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COPPER_GOLEM_WEATHERED_DEATH);
+    SoundEvent ENTITY_COPPER_GOLEM_WEATHERED_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COPPER_GOLEM_WEATHERED_DEATH);
 
-    SoundEvent ENTITY_COPPER_GOLEM_OXIDIZED_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COPPER_GOLEM_OXIDIZED_STEP);
+    SoundEvent ENTITY_COPPER_GOLEM_OXIDIZED_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COPPER_GOLEM_OXIDIZED_STEP);
 
-    SoundEvent ENTITY_COPPER_GOLEM_OXIDIZED_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COPPER_GOLEM_OXIDIZED_HURT);
+    SoundEvent ENTITY_COPPER_GOLEM_OXIDIZED_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COPPER_GOLEM_OXIDIZED_HURT);
 
-    SoundEvent ENTITY_COPPER_GOLEM_OXIDIZED_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COPPER_GOLEM_OXIDIZED_DEATH);
+    SoundEvent ENTITY_COPPER_GOLEM_OXIDIZED_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COPPER_GOLEM_OXIDIZED_DEATH);
 
-    SoundEvent ENTITY_COPPER_GOLEM_SPIN = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COPPER_GOLEM_SPIN);
+    SoundEvent ENTITY_COPPER_GOLEM_SPIN = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COPPER_GOLEM_SPIN);
 
-    SoundEvent ENTITY_COPPER_GOLEM_WEATHERED_SPIN = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COPPER_GOLEM_WEATHERED_SPIN);
+    SoundEvent ENTITY_COPPER_GOLEM_WEATHERED_SPIN = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COPPER_GOLEM_WEATHERED_SPIN);
 
-    SoundEvent ENTITY_COPPER_GOLEM_OXIDIZED_SPIN = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COPPER_GOLEM_OXIDIZED_SPIN);
+    SoundEvent ENTITY_COPPER_GOLEM_OXIDIZED_SPIN = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COPPER_GOLEM_OXIDIZED_SPIN);
 
-    SoundEvent ENTITY_COPPER_GOLEM_NO_ITEM_GET = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COPPER_GOLEM_NO_ITEM_GET);
+    SoundEvent ENTITY_COPPER_GOLEM_NO_ITEM_GET = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COPPER_GOLEM_NO_ITEM_GET);
 
-    SoundEvent ENTITY_COPPER_GOLEM_NO_ITEM_NO_GET = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COPPER_GOLEM_NO_ITEM_NO_GET);
+    SoundEvent ENTITY_COPPER_GOLEM_NO_ITEM_NO_GET = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COPPER_GOLEM_NO_ITEM_NO_GET);
 
-    SoundEvent ENTITY_COPPER_GOLEM_ITEM_DROP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COPPER_GOLEM_ITEM_DROP);
+    SoundEvent ENTITY_COPPER_GOLEM_ITEM_DROP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COPPER_GOLEM_ITEM_DROP);
 
-    SoundEvent ENTITY_COPPER_GOLEM_ITEM_NO_DROP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COPPER_GOLEM_ITEM_NO_DROP);
+    SoundEvent ENTITY_COPPER_GOLEM_ITEM_NO_DROP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COPPER_GOLEM_ITEM_NO_DROP);
 
-    SoundEvent ENTITY_COPPER_GOLEM_BECOME_STATUE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COPPER_GOLEM_BECOME_STATUE);
+    SoundEvent ENTITY_COPPER_GOLEM_BECOME_STATUE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COPPER_GOLEM_BECOME_STATUE);
 
-    SoundEvent BLOCK_COPPER_GOLEM_STATUE_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_GOLEM_STATUE_BREAK);
+    SoundEvent BLOCK_COPPER_GOLEM_STATUE_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_GOLEM_STATUE_BREAK);
 
-    SoundEvent BLOCK_COPPER_GOLEM_STATUE_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_GOLEM_STATUE_PLACE);
+    SoundEvent BLOCK_COPPER_GOLEM_STATUE_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_GOLEM_STATUE_PLACE);
 
-    SoundEvent BLOCK_COPPER_GOLEM_STATUE_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_GOLEM_STATUE_HIT);
+    SoundEvent BLOCK_COPPER_GOLEM_STATUE_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_GOLEM_STATUE_HIT);
 
-    SoundEvent BLOCK_COPPER_GOLEM_STATUE_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_GOLEM_STATUE_STEP);
+    SoundEvent BLOCK_COPPER_GOLEM_STATUE_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_GOLEM_STATUE_STEP);
 
-    SoundEvent BLOCK_COPPER_GOLEM_STATUE_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_GOLEM_STATUE_FALL);
+    SoundEvent BLOCK_COPPER_GOLEM_STATUE_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_GOLEM_STATUE_FALL);
 
-    SoundEvent ENTITY_COPPER_GOLEM_SPAWN = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COPPER_GOLEM_SPAWN);
+    SoundEvent ENTITY_COPPER_GOLEM_SPAWN = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COPPER_GOLEM_SPAWN);
 
-    SoundEvent ENTITY_COPPER_GOLEM_SHEAR = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COPPER_GOLEM_SHEAR);
+    SoundEvent ENTITY_COPPER_GOLEM_SHEAR = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COPPER_GOLEM_SHEAR);
 
-    SoundEvent BLOCK_COPPER_GRATE_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_GRATE_BREAK);
+    SoundEvent BLOCK_COPPER_GRATE_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_GRATE_BREAK);
 
-    SoundEvent BLOCK_COPPER_GRATE_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_GRATE_STEP);
+    SoundEvent BLOCK_COPPER_GRATE_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_GRATE_STEP);
 
-    SoundEvent BLOCK_COPPER_GRATE_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_GRATE_PLACE);
+    SoundEvent BLOCK_COPPER_GRATE_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_GRATE_PLACE);
 
-    SoundEvent BLOCK_COPPER_GRATE_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_GRATE_HIT);
+    SoundEvent BLOCK_COPPER_GRATE_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_GRATE_HIT);
 
-    SoundEvent BLOCK_COPPER_GRATE_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_GRATE_FALL);
+    SoundEvent BLOCK_COPPER_GRATE_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_GRATE_FALL);
 
-    SoundEvent BLOCK_COPPER_TRAPDOOR_CLOSE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_TRAPDOOR_CLOSE);
+    SoundEvent BLOCK_COPPER_TRAPDOOR_CLOSE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_TRAPDOOR_CLOSE);
 
-    SoundEvent BLOCK_COPPER_TRAPDOOR_OPEN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_COPPER_TRAPDOOR_OPEN);
+    SoundEvent BLOCK_COPPER_TRAPDOOR_OPEN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_COPPER_TRAPDOOR_OPEN);
 
-    SoundEvent BLOCK_CORAL_BLOCK_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CORAL_BLOCK_BREAK);
+    SoundEvent BLOCK_CORAL_BLOCK_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CORAL_BLOCK_BREAK);
 
-    SoundEvent BLOCK_CORAL_BLOCK_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CORAL_BLOCK_FALL);
+    SoundEvent BLOCK_CORAL_BLOCK_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CORAL_BLOCK_FALL);
 
-    SoundEvent BLOCK_CORAL_BLOCK_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CORAL_BLOCK_HIT);
+    SoundEvent BLOCK_CORAL_BLOCK_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CORAL_BLOCK_HIT);
 
-    SoundEvent BLOCK_CORAL_BLOCK_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CORAL_BLOCK_PLACE);
+    SoundEvent BLOCK_CORAL_BLOCK_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CORAL_BLOCK_PLACE);
 
-    SoundEvent BLOCK_CORAL_BLOCK_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CORAL_BLOCK_STEP);
+    SoundEvent BLOCK_CORAL_BLOCK_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CORAL_BLOCK_STEP);
 
-    SoundEvent ENTITY_COW_MILK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COW_MILK);
+    SoundEvent ENTITY_COW_MILK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COW_MILK);
 
-    SoundEvent ENTITY_COW_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COW_AMBIENT);
+    SoundEvent ENTITY_COW_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COW_AMBIENT);
 
-    SoundEvent ENTITY_COW_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COW_HURT);
+    SoundEvent ENTITY_COW_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COW_HURT);
 
-    SoundEvent ENTITY_COW_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COW_DEATH);
+    SoundEvent ENTITY_COW_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COW_DEATH);
 
-    SoundEvent ENTITY_COW_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COW_STEP);
+    SoundEvent ENTITY_COW_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COW_STEP);
 
-    SoundEvent ENTITY_COW_MOODY_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COW_MOODY_AMBIENT);
+    SoundEvent ENTITY_COW_MOODY_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COW_MOODY_AMBIENT);
 
-    SoundEvent ENTITY_COW_MOODY_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COW_MOODY_HURT);
+    SoundEvent ENTITY_COW_MOODY_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COW_MOODY_HURT);
 
-    SoundEvent ENTITY_COW_MOODY_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COW_MOODY_DEATH);
+    SoundEvent ENTITY_COW_MOODY_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COW_MOODY_DEATH);
 
-    SoundEvent ENTITY_COW_MOODY_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_COW_MOODY_STEP);
+    SoundEvent ENTITY_COW_MOODY_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_COW_MOODY_STEP);
 
-    SoundEvent BLOCK_CRAFTER_CRAFT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CRAFTER_CRAFT);
+    SoundEvent BLOCK_CRAFTER_CRAFT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CRAFTER_CRAFT);
 
-    SoundEvent BLOCK_CRAFTER_FAIL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CRAFTER_FAIL);
+    SoundEvent BLOCK_CRAFTER_FAIL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CRAFTER_FAIL);
 
-    SoundEvent ENTITY_CREAKING_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CREAKING_AMBIENT);
+    SoundEvent ENTITY_CREAKING_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CREAKING_AMBIENT);
 
-    SoundEvent ENTITY_CREAKING_ACTIVATE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CREAKING_ACTIVATE);
+    SoundEvent ENTITY_CREAKING_ACTIVATE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CREAKING_ACTIVATE);
 
-    SoundEvent ENTITY_CREAKING_DEACTIVATE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CREAKING_DEACTIVATE);
+    SoundEvent ENTITY_CREAKING_DEACTIVATE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CREAKING_DEACTIVATE);
 
-    SoundEvent ENTITY_CREAKING_ATTACK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CREAKING_ATTACK);
+    SoundEvent ENTITY_CREAKING_ATTACK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CREAKING_ATTACK);
 
-    SoundEvent ENTITY_CREAKING_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CREAKING_DEATH);
+    SoundEvent ENTITY_CREAKING_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CREAKING_DEATH);
 
-    SoundEvent ENTITY_CREAKING_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CREAKING_STEP);
+    SoundEvent ENTITY_CREAKING_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CREAKING_STEP);
 
-    SoundEvent ENTITY_CREAKING_FREEZE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CREAKING_FREEZE);
+    SoundEvent ENTITY_CREAKING_FREEZE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CREAKING_FREEZE);
 
-    SoundEvent ENTITY_CREAKING_UNFREEZE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CREAKING_UNFREEZE);
+    SoundEvent ENTITY_CREAKING_UNFREEZE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CREAKING_UNFREEZE);
 
-    SoundEvent ENTITY_CREAKING_SPAWN = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CREAKING_SPAWN);
+    SoundEvent ENTITY_CREAKING_SPAWN = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CREAKING_SPAWN);
 
-    SoundEvent ENTITY_CREAKING_SWAY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CREAKING_SWAY);
+    SoundEvent ENTITY_CREAKING_SWAY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CREAKING_SWAY);
 
-    SoundEvent ENTITY_CREAKING_TWITCH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CREAKING_TWITCH);
+    SoundEvent ENTITY_CREAKING_TWITCH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CREAKING_TWITCH);
 
-    SoundEvent BLOCK_CREAKING_HEART_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CREAKING_HEART_BREAK);
+    SoundEvent BLOCK_CREAKING_HEART_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CREAKING_HEART_BREAK);
 
-    SoundEvent BLOCK_CREAKING_HEART_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CREAKING_HEART_FALL);
+    SoundEvent BLOCK_CREAKING_HEART_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CREAKING_HEART_FALL);
 
-    SoundEvent BLOCK_CREAKING_HEART_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CREAKING_HEART_HIT);
+    SoundEvent BLOCK_CREAKING_HEART_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CREAKING_HEART_HIT);
 
-    SoundEvent BLOCK_CREAKING_HEART_HURT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CREAKING_HEART_HURT);
+    SoundEvent BLOCK_CREAKING_HEART_HURT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CREAKING_HEART_HURT);
 
-    SoundEvent BLOCK_CREAKING_HEART_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CREAKING_HEART_PLACE);
+    SoundEvent BLOCK_CREAKING_HEART_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CREAKING_HEART_PLACE);
 
-    SoundEvent BLOCK_CREAKING_HEART_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CREAKING_HEART_STEP);
+    SoundEvent BLOCK_CREAKING_HEART_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CREAKING_HEART_STEP);
 
-    SoundEvent BLOCK_CREAKING_HEART_IDLE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CREAKING_HEART_IDLE);
+    SoundEvent BLOCK_CREAKING_HEART_IDLE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CREAKING_HEART_IDLE);
 
-    SoundEvent BLOCK_CREAKING_HEART_SPAWN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CREAKING_HEART_SPAWN);
+    SoundEvent BLOCK_CREAKING_HEART_SPAWN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CREAKING_HEART_SPAWN);
 
-    SoundEvent ENTITY_CREEPER_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CREEPER_DEATH);
+    SoundEvent ENTITY_CREEPER_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CREEPER_DEATH);
 
-    SoundEvent ENTITY_CREEPER_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CREEPER_HURT);
+    SoundEvent ENTITY_CREEPER_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CREEPER_HURT);
 
-    SoundEvent ENTITY_CREEPER_PRIMED = BuiltinSoundEvent.get(SoundEventKey.ENTITY_CREEPER_PRIMED);
+    SoundEvent ENTITY_CREEPER_PRIMED = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CREEPER_PRIMED);
 
-    SoundEvent BLOCK_CROP_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CROP_BREAK);
+    SoundEvent BLOCK_CROP_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CROP_BREAK);
 
-    SoundEvent ITEM_CROP_PLANT = BuiltinSoundEvent.get(SoundEventKey.ITEM_CROP_PLANT);
+    SoundEvent ITEM_CROP_PLANT = BuiltinSoundEvent.get(SoundEventKeys.ITEM_CROP_PLANT);
 
-    SoundEvent ITEM_CROSSBOW_HIT = BuiltinSoundEvent.get(SoundEventKey.ITEM_CROSSBOW_HIT);
+    SoundEvent ITEM_CROSSBOW_HIT = BuiltinSoundEvent.get(SoundEventKeys.ITEM_CROSSBOW_HIT);
 
-    SoundEvent ITEM_CROSSBOW_LOADING_END = BuiltinSoundEvent.get(SoundEventKey.ITEM_CROSSBOW_LOADING_END);
+    SoundEvent ITEM_CROSSBOW_LOADING_END = BuiltinSoundEvent.get(SoundEventKeys.ITEM_CROSSBOW_LOADING_END);
 
-    SoundEvent ITEM_CROSSBOW_LOADING_MIDDLE = BuiltinSoundEvent.get(SoundEventKey.ITEM_CROSSBOW_LOADING_MIDDLE);
+    SoundEvent ITEM_CROSSBOW_LOADING_MIDDLE = BuiltinSoundEvent.get(SoundEventKeys.ITEM_CROSSBOW_LOADING_MIDDLE);
 
-    SoundEvent ITEM_CROSSBOW_LOADING_START = BuiltinSoundEvent.get(SoundEventKey.ITEM_CROSSBOW_LOADING_START);
+    SoundEvent ITEM_CROSSBOW_LOADING_START = BuiltinSoundEvent.get(SoundEventKeys.ITEM_CROSSBOW_LOADING_START);
 
-    SoundEvent ITEM_CROSSBOW_QUICK_CHARGE_1 = BuiltinSoundEvent.get(SoundEventKey.ITEM_CROSSBOW_QUICK_CHARGE_1);
+    SoundEvent ITEM_CROSSBOW_QUICK_CHARGE_1 = BuiltinSoundEvent.get(SoundEventKeys.ITEM_CROSSBOW_QUICK_CHARGE_1);
 
-    SoundEvent ITEM_CROSSBOW_QUICK_CHARGE_2 = BuiltinSoundEvent.get(SoundEventKey.ITEM_CROSSBOW_QUICK_CHARGE_2);
+    SoundEvent ITEM_CROSSBOW_QUICK_CHARGE_2 = BuiltinSoundEvent.get(SoundEventKeys.ITEM_CROSSBOW_QUICK_CHARGE_2);
 
-    SoundEvent ITEM_CROSSBOW_QUICK_CHARGE_3 = BuiltinSoundEvent.get(SoundEventKey.ITEM_CROSSBOW_QUICK_CHARGE_3);
+    SoundEvent ITEM_CROSSBOW_QUICK_CHARGE_3 = BuiltinSoundEvent.get(SoundEventKeys.ITEM_CROSSBOW_QUICK_CHARGE_3);
 
-    SoundEvent ITEM_CROSSBOW_SHOOT = BuiltinSoundEvent.get(SoundEventKey.ITEM_CROSSBOW_SHOOT);
+    SoundEvent ITEM_CROSSBOW_SHOOT = BuiltinSoundEvent.get(SoundEventKeys.ITEM_CROSSBOW_SHOOT);
 
-    SoundEvent BLOCK_DEADBUSH_IDLE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DEADBUSH_IDLE);
+    SoundEvent BLOCK_DEADBUSH_IDLE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DEADBUSH_IDLE);
 
-    SoundEvent BLOCK_DECORATED_POT_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DECORATED_POT_BREAK);
+    SoundEvent BLOCK_DECORATED_POT_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DECORATED_POT_BREAK);
 
-    SoundEvent BLOCK_DECORATED_POT_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DECORATED_POT_FALL);
+    SoundEvent BLOCK_DECORATED_POT_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DECORATED_POT_FALL);
 
-    SoundEvent BLOCK_DECORATED_POT_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DECORATED_POT_HIT);
+    SoundEvent BLOCK_DECORATED_POT_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DECORATED_POT_HIT);
 
-    SoundEvent BLOCK_DECORATED_POT_INSERT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DECORATED_POT_INSERT);
+    SoundEvent BLOCK_DECORATED_POT_INSERT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DECORATED_POT_INSERT);
 
-    SoundEvent BLOCK_DECORATED_POT_INSERT_FAIL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DECORATED_POT_INSERT_FAIL);
+    SoundEvent BLOCK_DECORATED_POT_INSERT_FAIL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DECORATED_POT_INSERT_FAIL);
 
-    SoundEvent BLOCK_DECORATED_POT_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DECORATED_POT_STEP);
+    SoundEvent BLOCK_DECORATED_POT_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DECORATED_POT_STEP);
 
-    SoundEvent BLOCK_DECORATED_POT_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DECORATED_POT_PLACE);
+    SoundEvent BLOCK_DECORATED_POT_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DECORATED_POT_PLACE);
 
-    SoundEvent BLOCK_DECORATED_POT_SHATTER = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DECORATED_POT_SHATTER);
+    SoundEvent BLOCK_DECORATED_POT_SHATTER = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DECORATED_POT_SHATTER);
 
-    SoundEvent BLOCK_DEEPSLATE_BRICKS_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DEEPSLATE_BRICKS_BREAK);
+    SoundEvent BLOCK_DEEPSLATE_BRICKS_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DEEPSLATE_BRICKS_BREAK);
 
-    SoundEvent BLOCK_DEEPSLATE_BRICKS_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DEEPSLATE_BRICKS_FALL);
+    SoundEvent BLOCK_DEEPSLATE_BRICKS_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DEEPSLATE_BRICKS_FALL);
 
-    SoundEvent BLOCK_DEEPSLATE_BRICKS_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DEEPSLATE_BRICKS_HIT);
+    SoundEvent BLOCK_DEEPSLATE_BRICKS_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DEEPSLATE_BRICKS_HIT);
 
-    SoundEvent BLOCK_DEEPSLATE_BRICKS_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DEEPSLATE_BRICKS_PLACE);
+    SoundEvent BLOCK_DEEPSLATE_BRICKS_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DEEPSLATE_BRICKS_PLACE);
 
-    SoundEvent BLOCK_DEEPSLATE_BRICKS_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DEEPSLATE_BRICKS_STEP);
+    SoundEvent BLOCK_DEEPSLATE_BRICKS_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DEEPSLATE_BRICKS_STEP);
 
-    SoundEvent BLOCK_DEEPSLATE_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DEEPSLATE_BREAK);
+    SoundEvent BLOCK_DEEPSLATE_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DEEPSLATE_BREAK);
 
-    SoundEvent BLOCK_DEEPSLATE_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DEEPSLATE_FALL);
+    SoundEvent BLOCK_DEEPSLATE_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DEEPSLATE_FALL);
 
-    SoundEvent BLOCK_DEEPSLATE_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DEEPSLATE_HIT);
+    SoundEvent BLOCK_DEEPSLATE_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DEEPSLATE_HIT);
 
-    SoundEvent BLOCK_DEEPSLATE_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DEEPSLATE_PLACE);
+    SoundEvent BLOCK_DEEPSLATE_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DEEPSLATE_PLACE);
 
-    SoundEvent BLOCK_DEEPSLATE_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DEEPSLATE_STEP);
+    SoundEvent BLOCK_DEEPSLATE_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DEEPSLATE_STEP);
 
-    SoundEvent BLOCK_DEEPSLATE_TILES_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DEEPSLATE_TILES_BREAK);
+    SoundEvent BLOCK_DEEPSLATE_TILES_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DEEPSLATE_TILES_BREAK);
 
-    SoundEvent BLOCK_DEEPSLATE_TILES_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DEEPSLATE_TILES_FALL);
+    SoundEvent BLOCK_DEEPSLATE_TILES_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DEEPSLATE_TILES_FALL);
 
-    SoundEvent BLOCK_DEEPSLATE_TILES_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DEEPSLATE_TILES_HIT);
+    SoundEvent BLOCK_DEEPSLATE_TILES_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DEEPSLATE_TILES_HIT);
 
-    SoundEvent BLOCK_DEEPSLATE_TILES_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DEEPSLATE_TILES_PLACE);
+    SoundEvent BLOCK_DEEPSLATE_TILES_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DEEPSLATE_TILES_PLACE);
 
-    SoundEvent BLOCK_DEEPSLATE_TILES_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DEEPSLATE_TILES_STEP);
+    SoundEvent BLOCK_DEEPSLATE_TILES_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DEEPSLATE_TILES_STEP);
 
-    SoundEvent BLOCK_DISPENSER_DISPENSE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DISPENSER_DISPENSE);
+    SoundEvent BLOCK_DISPENSER_DISPENSE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DISPENSER_DISPENSE);
 
-    SoundEvent BLOCK_DISPENSER_FAIL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DISPENSER_FAIL);
+    SoundEvent BLOCK_DISPENSER_FAIL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DISPENSER_FAIL);
 
-    SoundEvent BLOCK_DISPENSER_LAUNCH = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DISPENSER_LAUNCH);
+    SoundEvent BLOCK_DISPENSER_LAUNCH = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DISPENSER_LAUNCH);
 
-    SoundEvent ENTITY_DOLPHIN_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_DOLPHIN_AMBIENT);
+    SoundEvent ENTITY_DOLPHIN_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_DOLPHIN_AMBIENT);
 
-    SoundEvent ENTITY_DOLPHIN_AMBIENT_WATER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_DOLPHIN_AMBIENT_WATER);
+    SoundEvent ENTITY_DOLPHIN_AMBIENT_WATER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_DOLPHIN_AMBIENT_WATER);
 
-    SoundEvent ENTITY_DOLPHIN_ATTACK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_DOLPHIN_ATTACK);
+    SoundEvent ENTITY_DOLPHIN_ATTACK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_DOLPHIN_ATTACK);
 
-    SoundEvent ENTITY_DOLPHIN_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_DOLPHIN_DEATH);
+    SoundEvent ENTITY_DOLPHIN_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_DOLPHIN_DEATH);
 
-    SoundEvent ENTITY_DOLPHIN_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_DOLPHIN_EAT);
+    SoundEvent ENTITY_DOLPHIN_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_DOLPHIN_EAT);
 
-    SoundEvent ENTITY_DOLPHIN_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_DOLPHIN_HURT);
+    SoundEvent ENTITY_DOLPHIN_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_DOLPHIN_HURT);
 
-    SoundEvent ENTITY_DOLPHIN_JUMP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_DOLPHIN_JUMP);
+    SoundEvent ENTITY_DOLPHIN_JUMP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_DOLPHIN_JUMP);
 
-    SoundEvent ENTITY_DOLPHIN_PLAY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_DOLPHIN_PLAY);
+    SoundEvent ENTITY_DOLPHIN_PLAY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_DOLPHIN_PLAY);
 
-    SoundEvent ENTITY_DOLPHIN_SPLASH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_DOLPHIN_SPLASH);
+    SoundEvent ENTITY_DOLPHIN_SPLASH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_DOLPHIN_SPLASH);
 
-    SoundEvent ENTITY_DOLPHIN_SWIM = BuiltinSoundEvent.get(SoundEventKey.ENTITY_DOLPHIN_SWIM);
+    SoundEvent ENTITY_DOLPHIN_SWIM = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_DOLPHIN_SWIM);
 
-    SoundEvent ENTITY_DONKEY_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_DONKEY_AMBIENT);
+    SoundEvent ENTITY_DONKEY_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_DONKEY_AMBIENT);
 
-    SoundEvent ENTITY_DONKEY_ANGRY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_DONKEY_ANGRY);
+    SoundEvent ENTITY_DONKEY_ANGRY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_DONKEY_ANGRY);
 
-    SoundEvent ENTITY_DONKEY_CHEST = BuiltinSoundEvent.get(SoundEventKey.ENTITY_DONKEY_CHEST);
+    SoundEvent ENTITY_DONKEY_CHEST = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_DONKEY_CHEST);
 
-    SoundEvent ENTITY_DONKEY_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_DONKEY_DEATH);
+    SoundEvent ENTITY_DONKEY_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_DONKEY_DEATH);
 
-    SoundEvent ENTITY_DONKEY_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_DONKEY_EAT);
+    SoundEvent ENTITY_DONKEY_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_DONKEY_EAT);
 
-    SoundEvent ENTITY_DONKEY_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_DONKEY_HURT);
+    SoundEvent ENTITY_DONKEY_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_DONKEY_HURT);
 
-    SoundEvent ENTITY_DONKEY_JUMP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_DONKEY_JUMP);
+    SoundEvent ENTITY_DONKEY_JUMP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_DONKEY_JUMP);
 
-    SoundEvent BLOCK_DRIED_GHAST_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DRIED_GHAST_BREAK);
+    SoundEvent BLOCK_DRIED_GHAST_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DRIED_GHAST_BREAK);
 
-    SoundEvent BLOCK_DRIED_GHAST_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DRIED_GHAST_STEP);
+    SoundEvent BLOCK_DRIED_GHAST_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DRIED_GHAST_STEP);
 
-    SoundEvent BLOCK_DRIED_GHAST_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DRIED_GHAST_FALL);
+    SoundEvent BLOCK_DRIED_GHAST_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DRIED_GHAST_FALL);
 
-    SoundEvent BLOCK_DRIED_GHAST_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DRIED_GHAST_AMBIENT);
+    SoundEvent BLOCK_DRIED_GHAST_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DRIED_GHAST_AMBIENT);
 
-    SoundEvent BLOCK_DRIED_GHAST_AMBIENT_WATER = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DRIED_GHAST_AMBIENT_WATER);
+    SoundEvent BLOCK_DRIED_GHAST_AMBIENT_WATER = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DRIED_GHAST_AMBIENT_WATER);
 
-    SoundEvent BLOCK_DRIED_GHAST_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DRIED_GHAST_PLACE);
+    SoundEvent BLOCK_DRIED_GHAST_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DRIED_GHAST_PLACE);
 
-    SoundEvent BLOCK_DRIED_GHAST_PLACE_IN_WATER = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DRIED_GHAST_PLACE_IN_WATER);
+    SoundEvent BLOCK_DRIED_GHAST_PLACE_IN_WATER = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DRIED_GHAST_PLACE_IN_WATER);
 
-    SoundEvent BLOCK_DRIED_GHAST_TRANSITION = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DRIED_GHAST_TRANSITION);
+    SoundEvent BLOCK_DRIED_GHAST_TRANSITION = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DRIED_GHAST_TRANSITION);
 
-    SoundEvent BLOCK_DRIPSTONE_BLOCK_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DRIPSTONE_BLOCK_BREAK);
+    SoundEvent BLOCK_DRIPSTONE_BLOCK_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DRIPSTONE_BLOCK_BREAK);
 
-    SoundEvent BLOCK_DRIPSTONE_BLOCK_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DRIPSTONE_BLOCK_STEP);
+    SoundEvent BLOCK_DRIPSTONE_BLOCK_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DRIPSTONE_BLOCK_STEP);
 
-    SoundEvent BLOCK_DRIPSTONE_BLOCK_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DRIPSTONE_BLOCK_PLACE);
+    SoundEvent BLOCK_DRIPSTONE_BLOCK_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DRIPSTONE_BLOCK_PLACE);
 
-    SoundEvent BLOCK_DRIPSTONE_BLOCK_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DRIPSTONE_BLOCK_HIT);
+    SoundEvent BLOCK_DRIPSTONE_BLOCK_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DRIPSTONE_BLOCK_HIT);
 
-    SoundEvent BLOCK_DRIPSTONE_BLOCK_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DRIPSTONE_BLOCK_FALL);
+    SoundEvent BLOCK_DRIPSTONE_BLOCK_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DRIPSTONE_BLOCK_FALL);
 
-    SoundEvent BLOCK_DRY_GRASS_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_DRY_GRASS_AMBIENT);
+    SoundEvent BLOCK_DRY_GRASS_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DRY_GRASS_AMBIENT);
 
-    SoundEvent BLOCK_POINTED_DRIPSTONE_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POINTED_DRIPSTONE_BREAK);
+    SoundEvent BLOCK_POINTED_DRIPSTONE_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POINTED_DRIPSTONE_BREAK);
 
-    SoundEvent BLOCK_POINTED_DRIPSTONE_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POINTED_DRIPSTONE_STEP);
+    SoundEvent BLOCK_POINTED_DRIPSTONE_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POINTED_DRIPSTONE_STEP);
 
-    SoundEvent BLOCK_POINTED_DRIPSTONE_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POINTED_DRIPSTONE_PLACE);
+    SoundEvent BLOCK_POINTED_DRIPSTONE_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POINTED_DRIPSTONE_PLACE);
 
-    SoundEvent BLOCK_POINTED_DRIPSTONE_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POINTED_DRIPSTONE_HIT);
+    SoundEvent BLOCK_POINTED_DRIPSTONE_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POINTED_DRIPSTONE_HIT);
 
-    SoundEvent BLOCK_POINTED_DRIPSTONE_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POINTED_DRIPSTONE_FALL);
+    SoundEvent BLOCK_POINTED_DRIPSTONE_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POINTED_DRIPSTONE_FALL);
 
-    SoundEvent BLOCK_POINTED_DRIPSTONE_LAND = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POINTED_DRIPSTONE_LAND);
+    SoundEvent BLOCK_POINTED_DRIPSTONE_LAND = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POINTED_DRIPSTONE_LAND);
 
-    SoundEvent BLOCK_POINTED_DRIPSTONE_DRIP_LAVA = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POINTED_DRIPSTONE_DRIP_LAVA);
+    SoundEvent BLOCK_POINTED_DRIPSTONE_DRIP_LAVA = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POINTED_DRIPSTONE_DRIP_LAVA);
 
-    SoundEvent BLOCK_POINTED_DRIPSTONE_DRIP_WATER = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POINTED_DRIPSTONE_DRIP_WATER);
+    SoundEvent BLOCK_POINTED_DRIPSTONE_DRIP_WATER = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POINTED_DRIPSTONE_DRIP_WATER);
 
-    SoundEvent BLOCK_POINTED_DRIPSTONE_DRIP_LAVA_INTO_CAULDRON = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POINTED_DRIPSTONE_DRIP_LAVA_INTO_CAULDRON);
+    SoundEvent BLOCK_POINTED_DRIPSTONE_DRIP_LAVA_INTO_CAULDRON = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POINTED_DRIPSTONE_DRIP_LAVA_INTO_CAULDRON);
 
-    SoundEvent BLOCK_POINTED_DRIPSTONE_DRIP_WATER_INTO_CAULDRON = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POINTED_DRIPSTONE_DRIP_WATER_INTO_CAULDRON);
+    SoundEvent BLOCK_POINTED_DRIPSTONE_DRIP_WATER_INTO_CAULDRON = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POINTED_DRIPSTONE_DRIP_WATER_INTO_CAULDRON);
 
-    SoundEvent BLOCK_BIG_DRIPLEAF_TILT_DOWN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BIG_DRIPLEAF_TILT_DOWN);
+    SoundEvent BLOCK_BIG_DRIPLEAF_TILT_DOWN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BIG_DRIPLEAF_TILT_DOWN);
 
-    SoundEvent BLOCK_BIG_DRIPLEAF_TILT_UP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BIG_DRIPLEAF_TILT_UP);
+    SoundEvent BLOCK_BIG_DRIPLEAF_TILT_UP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BIG_DRIPLEAF_TILT_UP);
 
-    SoundEvent ENTITY_DROWNED_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_DROWNED_AMBIENT);
+    SoundEvent ENTITY_DROWNED_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_DROWNED_AMBIENT);
 
-    SoundEvent ENTITY_DROWNED_AMBIENT_WATER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_DROWNED_AMBIENT_WATER);
+    SoundEvent ENTITY_DROWNED_AMBIENT_WATER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_DROWNED_AMBIENT_WATER);
 
-    SoundEvent ENTITY_DROWNED_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_DROWNED_DEATH);
+    SoundEvent ENTITY_DROWNED_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_DROWNED_DEATH);
 
-    SoundEvent ENTITY_DROWNED_DEATH_WATER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_DROWNED_DEATH_WATER);
+    SoundEvent ENTITY_DROWNED_DEATH_WATER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_DROWNED_DEATH_WATER);
 
-    SoundEvent ENTITY_DROWNED_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_DROWNED_HURT);
+    SoundEvent ENTITY_DROWNED_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_DROWNED_HURT);
 
-    SoundEvent ENTITY_DROWNED_HURT_WATER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_DROWNED_HURT_WATER);
+    SoundEvent ENTITY_DROWNED_HURT_WATER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_DROWNED_HURT_WATER);
 
-    SoundEvent ENTITY_DROWNED_SHOOT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_DROWNED_SHOOT);
+    SoundEvent ENTITY_DROWNED_SHOOT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_DROWNED_SHOOT);
 
-    SoundEvent ENTITY_DROWNED_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_DROWNED_STEP);
+    SoundEvent ENTITY_DROWNED_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_DROWNED_STEP);
 
-    SoundEvent ENTITY_DROWNED_SWIM = BuiltinSoundEvent.get(SoundEventKey.ENTITY_DROWNED_SWIM);
+    SoundEvent ENTITY_DROWNED_SWIM = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_DROWNED_SWIM);
 
-    SoundEvent ITEM_DYE_USE = BuiltinSoundEvent.get(SoundEventKey.ITEM_DYE_USE);
+    SoundEvent ITEM_DYE_USE = BuiltinSoundEvent.get(SoundEventKeys.ITEM_DYE_USE);
 
-    SoundEvent ENTITY_EGG_THROW = BuiltinSoundEvent.get(SoundEventKey.ENTITY_EGG_THROW);
+    SoundEvent ENTITY_EGG_THROW = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_EGG_THROW);
 
-    SoundEvent ENTITY_ELDER_GUARDIAN_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ELDER_GUARDIAN_AMBIENT);
+    SoundEvent ENTITY_ELDER_GUARDIAN_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ELDER_GUARDIAN_AMBIENT);
 
-    SoundEvent ENTITY_ELDER_GUARDIAN_AMBIENT_LAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ELDER_GUARDIAN_AMBIENT_LAND);
+    SoundEvent ENTITY_ELDER_GUARDIAN_AMBIENT_LAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ELDER_GUARDIAN_AMBIENT_LAND);
 
-    SoundEvent ENTITY_ELDER_GUARDIAN_CURSE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ELDER_GUARDIAN_CURSE);
+    SoundEvent ENTITY_ELDER_GUARDIAN_CURSE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ELDER_GUARDIAN_CURSE);
 
-    SoundEvent ENTITY_ELDER_GUARDIAN_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ELDER_GUARDIAN_DEATH);
+    SoundEvent ENTITY_ELDER_GUARDIAN_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ELDER_GUARDIAN_DEATH);
 
-    SoundEvent ENTITY_ELDER_GUARDIAN_DEATH_LAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ELDER_GUARDIAN_DEATH_LAND);
+    SoundEvent ENTITY_ELDER_GUARDIAN_DEATH_LAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ELDER_GUARDIAN_DEATH_LAND);
 
-    SoundEvent ENTITY_ELDER_GUARDIAN_FLOP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ELDER_GUARDIAN_FLOP);
+    SoundEvent ENTITY_ELDER_GUARDIAN_FLOP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ELDER_GUARDIAN_FLOP);
 
-    SoundEvent ENTITY_ELDER_GUARDIAN_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ELDER_GUARDIAN_HURT);
+    SoundEvent ENTITY_ELDER_GUARDIAN_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ELDER_GUARDIAN_HURT);
 
-    SoundEvent ENTITY_ELDER_GUARDIAN_HURT_LAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ELDER_GUARDIAN_HURT_LAND);
+    SoundEvent ENTITY_ELDER_GUARDIAN_HURT_LAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ELDER_GUARDIAN_HURT_LAND);
 
-    SoundEvent ITEM_ELYTRA_FLYING = BuiltinSoundEvent.get(SoundEventKey.ITEM_ELYTRA_FLYING);
+    SoundEvent ITEM_ELYTRA_FLYING = BuiltinSoundEvent.get(SoundEventKeys.ITEM_ELYTRA_FLYING);
 
-    SoundEvent BLOCK_ENCHANTMENT_TABLE_USE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_ENCHANTMENT_TABLE_USE);
+    SoundEvent BLOCK_ENCHANTMENT_TABLE_USE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_ENCHANTMENT_TABLE_USE);
 
-    SoundEvent BLOCK_ENDER_CHEST_CLOSE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_ENDER_CHEST_CLOSE);
+    SoundEvent BLOCK_ENDER_CHEST_CLOSE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_ENDER_CHEST_CLOSE);
 
-    SoundEvent BLOCK_ENDER_CHEST_OPEN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_ENDER_CHEST_OPEN);
+    SoundEvent BLOCK_ENDER_CHEST_OPEN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_ENDER_CHEST_OPEN);
 
-    SoundEvent ENTITY_ENDER_DRAGON_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ENDER_DRAGON_AMBIENT);
+    SoundEvent ENTITY_ENDER_DRAGON_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ENDER_DRAGON_AMBIENT);
 
-    SoundEvent ENTITY_ENDER_DRAGON_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ENDER_DRAGON_DEATH);
+    SoundEvent ENTITY_ENDER_DRAGON_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ENDER_DRAGON_DEATH);
 
-    SoundEvent ENTITY_DRAGON_FIREBALL_EXPLODE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_DRAGON_FIREBALL_EXPLODE);
+    SoundEvent ENTITY_DRAGON_FIREBALL_EXPLODE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_DRAGON_FIREBALL_EXPLODE);
 
-    SoundEvent ENTITY_ENDER_DRAGON_FLAP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ENDER_DRAGON_FLAP);
+    SoundEvent ENTITY_ENDER_DRAGON_FLAP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ENDER_DRAGON_FLAP);
 
-    SoundEvent ENTITY_ENDER_DRAGON_GROWL = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ENDER_DRAGON_GROWL);
+    SoundEvent ENTITY_ENDER_DRAGON_GROWL = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ENDER_DRAGON_GROWL);
 
-    SoundEvent ENTITY_ENDER_DRAGON_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ENDER_DRAGON_HURT);
+    SoundEvent ENTITY_ENDER_DRAGON_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ENDER_DRAGON_HURT);
 
-    SoundEvent ENTITY_ENDER_DRAGON_SHOOT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ENDER_DRAGON_SHOOT);
+    SoundEvent ENTITY_ENDER_DRAGON_SHOOT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ENDER_DRAGON_SHOOT);
 
-    SoundEvent ENTITY_ENDER_EYE_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ENDER_EYE_DEATH);
+    SoundEvent ENTITY_ENDER_EYE_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ENDER_EYE_DEATH);
 
-    SoundEvent ENTITY_ENDER_EYE_LAUNCH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ENDER_EYE_LAUNCH);
+    SoundEvent ENTITY_ENDER_EYE_LAUNCH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ENDER_EYE_LAUNCH);
 
-    SoundEvent ENTITY_ENDERMAN_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ENDERMAN_AMBIENT);
+    SoundEvent ENTITY_ENDERMAN_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ENDERMAN_AMBIENT);
 
-    SoundEvent ENTITY_ENDERMAN_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ENDERMAN_DEATH);
+    SoundEvent ENTITY_ENDERMAN_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ENDERMAN_DEATH);
 
-    SoundEvent ENTITY_ENDERMAN_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ENDERMAN_HURT);
+    SoundEvent ENTITY_ENDERMAN_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ENDERMAN_HURT);
 
-    SoundEvent ENTITY_ENDERMAN_SCREAM = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ENDERMAN_SCREAM);
+    SoundEvent ENTITY_ENDERMAN_SCREAM = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ENDERMAN_SCREAM);
 
-    SoundEvent ENTITY_ENDERMAN_STARE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ENDERMAN_STARE);
+    SoundEvent ENTITY_ENDERMAN_STARE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ENDERMAN_STARE);
 
-    SoundEvent ENTITY_ENDERMAN_TELEPORT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ENDERMAN_TELEPORT);
+    SoundEvent ENTITY_ENDERMAN_TELEPORT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ENDERMAN_TELEPORT);
 
-    SoundEvent ENTITY_ENDERMITE_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ENDERMITE_AMBIENT);
+    SoundEvent ENTITY_ENDERMITE_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ENDERMITE_AMBIENT);
 
-    SoundEvent ENTITY_ENDERMITE_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ENDERMITE_DEATH);
+    SoundEvent ENTITY_ENDERMITE_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ENDERMITE_DEATH);
 
-    SoundEvent ENTITY_ENDERMITE_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ENDERMITE_HURT);
+    SoundEvent ENTITY_ENDERMITE_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ENDERMITE_HURT);
 
-    SoundEvent ENTITY_ENDERMITE_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ENDERMITE_STEP);
+    SoundEvent ENTITY_ENDERMITE_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ENDERMITE_STEP);
 
-    SoundEvent ENTITY_ENDER_PEARL_THROW = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ENDER_PEARL_THROW);
+    SoundEvent ENTITY_ENDER_PEARL_THROW = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ENDER_PEARL_THROW);
 
-    SoundEvent BLOCK_END_GATEWAY_SPAWN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_END_GATEWAY_SPAWN);
+    SoundEvent BLOCK_END_GATEWAY_SPAWN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_END_GATEWAY_SPAWN);
 
-    SoundEvent BLOCK_END_PORTAL_FRAME_FILL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_END_PORTAL_FRAME_FILL);
+    SoundEvent BLOCK_END_PORTAL_FRAME_FILL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_END_PORTAL_FRAME_FILL);
 
-    SoundEvent BLOCK_END_PORTAL_SPAWN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_END_PORTAL_SPAWN);
+    SoundEvent BLOCK_END_PORTAL_SPAWN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_END_PORTAL_SPAWN);
 
-    SoundEvent ENTITY_EVOKER_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_EVOKER_AMBIENT);
+    SoundEvent ENTITY_EVOKER_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_EVOKER_AMBIENT);
 
-    SoundEvent ENTITY_EVOKER_CAST_SPELL = BuiltinSoundEvent.get(SoundEventKey.ENTITY_EVOKER_CAST_SPELL);
+    SoundEvent ENTITY_EVOKER_CAST_SPELL = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_EVOKER_CAST_SPELL);
 
-    SoundEvent ENTITY_EVOKER_CELEBRATE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_EVOKER_CELEBRATE);
+    SoundEvent ENTITY_EVOKER_CELEBRATE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_EVOKER_CELEBRATE);
 
-    SoundEvent ENTITY_EVOKER_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_EVOKER_DEATH);
+    SoundEvent ENTITY_EVOKER_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_EVOKER_DEATH);
 
-    SoundEvent ENTITY_EVOKER_FANGS_ATTACK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_EVOKER_FANGS_ATTACK);
+    SoundEvent ENTITY_EVOKER_FANGS_ATTACK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_EVOKER_FANGS_ATTACK);
 
-    SoundEvent ENTITY_EVOKER_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_EVOKER_HURT);
+    SoundEvent ENTITY_EVOKER_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_EVOKER_HURT);
 
-    SoundEvent ENTITY_EVOKER_PREPARE_ATTACK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_EVOKER_PREPARE_ATTACK);
+    SoundEvent ENTITY_EVOKER_PREPARE_ATTACK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_EVOKER_PREPARE_ATTACK);
 
-    SoundEvent ENTITY_EVOKER_PREPARE_SUMMON = BuiltinSoundEvent.get(SoundEventKey.ENTITY_EVOKER_PREPARE_SUMMON);
+    SoundEvent ENTITY_EVOKER_PREPARE_SUMMON = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_EVOKER_PREPARE_SUMMON);
 
-    SoundEvent ENTITY_EVOKER_PREPARE_WOLOLO = BuiltinSoundEvent.get(SoundEventKey.ENTITY_EVOKER_PREPARE_WOLOLO);
+    SoundEvent ENTITY_EVOKER_PREPARE_WOLOLO = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_EVOKER_PREPARE_WOLOLO);
 
-    SoundEvent ENTITY_EXPERIENCE_BOTTLE_THROW = BuiltinSoundEvent.get(SoundEventKey.ENTITY_EXPERIENCE_BOTTLE_THROW);
+    SoundEvent ENTITY_EXPERIENCE_BOTTLE_THROW = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_EXPERIENCE_BOTTLE_THROW);
 
-    SoundEvent ENTITY_EXPERIENCE_ORB_PICKUP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_EXPERIENCE_ORB_PICKUP);
+    SoundEvent ENTITY_EXPERIENCE_ORB_PICKUP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_EXPERIENCE_ORB_PICKUP);
 
-    SoundEvent BLOCK_EYEBLOSSOM_OPEN_LONG = BuiltinSoundEvent.get(SoundEventKey.BLOCK_EYEBLOSSOM_OPEN_LONG);
+    SoundEvent BLOCK_EYEBLOSSOM_OPEN_LONG = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_EYEBLOSSOM_OPEN_LONG);
 
-    SoundEvent BLOCK_EYEBLOSSOM_OPEN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_EYEBLOSSOM_OPEN);
+    SoundEvent BLOCK_EYEBLOSSOM_OPEN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_EYEBLOSSOM_OPEN);
 
-    SoundEvent BLOCK_EYEBLOSSOM_CLOSE_LONG = BuiltinSoundEvent.get(SoundEventKey.BLOCK_EYEBLOSSOM_CLOSE_LONG);
+    SoundEvent BLOCK_EYEBLOSSOM_CLOSE_LONG = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_EYEBLOSSOM_CLOSE_LONG);
 
-    SoundEvent BLOCK_EYEBLOSSOM_CLOSE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_EYEBLOSSOM_CLOSE);
+    SoundEvent BLOCK_EYEBLOSSOM_CLOSE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_EYEBLOSSOM_CLOSE);
 
-    SoundEvent BLOCK_EYEBLOSSOM_IDLE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_EYEBLOSSOM_IDLE);
+    SoundEvent BLOCK_EYEBLOSSOM_IDLE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_EYEBLOSSOM_IDLE);
 
-    SoundEvent BLOCK_FENCE_GATE_CLOSE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_FENCE_GATE_CLOSE);
+    SoundEvent BLOCK_FENCE_GATE_CLOSE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_FENCE_GATE_CLOSE);
 
-    SoundEvent BLOCK_FENCE_GATE_OPEN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_FENCE_GATE_OPEN);
+    SoundEvent BLOCK_FENCE_GATE_OPEN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_FENCE_GATE_OPEN);
 
-    SoundEvent ITEM_FIRECHARGE_USE = BuiltinSoundEvent.get(SoundEventKey.ITEM_FIRECHARGE_USE);
+    SoundEvent ITEM_FIRECHARGE_USE = BuiltinSoundEvent.get(SoundEventKeys.ITEM_FIRECHARGE_USE);
 
-    SoundEvent BLOCK_FIREFLY_BUSH_IDLE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_FIREFLY_BUSH_IDLE);
+    SoundEvent BLOCK_FIREFLY_BUSH_IDLE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_FIREFLY_BUSH_IDLE);
 
-    SoundEvent ENTITY_FIREWORK_ROCKET_BLAST = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FIREWORK_ROCKET_BLAST);
+    SoundEvent ENTITY_FIREWORK_ROCKET_BLAST = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FIREWORK_ROCKET_BLAST);
 
-    SoundEvent ENTITY_FIREWORK_ROCKET_BLAST_FAR = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FIREWORK_ROCKET_BLAST_FAR);
+    SoundEvent ENTITY_FIREWORK_ROCKET_BLAST_FAR = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FIREWORK_ROCKET_BLAST_FAR);
 
-    SoundEvent ENTITY_FIREWORK_ROCKET_LARGE_BLAST = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FIREWORK_ROCKET_LARGE_BLAST);
+    SoundEvent ENTITY_FIREWORK_ROCKET_LARGE_BLAST = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FIREWORK_ROCKET_LARGE_BLAST);
 
-    SoundEvent ENTITY_FIREWORK_ROCKET_LARGE_BLAST_FAR = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FIREWORK_ROCKET_LARGE_BLAST_FAR);
+    SoundEvent ENTITY_FIREWORK_ROCKET_LARGE_BLAST_FAR = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FIREWORK_ROCKET_LARGE_BLAST_FAR);
 
-    SoundEvent ENTITY_FIREWORK_ROCKET_LAUNCH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FIREWORK_ROCKET_LAUNCH);
+    SoundEvent ENTITY_FIREWORK_ROCKET_LAUNCH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FIREWORK_ROCKET_LAUNCH);
 
-    SoundEvent ENTITY_FIREWORK_ROCKET_SHOOT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FIREWORK_ROCKET_SHOOT);
+    SoundEvent ENTITY_FIREWORK_ROCKET_SHOOT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FIREWORK_ROCKET_SHOOT);
 
-    SoundEvent ENTITY_FIREWORK_ROCKET_TWINKLE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FIREWORK_ROCKET_TWINKLE);
+    SoundEvent ENTITY_FIREWORK_ROCKET_TWINKLE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FIREWORK_ROCKET_TWINKLE);
 
-    SoundEvent ENTITY_FIREWORK_ROCKET_TWINKLE_FAR = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FIREWORK_ROCKET_TWINKLE_FAR);
+    SoundEvent ENTITY_FIREWORK_ROCKET_TWINKLE_FAR = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FIREWORK_ROCKET_TWINKLE_FAR);
 
-    SoundEvent BLOCK_FIRE_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_FIRE_AMBIENT);
+    SoundEvent BLOCK_FIRE_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_FIRE_AMBIENT);
 
-    SoundEvent BLOCK_FIRE_EXTINGUISH = BuiltinSoundEvent.get(SoundEventKey.BLOCK_FIRE_EXTINGUISH);
+    SoundEvent BLOCK_FIRE_EXTINGUISH = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_FIRE_EXTINGUISH);
 
-    SoundEvent ENTITY_FISH_SWIM = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FISH_SWIM);
+    SoundEvent ENTITY_FISH_SWIM = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FISH_SWIM);
 
-    SoundEvent ENTITY_FISHING_BOBBER_RETRIEVE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FISHING_BOBBER_RETRIEVE);
+    SoundEvent ENTITY_FISHING_BOBBER_RETRIEVE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FISHING_BOBBER_RETRIEVE);
 
-    SoundEvent ENTITY_FISHING_BOBBER_SPLASH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FISHING_BOBBER_SPLASH);
+    SoundEvent ENTITY_FISHING_BOBBER_SPLASH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FISHING_BOBBER_SPLASH);
 
-    SoundEvent ENTITY_FISHING_BOBBER_THROW = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FISHING_BOBBER_THROW);
+    SoundEvent ENTITY_FISHING_BOBBER_THROW = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FISHING_BOBBER_THROW);
 
-    SoundEvent ITEM_FLINTANDSTEEL_USE = BuiltinSoundEvent.get(SoundEventKey.ITEM_FLINTANDSTEEL_USE);
+    SoundEvent ITEM_FLINTANDSTEEL_USE = BuiltinSoundEvent.get(SoundEventKeys.ITEM_FLINTANDSTEEL_USE);
 
-    SoundEvent BLOCK_FLOWERING_AZALEA_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_FLOWERING_AZALEA_BREAK);
+    SoundEvent BLOCK_FLOWERING_AZALEA_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_FLOWERING_AZALEA_BREAK);
 
-    SoundEvent BLOCK_FLOWERING_AZALEA_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_FLOWERING_AZALEA_FALL);
+    SoundEvent BLOCK_FLOWERING_AZALEA_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_FLOWERING_AZALEA_FALL);
 
-    SoundEvent BLOCK_FLOWERING_AZALEA_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_FLOWERING_AZALEA_HIT);
+    SoundEvent BLOCK_FLOWERING_AZALEA_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_FLOWERING_AZALEA_HIT);
 
-    SoundEvent BLOCK_FLOWERING_AZALEA_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_FLOWERING_AZALEA_PLACE);
+    SoundEvent BLOCK_FLOWERING_AZALEA_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_FLOWERING_AZALEA_PLACE);
 
-    SoundEvent BLOCK_FLOWERING_AZALEA_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_FLOWERING_AZALEA_STEP);
+    SoundEvent BLOCK_FLOWERING_AZALEA_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_FLOWERING_AZALEA_STEP);
 
-    SoundEvent ENTITY_FOX_AGGRO = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FOX_AGGRO);
+    SoundEvent ENTITY_FOX_AGGRO = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FOX_AGGRO);
 
-    SoundEvent ENTITY_FOX_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FOX_AMBIENT);
+    SoundEvent ENTITY_FOX_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FOX_AMBIENT);
 
-    SoundEvent ENTITY_FOX_BITE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FOX_BITE);
+    SoundEvent ENTITY_FOX_BITE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FOX_BITE);
 
-    SoundEvent ENTITY_FOX_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FOX_DEATH);
+    SoundEvent ENTITY_FOX_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FOX_DEATH);
 
-    SoundEvent ENTITY_FOX_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FOX_EAT);
+    SoundEvent ENTITY_FOX_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FOX_EAT);
 
-    SoundEvent ENTITY_FOX_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FOX_HURT);
+    SoundEvent ENTITY_FOX_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FOX_HURT);
 
-    SoundEvent ENTITY_FOX_SCREECH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FOX_SCREECH);
+    SoundEvent ENTITY_FOX_SCREECH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FOX_SCREECH);
 
-    SoundEvent ENTITY_FOX_SLEEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FOX_SLEEP);
+    SoundEvent ENTITY_FOX_SLEEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FOX_SLEEP);
 
-    SoundEvent ENTITY_FOX_SNIFF = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FOX_SNIFF);
+    SoundEvent ENTITY_FOX_SNIFF = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FOX_SNIFF);
 
-    SoundEvent ENTITY_FOX_SPIT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FOX_SPIT);
+    SoundEvent ENTITY_FOX_SPIT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FOX_SPIT);
 
-    SoundEvent ENTITY_FOX_TELEPORT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FOX_TELEPORT);
+    SoundEvent ENTITY_FOX_TELEPORT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FOX_TELEPORT);
 
-    SoundEvent BLOCK_SUSPICIOUS_SAND_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SUSPICIOUS_SAND_BREAK);
+    SoundEvent BLOCK_SUSPICIOUS_SAND_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SUSPICIOUS_SAND_BREAK);
 
-    SoundEvent BLOCK_SUSPICIOUS_SAND_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SUSPICIOUS_SAND_STEP);
+    SoundEvent BLOCK_SUSPICIOUS_SAND_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SUSPICIOUS_SAND_STEP);
 
-    SoundEvent BLOCK_SUSPICIOUS_SAND_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SUSPICIOUS_SAND_PLACE);
+    SoundEvent BLOCK_SUSPICIOUS_SAND_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SUSPICIOUS_SAND_PLACE);
 
-    SoundEvent BLOCK_SUSPICIOUS_SAND_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SUSPICIOUS_SAND_HIT);
+    SoundEvent BLOCK_SUSPICIOUS_SAND_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SUSPICIOUS_SAND_HIT);
 
-    SoundEvent BLOCK_SUSPICIOUS_SAND_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SUSPICIOUS_SAND_FALL);
+    SoundEvent BLOCK_SUSPICIOUS_SAND_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SUSPICIOUS_SAND_FALL);
 
-    SoundEvent BLOCK_SUSPICIOUS_GRAVEL_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SUSPICIOUS_GRAVEL_BREAK);
+    SoundEvent BLOCK_SUSPICIOUS_GRAVEL_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SUSPICIOUS_GRAVEL_BREAK);
 
-    SoundEvent BLOCK_SUSPICIOUS_GRAVEL_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SUSPICIOUS_GRAVEL_STEP);
+    SoundEvent BLOCK_SUSPICIOUS_GRAVEL_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SUSPICIOUS_GRAVEL_STEP);
 
-    SoundEvent BLOCK_SUSPICIOUS_GRAVEL_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SUSPICIOUS_GRAVEL_PLACE);
+    SoundEvent BLOCK_SUSPICIOUS_GRAVEL_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SUSPICIOUS_GRAVEL_PLACE);
 
-    SoundEvent BLOCK_SUSPICIOUS_GRAVEL_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SUSPICIOUS_GRAVEL_HIT);
+    SoundEvent BLOCK_SUSPICIOUS_GRAVEL_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SUSPICIOUS_GRAVEL_HIT);
 
-    SoundEvent BLOCK_SUSPICIOUS_GRAVEL_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SUSPICIOUS_GRAVEL_FALL);
+    SoundEvent BLOCK_SUSPICIOUS_GRAVEL_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SUSPICIOUS_GRAVEL_FALL);
 
-    SoundEvent BLOCK_FROGLIGHT_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_FROGLIGHT_BREAK);
+    SoundEvent BLOCK_FROGLIGHT_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_FROGLIGHT_BREAK);
 
-    SoundEvent BLOCK_FROGLIGHT_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_FROGLIGHT_FALL);
+    SoundEvent BLOCK_FROGLIGHT_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_FROGLIGHT_FALL);
 
-    SoundEvent BLOCK_FROGLIGHT_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_FROGLIGHT_HIT);
+    SoundEvent BLOCK_FROGLIGHT_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_FROGLIGHT_HIT);
 
-    SoundEvent BLOCK_FROGLIGHT_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_FROGLIGHT_PLACE);
+    SoundEvent BLOCK_FROGLIGHT_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_FROGLIGHT_PLACE);
 
-    SoundEvent BLOCK_FROGLIGHT_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_FROGLIGHT_STEP);
+    SoundEvent BLOCK_FROGLIGHT_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_FROGLIGHT_STEP);
 
-    SoundEvent BLOCK_FROGSPAWN_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_FROGSPAWN_STEP);
+    SoundEvent BLOCK_FROGSPAWN_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_FROGSPAWN_STEP);
 
-    SoundEvent BLOCK_FROGSPAWN_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_FROGSPAWN_BREAK);
+    SoundEvent BLOCK_FROGSPAWN_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_FROGSPAWN_BREAK);
 
-    SoundEvent BLOCK_FROGSPAWN_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_FROGSPAWN_FALL);
+    SoundEvent BLOCK_FROGSPAWN_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_FROGSPAWN_FALL);
 
-    SoundEvent BLOCK_FROGSPAWN_HATCH = BuiltinSoundEvent.get(SoundEventKey.BLOCK_FROGSPAWN_HATCH);
+    SoundEvent BLOCK_FROGSPAWN_HATCH = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_FROGSPAWN_HATCH);
 
-    SoundEvent BLOCK_FROGSPAWN_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_FROGSPAWN_HIT);
+    SoundEvent BLOCK_FROGSPAWN_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_FROGSPAWN_HIT);
 
-    SoundEvent BLOCK_FROGSPAWN_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_FROGSPAWN_PLACE);
+    SoundEvent BLOCK_FROGSPAWN_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_FROGSPAWN_PLACE);
 
-    SoundEvent ENTITY_FROG_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FROG_AMBIENT);
+    SoundEvent ENTITY_FROG_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FROG_AMBIENT);
 
-    SoundEvent ENTITY_FROG_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FROG_DEATH);
+    SoundEvent ENTITY_FROG_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FROG_DEATH);
 
-    SoundEvent ENTITY_FROG_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FROG_EAT);
+    SoundEvent ENTITY_FROG_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FROG_EAT);
 
-    SoundEvent ENTITY_FROG_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FROG_HURT);
+    SoundEvent ENTITY_FROG_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FROG_HURT);
 
-    SoundEvent ENTITY_FROG_LAY_SPAWN = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FROG_LAY_SPAWN);
+    SoundEvent ENTITY_FROG_LAY_SPAWN = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FROG_LAY_SPAWN);
 
-    SoundEvent ENTITY_FROG_LONG_JUMP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FROG_LONG_JUMP);
+    SoundEvent ENTITY_FROG_LONG_JUMP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FROG_LONG_JUMP);
 
-    SoundEvent ENTITY_FROG_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FROG_STEP);
+    SoundEvent ENTITY_FROG_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FROG_STEP);
 
-    SoundEvent ENTITY_FROG_TONGUE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_FROG_TONGUE);
+    SoundEvent ENTITY_FROG_TONGUE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_FROG_TONGUE);
 
-    SoundEvent BLOCK_ROOTS_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_ROOTS_BREAK);
+    SoundEvent BLOCK_ROOTS_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_ROOTS_BREAK);
 
-    SoundEvent BLOCK_ROOTS_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_ROOTS_STEP);
+    SoundEvent BLOCK_ROOTS_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_ROOTS_STEP);
 
-    SoundEvent BLOCK_ROOTS_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_ROOTS_PLACE);
+    SoundEvent BLOCK_ROOTS_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_ROOTS_PLACE);
 
-    SoundEvent BLOCK_ROOTS_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_ROOTS_HIT);
+    SoundEvent BLOCK_ROOTS_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_ROOTS_HIT);
 
-    SoundEvent BLOCK_ROOTS_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_ROOTS_FALL);
+    SoundEvent BLOCK_ROOTS_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_ROOTS_FALL);
 
-    SoundEvent BLOCK_FURNACE_FIRE_CRACKLE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_FURNACE_FIRE_CRACKLE);
+    SoundEvent BLOCK_FURNACE_FIRE_CRACKLE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_FURNACE_FIRE_CRACKLE);
 
-    SoundEvent ENTITY_GENERIC_BIG_FALL = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GENERIC_BIG_FALL);
+    SoundEvent ENTITY_GENERIC_BIG_FALL = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GENERIC_BIG_FALL);
 
-    SoundEvent ENTITY_GENERIC_BURN = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GENERIC_BURN);
+    SoundEvent ENTITY_GENERIC_BURN = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GENERIC_BURN);
 
-    SoundEvent ENTITY_GENERIC_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GENERIC_DEATH);
+    SoundEvent ENTITY_GENERIC_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GENERIC_DEATH);
 
-    SoundEvent ENTITY_GENERIC_DRINK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GENERIC_DRINK);
+    SoundEvent ENTITY_GENERIC_DRINK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GENERIC_DRINK);
 
-    SoundEvent ENTITY_GENERIC_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GENERIC_EAT);
+    SoundEvent ENTITY_GENERIC_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GENERIC_EAT);
 
-    SoundEvent ENTITY_GENERIC_EXPLODE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GENERIC_EXPLODE);
+    SoundEvent ENTITY_GENERIC_EXPLODE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GENERIC_EXPLODE);
 
-    SoundEvent ENTITY_GENERIC_EXTINGUISH_FIRE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GENERIC_EXTINGUISH_FIRE);
+    SoundEvent ENTITY_GENERIC_EXTINGUISH_FIRE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GENERIC_EXTINGUISH_FIRE);
 
-    SoundEvent ENTITY_GENERIC_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GENERIC_HURT);
+    SoundEvent ENTITY_GENERIC_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GENERIC_HURT);
 
-    SoundEvent ENTITY_GENERIC_SMALL_FALL = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GENERIC_SMALL_FALL);
+    SoundEvent ENTITY_GENERIC_SMALL_FALL = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GENERIC_SMALL_FALL);
 
-    SoundEvent ENTITY_GENERIC_SPLASH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GENERIC_SPLASH);
+    SoundEvent ENTITY_GENERIC_SPLASH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GENERIC_SPLASH);
 
-    SoundEvent ENTITY_GENERIC_SWIM = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GENERIC_SWIM);
+    SoundEvent ENTITY_GENERIC_SWIM = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GENERIC_SWIM);
 
-    SoundEvent ENTITY_GHAST_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GHAST_AMBIENT);
+    SoundEvent ENTITY_GHAST_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GHAST_AMBIENT);
 
-    SoundEvent ENTITY_GHAST_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GHAST_DEATH);
+    SoundEvent ENTITY_GHAST_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GHAST_DEATH);
 
-    SoundEvent ENTITY_GHAST_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GHAST_HURT);
+    SoundEvent ENTITY_GHAST_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GHAST_HURT);
 
-    SoundEvent ENTITY_GHAST_SCREAM = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GHAST_SCREAM);
+    SoundEvent ENTITY_GHAST_SCREAM = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GHAST_SCREAM);
 
-    SoundEvent ENTITY_GHAST_SHOOT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GHAST_SHOOT);
+    SoundEvent ENTITY_GHAST_SHOOT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GHAST_SHOOT);
 
-    SoundEvent ENTITY_GHAST_WARN = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GHAST_WARN);
+    SoundEvent ENTITY_GHAST_WARN = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GHAST_WARN);
 
-    SoundEvent ENTITY_GHASTLING_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GHASTLING_AMBIENT);
+    SoundEvent ENTITY_GHASTLING_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GHASTLING_AMBIENT);
 
-    SoundEvent ENTITY_GHASTLING_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GHASTLING_DEATH);
+    SoundEvent ENTITY_GHASTLING_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GHASTLING_DEATH);
 
-    SoundEvent ENTITY_GHASTLING_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GHASTLING_HURT);
+    SoundEvent ENTITY_GHASTLING_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GHASTLING_HURT);
 
-    SoundEvent ENTITY_GHASTLING_SPAWN = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GHASTLING_SPAWN);
+    SoundEvent ENTITY_GHASTLING_SPAWN = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GHASTLING_SPAWN);
 
-    SoundEvent BLOCK_GILDED_BLACKSTONE_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_GILDED_BLACKSTONE_BREAK);
+    SoundEvent BLOCK_GILDED_BLACKSTONE_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_GILDED_BLACKSTONE_BREAK);
 
-    SoundEvent BLOCK_GILDED_BLACKSTONE_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_GILDED_BLACKSTONE_FALL);
+    SoundEvent BLOCK_GILDED_BLACKSTONE_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_GILDED_BLACKSTONE_FALL);
 
-    SoundEvent BLOCK_GILDED_BLACKSTONE_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_GILDED_BLACKSTONE_HIT);
+    SoundEvent BLOCK_GILDED_BLACKSTONE_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_GILDED_BLACKSTONE_HIT);
 
-    SoundEvent BLOCK_GILDED_BLACKSTONE_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_GILDED_BLACKSTONE_PLACE);
+    SoundEvent BLOCK_GILDED_BLACKSTONE_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_GILDED_BLACKSTONE_PLACE);
 
-    SoundEvent BLOCK_GILDED_BLACKSTONE_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_GILDED_BLACKSTONE_STEP);
+    SoundEvent BLOCK_GILDED_BLACKSTONE_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_GILDED_BLACKSTONE_STEP);
 
-    SoundEvent BLOCK_GLASS_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_GLASS_BREAK);
+    SoundEvent BLOCK_GLASS_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_GLASS_BREAK);
 
-    SoundEvent BLOCK_GLASS_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_GLASS_FALL);
+    SoundEvent BLOCK_GLASS_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_GLASS_FALL);
 
-    SoundEvent BLOCK_GLASS_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_GLASS_HIT);
+    SoundEvent BLOCK_GLASS_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_GLASS_HIT);
 
-    SoundEvent BLOCK_GLASS_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_GLASS_PLACE);
+    SoundEvent BLOCK_GLASS_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_GLASS_PLACE);
 
-    SoundEvent BLOCK_GLASS_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_GLASS_STEP);
+    SoundEvent BLOCK_GLASS_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_GLASS_STEP);
 
-    SoundEvent ITEM_GLOW_INK_SAC_USE = BuiltinSoundEvent.get(SoundEventKey.ITEM_GLOW_INK_SAC_USE);
+    SoundEvent ITEM_GLOW_INK_SAC_USE = BuiltinSoundEvent.get(SoundEventKeys.ITEM_GLOW_INK_SAC_USE);
 
-    SoundEvent ENTITY_GLOW_ITEM_FRAME_ADD_ITEM = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GLOW_ITEM_FRAME_ADD_ITEM);
+    SoundEvent ENTITY_GLOW_ITEM_FRAME_ADD_ITEM = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GLOW_ITEM_FRAME_ADD_ITEM);
 
-    SoundEvent ENTITY_GLOW_ITEM_FRAME_BREAK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GLOW_ITEM_FRAME_BREAK);
+    SoundEvent ENTITY_GLOW_ITEM_FRAME_BREAK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GLOW_ITEM_FRAME_BREAK);
 
-    SoundEvent ENTITY_GLOW_ITEM_FRAME_PLACE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GLOW_ITEM_FRAME_PLACE);
+    SoundEvent ENTITY_GLOW_ITEM_FRAME_PLACE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GLOW_ITEM_FRAME_PLACE);
 
-    SoundEvent ENTITY_GLOW_ITEM_FRAME_REMOVE_ITEM = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GLOW_ITEM_FRAME_REMOVE_ITEM);
+    SoundEvent ENTITY_GLOW_ITEM_FRAME_REMOVE_ITEM = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GLOW_ITEM_FRAME_REMOVE_ITEM);
 
-    SoundEvent ENTITY_GLOW_ITEM_FRAME_ROTATE_ITEM = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GLOW_ITEM_FRAME_ROTATE_ITEM);
+    SoundEvent ENTITY_GLOW_ITEM_FRAME_ROTATE_ITEM = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GLOW_ITEM_FRAME_ROTATE_ITEM);
 
-    SoundEvent ENTITY_GLOW_SQUID_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GLOW_SQUID_AMBIENT);
+    SoundEvent ENTITY_GLOW_SQUID_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GLOW_SQUID_AMBIENT);
 
-    SoundEvent ENTITY_GLOW_SQUID_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GLOW_SQUID_DEATH);
+    SoundEvent ENTITY_GLOW_SQUID_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GLOW_SQUID_DEATH);
 
-    SoundEvent ENTITY_GLOW_SQUID_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GLOW_SQUID_HURT);
+    SoundEvent ENTITY_GLOW_SQUID_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GLOW_SQUID_HURT);
 
-    SoundEvent ENTITY_GLOW_SQUID_SQUIRT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GLOW_SQUID_SQUIRT);
+    SoundEvent ENTITY_GLOW_SQUID_SQUIRT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GLOW_SQUID_SQUIRT);
 
-    SoundEvent ENTITY_GOAT_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GOAT_AMBIENT);
+    SoundEvent ENTITY_GOAT_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GOAT_AMBIENT);
 
-    SoundEvent ENTITY_GOAT_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GOAT_DEATH);
+    SoundEvent ENTITY_GOAT_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GOAT_DEATH);
 
-    SoundEvent ENTITY_GOAT_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GOAT_EAT);
+    SoundEvent ENTITY_GOAT_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GOAT_EAT);
 
-    SoundEvent ENTITY_GOAT_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GOAT_HURT);
+    SoundEvent ENTITY_GOAT_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GOAT_HURT);
 
-    SoundEvent ENTITY_GOAT_LONG_JUMP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GOAT_LONG_JUMP);
+    SoundEvent ENTITY_GOAT_LONG_JUMP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GOAT_LONG_JUMP);
 
-    SoundEvent ENTITY_GOAT_MILK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GOAT_MILK);
+    SoundEvent ENTITY_GOAT_MILK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GOAT_MILK);
 
-    SoundEvent ENTITY_GOAT_PREPARE_RAM = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GOAT_PREPARE_RAM);
+    SoundEvent ENTITY_GOAT_PREPARE_RAM = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GOAT_PREPARE_RAM);
 
-    SoundEvent ENTITY_GOAT_RAM_IMPACT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GOAT_RAM_IMPACT);
+    SoundEvent ENTITY_GOAT_RAM_IMPACT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GOAT_RAM_IMPACT);
 
-    SoundEvent ENTITY_GOAT_HORN_BREAK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GOAT_HORN_BREAK);
+    SoundEvent ENTITY_GOAT_HORN_BREAK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GOAT_HORN_BREAK);
 
-    SoundEvent ENTITY_GOAT_SCREAMING_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GOAT_SCREAMING_AMBIENT);
+    SoundEvent ENTITY_GOAT_SCREAMING_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GOAT_SCREAMING_AMBIENT);
 
-    SoundEvent ENTITY_GOAT_SCREAMING_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GOAT_SCREAMING_DEATH);
+    SoundEvent ENTITY_GOAT_SCREAMING_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GOAT_SCREAMING_DEATH);
 
-    SoundEvent ENTITY_GOAT_SCREAMING_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GOAT_SCREAMING_EAT);
+    SoundEvent ENTITY_GOAT_SCREAMING_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GOAT_SCREAMING_EAT);
 
-    SoundEvent ENTITY_GOAT_SCREAMING_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GOAT_SCREAMING_HURT);
+    SoundEvent ENTITY_GOAT_SCREAMING_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GOAT_SCREAMING_HURT);
 
-    SoundEvent ENTITY_GOAT_SCREAMING_LONG_JUMP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GOAT_SCREAMING_LONG_JUMP);
+    SoundEvent ENTITY_GOAT_SCREAMING_LONG_JUMP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GOAT_SCREAMING_LONG_JUMP);
 
-    SoundEvent ENTITY_GOAT_SCREAMING_MILK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GOAT_SCREAMING_MILK);
+    SoundEvent ENTITY_GOAT_SCREAMING_MILK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GOAT_SCREAMING_MILK);
 
-    SoundEvent ENTITY_GOAT_SCREAMING_PREPARE_RAM = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GOAT_SCREAMING_PREPARE_RAM);
+    SoundEvent ENTITY_GOAT_SCREAMING_PREPARE_RAM = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GOAT_SCREAMING_PREPARE_RAM);
 
-    SoundEvent ENTITY_GOAT_SCREAMING_RAM_IMPACT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GOAT_SCREAMING_RAM_IMPACT);
+    SoundEvent ENTITY_GOAT_SCREAMING_RAM_IMPACT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GOAT_SCREAMING_RAM_IMPACT);
 
-    SoundEvent ENTITY_GOAT_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GOAT_STEP);
+    SoundEvent ENTITY_GOAT_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GOAT_STEP);
 
-    SoundEvent ITEM_GOLDEN_DANDELION_USE = BuiltinSoundEvent.get(SoundEventKey.ITEM_GOLDEN_DANDELION_USE);
+    SoundEvent ITEM_GOLDEN_DANDELION_USE = BuiltinSoundEvent.get(SoundEventKeys.ITEM_GOLDEN_DANDELION_USE);
 
-    SoundEvent ITEM_GOLDEN_DANDELION_UNUSE = BuiltinSoundEvent.get(SoundEventKey.ITEM_GOLDEN_DANDELION_UNUSE);
+    SoundEvent ITEM_GOLDEN_DANDELION_UNUSE = BuiltinSoundEvent.get(SoundEventKeys.ITEM_GOLDEN_DANDELION_UNUSE);
 
-    SoundEvent BLOCK_GRASS_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_GRASS_BREAK);
+    SoundEvent BLOCK_GRASS_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_GRASS_BREAK);
 
-    SoundEvent BLOCK_GRASS_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_GRASS_FALL);
+    SoundEvent BLOCK_GRASS_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_GRASS_FALL);
 
-    SoundEvent BLOCK_GRASS_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_GRASS_HIT);
+    SoundEvent BLOCK_GRASS_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_GRASS_HIT);
 
-    SoundEvent BLOCK_GRASS_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_GRASS_PLACE);
+    SoundEvent BLOCK_GRASS_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_GRASS_PLACE);
 
-    SoundEvent BLOCK_GRASS_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_GRASS_STEP);
+    SoundEvent BLOCK_GRASS_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_GRASS_STEP);
 
-    SoundEvent BLOCK_GRAVEL_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_GRAVEL_BREAK);
+    SoundEvent BLOCK_GRAVEL_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_GRAVEL_BREAK);
 
-    SoundEvent BLOCK_GRAVEL_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_GRAVEL_FALL);
+    SoundEvent BLOCK_GRAVEL_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_GRAVEL_FALL);
 
-    SoundEvent BLOCK_GRAVEL_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_GRAVEL_HIT);
+    SoundEvent BLOCK_GRAVEL_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_GRAVEL_HIT);
 
-    SoundEvent BLOCK_GRAVEL_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_GRAVEL_PLACE);
+    SoundEvent BLOCK_GRAVEL_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_GRAVEL_PLACE);
 
-    SoundEvent BLOCK_GRAVEL_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_GRAVEL_STEP);
+    SoundEvent BLOCK_GRAVEL_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_GRAVEL_STEP);
 
-    SoundEvent BLOCK_GRINDSTONE_USE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_GRINDSTONE_USE);
+    SoundEvent BLOCK_GRINDSTONE_USE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_GRINDSTONE_USE);
 
-    SoundEvent BLOCK_GROWING_PLANT_CROP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_GROWING_PLANT_CROP);
+    SoundEvent BLOCK_GROWING_PLANT_CROP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_GROWING_PLANT_CROP);
 
-    SoundEvent ENTITY_GUARDIAN_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GUARDIAN_AMBIENT);
+    SoundEvent ENTITY_GUARDIAN_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GUARDIAN_AMBIENT);
 
-    SoundEvent ENTITY_GUARDIAN_AMBIENT_LAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GUARDIAN_AMBIENT_LAND);
+    SoundEvent ENTITY_GUARDIAN_AMBIENT_LAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GUARDIAN_AMBIENT_LAND);
 
-    SoundEvent ENTITY_GUARDIAN_ATTACK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GUARDIAN_ATTACK);
+    SoundEvent ENTITY_GUARDIAN_ATTACK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GUARDIAN_ATTACK);
 
-    SoundEvent ENTITY_GUARDIAN_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GUARDIAN_DEATH);
+    SoundEvent ENTITY_GUARDIAN_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GUARDIAN_DEATH);
 
-    SoundEvent ENTITY_GUARDIAN_DEATH_LAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GUARDIAN_DEATH_LAND);
+    SoundEvent ENTITY_GUARDIAN_DEATH_LAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GUARDIAN_DEATH_LAND);
 
-    SoundEvent ENTITY_GUARDIAN_FLOP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GUARDIAN_FLOP);
+    SoundEvent ENTITY_GUARDIAN_FLOP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GUARDIAN_FLOP);
 
-    SoundEvent ENTITY_GUARDIAN_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GUARDIAN_HURT);
+    SoundEvent ENTITY_GUARDIAN_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GUARDIAN_HURT);
 
-    SoundEvent ENTITY_GUARDIAN_HURT_LAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_GUARDIAN_HURT_LAND);
+    SoundEvent ENTITY_GUARDIAN_HURT_LAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_GUARDIAN_HURT_LAND);
 
-    SoundEvent BLOCK_HANGING_ROOTS_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_HANGING_ROOTS_BREAK);
+    SoundEvent BLOCK_HANGING_ROOTS_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_HANGING_ROOTS_BREAK);
 
-    SoundEvent BLOCK_HANGING_ROOTS_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_HANGING_ROOTS_FALL);
+    SoundEvent BLOCK_HANGING_ROOTS_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_HANGING_ROOTS_FALL);
 
-    SoundEvent BLOCK_HANGING_ROOTS_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_HANGING_ROOTS_HIT);
+    SoundEvent BLOCK_HANGING_ROOTS_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_HANGING_ROOTS_HIT);
 
-    SoundEvent BLOCK_HANGING_ROOTS_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_HANGING_ROOTS_PLACE);
+    SoundEvent BLOCK_HANGING_ROOTS_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_HANGING_ROOTS_PLACE);
 
-    SoundEvent BLOCK_HANGING_ROOTS_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_HANGING_ROOTS_STEP);
+    SoundEvent BLOCK_HANGING_ROOTS_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_HANGING_ROOTS_STEP);
 
-    SoundEvent BLOCK_HANGING_SIGN_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_HANGING_SIGN_STEP);
+    SoundEvent BLOCK_HANGING_SIGN_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_HANGING_SIGN_STEP);
 
-    SoundEvent BLOCK_HANGING_SIGN_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_HANGING_SIGN_BREAK);
+    SoundEvent BLOCK_HANGING_SIGN_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_HANGING_SIGN_BREAK);
 
-    SoundEvent BLOCK_HANGING_SIGN_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_HANGING_SIGN_FALL);
+    SoundEvent BLOCK_HANGING_SIGN_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_HANGING_SIGN_FALL);
 
-    SoundEvent BLOCK_HANGING_SIGN_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_HANGING_SIGN_HIT);
+    SoundEvent BLOCK_HANGING_SIGN_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_HANGING_SIGN_HIT);
 
-    SoundEvent BLOCK_HANGING_SIGN_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_HANGING_SIGN_PLACE);
+    SoundEvent BLOCK_HANGING_SIGN_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_HANGING_SIGN_PLACE);
 
-    SoundEvent ENTITY_HAPPY_GHAST_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HAPPY_GHAST_AMBIENT);
+    SoundEvent ENTITY_HAPPY_GHAST_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HAPPY_GHAST_AMBIENT);
 
-    SoundEvent ENTITY_HAPPY_GHAST_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HAPPY_GHAST_DEATH);
+    SoundEvent ENTITY_HAPPY_GHAST_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HAPPY_GHAST_DEATH);
 
-    SoundEvent ENTITY_HAPPY_GHAST_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HAPPY_GHAST_HURT);
+    SoundEvent ENTITY_HAPPY_GHAST_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HAPPY_GHAST_HURT);
 
-    SoundEvent ENTITY_HAPPY_GHAST_RIDING = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HAPPY_GHAST_RIDING);
+    SoundEvent ENTITY_HAPPY_GHAST_RIDING = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HAPPY_GHAST_RIDING);
 
-    SoundEvent BLOCK_HEAVY_CORE_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_HEAVY_CORE_BREAK);
+    SoundEvent BLOCK_HEAVY_CORE_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_HEAVY_CORE_BREAK);
 
-    SoundEvent BLOCK_HEAVY_CORE_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_HEAVY_CORE_FALL);
+    SoundEvent BLOCK_HEAVY_CORE_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_HEAVY_CORE_FALL);
 
-    SoundEvent BLOCK_HEAVY_CORE_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_HEAVY_CORE_HIT);
+    SoundEvent BLOCK_HEAVY_CORE_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_HEAVY_CORE_HIT);
 
-    SoundEvent BLOCK_HEAVY_CORE_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_HEAVY_CORE_PLACE);
+    SoundEvent BLOCK_HEAVY_CORE_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_HEAVY_CORE_PLACE);
 
-    SoundEvent BLOCK_HEAVY_CORE_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_HEAVY_CORE_STEP);
+    SoundEvent BLOCK_HEAVY_CORE_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_HEAVY_CORE_STEP);
 
-    SoundEvent BLOCK_NETHER_WOOD_HANGING_SIGN_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_WOOD_HANGING_SIGN_STEP);
+    SoundEvent BLOCK_NETHER_WOOD_HANGING_SIGN_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_WOOD_HANGING_SIGN_STEP);
 
-    SoundEvent BLOCK_NETHER_WOOD_HANGING_SIGN_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_WOOD_HANGING_SIGN_BREAK);
+    SoundEvent BLOCK_NETHER_WOOD_HANGING_SIGN_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_WOOD_HANGING_SIGN_BREAK);
 
-    SoundEvent BLOCK_NETHER_WOOD_HANGING_SIGN_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_WOOD_HANGING_SIGN_FALL);
+    SoundEvent BLOCK_NETHER_WOOD_HANGING_SIGN_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_WOOD_HANGING_SIGN_FALL);
 
-    SoundEvent BLOCK_NETHER_WOOD_HANGING_SIGN_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_WOOD_HANGING_SIGN_HIT);
+    SoundEvent BLOCK_NETHER_WOOD_HANGING_SIGN_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_WOOD_HANGING_SIGN_HIT);
 
-    SoundEvent BLOCK_NETHER_WOOD_HANGING_SIGN_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_WOOD_HANGING_SIGN_PLACE);
+    SoundEvent BLOCK_NETHER_WOOD_HANGING_SIGN_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_WOOD_HANGING_SIGN_PLACE);
 
-    SoundEvent BLOCK_BAMBOO_WOOD_HANGING_SIGN_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_WOOD_HANGING_SIGN_STEP);
+    SoundEvent BLOCK_BAMBOO_WOOD_HANGING_SIGN_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_WOOD_HANGING_SIGN_STEP);
 
-    SoundEvent BLOCK_BAMBOO_WOOD_HANGING_SIGN_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_WOOD_HANGING_SIGN_BREAK);
+    SoundEvent BLOCK_BAMBOO_WOOD_HANGING_SIGN_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_WOOD_HANGING_SIGN_BREAK);
 
-    SoundEvent BLOCK_BAMBOO_WOOD_HANGING_SIGN_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_WOOD_HANGING_SIGN_FALL);
+    SoundEvent BLOCK_BAMBOO_WOOD_HANGING_SIGN_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_WOOD_HANGING_SIGN_FALL);
 
-    SoundEvent BLOCK_BAMBOO_WOOD_HANGING_SIGN_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_WOOD_HANGING_SIGN_HIT);
+    SoundEvent BLOCK_BAMBOO_WOOD_HANGING_SIGN_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_WOOD_HANGING_SIGN_HIT);
 
-    SoundEvent BLOCK_BAMBOO_WOOD_HANGING_SIGN_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_BAMBOO_WOOD_HANGING_SIGN_PLACE);
+    SoundEvent BLOCK_BAMBOO_WOOD_HANGING_SIGN_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_BAMBOO_WOOD_HANGING_SIGN_PLACE);
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TRIAL_SPAWNER_BREAK);
+    SoundEvent BLOCK_TRIAL_SPAWNER_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TRIAL_SPAWNER_BREAK);
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TRIAL_SPAWNER_STEP);
+    SoundEvent BLOCK_TRIAL_SPAWNER_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TRIAL_SPAWNER_STEP);
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TRIAL_SPAWNER_PLACE);
+    SoundEvent BLOCK_TRIAL_SPAWNER_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TRIAL_SPAWNER_PLACE);
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TRIAL_SPAWNER_HIT);
+    SoundEvent BLOCK_TRIAL_SPAWNER_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TRIAL_SPAWNER_HIT);
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TRIAL_SPAWNER_FALL);
+    SoundEvent BLOCK_TRIAL_SPAWNER_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TRIAL_SPAWNER_FALL);
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_SPAWN_MOB = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TRIAL_SPAWNER_SPAWN_MOB);
+    SoundEvent BLOCK_TRIAL_SPAWNER_SPAWN_MOB = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TRIAL_SPAWNER_SPAWN_MOB);
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_ABOUT_TO_SPAWN_ITEM = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TRIAL_SPAWNER_ABOUT_TO_SPAWN_ITEM);
+    SoundEvent BLOCK_TRIAL_SPAWNER_ABOUT_TO_SPAWN_ITEM = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TRIAL_SPAWNER_ABOUT_TO_SPAWN_ITEM);
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_SPAWN_ITEM = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TRIAL_SPAWNER_SPAWN_ITEM);
+    SoundEvent BLOCK_TRIAL_SPAWNER_SPAWN_ITEM = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TRIAL_SPAWNER_SPAWN_ITEM);
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_SPAWN_ITEM_BEGIN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TRIAL_SPAWNER_SPAWN_ITEM_BEGIN);
+    SoundEvent BLOCK_TRIAL_SPAWNER_SPAWN_ITEM_BEGIN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TRIAL_SPAWNER_SPAWN_ITEM_BEGIN);
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_DETECT_PLAYER = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TRIAL_SPAWNER_DETECT_PLAYER);
+    SoundEvent BLOCK_TRIAL_SPAWNER_DETECT_PLAYER = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TRIAL_SPAWNER_DETECT_PLAYER);
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_OMINOUS_ACTIVATE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TRIAL_SPAWNER_OMINOUS_ACTIVATE);
+    SoundEvent BLOCK_TRIAL_SPAWNER_OMINOUS_ACTIVATE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TRIAL_SPAWNER_OMINOUS_ACTIVATE);
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TRIAL_SPAWNER_AMBIENT);
+    SoundEvent BLOCK_TRIAL_SPAWNER_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TRIAL_SPAWNER_AMBIENT);
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_AMBIENT_OMINOUS = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TRIAL_SPAWNER_AMBIENT_OMINOUS);
+    SoundEvent BLOCK_TRIAL_SPAWNER_AMBIENT_OMINOUS = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TRIAL_SPAWNER_AMBIENT_OMINOUS);
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_OPEN_SHUTTER = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TRIAL_SPAWNER_OPEN_SHUTTER);
+    SoundEvent BLOCK_TRIAL_SPAWNER_OPEN_SHUTTER = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TRIAL_SPAWNER_OPEN_SHUTTER);
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_CLOSE_SHUTTER = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TRIAL_SPAWNER_CLOSE_SHUTTER);
+    SoundEvent BLOCK_TRIAL_SPAWNER_CLOSE_SHUTTER = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TRIAL_SPAWNER_CLOSE_SHUTTER);
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_EJECT_ITEM = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TRIAL_SPAWNER_EJECT_ITEM);
+    SoundEvent BLOCK_TRIAL_SPAWNER_EJECT_ITEM = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TRIAL_SPAWNER_EJECT_ITEM);
 
-    SoundEvent ENTITY_HAPPY_GHAST_EQUIP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HAPPY_GHAST_EQUIP);
+    SoundEvent ENTITY_HAPPY_GHAST_EQUIP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HAPPY_GHAST_EQUIP);
 
-    SoundEvent ENTITY_HAPPY_GHAST_UNEQUIP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HAPPY_GHAST_UNEQUIP);
+    SoundEvent ENTITY_HAPPY_GHAST_UNEQUIP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HAPPY_GHAST_UNEQUIP);
 
-    SoundEvent ENTITY_HAPPY_GHAST_HARNESS_GOGGLES_UP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HAPPY_GHAST_HARNESS_GOGGLES_UP);
+    SoundEvent ENTITY_HAPPY_GHAST_HARNESS_GOGGLES_UP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HAPPY_GHAST_HARNESS_GOGGLES_UP);
 
-    SoundEvent ENTITY_HAPPY_GHAST_HARNESS_GOGGLES_DOWN = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HAPPY_GHAST_HARNESS_GOGGLES_DOWN);
+    SoundEvent ENTITY_HAPPY_GHAST_HARNESS_GOGGLES_DOWN = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HAPPY_GHAST_HARNESS_GOGGLES_DOWN);
 
-    SoundEvent ITEM_HOE_TILL = BuiltinSoundEvent.get(SoundEventKey.ITEM_HOE_TILL);
+    SoundEvent ITEM_HOE_TILL = BuiltinSoundEvent.get(SoundEventKeys.ITEM_HOE_TILL);
 
-    SoundEvent ENTITY_HOGLIN_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HOGLIN_AMBIENT);
+    SoundEvent ENTITY_HOGLIN_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HOGLIN_AMBIENT);
 
-    SoundEvent ENTITY_HOGLIN_ANGRY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HOGLIN_ANGRY);
+    SoundEvent ENTITY_HOGLIN_ANGRY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HOGLIN_ANGRY);
 
-    SoundEvent ENTITY_HOGLIN_ATTACK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HOGLIN_ATTACK);
+    SoundEvent ENTITY_HOGLIN_ATTACK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HOGLIN_ATTACK);
 
-    SoundEvent ENTITY_HOGLIN_CONVERTED_TO_ZOMBIFIED = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HOGLIN_CONVERTED_TO_ZOMBIFIED);
+    SoundEvent ENTITY_HOGLIN_CONVERTED_TO_ZOMBIFIED = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HOGLIN_CONVERTED_TO_ZOMBIFIED);
 
-    SoundEvent ENTITY_HOGLIN_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HOGLIN_DEATH);
+    SoundEvent ENTITY_HOGLIN_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HOGLIN_DEATH);
 
-    SoundEvent ENTITY_HOGLIN_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HOGLIN_HURT);
+    SoundEvent ENTITY_HOGLIN_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HOGLIN_HURT);
 
-    SoundEvent ENTITY_HOGLIN_RETREAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HOGLIN_RETREAT);
+    SoundEvent ENTITY_HOGLIN_RETREAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HOGLIN_RETREAT);
 
-    SoundEvent ENTITY_HOGLIN_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HOGLIN_STEP);
+    SoundEvent ENTITY_HOGLIN_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HOGLIN_STEP);
 
-    SoundEvent BLOCK_HONEY_BLOCK_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_HONEY_BLOCK_BREAK);
+    SoundEvent BLOCK_HONEY_BLOCK_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_HONEY_BLOCK_BREAK);
 
-    SoundEvent BLOCK_HONEY_BLOCK_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_HONEY_BLOCK_FALL);
+    SoundEvent BLOCK_HONEY_BLOCK_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_HONEY_BLOCK_FALL);
 
-    SoundEvent BLOCK_HONEY_BLOCK_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_HONEY_BLOCK_HIT);
+    SoundEvent BLOCK_HONEY_BLOCK_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_HONEY_BLOCK_HIT);
 
-    SoundEvent BLOCK_HONEY_BLOCK_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_HONEY_BLOCK_PLACE);
+    SoundEvent BLOCK_HONEY_BLOCK_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_HONEY_BLOCK_PLACE);
 
-    SoundEvent BLOCK_HONEY_BLOCK_SLIDE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_HONEY_BLOCK_SLIDE);
+    SoundEvent BLOCK_HONEY_BLOCK_SLIDE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_HONEY_BLOCK_SLIDE);
 
-    SoundEvent BLOCK_HONEY_BLOCK_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_HONEY_BLOCK_STEP);
+    SoundEvent BLOCK_HONEY_BLOCK_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_HONEY_BLOCK_STEP);
 
-    SoundEvent ITEM_HONEYCOMB_WAX_ON = BuiltinSoundEvent.get(SoundEventKey.ITEM_HONEYCOMB_WAX_ON);
+    SoundEvent ITEM_HONEYCOMB_WAX_ON = BuiltinSoundEvent.get(SoundEventKeys.ITEM_HONEYCOMB_WAX_ON);
 
-    SoundEvent ITEM_HONEY_BOTTLE_DRINK = BuiltinSoundEvent.get(SoundEventKey.ITEM_HONEY_BOTTLE_DRINK);
+    SoundEvent ITEM_HONEY_BOTTLE_DRINK = BuiltinSoundEvent.get(SoundEventKeys.ITEM_HONEY_BOTTLE_DRINK);
 
-    SoundEvent ITEM_GOAT_HORN_SOUND_0 = BuiltinSoundEvent.get(SoundEventKey.ITEM_GOAT_HORN_SOUND_0);
+    SoundEvent ITEM_GOAT_HORN_SOUND_0 = BuiltinSoundEvent.get(SoundEventKeys.ITEM_GOAT_HORN_SOUND_0);
 
-    SoundEvent ITEM_GOAT_HORN_SOUND_1 = BuiltinSoundEvent.get(SoundEventKey.ITEM_GOAT_HORN_SOUND_1);
+    SoundEvent ITEM_GOAT_HORN_SOUND_1 = BuiltinSoundEvent.get(SoundEventKeys.ITEM_GOAT_HORN_SOUND_1);
 
-    SoundEvent ITEM_GOAT_HORN_SOUND_2 = BuiltinSoundEvent.get(SoundEventKey.ITEM_GOAT_HORN_SOUND_2);
+    SoundEvent ITEM_GOAT_HORN_SOUND_2 = BuiltinSoundEvent.get(SoundEventKeys.ITEM_GOAT_HORN_SOUND_2);
 
-    SoundEvent ITEM_GOAT_HORN_SOUND_3 = BuiltinSoundEvent.get(SoundEventKey.ITEM_GOAT_HORN_SOUND_3);
+    SoundEvent ITEM_GOAT_HORN_SOUND_3 = BuiltinSoundEvent.get(SoundEventKeys.ITEM_GOAT_HORN_SOUND_3);
 
-    SoundEvent ITEM_GOAT_HORN_SOUND_4 = BuiltinSoundEvent.get(SoundEventKey.ITEM_GOAT_HORN_SOUND_4);
+    SoundEvent ITEM_GOAT_HORN_SOUND_4 = BuiltinSoundEvent.get(SoundEventKeys.ITEM_GOAT_HORN_SOUND_4);
 
-    SoundEvent ITEM_GOAT_HORN_SOUND_5 = BuiltinSoundEvent.get(SoundEventKey.ITEM_GOAT_HORN_SOUND_5);
+    SoundEvent ITEM_GOAT_HORN_SOUND_5 = BuiltinSoundEvent.get(SoundEventKeys.ITEM_GOAT_HORN_SOUND_5);
 
-    SoundEvent ITEM_GOAT_HORN_SOUND_6 = BuiltinSoundEvent.get(SoundEventKey.ITEM_GOAT_HORN_SOUND_6);
+    SoundEvent ITEM_GOAT_HORN_SOUND_6 = BuiltinSoundEvent.get(SoundEventKeys.ITEM_GOAT_HORN_SOUND_6);
 
-    SoundEvent ITEM_GOAT_HORN_SOUND_7 = BuiltinSoundEvent.get(SoundEventKey.ITEM_GOAT_HORN_SOUND_7);
+    SoundEvent ITEM_GOAT_HORN_SOUND_7 = BuiltinSoundEvent.get(SoundEventKeys.ITEM_GOAT_HORN_SOUND_7);
 
-    SoundEvent ENTITY_HORSE_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HORSE_AMBIENT);
+    SoundEvent ENTITY_HORSE_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HORSE_AMBIENT);
 
-    SoundEvent ENTITY_BABY_HORSE_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_HORSE_AMBIENT);
+    SoundEvent ENTITY_BABY_HORSE_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_HORSE_AMBIENT);
 
-    SoundEvent ENTITY_HORSE_ANGRY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HORSE_ANGRY);
+    SoundEvent ENTITY_HORSE_ANGRY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HORSE_ANGRY);
 
-    SoundEvent ENTITY_BABY_HORSE_ANGRY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_HORSE_ANGRY);
+    SoundEvent ENTITY_BABY_HORSE_ANGRY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_HORSE_ANGRY);
 
-    SoundEvent ENTITY_HORSE_ARMOR = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HORSE_ARMOR);
+    SoundEvent ENTITY_HORSE_ARMOR = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HORSE_ARMOR);
 
-    SoundEvent ITEM_HORSE_ARMOR_UNEQUIP = BuiltinSoundEvent.get(SoundEventKey.ITEM_HORSE_ARMOR_UNEQUIP);
+    SoundEvent ITEM_HORSE_ARMOR_UNEQUIP = BuiltinSoundEvent.get(SoundEventKeys.ITEM_HORSE_ARMOR_UNEQUIP);
 
-    SoundEvent ENTITY_HORSE_BREATHE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HORSE_BREATHE);
+    SoundEvent ENTITY_HORSE_BREATHE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HORSE_BREATHE);
 
-    SoundEvent ENTITY_BABY_HORSE_BREATHE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_HORSE_BREATHE);
+    SoundEvent ENTITY_BABY_HORSE_BREATHE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_HORSE_BREATHE);
 
-    SoundEvent ENTITY_HORSE_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HORSE_DEATH);
+    SoundEvent ENTITY_HORSE_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HORSE_DEATH);
 
-    SoundEvent ENTITY_BABY_HORSE_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_HORSE_DEATH);
+    SoundEvent ENTITY_BABY_HORSE_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_HORSE_DEATH);
 
-    SoundEvent ENTITY_HORSE_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HORSE_EAT);
+    SoundEvent ENTITY_HORSE_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HORSE_EAT);
 
-    SoundEvent ENTITY_BABY_HORSE_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_HORSE_EAT);
+    SoundEvent ENTITY_BABY_HORSE_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_HORSE_EAT);
 
-    SoundEvent ENTITY_HORSE_GALLOP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HORSE_GALLOP);
+    SoundEvent ENTITY_HORSE_GALLOP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HORSE_GALLOP);
 
-    SoundEvent ENTITY_HORSE_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HORSE_HURT);
+    SoundEvent ENTITY_HORSE_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HORSE_HURT);
 
-    SoundEvent ENTITY_BABY_HORSE_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_HORSE_HURT);
+    SoundEvent ENTITY_BABY_HORSE_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_HORSE_HURT);
 
-    SoundEvent ENTITY_HORSE_JUMP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HORSE_JUMP);
+    SoundEvent ENTITY_HORSE_JUMP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HORSE_JUMP);
 
-    SoundEvent ENTITY_HORSE_LAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HORSE_LAND);
+    SoundEvent ENTITY_HORSE_LAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HORSE_LAND);
 
-    SoundEvent ENTITY_BABY_HORSE_LAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_HORSE_LAND);
+    SoundEvent ENTITY_BABY_HORSE_LAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_HORSE_LAND);
 
-    SoundEvent ENTITY_HORSE_SADDLE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HORSE_SADDLE);
+    SoundEvent ENTITY_HORSE_SADDLE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HORSE_SADDLE);
 
-    SoundEvent ENTITY_HORSE_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HORSE_STEP);
+    SoundEvent ENTITY_HORSE_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HORSE_STEP);
 
-    SoundEvent ENTITY_BABY_HORSE_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_HORSE_STEP);
+    SoundEvent ENTITY_BABY_HORSE_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_HORSE_STEP);
 
-    SoundEvent ENTITY_HORSE_STEP_WOOD = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HORSE_STEP_WOOD);
+    SoundEvent ENTITY_HORSE_STEP_WOOD = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HORSE_STEP_WOOD);
 
-    SoundEvent ENTITY_HOSTILE_BIG_FALL = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HOSTILE_BIG_FALL);
+    SoundEvent ENTITY_HOSTILE_BIG_FALL = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HOSTILE_BIG_FALL);
 
-    SoundEvent ENTITY_HOSTILE_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HOSTILE_DEATH);
+    SoundEvent ENTITY_HOSTILE_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HOSTILE_DEATH);
 
-    SoundEvent ENTITY_HOSTILE_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HOSTILE_HURT);
+    SoundEvent ENTITY_HOSTILE_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HOSTILE_HURT);
 
-    SoundEvent ENTITY_HOSTILE_SMALL_FALL = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HOSTILE_SMALL_FALL);
+    SoundEvent ENTITY_HOSTILE_SMALL_FALL = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HOSTILE_SMALL_FALL);
 
-    SoundEvent ENTITY_HOSTILE_SPLASH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HOSTILE_SPLASH);
+    SoundEvent ENTITY_HOSTILE_SPLASH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HOSTILE_SPLASH);
 
-    SoundEvent ENTITY_HOSTILE_SWIM = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HOSTILE_SWIM);
+    SoundEvent ENTITY_HOSTILE_SWIM = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HOSTILE_SWIM);
 
-    SoundEvent ENTITY_HUSK_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HUSK_AMBIENT);
+    SoundEvent ENTITY_HUSK_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HUSK_AMBIENT);
 
-    SoundEvent ENTITY_HUSK_CONVERTED_TO_ZOMBIE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HUSK_CONVERTED_TO_ZOMBIE);
+    SoundEvent ENTITY_HUSK_CONVERTED_TO_ZOMBIE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HUSK_CONVERTED_TO_ZOMBIE);
 
-    SoundEvent ENTITY_HUSK_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HUSK_DEATH);
+    SoundEvent ENTITY_HUSK_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HUSK_DEATH);
 
-    SoundEvent ENTITY_HUSK_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HUSK_HURT);
+    SoundEvent ENTITY_HUSK_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HUSK_HURT);
 
-    SoundEvent ENTITY_HUSK_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_HUSK_STEP);
+    SoundEvent ENTITY_HUSK_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_HUSK_STEP);
 
-    SoundEvent ENTITY_ILLUSIONER_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ILLUSIONER_AMBIENT);
+    SoundEvent ENTITY_ILLUSIONER_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ILLUSIONER_AMBIENT);
 
-    SoundEvent ENTITY_ILLUSIONER_CAST_SPELL = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ILLUSIONER_CAST_SPELL);
+    SoundEvent ENTITY_ILLUSIONER_CAST_SPELL = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ILLUSIONER_CAST_SPELL);
 
-    SoundEvent ENTITY_ILLUSIONER_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ILLUSIONER_DEATH);
+    SoundEvent ENTITY_ILLUSIONER_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ILLUSIONER_DEATH);
 
-    SoundEvent ENTITY_ILLUSIONER_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ILLUSIONER_HURT);
+    SoundEvent ENTITY_ILLUSIONER_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ILLUSIONER_HURT);
 
-    SoundEvent ENTITY_ILLUSIONER_MIRROR_MOVE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ILLUSIONER_MIRROR_MOVE);
+    SoundEvent ENTITY_ILLUSIONER_MIRROR_MOVE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ILLUSIONER_MIRROR_MOVE);
 
-    SoundEvent ENTITY_ILLUSIONER_PREPARE_BLINDNESS = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ILLUSIONER_PREPARE_BLINDNESS);
+    SoundEvent ENTITY_ILLUSIONER_PREPARE_BLINDNESS = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ILLUSIONER_PREPARE_BLINDNESS);
 
-    SoundEvent ENTITY_ILLUSIONER_PREPARE_MIRROR = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ILLUSIONER_PREPARE_MIRROR);
+    SoundEvent ENTITY_ILLUSIONER_PREPARE_MIRROR = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ILLUSIONER_PREPARE_MIRROR);
 
-    SoundEvent ITEM_INK_SAC_USE = BuiltinSoundEvent.get(SoundEventKey.ITEM_INK_SAC_USE);
+    SoundEvent ITEM_INK_SAC_USE = BuiltinSoundEvent.get(SoundEventKeys.ITEM_INK_SAC_USE);
 
-    SoundEvent BLOCK_IRON_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_IRON_BREAK);
+    SoundEvent BLOCK_IRON_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_IRON_BREAK);
 
-    SoundEvent BLOCK_IRON_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_IRON_STEP);
+    SoundEvent BLOCK_IRON_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_IRON_STEP);
 
-    SoundEvent BLOCK_IRON_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_IRON_PLACE);
+    SoundEvent BLOCK_IRON_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_IRON_PLACE);
 
-    SoundEvent BLOCK_IRON_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_IRON_HIT);
+    SoundEvent BLOCK_IRON_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_IRON_HIT);
 
-    SoundEvent BLOCK_IRON_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_IRON_FALL);
+    SoundEvent BLOCK_IRON_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_IRON_FALL);
 
-    SoundEvent BLOCK_IRON_DOOR_CLOSE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_IRON_DOOR_CLOSE);
+    SoundEvent BLOCK_IRON_DOOR_CLOSE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_IRON_DOOR_CLOSE);
 
-    SoundEvent BLOCK_IRON_DOOR_OPEN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_IRON_DOOR_OPEN);
+    SoundEvent BLOCK_IRON_DOOR_OPEN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_IRON_DOOR_OPEN);
 
-    SoundEvent ENTITY_IRON_GOLEM_ATTACK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_IRON_GOLEM_ATTACK);
+    SoundEvent ENTITY_IRON_GOLEM_ATTACK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_IRON_GOLEM_ATTACK);
 
-    SoundEvent ENTITY_IRON_GOLEM_DAMAGE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_IRON_GOLEM_DAMAGE);
+    SoundEvent ENTITY_IRON_GOLEM_DAMAGE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_IRON_GOLEM_DAMAGE);
 
-    SoundEvent ENTITY_IRON_GOLEM_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_IRON_GOLEM_DEATH);
+    SoundEvent ENTITY_IRON_GOLEM_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_IRON_GOLEM_DEATH);
 
-    SoundEvent ENTITY_IRON_GOLEM_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_IRON_GOLEM_HURT);
+    SoundEvent ENTITY_IRON_GOLEM_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_IRON_GOLEM_HURT);
 
-    SoundEvent ENTITY_IRON_GOLEM_REPAIR = BuiltinSoundEvent.get(SoundEventKey.ENTITY_IRON_GOLEM_REPAIR);
+    SoundEvent ENTITY_IRON_GOLEM_REPAIR = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_IRON_GOLEM_REPAIR);
 
-    SoundEvent ENTITY_IRON_GOLEM_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_IRON_GOLEM_STEP);
+    SoundEvent ENTITY_IRON_GOLEM_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_IRON_GOLEM_STEP);
 
-    SoundEvent BLOCK_IRON_TRAPDOOR_CLOSE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_IRON_TRAPDOOR_CLOSE);
+    SoundEvent BLOCK_IRON_TRAPDOOR_CLOSE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_IRON_TRAPDOOR_CLOSE);
 
-    SoundEvent BLOCK_IRON_TRAPDOOR_OPEN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_IRON_TRAPDOOR_OPEN);
+    SoundEvent BLOCK_IRON_TRAPDOOR_OPEN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_IRON_TRAPDOOR_OPEN);
 
-    SoundEvent ENTITY_ITEM_FRAME_ADD_ITEM = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ITEM_FRAME_ADD_ITEM);
+    SoundEvent ENTITY_ITEM_FRAME_ADD_ITEM = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ITEM_FRAME_ADD_ITEM);
 
-    SoundEvent ENTITY_ITEM_FRAME_BREAK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ITEM_FRAME_BREAK);
+    SoundEvent ENTITY_ITEM_FRAME_BREAK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ITEM_FRAME_BREAK);
 
-    SoundEvent ENTITY_ITEM_FRAME_PLACE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ITEM_FRAME_PLACE);
+    SoundEvent ENTITY_ITEM_FRAME_PLACE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ITEM_FRAME_PLACE);
 
-    SoundEvent ENTITY_ITEM_FRAME_REMOVE_ITEM = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ITEM_FRAME_REMOVE_ITEM);
+    SoundEvent ENTITY_ITEM_FRAME_REMOVE_ITEM = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ITEM_FRAME_REMOVE_ITEM);
 
-    SoundEvent ENTITY_ITEM_FRAME_ROTATE_ITEM = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ITEM_FRAME_ROTATE_ITEM);
+    SoundEvent ENTITY_ITEM_FRAME_ROTATE_ITEM = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ITEM_FRAME_ROTATE_ITEM);
 
-    SoundEvent ENTITY_ITEM_BREAK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ITEM_BREAK);
+    SoundEvent ENTITY_ITEM_BREAK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ITEM_BREAK);
 
-    SoundEvent ENTITY_ITEM_PICKUP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ITEM_PICKUP);
+    SoundEvent ENTITY_ITEM_PICKUP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ITEM_PICKUP);
 
-    SoundEvent BLOCK_LADDER_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_LADDER_BREAK);
+    SoundEvent BLOCK_LADDER_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_LADDER_BREAK);
 
-    SoundEvent BLOCK_LADDER_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_LADDER_FALL);
+    SoundEvent BLOCK_LADDER_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_LADDER_FALL);
 
-    SoundEvent BLOCK_LADDER_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_LADDER_HIT);
+    SoundEvent BLOCK_LADDER_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_LADDER_HIT);
 
-    SoundEvent BLOCK_LADDER_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_LADDER_PLACE);
+    SoundEvent BLOCK_LADDER_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_LADDER_PLACE);
 
-    SoundEvent BLOCK_LADDER_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_LADDER_STEP);
+    SoundEvent BLOCK_LADDER_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_LADDER_STEP);
 
-    SoundEvent BLOCK_LANTERN_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_LANTERN_BREAK);
+    SoundEvent BLOCK_LANTERN_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_LANTERN_BREAK);
 
-    SoundEvent BLOCK_LANTERN_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_LANTERN_FALL);
+    SoundEvent BLOCK_LANTERN_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_LANTERN_FALL);
 
-    SoundEvent BLOCK_LANTERN_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_LANTERN_HIT);
+    SoundEvent BLOCK_LANTERN_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_LANTERN_HIT);
 
-    SoundEvent BLOCK_LANTERN_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_LANTERN_PLACE);
+    SoundEvent BLOCK_LANTERN_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_LANTERN_PLACE);
 
-    SoundEvent BLOCK_LANTERN_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_LANTERN_STEP);
+    SoundEvent BLOCK_LANTERN_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_LANTERN_STEP);
 
-    SoundEvent BLOCK_LARGE_AMETHYST_BUD_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_LARGE_AMETHYST_BUD_BREAK);
+    SoundEvent BLOCK_LARGE_AMETHYST_BUD_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_LARGE_AMETHYST_BUD_BREAK);
 
-    SoundEvent BLOCK_LARGE_AMETHYST_BUD_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_LARGE_AMETHYST_BUD_PLACE);
+    SoundEvent BLOCK_LARGE_AMETHYST_BUD_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_LARGE_AMETHYST_BUD_PLACE);
 
-    SoundEvent BLOCK_LAVA_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_LAVA_AMBIENT);
+    SoundEvent BLOCK_LAVA_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_LAVA_AMBIENT);
 
-    SoundEvent BLOCK_LAVA_EXTINGUISH = BuiltinSoundEvent.get(SoundEventKey.BLOCK_LAVA_EXTINGUISH);
+    SoundEvent BLOCK_LAVA_EXTINGUISH = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_LAVA_EXTINGUISH);
 
-    SoundEvent BLOCK_LAVA_POP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_LAVA_POP);
+    SoundEvent BLOCK_LAVA_POP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_LAVA_POP);
 
-    SoundEvent BLOCK_LEAF_LITTER_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_LEAF_LITTER_BREAK);
+    SoundEvent BLOCK_LEAF_LITTER_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_LEAF_LITTER_BREAK);
 
-    SoundEvent BLOCK_LEAF_LITTER_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_LEAF_LITTER_STEP);
+    SoundEvent BLOCK_LEAF_LITTER_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_LEAF_LITTER_STEP);
 
-    SoundEvent BLOCK_LEAF_LITTER_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_LEAF_LITTER_PLACE);
+    SoundEvent BLOCK_LEAF_LITTER_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_LEAF_LITTER_PLACE);
 
-    SoundEvent BLOCK_LEAF_LITTER_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_LEAF_LITTER_HIT);
+    SoundEvent BLOCK_LEAF_LITTER_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_LEAF_LITTER_HIT);
 
-    SoundEvent BLOCK_LEAF_LITTER_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_LEAF_LITTER_FALL);
+    SoundEvent BLOCK_LEAF_LITTER_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_LEAF_LITTER_FALL);
 
-    SoundEvent ITEM_LEAD_UNTIED = BuiltinSoundEvent.get(SoundEventKey.ITEM_LEAD_UNTIED);
+    SoundEvent ITEM_LEAD_UNTIED = BuiltinSoundEvent.get(SoundEventKeys.ITEM_LEAD_UNTIED);
 
-    SoundEvent ITEM_LEAD_TIED = BuiltinSoundEvent.get(SoundEventKey.ITEM_LEAD_TIED);
+    SoundEvent ITEM_LEAD_TIED = BuiltinSoundEvent.get(SoundEventKeys.ITEM_LEAD_TIED);
 
-    SoundEvent ITEM_LEAD_BREAK = BuiltinSoundEvent.get(SoundEventKey.ITEM_LEAD_BREAK);
+    SoundEvent ITEM_LEAD_BREAK = BuiltinSoundEvent.get(SoundEventKeys.ITEM_LEAD_BREAK);
 
-    SoundEvent BLOCK_LEVER_CLICK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_LEVER_CLICK);
+    SoundEvent BLOCK_LEVER_CLICK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_LEVER_CLICK);
 
-    SoundEvent ENTITY_LIGHTNING_BOLT_IMPACT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_LIGHTNING_BOLT_IMPACT);
+    SoundEvent ENTITY_LIGHTNING_BOLT_IMPACT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_LIGHTNING_BOLT_IMPACT);
 
-    SoundEvent ENTITY_LIGHTNING_BOLT_THUNDER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_LIGHTNING_BOLT_THUNDER);
+    SoundEvent ENTITY_LIGHTNING_BOLT_THUNDER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_LIGHTNING_BOLT_THUNDER);
 
-    SoundEvent ENTITY_LINGERING_POTION_THROW = BuiltinSoundEvent.get(SoundEventKey.ENTITY_LINGERING_POTION_THROW);
+    SoundEvent ENTITY_LINGERING_POTION_THROW = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_LINGERING_POTION_THROW);
 
-    SoundEvent ENTITY_LLAMA_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_LLAMA_AMBIENT);
+    SoundEvent ENTITY_LLAMA_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_LLAMA_AMBIENT);
 
-    SoundEvent ENTITY_LLAMA_ANGRY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_LLAMA_ANGRY);
+    SoundEvent ENTITY_LLAMA_ANGRY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_LLAMA_ANGRY);
 
-    SoundEvent ENTITY_LLAMA_CHEST = BuiltinSoundEvent.get(SoundEventKey.ENTITY_LLAMA_CHEST);
+    SoundEvent ENTITY_LLAMA_CHEST = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_LLAMA_CHEST);
 
-    SoundEvent ENTITY_LLAMA_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_LLAMA_DEATH);
+    SoundEvent ENTITY_LLAMA_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_LLAMA_DEATH);
 
-    SoundEvent ENTITY_LLAMA_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_LLAMA_EAT);
+    SoundEvent ENTITY_LLAMA_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_LLAMA_EAT);
 
-    SoundEvent ENTITY_LLAMA_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_LLAMA_HURT);
+    SoundEvent ENTITY_LLAMA_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_LLAMA_HURT);
 
-    SoundEvent ENTITY_LLAMA_SPIT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_LLAMA_SPIT);
+    SoundEvent ENTITY_LLAMA_SPIT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_LLAMA_SPIT);
 
-    SoundEvent ENTITY_LLAMA_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_LLAMA_STEP);
+    SoundEvent ENTITY_LLAMA_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_LLAMA_STEP);
 
-    SoundEvent ENTITY_LLAMA_SWAG = BuiltinSoundEvent.get(SoundEventKey.ENTITY_LLAMA_SWAG);
+    SoundEvent ENTITY_LLAMA_SWAG = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_LLAMA_SWAG);
 
-    SoundEvent ITEM_LLAMA_CARPET_UNEQUIP = BuiltinSoundEvent.get(SoundEventKey.ITEM_LLAMA_CARPET_UNEQUIP);
+    SoundEvent ITEM_LLAMA_CARPET_UNEQUIP = BuiltinSoundEvent.get(SoundEventKeys.ITEM_LLAMA_CARPET_UNEQUIP);
 
-    SoundEvent ENTITY_MAGMA_CUBE_DEATH_SMALL = BuiltinSoundEvent.get(SoundEventKey.ENTITY_MAGMA_CUBE_DEATH_SMALL);
+    SoundEvent ENTITY_MAGMA_CUBE_DEATH_SMALL = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_MAGMA_CUBE_DEATH_SMALL);
 
-    SoundEvent BLOCK_LODESTONE_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_LODESTONE_BREAK);
+    SoundEvent BLOCK_LODESTONE_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_LODESTONE_BREAK);
 
-    SoundEvent BLOCK_LODESTONE_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_LODESTONE_STEP);
+    SoundEvent BLOCK_LODESTONE_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_LODESTONE_STEP);
 
-    SoundEvent BLOCK_LODESTONE_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_LODESTONE_PLACE);
+    SoundEvent BLOCK_LODESTONE_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_LODESTONE_PLACE);
 
-    SoundEvent BLOCK_LODESTONE_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_LODESTONE_HIT);
+    SoundEvent BLOCK_LODESTONE_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_LODESTONE_HIT);
 
-    SoundEvent BLOCK_LODESTONE_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_LODESTONE_FALL);
+    SoundEvent BLOCK_LODESTONE_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_LODESTONE_FALL);
 
-    SoundEvent ITEM_LODESTONE_COMPASS_LOCK = BuiltinSoundEvent.get(SoundEventKey.ITEM_LODESTONE_COMPASS_LOCK);
+    SoundEvent ITEM_LODESTONE_COMPASS_LOCK = BuiltinSoundEvent.get(SoundEventKeys.ITEM_LODESTONE_COMPASS_LOCK);
 
-    SoundEvent ITEM_SPEAR_LUNGE_1 = BuiltinSoundEvent.get(SoundEventKey.ITEM_SPEAR_LUNGE_1);
+    SoundEvent ITEM_SPEAR_LUNGE_1 = BuiltinSoundEvent.get(SoundEventKeys.ITEM_SPEAR_LUNGE_1);
 
-    SoundEvent ITEM_SPEAR_LUNGE_2 = BuiltinSoundEvent.get(SoundEventKey.ITEM_SPEAR_LUNGE_2);
+    SoundEvent ITEM_SPEAR_LUNGE_2 = BuiltinSoundEvent.get(SoundEventKeys.ITEM_SPEAR_LUNGE_2);
 
-    SoundEvent ITEM_SPEAR_LUNGE_3 = BuiltinSoundEvent.get(SoundEventKey.ITEM_SPEAR_LUNGE_3);
+    SoundEvent ITEM_SPEAR_LUNGE_3 = BuiltinSoundEvent.get(SoundEventKeys.ITEM_SPEAR_LUNGE_3);
 
-    SoundEvent ITEM_MACE_SMASH_AIR = BuiltinSoundEvent.get(SoundEventKey.ITEM_MACE_SMASH_AIR);
+    SoundEvent ITEM_MACE_SMASH_AIR = BuiltinSoundEvent.get(SoundEventKeys.ITEM_MACE_SMASH_AIR);
 
-    SoundEvent ITEM_MACE_SMASH_GROUND = BuiltinSoundEvent.get(SoundEventKey.ITEM_MACE_SMASH_GROUND);
+    SoundEvent ITEM_MACE_SMASH_GROUND = BuiltinSoundEvent.get(SoundEventKeys.ITEM_MACE_SMASH_GROUND);
 
-    SoundEvent ITEM_MACE_SMASH_GROUND_HEAVY = BuiltinSoundEvent.get(SoundEventKey.ITEM_MACE_SMASH_GROUND_HEAVY);
+    SoundEvent ITEM_MACE_SMASH_GROUND_HEAVY = BuiltinSoundEvent.get(SoundEventKeys.ITEM_MACE_SMASH_GROUND_HEAVY);
 
-    SoundEvent ENTITY_MAGMA_CUBE_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_MAGMA_CUBE_DEATH);
+    SoundEvent ENTITY_MAGMA_CUBE_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_MAGMA_CUBE_DEATH);
 
-    SoundEvent ENTITY_MAGMA_CUBE_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_MAGMA_CUBE_HURT);
+    SoundEvent ENTITY_MAGMA_CUBE_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_MAGMA_CUBE_HURT);
 
-    SoundEvent ENTITY_MAGMA_CUBE_HURT_SMALL = BuiltinSoundEvent.get(SoundEventKey.ENTITY_MAGMA_CUBE_HURT_SMALL);
+    SoundEvent ENTITY_MAGMA_CUBE_HURT_SMALL = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_MAGMA_CUBE_HURT_SMALL);
 
-    SoundEvent ENTITY_MAGMA_CUBE_JUMP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_MAGMA_CUBE_JUMP);
+    SoundEvent ENTITY_MAGMA_CUBE_JUMP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_MAGMA_CUBE_JUMP);
 
-    SoundEvent ENTITY_MAGMA_CUBE_SQUISH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_MAGMA_CUBE_SQUISH);
+    SoundEvent ENTITY_MAGMA_CUBE_SQUISH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_MAGMA_CUBE_SQUISH);
 
-    SoundEvent ENTITY_MAGMA_CUBE_SQUISH_SMALL = BuiltinSoundEvent.get(SoundEventKey.ENTITY_MAGMA_CUBE_SQUISH_SMALL);
+    SoundEvent ENTITY_MAGMA_CUBE_SQUISH_SMALL = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_MAGMA_CUBE_SQUISH_SMALL);
 
-    SoundEvent BLOCK_MANGROVE_ROOTS_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MANGROVE_ROOTS_BREAK);
+    SoundEvent BLOCK_MANGROVE_ROOTS_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MANGROVE_ROOTS_BREAK);
 
-    SoundEvent BLOCK_MANGROVE_ROOTS_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MANGROVE_ROOTS_FALL);
+    SoundEvent BLOCK_MANGROVE_ROOTS_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MANGROVE_ROOTS_FALL);
 
-    SoundEvent BLOCK_MANGROVE_ROOTS_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MANGROVE_ROOTS_HIT);
+    SoundEvent BLOCK_MANGROVE_ROOTS_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MANGROVE_ROOTS_HIT);
 
-    SoundEvent BLOCK_MANGROVE_ROOTS_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MANGROVE_ROOTS_PLACE);
+    SoundEvent BLOCK_MANGROVE_ROOTS_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MANGROVE_ROOTS_PLACE);
 
-    SoundEvent BLOCK_MANGROVE_ROOTS_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MANGROVE_ROOTS_STEP);
+    SoundEvent BLOCK_MANGROVE_ROOTS_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MANGROVE_ROOTS_STEP);
 
-    SoundEvent BLOCK_MEDIUM_AMETHYST_BUD_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MEDIUM_AMETHYST_BUD_BREAK);
+    SoundEvent BLOCK_MEDIUM_AMETHYST_BUD_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MEDIUM_AMETHYST_BUD_BREAK);
 
-    SoundEvent BLOCK_MEDIUM_AMETHYST_BUD_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MEDIUM_AMETHYST_BUD_PLACE);
+    SoundEvent BLOCK_MEDIUM_AMETHYST_BUD_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MEDIUM_AMETHYST_BUD_PLACE);
 
-    SoundEvent BLOCK_METAL_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_METAL_BREAK);
+    SoundEvent BLOCK_METAL_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_METAL_BREAK);
 
-    SoundEvent BLOCK_METAL_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_METAL_FALL);
+    SoundEvent BLOCK_METAL_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_METAL_FALL);
 
-    SoundEvent BLOCK_METAL_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_METAL_HIT);
+    SoundEvent BLOCK_METAL_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_METAL_HIT);
 
-    SoundEvent BLOCK_METAL_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_METAL_PLACE);
+    SoundEvent BLOCK_METAL_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_METAL_PLACE);
 
-    SoundEvent BLOCK_METAL_PRESSURE_PLATE_CLICK_OFF = BuiltinSoundEvent.get(SoundEventKey.BLOCK_METAL_PRESSURE_PLATE_CLICK_OFF);
+    SoundEvent BLOCK_METAL_PRESSURE_PLATE_CLICK_OFF = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_METAL_PRESSURE_PLATE_CLICK_OFF);
 
-    SoundEvent BLOCK_METAL_PRESSURE_PLATE_CLICK_ON = BuiltinSoundEvent.get(SoundEventKey.BLOCK_METAL_PRESSURE_PLATE_CLICK_ON);
+    SoundEvent BLOCK_METAL_PRESSURE_PLATE_CLICK_ON = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_METAL_PRESSURE_PLATE_CLICK_ON);
 
-    SoundEvent BLOCK_METAL_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_METAL_STEP);
+    SoundEvent BLOCK_METAL_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_METAL_STEP);
 
-    SoundEvent ENTITY_MINECART_INSIDE_UNDERWATER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_MINECART_INSIDE_UNDERWATER);
+    SoundEvent ENTITY_MINECART_INSIDE_UNDERWATER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_MINECART_INSIDE_UNDERWATER);
 
-    SoundEvent ENTITY_MINECART_INSIDE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_MINECART_INSIDE);
+    SoundEvent ENTITY_MINECART_INSIDE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_MINECART_INSIDE);
 
-    SoundEvent ENTITY_MINECART_RIDING = BuiltinSoundEvent.get(SoundEventKey.ENTITY_MINECART_RIDING);
+    SoundEvent ENTITY_MINECART_RIDING = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_MINECART_RIDING);
 
-    SoundEvent ENTITY_MOOSHROOM_CONVERT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_MOOSHROOM_CONVERT);
+    SoundEvent ENTITY_MOOSHROOM_CONVERT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_MOOSHROOM_CONVERT);
 
-    SoundEvent ENTITY_MOOSHROOM_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_MOOSHROOM_EAT);
+    SoundEvent ENTITY_MOOSHROOM_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_MOOSHROOM_EAT);
 
-    SoundEvent ENTITY_MOOSHROOM_MILK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_MOOSHROOM_MILK);
+    SoundEvent ENTITY_MOOSHROOM_MILK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_MOOSHROOM_MILK);
 
-    SoundEvent ENTITY_MOOSHROOM_SUSPICIOUS_MILK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_MOOSHROOM_SUSPICIOUS_MILK);
+    SoundEvent ENTITY_MOOSHROOM_SUSPICIOUS_MILK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_MOOSHROOM_SUSPICIOUS_MILK);
 
-    SoundEvent ENTITY_MOOSHROOM_SHEAR = BuiltinSoundEvent.get(SoundEventKey.ENTITY_MOOSHROOM_SHEAR);
+    SoundEvent ENTITY_MOOSHROOM_SHEAR = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_MOOSHROOM_SHEAR);
 
-    SoundEvent BLOCK_MOSS_CARPET_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MOSS_CARPET_BREAK);
+    SoundEvent BLOCK_MOSS_CARPET_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MOSS_CARPET_BREAK);
 
-    SoundEvent BLOCK_MOSS_CARPET_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MOSS_CARPET_FALL);
+    SoundEvent BLOCK_MOSS_CARPET_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MOSS_CARPET_FALL);
 
-    SoundEvent BLOCK_MOSS_CARPET_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MOSS_CARPET_HIT);
+    SoundEvent BLOCK_MOSS_CARPET_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MOSS_CARPET_HIT);
 
-    SoundEvent BLOCK_MOSS_CARPET_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MOSS_CARPET_PLACE);
+    SoundEvent BLOCK_MOSS_CARPET_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MOSS_CARPET_PLACE);
 
-    SoundEvent BLOCK_MOSS_CARPET_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MOSS_CARPET_STEP);
+    SoundEvent BLOCK_MOSS_CARPET_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MOSS_CARPET_STEP);
 
-    SoundEvent BLOCK_PINK_PETALS_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_PINK_PETALS_BREAK);
+    SoundEvent BLOCK_PINK_PETALS_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_PINK_PETALS_BREAK);
 
-    SoundEvent BLOCK_PINK_PETALS_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_PINK_PETALS_FALL);
+    SoundEvent BLOCK_PINK_PETALS_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_PINK_PETALS_FALL);
 
-    SoundEvent BLOCK_PINK_PETALS_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_PINK_PETALS_HIT);
+    SoundEvent BLOCK_PINK_PETALS_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_PINK_PETALS_HIT);
 
-    SoundEvent BLOCK_PINK_PETALS_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_PINK_PETALS_PLACE);
+    SoundEvent BLOCK_PINK_PETALS_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_PINK_PETALS_PLACE);
 
-    SoundEvent BLOCK_PINK_PETALS_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_PINK_PETALS_STEP);
+    SoundEvent BLOCK_PINK_PETALS_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_PINK_PETALS_STEP);
 
-    SoundEvent BLOCK_MOSS_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MOSS_BREAK);
+    SoundEvent BLOCK_MOSS_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MOSS_BREAK);
 
-    SoundEvent BLOCK_MOSS_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MOSS_FALL);
+    SoundEvent BLOCK_MOSS_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MOSS_FALL);
 
-    SoundEvent BLOCK_MOSS_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MOSS_HIT);
+    SoundEvent BLOCK_MOSS_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MOSS_HIT);
 
-    SoundEvent BLOCK_MOSS_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MOSS_PLACE);
+    SoundEvent BLOCK_MOSS_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MOSS_PLACE);
 
-    SoundEvent BLOCK_MOSS_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MOSS_STEP);
+    SoundEvent BLOCK_MOSS_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MOSS_STEP);
 
-    SoundEvent BLOCK_MUD_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MUD_BREAK);
+    SoundEvent BLOCK_MUD_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MUD_BREAK);
 
-    SoundEvent BLOCK_MUD_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MUD_FALL);
+    SoundEvent BLOCK_MUD_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MUD_FALL);
 
-    SoundEvent BLOCK_MUD_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MUD_HIT);
+    SoundEvent BLOCK_MUD_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MUD_HIT);
 
-    SoundEvent BLOCK_MUD_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MUD_PLACE);
+    SoundEvent BLOCK_MUD_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MUD_PLACE);
 
-    SoundEvent BLOCK_MUD_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MUD_STEP);
+    SoundEvent BLOCK_MUD_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MUD_STEP);
 
-    SoundEvent BLOCK_MUD_BRICKS_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MUD_BRICKS_BREAK);
+    SoundEvent BLOCK_MUD_BRICKS_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MUD_BRICKS_BREAK);
 
-    SoundEvent BLOCK_MUD_BRICKS_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MUD_BRICKS_FALL);
+    SoundEvent BLOCK_MUD_BRICKS_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MUD_BRICKS_FALL);
 
-    SoundEvent BLOCK_MUD_BRICKS_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MUD_BRICKS_HIT);
+    SoundEvent BLOCK_MUD_BRICKS_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MUD_BRICKS_HIT);
 
-    SoundEvent BLOCK_MUD_BRICKS_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MUD_BRICKS_PLACE);
+    SoundEvent BLOCK_MUD_BRICKS_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MUD_BRICKS_PLACE);
 
-    SoundEvent BLOCK_MUD_BRICKS_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MUD_BRICKS_STEP);
+    SoundEvent BLOCK_MUD_BRICKS_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MUD_BRICKS_STEP);
 
-    SoundEvent BLOCK_MUDDY_MANGROVE_ROOTS_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MUDDY_MANGROVE_ROOTS_BREAK);
+    SoundEvent BLOCK_MUDDY_MANGROVE_ROOTS_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MUDDY_MANGROVE_ROOTS_BREAK);
 
-    SoundEvent BLOCK_MUDDY_MANGROVE_ROOTS_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MUDDY_MANGROVE_ROOTS_FALL);
+    SoundEvent BLOCK_MUDDY_MANGROVE_ROOTS_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MUDDY_MANGROVE_ROOTS_FALL);
 
-    SoundEvent BLOCK_MUDDY_MANGROVE_ROOTS_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MUDDY_MANGROVE_ROOTS_HIT);
+    SoundEvent BLOCK_MUDDY_MANGROVE_ROOTS_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MUDDY_MANGROVE_ROOTS_HIT);
 
-    SoundEvent BLOCK_MUDDY_MANGROVE_ROOTS_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MUDDY_MANGROVE_ROOTS_PLACE);
+    SoundEvent BLOCK_MUDDY_MANGROVE_ROOTS_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MUDDY_MANGROVE_ROOTS_PLACE);
 
-    SoundEvent BLOCK_MUDDY_MANGROVE_ROOTS_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_MUDDY_MANGROVE_ROOTS_STEP);
+    SoundEvent BLOCK_MUDDY_MANGROVE_ROOTS_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_MUDDY_MANGROVE_ROOTS_STEP);
 
-    SoundEvent ENTITY_MULE_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_MULE_AMBIENT);
+    SoundEvent ENTITY_MULE_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_MULE_AMBIENT);
 
-    SoundEvent ENTITY_MULE_ANGRY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_MULE_ANGRY);
+    SoundEvent ENTITY_MULE_ANGRY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_MULE_ANGRY);
 
-    SoundEvent ENTITY_MULE_CHEST = BuiltinSoundEvent.get(SoundEventKey.ENTITY_MULE_CHEST);
+    SoundEvent ENTITY_MULE_CHEST = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_MULE_CHEST);
 
-    SoundEvent ENTITY_MULE_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_MULE_DEATH);
+    SoundEvent ENTITY_MULE_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_MULE_DEATH);
 
-    SoundEvent ENTITY_MULE_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_MULE_EAT);
+    SoundEvent ENTITY_MULE_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_MULE_EAT);
 
-    SoundEvent ENTITY_MULE_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_MULE_HURT);
+    SoundEvent ENTITY_MULE_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_MULE_HURT);
 
-    SoundEvent ENTITY_MULE_JUMP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_MULE_JUMP);
+    SoundEvent ENTITY_MULE_JUMP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_MULE_JUMP);
 
-    SoundEvent MUSIC_CREATIVE = BuiltinSoundEvent.get(SoundEventKey.MUSIC_CREATIVE);
+    SoundEvent MUSIC_CREATIVE = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_CREATIVE);
 
-    SoundEvent MUSIC_CREDITS = BuiltinSoundEvent.get(SoundEventKey.MUSIC_CREDITS);
+    SoundEvent MUSIC_CREDITS = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_CREDITS);
 
-    SoundEvent MUSIC_DISC_5 = BuiltinSoundEvent.get(SoundEventKey.MUSIC_DISC_5);
+    SoundEvent MUSIC_DISC_5 = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_DISC_5);
 
-    SoundEvent MUSIC_DISC_11 = BuiltinSoundEvent.get(SoundEventKey.MUSIC_DISC_11);
+    SoundEvent MUSIC_DISC_11 = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_DISC_11);
 
-    SoundEvent MUSIC_DISC_13 = BuiltinSoundEvent.get(SoundEventKey.MUSIC_DISC_13);
+    SoundEvent MUSIC_DISC_13 = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_DISC_13);
 
-    SoundEvent MUSIC_DISC_BLOCKS = BuiltinSoundEvent.get(SoundEventKey.MUSIC_DISC_BLOCKS);
+    SoundEvent MUSIC_DISC_BLOCKS = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_DISC_BLOCKS);
 
-    SoundEvent MUSIC_DISC_BOUNCE = BuiltinSoundEvent.get(SoundEventKey.MUSIC_DISC_BOUNCE);
+    SoundEvent MUSIC_DISC_BOUNCE = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_DISC_BOUNCE);
 
-    SoundEvent MUSIC_DISC_CAT = BuiltinSoundEvent.get(SoundEventKey.MUSIC_DISC_CAT);
+    SoundEvent MUSIC_DISC_CAT = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_DISC_CAT);
 
-    SoundEvent MUSIC_DISC_CHIRP = BuiltinSoundEvent.get(SoundEventKey.MUSIC_DISC_CHIRP);
+    SoundEvent MUSIC_DISC_CHIRP = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_DISC_CHIRP);
 
-    SoundEvent MUSIC_DISC_FAR = BuiltinSoundEvent.get(SoundEventKey.MUSIC_DISC_FAR);
+    SoundEvent MUSIC_DISC_FAR = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_DISC_FAR);
 
-    SoundEvent MUSIC_DISC_LAVA_CHICKEN = BuiltinSoundEvent.get(SoundEventKey.MUSIC_DISC_LAVA_CHICKEN);
+    SoundEvent MUSIC_DISC_LAVA_CHICKEN = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_DISC_LAVA_CHICKEN);
 
-    SoundEvent MUSIC_DISC_MALL = BuiltinSoundEvent.get(SoundEventKey.MUSIC_DISC_MALL);
+    SoundEvent MUSIC_DISC_MALL = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_DISC_MALL);
 
-    SoundEvent MUSIC_DISC_MELLOHI = BuiltinSoundEvent.get(SoundEventKey.MUSIC_DISC_MELLOHI);
+    SoundEvent MUSIC_DISC_MELLOHI = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_DISC_MELLOHI);
 
-    SoundEvent MUSIC_DISC_PIGSTEP = BuiltinSoundEvent.get(SoundEventKey.MUSIC_DISC_PIGSTEP);
+    SoundEvent MUSIC_DISC_PIGSTEP = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_DISC_PIGSTEP);
 
-    SoundEvent MUSIC_DISC_STAL = BuiltinSoundEvent.get(SoundEventKey.MUSIC_DISC_STAL);
+    SoundEvent MUSIC_DISC_STAL = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_DISC_STAL);
 
-    SoundEvent MUSIC_DISC_STRAD = BuiltinSoundEvent.get(SoundEventKey.MUSIC_DISC_STRAD);
+    SoundEvent MUSIC_DISC_STRAD = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_DISC_STRAD);
 
-    SoundEvent MUSIC_DISC_WAIT = BuiltinSoundEvent.get(SoundEventKey.MUSIC_DISC_WAIT);
+    SoundEvent MUSIC_DISC_WAIT = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_DISC_WAIT);
 
-    SoundEvent MUSIC_DISC_WARD = BuiltinSoundEvent.get(SoundEventKey.MUSIC_DISC_WARD);
+    SoundEvent MUSIC_DISC_WARD = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_DISC_WARD);
 
-    SoundEvent MUSIC_DISC_OTHERSIDE = BuiltinSoundEvent.get(SoundEventKey.MUSIC_DISC_OTHERSIDE);
+    SoundEvent MUSIC_DISC_OTHERSIDE = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_DISC_OTHERSIDE);
 
-    SoundEvent MUSIC_DISC_RELIC = BuiltinSoundEvent.get(SoundEventKey.MUSIC_DISC_RELIC);
+    SoundEvent MUSIC_DISC_RELIC = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_DISC_RELIC);
 
-    SoundEvent MUSIC_DISC_CREATOR = BuiltinSoundEvent.get(SoundEventKey.MUSIC_DISC_CREATOR);
+    SoundEvent MUSIC_DISC_CREATOR = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_DISC_CREATOR);
 
-    SoundEvent MUSIC_DISC_CREATOR_MUSIC_BOX = BuiltinSoundEvent.get(SoundEventKey.MUSIC_DISC_CREATOR_MUSIC_BOX);
+    SoundEvent MUSIC_DISC_CREATOR_MUSIC_BOX = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_DISC_CREATOR_MUSIC_BOX);
 
-    SoundEvent MUSIC_DISC_PRECIPICE = BuiltinSoundEvent.get(SoundEventKey.MUSIC_DISC_PRECIPICE);
+    SoundEvent MUSIC_DISC_PRECIPICE = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_DISC_PRECIPICE);
 
-    SoundEvent MUSIC_DISC_TEARS = BuiltinSoundEvent.get(SoundEventKey.MUSIC_DISC_TEARS);
+    SoundEvent MUSIC_DISC_TEARS = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_DISC_TEARS);
 
-    SoundEvent MUSIC_DRAGON = BuiltinSoundEvent.get(SoundEventKey.MUSIC_DRAGON);
+    SoundEvent MUSIC_DRAGON = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_DRAGON);
 
-    SoundEvent MUSIC_END = BuiltinSoundEvent.get(SoundEventKey.MUSIC_END);
+    SoundEvent MUSIC_END = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_END);
 
-    SoundEvent MUSIC_GAME = BuiltinSoundEvent.get(SoundEventKey.MUSIC_GAME);
+    SoundEvent MUSIC_GAME = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_GAME);
 
-    SoundEvent MUSIC_MENU = BuiltinSoundEvent.get(SoundEventKey.MUSIC_MENU);
+    SoundEvent MUSIC_MENU = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_MENU);
 
-    SoundEvent MUSIC_NETHER_BASALT_DELTAS = BuiltinSoundEvent.get(SoundEventKey.MUSIC_NETHER_BASALT_DELTAS);
+    SoundEvent MUSIC_NETHER_BASALT_DELTAS = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_NETHER_BASALT_DELTAS);
 
-    SoundEvent MUSIC_NETHER_CRIMSON_FOREST = BuiltinSoundEvent.get(SoundEventKey.MUSIC_NETHER_CRIMSON_FOREST);
+    SoundEvent MUSIC_NETHER_CRIMSON_FOREST = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_NETHER_CRIMSON_FOREST);
 
-    SoundEvent MUSIC_OVERWORLD_DEEP_DARK = BuiltinSoundEvent.get(SoundEventKey.MUSIC_OVERWORLD_DEEP_DARK);
+    SoundEvent MUSIC_OVERWORLD_DEEP_DARK = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_OVERWORLD_DEEP_DARK);
 
-    SoundEvent MUSIC_OVERWORLD_DRIPSTONE_CAVES = BuiltinSoundEvent.get(SoundEventKey.MUSIC_OVERWORLD_DRIPSTONE_CAVES);
+    SoundEvent MUSIC_OVERWORLD_DRIPSTONE_CAVES = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_OVERWORLD_DRIPSTONE_CAVES);
 
-    SoundEvent MUSIC_OVERWORLD_GROVE = BuiltinSoundEvent.get(SoundEventKey.MUSIC_OVERWORLD_GROVE);
+    SoundEvent MUSIC_OVERWORLD_GROVE = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_OVERWORLD_GROVE);
 
-    SoundEvent MUSIC_OVERWORLD_JAGGED_PEAKS = BuiltinSoundEvent.get(SoundEventKey.MUSIC_OVERWORLD_JAGGED_PEAKS);
+    SoundEvent MUSIC_OVERWORLD_JAGGED_PEAKS = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_OVERWORLD_JAGGED_PEAKS);
 
-    SoundEvent MUSIC_OVERWORLD_LUSH_CAVES = BuiltinSoundEvent.get(SoundEventKey.MUSIC_OVERWORLD_LUSH_CAVES);
+    SoundEvent MUSIC_OVERWORLD_LUSH_CAVES = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_OVERWORLD_LUSH_CAVES);
 
-    SoundEvent MUSIC_OVERWORLD_SWAMP = BuiltinSoundEvent.get(SoundEventKey.MUSIC_OVERWORLD_SWAMP);
+    SoundEvent MUSIC_OVERWORLD_SWAMP = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_OVERWORLD_SWAMP);
 
-    SoundEvent MUSIC_OVERWORLD_FOREST = BuiltinSoundEvent.get(SoundEventKey.MUSIC_OVERWORLD_FOREST);
+    SoundEvent MUSIC_OVERWORLD_FOREST = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_OVERWORLD_FOREST);
 
-    SoundEvent MUSIC_OVERWORLD_OLD_GROWTH_TAIGA = BuiltinSoundEvent.get(SoundEventKey.MUSIC_OVERWORLD_OLD_GROWTH_TAIGA);
+    SoundEvent MUSIC_OVERWORLD_OLD_GROWTH_TAIGA = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_OVERWORLD_OLD_GROWTH_TAIGA);
 
-    SoundEvent MUSIC_OVERWORLD_MEADOW = BuiltinSoundEvent.get(SoundEventKey.MUSIC_OVERWORLD_MEADOW);
+    SoundEvent MUSIC_OVERWORLD_MEADOW = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_OVERWORLD_MEADOW);
 
-    SoundEvent MUSIC_OVERWORLD_CHERRY_GROVE = BuiltinSoundEvent.get(SoundEventKey.MUSIC_OVERWORLD_CHERRY_GROVE);
+    SoundEvent MUSIC_OVERWORLD_CHERRY_GROVE = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_OVERWORLD_CHERRY_GROVE);
 
-    SoundEvent MUSIC_NETHER_NETHER_WASTES = BuiltinSoundEvent.get(SoundEventKey.MUSIC_NETHER_NETHER_WASTES);
+    SoundEvent MUSIC_NETHER_NETHER_WASTES = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_NETHER_NETHER_WASTES);
 
-    SoundEvent MUSIC_OVERWORLD_FROZEN_PEAKS = BuiltinSoundEvent.get(SoundEventKey.MUSIC_OVERWORLD_FROZEN_PEAKS);
+    SoundEvent MUSIC_OVERWORLD_FROZEN_PEAKS = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_OVERWORLD_FROZEN_PEAKS);
 
-    SoundEvent MUSIC_OVERWORLD_SNOWY_SLOPES = BuiltinSoundEvent.get(SoundEventKey.MUSIC_OVERWORLD_SNOWY_SLOPES);
+    SoundEvent MUSIC_OVERWORLD_SNOWY_SLOPES = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_OVERWORLD_SNOWY_SLOPES);
 
-    SoundEvent MUSIC_NETHER_SOUL_SAND_VALLEY = BuiltinSoundEvent.get(SoundEventKey.MUSIC_NETHER_SOUL_SAND_VALLEY);
+    SoundEvent MUSIC_NETHER_SOUL_SAND_VALLEY = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_NETHER_SOUL_SAND_VALLEY);
 
-    SoundEvent MUSIC_OVERWORLD_STONY_PEAKS = BuiltinSoundEvent.get(SoundEventKey.MUSIC_OVERWORLD_STONY_PEAKS);
+    SoundEvent MUSIC_OVERWORLD_STONY_PEAKS = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_OVERWORLD_STONY_PEAKS);
 
-    SoundEvent MUSIC_NETHER_WARPED_FOREST = BuiltinSoundEvent.get(SoundEventKey.MUSIC_NETHER_WARPED_FOREST);
+    SoundEvent MUSIC_NETHER_WARPED_FOREST = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_NETHER_WARPED_FOREST);
 
-    SoundEvent MUSIC_OVERWORLD_FLOWER_FOREST = BuiltinSoundEvent.get(SoundEventKey.MUSIC_OVERWORLD_FLOWER_FOREST);
+    SoundEvent MUSIC_OVERWORLD_FLOWER_FOREST = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_OVERWORLD_FLOWER_FOREST);
 
-    SoundEvent MUSIC_OVERWORLD_DESERT = BuiltinSoundEvent.get(SoundEventKey.MUSIC_OVERWORLD_DESERT);
+    SoundEvent MUSIC_OVERWORLD_DESERT = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_OVERWORLD_DESERT);
 
-    SoundEvent MUSIC_OVERWORLD_BADLANDS = BuiltinSoundEvent.get(SoundEventKey.MUSIC_OVERWORLD_BADLANDS);
+    SoundEvent MUSIC_OVERWORLD_BADLANDS = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_OVERWORLD_BADLANDS);
 
-    SoundEvent MUSIC_OVERWORLD_JUNGLE = BuiltinSoundEvent.get(SoundEventKey.MUSIC_OVERWORLD_JUNGLE);
+    SoundEvent MUSIC_OVERWORLD_JUNGLE = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_OVERWORLD_JUNGLE);
 
-    SoundEvent MUSIC_OVERWORLD_SPARSE_JUNGLE = BuiltinSoundEvent.get(SoundEventKey.MUSIC_OVERWORLD_SPARSE_JUNGLE);
+    SoundEvent MUSIC_OVERWORLD_SPARSE_JUNGLE = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_OVERWORLD_SPARSE_JUNGLE);
 
-    SoundEvent MUSIC_OVERWORLD_BAMBOO_JUNGLE = BuiltinSoundEvent.get(SoundEventKey.MUSIC_OVERWORLD_BAMBOO_JUNGLE);
+    SoundEvent MUSIC_OVERWORLD_BAMBOO_JUNGLE = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_OVERWORLD_BAMBOO_JUNGLE);
 
-    SoundEvent MUSIC_OVERWORLD_SULFUR_CAVES = BuiltinSoundEvent.get(SoundEventKey.MUSIC_OVERWORLD_SULFUR_CAVES);
+    SoundEvent MUSIC_OVERWORLD_SULFUR_CAVES = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_OVERWORLD_SULFUR_CAVES);
 
-    SoundEvent MUSIC_UNDER_WATER = BuiltinSoundEvent.get(SoundEventKey.MUSIC_UNDER_WATER);
+    SoundEvent MUSIC_UNDER_WATER = BuiltinSoundEvent.get(SoundEventKeys.MUSIC_UNDER_WATER);
 
-    SoundEvent ENTITY_NAUTILUS_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_NAUTILUS_AMBIENT);
+    SoundEvent ENTITY_NAUTILUS_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_NAUTILUS_AMBIENT);
 
-    SoundEvent ENTITY_NAUTILUS_AMBIENT_LAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_NAUTILUS_AMBIENT_LAND);
+    SoundEvent ENTITY_NAUTILUS_AMBIENT_LAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_NAUTILUS_AMBIENT_LAND);
 
-    SoundEvent ENTITY_NAUTILUS_DASH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_NAUTILUS_DASH);
+    SoundEvent ENTITY_NAUTILUS_DASH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_NAUTILUS_DASH);
 
-    SoundEvent ENTITY_NAUTILUS_DASH_LAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_NAUTILUS_DASH_LAND);
+    SoundEvent ENTITY_NAUTILUS_DASH_LAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_NAUTILUS_DASH_LAND);
 
-    SoundEvent ENTITY_NAUTILUS_DASH_READY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_NAUTILUS_DASH_READY);
+    SoundEvent ENTITY_NAUTILUS_DASH_READY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_NAUTILUS_DASH_READY);
 
-    SoundEvent ENTITY_NAUTILUS_DASH_READY_LAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_NAUTILUS_DASH_READY_LAND);
+    SoundEvent ENTITY_NAUTILUS_DASH_READY_LAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_NAUTILUS_DASH_READY_LAND);
 
-    SoundEvent ENTITY_NAUTILUS_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_NAUTILUS_DEATH);
+    SoundEvent ENTITY_NAUTILUS_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_NAUTILUS_DEATH);
 
-    SoundEvent ENTITY_NAUTILUS_DEATH_LAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_NAUTILUS_DEATH_LAND);
+    SoundEvent ENTITY_NAUTILUS_DEATH_LAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_NAUTILUS_DEATH_LAND);
 
-    SoundEvent ENTITY_NAUTILUS_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_NAUTILUS_EAT);
+    SoundEvent ENTITY_NAUTILUS_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_NAUTILUS_EAT);
 
-    SoundEvent ENTITY_NAUTILUS_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_NAUTILUS_HURT);
+    SoundEvent ENTITY_NAUTILUS_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_NAUTILUS_HURT);
 
-    SoundEvent ENTITY_NAUTILUS_HURT_LAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_NAUTILUS_HURT_LAND);
+    SoundEvent ENTITY_NAUTILUS_HURT_LAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_NAUTILUS_HURT_LAND);
 
-    SoundEvent ENTITY_NAUTILUS_SWIM = BuiltinSoundEvent.get(SoundEventKey.ENTITY_NAUTILUS_SWIM);
+    SoundEvent ENTITY_NAUTILUS_SWIM = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_NAUTILUS_SWIM);
 
-    SoundEvent BLOCK_NETHER_BRICKS_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_BRICKS_BREAK);
+    SoundEvent BLOCK_NETHER_BRICKS_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_BRICKS_BREAK);
 
-    SoundEvent BLOCK_NETHER_BRICKS_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_BRICKS_STEP);
+    SoundEvent BLOCK_NETHER_BRICKS_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_BRICKS_STEP);
 
-    SoundEvent BLOCK_NETHER_BRICKS_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_BRICKS_PLACE);
+    SoundEvent BLOCK_NETHER_BRICKS_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_BRICKS_PLACE);
 
-    SoundEvent BLOCK_NETHER_BRICKS_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_BRICKS_HIT);
+    SoundEvent BLOCK_NETHER_BRICKS_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_BRICKS_HIT);
 
-    SoundEvent BLOCK_NETHER_BRICKS_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_BRICKS_FALL);
+    SoundEvent BLOCK_NETHER_BRICKS_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_BRICKS_FALL);
 
-    SoundEvent BLOCK_NETHER_WART_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_WART_BREAK);
+    SoundEvent BLOCK_NETHER_WART_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_WART_BREAK);
 
-    SoundEvent ITEM_NETHER_WART_PLANT = BuiltinSoundEvent.get(SoundEventKey.ITEM_NETHER_WART_PLANT);
+    SoundEvent ITEM_NETHER_WART_PLANT = BuiltinSoundEvent.get(SoundEventKeys.ITEM_NETHER_WART_PLANT);
 
-    SoundEvent BLOCK_NETHER_WOOD_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_WOOD_BREAK);
+    SoundEvent BLOCK_NETHER_WOOD_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_WOOD_BREAK);
 
-    SoundEvent BLOCK_NETHER_WOOD_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_WOOD_FALL);
+    SoundEvent BLOCK_NETHER_WOOD_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_WOOD_FALL);
 
-    SoundEvent BLOCK_NETHER_WOOD_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_WOOD_HIT);
+    SoundEvent BLOCK_NETHER_WOOD_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_WOOD_HIT);
 
-    SoundEvent BLOCK_NETHER_WOOD_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_WOOD_PLACE);
+    SoundEvent BLOCK_NETHER_WOOD_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_WOOD_PLACE);
 
-    SoundEvent BLOCK_NETHER_WOOD_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_WOOD_STEP);
+    SoundEvent BLOCK_NETHER_WOOD_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_WOOD_STEP);
 
-    SoundEvent BLOCK_NETHER_WOOD_DOOR_CLOSE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_WOOD_DOOR_CLOSE);
+    SoundEvent BLOCK_NETHER_WOOD_DOOR_CLOSE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_WOOD_DOOR_CLOSE);
 
-    SoundEvent BLOCK_NETHER_WOOD_DOOR_OPEN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_WOOD_DOOR_OPEN);
+    SoundEvent BLOCK_NETHER_WOOD_DOOR_OPEN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_WOOD_DOOR_OPEN);
 
-    SoundEvent BLOCK_NETHER_WOOD_TRAPDOOR_CLOSE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_WOOD_TRAPDOOR_CLOSE);
+    SoundEvent BLOCK_NETHER_WOOD_TRAPDOOR_CLOSE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_WOOD_TRAPDOOR_CLOSE);
 
-    SoundEvent BLOCK_NETHER_WOOD_TRAPDOOR_OPEN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_WOOD_TRAPDOOR_OPEN);
+    SoundEvent BLOCK_NETHER_WOOD_TRAPDOOR_OPEN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_WOOD_TRAPDOOR_OPEN);
 
-    SoundEvent BLOCK_NETHER_WOOD_BUTTON_CLICK_OFF = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_WOOD_BUTTON_CLICK_OFF);
+    SoundEvent BLOCK_NETHER_WOOD_BUTTON_CLICK_OFF = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_WOOD_BUTTON_CLICK_OFF);
 
-    SoundEvent BLOCK_NETHER_WOOD_BUTTON_CLICK_ON = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_WOOD_BUTTON_CLICK_ON);
+    SoundEvent BLOCK_NETHER_WOOD_BUTTON_CLICK_ON = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_WOOD_BUTTON_CLICK_ON);
 
-    SoundEvent BLOCK_NETHER_WOOD_PRESSURE_PLATE_CLICK_OFF = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_WOOD_PRESSURE_PLATE_CLICK_OFF);
+    SoundEvent BLOCK_NETHER_WOOD_PRESSURE_PLATE_CLICK_OFF = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_WOOD_PRESSURE_PLATE_CLICK_OFF);
 
-    SoundEvent BLOCK_NETHER_WOOD_PRESSURE_PLATE_CLICK_ON = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_WOOD_PRESSURE_PLATE_CLICK_ON);
+    SoundEvent BLOCK_NETHER_WOOD_PRESSURE_PLATE_CLICK_ON = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_WOOD_PRESSURE_PLATE_CLICK_ON);
 
-    SoundEvent BLOCK_NETHER_WOOD_FENCE_GATE_CLOSE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_WOOD_FENCE_GATE_CLOSE);
+    SoundEvent BLOCK_NETHER_WOOD_FENCE_GATE_CLOSE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_WOOD_FENCE_GATE_CLOSE);
 
-    SoundEvent BLOCK_NETHER_WOOD_FENCE_GATE_OPEN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_WOOD_FENCE_GATE_OPEN);
+    SoundEvent BLOCK_NETHER_WOOD_FENCE_GATE_OPEN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_WOOD_FENCE_GATE_OPEN);
 
-    SoundEvent INTENTIONALLY_EMPTY = BuiltinSoundEvent.get(SoundEventKey.INTENTIONALLY_EMPTY);
+    SoundEvent INTENTIONALLY_EMPTY = BuiltinSoundEvent.get(SoundEventKeys.INTENTIONALLY_EMPTY);
 
-    SoundEvent BLOCK_PACKED_MUD_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_PACKED_MUD_BREAK);
+    SoundEvent BLOCK_PACKED_MUD_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_PACKED_MUD_BREAK);
 
-    SoundEvent BLOCK_PACKED_MUD_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_PACKED_MUD_FALL);
+    SoundEvent BLOCK_PACKED_MUD_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_PACKED_MUD_FALL);
 
-    SoundEvent BLOCK_PACKED_MUD_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_PACKED_MUD_HIT);
+    SoundEvent BLOCK_PACKED_MUD_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_PACKED_MUD_HIT);
 
-    SoundEvent BLOCK_PACKED_MUD_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_PACKED_MUD_PLACE);
+    SoundEvent BLOCK_PACKED_MUD_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_PACKED_MUD_PLACE);
 
-    SoundEvent BLOCK_PACKED_MUD_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_PACKED_MUD_STEP);
+    SoundEvent BLOCK_PACKED_MUD_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_PACKED_MUD_STEP);
 
-    SoundEvent BLOCK_STEM_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_STEM_BREAK);
+    SoundEvent BLOCK_STEM_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_STEM_BREAK);
 
-    SoundEvent BLOCK_STEM_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_STEM_STEP);
+    SoundEvent BLOCK_STEM_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_STEM_STEP);
 
-    SoundEvent BLOCK_STEM_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_STEM_PLACE);
+    SoundEvent BLOCK_STEM_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_STEM_PLACE);
 
-    SoundEvent BLOCK_STEM_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_STEM_HIT);
+    SoundEvent BLOCK_STEM_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_STEM_HIT);
 
-    SoundEvent BLOCK_STEM_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_STEM_FALL);
+    SoundEvent BLOCK_STEM_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_STEM_FALL);
 
-    SoundEvent BLOCK_NYLIUM_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NYLIUM_BREAK);
+    SoundEvent BLOCK_NYLIUM_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NYLIUM_BREAK);
 
-    SoundEvent BLOCK_NYLIUM_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NYLIUM_STEP);
+    SoundEvent BLOCK_NYLIUM_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NYLIUM_STEP);
 
-    SoundEvent BLOCK_NYLIUM_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NYLIUM_PLACE);
+    SoundEvent BLOCK_NYLIUM_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NYLIUM_PLACE);
 
-    SoundEvent BLOCK_NYLIUM_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NYLIUM_HIT);
+    SoundEvent BLOCK_NYLIUM_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NYLIUM_HIT);
 
-    SoundEvent BLOCK_NYLIUM_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NYLIUM_FALL);
+    SoundEvent BLOCK_NYLIUM_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NYLIUM_FALL);
 
-    SoundEvent BLOCK_NETHER_SPROUTS_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_SPROUTS_BREAK);
+    SoundEvent BLOCK_NETHER_SPROUTS_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_SPROUTS_BREAK);
 
-    SoundEvent BLOCK_NETHER_SPROUTS_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_SPROUTS_STEP);
+    SoundEvent BLOCK_NETHER_SPROUTS_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_SPROUTS_STEP);
 
-    SoundEvent BLOCK_NETHER_SPROUTS_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_SPROUTS_PLACE);
+    SoundEvent BLOCK_NETHER_SPROUTS_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_SPROUTS_PLACE);
 
-    SoundEvent BLOCK_NETHER_SPROUTS_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_SPROUTS_HIT);
+    SoundEvent BLOCK_NETHER_SPROUTS_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_SPROUTS_HIT);
 
-    SoundEvent BLOCK_NETHER_SPROUTS_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_SPROUTS_FALL);
+    SoundEvent BLOCK_NETHER_SPROUTS_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_SPROUTS_FALL);
 
-    SoundEvent BLOCK_FUNGUS_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_FUNGUS_BREAK);
+    SoundEvent BLOCK_FUNGUS_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_FUNGUS_BREAK);
 
-    SoundEvent BLOCK_FUNGUS_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_FUNGUS_STEP);
+    SoundEvent BLOCK_FUNGUS_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_FUNGUS_STEP);
 
-    SoundEvent BLOCK_FUNGUS_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_FUNGUS_PLACE);
+    SoundEvent BLOCK_FUNGUS_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_FUNGUS_PLACE);
 
-    SoundEvent BLOCK_FUNGUS_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_FUNGUS_HIT);
+    SoundEvent BLOCK_FUNGUS_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_FUNGUS_HIT);
 
-    SoundEvent BLOCK_FUNGUS_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_FUNGUS_FALL);
+    SoundEvent BLOCK_FUNGUS_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_FUNGUS_FALL);
 
-    SoundEvent BLOCK_WEEPING_VINES_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WEEPING_VINES_BREAK);
+    SoundEvent BLOCK_WEEPING_VINES_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WEEPING_VINES_BREAK);
 
-    SoundEvent BLOCK_WEEPING_VINES_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WEEPING_VINES_STEP);
+    SoundEvent BLOCK_WEEPING_VINES_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WEEPING_VINES_STEP);
 
-    SoundEvent BLOCK_WEEPING_VINES_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WEEPING_VINES_PLACE);
+    SoundEvent BLOCK_WEEPING_VINES_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WEEPING_VINES_PLACE);
 
-    SoundEvent BLOCK_WEEPING_VINES_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WEEPING_VINES_HIT);
+    SoundEvent BLOCK_WEEPING_VINES_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WEEPING_VINES_HIT);
 
-    SoundEvent BLOCK_WEEPING_VINES_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WEEPING_VINES_FALL);
+    SoundEvent BLOCK_WEEPING_VINES_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WEEPING_VINES_FALL);
 
-    SoundEvent BLOCK_WART_BLOCK_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WART_BLOCK_BREAK);
+    SoundEvent BLOCK_WART_BLOCK_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WART_BLOCK_BREAK);
 
-    SoundEvent BLOCK_WART_BLOCK_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WART_BLOCK_STEP);
+    SoundEvent BLOCK_WART_BLOCK_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WART_BLOCK_STEP);
 
-    SoundEvent BLOCK_WART_BLOCK_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WART_BLOCK_PLACE);
+    SoundEvent BLOCK_WART_BLOCK_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WART_BLOCK_PLACE);
 
-    SoundEvent BLOCK_WART_BLOCK_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WART_BLOCK_HIT);
+    SoundEvent BLOCK_WART_BLOCK_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WART_BLOCK_HIT);
 
-    SoundEvent BLOCK_WART_BLOCK_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WART_BLOCK_FALL);
+    SoundEvent BLOCK_WART_BLOCK_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WART_BLOCK_FALL);
 
-    SoundEvent BLOCK_NETHERITE_BLOCK_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHERITE_BLOCK_BREAK);
+    SoundEvent BLOCK_NETHERITE_BLOCK_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHERITE_BLOCK_BREAK);
 
-    SoundEvent BLOCK_NETHERITE_BLOCK_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHERITE_BLOCK_STEP);
+    SoundEvent BLOCK_NETHERITE_BLOCK_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHERITE_BLOCK_STEP);
 
-    SoundEvent BLOCK_NETHERITE_BLOCK_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHERITE_BLOCK_PLACE);
+    SoundEvent BLOCK_NETHERITE_BLOCK_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHERITE_BLOCK_PLACE);
 
-    SoundEvent BLOCK_NETHERITE_BLOCK_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHERITE_BLOCK_HIT);
+    SoundEvent BLOCK_NETHERITE_BLOCK_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHERITE_BLOCK_HIT);
 
-    SoundEvent BLOCK_NETHERITE_BLOCK_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHERITE_BLOCK_FALL);
+    SoundEvent BLOCK_NETHERITE_BLOCK_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHERITE_BLOCK_FALL);
 
-    SoundEvent BLOCK_NETHERRACK_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHERRACK_BREAK);
+    SoundEvent BLOCK_NETHERRACK_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHERRACK_BREAK);
 
-    SoundEvent BLOCK_NETHERRACK_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHERRACK_STEP);
+    SoundEvent BLOCK_NETHERRACK_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHERRACK_STEP);
 
-    SoundEvent BLOCK_NETHERRACK_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHERRACK_PLACE);
+    SoundEvent BLOCK_NETHERRACK_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHERRACK_PLACE);
 
-    SoundEvent BLOCK_NETHERRACK_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHERRACK_HIT);
+    SoundEvent BLOCK_NETHERRACK_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHERRACK_HIT);
 
-    SoundEvent BLOCK_NETHERRACK_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHERRACK_FALL);
+    SoundEvent BLOCK_NETHERRACK_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHERRACK_FALL);
 
-    SoundEvent BLOCK_NOTE_BLOCK_BASEDRUM = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NOTE_BLOCK_BASEDRUM);
+    SoundEvent BLOCK_NOTE_BLOCK_BASEDRUM = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NOTE_BLOCK_BASEDRUM);
 
-    SoundEvent BLOCK_NOTE_BLOCK_BASS = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NOTE_BLOCK_BASS);
+    SoundEvent BLOCK_NOTE_BLOCK_BASS = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NOTE_BLOCK_BASS);
 
-    SoundEvent BLOCK_NOTE_BLOCK_BELL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NOTE_BLOCK_BELL);
+    SoundEvent BLOCK_NOTE_BLOCK_BELL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NOTE_BLOCK_BELL);
 
-    SoundEvent BLOCK_NOTE_BLOCK_CHIME = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NOTE_BLOCK_CHIME);
+    SoundEvent BLOCK_NOTE_BLOCK_CHIME = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NOTE_BLOCK_CHIME);
 
-    SoundEvent BLOCK_NOTE_BLOCK_FLUTE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NOTE_BLOCK_FLUTE);
+    SoundEvent BLOCK_NOTE_BLOCK_FLUTE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NOTE_BLOCK_FLUTE);
 
-    SoundEvent BLOCK_NOTE_BLOCK_GUITAR = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NOTE_BLOCK_GUITAR);
+    SoundEvent BLOCK_NOTE_BLOCK_GUITAR = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NOTE_BLOCK_GUITAR);
 
-    SoundEvent BLOCK_NOTE_BLOCK_HARP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NOTE_BLOCK_HARP);
+    SoundEvent BLOCK_NOTE_BLOCK_HARP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NOTE_BLOCK_HARP);
 
-    SoundEvent BLOCK_NOTE_BLOCK_HAT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NOTE_BLOCK_HAT);
+    SoundEvent BLOCK_NOTE_BLOCK_HAT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NOTE_BLOCK_HAT);
 
-    SoundEvent BLOCK_NOTE_BLOCK_PLING = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NOTE_BLOCK_PLING);
+    SoundEvent BLOCK_NOTE_BLOCK_PLING = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NOTE_BLOCK_PLING);
 
-    SoundEvent BLOCK_NOTE_BLOCK_SNARE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NOTE_BLOCK_SNARE);
+    SoundEvent BLOCK_NOTE_BLOCK_SNARE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NOTE_BLOCK_SNARE);
 
-    SoundEvent BLOCK_NOTE_BLOCK_TRUMPET = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NOTE_BLOCK_TRUMPET);
+    SoundEvent BLOCK_NOTE_BLOCK_TRUMPET = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NOTE_BLOCK_TRUMPET);
 
-    SoundEvent BLOCK_NOTE_BLOCK_TRUMPET_EXPOSED = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NOTE_BLOCK_TRUMPET_EXPOSED);
+    SoundEvent BLOCK_NOTE_BLOCK_TRUMPET_EXPOSED = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NOTE_BLOCK_TRUMPET_EXPOSED);
 
-    SoundEvent BLOCK_NOTE_BLOCK_TRUMPET_OXIDIZED = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NOTE_BLOCK_TRUMPET_OXIDIZED);
+    SoundEvent BLOCK_NOTE_BLOCK_TRUMPET_OXIDIZED = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NOTE_BLOCK_TRUMPET_OXIDIZED);
 
-    SoundEvent BLOCK_NOTE_BLOCK_TRUMPET_WEATHERED = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NOTE_BLOCK_TRUMPET_WEATHERED);
+    SoundEvent BLOCK_NOTE_BLOCK_TRUMPET_WEATHERED = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NOTE_BLOCK_TRUMPET_WEATHERED);
 
-    SoundEvent BLOCK_NOTE_BLOCK_XYLOPHONE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NOTE_BLOCK_XYLOPHONE);
+    SoundEvent BLOCK_NOTE_BLOCK_XYLOPHONE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NOTE_BLOCK_XYLOPHONE);
 
-    SoundEvent BLOCK_NOTE_BLOCK_IRON_XYLOPHONE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE);
+    SoundEvent BLOCK_NOTE_BLOCK_IRON_XYLOPHONE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE);
 
-    SoundEvent BLOCK_NOTE_BLOCK_COW_BELL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NOTE_BLOCK_COW_BELL);
+    SoundEvent BLOCK_NOTE_BLOCK_COW_BELL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NOTE_BLOCK_COW_BELL);
 
-    SoundEvent BLOCK_NOTE_BLOCK_DIDGERIDOO = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NOTE_BLOCK_DIDGERIDOO);
+    SoundEvent BLOCK_NOTE_BLOCK_DIDGERIDOO = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NOTE_BLOCK_DIDGERIDOO);
 
-    SoundEvent BLOCK_NOTE_BLOCK_BIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NOTE_BLOCK_BIT);
+    SoundEvent BLOCK_NOTE_BLOCK_BIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NOTE_BLOCK_BIT);
 
-    SoundEvent BLOCK_NOTE_BLOCK_BANJO = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NOTE_BLOCK_BANJO);
+    SoundEvent BLOCK_NOTE_BLOCK_BANJO = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NOTE_BLOCK_BANJO);
 
-    SoundEvent BLOCK_NOTE_BLOCK_IMITATE_ZOMBIE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NOTE_BLOCK_IMITATE_ZOMBIE);
+    SoundEvent BLOCK_NOTE_BLOCK_IMITATE_ZOMBIE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NOTE_BLOCK_IMITATE_ZOMBIE);
 
-    SoundEvent BLOCK_NOTE_BLOCK_IMITATE_SKELETON = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NOTE_BLOCK_IMITATE_SKELETON);
+    SoundEvent BLOCK_NOTE_BLOCK_IMITATE_SKELETON = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NOTE_BLOCK_IMITATE_SKELETON);
 
-    SoundEvent BLOCK_NOTE_BLOCK_IMITATE_CREEPER = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NOTE_BLOCK_IMITATE_CREEPER);
+    SoundEvent BLOCK_NOTE_BLOCK_IMITATE_CREEPER = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NOTE_BLOCK_IMITATE_CREEPER);
 
-    SoundEvent BLOCK_NOTE_BLOCK_IMITATE_ENDER_DRAGON = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NOTE_BLOCK_IMITATE_ENDER_DRAGON);
+    SoundEvent BLOCK_NOTE_BLOCK_IMITATE_ENDER_DRAGON = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NOTE_BLOCK_IMITATE_ENDER_DRAGON);
 
-    SoundEvent BLOCK_NOTE_BLOCK_IMITATE_WITHER_SKELETON = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NOTE_BLOCK_IMITATE_WITHER_SKELETON);
+    SoundEvent BLOCK_NOTE_BLOCK_IMITATE_WITHER_SKELETON = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NOTE_BLOCK_IMITATE_WITHER_SKELETON);
 
-    SoundEvent BLOCK_NOTE_BLOCK_IMITATE_PIGLIN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NOTE_BLOCK_IMITATE_PIGLIN);
+    SoundEvent BLOCK_NOTE_BLOCK_IMITATE_PIGLIN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NOTE_BLOCK_IMITATE_PIGLIN);
 
-    SoundEvent ENTITY_OCELOT_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_OCELOT_HURT);
+    SoundEvent ENTITY_OCELOT_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_OCELOT_HURT);
 
-    SoundEvent ENTITY_OCELOT_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_OCELOT_AMBIENT);
+    SoundEvent ENTITY_OCELOT_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_OCELOT_AMBIENT);
 
-    SoundEvent ENTITY_OCELOT_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_OCELOT_DEATH);
+    SoundEvent ENTITY_OCELOT_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_OCELOT_DEATH);
 
-    SoundEvent ITEM_OMINOUS_BOTTLE_DISPOSE = BuiltinSoundEvent.get(SoundEventKey.ITEM_OMINOUS_BOTTLE_DISPOSE);
+    SoundEvent ITEM_OMINOUS_BOTTLE_DISPOSE = BuiltinSoundEvent.get(SoundEventKeys.ITEM_OMINOUS_BOTTLE_DISPOSE);
 
-    SoundEvent ENTITY_PAINTING_BREAK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PAINTING_BREAK);
+    SoundEvent ENTITY_PAINTING_BREAK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PAINTING_BREAK);
 
-    SoundEvent ENTITY_PAINTING_PLACE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PAINTING_PLACE);
+    SoundEvent ENTITY_PAINTING_PLACE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PAINTING_PLACE);
 
-    SoundEvent BLOCK_PALE_HANGING_MOSS_IDLE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_PALE_HANGING_MOSS_IDLE);
+    SoundEvent BLOCK_PALE_HANGING_MOSS_IDLE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_PALE_HANGING_MOSS_IDLE);
 
-    SoundEvent ENTITY_PANDA_PRE_SNEEZE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PANDA_PRE_SNEEZE);
+    SoundEvent ENTITY_PANDA_PRE_SNEEZE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PANDA_PRE_SNEEZE);
 
-    SoundEvent ENTITY_PANDA_SNEEZE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PANDA_SNEEZE);
+    SoundEvent ENTITY_PANDA_SNEEZE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PANDA_SNEEZE);
 
-    SoundEvent ENTITY_PANDA_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PANDA_AMBIENT);
+    SoundEvent ENTITY_PANDA_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PANDA_AMBIENT);
 
-    SoundEvent ENTITY_PANDA_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PANDA_DEATH);
+    SoundEvent ENTITY_PANDA_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PANDA_DEATH);
 
-    SoundEvent ENTITY_PANDA_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PANDA_EAT);
+    SoundEvent ENTITY_PANDA_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PANDA_EAT);
 
-    SoundEvent ENTITY_PANDA_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PANDA_STEP);
+    SoundEvent ENTITY_PANDA_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PANDA_STEP);
 
-    SoundEvent ENTITY_PANDA_CANT_BREED = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PANDA_CANT_BREED);
+    SoundEvent ENTITY_PANDA_CANT_BREED = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PANDA_CANT_BREED);
 
-    SoundEvent ENTITY_PANDA_AGGRESSIVE_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PANDA_AGGRESSIVE_AMBIENT);
+    SoundEvent ENTITY_PANDA_AGGRESSIVE_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PANDA_AGGRESSIVE_AMBIENT);
 
-    SoundEvent ENTITY_PANDA_WORRIED_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PANDA_WORRIED_AMBIENT);
+    SoundEvent ENTITY_PANDA_WORRIED_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PANDA_WORRIED_AMBIENT);
 
-    SoundEvent ENTITY_PANDA_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PANDA_HURT);
+    SoundEvent ENTITY_PANDA_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PANDA_HURT);
 
-    SoundEvent ENTITY_PANDA_BITE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PANDA_BITE);
+    SoundEvent ENTITY_PANDA_BITE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PANDA_BITE);
 
-    SoundEvent ENTITY_PARCHED_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARCHED_AMBIENT);
+    SoundEvent ENTITY_PARCHED_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARCHED_AMBIENT);
 
-    SoundEvent ENTITY_PARCHED_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARCHED_DEATH);
+    SoundEvent ENTITY_PARCHED_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARCHED_DEATH);
 
-    SoundEvent ENTITY_PARCHED_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARCHED_HURT);
+    SoundEvent ENTITY_PARCHED_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARCHED_HURT);
 
-    SoundEvent ENTITY_PARCHED_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARCHED_STEP);
+    SoundEvent ENTITY_PARCHED_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARCHED_STEP);
 
-    SoundEvent ENTITY_PARROT_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_AMBIENT);
+    SoundEvent ENTITY_PARROT_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_AMBIENT);
 
-    SoundEvent ENTITY_PARROT_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_DEATH);
+    SoundEvent ENTITY_PARROT_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_DEATH);
 
-    SoundEvent ENTITY_PARROT_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_EAT);
+    SoundEvent ENTITY_PARROT_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_EAT);
 
-    SoundEvent ENTITY_PARROT_FLY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_FLY);
+    SoundEvent ENTITY_PARROT_FLY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_FLY);
 
-    SoundEvent ENTITY_PARROT_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_HURT);
+    SoundEvent ENTITY_PARROT_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_HURT);
 
-    SoundEvent ENTITY_PARROT_IMITATE_BLAZE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_BLAZE);
+    SoundEvent ENTITY_PARROT_IMITATE_BLAZE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_BLAZE);
 
-    SoundEvent ENTITY_PARROT_IMITATE_BOGGED = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_BOGGED);
+    SoundEvent ENTITY_PARROT_IMITATE_BOGGED = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_BOGGED);
 
-    SoundEvent ENTITY_PARROT_IMITATE_BREEZE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_BREEZE);
+    SoundEvent ENTITY_PARROT_IMITATE_BREEZE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_BREEZE);
 
-    SoundEvent ENTITY_PARROT_IMITATE_CAMEL_HUSK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_CAMEL_HUSK);
+    SoundEvent ENTITY_PARROT_IMITATE_CAMEL_HUSK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_CAMEL_HUSK);
 
-    SoundEvent ENTITY_PARROT_IMITATE_CREAKING = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_CREAKING);
+    SoundEvent ENTITY_PARROT_IMITATE_CREAKING = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_CREAKING);
 
-    SoundEvent ENTITY_PARROT_IMITATE_CREEPER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_CREEPER);
+    SoundEvent ENTITY_PARROT_IMITATE_CREEPER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_CREEPER);
 
-    SoundEvent ENTITY_PARROT_IMITATE_DROWNED = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_DROWNED);
+    SoundEvent ENTITY_PARROT_IMITATE_DROWNED = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_DROWNED);
 
-    SoundEvent ENTITY_PARROT_IMITATE_ELDER_GUARDIAN = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_ELDER_GUARDIAN);
+    SoundEvent ENTITY_PARROT_IMITATE_ELDER_GUARDIAN = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_ELDER_GUARDIAN);
 
-    SoundEvent ENTITY_PARROT_IMITATE_ENDER_DRAGON = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_ENDER_DRAGON);
+    SoundEvent ENTITY_PARROT_IMITATE_ENDER_DRAGON = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_ENDER_DRAGON);
 
-    SoundEvent ENTITY_PARROT_IMITATE_ENDERMITE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_ENDERMITE);
+    SoundEvent ENTITY_PARROT_IMITATE_ENDERMITE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_ENDERMITE);
 
-    SoundEvent ENTITY_PARROT_IMITATE_EVOKER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_EVOKER);
+    SoundEvent ENTITY_PARROT_IMITATE_EVOKER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_EVOKER);
 
-    SoundEvent ENTITY_PARROT_IMITATE_GHAST = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_GHAST);
+    SoundEvent ENTITY_PARROT_IMITATE_GHAST = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_GHAST);
 
-    SoundEvent ENTITY_PARROT_IMITATE_GUARDIAN = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_GUARDIAN);
+    SoundEvent ENTITY_PARROT_IMITATE_GUARDIAN = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_GUARDIAN);
 
-    SoundEvent ENTITY_PARROT_IMITATE_HOGLIN = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_HOGLIN);
+    SoundEvent ENTITY_PARROT_IMITATE_HOGLIN = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_HOGLIN);
 
-    SoundEvent ENTITY_PARROT_IMITATE_HUSK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_HUSK);
+    SoundEvent ENTITY_PARROT_IMITATE_HUSK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_HUSK);
 
-    SoundEvent ENTITY_PARROT_IMITATE_ILLUSIONER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_ILLUSIONER);
+    SoundEvent ENTITY_PARROT_IMITATE_ILLUSIONER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_ILLUSIONER);
 
-    SoundEvent ENTITY_PARROT_IMITATE_MAGMA_CUBE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_MAGMA_CUBE);
+    SoundEvent ENTITY_PARROT_IMITATE_MAGMA_CUBE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_MAGMA_CUBE);
 
-    SoundEvent ENTITY_PARROT_IMITATE_PHANTOM = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_PHANTOM);
+    SoundEvent ENTITY_PARROT_IMITATE_PHANTOM = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_PHANTOM);
 
-    SoundEvent ENTITY_PARROT_IMITATE_PARCHED = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_PARCHED);
+    SoundEvent ENTITY_PARROT_IMITATE_PARCHED = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_PARCHED);
 
-    SoundEvent ENTITY_PARROT_IMITATE_PIGLIN = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_PIGLIN);
+    SoundEvent ENTITY_PARROT_IMITATE_PIGLIN = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_PIGLIN);
 
-    SoundEvent ENTITY_PARROT_IMITATE_PIGLIN_BRUTE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_PIGLIN_BRUTE);
+    SoundEvent ENTITY_PARROT_IMITATE_PIGLIN_BRUTE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_PIGLIN_BRUTE);
 
-    SoundEvent ENTITY_PARROT_IMITATE_PILLAGER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_PILLAGER);
+    SoundEvent ENTITY_PARROT_IMITATE_PILLAGER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_PILLAGER);
 
-    SoundEvent ENTITY_PARROT_IMITATE_RAVAGER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_RAVAGER);
+    SoundEvent ENTITY_PARROT_IMITATE_RAVAGER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_RAVAGER);
 
-    SoundEvent ENTITY_PARROT_IMITATE_SHULKER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_SHULKER);
+    SoundEvent ENTITY_PARROT_IMITATE_SHULKER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_SHULKER);
 
-    SoundEvent ENTITY_PARROT_IMITATE_SILVERFISH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_SILVERFISH);
+    SoundEvent ENTITY_PARROT_IMITATE_SILVERFISH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_SILVERFISH);
 
-    SoundEvent ENTITY_PARROT_IMITATE_SKELETON = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_SKELETON);
+    SoundEvent ENTITY_PARROT_IMITATE_SKELETON = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_SKELETON);
 
-    SoundEvent ENTITY_PARROT_IMITATE_SLIME = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_SLIME);
+    SoundEvent ENTITY_PARROT_IMITATE_SLIME = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_SLIME);
 
-    SoundEvent ENTITY_PARROT_IMITATE_SPIDER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_SPIDER);
+    SoundEvent ENTITY_PARROT_IMITATE_SPIDER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_SPIDER);
 
-    SoundEvent ENTITY_PARROT_IMITATE_STRAY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_STRAY);
+    SoundEvent ENTITY_PARROT_IMITATE_STRAY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_STRAY);
 
-    SoundEvent ENTITY_PARROT_IMITATE_VEX = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_VEX);
+    SoundEvent ENTITY_PARROT_IMITATE_VEX = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_VEX);
 
-    SoundEvent ENTITY_PARROT_IMITATE_VINDICATOR = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_VINDICATOR);
+    SoundEvent ENTITY_PARROT_IMITATE_VINDICATOR = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_VINDICATOR);
 
-    SoundEvent ENTITY_PARROT_IMITATE_WARDEN = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_WARDEN);
+    SoundEvent ENTITY_PARROT_IMITATE_WARDEN = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_WARDEN);
 
-    SoundEvent ENTITY_PARROT_IMITATE_WITCH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_WITCH);
+    SoundEvent ENTITY_PARROT_IMITATE_WITCH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_WITCH);
 
-    SoundEvent ENTITY_PARROT_IMITATE_WITHER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_WITHER);
+    SoundEvent ENTITY_PARROT_IMITATE_WITHER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_WITHER);
 
-    SoundEvent ENTITY_PARROT_IMITATE_WITHER_SKELETON = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_WITHER_SKELETON);
+    SoundEvent ENTITY_PARROT_IMITATE_WITHER_SKELETON = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_WITHER_SKELETON);
 
-    SoundEvent ENTITY_PARROT_IMITATE_ZOGLIN = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_ZOGLIN);
+    SoundEvent ENTITY_PARROT_IMITATE_ZOGLIN = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_ZOGLIN);
 
-    SoundEvent ENTITY_PARROT_IMITATE_ZOMBIE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_ZOMBIE);
+    SoundEvent ENTITY_PARROT_IMITATE_ZOMBIE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_ZOMBIE);
 
-    SoundEvent ENTITY_PARROT_IMITATE_ZOMBIE_HORSE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_ZOMBIE_HORSE);
+    SoundEvent ENTITY_PARROT_IMITATE_ZOMBIE_HORSE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_ZOMBIE_HORSE);
 
-    SoundEvent ENTITY_PARROT_IMITATE_ZOMBIE_NAUTILUS = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_ZOMBIE_NAUTILUS);
+    SoundEvent ENTITY_PARROT_IMITATE_ZOMBIE_NAUTILUS = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_ZOMBIE_NAUTILUS);
 
-    SoundEvent ENTITY_PARROT_IMITATE_ZOMBIE_VILLAGER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_IMITATE_ZOMBIE_VILLAGER);
+    SoundEvent ENTITY_PARROT_IMITATE_ZOMBIE_VILLAGER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_IMITATE_ZOMBIE_VILLAGER);
 
-    SoundEvent ENTITY_PARROT_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PARROT_STEP);
+    SoundEvent ENTITY_PARROT_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PARROT_STEP);
 
-    SoundEvent ENTITY_PHANTOM_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PHANTOM_AMBIENT);
+    SoundEvent ENTITY_PHANTOM_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PHANTOM_AMBIENT);
 
-    SoundEvent ENTITY_PHANTOM_BITE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PHANTOM_BITE);
+    SoundEvent ENTITY_PHANTOM_BITE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PHANTOM_BITE);
 
-    SoundEvent ENTITY_PHANTOM_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PHANTOM_DEATH);
+    SoundEvent ENTITY_PHANTOM_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PHANTOM_DEATH);
 
-    SoundEvent ENTITY_PHANTOM_FLAP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PHANTOM_FLAP);
+    SoundEvent ENTITY_PHANTOM_FLAP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PHANTOM_FLAP);
 
-    SoundEvent ENTITY_PHANTOM_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PHANTOM_HURT);
+    SoundEvent ENTITY_PHANTOM_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PHANTOM_HURT);
 
-    SoundEvent ENTITY_PHANTOM_SWOOP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PHANTOM_SWOOP);
+    SoundEvent ENTITY_PHANTOM_SWOOP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PHANTOM_SWOOP);
 
-    SoundEvent ENTITY_PIG_SADDLE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIG_SADDLE);
+    SoundEvent ENTITY_PIG_SADDLE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIG_SADDLE);
 
-    SoundEvent ENTITY_PIG_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIG_STEP);
+    SoundEvent ENTITY_PIG_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIG_STEP);
 
-    SoundEvent ENTITY_BABY_PIG_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_PIG_STEP);
+    SoundEvent ENTITY_BABY_PIG_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_PIG_STEP);
 
-    SoundEvent ENTITY_BABY_PIG_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_PIG_AMBIENT);
+    SoundEvent ENTITY_BABY_PIG_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_PIG_AMBIENT);
 
-    SoundEvent ENTITY_BABY_PIG_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_PIG_EAT);
+    SoundEvent ENTITY_BABY_PIG_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_PIG_EAT);
 
-    SoundEvent ENTITY_BABY_PIG_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_PIG_HURT);
+    SoundEvent ENTITY_BABY_PIG_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_PIG_HURT);
 
-    SoundEvent ENTITY_BABY_PIG_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_PIG_DEATH);
+    SoundEvent ENTITY_BABY_PIG_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_PIG_DEATH);
 
-    SoundEvent ENTITY_PIG_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIG_AMBIENT);
+    SoundEvent ENTITY_PIG_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIG_AMBIENT);
 
-    SoundEvent ENTITY_PIG_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIG_HURT);
+    SoundEvent ENTITY_PIG_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIG_HURT);
 
-    SoundEvent ENTITY_PIG_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIG_DEATH);
+    SoundEvent ENTITY_PIG_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIG_DEATH);
 
-    SoundEvent ENTITY_PIG_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIG_EAT);
+    SoundEvent ENTITY_PIG_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIG_EAT);
 
-    SoundEvent ENTITY_PIG_MINI_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIG_MINI_AMBIENT);
+    SoundEvent ENTITY_PIG_MINI_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIG_MINI_AMBIENT);
 
-    SoundEvent ENTITY_PIG_MINI_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIG_MINI_HURT);
+    SoundEvent ENTITY_PIG_MINI_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIG_MINI_HURT);
 
-    SoundEvent ENTITY_PIG_MINI_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIG_MINI_DEATH);
+    SoundEvent ENTITY_PIG_MINI_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIG_MINI_DEATH);
 
-    SoundEvent ENTITY_PIG_MINI_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIG_MINI_EAT);
+    SoundEvent ENTITY_PIG_MINI_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIG_MINI_EAT);
 
-    SoundEvent ENTITY_PIG_BIG_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIG_BIG_AMBIENT);
+    SoundEvent ENTITY_PIG_BIG_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIG_BIG_AMBIENT);
 
-    SoundEvent ENTITY_PIG_BIG_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIG_BIG_HURT);
+    SoundEvent ENTITY_PIG_BIG_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIG_BIG_HURT);
 
-    SoundEvent ENTITY_PIG_BIG_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIG_BIG_DEATH);
+    SoundEvent ENTITY_PIG_BIG_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIG_BIG_DEATH);
 
-    SoundEvent ENTITY_PIG_BIG_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIG_BIG_EAT);
+    SoundEvent ENTITY_PIG_BIG_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIG_BIG_EAT);
 
-    SoundEvent ENTITY_PIGLIN_ADMIRING_ITEM = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIGLIN_ADMIRING_ITEM);
+    SoundEvent ENTITY_PIGLIN_ADMIRING_ITEM = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIGLIN_ADMIRING_ITEM);
 
-    SoundEvent ENTITY_PIGLIN_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIGLIN_AMBIENT);
+    SoundEvent ENTITY_PIGLIN_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIGLIN_AMBIENT);
 
-    SoundEvent ENTITY_PIGLIN_ANGRY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIGLIN_ANGRY);
+    SoundEvent ENTITY_PIGLIN_ANGRY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIGLIN_ANGRY);
 
-    SoundEvent ENTITY_PIGLIN_CELEBRATE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIGLIN_CELEBRATE);
+    SoundEvent ENTITY_PIGLIN_CELEBRATE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIGLIN_CELEBRATE);
 
-    SoundEvent ENTITY_PIGLIN_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIGLIN_DEATH);
+    SoundEvent ENTITY_PIGLIN_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIGLIN_DEATH);
 
-    SoundEvent ENTITY_PIGLIN_JEALOUS = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIGLIN_JEALOUS);
+    SoundEvent ENTITY_PIGLIN_JEALOUS = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIGLIN_JEALOUS);
 
-    SoundEvent ENTITY_PIGLIN_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIGLIN_HURT);
+    SoundEvent ENTITY_PIGLIN_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIGLIN_HURT);
 
-    SoundEvent ENTITY_PIGLIN_RETREAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIGLIN_RETREAT);
+    SoundEvent ENTITY_PIGLIN_RETREAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIGLIN_RETREAT);
 
-    SoundEvent ENTITY_PIGLIN_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIGLIN_STEP);
+    SoundEvent ENTITY_PIGLIN_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIGLIN_STEP);
 
-    SoundEvent ENTITY_PIGLIN_CONVERTED_TO_ZOMBIFIED = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIGLIN_CONVERTED_TO_ZOMBIFIED);
+    SoundEvent ENTITY_PIGLIN_CONVERTED_TO_ZOMBIFIED = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIGLIN_CONVERTED_TO_ZOMBIFIED);
 
-    SoundEvent ENTITY_PIGLIN_BRUTE_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIGLIN_BRUTE_AMBIENT);
+    SoundEvent ENTITY_PIGLIN_BRUTE_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIGLIN_BRUTE_AMBIENT);
 
-    SoundEvent ENTITY_PIGLIN_BRUTE_ANGRY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIGLIN_BRUTE_ANGRY);
+    SoundEvent ENTITY_PIGLIN_BRUTE_ANGRY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIGLIN_BRUTE_ANGRY);
 
-    SoundEvent ENTITY_PIGLIN_BRUTE_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIGLIN_BRUTE_DEATH);
+    SoundEvent ENTITY_PIGLIN_BRUTE_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIGLIN_BRUTE_DEATH);
 
-    SoundEvent ENTITY_PIGLIN_BRUTE_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIGLIN_BRUTE_HURT);
+    SoundEvent ENTITY_PIGLIN_BRUTE_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIGLIN_BRUTE_HURT);
 
-    SoundEvent ENTITY_PIGLIN_BRUTE_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIGLIN_BRUTE_STEP);
+    SoundEvent ENTITY_PIGLIN_BRUTE_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIGLIN_BRUTE_STEP);
 
-    SoundEvent ENTITY_PIGLIN_BRUTE_CONVERTED_TO_ZOMBIFIED = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PIGLIN_BRUTE_CONVERTED_TO_ZOMBIFIED);
+    SoundEvent ENTITY_PIGLIN_BRUTE_CONVERTED_TO_ZOMBIFIED = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PIGLIN_BRUTE_CONVERTED_TO_ZOMBIFIED);
 
-    SoundEvent ENTITY_PILLAGER_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PILLAGER_AMBIENT);
+    SoundEvent ENTITY_PILLAGER_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PILLAGER_AMBIENT);
 
-    SoundEvent ENTITY_PILLAGER_CELEBRATE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PILLAGER_CELEBRATE);
+    SoundEvent ENTITY_PILLAGER_CELEBRATE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PILLAGER_CELEBRATE);
 
-    SoundEvent ENTITY_PILLAGER_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PILLAGER_DEATH);
+    SoundEvent ENTITY_PILLAGER_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PILLAGER_DEATH);
 
-    SoundEvent ENTITY_PILLAGER_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PILLAGER_HURT);
+    SoundEvent ENTITY_PILLAGER_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PILLAGER_HURT);
 
-    SoundEvent BLOCK_PISTON_CONTRACT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_PISTON_CONTRACT);
+    SoundEvent BLOCK_PISTON_CONTRACT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_PISTON_CONTRACT);
 
-    SoundEvent BLOCK_PISTON_EXTEND = BuiltinSoundEvent.get(SoundEventKey.BLOCK_PISTON_EXTEND);
+    SoundEvent BLOCK_PISTON_EXTEND = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_PISTON_EXTEND);
 
-    SoundEvent ENTITY_PLAYER_ATTACK_CRIT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PLAYER_ATTACK_CRIT);
+    SoundEvent ENTITY_PLAYER_ATTACK_CRIT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PLAYER_ATTACK_CRIT);
 
-    SoundEvent ENTITY_PLAYER_ATTACK_KNOCKBACK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PLAYER_ATTACK_KNOCKBACK);
+    SoundEvent ENTITY_PLAYER_ATTACK_KNOCKBACK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PLAYER_ATTACK_KNOCKBACK);
 
-    SoundEvent ENTITY_PLAYER_ATTACK_NODAMAGE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PLAYER_ATTACK_NODAMAGE);
+    SoundEvent ENTITY_PLAYER_ATTACK_NODAMAGE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PLAYER_ATTACK_NODAMAGE);
 
-    SoundEvent ENTITY_PLAYER_ATTACK_STRONG = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PLAYER_ATTACK_STRONG);
+    SoundEvent ENTITY_PLAYER_ATTACK_STRONG = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PLAYER_ATTACK_STRONG);
 
-    SoundEvent ENTITY_PLAYER_ATTACK_SWEEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PLAYER_ATTACK_SWEEP);
+    SoundEvent ENTITY_PLAYER_ATTACK_SWEEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PLAYER_ATTACK_SWEEP);
 
-    SoundEvent ENTITY_PLAYER_ATTACK_WEAK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PLAYER_ATTACK_WEAK);
+    SoundEvent ENTITY_PLAYER_ATTACK_WEAK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PLAYER_ATTACK_WEAK);
 
-    SoundEvent ENTITY_PLAYER_BIG_FALL = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PLAYER_BIG_FALL);
+    SoundEvent ENTITY_PLAYER_BIG_FALL = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PLAYER_BIG_FALL);
 
-    SoundEvent ENTITY_PLAYER_BREATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PLAYER_BREATH);
+    SoundEvent ENTITY_PLAYER_BREATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PLAYER_BREATH);
 
-    SoundEvent ENTITY_PLAYER_BURP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PLAYER_BURP);
+    SoundEvent ENTITY_PLAYER_BURP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PLAYER_BURP);
 
-    SoundEvent ENTITY_PLAYER_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PLAYER_DEATH);
+    SoundEvent ENTITY_PLAYER_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PLAYER_DEATH);
 
-    SoundEvent ENTITY_PLAYER_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PLAYER_HURT);
+    SoundEvent ENTITY_PLAYER_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PLAYER_HURT);
 
-    SoundEvent ENTITY_PLAYER_HURT_DROWN = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PLAYER_HURT_DROWN);
+    SoundEvent ENTITY_PLAYER_HURT_DROWN = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PLAYER_HURT_DROWN);
 
-    SoundEvent ENTITY_PLAYER_HURT_FREEZE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PLAYER_HURT_FREEZE);
+    SoundEvent ENTITY_PLAYER_HURT_FREEZE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PLAYER_HURT_FREEZE);
 
-    SoundEvent ENTITY_PLAYER_HURT_ON_FIRE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PLAYER_HURT_ON_FIRE);
+    SoundEvent ENTITY_PLAYER_HURT_ON_FIRE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PLAYER_HURT_ON_FIRE);
 
-    SoundEvent ENTITY_PLAYER_HURT_SWEET_BERRY_BUSH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PLAYER_HURT_SWEET_BERRY_BUSH);
+    SoundEvent ENTITY_PLAYER_HURT_SWEET_BERRY_BUSH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PLAYER_HURT_SWEET_BERRY_BUSH);
 
-    SoundEvent ENTITY_PLAYER_LEVELUP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PLAYER_LEVELUP);
+    SoundEvent ENTITY_PLAYER_LEVELUP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PLAYER_LEVELUP);
 
-    SoundEvent ENTITY_PLAYER_SMALL_FALL = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PLAYER_SMALL_FALL);
+    SoundEvent ENTITY_PLAYER_SMALL_FALL = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PLAYER_SMALL_FALL);
 
-    SoundEvent ENTITY_PLAYER_SPLASH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PLAYER_SPLASH);
+    SoundEvent ENTITY_PLAYER_SPLASH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PLAYER_SPLASH);
 
-    SoundEvent ENTITY_PLAYER_SPLASH_HIGH_SPEED = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PLAYER_SPLASH_HIGH_SPEED);
+    SoundEvent ENTITY_PLAYER_SPLASH_HIGH_SPEED = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PLAYER_SPLASH_HIGH_SPEED);
 
-    SoundEvent ENTITY_PLAYER_SWIM = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PLAYER_SWIM);
+    SoundEvent ENTITY_PLAYER_SWIM = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PLAYER_SWIM);
 
-    SoundEvent ENTITY_PLAYER_TELEPORT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PLAYER_TELEPORT);
+    SoundEvent ENTITY_PLAYER_TELEPORT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PLAYER_TELEPORT);
 
-    SoundEvent ENTITY_POLAR_BEAR_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_POLAR_BEAR_AMBIENT);
+    SoundEvent ENTITY_POLAR_BEAR_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_POLAR_BEAR_AMBIENT);
 
-    SoundEvent ENTITY_POLAR_BEAR_AMBIENT_BABY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_POLAR_BEAR_AMBIENT_BABY);
+    SoundEvent ENTITY_POLAR_BEAR_AMBIENT_BABY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_POLAR_BEAR_AMBIENT_BABY);
 
-    SoundEvent ENTITY_POLAR_BEAR_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_POLAR_BEAR_DEATH);
+    SoundEvent ENTITY_POLAR_BEAR_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_POLAR_BEAR_DEATH);
 
-    SoundEvent ENTITY_POLAR_BEAR_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_POLAR_BEAR_HURT);
+    SoundEvent ENTITY_POLAR_BEAR_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_POLAR_BEAR_HURT);
 
-    SoundEvent ENTITY_POLAR_BEAR_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_POLAR_BEAR_STEP);
+    SoundEvent ENTITY_POLAR_BEAR_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_POLAR_BEAR_STEP);
 
-    SoundEvent ENTITY_POLAR_BEAR_WARNING = BuiltinSoundEvent.get(SoundEventKey.ENTITY_POLAR_BEAR_WARNING);
+    SoundEvent ENTITY_POLAR_BEAR_WARNING = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_POLAR_BEAR_WARNING);
 
-    SoundEvent BLOCK_POLISHED_DEEPSLATE_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POLISHED_DEEPSLATE_BREAK);
+    SoundEvent BLOCK_POLISHED_DEEPSLATE_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POLISHED_DEEPSLATE_BREAK);
 
-    SoundEvent BLOCK_POLISHED_DEEPSLATE_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POLISHED_DEEPSLATE_FALL);
+    SoundEvent BLOCK_POLISHED_DEEPSLATE_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POLISHED_DEEPSLATE_FALL);
 
-    SoundEvent BLOCK_POLISHED_DEEPSLATE_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POLISHED_DEEPSLATE_HIT);
+    SoundEvent BLOCK_POLISHED_DEEPSLATE_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POLISHED_DEEPSLATE_HIT);
 
-    SoundEvent BLOCK_POLISHED_DEEPSLATE_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POLISHED_DEEPSLATE_PLACE);
+    SoundEvent BLOCK_POLISHED_DEEPSLATE_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POLISHED_DEEPSLATE_PLACE);
 
-    SoundEvent BLOCK_POLISHED_DEEPSLATE_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POLISHED_DEEPSLATE_STEP);
+    SoundEvent BLOCK_POLISHED_DEEPSLATE_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POLISHED_DEEPSLATE_STEP);
 
-    SoundEvent BLOCK_PORTAL_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_PORTAL_AMBIENT);
+    SoundEvent BLOCK_PORTAL_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_PORTAL_AMBIENT);
 
-    SoundEvent BLOCK_PORTAL_TRAVEL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_PORTAL_TRAVEL);
+    SoundEvent BLOCK_PORTAL_TRAVEL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_PORTAL_TRAVEL);
 
-    SoundEvent BLOCK_PORTAL_TRIGGER = BuiltinSoundEvent.get(SoundEventKey.BLOCK_PORTAL_TRIGGER);
+    SoundEvent BLOCK_PORTAL_TRIGGER = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_PORTAL_TRIGGER);
 
-    SoundEvent BLOCK_POWDER_SNOW_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POWDER_SNOW_BREAK);
+    SoundEvent BLOCK_POWDER_SNOW_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POWDER_SNOW_BREAK);
 
-    SoundEvent BLOCK_POWDER_SNOW_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POWDER_SNOW_FALL);
+    SoundEvent BLOCK_POWDER_SNOW_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POWDER_SNOW_FALL);
 
-    SoundEvent BLOCK_POWDER_SNOW_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POWDER_SNOW_HIT);
+    SoundEvent BLOCK_POWDER_SNOW_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POWDER_SNOW_HIT);
 
-    SoundEvent BLOCK_POWDER_SNOW_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POWDER_SNOW_PLACE);
+    SoundEvent BLOCK_POWDER_SNOW_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POWDER_SNOW_PLACE);
 
-    SoundEvent BLOCK_POWDER_SNOW_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POWDER_SNOW_STEP);
+    SoundEvent BLOCK_POWDER_SNOW_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POWDER_SNOW_STEP);
 
-    SoundEvent ENTITY_PUFFER_FISH_BLOW_OUT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PUFFER_FISH_BLOW_OUT);
+    SoundEvent ENTITY_PUFFER_FISH_BLOW_OUT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PUFFER_FISH_BLOW_OUT);
 
-    SoundEvent ENTITY_PUFFER_FISH_BLOW_UP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PUFFER_FISH_BLOW_UP);
+    SoundEvent ENTITY_PUFFER_FISH_BLOW_UP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PUFFER_FISH_BLOW_UP);
 
-    SoundEvent ENTITY_PUFFER_FISH_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PUFFER_FISH_DEATH);
+    SoundEvent ENTITY_PUFFER_FISH_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PUFFER_FISH_DEATH);
 
-    SoundEvent ENTITY_PUFFER_FISH_FLOP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PUFFER_FISH_FLOP);
+    SoundEvent ENTITY_PUFFER_FISH_FLOP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PUFFER_FISH_FLOP);
 
-    SoundEvent ENTITY_PUFFER_FISH_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PUFFER_FISH_HURT);
+    SoundEvent ENTITY_PUFFER_FISH_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PUFFER_FISH_HURT);
 
-    SoundEvent ENTITY_PUFFER_FISH_STING = BuiltinSoundEvent.get(SoundEventKey.ENTITY_PUFFER_FISH_STING);
+    SoundEvent ENTITY_PUFFER_FISH_STING = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_PUFFER_FISH_STING);
 
-    SoundEvent BLOCK_PUMPKIN_CARVE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_PUMPKIN_CARVE);
+    SoundEvent BLOCK_PUMPKIN_CARVE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_PUMPKIN_CARVE);
 
-    SoundEvent ENTITY_RABBIT_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_RABBIT_AMBIENT);
+    SoundEvent ENTITY_RABBIT_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_RABBIT_AMBIENT);
 
-    SoundEvent ENTITY_RABBIT_ATTACK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_RABBIT_ATTACK);
+    SoundEvent ENTITY_RABBIT_ATTACK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_RABBIT_ATTACK);
 
-    SoundEvent ENTITY_RABBIT_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_RABBIT_DEATH);
+    SoundEvent ENTITY_RABBIT_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_RABBIT_DEATH);
 
-    SoundEvent ENTITY_RABBIT_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_RABBIT_HURT);
+    SoundEvent ENTITY_RABBIT_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_RABBIT_HURT);
 
-    SoundEvent ENTITY_RABBIT_JUMP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_RABBIT_JUMP);
+    SoundEvent ENTITY_RABBIT_JUMP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_RABBIT_JUMP);
 
-    SoundEvent EVENT_RAID_HORN = BuiltinSoundEvent.get(SoundEventKey.EVENT_RAID_HORN);
+    SoundEvent EVENT_RAID_HORN = BuiltinSoundEvent.get(SoundEventKeys.EVENT_RAID_HORN);
 
-    SoundEvent ENTITY_RAVAGER_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_RAVAGER_AMBIENT);
+    SoundEvent ENTITY_RAVAGER_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_RAVAGER_AMBIENT);
 
-    SoundEvent ENTITY_RAVAGER_ATTACK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_RAVAGER_ATTACK);
+    SoundEvent ENTITY_RAVAGER_ATTACK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_RAVAGER_ATTACK);
 
-    SoundEvent ENTITY_RAVAGER_CELEBRATE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_RAVAGER_CELEBRATE);
+    SoundEvent ENTITY_RAVAGER_CELEBRATE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_RAVAGER_CELEBRATE);
 
-    SoundEvent ENTITY_RAVAGER_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_RAVAGER_DEATH);
+    SoundEvent ENTITY_RAVAGER_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_RAVAGER_DEATH);
 
-    SoundEvent ENTITY_RAVAGER_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_RAVAGER_HURT);
+    SoundEvent ENTITY_RAVAGER_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_RAVAGER_HURT);
 
-    SoundEvent ENTITY_RAVAGER_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_RAVAGER_STEP);
+    SoundEvent ENTITY_RAVAGER_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_RAVAGER_STEP);
 
-    SoundEvent ENTITY_RAVAGER_STUNNED = BuiltinSoundEvent.get(SoundEventKey.ENTITY_RAVAGER_STUNNED);
+    SoundEvent ENTITY_RAVAGER_STUNNED = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_RAVAGER_STUNNED);
 
-    SoundEvent ENTITY_RAVAGER_ROAR = BuiltinSoundEvent.get(SoundEventKey.ENTITY_RAVAGER_ROAR);
+    SoundEvent ENTITY_RAVAGER_ROAR = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_RAVAGER_ROAR);
 
-    SoundEvent BLOCK_NETHER_GOLD_ORE_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_GOLD_ORE_BREAK);
+    SoundEvent BLOCK_NETHER_GOLD_ORE_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_GOLD_ORE_BREAK);
 
-    SoundEvent BLOCK_NETHER_GOLD_ORE_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_GOLD_ORE_FALL);
+    SoundEvent BLOCK_NETHER_GOLD_ORE_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_GOLD_ORE_FALL);
 
-    SoundEvent BLOCK_NETHER_GOLD_ORE_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_GOLD_ORE_HIT);
+    SoundEvent BLOCK_NETHER_GOLD_ORE_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_GOLD_ORE_HIT);
 
-    SoundEvent BLOCK_NETHER_GOLD_ORE_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_GOLD_ORE_PLACE);
+    SoundEvent BLOCK_NETHER_GOLD_ORE_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_GOLD_ORE_PLACE);
 
-    SoundEvent BLOCK_NETHER_GOLD_ORE_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_GOLD_ORE_STEP);
+    SoundEvent BLOCK_NETHER_GOLD_ORE_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_GOLD_ORE_STEP);
 
-    SoundEvent BLOCK_NETHER_ORE_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_ORE_BREAK);
+    SoundEvent BLOCK_NETHER_ORE_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_ORE_BREAK);
 
-    SoundEvent BLOCK_NETHER_ORE_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_ORE_FALL);
+    SoundEvent BLOCK_NETHER_ORE_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_ORE_FALL);
 
-    SoundEvent BLOCK_NETHER_ORE_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_ORE_HIT);
+    SoundEvent BLOCK_NETHER_ORE_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_ORE_HIT);
 
-    SoundEvent BLOCK_NETHER_ORE_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_ORE_PLACE);
+    SoundEvent BLOCK_NETHER_ORE_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_ORE_PLACE);
 
-    SoundEvent BLOCK_NETHER_ORE_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_NETHER_ORE_STEP);
+    SoundEvent BLOCK_NETHER_ORE_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_NETHER_ORE_STEP);
 
-    SoundEvent BLOCK_REDSTONE_TORCH_BURNOUT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_REDSTONE_TORCH_BURNOUT);
+    SoundEvent BLOCK_REDSTONE_TORCH_BURNOUT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_REDSTONE_TORCH_BURNOUT);
 
-    SoundEvent BLOCK_RESIN_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_RESIN_BREAK);
+    SoundEvent BLOCK_RESIN_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_RESIN_BREAK);
 
-    SoundEvent BLOCK_RESIN_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_RESIN_FALL);
+    SoundEvent BLOCK_RESIN_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_RESIN_FALL);
 
-    SoundEvent BLOCK_RESIN_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_RESIN_PLACE);
+    SoundEvent BLOCK_RESIN_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_RESIN_PLACE);
 
-    SoundEvent BLOCK_RESIN_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_RESIN_STEP);
+    SoundEvent BLOCK_RESIN_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_RESIN_STEP);
 
-    SoundEvent BLOCK_RESIN_BRICKS_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_RESIN_BRICKS_BREAK);
+    SoundEvent BLOCK_RESIN_BRICKS_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_RESIN_BRICKS_BREAK);
 
-    SoundEvent BLOCK_RESIN_BRICKS_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_RESIN_BRICKS_FALL);
+    SoundEvent BLOCK_RESIN_BRICKS_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_RESIN_BRICKS_FALL);
 
-    SoundEvent BLOCK_RESIN_BRICKS_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_RESIN_BRICKS_HIT);
+    SoundEvent BLOCK_RESIN_BRICKS_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_RESIN_BRICKS_HIT);
 
-    SoundEvent BLOCK_RESIN_BRICKS_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_RESIN_BRICKS_PLACE);
+    SoundEvent BLOCK_RESIN_BRICKS_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_RESIN_BRICKS_PLACE);
 
-    SoundEvent BLOCK_RESIN_BRICKS_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_RESIN_BRICKS_STEP);
+    SoundEvent BLOCK_RESIN_BRICKS_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_RESIN_BRICKS_STEP);
 
-    SoundEvent BLOCK_RESPAWN_ANCHOR_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_RESPAWN_ANCHOR_AMBIENT);
+    SoundEvent BLOCK_RESPAWN_ANCHOR_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_RESPAWN_ANCHOR_AMBIENT);
 
-    SoundEvent BLOCK_RESPAWN_ANCHOR_CHARGE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_RESPAWN_ANCHOR_CHARGE);
+    SoundEvent BLOCK_RESPAWN_ANCHOR_CHARGE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_RESPAWN_ANCHOR_CHARGE);
 
-    SoundEvent BLOCK_RESPAWN_ANCHOR_DEPLETE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_RESPAWN_ANCHOR_DEPLETE);
+    SoundEvent BLOCK_RESPAWN_ANCHOR_DEPLETE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_RESPAWN_ANCHOR_DEPLETE);
 
-    SoundEvent BLOCK_RESPAWN_ANCHOR_SET_SPAWN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_RESPAWN_ANCHOR_SET_SPAWN);
+    SoundEvent BLOCK_RESPAWN_ANCHOR_SET_SPAWN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_RESPAWN_ANCHOR_SET_SPAWN);
 
-    SoundEvent BLOCK_ROOTED_DIRT_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_ROOTED_DIRT_BREAK);
+    SoundEvent BLOCK_ROOTED_DIRT_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_ROOTED_DIRT_BREAK);
 
-    SoundEvent BLOCK_ROOTED_DIRT_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_ROOTED_DIRT_FALL);
+    SoundEvent BLOCK_ROOTED_DIRT_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_ROOTED_DIRT_FALL);
 
-    SoundEvent BLOCK_ROOTED_DIRT_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_ROOTED_DIRT_HIT);
+    SoundEvent BLOCK_ROOTED_DIRT_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_ROOTED_DIRT_HIT);
 
-    SoundEvent BLOCK_ROOTED_DIRT_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_ROOTED_DIRT_PLACE);
+    SoundEvent BLOCK_ROOTED_DIRT_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_ROOTED_DIRT_PLACE);
 
-    SoundEvent BLOCK_ROOTED_DIRT_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_ROOTED_DIRT_STEP);
+    SoundEvent BLOCK_ROOTED_DIRT_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_ROOTED_DIRT_STEP);
 
-    SoundEvent ENTITY_SALMON_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SALMON_AMBIENT);
+    SoundEvent ENTITY_SALMON_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SALMON_AMBIENT);
 
-    SoundEvent ENTITY_SALMON_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SALMON_DEATH);
+    SoundEvent ENTITY_SALMON_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SALMON_DEATH);
 
-    SoundEvent ENTITY_SALMON_FLOP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SALMON_FLOP);
+    SoundEvent ENTITY_SALMON_FLOP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SALMON_FLOP);
 
-    SoundEvent ENTITY_SALMON_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SALMON_HURT);
+    SoundEvent ENTITY_SALMON_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SALMON_HURT);
 
-    SoundEvent BLOCK_SAND_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SAND_BREAK);
+    SoundEvent BLOCK_SAND_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SAND_BREAK);
 
-    SoundEvent BLOCK_SAND_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SAND_FALL);
+    SoundEvent BLOCK_SAND_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SAND_FALL);
 
-    SoundEvent BLOCK_SAND_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SAND_HIT);
+    SoundEvent BLOCK_SAND_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SAND_HIT);
 
-    SoundEvent BLOCK_SAND_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SAND_PLACE);
+    SoundEvent BLOCK_SAND_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SAND_PLACE);
 
-    SoundEvent BLOCK_SAND_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SAND_STEP);
+    SoundEvent BLOCK_SAND_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SAND_STEP);
 
-    SoundEvent BLOCK_SAND_IDLE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SAND_IDLE);
+    SoundEvent BLOCK_SAND_IDLE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SAND_IDLE);
 
-    SoundEvent BLOCK_SCAFFOLDING_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCAFFOLDING_BREAK);
+    SoundEvent BLOCK_SCAFFOLDING_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCAFFOLDING_BREAK);
 
-    SoundEvent BLOCK_SCAFFOLDING_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCAFFOLDING_FALL);
+    SoundEvent BLOCK_SCAFFOLDING_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCAFFOLDING_FALL);
 
-    SoundEvent BLOCK_SCAFFOLDING_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCAFFOLDING_HIT);
+    SoundEvent BLOCK_SCAFFOLDING_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCAFFOLDING_HIT);
 
-    SoundEvent BLOCK_SCAFFOLDING_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCAFFOLDING_PLACE);
+    SoundEvent BLOCK_SCAFFOLDING_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCAFFOLDING_PLACE);
 
-    SoundEvent BLOCK_SCAFFOLDING_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCAFFOLDING_STEP);
+    SoundEvent BLOCK_SCAFFOLDING_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCAFFOLDING_STEP);
 
-    SoundEvent BLOCK_SCULK_SPREAD = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_SPREAD);
+    SoundEvent BLOCK_SCULK_SPREAD = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_SPREAD);
 
-    SoundEvent BLOCK_SCULK_CHARGE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_CHARGE);
+    SoundEvent BLOCK_SCULK_CHARGE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_CHARGE);
 
-    SoundEvent BLOCK_SCULK_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_BREAK);
+    SoundEvent BLOCK_SCULK_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_BREAK);
 
-    SoundEvent BLOCK_SCULK_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_FALL);
+    SoundEvent BLOCK_SCULK_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_FALL);
 
-    SoundEvent BLOCK_SCULK_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_HIT);
+    SoundEvent BLOCK_SCULK_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_HIT);
 
-    SoundEvent BLOCK_SCULK_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_PLACE);
+    SoundEvent BLOCK_SCULK_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_PLACE);
 
-    SoundEvent BLOCK_SCULK_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_STEP);
+    SoundEvent BLOCK_SCULK_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_STEP);
 
-    SoundEvent BLOCK_SCULK_CATALYST_BLOOM = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_CATALYST_BLOOM);
+    SoundEvent BLOCK_SCULK_CATALYST_BLOOM = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_CATALYST_BLOOM);
 
-    SoundEvent BLOCK_SCULK_CATALYST_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_CATALYST_BREAK);
+    SoundEvent BLOCK_SCULK_CATALYST_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_CATALYST_BREAK);
 
-    SoundEvent BLOCK_SCULK_CATALYST_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_CATALYST_FALL);
+    SoundEvent BLOCK_SCULK_CATALYST_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_CATALYST_FALL);
 
-    SoundEvent BLOCK_SCULK_CATALYST_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_CATALYST_HIT);
+    SoundEvent BLOCK_SCULK_CATALYST_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_CATALYST_HIT);
 
-    SoundEvent BLOCK_SCULK_CATALYST_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_CATALYST_PLACE);
+    SoundEvent BLOCK_SCULK_CATALYST_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_CATALYST_PLACE);
 
-    SoundEvent BLOCK_SCULK_CATALYST_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_CATALYST_STEP);
+    SoundEvent BLOCK_SCULK_CATALYST_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_CATALYST_STEP);
 
-    SoundEvent BLOCK_SCULK_SENSOR_CLICKING = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_SENSOR_CLICKING);
+    SoundEvent BLOCK_SCULK_SENSOR_CLICKING = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_SENSOR_CLICKING);
 
-    SoundEvent BLOCK_SCULK_SENSOR_CLICKING_STOP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_SENSOR_CLICKING_STOP);
+    SoundEvent BLOCK_SCULK_SENSOR_CLICKING_STOP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_SENSOR_CLICKING_STOP);
 
-    SoundEvent BLOCK_SCULK_SENSOR_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_SENSOR_BREAK);
+    SoundEvent BLOCK_SCULK_SENSOR_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_SENSOR_BREAK);
 
-    SoundEvent BLOCK_SCULK_SENSOR_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_SENSOR_FALL);
+    SoundEvent BLOCK_SCULK_SENSOR_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_SENSOR_FALL);
 
-    SoundEvent BLOCK_SCULK_SENSOR_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_SENSOR_HIT);
+    SoundEvent BLOCK_SCULK_SENSOR_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_SENSOR_HIT);
 
-    SoundEvent BLOCK_SCULK_SENSOR_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_SENSOR_PLACE);
+    SoundEvent BLOCK_SCULK_SENSOR_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_SENSOR_PLACE);
 
-    SoundEvent BLOCK_SCULK_SENSOR_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_SENSOR_STEP);
+    SoundEvent BLOCK_SCULK_SENSOR_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_SENSOR_STEP);
 
-    SoundEvent BLOCK_SCULK_SHRIEKER_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_SHRIEKER_BREAK);
+    SoundEvent BLOCK_SCULK_SHRIEKER_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_SHRIEKER_BREAK);
 
-    SoundEvent BLOCK_SCULK_SHRIEKER_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_SHRIEKER_FALL);
+    SoundEvent BLOCK_SCULK_SHRIEKER_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_SHRIEKER_FALL);
 
-    SoundEvent BLOCK_SCULK_SHRIEKER_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_SHRIEKER_HIT);
+    SoundEvent BLOCK_SCULK_SHRIEKER_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_SHRIEKER_HIT);
 
-    SoundEvent BLOCK_SCULK_SHRIEKER_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_SHRIEKER_PLACE);
+    SoundEvent BLOCK_SCULK_SHRIEKER_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_SHRIEKER_PLACE);
 
-    SoundEvent BLOCK_SCULK_SHRIEKER_SHRIEK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_SHRIEKER_SHRIEK);
+    SoundEvent BLOCK_SCULK_SHRIEKER_SHRIEK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_SHRIEKER_SHRIEK);
 
-    SoundEvent BLOCK_SCULK_SHRIEKER_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_SHRIEKER_STEP);
+    SoundEvent BLOCK_SCULK_SHRIEKER_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_SHRIEKER_STEP);
 
-    SoundEvent BLOCK_SCULK_VEIN_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_VEIN_BREAK);
+    SoundEvent BLOCK_SCULK_VEIN_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_VEIN_BREAK);
 
-    SoundEvent BLOCK_SCULK_VEIN_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_VEIN_FALL);
+    SoundEvent BLOCK_SCULK_VEIN_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_VEIN_FALL);
 
-    SoundEvent BLOCK_SCULK_VEIN_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_VEIN_HIT);
+    SoundEvent BLOCK_SCULK_VEIN_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_VEIN_HIT);
 
-    SoundEvent BLOCK_SCULK_VEIN_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_VEIN_PLACE);
+    SoundEvent BLOCK_SCULK_VEIN_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_VEIN_PLACE);
 
-    SoundEvent BLOCK_SCULK_VEIN_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SCULK_VEIN_STEP);
+    SoundEvent BLOCK_SCULK_VEIN_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SCULK_VEIN_STEP);
 
-    SoundEvent ENTITY_SHEEP_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SHEEP_AMBIENT);
+    SoundEvent ENTITY_SHEEP_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SHEEP_AMBIENT);
 
-    SoundEvent ENTITY_SHEEP_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SHEEP_DEATH);
+    SoundEvent ENTITY_SHEEP_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SHEEP_DEATH);
 
-    SoundEvent ENTITY_SHEEP_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SHEEP_HURT);
+    SoundEvent ENTITY_SHEEP_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SHEEP_HURT);
 
-    SoundEvent ENTITY_SHEEP_SHEAR = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SHEEP_SHEAR);
+    SoundEvent ENTITY_SHEEP_SHEAR = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SHEEP_SHEAR);
 
-    SoundEvent ENTITY_SHEEP_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SHEEP_STEP);
+    SoundEvent ENTITY_SHEEP_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SHEEP_STEP);
 
-    SoundEvent ITEM_SHEARS_SNIP = BuiltinSoundEvent.get(SoundEventKey.ITEM_SHEARS_SNIP);
+    SoundEvent ITEM_SHEARS_SNIP = BuiltinSoundEvent.get(SoundEventKeys.ITEM_SHEARS_SNIP);
 
-    SoundEvent BLOCK_SHELF_ACTIVATE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SHELF_ACTIVATE);
+    SoundEvent BLOCK_SHELF_ACTIVATE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SHELF_ACTIVATE);
 
-    SoundEvent BLOCK_SHELF_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SHELF_BREAK);
+    SoundEvent BLOCK_SHELF_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SHELF_BREAK);
 
-    SoundEvent BLOCK_SHELF_DEACTIVATE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SHELF_DEACTIVATE);
+    SoundEvent BLOCK_SHELF_DEACTIVATE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SHELF_DEACTIVATE);
 
-    SoundEvent BLOCK_SHELF_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SHELF_FALL);
+    SoundEvent BLOCK_SHELF_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SHELF_FALL);
 
-    SoundEvent BLOCK_SHELF_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SHELF_HIT);
+    SoundEvent BLOCK_SHELF_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SHELF_HIT);
 
-    SoundEvent BLOCK_SHELF_MULTI_SWAP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SHELF_MULTI_SWAP);
+    SoundEvent BLOCK_SHELF_MULTI_SWAP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SHELF_MULTI_SWAP);
 
-    SoundEvent BLOCK_SHELF_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SHELF_PLACE);
+    SoundEvent BLOCK_SHELF_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SHELF_PLACE);
 
-    SoundEvent BLOCK_SHELF_PLACE_ITEM = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SHELF_PLACE_ITEM);
+    SoundEvent BLOCK_SHELF_PLACE_ITEM = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SHELF_PLACE_ITEM);
 
-    SoundEvent BLOCK_SHELF_SINGLE_SWAP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SHELF_SINGLE_SWAP);
+    SoundEvent BLOCK_SHELF_SINGLE_SWAP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SHELF_SINGLE_SWAP);
 
-    SoundEvent BLOCK_SHELF_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SHELF_STEP);
+    SoundEvent BLOCK_SHELF_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SHELF_STEP);
 
-    SoundEvent BLOCK_SHELF_TAKE_ITEM = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SHELF_TAKE_ITEM);
+    SoundEvent BLOCK_SHELF_TAKE_ITEM = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SHELF_TAKE_ITEM);
 
-    SoundEvent ITEM_SHIELD_BLOCK = BuiltinSoundEvent.get(SoundEventKey.ITEM_SHIELD_BLOCK);
+    SoundEvent ITEM_SHIELD_BLOCK = BuiltinSoundEvent.get(SoundEventKeys.ITEM_SHIELD_BLOCK);
 
-    SoundEvent ITEM_SHIELD_BREAK = BuiltinSoundEvent.get(SoundEventKey.ITEM_SHIELD_BREAK);
+    SoundEvent ITEM_SHIELD_BREAK = BuiltinSoundEvent.get(SoundEventKeys.ITEM_SHIELD_BREAK);
 
-    SoundEvent BLOCK_SHROOMLIGHT_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SHROOMLIGHT_BREAK);
+    SoundEvent BLOCK_SHROOMLIGHT_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SHROOMLIGHT_BREAK);
 
-    SoundEvent BLOCK_SHROOMLIGHT_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SHROOMLIGHT_STEP);
+    SoundEvent BLOCK_SHROOMLIGHT_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SHROOMLIGHT_STEP);
 
-    SoundEvent BLOCK_SHROOMLIGHT_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SHROOMLIGHT_PLACE);
+    SoundEvent BLOCK_SHROOMLIGHT_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SHROOMLIGHT_PLACE);
 
-    SoundEvent BLOCK_SHROOMLIGHT_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SHROOMLIGHT_HIT);
+    SoundEvent BLOCK_SHROOMLIGHT_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SHROOMLIGHT_HIT);
 
-    SoundEvent BLOCK_SHROOMLIGHT_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SHROOMLIGHT_FALL);
+    SoundEvent BLOCK_SHROOMLIGHT_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SHROOMLIGHT_FALL);
 
-    SoundEvent ITEM_SHOVEL_FLATTEN = BuiltinSoundEvent.get(SoundEventKey.ITEM_SHOVEL_FLATTEN);
+    SoundEvent ITEM_SHOVEL_FLATTEN = BuiltinSoundEvent.get(SoundEventKeys.ITEM_SHOVEL_FLATTEN);
 
-    SoundEvent ENTITY_SHULKER_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SHULKER_AMBIENT);
+    SoundEvent ENTITY_SHULKER_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SHULKER_AMBIENT);
 
-    SoundEvent BLOCK_SHULKER_BOX_CLOSE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SHULKER_BOX_CLOSE);
+    SoundEvent BLOCK_SHULKER_BOX_CLOSE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SHULKER_BOX_CLOSE);
 
-    SoundEvent BLOCK_SHULKER_BOX_OPEN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SHULKER_BOX_OPEN);
+    SoundEvent BLOCK_SHULKER_BOX_OPEN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SHULKER_BOX_OPEN);
 
-    SoundEvent ENTITY_SHULKER_BULLET_HIT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SHULKER_BULLET_HIT);
+    SoundEvent ENTITY_SHULKER_BULLET_HIT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SHULKER_BULLET_HIT);
 
-    SoundEvent ENTITY_SHULKER_BULLET_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SHULKER_BULLET_HURT);
+    SoundEvent ENTITY_SHULKER_BULLET_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SHULKER_BULLET_HURT);
 
-    SoundEvent ENTITY_SHULKER_CLOSE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SHULKER_CLOSE);
+    SoundEvent ENTITY_SHULKER_CLOSE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SHULKER_CLOSE);
 
-    SoundEvent ENTITY_SHULKER_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SHULKER_DEATH);
+    SoundEvent ENTITY_SHULKER_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SHULKER_DEATH);
 
-    SoundEvent ENTITY_SHULKER_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SHULKER_HURT);
+    SoundEvent ENTITY_SHULKER_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SHULKER_HURT);
 
-    SoundEvent ENTITY_SHULKER_HURT_CLOSED = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SHULKER_HURT_CLOSED);
+    SoundEvent ENTITY_SHULKER_HURT_CLOSED = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SHULKER_HURT_CLOSED);
 
-    SoundEvent ENTITY_SHULKER_OPEN = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SHULKER_OPEN);
+    SoundEvent ENTITY_SHULKER_OPEN = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SHULKER_OPEN);
 
-    SoundEvent ENTITY_SHULKER_SHOOT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SHULKER_SHOOT);
+    SoundEvent ENTITY_SHULKER_SHOOT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SHULKER_SHOOT);
 
-    SoundEvent ENTITY_SHULKER_TELEPORT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SHULKER_TELEPORT);
+    SoundEvent ENTITY_SHULKER_TELEPORT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SHULKER_TELEPORT);
 
-    SoundEvent ENTITY_SILVERFISH_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SILVERFISH_AMBIENT);
+    SoundEvent ENTITY_SILVERFISH_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SILVERFISH_AMBIENT);
 
-    SoundEvent ENTITY_SILVERFISH_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SILVERFISH_DEATH);
+    SoundEvent ENTITY_SILVERFISH_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SILVERFISH_DEATH);
 
-    SoundEvent ENTITY_SILVERFISH_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SILVERFISH_HURT);
+    SoundEvent ENTITY_SILVERFISH_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SILVERFISH_HURT);
 
-    SoundEvent ENTITY_SILVERFISH_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SILVERFISH_STEP);
+    SoundEvent ENTITY_SILVERFISH_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SILVERFISH_STEP);
 
-    SoundEvent ENTITY_SKELETON_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SKELETON_AMBIENT);
+    SoundEvent ENTITY_SKELETON_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SKELETON_AMBIENT);
 
-    SoundEvent ENTITY_SKELETON_CONVERTED_TO_STRAY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SKELETON_CONVERTED_TO_STRAY);
+    SoundEvent ENTITY_SKELETON_CONVERTED_TO_STRAY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SKELETON_CONVERTED_TO_STRAY);
 
-    SoundEvent ENTITY_SKELETON_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SKELETON_DEATH);
+    SoundEvent ENTITY_SKELETON_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SKELETON_DEATH);
 
-    SoundEvent ENTITY_SKELETON_HORSE_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SKELETON_HORSE_AMBIENT);
+    SoundEvent ENTITY_SKELETON_HORSE_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SKELETON_HORSE_AMBIENT);
 
-    SoundEvent ENTITY_SKELETON_HORSE_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SKELETON_HORSE_DEATH);
+    SoundEvent ENTITY_SKELETON_HORSE_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SKELETON_HORSE_DEATH);
 
-    SoundEvent ENTITY_SKELETON_HORSE_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SKELETON_HORSE_HURT);
+    SoundEvent ENTITY_SKELETON_HORSE_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SKELETON_HORSE_HURT);
 
-    SoundEvent ENTITY_SKELETON_HORSE_SWIM = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SKELETON_HORSE_SWIM);
+    SoundEvent ENTITY_SKELETON_HORSE_SWIM = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SKELETON_HORSE_SWIM);
 
-    SoundEvent ENTITY_SKELETON_HORSE_AMBIENT_WATER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SKELETON_HORSE_AMBIENT_WATER);
+    SoundEvent ENTITY_SKELETON_HORSE_AMBIENT_WATER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SKELETON_HORSE_AMBIENT_WATER);
 
-    SoundEvent ENTITY_SKELETON_HORSE_GALLOP_WATER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SKELETON_HORSE_GALLOP_WATER);
+    SoundEvent ENTITY_SKELETON_HORSE_GALLOP_WATER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SKELETON_HORSE_GALLOP_WATER);
 
-    SoundEvent ENTITY_SKELETON_HORSE_JUMP_WATER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SKELETON_HORSE_JUMP_WATER);
+    SoundEvent ENTITY_SKELETON_HORSE_JUMP_WATER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SKELETON_HORSE_JUMP_WATER);
 
-    SoundEvent ENTITY_SKELETON_HORSE_STEP_WATER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SKELETON_HORSE_STEP_WATER);
+    SoundEvent ENTITY_SKELETON_HORSE_STEP_WATER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SKELETON_HORSE_STEP_WATER);
 
-    SoundEvent ENTITY_SKELETON_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SKELETON_HURT);
+    SoundEvent ENTITY_SKELETON_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SKELETON_HURT);
 
-    SoundEvent ENTITY_SKELETON_SHOOT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SKELETON_SHOOT);
+    SoundEvent ENTITY_SKELETON_SHOOT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SKELETON_SHOOT);
 
-    SoundEvent ENTITY_SKELETON_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SKELETON_STEP);
+    SoundEvent ENTITY_SKELETON_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SKELETON_STEP);
 
-    SoundEvent ENTITY_SLIME_ATTACK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SLIME_ATTACK);
+    SoundEvent ENTITY_SLIME_ATTACK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SLIME_ATTACK);
 
-    SoundEvent ENTITY_SLIME_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SLIME_DEATH);
+    SoundEvent ENTITY_SLIME_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SLIME_DEATH);
 
-    SoundEvent ENTITY_SLIME_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SLIME_HURT);
+    SoundEvent ENTITY_SLIME_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SLIME_HURT);
 
-    SoundEvent ENTITY_SLIME_JUMP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SLIME_JUMP);
+    SoundEvent ENTITY_SLIME_JUMP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SLIME_JUMP);
 
-    SoundEvent ENTITY_SLIME_SQUISH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SLIME_SQUISH);
+    SoundEvent ENTITY_SLIME_SQUISH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SLIME_SQUISH);
 
-    SoundEvent BLOCK_SLIME_BLOCK_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SLIME_BLOCK_BREAK);
+    SoundEvent BLOCK_SLIME_BLOCK_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SLIME_BLOCK_BREAK);
 
-    SoundEvent BLOCK_SLIME_BLOCK_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SLIME_BLOCK_FALL);
+    SoundEvent BLOCK_SLIME_BLOCK_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SLIME_BLOCK_FALL);
 
-    SoundEvent BLOCK_SLIME_BLOCK_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SLIME_BLOCK_HIT);
+    SoundEvent BLOCK_SLIME_BLOCK_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SLIME_BLOCK_HIT);
 
-    SoundEvent BLOCK_SLIME_BLOCK_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SLIME_BLOCK_PLACE);
+    SoundEvent BLOCK_SLIME_BLOCK_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SLIME_BLOCK_PLACE);
 
-    SoundEvent BLOCK_SLIME_BLOCK_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SLIME_BLOCK_STEP);
+    SoundEvent BLOCK_SLIME_BLOCK_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SLIME_BLOCK_STEP);
 
-    SoundEvent BLOCK_SMALL_AMETHYST_BUD_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SMALL_AMETHYST_BUD_BREAK);
+    SoundEvent BLOCK_SMALL_AMETHYST_BUD_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SMALL_AMETHYST_BUD_BREAK);
 
-    SoundEvent BLOCK_SMALL_AMETHYST_BUD_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SMALL_AMETHYST_BUD_PLACE);
+    SoundEvent BLOCK_SMALL_AMETHYST_BUD_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SMALL_AMETHYST_BUD_PLACE);
 
-    SoundEvent BLOCK_SMALL_DRIPLEAF_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SMALL_DRIPLEAF_BREAK);
+    SoundEvent BLOCK_SMALL_DRIPLEAF_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SMALL_DRIPLEAF_BREAK);
 
-    SoundEvent BLOCK_SMALL_DRIPLEAF_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SMALL_DRIPLEAF_FALL);
+    SoundEvent BLOCK_SMALL_DRIPLEAF_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SMALL_DRIPLEAF_FALL);
 
-    SoundEvent BLOCK_SMALL_DRIPLEAF_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SMALL_DRIPLEAF_HIT);
+    SoundEvent BLOCK_SMALL_DRIPLEAF_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SMALL_DRIPLEAF_HIT);
 
-    SoundEvent BLOCK_SMALL_DRIPLEAF_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SMALL_DRIPLEAF_PLACE);
+    SoundEvent BLOCK_SMALL_DRIPLEAF_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SMALL_DRIPLEAF_PLACE);
 
-    SoundEvent BLOCK_SMALL_DRIPLEAF_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SMALL_DRIPLEAF_STEP);
+    SoundEvent BLOCK_SMALL_DRIPLEAF_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SMALL_DRIPLEAF_STEP);
 
-    SoundEvent BLOCK_SOUL_SAND_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SOUL_SAND_BREAK);
+    SoundEvent BLOCK_SOUL_SAND_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SOUL_SAND_BREAK);
 
-    SoundEvent BLOCK_SOUL_SAND_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SOUL_SAND_STEP);
+    SoundEvent BLOCK_SOUL_SAND_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SOUL_SAND_STEP);
 
-    SoundEvent BLOCK_SOUL_SAND_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SOUL_SAND_PLACE);
+    SoundEvent BLOCK_SOUL_SAND_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SOUL_SAND_PLACE);
 
-    SoundEvent BLOCK_SOUL_SAND_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SOUL_SAND_HIT);
+    SoundEvent BLOCK_SOUL_SAND_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SOUL_SAND_HIT);
 
-    SoundEvent BLOCK_SOUL_SAND_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SOUL_SAND_FALL);
+    SoundEvent BLOCK_SOUL_SAND_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SOUL_SAND_FALL);
 
-    SoundEvent BLOCK_SOUL_SOIL_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SOUL_SOIL_BREAK);
+    SoundEvent BLOCK_SOUL_SOIL_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SOUL_SOIL_BREAK);
 
-    SoundEvent BLOCK_SOUL_SOIL_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SOUL_SOIL_STEP);
+    SoundEvent BLOCK_SOUL_SOIL_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SOUL_SOIL_STEP);
 
-    SoundEvent BLOCK_SOUL_SOIL_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SOUL_SOIL_PLACE);
+    SoundEvent BLOCK_SOUL_SOIL_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SOUL_SOIL_PLACE);
 
-    SoundEvent BLOCK_SOUL_SOIL_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SOUL_SOIL_HIT);
+    SoundEvent BLOCK_SOUL_SOIL_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SOUL_SOIL_HIT);
 
-    SoundEvent BLOCK_SOUL_SOIL_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SOUL_SOIL_FALL);
+    SoundEvent BLOCK_SOUL_SOIL_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SOUL_SOIL_FALL);
 
-    SoundEvent PARTICLE_SOUL_ESCAPE = BuiltinSoundEvent.get(SoundEventKey.PARTICLE_SOUL_ESCAPE);
+    SoundEvent PARTICLE_SOUL_ESCAPE = BuiltinSoundEvent.get(SoundEventKeys.PARTICLE_SOUL_ESCAPE);
 
-    SoundEvent BLOCK_SPAWNER_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SPAWNER_BREAK);
+    SoundEvent BLOCK_SPAWNER_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SPAWNER_BREAK);
 
-    SoundEvent BLOCK_SPAWNER_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SPAWNER_FALL);
+    SoundEvent BLOCK_SPAWNER_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SPAWNER_FALL);
 
-    SoundEvent BLOCK_SPAWNER_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SPAWNER_HIT);
+    SoundEvent BLOCK_SPAWNER_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SPAWNER_HIT);
 
-    SoundEvent BLOCK_SPAWNER_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SPAWNER_PLACE);
+    SoundEvent BLOCK_SPAWNER_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SPAWNER_PLACE);
 
-    SoundEvent BLOCK_SPAWNER_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SPAWNER_STEP);
+    SoundEvent BLOCK_SPAWNER_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SPAWNER_STEP);
 
-    SoundEvent ITEM_SPEAR_USE = BuiltinSoundEvent.get(SoundEventKey.ITEM_SPEAR_USE);
+    SoundEvent ITEM_SPEAR_USE = BuiltinSoundEvent.get(SoundEventKeys.ITEM_SPEAR_USE);
 
-    SoundEvent ITEM_SPEAR_HIT = BuiltinSoundEvent.get(SoundEventKey.ITEM_SPEAR_HIT);
+    SoundEvent ITEM_SPEAR_HIT = BuiltinSoundEvent.get(SoundEventKeys.ITEM_SPEAR_HIT);
 
-    SoundEvent ITEM_SPEAR_ATTACK = BuiltinSoundEvent.get(SoundEventKey.ITEM_SPEAR_ATTACK);
+    SoundEvent ITEM_SPEAR_ATTACK = BuiltinSoundEvent.get(SoundEventKeys.ITEM_SPEAR_ATTACK);
 
-    SoundEvent ITEM_SPEAR_WOOD_USE = BuiltinSoundEvent.get(SoundEventKey.ITEM_SPEAR_WOOD_USE);
+    SoundEvent ITEM_SPEAR_WOOD_USE = BuiltinSoundEvent.get(SoundEventKeys.ITEM_SPEAR_WOOD_USE);
 
-    SoundEvent ITEM_SPEAR_WOOD_HIT = BuiltinSoundEvent.get(SoundEventKey.ITEM_SPEAR_WOOD_HIT);
+    SoundEvent ITEM_SPEAR_WOOD_HIT = BuiltinSoundEvent.get(SoundEventKeys.ITEM_SPEAR_WOOD_HIT);
 
-    SoundEvent ITEM_SPEAR_WOOD_ATTACK = BuiltinSoundEvent.get(SoundEventKey.ITEM_SPEAR_WOOD_ATTACK);
+    SoundEvent ITEM_SPEAR_WOOD_ATTACK = BuiltinSoundEvent.get(SoundEventKeys.ITEM_SPEAR_WOOD_ATTACK);
 
-    SoundEvent BLOCK_SPORE_BLOSSOM_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SPORE_BLOSSOM_BREAK);
+    SoundEvent BLOCK_SPORE_BLOSSOM_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SPORE_BLOSSOM_BREAK);
 
-    SoundEvent BLOCK_SPORE_BLOSSOM_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SPORE_BLOSSOM_FALL);
+    SoundEvent BLOCK_SPORE_BLOSSOM_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SPORE_BLOSSOM_FALL);
 
-    SoundEvent BLOCK_SPORE_BLOSSOM_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SPORE_BLOSSOM_HIT);
+    SoundEvent BLOCK_SPORE_BLOSSOM_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SPORE_BLOSSOM_HIT);
 
-    SoundEvent BLOCK_SPORE_BLOSSOM_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SPORE_BLOSSOM_PLACE);
+    SoundEvent BLOCK_SPORE_BLOSSOM_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SPORE_BLOSSOM_PLACE);
 
-    SoundEvent BLOCK_SPORE_BLOSSOM_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SPORE_BLOSSOM_STEP);
+    SoundEvent BLOCK_SPORE_BLOSSOM_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SPORE_BLOSSOM_STEP);
 
-    SoundEvent ENTITY_STRIDER_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_STRIDER_AMBIENT);
+    SoundEvent ENTITY_STRIDER_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_STRIDER_AMBIENT);
 
-    SoundEvent ENTITY_STRIDER_HAPPY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_STRIDER_HAPPY);
+    SoundEvent ENTITY_STRIDER_HAPPY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_STRIDER_HAPPY);
 
-    SoundEvent ENTITY_STRIDER_RETREAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_STRIDER_RETREAT);
+    SoundEvent ENTITY_STRIDER_RETREAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_STRIDER_RETREAT);
 
-    SoundEvent ENTITY_STRIDER_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_STRIDER_DEATH);
+    SoundEvent ENTITY_STRIDER_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_STRIDER_DEATH);
 
-    SoundEvent ENTITY_STRIDER_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_STRIDER_HURT);
+    SoundEvent ENTITY_STRIDER_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_STRIDER_HURT);
 
-    SoundEvent ENTITY_STRIDER_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_STRIDER_STEP);
+    SoundEvent ENTITY_STRIDER_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_STRIDER_STEP);
 
-    SoundEvent ENTITY_STRIDER_STEP_LAVA = BuiltinSoundEvent.get(SoundEventKey.ENTITY_STRIDER_STEP_LAVA);
+    SoundEvent ENTITY_STRIDER_STEP_LAVA = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_STRIDER_STEP_LAVA);
 
-    SoundEvent ENTITY_STRIDER_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_STRIDER_EAT);
+    SoundEvent ENTITY_STRIDER_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_STRIDER_EAT);
 
-    SoundEvent ENTITY_STRIDER_SADDLE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_STRIDER_SADDLE);
+    SoundEvent ENTITY_STRIDER_SADDLE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_STRIDER_SADDLE);
 
-    SoundEvent ENTITY_SLIME_DEATH_SMALL = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SLIME_DEATH_SMALL);
+    SoundEvent ENTITY_SLIME_DEATH_SMALL = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SLIME_DEATH_SMALL);
 
-    SoundEvent ENTITY_SLIME_HURT_SMALL = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SLIME_HURT_SMALL);
+    SoundEvent ENTITY_SLIME_HURT_SMALL = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SLIME_HURT_SMALL);
 
-    SoundEvent ENTITY_SLIME_JUMP_SMALL = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SLIME_JUMP_SMALL);
+    SoundEvent ENTITY_SLIME_JUMP_SMALL = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SLIME_JUMP_SMALL);
 
-    SoundEvent ENTITY_SLIME_SQUISH_SMALL = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SLIME_SQUISH_SMALL);
+    SoundEvent ENTITY_SLIME_SQUISH_SMALL = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SLIME_SQUISH_SMALL);
 
-    SoundEvent BLOCK_SMITHING_TABLE_USE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SMITHING_TABLE_USE);
+    SoundEvent BLOCK_SMITHING_TABLE_USE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SMITHING_TABLE_USE);
 
-    SoundEvent BLOCK_SMOKER_SMOKE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SMOKER_SMOKE);
+    SoundEvent BLOCK_SMOKER_SMOKE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SMOKER_SMOKE);
 
-    SoundEvent ENTITY_SNIFFER_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SNIFFER_STEP);
+    SoundEvent ENTITY_SNIFFER_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SNIFFER_STEP);
 
-    SoundEvent ENTITY_SNIFFER_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SNIFFER_EAT);
+    SoundEvent ENTITY_SNIFFER_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SNIFFER_EAT);
 
-    SoundEvent ENTITY_SNIFFER_IDLE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SNIFFER_IDLE);
+    SoundEvent ENTITY_SNIFFER_IDLE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SNIFFER_IDLE);
 
-    SoundEvent ENTITY_SNIFFER_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SNIFFER_HURT);
+    SoundEvent ENTITY_SNIFFER_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SNIFFER_HURT);
 
-    SoundEvent ENTITY_SNIFFER_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SNIFFER_DEATH);
+    SoundEvent ENTITY_SNIFFER_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SNIFFER_DEATH);
 
-    SoundEvent ENTITY_SNIFFER_DROP_SEED = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SNIFFER_DROP_SEED);
+    SoundEvent ENTITY_SNIFFER_DROP_SEED = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SNIFFER_DROP_SEED);
 
-    SoundEvent ENTITY_SNIFFER_SCENTING = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SNIFFER_SCENTING);
+    SoundEvent ENTITY_SNIFFER_SCENTING = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SNIFFER_SCENTING);
 
-    SoundEvent ENTITY_SNIFFER_SNIFFING = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SNIFFER_SNIFFING);
+    SoundEvent ENTITY_SNIFFER_SNIFFING = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SNIFFER_SNIFFING);
 
-    SoundEvent ENTITY_SNIFFER_SEARCHING = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SNIFFER_SEARCHING);
+    SoundEvent ENTITY_SNIFFER_SEARCHING = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SNIFFER_SEARCHING);
 
-    SoundEvent ENTITY_SNIFFER_DIGGING = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SNIFFER_DIGGING);
+    SoundEvent ENTITY_SNIFFER_DIGGING = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SNIFFER_DIGGING);
 
-    SoundEvent ENTITY_SNIFFER_DIGGING_STOP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SNIFFER_DIGGING_STOP);
+    SoundEvent ENTITY_SNIFFER_DIGGING_STOP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SNIFFER_DIGGING_STOP);
 
-    SoundEvent ENTITY_SNIFFER_HAPPY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SNIFFER_HAPPY);
+    SoundEvent ENTITY_SNIFFER_HAPPY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SNIFFER_HAPPY);
 
-    SoundEvent BLOCK_SNIFFER_EGG_PLOP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SNIFFER_EGG_PLOP);
+    SoundEvent BLOCK_SNIFFER_EGG_PLOP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SNIFFER_EGG_PLOP);
 
-    SoundEvent BLOCK_SNIFFER_EGG_CRACK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SNIFFER_EGG_CRACK);
+    SoundEvent BLOCK_SNIFFER_EGG_CRACK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SNIFFER_EGG_CRACK);
 
-    SoundEvent BLOCK_SNIFFER_EGG_HATCH = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SNIFFER_EGG_HATCH);
+    SoundEvent BLOCK_SNIFFER_EGG_HATCH = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SNIFFER_EGG_HATCH);
 
-    SoundEvent ENTITY_SNOWBALL_THROW = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SNOWBALL_THROW);
+    SoundEvent ENTITY_SNOWBALL_THROW = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SNOWBALL_THROW);
 
-    SoundEvent BLOCK_SNOW_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SNOW_BREAK);
+    SoundEvent BLOCK_SNOW_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SNOW_BREAK);
 
-    SoundEvent BLOCK_SNOW_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SNOW_FALL);
+    SoundEvent BLOCK_SNOW_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SNOW_FALL);
 
-    SoundEvent ENTITY_SNOW_GOLEM_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SNOW_GOLEM_AMBIENT);
+    SoundEvent ENTITY_SNOW_GOLEM_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SNOW_GOLEM_AMBIENT);
 
-    SoundEvent ENTITY_SNOW_GOLEM_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SNOW_GOLEM_DEATH);
+    SoundEvent ENTITY_SNOW_GOLEM_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SNOW_GOLEM_DEATH);
 
-    SoundEvent ENTITY_SNOW_GOLEM_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SNOW_GOLEM_HURT);
+    SoundEvent ENTITY_SNOW_GOLEM_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SNOW_GOLEM_HURT);
 
-    SoundEvent ENTITY_SNOW_GOLEM_SHOOT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SNOW_GOLEM_SHOOT);
+    SoundEvent ENTITY_SNOW_GOLEM_SHOOT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SNOW_GOLEM_SHOOT);
 
-    SoundEvent ENTITY_SNOW_GOLEM_SHEAR = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SNOW_GOLEM_SHEAR);
+    SoundEvent ENTITY_SNOW_GOLEM_SHEAR = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SNOW_GOLEM_SHEAR);
 
-    SoundEvent BLOCK_SNOW_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SNOW_HIT);
+    SoundEvent BLOCK_SNOW_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SNOW_HIT);
 
-    SoundEvent BLOCK_SNOW_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SNOW_PLACE);
+    SoundEvent BLOCK_SNOW_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SNOW_PLACE);
 
-    SoundEvent BLOCK_SNOW_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SNOW_STEP);
+    SoundEvent BLOCK_SNOW_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SNOW_STEP);
 
-    SoundEvent ENTITY_SPIDER_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SPIDER_AMBIENT);
+    SoundEvent ENTITY_SPIDER_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SPIDER_AMBIENT);
 
-    SoundEvent ENTITY_SPIDER_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SPIDER_DEATH);
+    SoundEvent ENTITY_SPIDER_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SPIDER_DEATH);
 
-    SoundEvent ENTITY_SPIDER_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SPIDER_HURT);
+    SoundEvent ENTITY_SPIDER_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SPIDER_HURT);
 
-    SoundEvent ENTITY_SPIDER_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SPIDER_STEP);
+    SoundEvent ENTITY_SPIDER_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SPIDER_STEP);
 
-    SoundEvent ENTITY_SPLASH_POTION_BREAK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SPLASH_POTION_BREAK);
+    SoundEvent ENTITY_SPLASH_POTION_BREAK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SPLASH_POTION_BREAK);
 
-    SoundEvent ENTITY_SPLASH_POTION_THROW = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SPLASH_POTION_THROW);
+    SoundEvent ENTITY_SPLASH_POTION_THROW = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SPLASH_POTION_THROW);
 
-    SoundEvent BLOCK_SPONGE_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SPONGE_BREAK);
+    SoundEvent BLOCK_SPONGE_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SPONGE_BREAK);
 
-    SoundEvent BLOCK_SPONGE_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SPONGE_FALL);
+    SoundEvent BLOCK_SPONGE_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SPONGE_FALL);
 
-    SoundEvent BLOCK_SPONGE_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SPONGE_HIT);
+    SoundEvent BLOCK_SPONGE_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SPONGE_HIT);
 
-    SoundEvent BLOCK_SPONGE_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SPONGE_PLACE);
+    SoundEvent BLOCK_SPONGE_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SPONGE_PLACE);
 
-    SoundEvent BLOCK_SPONGE_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SPONGE_STEP);
+    SoundEvent BLOCK_SPONGE_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SPONGE_STEP);
 
-    SoundEvent BLOCK_SPONGE_ABSORB = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SPONGE_ABSORB);
+    SoundEvent BLOCK_SPONGE_ABSORB = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SPONGE_ABSORB);
 
-    SoundEvent ITEM_SPYGLASS_USE = BuiltinSoundEvent.get(SoundEventKey.ITEM_SPYGLASS_USE);
+    SoundEvent ITEM_SPYGLASS_USE = BuiltinSoundEvent.get(SoundEventKeys.ITEM_SPYGLASS_USE);
 
-    SoundEvent ITEM_SPYGLASS_STOP_USING = BuiltinSoundEvent.get(SoundEventKey.ITEM_SPYGLASS_STOP_USING);
+    SoundEvent ITEM_SPYGLASS_STOP_USING = BuiltinSoundEvent.get(SoundEventKeys.ITEM_SPYGLASS_STOP_USING);
 
-    SoundEvent ENTITY_SQUID_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SQUID_AMBIENT);
+    SoundEvent ENTITY_SQUID_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SQUID_AMBIENT);
 
-    SoundEvent ENTITY_SQUID_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SQUID_DEATH);
+    SoundEvent ENTITY_SQUID_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SQUID_DEATH);
 
-    SoundEvent ENTITY_SQUID_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SQUID_HURT);
+    SoundEvent ENTITY_SQUID_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SQUID_HURT);
 
-    SoundEvent ENTITY_SQUID_SQUIRT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SQUID_SQUIRT);
+    SoundEvent ENTITY_SQUID_SQUIRT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SQUID_SQUIRT);
 
-    SoundEvent BLOCK_STONE_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_STONE_BREAK);
+    SoundEvent BLOCK_STONE_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_STONE_BREAK);
 
-    SoundEvent BLOCK_STONE_BUTTON_CLICK_OFF = BuiltinSoundEvent.get(SoundEventKey.BLOCK_STONE_BUTTON_CLICK_OFF);
+    SoundEvent BLOCK_STONE_BUTTON_CLICK_OFF = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_STONE_BUTTON_CLICK_OFF);
 
-    SoundEvent BLOCK_STONE_BUTTON_CLICK_ON = BuiltinSoundEvent.get(SoundEventKey.BLOCK_STONE_BUTTON_CLICK_ON);
+    SoundEvent BLOCK_STONE_BUTTON_CLICK_ON = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_STONE_BUTTON_CLICK_ON);
 
-    SoundEvent BLOCK_STONE_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_STONE_FALL);
+    SoundEvent BLOCK_STONE_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_STONE_FALL);
 
-    SoundEvent BLOCK_STONE_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_STONE_HIT);
+    SoundEvent BLOCK_STONE_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_STONE_HIT);
 
-    SoundEvent BLOCK_STONE_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_STONE_PLACE);
+    SoundEvent BLOCK_STONE_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_STONE_PLACE);
 
-    SoundEvent BLOCK_STONE_PRESSURE_PLATE_CLICK_OFF = BuiltinSoundEvent.get(SoundEventKey.BLOCK_STONE_PRESSURE_PLATE_CLICK_OFF);
+    SoundEvent BLOCK_STONE_PRESSURE_PLATE_CLICK_OFF = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_STONE_PRESSURE_PLATE_CLICK_OFF);
 
-    SoundEvent BLOCK_STONE_PRESSURE_PLATE_CLICK_ON = BuiltinSoundEvent.get(SoundEventKey.BLOCK_STONE_PRESSURE_PLATE_CLICK_ON);
+    SoundEvent BLOCK_STONE_PRESSURE_PLATE_CLICK_ON = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_STONE_PRESSURE_PLATE_CLICK_ON);
 
-    SoundEvent BLOCK_STONE_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_STONE_STEP);
+    SoundEvent BLOCK_STONE_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_STONE_STEP);
 
-    SoundEvent ENTITY_STRAY_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_STRAY_AMBIENT);
+    SoundEvent ENTITY_STRAY_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_STRAY_AMBIENT);
 
-    SoundEvent ENTITY_STRAY_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_STRAY_DEATH);
+    SoundEvent ENTITY_STRAY_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_STRAY_DEATH);
 
-    SoundEvent ENTITY_STRAY_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_STRAY_HURT);
+    SoundEvent ENTITY_STRAY_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_STRAY_HURT);
 
-    SoundEvent ENTITY_STRAY_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_STRAY_STEP);
+    SoundEvent ENTITY_STRAY_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_STRAY_STEP);
 
-    SoundEvent BLOCK_SULFUR_SPIKE_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SULFUR_SPIKE_BREAK);
+    SoundEvent BLOCK_SULFUR_SPIKE_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SULFUR_SPIKE_BREAK);
 
-    SoundEvent BLOCK_SULFUR_SPIKE_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SULFUR_SPIKE_STEP);
+    SoundEvent BLOCK_SULFUR_SPIKE_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SULFUR_SPIKE_STEP);
 
-    SoundEvent BLOCK_SULFUR_SPIKE_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SULFUR_SPIKE_PLACE);
+    SoundEvent BLOCK_SULFUR_SPIKE_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SULFUR_SPIKE_PLACE);
 
-    SoundEvent BLOCK_SULFUR_SPIKE_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SULFUR_SPIKE_HIT);
+    SoundEvent BLOCK_SULFUR_SPIKE_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SULFUR_SPIKE_HIT);
 
-    SoundEvent BLOCK_SULFUR_SPIKE_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SULFUR_SPIKE_FALL);
+    SoundEvent BLOCK_SULFUR_SPIKE_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SULFUR_SPIKE_FALL);
 
-    SoundEvent BLOCK_SULFUR_SPIKE_LAND = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SULFUR_SPIKE_LAND);
+    SoundEvent BLOCK_SULFUR_SPIKE_LAND = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SULFUR_SPIKE_LAND);
 
-    SoundEvent BLOCK_SWEET_BERRY_BUSH_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SWEET_BERRY_BUSH_BREAK);
+    SoundEvent BLOCK_SWEET_BERRY_BUSH_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SWEET_BERRY_BUSH_BREAK);
 
-    SoundEvent BLOCK_SWEET_BERRY_BUSH_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SWEET_BERRY_BUSH_PLACE);
+    SoundEvent BLOCK_SWEET_BERRY_BUSH_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SWEET_BERRY_BUSH_PLACE);
 
-    SoundEvent BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES);
+    SoundEvent BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES);
 
-    SoundEvent ENTITY_TADPOLE_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_TADPOLE_DEATH);
+    SoundEvent ENTITY_TADPOLE_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_TADPOLE_DEATH);
 
-    SoundEvent ENTITY_TADPOLE_FLOP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_TADPOLE_FLOP);
+    SoundEvent ENTITY_TADPOLE_FLOP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_TADPOLE_FLOP);
 
-    SoundEvent ENTITY_TADPOLE_GROW_UP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_TADPOLE_GROW_UP);
+    SoundEvent ENTITY_TADPOLE_GROW_UP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_TADPOLE_GROW_UP);
 
-    SoundEvent ENTITY_TADPOLE_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_TADPOLE_HURT);
+    SoundEvent ENTITY_TADPOLE_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_TADPOLE_HURT);
 
-    SoundEvent ENCHANT_THORNS_HIT = BuiltinSoundEvent.get(SoundEventKey.ENCHANT_THORNS_HIT);
+    SoundEvent ENCHANT_THORNS_HIT = BuiltinSoundEvent.get(SoundEventKeys.ENCHANT_THORNS_HIT);
 
-    SoundEvent ENTITY_TNT_PRIMED = BuiltinSoundEvent.get(SoundEventKey.ENTITY_TNT_PRIMED);
+    SoundEvent ENTITY_TNT_PRIMED = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_TNT_PRIMED);
 
-    SoundEvent ITEM_TOTEM_USE = BuiltinSoundEvent.get(SoundEventKey.ITEM_TOTEM_USE);
+    SoundEvent ITEM_TOTEM_USE = BuiltinSoundEvent.get(SoundEventKeys.ITEM_TOTEM_USE);
 
-    SoundEvent ITEM_TRIDENT_HIT = BuiltinSoundEvent.get(SoundEventKey.ITEM_TRIDENT_HIT);
+    SoundEvent ITEM_TRIDENT_HIT = BuiltinSoundEvent.get(SoundEventKeys.ITEM_TRIDENT_HIT);
 
-    SoundEvent ITEM_TRIDENT_HIT_GROUND = BuiltinSoundEvent.get(SoundEventKey.ITEM_TRIDENT_HIT_GROUND);
+    SoundEvent ITEM_TRIDENT_HIT_GROUND = BuiltinSoundEvent.get(SoundEventKeys.ITEM_TRIDENT_HIT_GROUND);
 
-    SoundEvent ITEM_TRIDENT_RETURN = BuiltinSoundEvent.get(SoundEventKey.ITEM_TRIDENT_RETURN);
+    SoundEvent ITEM_TRIDENT_RETURN = BuiltinSoundEvent.get(SoundEventKeys.ITEM_TRIDENT_RETURN);
 
-    SoundEvent ITEM_TRIDENT_RIPTIDE_1 = BuiltinSoundEvent.get(SoundEventKey.ITEM_TRIDENT_RIPTIDE_1);
+    SoundEvent ITEM_TRIDENT_RIPTIDE_1 = BuiltinSoundEvent.get(SoundEventKeys.ITEM_TRIDENT_RIPTIDE_1);
 
-    SoundEvent ITEM_TRIDENT_RIPTIDE_2 = BuiltinSoundEvent.get(SoundEventKey.ITEM_TRIDENT_RIPTIDE_2);
+    SoundEvent ITEM_TRIDENT_RIPTIDE_2 = BuiltinSoundEvent.get(SoundEventKeys.ITEM_TRIDENT_RIPTIDE_2);
 
-    SoundEvent ITEM_TRIDENT_RIPTIDE_3 = BuiltinSoundEvent.get(SoundEventKey.ITEM_TRIDENT_RIPTIDE_3);
+    SoundEvent ITEM_TRIDENT_RIPTIDE_3 = BuiltinSoundEvent.get(SoundEventKeys.ITEM_TRIDENT_RIPTIDE_3);
 
-    SoundEvent ITEM_TRIDENT_THROW = BuiltinSoundEvent.get(SoundEventKey.ITEM_TRIDENT_THROW);
+    SoundEvent ITEM_TRIDENT_THROW = BuiltinSoundEvent.get(SoundEventKeys.ITEM_TRIDENT_THROW);
 
-    SoundEvent ITEM_TRIDENT_THUNDER = BuiltinSoundEvent.get(SoundEventKey.ITEM_TRIDENT_THUNDER);
+    SoundEvent ITEM_TRIDENT_THUNDER = BuiltinSoundEvent.get(SoundEventKeys.ITEM_TRIDENT_THUNDER);
 
-    SoundEvent BLOCK_TRIPWIRE_ATTACH = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TRIPWIRE_ATTACH);
+    SoundEvent BLOCK_TRIPWIRE_ATTACH = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TRIPWIRE_ATTACH);
 
-    SoundEvent BLOCK_TRIPWIRE_CLICK_OFF = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TRIPWIRE_CLICK_OFF);
+    SoundEvent BLOCK_TRIPWIRE_CLICK_OFF = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TRIPWIRE_CLICK_OFF);
 
-    SoundEvent BLOCK_TRIPWIRE_CLICK_ON = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TRIPWIRE_CLICK_ON);
+    SoundEvent BLOCK_TRIPWIRE_CLICK_ON = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TRIPWIRE_CLICK_ON);
 
-    SoundEvent BLOCK_TRIPWIRE_DETACH = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TRIPWIRE_DETACH);
+    SoundEvent BLOCK_TRIPWIRE_DETACH = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TRIPWIRE_DETACH);
 
-    SoundEvent ENTITY_TROPICAL_FISH_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_TROPICAL_FISH_AMBIENT);
+    SoundEvent ENTITY_TROPICAL_FISH_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_TROPICAL_FISH_AMBIENT);
 
-    SoundEvent ENTITY_TROPICAL_FISH_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_TROPICAL_FISH_DEATH);
+    SoundEvent ENTITY_TROPICAL_FISH_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_TROPICAL_FISH_DEATH);
 
-    SoundEvent ENTITY_TROPICAL_FISH_FLOP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_TROPICAL_FISH_FLOP);
+    SoundEvent ENTITY_TROPICAL_FISH_FLOP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_TROPICAL_FISH_FLOP);
 
-    SoundEvent ENTITY_TROPICAL_FISH_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_TROPICAL_FISH_HURT);
+    SoundEvent ENTITY_TROPICAL_FISH_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_TROPICAL_FISH_HURT);
 
-    SoundEvent BLOCK_TUFF_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TUFF_BREAK);
+    SoundEvent BLOCK_TUFF_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TUFF_BREAK);
 
-    SoundEvent BLOCK_TUFF_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TUFF_STEP);
+    SoundEvent BLOCK_TUFF_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TUFF_STEP);
 
-    SoundEvent BLOCK_TUFF_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TUFF_PLACE);
+    SoundEvent BLOCK_TUFF_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TUFF_PLACE);
 
-    SoundEvent BLOCK_TUFF_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TUFF_HIT);
+    SoundEvent BLOCK_TUFF_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TUFF_HIT);
 
-    SoundEvent BLOCK_TUFF_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TUFF_FALL);
+    SoundEvent BLOCK_TUFF_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TUFF_FALL);
 
-    SoundEvent BLOCK_TUFF_BRICKS_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TUFF_BRICKS_BREAK);
+    SoundEvent BLOCK_TUFF_BRICKS_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TUFF_BRICKS_BREAK);
 
-    SoundEvent BLOCK_TUFF_BRICKS_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TUFF_BRICKS_FALL);
+    SoundEvent BLOCK_TUFF_BRICKS_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TUFF_BRICKS_FALL);
 
-    SoundEvent BLOCK_TUFF_BRICKS_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TUFF_BRICKS_HIT);
+    SoundEvent BLOCK_TUFF_BRICKS_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TUFF_BRICKS_HIT);
 
-    SoundEvent BLOCK_TUFF_BRICKS_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TUFF_BRICKS_PLACE);
+    SoundEvent BLOCK_TUFF_BRICKS_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TUFF_BRICKS_PLACE);
 
-    SoundEvent BLOCK_TUFF_BRICKS_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_TUFF_BRICKS_STEP);
+    SoundEvent BLOCK_TUFF_BRICKS_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_TUFF_BRICKS_STEP);
 
-    SoundEvent BLOCK_POLISHED_TUFF_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POLISHED_TUFF_BREAK);
+    SoundEvent BLOCK_POLISHED_TUFF_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POLISHED_TUFF_BREAK);
 
-    SoundEvent BLOCK_POLISHED_TUFF_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POLISHED_TUFF_FALL);
+    SoundEvent BLOCK_POLISHED_TUFF_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POLISHED_TUFF_FALL);
 
-    SoundEvent BLOCK_POLISHED_TUFF_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POLISHED_TUFF_HIT);
+    SoundEvent BLOCK_POLISHED_TUFF_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POLISHED_TUFF_HIT);
 
-    SoundEvent BLOCK_POLISHED_TUFF_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POLISHED_TUFF_PLACE);
+    SoundEvent BLOCK_POLISHED_TUFF_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POLISHED_TUFF_PLACE);
 
-    SoundEvent BLOCK_POLISHED_TUFF_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POLISHED_TUFF_STEP);
+    SoundEvent BLOCK_POLISHED_TUFF_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POLISHED_TUFF_STEP);
 
-    SoundEvent ENTITY_TURTLE_AMBIENT_LAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_TURTLE_AMBIENT_LAND);
+    SoundEvent ENTITY_TURTLE_AMBIENT_LAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_TURTLE_AMBIENT_LAND);
 
-    SoundEvent ENTITY_TURTLE_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_TURTLE_DEATH);
+    SoundEvent ENTITY_TURTLE_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_TURTLE_DEATH);
 
-    SoundEvent ENTITY_TURTLE_DEATH_BABY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_TURTLE_DEATH_BABY);
+    SoundEvent ENTITY_TURTLE_DEATH_BABY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_TURTLE_DEATH_BABY);
 
-    SoundEvent ENTITY_TURTLE_EGG_BREAK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_TURTLE_EGG_BREAK);
+    SoundEvent ENTITY_TURTLE_EGG_BREAK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_TURTLE_EGG_BREAK);
 
-    SoundEvent ENTITY_TURTLE_EGG_CRACK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_TURTLE_EGG_CRACK);
+    SoundEvent ENTITY_TURTLE_EGG_CRACK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_TURTLE_EGG_CRACK);
 
-    SoundEvent ENTITY_TURTLE_EGG_HATCH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_TURTLE_EGG_HATCH);
+    SoundEvent ENTITY_TURTLE_EGG_HATCH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_TURTLE_EGG_HATCH);
 
-    SoundEvent ENTITY_TURTLE_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_TURTLE_HURT);
+    SoundEvent ENTITY_TURTLE_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_TURTLE_HURT);
 
-    SoundEvent ENTITY_TURTLE_HURT_BABY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_TURTLE_HURT_BABY);
+    SoundEvent ENTITY_TURTLE_HURT_BABY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_TURTLE_HURT_BABY);
 
-    SoundEvent ENTITY_TURTLE_LAY_EGG = BuiltinSoundEvent.get(SoundEventKey.ENTITY_TURTLE_LAY_EGG);
+    SoundEvent ENTITY_TURTLE_LAY_EGG = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_TURTLE_LAY_EGG);
 
-    SoundEvent ENTITY_TURTLE_SHAMBLE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_TURTLE_SHAMBLE);
+    SoundEvent ENTITY_TURTLE_SHAMBLE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_TURTLE_SHAMBLE);
 
-    SoundEvent ENTITY_TURTLE_SHAMBLE_BABY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_TURTLE_SHAMBLE_BABY);
+    SoundEvent ENTITY_TURTLE_SHAMBLE_BABY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_TURTLE_SHAMBLE_BABY);
 
-    SoundEvent ENTITY_TURTLE_SWIM = BuiltinSoundEvent.get(SoundEventKey.ENTITY_TURTLE_SWIM);
+    SoundEvent ENTITY_TURTLE_SWIM = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_TURTLE_SWIM);
 
-    SoundEvent UI_BUTTON_CLICK = BuiltinSoundEvent.get(SoundEventKey.UI_BUTTON_CLICK);
+    SoundEvent UI_BUTTON_CLICK = BuiltinSoundEvent.get(SoundEventKeys.UI_BUTTON_CLICK);
 
-    SoundEvent UI_LOOM_SELECT_PATTERN = BuiltinSoundEvent.get(SoundEventKey.UI_LOOM_SELECT_PATTERN);
+    SoundEvent UI_LOOM_SELECT_PATTERN = BuiltinSoundEvent.get(SoundEventKeys.UI_LOOM_SELECT_PATTERN);
 
-    SoundEvent UI_LOOM_TAKE_RESULT = BuiltinSoundEvent.get(SoundEventKey.UI_LOOM_TAKE_RESULT);
+    SoundEvent UI_LOOM_TAKE_RESULT = BuiltinSoundEvent.get(SoundEventKeys.UI_LOOM_TAKE_RESULT);
 
-    SoundEvent UI_CARTOGRAPHY_TABLE_TAKE_RESULT = BuiltinSoundEvent.get(SoundEventKey.UI_CARTOGRAPHY_TABLE_TAKE_RESULT);
+    SoundEvent UI_CARTOGRAPHY_TABLE_TAKE_RESULT = BuiltinSoundEvent.get(SoundEventKeys.UI_CARTOGRAPHY_TABLE_TAKE_RESULT);
 
-    SoundEvent UI_STONECUTTER_TAKE_RESULT = BuiltinSoundEvent.get(SoundEventKey.UI_STONECUTTER_TAKE_RESULT);
+    SoundEvent UI_STONECUTTER_TAKE_RESULT = BuiltinSoundEvent.get(SoundEventKeys.UI_STONECUTTER_TAKE_RESULT);
 
-    SoundEvent UI_STONECUTTER_SELECT_RECIPE = BuiltinSoundEvent.get(SoundEventKey.UI_STONECUTTER_SELECT_RECIPE);
+    SoundEvent UI_STONECUTTER_SELECT_RECIPE = BuiltinSoundEvent.get(SoundEventKeys.UI_STONECUTTER_SELECT_RECIPE);
 
-    SoundEvent UI_TOAST_CHALLENGE_COMPLETE = BuiltinSoundEvent.get(SoundEventKey.UI_TOAST_CHALLENGE_COMPLETE);
+    SoundEvent UI_TOAST_CHALLENGE_COMPLETE = BuiltinSoundEvent.get(SoundEventKeys.UI_TOAST_CHALLENGE_COMPLETE);
 
-    SoundEvent UI_TOAST_IN = BuiltinSoundEvent.get(SoundEventKey.UI_TOAST_IN);
+    SoundEvent UI_TOAST_IN = BuiltinSoundEvent.get(SoundEventKeys.UI_TOAST_IN);
 
-    SoundEvent UI_TOAST_OUT = BuiltinSoundEvent.get(SoundEventKey.UI_TOAST_OUT);
+    SoundEvent UI_TOAST_OUT = BuiltinSoundEvent.get(SoundEventKeys.UI_TOAST_OUT);
 
-    SoundEvent BLOCK_VAULT_ACTIVATE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_VAULT_ACTIVATE);
+    SoundEvent BLOCK_VAULT_ACTIVATE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_VAULT_ACTIVATE);
 
-    SoundEvent BLOCK_VAULT_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_VAULT_AMBIENT);
+    SoundEvent BLOCK_VAULT_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_VAULT_AMBIENT);
 
-    SoundEvent BLOCK_VAULT_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_VAULT_BREAK);
+    SoundEvent BLOCK_VAULT_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_VAULT_BREAK);
 
-    SoundEvent BLOCK_VAULT_CLOSE_SHUTTER = BuiltinSoundEvent.get(SoundEventKey.BLOCK_VAULT_CLOSE_SHUTTER);
+    SoundEvent BLOCK_VAULT_CLOSE_SHUTTER = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_VAULT_CLOSE_SHUTTER);
 
-    SoundEvent BLOCK_VAULT_DEACTIVATE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_VAULT_DEACTIVATE);
+    SoundEvent BLOCK_VAULT_DEACTIVATE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_VAULT_DEACTIVATE);
 
-    SoundEvent BLOCK_VAULT_EJECT_ITEM = BuiltinSoundEvent.get(SoundEventKey.BLOCK_VAULT_EJECT_ITEM);
+    SoundEvent BLOCK_VAULT_EJECT_ITEM = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_VAULT_EJECT_ITEM);
 
-    SoundEvent BLOCK_VAULT_REJECT_REWARDED_PLAYER = BuiltinSoundEvent.get(SoundEventKey.BLOCK_VAULT_REJECT_REWARDED_PLAYER);
+    SoundEvent BLOCK_VAULT_REJECT_REWARDED_PLAYER = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_VAULT_REJECT_REWARDED_PLAYER);
 
-    SoundEvent BLOCK_VAULT_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_VAULT_FALL);
+    SoundEvent BLOCK_VAULT_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_VAULT_FALL);
 
-    SoundEvent BLOCK_VAULT_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_VAULT_HIT);
+    SoundEvent BLOCK_VAULT_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_VAULT_HIT);
 
-    SoundEvent BLOCK_VAULT_INSERT_ITEM = BuiltinSoundEvent.get(SoundEventKey.BLOCK_VAULT_INSERT_ITEM);
+    SoundEvent BLOCK_VAULT_INSERT_ITEM = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_VAULT_INSERT_ITEM);
 
-    SoundEvent BLOCK_VAULT_INSERT_ITEM_FAIL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_VAULT_INSERT_ITEM_FAIL);
+    SoundEvent BLOCK_VAULT_INSERT_ITEM_FAIL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_VAULT_INSERT_ITEM_FAIL);
 
-    SoundEvent BLOCK_VAULT_OPEN_SHUTTER = BuiltinSoundEvent.get(SoundEventKey.BLOCK_VAULT_OPEN_SHUTTER);
+    SoundEvent BLOCK_VAULT_OPEN_SHUTTER = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_VAULT_OPEN_SHUTTER);
 
-    SoundEvent BLOCK_VAULT_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_VAULT_PLACE);
+    SoundEvent BLOCK_VAULT_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_VAULT_PLACE);
 
-    SoundEvent BLOCK_VAULT_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_VAULT_STEP);
+    SoundEvent BLOCK_VAULT_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_VAULT_STEP);
 
-    SoundEvent ENTITY_VEX_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VEX_AMBIENT);
+    SoundEvent ENTITY_VEX_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VEX_AMBIENT);
 
-    SoundEvent ENTITY_VEX_CHARGE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VEX_CHARGE);
+    SoundEvent ENTITY_VEX_CHARGE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VEX_CHARGE);
 
-    SoundEvent ENTITY_VEX_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VEX_DEATH);
+    SoundEvent ENTITY_VEX_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VEX_DEATH);
 
-    SoundEvent ENTITY_VEX_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VEX_HURT);
+    SoundEvent ENTITY_VEX_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VEX_HURT);
 
-    SoundEvent ENTITY_VILLAGER_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VILLAGER_AMBIENT);
+    SoundEvent ENTITY_VILLAGER_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VILLAGER_AMBIENT);
 
-    SoundEvent ENTITY_VILLAGER_CELEBRATE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VILLAGER_CELEBRATE);
+    SoundEvent ENTITY_VILLAGER_CELEBRATE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VILLAGER_CELEBRATE);
 
-    SoundEvent ENTITY_VILLAGER_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VILLAGER_DEATH);
+    SoundEvent ENTITY_VILLAGER_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VILLAGER_DEATH);
 
-    SoundEvent ENTITY_VILLAGER_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VILLAGER_HURT);
+    SoundEvent ENTITY_VILLAGER_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VILLAGER_HURT);
 
-    SoundEvent ENTITY_VILLAGER_NO = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VILLAGER_NO);
+    SoundEvent ENTITY_VILLAGER_NO = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VILLAGER_NO);
 
-    SoundEvent ENTITY_VILLAGER_TRADE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VILLAGER_TRADE);
+    SoundEvent ENTITY_VILLAGER_TRADE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VILLAGER_TRADE);
 
-    SoundEvent ENTITY_VILLAGER_YES = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VILLAGER_YES);
+    SoundEvent ENTITY_VILLAGER_YES = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VILLAGER_YES);
 
-    SoundEvent ENTITY_VILLAGER_WORK_ARMORER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VILLAGER_WORK_ARMORER);
+    SoundEvent ENTITY_VILLAGER_WORK_ARMORER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VILLAGER_WORK_ARMORER);
 
-    SoundEvent ENTITY_VILLAGER_WORK_BUTCHER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VILLAGER_WORK_BUTCHER);
+    SoundEvent ENTITY_VILLAGER_WORK_BUTCHER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VILLAGER_WORK_BUTCHER);
 
-    SoundEvent ENTITY_VILLAGER_WORK_CARTOGRAPHER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VILLAGER_WORK_CARTOGRAPHER);
+    SoundEvent ENTITY_VILLAGER_WORK_CARTOGRAPHER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VILLAGER_WORK_CARTOGRAPHER);
 
-    SoundEvent ENTITY_VILLAGER_WORK_CLERIC = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VILLAGER_WORK_CLERIC);
+    SoundEvent ENTITY_VILLAGER_WORK_CLERIC = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VILLAGER_WORK_CLERIC);
 
-    SoundEvent ENTITY_VILLAGER_WORK_FARMER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VILLAGER_WORK_FARMER);
+    SoundEvent ENTITY_VILLAGER_WORK_FARMER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VILLAGER_WORK_FARMER);
 
-    SoundEvent ENTITY_VILLAGER_WORK_FISHERMAN = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VILLAGER_WORK_FISHERMAN);
+    SoundEvent ENTITY_VILLAGER_WORK_FISHERMAN = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VILLAGER_WORK_FISHERMAN);
 
-    SoundEvent ENTITY_VILLAGER_WORK_FLETCHER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VILLAGER_WORK_FLETCHER);
+    SoundEvent ENTITY_VILLAGER_WORK_FLETCHER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VILLAGER_WORK_FLETCHER);
 
-    SoundEvent ENTITY_VILLAGER_WORK_LEATHERWORKER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VILLAGER_WORK_LEATHERWORKER);
+    SoundEvent ENTITY_VILLAGER_WORK_LEATHERWORKER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VILLAGER_WORK_LEATHERWORKER);
 
-    SoundEvent ENTITY_VILLAGER_WORK_LIBRARIAN = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VILLAGER_WORK_LIBRARIAN);
+    SoundEvent ENTITY_VILLAGER_WORK_LIBRARIAN = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VILLAGER_WORK_LIBRARIAN);
 
-    SoundEvent ENTITY_VILLAGER_WORK_MASON = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VILLAGER_WORK_MASON);
+    SoundEvent ENTITY_VILLAGER_WORK_MASON = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VILLAGER_WORK_MASON);
 
-    SoundEvent ENTITY_VILLAGER_WORK_SHEPHERD = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VILLAGER_WORK_SHEPHERD);
+    SoundEvent ENTITY_VILLAGER_WORK_SHEPHERD = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VILLAGER_WORK_SHEPHERD);
 
-    SoundEvent ENTITY_VILLAGER_WORK_TOOLSMITH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VILLAGER_WORK_TOOLSMITH);
+    SoundEvent ENTITY_VILLAGER_WORK_TOOLSMITH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VILLAGER_WORK_TOOLSMITH);
 
-    SoundEvent ENTITY_VILLAGER_WORK_WEAPONSMITH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VILLAGER_WORK_WEAPONSMITH);
+    SoundEvent ENTITY_VILLAGER_WORK_WEAPONSMITH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VILLAGER_WORK_WEAPONSMITH);
 
-    SoundEvent ENTITY_VINDICATOR_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VINDICATOR_AMBIENT);
+    SoundEvent ENTITY_VINDICATOR_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VINDICATOR_AMBIENT);
 
-    SoundEvent ENTITY_VINDICATOR_CELEBRATE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VINDICATOR_CELEBRATE);
+    SoundEvent ENTITY_VINDICATOR_CELEBRATE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VINDICATOR_CELEBRATE);
 
-    SoundEvent ENTITY_VINDICATOR_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VINDICATOR_DEATH);
+    SoundEvent ENTITY_VINDICATOR_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VINDICATOR_DEATH);
 
-    SoundEvent ENTITY_VINDICATOR_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_VINDICATOR_HURT);
+    SoundEvent ENTITY_VINDICATOR_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_VINDICATOR_HURT);
 
-    SoundEvent BLOCK_VINE_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_VINE_BREAK);
+    SoundEvent BLOCK_VINE_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_VINE_BREAK);
 
-    SoundEvent BLOCK_VINE_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_VINE_FALL);
+    SoundEvent BLOCK_VINE_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_VINE_FALL);
 
-    SoundEvent BLOCK_VINE_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_VINE_HIT);
+    SoundEvent BLOCK_VINE_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_VINE_HIT);
 
-    SoundEvent BLOCK_VINE_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_VINE_PLACE);
+    SoundEvent BLOCK_VINE_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_VINE_PLACE);
 
-    SoundEvent BLOCK_VINE_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_VINE_STEP);
+    SoundEvent BLOCK_VINE_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_VINE_STEP);
 
-    SoundEvent BLOCK_LILY_PAD_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_LILY_PAD_PLACE);
+    SoundEvent BLOCK_LILY_PAD_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_LILY_PAD_PLACE);
 
-    SoundEvent ENTITY_WANDERING_TRADER_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WANDERING_TRADER_AMBIENT);
+    SoundEvent ENTITY_WANDERING_TRADER_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WANDERING_TRADER_AMBIENT);
 
-    SoundEvent ENTITY_WANDERING_TRADER_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WANDERING_TRADER_DEATH);
+    SoundEvent ENTITY_WANDERING_TRADER_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WANDERING_TRADER_DEATH);
 
-    SoundEvent ENTITY_WANDERING_TRADER_DISAPPEARED = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WANDERING_TRADER_DISAPPEARED);
+    SoundEvent ENTITY_WANDERING_TRADER_DISAPPEARED = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WANDERING_TRADER_DISAPPEARED);
 
-    SoundEvent ENTITY_WANDERING_TRADER_DRINK_MILK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WANDERING_TRADER_DRINK_MILK);
+    SoundEvent ENTITY_WANDERING_TRADER_DRINK_MILK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WANDERING_TRADER_DRINK_MILK);
 
-    SoundEvent ENTITY_WANDERING_TRADER_DRINK_POTION = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WANDERING_TRADER_DRINK_POTION);
+    SoundEvent ENTITY_WANDERING_TRADER_DRINK_POTION = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WANDERING_TRADER_DRINK_POTION);
 
-    SoundEvent ENTITY_WANDERING_TRADER_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WANDERING_TRADER_HURT);
+    SoundEvent ENTITY_WANDERING_TRADER_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WANDERING_TRADER_HURT);
 
-    SoundEvent ENTITY_WANDERING_TRADER_NO = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WANDERING_TRADER_NO);
+    SoundEvent ENTITY_WANDERING_TRADER_NO = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WANDERING_TRADER_NO);
 
-    SoundEvent ENTITY_WANDERING_TRADER_REAPPEARED = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WANDERING_TRADER_REAPPEARED);
+    SoundEvent ENTITY_WANDERING_TRADER_REAPPEARED = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WANDERING_TRADER_REAPPEARED);
 
-    SoundEvent ENTITY_WANDERING_TRADER_TRADE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WANDERING_TRADER_TRADE);
+    SoundEvent ENTITY_WANDERING_TRADER_TRADE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WANDERING_TRADER_TRADE);
 
-    SoundEvent ENTITY_WANDERING_TRADER_YES = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WANDERING_TRADER_YES);
+    SoundEvent ENTITY_WANDERING_TRADER_YES = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WANDERING_TRADER_YES);
 
-    SoundEvent ENTITY_WARDEN_AGITATED = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WARDEN_AGITATED);
+    SoundEvent ENTITY_WARDEN_AGITATED = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WARDEN_AGITATED);
 
-    SoundEvent ENTITY_WARDEN_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WARDEN_AMBIENT);
+    SoundEvent ENTITY_WARDEN_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WARDEN_AMBIENT);
 
-    SoundEvent ENTITY_WARDEN_ANGRY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WARDEN_ANGRY);
+    SoundEvent ENTITY_WARDEN_ANGRY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WARDEN_ANGRY);
 
-    SoundEvent ENTITY_WARDEN_ATTACK_IMPACT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WARDEN_ATTACK_IMPACT);
+    SoundEvent ENTITY_WARDEN_ATTACK_IMPACT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WARDEN_ATTACK_IMPACT);
 
-    SoundEvent ENTITY_WARDEN_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WARDEN_DEATH);
+    SoundEvent ENTITY_WARDEN_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WARDEN_DEATH);
 
-    SoundEvent ENTITY_WARDEN_DIG = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WARDEN_DIG);
+    SoundEvent ENTITY_WARDEN_DIG = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WARDEN_DIG);
 
-    SoundEvent ENTITY_WARDEN_EMERGE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WARDEN_EMERGE);
+    SoundEvent ENTITY_WARDEN_EMERGE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WARDEN_EMERGE);
 
-    SoundEvent ENTITY_WARDEN_HEARTBEAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WARDEN_HEARTBEAT);
+    SoundEvent ENTITY_WARDEN_HEARTBEAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WARDEN_HEARTBEAT);
 
-    SoundEvent ENTITY_WARDEN_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WARDEN_HURT);
+    SoundEvent ENTITY_WARDEN_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WARDEN_HURT);
 
-    SoundEvent ENTITY_WARDEN_LISTENING = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WARDEN_LISTENING);
+    SoundEvent ENTITY_WARDEN_LISTENING = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WARDEN_LISTENING);
 
-    SoundEvent ENTITY_WARDEN_LISTENING_ANGRY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WARDEN_LISTENING_ANGRY);
+    SoundEvent ENTITY_WARDEN_LISTENING_ANGRY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WARDEN_LISTENING_ANGRY);
 
-    SoundEvent ENTITY_WARDEN_NEARBY_CLOSE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WARDEN_NEARBY_CLOSE);
+    SoundEvent ENTITY_WARDEN_NEARBY_CLOSE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WARDEN_NEARBY_CLOSE);
 
-    SoundEvent ENTITY_WARDEN_NEARBY_CLOSER = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WARDEN_NEARBY_CLOSER);
+    SoundEvent ENTITY_WARDEN_NEARBY_CLOSER = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WARDEN_NEARBY_CLOSER);
 
-    SoundEvent ENTITY_WARDEN_NEARBY_CLOSEST = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WARDEN_NEARBY_CLOSEST);
+    SoundEvent ENTITY_WARDEN_NEARBY_CLOSEST = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WARDEN_NEARBY_CLOSEST);
 
-    SoundEvent ENTITY_WARDEN_ROAR = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WARDEN_ROAR);
+    SoundEvent ENTITY_WARDEN_ROAR = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WARDEN_ROAR);
 
-    SoundEvent ENTITY_WARDEN_SNIFF = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WARDEN_SNIFF);
+    SoundEvent ENTITY_WARDEN_SNIFF = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WARDEN_SNIFF);
 
-    SoundEvent ENTITY_WARDEN_SONIC_BOOM = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WARDEN_SONIC_BOOM);
+    SoundEvent ENTITY_WARDEN_SONIC_BOOM = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WARDEN_SONIC_BOOM);
 
-    SoundEvent ENTITY_WARDEN_SONIC_CHARGE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WARDEN_SONIC_CHARGE);
+    SoundEvent ENTITY_WARDEN_SONIC_CHARGE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WARDEN_SONIC_CHARGE);
 
-    SoundEvent ENTITY_WARDEN_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WARDEN_STEP);
+    SoundEvent ENTITY_WARDEN_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WARDEN_STEP);
 
-    SoundEvent ENTITY_WARDEN_TENDRIL_CLICKS = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WARDEN_TENDRIL_CLICKS);
+    SoundEvent ENTITY_WARDEN_TENDRIL_CLICKS = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WARDEN_TENDRIL_CLICKS);
 
-    SoundEvent BLOCK_HANGING_SIGN_WAXED_INTERACT_FAIL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_HANGING_SIGN_WAXED_INTERACT_FAIL);
+    SoundEvent BLOCK_HANGING_SIGN_WAXED_INTERACT_FAIL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_HANGING_SIGN_WAXED_INTERACT_FAIL);
 
-    SoundEvent BLOCK_SIGN_WAXED_INTERACT_FAIL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SIGN_WAXED_INTERACT_FAIL);
+    SoundEvent BLOCK_SIGN_WAXED_INTERACT_FAIL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SIGN_WAXED_INTERACT_FAIL);
 
-    SoundEvent BLOCK_WATER_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WATER_AMBIENT);
+    SoundEvent BLOCK_WATER_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WATER_AMBIENT);
 
-    SoundEvent WEATHER_END_FLASH = BuiltinSoundEvent.get(SoundEventKey.WEATHER_END_FLASH);
+    SoundEvent WEATHER_END_FLASH = BuiltinSoundEvent.get(SoundEventKeys.WEATHER_END_FLASH);
 
-    SoundEvent WEATHER_RAIN = BuiltinSoundEvent.get(SoundEventKey.WEATHER_RAIN);
+    SoundEvent WEATHER_RAIN = BuiltinSoundEvent.get(SoundEventKeys.WEATHER_RAIN);
 
-    SoundEvent WEATHER_RAIN_ABOVE = BuiltinSoundEvent.get(SoundEventKey.WEATHER_RAIN_ABOVE);
+    SoundEvent WEATHER_RAIN_ABOVE = BuiltinSoundEvent.get(SoundEventKeys.WEATHER_RAIN_ABOVE);
 
-    SoundEvent BLOCK_WET_GRASS_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WET_GRASS_BREAK);
+    SoundEvent BLOCK_WET_GRASS_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WET_GRASS_BREAK);
 
-    SoundEvent BLOCK_WET_GRASS_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WET_GRASS_FALL);
+    SoundEvent BLOCK_WET_GRASS_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WET_GRASS_FALL);
 
-    SoundEvent BLOCK_WET_GRASS_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WET_GRASS_HIT);
+    SoundEvent BLOCK_WET_GRASS_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WET_GRASS_HIT);
 
-    SoundEvent BLOCK_WET_GRASS_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WET_GRASS_PLACE);
+    SoundEvent BLOCK_WET_GRASS_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WET_GRASS_PLACE);
 
-    SoundEvent BLOCK_WET_GRASS_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WET_GRASS_STEP);
+    SoundEvent BLOCK_WET_GRASS_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WET_GRASS_STEP);
 
-    SoundEvent BLOCK_WET_SPONGE_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WET_SPONGE_BREAK);
+    SoundEvent BLOCK_WET_SPONGE_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WET_SPONGE_BREAK);
 
-    SoundEvent BLOCK_WET_SPONGE_DRIES = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WET_SPONGE_DRIES);
+    SoundEvent BLOCK_WET_SPONGE_DRIES = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WET_SPONGE_DRIES);
 
-    SoundEvent BLOCK_WET_SPONGE_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WET_SPONGE_FALL);
+    SoundEvent BLOCK_WET_SPONGE_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WET_SPONGE_FALL);
 
-    SoundEvent BLOCK_WET_SPONGE_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WET_SPONGE_HIT);
+    SoundEvent BLOCK_WET_SPONGE_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WET_SPONGE_HIT);
 
-    SoundEvent BLOCK_WET_SPONGE_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WET_SPONGE_PLACE);
+    SoundEvent BLOCK_WET_SPONGE_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WET_SPONGE_PLACE);
 
-    SoundEvent BLOCK_WET_SPONGE_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WET_SPONGE_STEP);
+    SoundEvent BLOCK_WET_SPONGE_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WET_SPONGE_STEP);
 
-    SoundEvent ENTITY_WIND_CHARGE_WIND_BURST = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WIND_CHARGE_WIND_BURST);
+    SoundEvent ENTITY_WIND_CHARGE_WIND_BURST = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WIND_CHARGE_WIND_BURST);
 
-    SoundEvent ENTITY_WIND_CHARGE_THROW = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WIND_CHARGE_THROW);
+    SoundEvent ENTITY_WIND_CHARGE_THROW = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WIND_CHARGE_THROW);
 
-    SoundEvent ENTITY_WITCH_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WITCH_AMBIENT);
+    SoundEvent ENTITY_WITCH_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WITCH_AMBIENT);
 
-    SoundEvent ENTITY_WITCH_CELEBRATE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WITCH_CELEBRATE);
+    SoundEvent ENTITY_WITCH_CELEBRATE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WITCH_CELEBRATE);
 
-    SoundEvent ENTITY_WITCH_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WITCH_DEATH);
+    SoundEvent ENTITY_WITCH_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WITCH_DEATH);
 
-    SoundEvent ENTITY_WITCH_DRINK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WITCH_DRINK);
+    SoundEvent ENTITY_WITCH_DRINK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WITCH_DRINK);
 
-    SoundEvent ENTITY_WITCH_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WITCH_HURT);
+    SoundEvent ENTITY_WITCH_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WITCH_HURT);
 
-    SoundEvent ENTITY_WITCH_THROW = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WITCH_THROW);
+    SoundEvent ENTITY_WITCH_THROW = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WITCH_THROW);
 
-    SoundEvent ENTITY_WITHER_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WITHER_AMBIENT);
+    SoundEvent ENTITY_WITHER_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WITHER_AMBIENT);
 
-    SoundEvent ENTITY_WITHER_BREAK_BLOCK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WITHER_BREAK_BLOCK);
+    SoundEvent ENTITY_WITHER_BREAK_BLOCK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WITHER_BREAK_BLOCK);
 
-    SoundEvent ENTITY_WITHER_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WITHER_DEATH);
+    SoundEvent ENTITY_WITHER_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WITHER_DEATH);
 
-    SoundEvent ENTITY_WITHER_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WITHER_HURT);
+    SoundEvent ENTITY_WITHER_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WITHER_HURT);
 
-    SoundEvent ENTITY_WITHER_SHOOT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WITHER_SHOOT);
+    SoundEvent ENTITY_WITHER_SHOOT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WITHER_SHOOT);
 
-    SoundEvent ENTITY_WITHER_SKELETON_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WITHER_SKELETON_AMBIENT);
+    SoundEvent ENTITY_WITHER_SKELETON_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WITHER_SKELETON_AMBIENT);
 
-    SoundEvent ENTITY_WITHER_SKELETON_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WITHER_SKELETON_DEATH);
+    SoundEvent ENTITY_WITHER_SKELETON_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WITHER_SKELETON_DEATH);
 
-    SoundEvent ENTITY_WITHER_SKELETON_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WITHER_SKELETON_HURT);
+    SoundEvent ENTITY_WITHER_SKELETON_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WITHER_SKELETON_HURT);
 
-    SoundEvent ENTITY_WITHER_SKELETON_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WITHER_SKELETON_STEP);
+    SoundEvent ENTITY_WITHER_SKELETON_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WITHER_SKELETON_STEP);
 
-    SoundEvent ENTITY_WITHER_SPAWN = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WITHER_SPAWN);
+    SoundEvent ENTITY_WITHER_SPAWN = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WITHER_SPAWN);
 
-    SoundEvent ITEM_WOLF_ARMOR_BREAK = BuiltinSoundEvent.get(SoundEventKey.ITEM_WOLF_ARMOR_BREAK);
+    SoundEvent ITEM_WOLF_ARMOR_BREAK = BuiltinSoundEvent.get(SoundEventKeys.ITEM_WOLF_ARMOR_BREAK);
 
-    SoundEvent ENTITY_BABY_WOLF_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_WOLF_AMBIENT);
+    SoundEvent ENTITY_BABY_WOLF_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_WOLF_AMBIENT);
 
-    SoundEvent ITEM_WOLF_ARMOR_CRACK = BuiltinSoundEvent.get(SoundEventKey.ITEM_WOLF_ARMOR_CRACK);
+    SoundEvent ITEM_WOLF_ARMOR_CRACK = BuiltinSoundEvent.get(SoundEventKeys.ITEM_WOLF_ARMOR_CRACK);
 
-    SoundEvent ITEM_WOLF_ARMOR_DAMAGE = BuiltinSoundEvent.get(SoundEventKey.ITEM_WOLF_ARMOR_DAMAGE);
+    SoundEvent ITEM_WOLF_ARMOR_DAMAGE = BuiltinSoundEvent.get(SoundEventKeys.ITEM_WOLF_ARMOR_DAMAGE);
 
-    SoundEvent ITEM_WOLF_ARMOR_REPAIR = BuiltinSoundEvent.get(SoundEventKey.ITEM_WOLF_ARMOR_REPAIR);
+    SoundEvent ITEM_WOLF_ARMOR_REPAIR = BuiltinSoundEvent.get(SoundEventKeys.ITEM_WOLF_ARMOR_REPAIR);
 
-    SoundEvent ENTITY_BABY_WOLF_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_WOLF_DEATH);
+    SoundEvent ENTITY_BABY_WOLF_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_WOLF_DEATH);
 
-    SoundEvent ENTITY_BABY_WOLF_GROWL = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_WOLF_GROWL);
+    SoundEvent ENTITY_BABY_WOLF_GROWL = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_WOLF_GROWL);
 
-    SoundEvent ENTITY_BABY_WOLF_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_WOLF_HURT);
+    SoundEvent ENTITY_BABY_WOLF_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_WOLF_HURT);
 
-    SoundEvent ENTITY_BABY_WOLF_PANT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_WOLF_PANT);
+    SoundEvent ENTITY_BABY_WOLF_PANT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_WOLF_PANT);
 
-    SoundEvent ENTITY_WOLF_SHAKE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_SHAKE);
+    SoundEvent ENTITY_WOLF_SHAKE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_SHAKE);
 
-    SoundEvent ENTITY_WOLF_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_STEP);
+    SoundEvent ENTITY_WOLF_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_STEP);
 
-    SoundEvent ENTITY_BABY_WOLF_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_WOLF_STEP);
+    SoundEvent ENTITY_BABY_WOLF_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_WOLF_STEP);
 
-    SoundEvent ENTITY_BABY_WOLF_WHINE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_BABY_WOLF_WHINE);
+    SoundEvent ENTITY_BABY_WOLF_WHINE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_BABY_WOLF_WHINE);
 
-    SoundEvent ENTITY_WOLF_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_AMBIENT);
+    SoundEvent ENTITY_WOLF_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_AMBIENT);
 
-    SoundEvent ENTITY_WOLF_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_DEATH);
+    SoundEvent ENTITY_WOLF_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_DEATH);
 
-    SoundEvent ENTITY_WOLF_GROWL = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_GROWL);
+    SoundEvent ENTITY_WOLF_GROWL = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_GROWL);
 
-    SoundEvent ENTITY_WOLF_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_HURT);
+    SoundEvent ENTITY_WOLF_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_HURT);
 
-    SoundEvent ENTITY_WOLF_PANT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_PANT);
+    SoundEvent ENTITY_WOLF_PANT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_PANT);
 
-    SoundEvent ENTITY_WOLF_WHINE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_WHINE);
+    SoundEvent ENTITY_WOLF_WHINE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_WHINE);
 
-    SoundEvent ENTITY_WOLF_PUGLIN_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_PUGLIN_AMBIENT);
+    SoundEvent ENTITY_WOLF_PUGLIN_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_PUGLIN_AMBIENT);
 
-    SoundEvent ENTITY_WOLF_PUGLIN_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_PUGLIN_DEATH);
+    SoundEvent ENTITY_WOLF_PUGLIN_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_PUGLIN_DEATH);
 
-    SoundEvent ENTITY_WOLF_PUGLIN_GROWL = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_PUGLIN_GROWL);
+    SoundEvent ENTITY_WOLF_PUGLIN_GROWL = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_PUGLIN_GROWL);
 
-    SoundEvent ENTITY_WOLF_PUGLIN_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_PUGLIN_HURT);
+    SoundEvent ENTITY_WOLF_PUGLIN_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_PUGLIN_HURT);
 
-    SoundEvent ENTITY_WOLF_PUGLIN_PANT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_PUGLIN_PANT);
+    SoundEvent ENTITY_WOLF_PUGLIN_PANT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_PUGLIN_PANT);
 
-    SoundEvent ENTITY_WOLF_PUGLIN_WHINE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_PUGLIN_WHINE);
+    SoundEvent ENTITY_WOLF_PUGLIN_WHINE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_PUGLIN_WHINE);
 
-    SoundEvent ENTITY_WOLF_SAD_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_SAD_AMBIENT);
+    SoundEvent ENTITY_WOLF_SAD_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_SAD_AMBIENT);
 
-    SoundEvent ENTITY_WOLF_SAD_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_SAD_DEATH);
+    SoundEvent ENTITY_WOLF_SAD_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_SAD_DEATH);
 
-    SoundEvent ENTITY_WOLF_SAD_GROWL = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_SAD_GROWL);
+    SoundEvent ENTITY_WOLF_SAD_GROWL = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_SAD_GROWL);
 
-    SoundEvent ENTITY_WOLF_SAD_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_SAD_HURT);
+    SoundEvent ENTITY_WOLF_SAD_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_SAD_HURT);
 
-    SoundEvent ENTITY_WOLF_SAD_PANT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_SAD_PANT);
+    SoundEvent ENTITY_WOLF_SAD_PANT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_SAD_PANT);
 
-    SoundEvent ENTITY_WOLF_SAD_WHINE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_SAD_WHINE);
+    SoundEvent ENTITY_WOLF_SAD_WHINE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_SAD_WHINE);
 
-    SoundEvent ENTITY_WOLF_ANGRY_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_ANGRY_AMBIENT);
+    SoundEvent ENTITY_WOLF_ANGRY_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_ANGRY_AMBIENT);
 
-    SoundEvent ENTITY_WOLF_ANGRY_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_ANGRY_DEATH);
+    SoundEvent ENTITY_WOLF_ANGRY_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_ANGRY_DEATH);
 
-    SoundEvent ENTITY_WOLF_ANGRY_GROWL = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_ANGRY_GROWL);
+    SoundEvent ENTITY_WOLF_ANGRY_GROWL = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_ANGRY_GROWL);
 
-    SoundEvent ENTITY_WOLF_ANGRY_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_ANGRY_HURT);
+    SoundEvent ENTITY_WOLF_ANGRY_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_ANGRY_HURT);
 
-    SoundEvent ENTITY_WOLF_ANGRY_PANT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_ANGRY_PANT);
+    SoundEvent ENTITY_WOLF_ANGRY_PANT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_ANGRY_PANT);
 
-    SoundEvent ENTITY_WOLF_ANGRY_WHINE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_ANGRY_WHINE);
+    SoundEvent ENTITY_WOLF_ANGRY_WHINE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_ANGRY_WHINE);
 
-    SoundEvent ENTITY_WOLF_GRUMPY_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_GRUMPY_AMBIENT);
+    SoundEvent ENTITY_WOLF_GRUMPY_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_GRUMPY_AMBIENT);
 
-    SoundEvent ENTITY_WOLF_GRUMPY_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_GRUMPY_DEATH);
+    SoundEvent ENTITY_WOLF_GRUMPY_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_GRUMPY_DEATH);
 
-    SoundEvent ENTITY_WOLF_GRUMPY_GROWL = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_GRUMPY_GROWL);
+    SoundEvent ENTITY_WOLF_GRUMPY_GROWL = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_GRUMPY_GROWL);
 
-    SoundEvent ENTITY_WOLF_GRUMPY_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_GRUMPY_HURT);
+    SoundEvent ENTITY_WOLF_GRUMPY_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_GRUMPY_HURT);
 
-    SoundEvent ENTITY_WOLF_GRUMPY_PANT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_GRUMPY_PANT);
+    SoundEvent ENTITY_WOLF_GRUMPY_PANT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_GRUMPY_PANT);
 
-    SoundEvent ENTITY_WOLF_GRUMPY_WHINE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_GRUMPY_WHINE);
+    SoundEvent ENTITY_WOLF_GRUMPY_WHINE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_GRUMPY_WHINE);
 
-    SoundEvent ENTITY_WOLF_BIG_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_BIG_AMBIENT);
+    SoundEvent ENTITY_WOLF_BIG_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_BIG_AMBIENT);
 
-    SoundEvent ENTITY_WOLF_BIG_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_BIG_DEATH);
+    SoundEvent ENTITY_WOLF_BIG_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_BIG_DEATH);
 
-    SoundEvent ENTITY_WOLF_BIG_GROWL = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_BIG_GROWL);
+    SoundEvent ENTITY_WOLF_BIG_GROWL = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_BIG_GROWL);
 
-    SoundEvent ENTITY_WOLF_BIG_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_BIG_HURT);
+    SoundEvent ENTITY_WOLF_BIG_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_BIG_HURT);
 
-    SoundEvent ENTITY_WOLF_BIG_PANT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_BIG_PANT);
+    SoundEvent ENTITY_WOLF_BIG_PANT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_BIG_PANT);
 
-    SoundEvent ENTITY_WOLF_BIG_WHINE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_BIG_WHINE);
+    SoundEvent ENTITY_WOLF_BIG_WHINE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_BIG_WHINE);
 
-    SoundEvent ENTITY_WOLF_CUTE_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_CUTE_AMBIENT);
+    SoundEvent ENTITY_WOLF_CUTE_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_CUTE_AMBIENT);
 
-    SoundEvent ENTITY_WOLF_CUTE_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_CUTE_DEATH);
+    SoundEvent ENTITY_WOLF_CUTE_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_CUTE_DEATH);
 
-    SoundEvent ENTITY_WOLF_CUTE_GROWL = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_CUTE_GROWL);
+    SoundEvent ENTITY_WOLF_CUTE_GROWL = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_CUTE_GROWL);
 
-    SoundEvent ENTITY_WOLF_CUTE_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_CUTE_HURT);
+    SoundEvent ENTITY_WOLF_CUTE_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_CUTE_HURT);
 
-    SoundEvent ENTITY_WOLF_CUTE_PANT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_CUTE_PANT);
+    SoundEvent ENTITY_WOLF_CUTE_PANT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_CUTE_PANT);
 
-    SoundEvent ENTITY_WOLF_CUTE_WHINE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_WOLF_CUTE_WHINE);
+    SoundEvent ENTITY_WOLF_CUTE_WHINE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_WOLF_CUTE_WHINE);
 
-    SoundEvent BLOCK_WOODEN_DOOR_CLOSE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WOODEN_DOOR_CLOSE);
+    SoundEvent BLOCK_WOODEN_DOOR_CLOSE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WOODEN_DOOR_CLOSE);
 
-    SoundEvent BLOCK_WOODEN_DOOR_OPEN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WOODEN_DOOR_OPEN);
+    SoundEvent BLOCK_WOODEN_DOOR_OPEN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WOODEN_DOOR_OPEN);
 
-    SoundEvent BLOCK_WOODEN_TRAPDOOR_CLOSE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WOODEN_TRAPDOOR_CLOSE);
+    SoundEvent BLOCK_WOODEN_TRAPDOOR_CLOSE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WOODEN_TRAPDOOR_CLOSE);
 
-    SoundEvent BLOCK_WOODEN_TRAPDOOR_OPEN = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WOODEN_TRAPDOOR_OPEN);
+    SoundEvent BLOCK_WOODEN_TRAPDOOR_OPEN = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WOODEN_TRAPDOOR_OPEN);
 
-    SoundEvent BLOCK_WOODEN_BUTTON_CLICK_OFF = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WOODEN_BUTTON_CLICK_OFF);
+    SoundEvent BLOCK_WOODEN_BUTTON_CLICK_OFF = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WOODEN_BUTTON_CLICK_OFF);
 
-    SoundEvent BLOCK_WOODEN_BUTTON_CLICK_ON = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WOODEN_BUTTON_CLICK_ON);
+    SoundEvent BLOCK_WOODEN_BUTTON_CLICK_ON = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WOODEN_BUTTON_CLICK_ON);
 
-    SoundEvent BLOCK_WOODEN_PRESSURE_PLATE_CLICK_OFF = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_OFF);
+    SoundEvent BLOCK_WOODEN_PRESSURE_PLATE_CLICK_OFF = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_OFF);
 
-    SoundEvent BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON);
+    SoundEvent BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON);
 
-    SoundEvent BLOCK_WOOD_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WOOD_BREAK);
+    SoundEvent BLOCK_WOOD_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WOOD_BREAK);
 
-    SoundEvent BLOCK_WOOD_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WOOD_FALL);
+    SoundEvent BLOCK_WOOD_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WOOD_FALL);
 
-    SoundEvent BLOCK_WOOD_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WOOD_HIT);
+    SoundEvent BLOCK_WOOD_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WOOD_HIT);
 
-    SoundEvent BLOCK_WOOD_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WOOD_PLACE);
+    SoundEvent BLOCK_WOOD_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WOOD_PLACE);
 
-    SoundEvent BLOCK_WOOD_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WOOD_STEP);
+    SoundEvent BLOCK_WOOD_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WOOD_STEP);
 
-    SoundEvent BLOCK_WOOL_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WOOL_BREAK);
+    SoundEvent BLOCK_WOOL_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WOOL_BREAK);
 
-    SoundEvent BLOCK_WOOL_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WOOL_FALL);
+    SoundEvent BLOCK_WOOL_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WOOL_FALL);
 
-    SoundEvent BLOCK_WOOL_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WOOL_HIT);
+    SoundEvent BLOCK_WOOL_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WOOL_HIT);
 
-    SoundEvent BLOCK_WOOL_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WOOL_PLACE);
+    SoundEvent BLOCK_WOOL_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WOOL_PLACE);
 
-    SoundEvent BLOCK_WOOL_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_WOOL_STEP);
+    SoundEvent BLOCK_WOOL_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_WOOL_STEP);
 
-    SoundEvent ENTITY_ZOGLIN_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOGLIN_AMBIENT);
+    SoundEvent ENTITY_ZOGLIN_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOGLIN_AMBIENT);
 
-    SoundEvent ENTITY_ZOGLIN_ANGRY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOGLIN_ANGRY);
+    SoundEvent ENTITY_ZOGLIN_ANGRY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOGLIN_ANGRY);
 
-    SoundEvent ENTITY_ZOGLIN_ATTACK = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOGLIN_ATTACK);
+    SoundEvent ENTITY_ZOGLIN_ATTACK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOGLIN_ATTACK);
 
-    SoundEvent ENTITY_ZOGLIN_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOGLIN_DEATH);
+    SoundEvent ENTITY_ZOGLIN_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOGLIN_DEATH);
 
-    SoundEvent ENTITY_ZOGLIN_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOGLIN_HURT);
+    SoundEvent ENTITY_ZOGLIN_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOGLIN_HURT);
 
-    SoundEvent ENTITY_ZOGLIN_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOGLIN_STEP);
+    SoundEvent ENTITY_ZOGLIN_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOGLIN_STEP);
 
-    SoundEvent ENTITY_ZOMBIE_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_AMBIENT);
+    SoundEvent ENTITY_ZOMBIE_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_AMBIENT);
 
-    SoundEvent ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR);
+    SoundEvent ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR);
 
-    SoundEvent ENTITY_ZOMBIE_ATTACK_IRON_DOOR = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_ATTACK_IRON_DOOR);
+    SoundEvent ENTITY_ZOMBIE_ATTACK_IRON_DOOR = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_ATTACK_IRON_DOOR);
 
-    SoundEvent ENTITY_ZOMBIE_BREAK_WOODEN_DOOR = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR);
+    SoundEvent ENTITY_ZOMBIE_BREAK_WOODEN_DOOR = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR);
 
-    SoundEvent ENTITY_ZOMBIE_CONVERTED_TO_DROWNED = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_CONVERTED_TO_DROWNED);
+    SoundEvent ENTITY_ZOMBIE_CONVERTED_TO_DROWNED = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_CONVERTED_TO_DROWNED);
 
-    SoundEvent ENTITY_ZOMBIE_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_DEATH);
+    SoundEvent ENTITY_ZOMBIE_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_DEATH);
 
-    SoundEvent ENTITY_ZOMBIE_DESTROY_EGG = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_DESTROY_EGG);
+    SoundEvent ENTITY_ZOMBIE_DESTROY_EGG = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_DESTROY_EGG);
 
-    SoundEvent ENTITY_ZOMBIE_HORSE_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_HORSE_AMBIENT);
+    SoundEvent ENTITY_ZOMBIE_HORSE_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_HORSE_AMBIENT);
 
-    SoundEvent ENTITY_ZOMBIE_HORSE_ANGRY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_HORSE_ANGRY);
+    SoundEvent ENTITY_ZOMBIE_HORSE_ANGRY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_HORSE_ANGRY);
 
-    SoundEvent ENTITY_ZOMBIE_HORSE_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_HORSE_DEATH);
+    SoundEvent ENTITY_ZOMBIE_HORSE_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_HORSE_DEATH);
 
-    SoundEvent ENTITY_ZOMBIE_HORSE_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_HORSE_EAT);
+    SoundEvent ENTITY_ZOMBIE_HORSE_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_HORSE_EAT);
 
-    SoundEvent ENTITY_ZOMBIE_HORSE_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_HORSE_HURT);
+    SoundEvent ENTITY_ZOMBIE_HORSE_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_HORSE_HURT);
 
-    SoundEvent ENTITY_ZOMBIE_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_HURT);
+    SoundEvent ENTITY_ZOMBIE_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_HURT);
 
-    SoundEvent ENTITY_ZOMBIE_INFECT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_INFECT);
+    SoundEvent ENTITY_ZOMBIE_INFECT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_INFECT);
 
-    SoundEvent ENTITY_ZOMBIE_NAUTILUS_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_NAUTILUS_AMBIENT);
+    SoundEvent ENTITY_ZOMBIE_NAUTILUS_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_NAUTILUS_AMBIENT);
 
-    SoundEvent ENTITY_ZOMBIE_NAUTILUS_AMBIENT_LAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_NAUTILUS_AMBIENT_LAND);
+    SoundEvent ENTITY_ZOMBIE_NAUTILUS_AMBIENT_LAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_NAUTILUS_AMBIENT_LAND);
 
-    SoundEvent ENTITY_ZOMBIE_NAUTILUS_DASH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_NAUTILUS_DASH);
+    SoundEvent ENTITY_ZOMBIE_NAUTILUS_DASH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_NAUTILUS_DASH);
 
-    SoundEvent ENTITY_ZOMBIE_NAUTILUS_DASH_LAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_NAUTILUS_DASH_LAND);
+    SoundEvent ENTITY_ZOMBIE_NAUTILUS_DASH_LAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_NAUTILUS_DASH_LAND);
 
-    SoundEvent ENTITY_ZOMBIE_NAUTILUS_DASH_READY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_NAUTILUS_DASH_READY);
+    SoundEvent ENTITY_ZOMBIE_NAUTILUS_DASH_READY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_NAUTILUS_DASH_READY);
 
-    SoundEvent ENTITY_ZOMBIE_NAUTILUS_DASH_READY_LAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_NAUTILUS_DASH_READY_LAND);
+    SoundEvent ENTITY_ZOMBIE_NAUTILUS_DASH_READY_LAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_NAUTILUS_DASH_READY_LAND);
 
-    SoundEvent ENTITY_ZOMBIE_NAUTILUS_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_NAUTILUS_DEATH);
+    SoundEvent ENTITY_ZOMBIE_NAUTILUS_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_NAUTILUS_DEATH);
 
-    SoundEvent ENTITY_ZOMBIE_NAUTILUS_DEATH_LAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_NAUTILUS_DEATH_LAND);
+    SoundEvent ENTITY_ZOMBIE_NAUTILUS_DEATH_LAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_NAUTILUS_DEATH_LAND);
 
-    SoundEvent ENTITY_ZOMBIE_NAUTILUS_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_NAUTILUS_EAT);
+    SoundEvent ENTITY_ZOMBIE_NAUTILUS_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_NAUTILUS_EAT);
 
-    SoundEvent ENTITY_ZOMBIE_NAUTILUS_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_NAUTILUS_HURT);
+    SoundEvent ENTITY_ZOMBIE_NAUTILUS_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_NAUTILUS_HURT);
 
-    SoundEvent ENTITY_ZOMBIE_NAUTILUS_HURT_LAND = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_NAUTILUS_HURT_LAND);
+    SoundEvent ENTITY_ZOMBIE_NAUTILUS_HURT_LAND = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_NAUTILUS_HURT_LAND);
 
-    SoundEvent ENTITY_ZOMBIE_NAUTILUS_SWIM = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_NAUTILUS_SWIM);
+    SoundEvent ENTITY_ZOMBIE_NAUTILUS_SWIM = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_NAUTILUS_SWIM);
 
-    SoundEvent ENTITY_ZOMBIFIED_PIGLIN_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIFIED_PIGLIN_AMBIENT);
+    SoundEvent ENTITY_ZOMBIFIED_PIGLIN_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIFIED_PIGLIN_AMBIENT);
 
-    SoundEvent ENTITY_ZOMBIFIED_PIGLIN_ANGRY = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIFIED_PIGLIN_ANGRY);
+    SoundEvent ENTITY_ZOMBIFIED_PIGLIN_ANGRY = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIFIED_PIGLIN_ANGRY);
 
-    SoundEvent ENTITY_ZOMBIFIED_PIGLIN_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIFIED_PIGLIN_DEATH);
+    SoundEvent ENTITY_ZOMBIFIED_PIGLIN_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIFIED_PIGLIN_DEATH);
 
-    SoundEvent ENTITY_ZOMBIFIED_PIGLIN_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIFIED_PIGLIN_HURT);
+    SoundEvent ENTITY_ZOMBIFIED_PIGLIN_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIFIED_PIGLIN_HURT);
 
-    SoundEvent ENTITY_ZOMBIE_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_STEP);
+    SoundEvent ENTITY_ZOMBIE_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_STEP);
 
-    SoundEvent ENTITY_ZOMBIE_VILLAGER_AMBIENT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_VILLAGER_AMBIENT);
+    SoundEvent ENTITY_ZOMBIE_VILLAGER_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_VILLAGER_AMBIENT);
 
-    SoundEvent ENTITY_ZOMBIE_VILLAGER_CONVERTED = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_VILLAGER_CONVERTED);
+    SoundEvent ENTITY_ZOMBIE_VILLAGER_CONVERTED = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_VILLAGER_CONVERTED);
 
-    SoundEvent ENTITY_ZOMBIE_VILLAGER_CURE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_VILLAGER_CURE);
+    SoundEvent ENTITY_ZOMBIE_VILLAGER_CURE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_VILLAGER_CURE);
 
-    SoundEvent ENTITY_ZOMBIE_VILLAGER_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_VILLAGER_DEATH);
+    SoundEvent ENTITY_ZOMBIE_VILLAGER_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_VILLAGER_DEATH);
 
-    SoundEvent ENTITY_ZOMBIE_VILLAGER_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_VILLAGER_HURT);
+    SoundEvent ENTITY_ZOMBIE_VILLAGER_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_VILLAGER_HURT);
 
-    SoundEvent ENTITY_ZOMBIE_VILLAGER_STEP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_ZOMBIE_VILLAGER_STEP);
+    SoundEvent ENTITY_ZOMBIE_VILLAGER_STEP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_ZOMBIE_VILLAGER_STEP);
 
-    SoundEvent EVENT_MOB_EFFECT_BAD_OMEN = BuiltinSoundEvent.get(SoundEventKey.EVENT_MOB_EFFECT_BAD_OMEN);
+    SoundEvent EVENT_MOB_EFFECT_BAD_OMEN = BuiltinSoundEvent.get(SoundEventKeys.EVENT_MOB_EFFECT_BAD_OMEN);
 
-    SoundEvent EVENT_MOB_EFFECT_TRIAL_OMEN = BuiltinSoundEvent.get(SoundEventKey.EVENT_MOB_EFFECT_TRIAL_OMEN);
+    SoundEvent EVENT_MOB_EFFECT_TRIAL_OMEN = BuiltinSoundEvent.get(SoundEventKeys.EVENT_MOB_EFFECT_TRIAL_OMEN);
 
-    SoundEvent EVENT_MOB_EFFECT_RAID_OMEN = BuiltinSoundEvent.get(SoundEventKey.EVENT_MOB_EFFECT_RAID_OMEN);
+    SoundEvent EVENT_MOB_EFFECT_RAID_OMEN = BuiltinSoundEvent.get(SoundEventKeys.EVENT_MOB_EFFECT_RAID_OMEN);
 
-    SoundEvent ITEM_SADDLE_UNEQUIP = BuiltinSoundEvent.get(SoundEventKey.ITEM_SADDLE_UNEQUIP);
+    SoundEvent ITEM_SADDLE_UNEQUIP = BuiltinSoundEvent.get(SoundEventKeys.ITEM_SADDLE_UNEQUIP);
 
-    SoundEvent ITEM_NAUTILUS_SADDLE_UNDERWATER_EQUIP = BuiltinSoundEvent.get(SoundEventKey.ITEM_NAUTILUS_SADDLE_UNDERWATER_EQUIP);
+    SoundEvent ITEM_NAUTILUS_SADDLE_UNDERWATER_EQUIP = BuiltinSoundEvent.get(SoundEventKeys.ITEM_NAUTILUS_SADDLE_UNDERWATER_EQUIP);
 
-    SoundEvent ITEM_NAUTILUS_SADDLE_EQUIP = BuiltinSoundEvent.get(SoundEventKey.ITEM_NAUTILUS_SADDLE_EQUIP);
+    SoundEvent ITEM_NAUTILUS_SADDLE_EQUIP = BuiltinSoundEvent.get(SoundEventKeys.ITEM_NAUTILUS_SADDLE_EQUIP);
 
-    SoundEvent BLOCK_SULFUR_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SULFUR_BREAK);
+    SoundEvent BLOCK_SULFUR_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SULFUR_BREAK);
 
-    SoundEvent BLOCK_SULFUR_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SULFUR_STEP);
+    SoundEvent BLOCK_SULFUR_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SULFUR_STEP);
 
-    SoundEvent BLOCK_SULFUR_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SULFUR_PLACE);
+    SoundEvent BLOCK_SULFUR_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SULFUR_PLACE);
 
-    SoundEvent BLOCK_SULFUR_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SULFUR_HIT);
+    SoundEvent BLOCK_SULFUR_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SULFUR_HIT);
 
-    SoundEvent BLOCK_SULFUR_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_SULFUR_FALL);
+    SoundEvent BLOCK_SULFUR_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SULFUR_FALL);
 
-    SoundEvent BLOCK_POTENT_SULFUR_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POTENT_SULFUR_BREAK);
+    SoundEvent BLOCK_POTENT_SULFUR_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POTENT_SULFUR_BREAK);
 
-    SoundEvent BLOCK_POTENT_SULFUR_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POTENT_SULFUR_STEP);
+    SoundEvent BLOCK_POTENT_SULFUR_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POTENT_SULFUR_STEP);
 
-    SoundEvent BLOCK_POTENT_SULFUR_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POTENT_SULFUR_PLACE);
+    SoundEvent BLOCK_POTENT_SULFUR_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POTENT_SULFUR_PLACE);
 
-    SoundEvent BLOCK_POTENT_SULFUR_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POTENT_SULFUR_HIT);
+    SoundEvent BLOCK_POTENT_SULFUR_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POTENT_SULFUR_HIT);
 
-    SoundEvent BLOCK_POTENT_SULFUR_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POTENT_SULFUR_FALL);
+    SoundEvent BLOCK_POTENT_SULFUR_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POTENT_SULFUR_FALL);
 
-    SoundEvent BLOCK_POTENT_SULFUR_GEYSER_ERUPTION = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POTENT_SULFUR_GEYSER_ERUPTION);
+    SoundEvent BLOCK_POTENT_SULFUR_GEYSER_ERUPTION = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POTENT_SULFUR_GEYSER_ERUPTION);
 
-    SoundEvent BLOCK_POTENT_SULFUR_GEYSER_ERUPTION_ACTIVE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POTENT_SULFUR_GEYSER_ERUPTION_ACTIVE);
+    SoundEvent BLOCK_POTENT_SULFUR_GEYSER_ERUPTION_ACTIVE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POTENT_SULFUR_GEYSER_ERUPTION_ACTIVE);
 
-    SoundEvent BLOCK_POTENT_SULFUR_GEYSER_CONTINUOUS_ERUPTION = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POTENT_SULFUR_GEYSER_CONTINUOUS_ERUPTION);
+    SoundEvent BLOCK_POTENT_SULFUR_GEYSER_CONTINUOUS_ERUPTION = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POTENT_SULFUR_GEYSER_CONTINUOUS_ERUPTION);
 
-    SoundEvent BLOCK_POTENT_SULFUR_GEYSER_CONTINUOUS_ERUPTION_ACTIVE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POTENT_SULFUR_GEYSER_CONTINUOUS_ERUPTION_ACTIVE);
+    SoundEvent BLOCK_POTENT_SULFUR_GEYSER_CONTINUOUS_ERUPTION_ACTIVE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POTENT_SULFUR_GEYSER_CONTINUOUS_ERUPTION_ACTIVE);
 
-    SoundEvent BLOCK_CINNABAR_BREAK = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CINNABAR_BREAK);
+    SoundEvent BLOCK_CINNABAR_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CINNABAR_BREAK);
 
-    SoundEvent BLOCK_CINNABAR_STEP = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CINNABAR_STEP);
+    SoundEvent BLOCK_CINNABAR_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CINNABAR_STEP);
 
-    SoundEvent BLOCK_CINNABAR_PLACE = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CINNABAR_PLACE);
+    SoundEvent BLOCK_CINNABAR_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CINNABAR_PLACE);
 
-    SoundEvent BLOCK_CINNABAR_HIT = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CINNABAR_HIT);
+    SoundEvent BLOCK_CINNABAR_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CINNABAR_HIT);
 
-    SoundEvent BLOCK_CINNABAR_FALL = BuiltinSoundEvent.get(SoundEventKey.BLOCK_CINNABAR_FALL);
+    SoundEvent BLOCK_CINNABAR_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_CINNABAR_FALL);
 
-    SoundEvent ENTITY_SULFUR_CUBE_ABSORB = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_ABSORB);
+    SoundEvent ENTITY_SULFUR_CUBE_ABSORB = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_ABSORB);
 
-    SoundEvent ENTITY_SULFUR_CUBE_BOUNCE = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_BOUNCE);
+    SoundEvent ENTITY_SULFUR_CUBE_BOUNCE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_BOUNCE);
 
-    SoundEvent ENTITY_SULFUR_CUBE_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_DEATH);
+    SoundEvent ENTITY_SULFUR_CUBE_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_DEATH);
 
-    SoundEvent ENTITY_SULFUR_CUBE_EJECT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_EJECT);
+    SoundEvent ENTITY_SULFUR_CUBE_EJECT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_EJECT);
 
-    SoundEvent ENTITY_SULFUR_CUBE_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_HURT);
+    SoundEvent ENTITY_SULFUR_CUBE_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_HURT);
 
-    SoundEvent ENTITY_SULFUR_CUBE_JUMP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_JUMP);
+    SoundEvent ENTITY_SULFUR_CUBE_JUMP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_JUMP);
 
-    SoundEvent ENTITY_SULFUR_CUBE_REGULAR_HIT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_REGULAR_HIT);
+    SoundEvent ENTITY_SULFUR_CUBE_REGULAR_HIT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_REGULAR_HIT);
 
-    SoundEvent ENTITY_SULFUR_CUBE_REGULAR_PUSH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_REGULAR_PUSH);
+    SoundEvent ENTITY_SULFUR_CUBE_REGULAR_PUSH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_REGULAR_PUSH);
 
-    SoundEvent ENTITY_SULFUR_CUBE_BOUNCY_HIT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_BOUNCY_HIT);
+    SoundEvent ENTITY_SULFUR_CUBE_BOUNCY_HIT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_BOUNCY_HIT);
 
-    SoundEvent ENTITY_SULFUR_CUBE_BOUNCY_PUSH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_BOUNCY_PUSH);
+    SoundEvent ENTITY_SULFUR_CUBE_BOUNCY_PUSH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_BOUNCY_PUSH);
 
-    SoundEvent ENTITY_SULFUR_CUBE_SLOW_BOUNCY_HIT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_SLOW_BOUNCY_HIT);
+    SoundEvent ENTITY_SULFUR_CUBE_SLOW_BOUNCY_HIT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_SLOW_BOUNCY_HIT);
 
-    SoundEvent ENTITY_SULFUR_CUBE_SLOW_BOUNCY_PUSH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_SLOW_BOUNCY_PUSH);
+    SoundEvent ENTITY_SULFUR_CUBE_SLOW_BOUNCY_PUSH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_SLOW_BOUNCY_PUSH);
 
-    SoundEvent ENTITY_SULFUR_CUBE_SLOW_FLAT_HIT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_SLOW_FLAT_HIT);
+    SoundEvent ENTITY_SULFUR_CUBE_SLOW_FLAT_HIT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_SLOW_FLAT_HIT);
 
-    SoundEvent ENTITY_SULFUR_CUBE_SLOW_FLAT_PUSH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_SLOW_FLAT_PUSH);
+    SoundEvent ENTITY_SULFUR_CUBE_SLOW_FLAT_PUSH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_SLOW_FLAT_PUSH);
 
-    SoundEvent ENTITY_SULFUR_CUBE_FAST_FLAT_HIT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_FAST_FLAT_HIT);
+    SoundEvent ENTITY_SULFUR_CUBE_FAST_FLAT_HIT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_FAST_FLAT_HIT);
 
-    SoundEvent ENTITY_SULFUR_CUBE_FAST_FLAT_PUSH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_FAST_FLAT_PUSH);
+    SoundEvent ENTITY_SULFUR_CUBE_FAST_FLAT_PUSH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_FAST_FLAT_PUSH);
 
-    SoundEvent ENTITY_SULFUR_CUBE_LIGHT_HIT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_LIGHT_HIT);
+    SoundEvent ENTITY_SULFUR_CUBE_LIGHT_HIT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_LIGHT_HIT);
 
-    SoundEvent ENTITY_SULFUR_CUBE_LIGHT_PUSH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_LIGHT_PUSH);
+    SoundEvent ENTITY_SULFUR_CUBE_LIGHT_PUSH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_LIGHT_PUSH);
 
-    SoundEvent ENTITY_SULFUR_CUBE_FAST_SLIDING_HIT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_FAST_SLIDING_HIT);
+    SoundEvent ENTITY_SULFUR_CUBE_FAST_SLIDING_HIT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_FAST_SLIDING_HIT);
 
-    SoundEvent ENTITY_SULFUR_CUBE_FAST_SLIDING_PUSH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_FAST_SLIDING_PUSH);
+    SoundEvent ENTITY_SULFUR_CUBE_FAST_SLIDING_PUSH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_FAST_SLIDING_PUSH);
 
-    SoundEvent ENTITY_SULFUR_CUBE_SLOW_SLIDING_HIT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_SLOW_SLIDING_HIT);
+    SoundEvent ENTITY_SULFUR_CUBE_SLOW_SLIDING_HIT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_SLOW_SLIDING_HIT);
 
-    SoundEvent ENTITY_SULFUR_CUBE_SLOW_SLIDING_PUSH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_SLOW_SLIDING_PUSH);
+    SoundEvent ENTITY_SULFUR_CUBE_SLOW_SLIDING_PUSH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_SLOW_SLIDING_PUSH);
 
-    SoundEvent ENTITY_SULFUR_CUBE_STICKY_HIT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_STICKY_HIT);
+    SoundEvent ENTITY_SULFUR_CUBE_STICKY_HIT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_STICKY_HIT);
 
-    SoundEvent ENTITY_SULFUR_CUBE_STICKY_PUSH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_STICKY_PUSH);
+    SoundEvent ENTITY_SULFUR_CUBE_STICKY_PUSH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_STICKY_PUSH);
 
-    SoundEvent ENTITY_SULFUR_CUBE_HIGH_RESISTANCE_HIT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_HIGH_RESISTANCE_HIT);
+    SoundEvent ENTITY_SULFUR_CUBE_HIGH_RESISTANCE_HIT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_HIGH_RESISTANCE_HIT);
 
-    SoundEvent ENTITY_SULFUR_CUBE_HIGH_RESISTANCE_PUSH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_HIGH_RESISTANCE_PUSH);
+    SoundEvent ENTITY_SULFUR_CUBE_HIGH_RESISTANCE_PUSH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_HIGH_RESISTANCE_PUSH);
 
-    SoundEvent ENTITY_SULFUR_CUBE_EXPLOSIVE_HIT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_EXPLOSIVE_HIT);
+    SoundEvent ENTITY_SULFUR_CUBE_EXPLOSIVE_HIT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_EXPLOSIVE_HIT);
 
-    SoundEvent ENTITY_SULFUR_CUBE_EXPLOSIVE_PUSH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_EXPLOSIVE_PUSH);
+    SoundEvent ENTITY_SULFUR_CUBE_EXPLOSIVE_PUSH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_EXPLOSIVE_PUSH);
 
-    SoundEvent ENTITY_SULFUR_CUBE_HOT_HIT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_HOT_HIT);
+    SoundEvent ENTITY_SULFUR_CUBE_HOT_HIT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_HOT_HIT);
 
-    SoundEvent ENTITY_SULFUR_CUBE_HOT_PUSH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_HOT_PUSH);
+    SoundEvent ENTITY_SULFUR_CUBE_HOT_PUSH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_HOT_PUSH);
 
-    SoundEvent ENTITY_SULFUR_CUBE_SQUISH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SULFUR_CUBE_SQUISH);
+    SoundEvent ENTITY_SULFUR_CUBE_SQUISH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SULFUR_CUBE_SQUISH);
 
-    SoundEvent BLOCK_POTENT_SULFUR_NOXIOUS_GAS = BuiltinSoundEvent.get(SoundEventKey.BLOCK_POTENT_SULFUR_NOXIOUS_GAS);
+    SoundEvent BLOCK_POTENT_SULFUR_NOXIOUS_GAS = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POTENT_SULFUR_NOXIOUS_GAS);
 
-    SoundEvent ENTITY_SMALL_SULFUR_CUBE_DEATH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SMALL_SULFUR_CUBE_DEATH);
+    SoundEvent ENTITY_SMALL_SULFUR_CUBE_DEATH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SMALL_SULFUR_CUBE_DEATH);
 
-    SoundEvent ENTITY_SMALL_SULFUR_CUBE_HURT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SMALL_SULFUR_CUBE_HURT);
+    SoundEvent ENTITY_SMALL_SULFUR_CUBE_HURT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SMALL_SULFUR_CUBE_HURT);
 
-    SoundEvent ENTITY_SMALL_SULFUR_CUBE_JUMP = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SMALL_SULFUR_CUBE_JUMP);
+    SoundEvent ENTITY_SMALL_SULFUR_CUBE_JUMP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SMALL_SULFUR_CUBE_JUMP);
 
-    SoundEvent ENTITY_SMALL_SULFUR_CUBE_SQUISH = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SMALL_SULFUR_CUBE_SQUISH);
+    SoundEvent ENTITY_SMALL_SULFUR_CUBE_SQUISH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SMALL_SULFUR_CUBE_SQUISH);
 
-    SoundEvent ENTITY_SMALL_SULFUR_CUBE_EAT = BuiltinSoundEvent.get(SoundEventKey.ENTITY_SMALL_SULFUR_CUBE_EAT);
+    SoundEvent ENTITY_SMALL_SULFUR_CUBE_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SMALL_SULFUR_CUBE_EAT);
 }

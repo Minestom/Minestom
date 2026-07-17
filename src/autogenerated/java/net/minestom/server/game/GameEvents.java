@@ -7,125 +7,125 @@ package net.minestom.server.game;
  */
 @SuppressWarnings("unused")
 sealed interface GameEvents permits GameEvent {
-    GameEvent BLOCK_ACTIVATE = GameEventImpl.get(GameEventKey.BLOCK_ACTIVATE);
+    GameEvent BLOCK_ACTIVATE = GameEventImpl.get(GameEventKeys.BLOCK_ACTIVATE);
 
-    GameEvent BLOCK_ATTACH = GameEventImpl.get(GameEventKey.BLOCK_ATTACH);
+    GameEvent BLOCK_ATTACH = GameEventImpl.get(GameEventKeys.BLOCK_ATTACH);
 
-    GameEvent BLOCK_CHANGE = GameEventImpl.get(GameEventKey.BLOCK_CHANGE);
+    GameEvent BLOCK_CHANGE = GameEventImpl.get(GameEventKeys.BLOCK_CHANGE);
 
-    GameEvent BLOCK_CLOSE = GameEventImpl.get(GameEventKey.BLOCK_CLOSE);
+    GameEvent BLOCK_CLOSE = GameEventImpl.get(GameEventKeys.BLOCK_CLOSE);
 
-    GameEvent BLOCK_DEACTIVATE = GameEventImpl.get(GameEventKey.BLOCK_DEACTIVATE);
+    GameEvent BLOCK_DEACTIVATE = GameEventImpl.get(GameEventKeys.BLOCK_DEACTIVATE);
 
-    GameEvent BLOCK_DESTROY = GameEventImpl.get(GameEventKey.BLOCK_DESTROY);
+    GameEvent BLOCK_DESTROY = GameEventImpl.get(GameEventKeys.BLOCK_DESTROY);
 
-    GameEvent BLOCK_DETACH = GameEventImpl.get(GameEventKey.BLOCK_DETACH);
+    GameEvent BLOCK_DETACH = GameEventImpl.get(GameEventKeys.BLOCK_DETACH);
 
-    GameEvent BLOCK_OPEN = GameEventImpl.get(GameEventKey.BLOCK_OPEN);
+    GameEvent BLOCK_OPEN = GameEventImpl.get(GameEventKeys.BLOCK_OPEN);
 
-    GameEvent BLOCK_PLACE = GameEventImpl.get(GameEventKey.BLOCK_PLACE);
+    GameEvent BLOCK_PLACE = GameEventImpl.get(GameEventKeys.BLOCK_PLACE);
 
-    GameEvent BOUNCE = GameEventImpl.get(GameEventKey.BOUNCE);
+    GameEvent BOUNCE = GameEventImpl.get(GameEventKeys.BOUNCE);
 
-    GameEvent CONTAINER_CLOSE = GameEventImpl.get(GameEventKey.CONTAINER_CLOSE);
+    GameEvent CONTAINER_CLOSE = GameEventImpl.get(GameEventKeys.CONTAINER_CLOSE);
 
-    GameEvent CONTAINER_OPEN = GameEventImpl.get(GameEventKey.CONTAINER_OPEN);
+    GameEvent CONTAINER_OPEN = GameEventImpl.get(GameEventKeys.CONTAINER_OPEN);
 
-    GameEvent DRINK = GameEventImpl.get(GameEventKey.DRINK);
+    GameEvent DRINK = GameEventImpl.get(GameEventKeys.DRINK);
 
-    GameEvent EAT = GameEventImpl.get(GameEventKey.EAT);
+    GameEvent EAT = GameEventImpl.get(GameEventKeys.EAT);
 
-    GameEvent ELYTRA_GLIDE = GameEventImpl.get(GameEventKey.ELYTRA_GLIDE);
+    GameEvent ELYTRA_GLIDE = GameEventImpl.get(GameEventKeys.ELYTRA_GLIDE);
 
-    GameEvent ENTITY_DAMAGE = GameEventImpl.get(GameEventKey.ENTITY_DAMAGE);
+    GameEvent ENTITY_DAMAGE = GameEventImpl.get(GameEventKeys.ENTITY_DAMAGE);
 
-    GameEvent ENTITY_DIE = GameEventImpl.get(GameEventKey.ENTITY_DIE);
+    GameEvent ENTITY_DIE = GameEventImpl.get(GameEventKeys.ENTITY_DIE);
 
-    GameEvent ENTITY_DISMOUNT = GameEventImpl.get(GameEventKey.ENTITY_DISMOUNT);
+    GameEvent ENTITY_DISMOUNT = GameEventImpl.get(GameEventKeys.ENTITY_DISMOUNT);
 
-    GameEvent ENTITY_INTERACT = GameEventImpl.get(GameEventKey.ENTITY_INTERACT);
+    GameEvent ENTITY_INTERACT = GameEventImpl.get(GameEventKeys.ENTITY_INTERACT);
 
-    GameEvent ENTITY_MOUNT = GameEventImpl.get(GameEventKey.ENTITY_MOUNT);
+    GameEvent ENTITY_MOUNT = GameEventImpl.get(GameEventKeys.ENTITY_MOUNT);
 
-    GameEvent ENTITY_PLACE = GameEventImpl.get(GameEventKey.ENTITY_PLACE);
+    GameEvent ENTITY_PLACE = GameEventImpl.get(GameEventKeys.ENTITY_PLACE);
 
-    GameEvent ENTITY_ACTION = GameEventImpl.get(GameEventKey.ENTITY_ACTION);
+    GameEvent ENTITY_ACTION = GameEventImpl.get(GameEventKeys.ENTITY_ACTION);
 
-    GameEvent EQUIP = GameEventImpl.get(GameEventKey.EQUIP);
+    GameEvent EQUIP = GameEventImpl.get(GameEventKeys.EQUIP);
 
-    GameEvent EXPLODE = GameEventImpl.get(GameEventKey.EXPLODE);
+    GameEvent EXPLODE = GameEventImpl.get(GameEventKeys.EXPLODE);
 
-    GameEvent FLAP = GameEventImpl.get(GameEventKey.FLAP);
+    GameEvent FLAP = GameEventImpl.get(GameEventKeys.FLAP);
 
-    GameEvent FLUID_PICKUP = GameEventImpl.get(GameEventKey.FLUID_PICKUP);
+    GameEvent FLUID_PICKUP = GameEventImpl.get(GameEventKeys.FLUID_PICKUP);
 
-    GameEvent FLUID_PLACE = GameEventImpl.get(GameEventKey.FLUID_PLACE);
+    GameEvent FLUID_PLACE = GameEventImpl.get(GameEventKeys.FLUID_PLACE);
 
-    GameEvent HIT_GROUND = GameEventImpl.get(GameEventKey.HIT_GROUND);
+    GameEvent HIT_GROUND = GameEventImpl.get(GameEventKeys.HIT_GROUND);
 
-    GameEvent INSTRUMENT_PLAY = GameEventImpl.get(GameEventKey.INSTRUMENT_PLAY);
+    GameEvent INSTRUMENT_PLAY = GameEventImpl.get(GameEventKeys.INSTRUMENT_PLAY);
 
-    GameEvent ITEM_INTERACT_FINISH = GameEventImpl.get(GameEventKey.ITEM_INTERACT_FINISH);
+    GameEvent ITEM_INTERACT_FINISH = GameEventImpl.get(GameEventKeys.ITEM_INTERACT_FINISH);
 
-    GameEvent ITEM_INTERACT_START = GameEventImpl.get(GameEventKey.ITEM_INTERACT_START);
+    GameEvent ITEM_INTERACT_START = GameEventImpl.get(GameEventKeys.ITEM_INTERACT_START);
 
-    GameEvent JUKEBOX_PLAY = GameEventImpl.get(GameEventKey.JUKEBOX_PLAY);
+    GameEvent JUKEBOX_PLAY = GameEventImpl.get(GameEventKeys.JUKEBOX_PLAY);
 
-    GameEvent JUKEBOX_STOP_PLAY = GameEventImpl.get(GameEventKey.JUKEBOX_STOP_PLAY);
+    GameEvent JUKEBOX_STOP_PLAY = GameEventImpl.get(GameEventKeys.JUKEBOX_STOP_PLAY);
 
-    GameEvent LIGHTNING_STRIKE = GameEventImpl.get(GameEventKey.LIGHTNING_STRIKE);
+    GameEvent LIGHTNING_STRIKE = GameEventImpl.get(GameEventKeys.LIGHTNING_STRIKE);
 
-    GameEvent NOTE_BLOCK_PLAY = GameEventImpl.get(GameEventKey.NOTE_BLOCK_PLAY);
+    GameEvent NOTE_BLOCK_PLAY = GameEventImpl.get(GameEventKeys.NOTE_BLOCK_PLAY);
 
-    GameEvent PRIME_FUSE = GameEventImpl.get(GameEventKey.PRIME_FUSE);
+    GameEvent PRIME_FUSE = GameEventImpl.get(GameEventKeys.PRIME_FUSE);
 
-    GameEvent PROJECTILE_LAND = GameEventImpl.get(GameEventKey.PROJECTILE_LAND);
+    GameEvent PROJECTILE_LAND = GameEventImpl.get(GameEventKeys.PROJECTILE_LAND);
 
-    GameEvent PROJECTILE_SHOOT = GameEventImpl.get(GameEventKey.PROJECTILE_SHOOT);
+    GameEvent PROJECTILE_SHOOT = GameEventImpl.get(GameEventKeys.PROJECTILE_SHOOT);
 
-    GameEvent SCULK_SENSOR_TENDRILS_CLICKING = GameEventImpl.get(GameEventKey.SCULK_SENSOR_TENDRILS_CLICKING);
+    GameEvent SCULK_SENSOR_TENDRILS_CLICKING = GameEventImpl.get(GameEventKeys.SCULK_SENSOR_TENDRILS_CLICKING);
 
-    GameEvent SHEAR = GameEventImpl.get(GameEventKey.SHEAR);
+    GameEvent SHEAR = GameEventImpl.get(GameEventKeys.SHEAR);
 
-    GameEvent SHRIEK = GameEventImpl.get(GameEventKey.SHRIEK);
+    GameEvent SHRIEK = GameEventImpl.get(GameEventKeys.SHRIEK);
 
-    GameEvent SPLASH = GameEventImpl.get(GameEventKey.SPLASH);
+    GameEvent SPLASH = GameEventImpl.get(GameEventKeys.SPLASH);
 
-    GameEvent STEP = GameEventImpl.get(GameEventKey.STEP);
+    GameEvent STEP = GameEventImpl.get(GameEventKeys.STEP);
 
-    GameEvent SWIM = GameEventImpl.get(GameEventKey.SWIM);
+    GameEvent SWIM = GameEventImpl.get(GameEventKeys.SWIM);
 
-    GameEvent TELEPORT = GameEventImpl.get(GameEventKey.TELEPORT);
+    GameEvent TELEPORT = GameEventImpl.get(GameEventKeys.TELEPORT);
 
-    GameEvent UNEQUIP = GameEventImpl.get(GameEventKey.UNEQUIP);
+    GameEvent UNEQUIP = GameEventImpl.get(GameEventKeys.UNEQUIP);
 
-    GameEvent RESONATE_1 = GameEventImpl.get(GameEventKey.RESONATE_1);
+    GameEvent RESONATE_1 = GameEventImpl.get(GameEventKeys.RESONATE_1);
 
-    GameEvent RESONATE_2 = GameEventImpl.get(GameEventKey.RESONATE_2);
+    GameEvent RESONATE_2 = GameEventImpl.get(GameEventKeys.RESONATE_2);
 
-    GameEvent RESONATE_3 = GameEventImpl.get(GameEventKey.RESONATE_3);
+    GameEvent RESONATE_3 = GameEventImpl.get(GameEventKeys.RESONATE_3);
 
-    GameEvent RESONATE_4 = GameEventImpl.get(GameEventKey.RESONATE_4);
+    GameEvent RESONATE_4 = GameEventImpl.get(GameEventKeys.RESONATE_4);
 
-    GameEvent RESONATE_5 = GameEventImpl.get(GameEventKey.RESONATE_5);
+    GameEvent RESONATE_5 = GameEventImpl.get(GameEventKeys.RESONATE_5);
 
-    GameEvent RESONATE_6 = GameEventImpl.get(GameEventKey.RESONATE_6);
+    GameEvent RESONATE_6 = GameEventImpl.get(GameEventKeys.RESONATE_6);
 
-    GameEvent RESONATE_7 = GameEventImpl.get(GameEventKey.RESONATE_7);
+    GameEvent RESONATE_7 = GameEventImpl.get(GameEventKeys.RESONATE_7);
 
-    GameEvent RESONATE_8 = GameEventImpl.get(GameEventKey.RESONATE_8);
+    GameEvent RESONATE_8 = GameEventImpl.get(GameEventKeys.RESONATE_8);
 
-    GameEvent RESONATE_9 = GameEventImpl.get(GameEventKey.RESONATE_9);
+    GameEvent RESONATE_9 = GameEventImpl.get(GameEventKeys.RESONATE_9);
 
-    GameEvent RESONATE_10 = GameEventImpl.get(GameEventKey.RESONATE_10);
+    GameEvent RESONATE_10 = GameEventImpl.get(GameEventKeys.RESONATE_10);
 
-    GameEvent RESONATE_11 = GameEventImpl.get(GameEventKey.RESONATE_11);
+    GameEvent RESONATE_11 = GameEventImpl.get(GameEventKeys.RESONATE_11);
 
-    GameEvent RESONATE_12 = GameEventImpl.get(GameEventKey.RESONATE_12);
+    GameEvent RESONATE_12 = GameEventImpl.get(GameEventKeys.RESONATE_12);
 
-    GameEvent RESONATE_13 = GameEventImpl.get(GameEventKey.RESONATE_13);
+    GameEvent RESONATE_13 = GameEventImpl.get(GameEventKeys.RESONATE_13);
 
-    GameEvent RESONATE_14 = GameEventImpl.get(GameEventKey.RESONATE_14);
+    GameEvent RESONATE_14 = GameEventImpl.get(GameEventKeys.RESONATE_14);
 
-    GameEvent RESONATE_15 = GameEventImpl.get(GameEventKey.RESONATE_15);
+    GameEvent RESONATE_15 = GameEventImpl.get(GameEventKeys.RESONATE_15);
 }
