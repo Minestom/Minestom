@@ -30,6 +30,6 @@ public class TestShape {
     @ParameterizedTest
     @MethodSource("isFullFaceCases")
     void isFullFace(Block block, BlockFace face, boolean isFullFace) {
-        assertEquals(block.registry().collisionShape().isFaceFull(face), isFullFace);
+        assertEquals(block.collisionShape().isFaceFull(face), isFullFace);
     }
 }

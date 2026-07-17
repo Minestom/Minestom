@@ -329,7 +329,7 @@ public final class GeneratorImpl {
         }
 
         private boolean requireCache(Block block) {
-            return block.hasNbt() || block.handler() != null || block.registry().isBlockEntity();
+            return block.hasNbt() || block.handler() != null || block.blockEntity();
         }
 
         private void fillRelative(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, Block block) {

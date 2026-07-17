@@ -126,7 +126,7 @@ public class EntityProjectile extends Entity {
     private boolean isStuck(Pos pos, Pos posNow) {
         final Instance instance = getInstance();
         if (pos.samePoint(posNow)) {
-            return instance.getBlock(pos).isSolid();
+            return instance.getBlock(pos).solid();
         }
 
         Chunk chunk = null;
@@ -151,7 +151,7 @@ public class EntityProjectile extends Entity {
                 block = instance.getBlock(pos);
                 blockPos = pos;
             }
-            if (block.isSolid()) {
+            if (block.solid()) {
                 final ProjectileCollideWithBlockEvent event = new ProjectileCollideWithBlockEvent(this, pos, block);
                 EventDispatcher.call(event);
                 if (isRemoved()) return true;

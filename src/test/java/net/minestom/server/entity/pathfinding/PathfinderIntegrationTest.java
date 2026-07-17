@@ -32,7 +32,7 @@ public class PathfinderIntegrationTest {
         if (nodes.isEmpty()) fail("Path is empty");
 
         nodes.forEach((node) -> {
-            if (instance.getBlock(node.blockX(), node.blockY(), node.blockZ()).isSolid()) {
+            if (instance.getBlock(node.blockX(), node.blockY(), node.blockZ()).solid()) {
                 fail("Node is inside a block");
             }
         });

@@ -44,7 +44,6 @@ import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
-import net.minestom.server.registry.RegistryData;
 import net.minestom.server.snapshot.EntitySnapshot;
 import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
@@ -206,13 +205,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         this.entityMeta = MetadataHolder.createMeta(entityType, this, this.metadata);
 
-        final RegistryData.EntityEntry registry = entityType.registry();
-        setBoundingBox(entityType.registry().boundingBox());
+        setBoundingBox(entityType.boundingBox());
 
         this.aerodynamics = new Aerodynamics(
-                registry.acceleration(),
-                registry.horizontalAirResistance(),
-                registry.verticalAirResistance());
+                entityType.acceleration(),
+                entityType.horizontalAirResistance(),
+                entityType.verticalAirResistance());
 
         final ServerProcess process = MinecraftServer.process();
         if (process != null) {
@@ -605,10 +603,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.metadata = new MetadataHolder(this::notifyMetadataChanges);
         this.entityMeta = MetadataHolder.createMeta(entityType, this, this.metadata);
 
-        final RegistryData.EntityEntry registry = entityType.registry();
         this.aerodynamics = aerodynamics.withAirResistance(
-                registry.horizontalAirResistance(),
-                registry.verticalAirResistance());
+                entityType.horizontalAirResistance(),
+                entityType.verticalAirResistance());
 
         updateCollisions();
         Set<Player> viewers = new HashSet<>(getViewers());
@@ -710,7 +707,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                         // Move a small amount towards the entity. If the entity is within 0.01 blocks of the block, touch will trigger
                         Vec blockPos = new Vec(x, y, z);
                         Point blockEntityVector = (blockPos.sub(position)).normalize().mul(0.01);
-                        if (block.registry().collisionShape().intersectBox(position.sub(blockPos).add(blockEntityVector), boundingBox)) {
+                        if (block.collisionShape()
+                                .intersectBox(position.sub(blockPos).add(blockEntityVector), boundingBox)) {
                             handler.onTouch(new BlockHandler.Touch(block, instance, new Vec(x, y, z), this));
                         }
                     }
@@ -1486,7 +1484,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @return the entity eye height
      */
     public double getEyeHeight() {
-        return getPose() == EntityPose.SLEEPING ? 0.2 : entityType.registry().eyeHeight();
+        return getPose() == EntityPose.SLEEPING ? 0.2 : entityType.eyeHeight();
     }
 
     /**
@@ -1802,7 +1800,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         var it = new BlockIterator(this, maxDistance);
         while (it.hasNext()) {
             final Point position = it.next();
-            if (!instance.getBlock(position).isAir()) blocks.add(position);
+            if (!instance.getBlock(position).air()) blocks.add(position);
         }
         return blocks;
     }

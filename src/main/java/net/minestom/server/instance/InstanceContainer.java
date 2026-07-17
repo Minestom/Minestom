@@ -206,7 +206,7 @@ public class InstanceContainer extends Instance {
             // Refresh player chunk block
             {
                 chunk.sendPacketToViewers(new BlockChangePacket(blockPosition, block.stateId()));
-                BlockEntityType blockEntityType = block.registry().blockEntityType();
+                BlockEntityType blockEntityType = block.blockEntityType();
                 if (blockEntityType != null) {
                     final CompoundBinaryTag data = BlockUtils.extractClientNbt(block);
                     chunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, blockEntityType, data));
@@ -239,7 +239,7 @@ public class InstanceContainer extends Instance {
         final int x = blockPosition.blockX();
         final int y = blockPosition.blockY();
         final int z = blockPosition.blockZ();
-        if (block.isAir()) {
+        if (block.air()) {
             // The player has a wrong version of this block; correct just that block instead of resending the chunk.
             player.sendPacket(new BlockChangePacket(blockPosition, block));
             return false;
@@ -499,7 +499,7 @@ public class InstanceContainer extends Instance {
                 packed.add(CoordConversion.encodeSectionBlockChange(CoordConversion.sectionBlockIndex(x, y, z), value - 1)));
         for (var entry : sectionModifier.genSection().specials().int2ObjectEntrySet()) {
             final Block block = entry.getValue();
-            final BlockEntityType blockEntityType = block.registry().blockEntityType();
+            final BlockEntityType blockEntityType = block.blockEntityType();
             if (blockEntityType != null) {
                 final int index = entry.getIntKey();
                 final int x = CoordConversion.chunkBlockIndexGetX(index);
@@ -765,7 +765,7 @@ public class InstanceContainer extends Instance {
             if (neighborY < getCachedDimensionType().minY() || neighborY > getCachedDimensionType().height())
                 continue;
             final Block neighborBlock = cache.getBlock(neighborX, neighborY, neighborZ, Condition.NONE);
-            if (neighborBlock == null || neighborBlock.isAir())
+            if (neighborBlock == null || neighborBlock.air())
                 continue;
             final BlockPlacementRule neighborBlockPlacementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(neighborBlock);
             if (neighborBlockPlacementRule == null || updateDistance >= neighborBlockPlacementRule.maxUpdateDistance())

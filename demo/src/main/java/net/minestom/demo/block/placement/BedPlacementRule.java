@@ -31,7 +31,7 @@ public class BedPlacementRule extends BlockPlacementRule {
         if (!(placementState.instance() instanceof Instance instance)) return null;
 
         var headPosition = placementState.placePosition().relative(facing);
-        if (!instance.getBlock(headPosition, Block.Getter.Condition.TYPE).isAir())
+        if (!instance.getBlock(headPosition, Block.Getter.Condition.TYPE).air())
             return null;
 
         var headBlock = this.block.withProperty(PROP_PART, "head")

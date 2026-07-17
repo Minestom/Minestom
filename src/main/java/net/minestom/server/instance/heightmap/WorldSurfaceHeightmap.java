@@ -10,7 +10,7 @@ public class WorldSurfaceHeightmap extends Heightmap {
 
     @Override
     protected boolean checkBlock(Block block) {
-        return !block.isAir();
+        return !block.air();
     }
 
     @Override

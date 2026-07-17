@@ -119,7 +119,8 @@ public class GroundNodeGenerator implements NodeGenerator {
 
             while (pointIterator.hasNext()) {
                 var block = pointIterator.next();
-                if (getter.getBlock(block.blockX(), block.blockY(), block.blockZ(), Block.Getter.Condition.TYPE).isSolid()) {
+                if (getter.getBlock(
+                        block.blockX(), block.blockY(), block.blockZ(), Block.Getter.Condition.TYPE).solid()) {
                     return OptionalDouble.of(block.blockY() + 1);
                 }
             }
