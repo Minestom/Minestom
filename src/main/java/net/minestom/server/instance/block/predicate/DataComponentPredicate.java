@@ -254,7 +254,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         public boolean test(DataComponent.Holder holder) {
             var potion = holder.get(DataComponents.POTION_CONTENTS);
             if (potion == null || potion.potion() == null) return false;
-            return potionTypes.contains(potion.potion());
+            return potionTypes.contains(potion.potion().registryKey());
         }
 
         @Override

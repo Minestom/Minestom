@@ -22,6 +22,6 @@ public record Ingredient(RegistryTag<Material> tag) {
     public Ingredient(List<Material> items) {
         Check.argCondition(items.isEmpty(), "Ingredients can't be empty");
         Check.argCondition(items.contains(Material.AIR), "Ingredient can't contain air");
-        this(RegistryTag.direct(items));
+        this(RegistryTag.direct(items.stream().map(Material::registryKey).toList()));
     }
 }

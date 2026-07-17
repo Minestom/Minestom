@@ -53,7 +53,7 @@ public class BlockPredicatesTest extends AbstractItemComponentTest<BlockPredicat
         var expected = new BlockPredicates(new BlockPredicate(RegistryTag.direct(RegistryKey.unsafeOf("minecraft:stone"))));
         assertEquals(expected, component);
         assertEquals(1, component.predicates().getFirst().blocks().size());
-        assertTrue(component.predicates().getFirst().blocks().contains(Block.STONE));
+        assertTrue(component.predicates().getFirst().blocks().contains(Block.STONE.registryKey()));
     }
 
     @Test
