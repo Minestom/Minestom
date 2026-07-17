@@ -38,7 +38,7 @@ public sealed interface RegistryTag<T> extends HolderSet<T>, Iterable<RegistryKe
         return new RegistryTagImpl.Direct<>(List.of(keys));
     }
 
-    static <T> RegistryTag<T> direct(Collection<RegistryKey<T>> values) {
+    static <T> RegistryTag<T> direct(Collection<? extends RegistryKey<T>> values) {
         if (values.isEmpty()) return empty();
         return new RegistryTagImpl.Direct<>(List.copyOf(values));
     }

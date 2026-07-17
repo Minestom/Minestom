@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.advancements.FrameType;
 import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.ItemStackTemplate;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -134,7 +135,7 @@ public record AdvancementsPacket(
             public void write(NetworkBuffer buffer, DisplayData value) {
                 buffer.write(NetworkBuffer.COMPONENT, value.title);
                 buffer.write(NetworkBuffer.COMPONENT, value.description);
-                buffer.write(ItemStack.NETWORK_TYPE, value.icon);
+                buffer.write(ItemStackTemplate.NETWORK_TYPE, value.icon);
                 buffer.write(NetworkBuffer.Enum(FrameType.class), value.frameType);
                 buffer.write(NetworkBuffer.INT, value.flags);
                 if ((value.flags & 0x1) != 0) {
@@ -149,7 +150,7 @@ public record AdvancementsPacket(
             public DisplayData read(NetworkBuffer buffer) {
                 var title = buffer.read(NetworkBuffer.COMPONENT);
                 var description = buffer.read(NetworkBuffer.COMPONENT);
-                var icon = buffer.read(ItemStack.NETWORK_TYPE);
+                var icon = buffer.read(ItemStackTemplate.NETWORK_TYPE);
                 var frameType = FrameType.values()[buffer.read(NetworkBuffer.VAR_INT)];
                 var flags = buffer.read(NetworkBuffer.INT);
                 var backgroundTexture = (flags & 0x1) != 0 ? buffer.read(NetworkBuffer.STRING) : null;

@@ -165,13 +165,13 @@ public sealed abstract class ViewableInventory extends AbstractInventory permits
             // Prioritize the hotbar (8->0), then their regular inventory (35->9).
             clickResult = clickProcessor.shiftClick(
                     this, playerInventory,
-                    8, 0, -1,
+                    8, -1, -1,
                     player, clickSlot, clicked, cursor);
 
             if (clickResult.isCancel()) {
                 clickResult = clickProcessor.shiftClick(
                         this, playerInventory,
-                        playerInventory.getInnerSize() - 1, 0, -1,
+                        playerInventory.getInnerSize() - 1, -1, -1,
                         player, clickSlot, clicked, cursor);
             }
         } else {

@@ -97,4 +97,41 @@ public class DataComponentMapTest {
         assertEquals(42, map1.get(DataComponents.REPAIR_COST));
         assertEquals(24, map2.get(DataComponents.REPAIR_COST));
     }
+
+    @Test
+    void testEmptyBuildsAreCanonical() {
+        assertSame(DataComponentMap.EMPTY, DataComponentMap.builder().build());
+        assertSame(DataComponentMap.EMPTY, DataComponentMap.patchBuilder().build());
+    }
+
+    @Test
+    void testReset() {
+        var map = DataComponentMap.patchBuilder()
+                .set(DataComponents.REPAIR_COST, 42)
+                .remove(DataComponents.CUSTOM_NAME)
+                .reset(DataComponents.REPAIR_COST)
+                .build();
+
+        assertNull(map.get(DataComponents.REPAIR_COST));
+        assertFalse(map.has(DataComponents.CUSTOM_NAME));
+        assertEquals(1, map.entrySet().size());
+    }
+
+    @Test
+    void testApplyPatch() {
+        var prototype = DataComponentMap.builder()
+                .set(DataComponents.REPAIR_COST, 42)
+                .set(DataComponents.CUSTOM_NAME, Component.text("Name"))
+                .build();
+        var patch = DataComponentMap.patchBuilder()
+                .set(DataComponents.REPAIR_COST, 24)
+                .remove(DataComponents.CUSTOM_NAME)
+                .set(DataComponents.ITEM_NAME, Component.text("Item"))
+                .build();
+        var resolved = DataComponentMap.applyPatch(prototype, patch);
+
+        assertEquals(24, resolved.get(DataComponents.REPAIR_COST));
+        assertNull(resolved.get(DataComponents.CUSTOM_NAME));
+        assertEquals(Component.text("Item"), resolved.get(DataComponents.ITEM_NAME));
+    }
 }

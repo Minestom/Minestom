@@ -1,6 +1,5 @@
 package net.minestom.server.item.enchant;
 
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
@@ -44,9 +43,18 @@ public sealed interface Enchantment extends Enchantments permits EnchantmentImpl
      */
     @ApiStatus.Internal
     static DynamicRegistry<Enchantment> createDefaultRegistry(Registries registries) {
-        return DynamicRegistry.createForEnchantmentsWithSelfReferentialLoadingNightmare(
-                Key.key("enchantment"), REGISTRY_CODEC, RegistryData.Resource.ENCHANTMENTS, registries
-        );
+        return DynamicRegistry.create(BuiltinRegistries.ENCHANTMENT, REGISTRY_CODEC,
+                registries, (delegate, registry) -> new Registries.Delegating() {
+                    @Override
+                    public Registries registries() {
+                        return delegate;
+                    }
+
+                    @Override
+                    public DynamicRegistry<Enchantment> enchantment() {
+                        return registry;
+                    }
+                });
     }
 
     Component description();

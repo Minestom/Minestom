@@ -1,9 +1,14 @@
 package net.minestom.server.instance.block;
 
+import net.kyori.adventure.key.InvalidKeyException;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.Result;
+import net.minestom.server.codec.StructCodec;
+import net.minestom.server.codec.Transcoder;
+import net.kyori.adventure.translation.Translatable;
 import net.minestom.server.coordinate.Area;
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
@@ -32,13 +37,65 @@ import java.util.function.BiPredicate;
  * <p>
  * Implementations are expected to be immutable.
  */
-public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, Blocks permits BlockImpl {
+public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, Blocks, Translatable permits BlockImpl {
 
     NetworkBuffer.Type<Block> ID_NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Block::fromBlockId, Block::id);
     NetworkBuffer.Type<Block> STATE_NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Block::fromStateId, Block::stateId);
 
+    /**
+     * Codec for blocks states as strings.
+     * Format: <code>"minecraft:x[a=y,b=z]"</code>
+     */
     Codec<Block> STATE_CODEC = Codec.STRING.transform(state -> Objects.requireNonNull(
             Block.fromState(state), () -> "not a block state: " + state), Block::state);
+
+    /**
+     * Codec for block states as a map.
+     * Format: <code>{Name:"minecraft:x",Properties:{a:"y",b:"z"}}</code>
+     */
+    Codec<Block> STATE_STRUCT_CODEC = new StructCodec<>() {
+        @Override
+        public <D> Result<Block> decodeFromMap(Transcoder<D> coder, Transcoder.MapLike<D> map) {
+            Result<Block> blockResult = map.getValue("Name").map(coder::getString).mapResult(Block::fromKey);
+            if (!(blockResult instanceof Result.Ok(Block block)))
+                return blockResult.cast();
+            Result<Transcoder.MapLike<D>> propertiesResult = map.getValue("Properties").map(coder::getMap);
+            if (!(propertiesResult instanceof Result.Ok(Transcoder.MapLike<D> properties)))
+                // properties are optional
+                return new Result.Ok<>(block);
+            for (String key : properties.keys()) {
+                Result<String> valueResult = properties.getValue(key).map(coder::getString);
+                if (!(valueResult instanceof Result.Ok(String mapValue))) {
+                    return new Result.Error<>("No string value found for property " + key + " in block state");
+                }
+                block = block.withProperty(key, mapValue);
+            }
+            return new Result.Ok<>(block);
+        }
+
+        @Override
+        public <D> Result<D> encodeToMap(Transcoder<D> coder, Block value, Transcoder.MapBuilder<D> map) {
+            if (value == null) return new Result.Error<>("null");
+            map.put("Name", coder.createString(value.key().asMinimalString()));
+            final var properties = value.properties();
+            if (properties.isEmpty()) {
+                return new Result.Ok<>(map.build());
+            }
+            Map<String, String> defaultProperties = value.defaultState().properties();
+            Transcoder.MapBuilder<D> propertiesBuilder = coder.createMap();
+            boolean nonDefaultPropertyExists = false;
+            for (Map.Entry<String, String> entry : properties.entrySet()) {
+                if (defaultProperties.getOrDefault(entry.getKey(), "").equals(entry.getValue()))
+                    continue; // Skip default values
+                propertiesBuilder.put(entry.getKey(), coder.createString(entry.getValue()));
+                nonDefaultPropertyExists = true;
+            }
+            if (nonDefaultPropertyExists) {
+                map.put("Properties", propertiesBuilder.build());
+            }
+            return new Result.Ok<>(map.build());
+        }
+    };
 
     /**
      * Creates a new block with the the property {@code property} sets to {@code value}.
@@ -201,8 +258,22 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
         return registry().isSolid();
     }
 
+    /** Whether this block stops entity movement (motion-blocking collision); unlike {@link #isSolid()}, e.g. cobweb is solid but does not block motion. */
+    default boolean blocksMotion() {
+        return registry().blocksMotion();
+    }
+
     default boolean isLiquid() {
         return registry().isLiquid();
+    }
+
+    default boolean isFluid() {
+        return registry().isFluid();
+    }
+
+    @Override
+    default String translationKey() {
+        return registry().translationKey();
     }
 
     default boolean compare(Block block, Comparator comparator) {
@@ -218,7 +289,11 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
     }
 
     static @Nullable Block fromKey(@KeyPattern String key) {
-        return fromKey(Key.key(key));
+        try {
+            return fromKey(Key.key(key));
+        } catch (InvalidKeyException e) {
+            return null;
+        }
     }
 
     static @Nullable Block fromKey(Key key) {

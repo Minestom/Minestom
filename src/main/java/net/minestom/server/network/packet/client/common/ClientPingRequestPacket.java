@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 
 import static net.minestom.server.network.NetworkBuffer.LONG;
 
-public record ClientPingRequestPacket(long number) implements ClientPacket {
+public record ClientPingRequestPacket(long number) implements ClientPacket.Status, ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientPingRequestPacket> SERIALIZER = NetworkBufferTemplate.template(
             LONG, ClientPingRequestPacket::number, ClientPingRequestPacket::new);
 }

@@ -7,3013 +7,3077 @@ package net.minestom.server.item;
  */
 @SuppressWarnings("unused")
 sealed interface Materials permits Material {
-    Material AIR = MaterialImpl.get("air");
+    Material AIR = MaterialImpl.get(MaterialKeys.AIR);
 
-    Material STONE = MaterialImpl.get("stone");
+    Material STONE = MaterialImpl.get(MaterialKeys.STONE);
 
-    Material GRANITE = MaterialImpl.get("granite");
+    Material GRANITE = MaterialImpl.get(MaterialKeys.GRANITE);
 
-    Material POLISHED_GRANITE = MaterialImpl.get("polished_granite");
+    Material POLISHED_GRANITE = MaterialImpl.get(MaterialKeys.POLISHED_GRANITE);
 
-    Material DIORITE = MaterialImpl.get("diorite");
+    Material DIORITE = MaterialImpl.get(MaterialKeys.DIORITE);
 
-    Material POLISHED_DIORITE = MaterialImpl.get("polished_diorite");
+    Material POLISHED_DIORITE = MaterialImpl.get(MaterialKeys.POLISHED_DIORITE);
 
-    Material ANDESITE = MaterialImpl.get("andesite");
+    Material ANDESITE = MaterialImpl.get(MaterialKeys.ANDESITE);
 
-    Material POLISHED_ANDESITE = MaterialImpl.get("polished_andesite");
+    Material POLISHED_ANDESITE = MaterialImpl.get(MaterialKeys.POLISHED_ANDESITE);
 
-    Material DEEPSLATE = MaterialImpl.get("deepslate");
+    Material DEEPSLATE = MaterialImpl.get(MaterialKeys.DEEPSLATE);
 
-    Material COBBLED_DEEPSLATE = MaterialImpl.get("cobbled_deepslate");
+    Material COBBLED_DEEPSLATE = MaterialImpl.get(MaterialKeys.COBBLED_DEEPSLATE);
 
-    Material POLISHED_DEEPSLATE = MaterialImpl.get("polished_deepslate");
+    Material POLISHED_DEEPSLATE = MaterialImpl.get(MaterialKeys.POLISHED_DEEPSLATE);
 
-    Material CALCITE = MaterialImpl.get("calcite");
+    Material CALCITE = MaterialImpl.get(MaterialKeys.CALCITE);
 
-    Material TUFF = MaterialImpl.get("tuff");
+    Material TUFF = MaterialImpl.get(MaterialKeys.TUFF);
 
-    Material TUFF_SLAB = MaterialImpl.get("tuff_slab");
+    Material TUFF_SLAB = MaterialImpl.get(MaterialKeys.TUFF_SLAB);
 
-    Material TUFF_STAIRS = MaterialImpl.get("tuff_stairs");
+    Material TUFF_STAIRS = MaterialImpl.get(MaterialKeys.TUFF_STAIRS);
 
-    Material TUFF_WALL = MaterialImpl.get("tuff_wall");
+    Material TUFF_WALL = MaterialImpl.get(MaterialKeys.TUFF_WALL);
 
-    Material CHISELED_TUFF = MaterialImpl.get("chiseled_tuff");
+    Material CHISELED_TUFF = MaterialImpl.get(MaterialKeys.CHISELED_TUFF);
 
-    Material POLISHED_TUFF = MaterialImpl.get("polished_tuff");
+    Material POLISHED_TUFF = MaterialImpl.get(MaterialKeys.POLISHED_TUFF);
 
-    Material POLISHED_TUFF_SLAB = MaterialImpl.get("polished_tuff_slab");
+    Material POLISHED_TUFF_SLAB = MaterialImpl.get(MaterialKeys.POLISHED_TUFF_SLAB);
 
-    Material POLISHED_TUFF_STAIRS = MaterialImpl.get("polished_tuff_stairs");
+    Material POLISHED_TUFF_STAIRS = MaterialImpl.get(MaterialKeys.POLISHED_TUFF_STAIRS);
 
-    Material POLISHED_TUFF_WALL = MaterialImpl.get("polished_tuff_wall");
+    Material POLISHED_TUFF_WALL = MaterialImpl.get(MaterialKeys.POLISHED_TUFF_WALL);
 
-    Material TUFF_BRICKS = MaterialImpl.get("tuff_bricks");
+    Material TUFF_BRICKS = MaterialImpl.get(MaterialKeys.TUFF_BRICKS);
 
-    Material TUFF_BRICK_SLAB = MaterialImpl.get("tuff_brick_slab");
+    Material TUFF_BRICK_SLAB = MaterialImpl.get(MaterialKeys.TUFF_BRICK_SLAB);
 
-    Material TUFF_BRICK_STAIRS = MaterialImpl.get("tuff_brick_stairs");
+    Material TUFF_BRICK_STAIRS = MaterialImpl.get(MaterialKeys.TUFF_BRICK_STAIRS);
 
-    Material TUFF_BRICK_WALL = MaterialImpl.get("tuff_brick_wall");
+    Material TUFF_BRICK_WALL = MaterialImpl.get(MaterialKeys.TUFF_BRICK_WALL);
 
-    Material CHISELED_TUFF_BRICKS = MaterialImpl.get("chiseled_tuff_bricks");
+    Material CHISELED_TUFF_BRICKS = MaterialImpl.get(MaterialKeys.CHISELED_TUFF_BRICKS);
 
-    Material DRIPSTONE_BLOCK = MaterialImpl.get("dripstone_block");
+    Material SULFUR = MaterialImpl.get(MaterialKeys.SULFUR);
 
-    Material GRASS_BLOCK = MaterialImpl.get("grass_block");
+    Material POTENT_SULFUR = MaterialImpl.get(MaterialKeys.POTENT_SULFUR);
 
-    Material DIRT = MaterialImpl.get("dirt");
+    Material SULFUR_SLAB = MaterialImpl.get(MaterialKeys.SULFUR_SLAB);
 
-    Material COARSE_DIRT = MaterialImpl.get("coarse_dirt");
+    Material SULFUR_STAIRS = MaterialImpl.get(MaterialKeys.SULFUR_STAIRS);
 
-    Material PODZOL = MaterialImpl.get("podzol");
+    Material SULFUR_WALL = MaterialImpl.get(MaterialKeys.SULFUR_WALL);
 
-    Material ROOTED_DIRT = MaterialImpl.get("rooted_dirt");
+    Material POLISHED_SULFUR = MaterialImpl.get(MaterialKeys.POLISHED_SULFUR);
 
-    Material MUD = MaterialImpl.get("mud");
+    Material POLISHED_SULFUR_SLAB = MaterialImpl.get(MaterialKeys.POLISHED_SULFUR_SLAB);
 
-    Material CRIMSON_NYLIUM = MaterialImpl.get("crimson_nylium");
+    Material POLISHED_SULFUR_STAIRS = MaterialImpl.get(MaterialKeys.POLISHED_SULFUR_STAIRS);
 
-    Material WARPED_NYLIUM = MaterialImpl.get("warped_nylium");
+    Material POLISHED_SULFUR_WALL = MaterialImpl.get(MaterialKeys.POLISHED_SULFUR_WALL);
 
-    Material COBBLESTONE = MaterialImpl.get("cobblestone");
+    Material SULFUR_BRICKS = MaterialImpl.get(MaterialKeys.SULFUR_BRICKS);
 
-    Material OAK_PLANKS = MaterialImpl.get("oak_planks");
+    Material SULFUR_BRICK_SLAB = MaterialImpl.get(MaterialKeys.SULFUR_BRICK_SLAB);
 
-    Material SPRUCE_PLANKS = MaterialImpl.get("spruce_planks");
+    Material SULFUR_BRICK_STAIRS = MaterialImpl.get(MaterialKeys.SULFUR_BRICK_STAIRS);
 
-    Material BIRCH_PLANKS = MaterialImpl.get("birch_planks");
+    Material SULFUR_BRICK_WALL = MaterialImpl.get(MaterialKeys.SULFUR_BRICK_WALL);
 
-    Material JUNGLE_PLANKS = MaterialImpl.get("jungle_planks");
+    Material CHISELED_SULFUR = MaterialImpl.get(MaterialKeys.CHISELED_SULFUR);
 
-    Material ACACIA_PLANKS = MaterialImpl.get("acacia_planks");
+    Material CINNABAR = MaterialImpl.get(MaterialKeys.CINNABAR);
 
-    Material CHERRY_PLANKS = MaterialImpl.get("cherry_planks");
+    Material CINNABAR_SLAB = MaterialImpl.get(MaterialKeys.CINNABAR_SLAB);
 
-    Material DARK_OAK_PLANKS = MaterialImpl.get("dark_oak_planks");
+    Material CINNABAR_STAIRS = MaterialImpl.get(MaterialKeys.CINNABAR_STAIRS);
 
-    Material PALE_OAK_PLANKS = MaterialImpl.get("pale_oak_planks");
+    Material CINNABAR_WALL = MaterialImpl.get(MaterialKeys.CINNABAR_WALL);
 
-    Material MANGROVE_PLANKS = MaterialImpl.get("mangrove_planks");
+    Material POLISHED_CINNABAR = MaterialImpl.get(MaterialKeys.POLISHED_CINNABAR);
 
-    Material BAMBOO_PLANKS = MaterialImpl.get("bamboo_planks");
+    Material POLISHED_CINNABAR_SLAB = MaterialImpl.get(MaterialKeys.POLISHED_CINNABAR_SLAB);
 
-    Material CRIMSON_PLANKS = MaterialImpl.get("crimson_planks");
+    Material POLISHED_CINNABAR_STAIRS = MaterialImpl.get(MaterialKeys.POLISHED_CINNABAR_STAIRS);
 
-    Material WARPED_PLANKS = MaterialImpl.get("warped_planks");
+    Material POLISHED_CINNABAR_WALL = MaterialImpl.get(MaterialKeys.POLISHED_CINNABAR_WALL);
 
-    Material BAMBOO_MOSAIC = MaterialImpl.get("bamboo_mosaic");
+    Material CINNABAR_BRICKS = MaterialImpl.get(MaterialKeys.CINNABAR_BRICKS);
 
-    Material OAK_SAPLING = MaterialImpl.get("oak_sapling");
+    Material CINNABAR_BRICK_SLAB = MaterialImpl.get(MaterialKeys.CINNABAR_BRICK_SLAB);
 
-    Material SPRUCE_SAPLING = MaterialImpl.get("spruce_sapling");
+    Material CINNABAR_BRICK_STAIRS = MaterialImpl.get(MaterialKeys.CINNABAR_BRICK_STAIRS);
 
-    Material BIRCH_SAPLING = MaterialImpl.get("birch_sapling");
+    Material CINNABAR_BRICK_WALL = MaterialImpl.get(MaterialKeys.CINNABAR_BRICK_WALL);
 
-    Material JUNGLE_SAPLING = MaterialImpl.get("jungle_sapling");
+    Material CHISELED_CINNABAR = MaterialImpl.get(MaterialKeys.CHISELED_CINNABAR);
 
-    Material ACACIA_SAPLING = MaterialImpl.get("acacia_sapling");
+    Material DRIPSTONE_BLOCK = MaterialImpl.get(MaterialKeys.DRIPSTONE_BLOCK);
 
-    Material CHERRY_SAPLING = MaterialImpl.get("cherry_sapling");
+    Material GRASS_BLOCK = MaterialImpl.get(MaterialKeys.GRASS_BLOCK);
 
-    Material DARK_OAK_SAPLING = MaterialImpl.get("dark_oak_sapling");
+    Material DIRT = MaterialImpl.get(MaterialKeys.DIRT);
 
-    Material PALE_OAK_SAPLING = MaterialImpl.get("pale_oak_sapling");
+    Material COARSE_DIRT = MaterialImpl.get(MaterialKeys.COARSE_DIRT);
 
-    Material MANGROVE_PROPAGULE = MaterialImpl.get("mangrove_propagule");
+    Material PODZOL = MaterialImpl.get(MaterialKeys.PODZOL);
 
-    Material BEDROCK = MaterialImpl.get("bedrock");
+    Material ROOTED_DIRT = MaterialImpl.get(MaterialKeys.ROOTED_DIRT);
 
-    Material SAND = MaterialImpl.get("sand");
+    Material MUD = MaterialImpl.get(MaterialKeys.MUD);
 
-    Material SUSPICIOUS_SAND = MaterialImpl.get("suspicious_sand");
+    Material CRIMSON_NYLIUM = MaterialImpl.get(MaterialKeys.CRIMSON_NYLIUM);
 
-    Material SUSPICIOUS_GRAVEL = MaterialImpl.get("suspicious_gravel");
+    Material WARPED_NYLIUM = MaterialImpl.get(MaterialKeys.WARPED_NYLIUM);
 
-    Material RED_SAND = MaterialImpl.get("red_sand");
+    Material COBBLESTONE = MaterialImpl.get(MaterialKeys.COBBLESTONE);
 
-    Material GRAVEL = MaterialImpl.get("gravel");
+    Material OAK_PLANKS = MaterialImpl.get(MaterialKeys.OAK_PLANKS);
 
-    Material COAL_ORE = MaterialImpl.get("coal_ore");
+    Material SPRUCE_PLANKS = MaterialImpl.get(MaterialKeys.SPRUCE_PLANKS);
 
-    Material DEEPSLATE_COAL_ORE = MaterialImpl.get("deepslate_coal_ore");
+    Material BIRCH_PLANKS = MaterialImpl.get(MaterialKeys.BIRCH_PLANKS);
 
-    Material IRON_ORE = MaterialImpl.get("iron_ore");
+    Material JUNGLE_PLANKS = MaterialImpl.get(MaterialKeys.JUNGLE_PLANKS);
 
-    Material DEEPSLATE_IRON_ORE = MaterialImpl.get("deepslate_iron_ore");
+    Material ACACIA_PLANKS = MaterialImpl.get(MaterialKeys.ACACIA_PLANKS);
 
-    Material COPPER_ORE = MaterialImpl.get("copper_ore");
+    Material CHERRY_PLANKS = MaterialImpl.get(MaterialKeys.CHERRY_PLANKS);
 
-    Material DEEPSLATE_COPPER_ORE = MaterialImpl.get("deepslate_copper_ore");
+    Material DARK_OAK_PLANKS = MaterialImpl.get(MaterialKeys.DARK_OAK_PLANKS);
 
-    Material GOLD_ORE = MaterialImpl.get("gold_ore");
+    Material PALE_OAK_PLANKS = MaterialImpl.get(MaterialKeys.PALE_OAK_PLANKS);
 
-    Material DEEPSLATE_GOLD_ORE = MaterialImpl.get("deepslate_gold_ore");
+    Material MANGROVE_PLANKS = MaterialImpl.get(MaterialKeys.MANGROVE_PLANKS);
 
-    Material REDSTONE_ORE = MaterialImpl.get("redstone_ore");
+    Material BAMBOO_PLANKS = MaterialImpl.get(MaterialKeys.BAMBOO_PLANKS);
 
-    Material DEEPSLATE_REDSTONE_ORE = MaterialImpl.get("deepslate_redstone_ore");
+    Material CRIMSON_PLANKS = MaterialImpl.get(MaterialKeys.CRIMSON_PLANKS);
 
-    Material EMERALD_ORE = MaterialImpl.get("emerald_ore");
+    Material WARPED_PLANKS = MaterialImpl.get(MaterialKeys.WARPED_PLANKS);
 
-    Material DEEPSLATE_EMERALD_ORE = MaterialImpl.get("deepslate_emerald_ore");
+    Material BAMBOO_MOSAIC = MaterialImpl.get(MaterialKeys.BAMBOO_MOSAIC);
 
-    Material LAPIS_ORE = MaterialImpl.get("lapis_ore");
+    Material OAK_SAPLING = MaterialImpl.get(MaterialKeys.OAK_SAPLING);
 
-    Material DEEPSLATE_LAPIS_ORE = MaterialImpl.get("deepslate_lapis_ore");
+    Material SPRUCE_SAPLING = MaterialImpl.get(MaterialKeys.SPRUCE_SAPLING);
 
-    Material DIAMOND_ORE = MaterialImpl.get("diamond_ore");
+    Material BIRCH_SAPLING = MaterialImpl.get(MaterialKeys.BIRCH_SAPLING);
 
-    Material DEEPSLATE_DIAMOND_ORE = MaterialImpl.get("deepslate_diamond_ore");
+    Material JUNGLE_SAPLING = MaterialImpl.get(MaterialKeys.JUNGLE_SAPLING);
 
-    Material NETHER_GOLD_ORE = MaterialImpl.get("nether_gold_ore");
+    Material ACACIA_SAPLING = MaterialImpl.get(MaterialKeys.ACACIA_SAPLING);
 
-    Material NETHER_QUARTZ_ORE = MaterialImpl.get("nether_quartz_ore");
+    Material CHERRY_SAPLING = MaterialImpl.get(MaterialKeys.CHERRY_SAPLING);
 
-    Material ANCIENT_DEBRIS = MaterialImpl.get("ancient_debris");
+    Material DARK_OAK_SAPLING = MaterialImpl.get(MaterialKeys.DARK_OAK_SAPLING);
 
-    Material COAL_BLOCK = MaterialImpl.get("coal_block");
+    Material PALE_OAK_SAPLING = MaterialImpl.get(MaterialKeys.PALE_OAK_SAPLING);
 
-    Material RAW_IRON_BLOCK = MaterialImpl.get("raw_iron_block");
+    Material MANGROVE_PROPAGULE = MaterialImpl.get(MaterialKeys.MANGROVE_PROPAGULE);
 
-    Material RAW_COPPER_BLOCK = MaterialImpl.get("raw_copper_block");
+    Material BEDROCK = MaterialImpl.get(MaterialKeys.BEDROCK);
 
-    Material RAW_GOLD_BLOCK = MaterialImpl.get("raw_gold_block");
+    Material SAND = MaterialImpl.get(MaterialKeys.SAND);
 
-    Material HEAVY_CORE = MaterialImpl.get("heavy_core");
+    Material SUSPICIOUS_SAND = MaterialImpl.get(MaterialKeys.SUSPICIOUS_SAND);
 
-    Material AMETHYST_BLOCK = MaterialImpl.get("amethyst_block");
+    Material SUSPICIOUS_GRAVEL = MaterialImpl.get(MaterialKeys.SUSPICIOUS_GRAVEL);
 
-    Material BUDDING_AMETHYST = MaterialImpl.get("budding_amethyst");
+    Material RED_SAND = MaterialImpl.get(MaterialKeys.RED_SAND);
 
-    Material IRON_BLOCK = MaterialImpl.get("iron_block");
+    Material GRAVEL = MaterialImpl.get(MaterialKeys.GRAVEL);
 
-    Material COPPER_BLOCK = MaterialImpl.get("copper_block");
+    Material COAL_ORE = MaterialImpl.get(MaterialKeys.COAL_ORE);
 
-    Material GOLD_BLOCK = MaterialImpl.get("gold_block");
+    Material DEEPSLATE_COAL_ORE = MaterialImpl.get(MaterialKeys.DEEPSLATE_COAL_ORE);
 
-    Material DIAMOND_BLOCK = MaterialImpl.get("diamond_block");
+    Material IRON_ORE = MaterialImpl.get(MaterialKeys.IRON_ORE);
 
-    Material NETHERITE_BLOCK = MaterialImpl.get("netherite_block");
+    Material DEEPSLATE_IRON_ORE = MaterialImpl.get(MaterialKeys.DEEPSLATE_IRON_ORE);
 
-    Material EXPOSED_COPPER = MaterialImpl.get("exposed_copper");
+    Material COPPER_ORE = MaterialImpl.get(MaterialKeys.COPPER_ORE);
 
-    Material WEATHERED_COPPER = MaterialImpl.get("weathered_copper");
+    Material DEEPSLATE_COPPER_ORE = MaterialImpl.get(MaterialKeys.DEEPSLATE_COPPER_ORE);
 
-    Material OXIDIZED_COPPER = MaterialImpl.get("oxidized_copper");
+    Material GOLD_ORE = MaterialImpl.get(MaterialKeys.GOLD_ORE);
 
-    Material CHISELED_COPPER = MaterialImpl.get("chiseled_copper");
+    Material DEEPSLATE_GOLD_ORE = MaterialImpl.get(MaterialKeys.DEEPSLATE_GOLD_ORE);
 
-    Material EXPOSED_CHISELED_COPPER = MaterialImpl.get("exposed_chiseled_copper");
+    Material REDSTONE_ORE = MaterialImpl.get(MaterialKeys.REDSTONE_ORE);
 
-    Material WEATHERED_CHISELED_COPPER = MaterialImpl.get("weathered_chiseled_copper");
+    Material DEEPSLATE_REDSTONE_ORE = MaterialImpl.get(MaterialKeys.DEEPSLATE_REDSTONE_ORE);
 
-    Material OXIDIZED_CHISELED_COPPER = MaterialImpl.get("oxidized_chiseled_copper");
+    Material EMERALD_ORE = MaterialImpl.get(MaterialKeys.EMERALD_ORE);
 
-    Material CUT_COPPER = MaterialImpl.get("cut_copper");
+    Material DEEPSLATE_EMERALD_ORE = MaterialImpl.get(MaterialKeys.DEEPSLATE_EMERALD_ORE);
 
-    Material EXPOSED_CUT_COPPER = MaterialImpl.get("exposed_cut_copper");
+    Material LAPIS_ORE = MaterialImpl.get(MaterialKeys.LAPIS_ORE);
 
-    Material WEATHERED_CUT_COPPER = MaterialImpl.get("weathered_cut_copper");
+    Material DEEPSLATE_LAPIS_ORE = MaterialImpl.get(MaterialKeys.DEEPSLATE_LAPIS_ORE);
 
-    Material OXIDIZED_CUT_COPPER = MaterialImpl.get("oxidized_cut_copper");
+    Material DIAMOND_ORE = MaterialImpl.get(MaterialKeys.DIAMOND_ORE);
 
-    Material CUT_COPPER_STAIRS = MaterialImpl.get("cut_copper_stairs");
+    Material DEEPSLATE_DIAMOND_ORE = MaterialImpl.get(MaterialKeys.DEEPSLATE_DIAMOND_ORE);
 
-    Material EXPOSED_CUT_COPPER_STAIRS = MaterialImpl.get("exposed_cut_copper_stairs");
+    Material NETHER_GOLD_ORE = MaterialImpl.get(MaterialKeys.NETHER_GOLD_ORE);
 
-    Material WEATHERED_CUT_COPPER_STAIRS = MaterialImpl.get("weathered_cut_copper_stairs");
+    Material NETHER_QUARTZ_ORE = MaterialImpl.get(MaterialKeys.NETHER_QUARTZ_ORE);
 
-    Material OXIDIZED_CUT_COPPER_STAIRS = MaterialImpl.get("oxidized_cut_copper_stairs");
+    Material ANCIENT_DEBRIS = MaterialImpl.get(MaterialKeys.ANCIENT_DEBRIS);
 
-    Material CUT_COPPER_SLAB = MaterialImpl.get("cut_copper_slab");
+    Material COAL_BLOCK = MaterialImpl.get(MaterialKeys.COAL_BLOCK);
 
-    Material EXPOSED_CUT_COPPER_SLAB = MaterialImpl.get("exposed_cut_copper_slab");
+    Material RAW_IRON_BLOCK = MaterialImpl.get(MaterialKeys.RAW_IRON_BLOCK);
 
-    Material WEATHERED_CUT_COPPER_SLAB = MaterialImpl.get("weathered_cut_copper_slab");
+    Material RAW_COPPER_BLOCK = MaterialImpl.get(MaterialKeys.RAW_COPPER_BLOCK);
 
-    Material OXIDIZED_CUT_COPPER_SLAB = MaterialImpl.get("oxidized_cut_copper_slab");
+    Material RAW_GOLD_BLOCK = MaterialImpl.get(MaterialKeys.RAW_GOLD_BLOCK);
 
-    Material WAXED_COPPER_BLOCK = MaterialImpl.get("waxed_copper_block");
+    Material HEAVY_CORE = MaterialImpl.get(MaterialKeys.HEAVY_CORE);
 
-    Material WAXED_EXPOSED_COPPER = MaterialImpl.get("waxed_exposed_copper");
+    Material AMETHYST_BLOCK = MaterialImpl.get(MaterialKeys.AMETHYST_BLOCK);
 
-    Material WAXED_WEATHERED_COPPER = MaterialImpl.get("waxed_weathered_copper");
+    Material BUDDING_AMETHYST = MaterialImpl.get(MaterialKeys.BUDDING_AMETHYST);
 
-    Material WAXED_OXIDIZED_COPPER = MaterialImpl.get("waxed_oxidized_copper");
+    Material IRON_BLOCK = MaterialImpl.get(MaterialKeys.IRON_BLOCK);
 
-    Material WAXED_CHISELED_COPPER = MaterialImpl.get("waxed_chiseled_copper");
+    Material COPPER_BLOCK = MaterialImpl.get(MaterialKeys.COPPER_BLOCK);
 
-    Material WAXED_EXPOSED_CHISELED_COPPER = MaterialImpl.get("waxed_exposed_chiseled_copper");
+    Material EXPOSED_COPPER = MaterialImpl.get(MaterialKeys.EXPOSED_COPPER);
 
-    Material WAXED_WEATHERED_CHISELED_COPPER = MaterialImpl.get("waxed_weathered_chiseled_copper");
+    Material WEATHERED_COPPER = MaterialImpl.get(MaterialKeys.WEATHERED_COPPER);
 
-    Material WAXED_OXIDIZED_CHISELED_COPPER = MaterialImpl.get("waxed_oxidized_chiseled_copper");
+    Material OXIDIZED_COPPER = MaterialImpl.get(MaterialKeys.OXIDIZED_COPPER);
 
-    Material WAXED_CUT_COPPER = MaterialImpl.get("waxed_cut_copper");
+    Material WAXED_COPPER_BLOCK = MaterialImpl.get(MaterialKeys.WAXED_COPPER_BLOCK);
 
-    Material WAXED_EXPOSED_CUT_COPPER = MaterialImpl.get("waxed_exposed_cut_copper");
+    Material WAXED_EXPOSED_COPPER = MaterialImpl.get(MaterialKeys.WAXED_EXPOSED_COPPER);
 
-    Material WAXED_WEATHERED_CUT_COPPER = MaterialImpl.get("waxed_weathered_cut_copper");
+    Material WAXED_WEATHERED_COPPER = MaterialImpl.get(MaterialKeys.WAXED_WEATHERED_COPPER);
 
-    Material WAXED_OXIDIZED_CUT_COPPER = MaterialImpl.get("waxed_oxidized_cut_copper");
+    Material WAXED_OXIDIZED_COPPER = MaterialImpl.get(MaterialKeys.WAXED_OXIDIZED_COPPER);
 
-    Material WAXED_CUT_COPPER_STAIRS = MaterialImpl.get("waxed_cut_copper_stairs");
+    Material GOLD_BLOCK = MaterialImpl.get(MaterialKeys.GOLD_BLOCK);
 
-    Material WAXED_EXPOSED_CUT_COPPER_STAIRS = MaterialImpl.get("waxed_exposed_cut_copper_stairs");
+    Material DIAMOND_BLOCK = MaterialImpl.get(MaterialKeys.DIAMOND_BLOCK);
 
-    Material WAXED_WEATHERED_CUT_COPPER_STAIRS = MaterialImpl.get("waxed_weathered_cut_copper_stairs");
+    Material NETHERITE_BLOCK = MaterialImpl.get(MaterialKeys.NETHERITE_BLOCK);
 
-    Material WAXED_OXIDIZED_CUT_COPPER_STAIRS = MaterialImpl.get("waxed_oxidized_cut_copper_stairs");
+    Material CHISELED_COPPER = MaterialImpl.get(MaterialKeys.CHISELED_COPPER);
 
-    Material WAXED_CUT_COPPER_SLAB = MaterialImpl.get("waxed_cut_copper_slab");
+    Material EXPOSED_CHISELED_COPPER = MaterialImpl.get(MaterialKeys.EXPOSED_CHISELED_COPPER);
 
-    Material WAXED_EXPOSED_CUT_COPPER_SLAB = MaterialImpl.get("waxed_exposed_cut_copper_slab");
+    Material WEATHERED_CHISELED_COPPER = MaterialImpl.get(MaterialKeys.WEATHERED_CHISELED_COPPER);
 
-    Material WAXED_WEATHERED_CUT_COPPER_SLAB = MaterialImpl.get("waxed_weathered_cut_copper_slab");
+    Material OXIDIZED_CHISELED_COPPER = MaterialImpl.get(MaterialKeys.OXIDIZED_CHISELED_COPPER);
 
-    Material WAXED_OXIDIZED_CUT_COPPER_SLAB = MaterialImpl.get("waxed_oxidized_cut_copper_slab");
+    Material WAXED_CHISELED_COPPER = MaterialImpl.get(MaterialKeys.WAXED_CHISELED_COPPER);
 
-    Material OAK_LOG = MaterialImpl.get("oak_log");
+    Material WAXED_EXPOSED_CHISELED_COPPER = MaterialImpl.get(MaterialKeys.WAXED_EXPOSED_CHISELED_COPPER);
 
-    Material SPRUCE_LOG = MaterialImpl.get("spruce_log");
+    Material WAXED_WEATHERED_CHISELED_COPPER = MaterialImpl.get(MaterialKeys.WAXED_WEATHERED_CHISELED_COPPER);
 
-    Material BIRCH_LOG = MaterialImpl.get("birch_log");
+    Material WAXED_OXIDIZED_CHISELED_COPPER = MaterialImpl.get(MaterialKeys.WAXED_OXIDIZED_CHISELED_COPPER);
 
-    Material JUNGLE_LOG = MaterialImpl.get("jungle_log");
+    Material CUT_COPPER = MaterialImpl.get(MaterialKeys.CUT_COPPER);
 
-    Material ACACIA_LOG = MaterialImpl.get("acacia_log");
+    Material EXPOSED_CUT_COPPER = MaterialImpl.get(MaterialKeys.EXPOSED_CUT_COPPER);
 
-    Material CHERRY_LOG = MaterialImpl.get("cherry_log");
+    Material WEATHERED_CUT_COPPER = MaterialImpl.get(MaterialKeys.WEATHERED_CUT_COPPER);
 
-    Material PALE_OAK_LOG = MaterialImpl.get("pale_oak_log");
+    Material OXIDIZED_CUT_COPPER = MaterialImpl.get(MaterialKeys.OXIDIZED_CUT_COPPER);
 
-    Material DARK_OAK_LOG = MaterialImpl.get("dark_oak_log");
+    Material WAXED_CUT_COPPER = MaterialImpl.get(MaterialKeys.WAXED_CUT_COPPER);
 
-    Material MANGROVE_LOG = MaterialImpl.get("mangrove_log");
+    Material WAXED_EXPOSED_CUT_COPPER = MaterialImpl.get(MaterialKeys.WAXED_EXPOSED_CUT_COPPER);
 
-    Material MANGROVE_ROOTS = MaterialImpl.get("mangrove_roots");
+    Material WAXED_WEATHERED_CUT_COPPER = MaterialImpl.get(MaterialKeys.WAXED_WEATHERED_CUT_COPPER);
 
-    Material MUDDY_MANGROVE_ROOTS = MaterialImpl.get("muddy_mangrove_roots");
+    Material WAXED_OXIDIZED_CUT_COPPER = MaterialImpl.get(MaterialKeys.WAXED_OXIDIZED_CUT_COPPER);
 
-    Material CRIMSON_STEM = MaterialImpl.get("crimson_stem");
+    Material CUT_COPPER_STAIRS = MaterialImpl.get(MaterialKeys.CUT_COPPER_STAIRS);
 
-    Material WARPED_STEM = MaterialImpl.get("warped_stem");
+    Material EXPOSED_CUT_COPPER_STAIRS = MaterialImpl.get(MaterialKeys.EXPOSED_CUT_COPPER_STAIRS);
 
-    Material BAMBOO_BLOCK = MaterialImpl.get("bamboo_block");
+    Material WEATHERED_CUT_COPPER_STAIRS = MaterialImpl.get(MaterialKeys.WEATHERED_CUT_COPPER_STAIRS);
 
-    Material STRIPPED_OAK_LOG = MaterialImpl.get("stripped_oak_log");
+    Material OXIDIZED_CUT_COPPER_STAIRS = MaterialImpl.get(MaterialKeys.OXIDIZED_CUT_COPPER_STAIRS);
 
-    Material STRIPPED_SPRUCE_LOG = MaterialImpl.get("stripped_spruce_log");
+    Material WAXED_CUT_COPPER_STAIRS = MaterialImpl.get(MaterialKeys.WAXED_CUT_COPPER_STAIRS);
 
-    Material STRIPPED_BIRCH_LOG = MaterialImpl.get("stripped_birch_log");
+    Material WAXED_EXPOSED_CUT_COPPER_STAIRS = MaterialImpl.get(MaterialKeys.WAXED_EXPOSED_CUT_COPPER_STAIRS);
 
-    Material STRIPPED_JUNGLE_LOG = MaterialImpl.get("stripped_jungle_log");
+    Material WAXED_WEATHERED_CUT_COPPER_STAIRS = MaterialImpl.get(MaterialKeys.WAXED_WEATHERED_CUT_COPPER_STAIRS);
 
-    Material STRIPPED_ACACIA_LOG = MaterialImpl.get("stripped_acacia_log");
+    Material WAXED_OXIDIZED_CUT_COPPER_STAIRS = MaterialImpl.get(MaterialKeys.WAXED_OXIDIZED_CUT_COPPER_STAIRS);
 
-    Material STRIPPED_CHERRY_LOG = MaterialImpl.get("stripped_cherry_log");
+    Material CUT_COPPER_SLAB = MaterialImpl.get(MaterialKeys.CUT_COPPER_SLAB);
 
-    Material STRIPPED_DARK_OAK_LOG = MaterialImpl.get("stripped_dark_oak_log");
+    Material EXPOSED_CUT_COPPER_SLAB = MaterialImpl.get(MaterialKeys.EXPOSED_CUT_COPPER_SLAB);
 
-    Material STRIPPED_PALE_OAK_LOG = MaterialImpl.get("stripped_pale_oak_log");
+    Material WEATHERED_CUT_COPPER_SLAB = MaterialImpl.get(MaterialKeys.WEATHERED_CUT_COPPER_SLAB);
 
-    Material STRIPPED_MANGROVE_LOG = MaterialImpl.get("stripped_mangrove_log");
+    Material OXIDIZED_CUT_COPPER_SLAB = MaterialImpl.get(MaterialKeys.OXIDIZED_CUT_COPPER_SLAB);
 
-    Material STRIPPED_CRIMSON_STEM = MaterialImpl.get("stripped_crimson_stem");
+    Material WAXED_CUT_COPPER_SLAB = MaterialImpl.get(MaterialKeys.WAXED_CUT_COPPER_SLAB);
 
-    Material STRIPPED_WARPED_STEM = MaterialImpl.get("stripped_warped_stem");
+    Material WAXED_EXPOSED_CUT_COPPER_SLAB = MaterialImpl.get(MaterialKeys.WAXED_EXPOSED_CUT_COPPER_SLAB);
 
-    Material STRIPPED_OAK_WOOD = MaterialImpl.get("stripped_oak_wood");
+    Material WAXED_WEATHERED_CUT_COPPER_SLAB = MaterialImpl.get(MaterialKeys.WAXED_WEATHERED_CUT_COPPER_SLAB);
 
-    Material STRIPPED_SPRUCE_WOOD = MaterialImpl.get("stripped_spruce_wood");
+    Material WAXED_OXIDIZED_CUT_COPPER_SLAB = MaterialImpl.get(MaterialKeys.WAXED_OXIDIZED_CUT_COPPER_SLAB);
 
-    Material STRIPPED_BIRCH_WOOD = MaterialImpl.get("stripped_birch_wood");
+    Material OAK_LOG = MaterialImpl.get(MaterialKeys.OAK_LOG);
 
-    Material STRIPPED_JUNGLE_WOOD = MaterialImpl.get("stripped_jungle_wood");
+    Material SPRUCE_LOG = MaterialImpl.get(MaterialKeys.SPRUCE_LOG);
 
-    Material STRIPPED_ACACIA_WOOD = MaterialImpl.get("stripped_acacia_wood");
+    Material BIRCH_LOG = MaterialImpl.get(MaterialKeys.BIRCH_LOG);
 
-    Material STRIPPED_CHERRY_WOOD = MaterialImpl.get("stripped_cherry_wood");
+    Material JUNGLE_LOG = MaterialImpl.get(MaterialKeys.JUNGLE_LOG);
 
-    Material STRIPPED_DARK_OAK_WOOD = MaterialImpl.get("stripped_dark_oak_wood");
+    Material ACACIA_LOG = MaterialImpl.get(MaterialKeys.ACACIA_LOG);
 
-    Material STRIPPED_PALE_OAK_WOOD = MaterialImpl.get("stripped_pale_oak_wood");
+    Material CHERRY_LOG = MaterialImpl.get(MaterialKeys.CHERRY_LOG);
 
-    Material STRIPPED_MANGROVE_WOOD = MaterialImpl.get("stripped_mangrove_wood");
+    Material PALE_OAK_LOG = MaterialImpl.get(MaterialKeys.PALE_OAK_LOG);
 
-    Material STRIPPED_CRIMSON_HYPHAE = MaterialImpl.get("stripped_crimson_hyphae");
+    Material DARK_OAK_LOG = MaterialImpl.get(MaterialKeys.DARK_OAK_LOG);
 
-    Material STRIPPED_WARPED_HYPHAE = MaterialImpl.get("stripped_warped_hyphae");
+    Material MANGROVE_LOG = MaterialImpl.get(MaterialKeys.MANGROVE_LOG);
 
-    Material STRIPPED_BAMBOO_BLOCK = MaterialImpl.get("stripped_bamboo_block");
+    Material MANGROVE_ROOTS = MaterialImpl.get(MaterialKeys.MANGROVE_ROOTS);
 
-    Material OAK_WOOD = MaterialImpl.get("oak_wood");
+    Material MUDDY_MANGROVE_ROOTS = MaterialImpl.get(MaterialKeys.MUDDY_MANGROVE_ROOTS);
 
-    Material SPRUCE_WOOD = MaterialImpl.get("spruce_wood");
+    Material CRIMSON_STEM = MaterialImpl.get(MaterialKeys.CRIMSON_STEM);
 
-    Material BIRCH_WOOD = MaterialImpl.get("birch_wood");
+    Material WARPED_STEM = MaterialImpl.get(MaterialKeys.WARPED_STEM);
 
-    Material JUNGLE_WOOD = MaterialImpl.get("jungle_wood");
+    Material BAMBOO_BLOCK = MaterialImpl.get(MaterialKeys.BAMBOO_BLOCK);
 
-    Material ACACIA_WOOD = MaterialImpl.get("acacia_wood");
+    Material STRIPPED_OAK_LOG = MaterialImpl.get(MaterialKeys.STRIPPED_OAK_LOG);
 
-    Material CHERRY_WOOD = MaterialImpl.get("cherry_wood");
+    Material STRIPPED_SPRUCE_LOG = MaterialImpl.get(MaterialKeys.STRIPPED_SPRUCE_LOG);
 
-    Material PALE_OAK_WOOD = MaterialImpl.get("pale_oak_wood");
+    Material STRIPPED_BIRCH_LOG = MaterialImpl.get(MaterialKeys.STRIPPED_BIRCH_LOG);
 
-    Material DARK_OAK_WOOD = MaterialImpl.get("dark_oak_wood");
+    Material STRIPPED_JUNGLE_LOG = MaterialImpl.get(MaterialKeys.STRIPPED_JUNGLE_LOG);
 
-    Material MANGROVE_WOOD = MaterialImpl.get("mangrove_wood");
+    Material STRIPPED_ACACIA_LOG = MaterialImpl.get(MaterialKeys.STRIPPED_ACACIA_LOG);
 
-    Material CRIMSON_HYPHAE = MaterialImpl.get("crimson_hyphae");
+    Material STRIPPED_CHERRY_LOG = MaterialImpl.get(MaterialKeys.STRIPPED_CHERRY_LOG);
 
-    Material WARPED_HYPHAE = MaterialImpl.get("warped_hyphae");
+    Material STRIPPED_DARK_OAK_LOG = MaterialImpl.get(MaterialKeys.STRIPPED_DARK_OAK_LOG);
 
-    Material OAK_LEAVES = MaterialImpl.get("oak_leaves");
+    Material STRIPPED_PALE_OAK_LOG = MaterialImpl.get(MaterialKeys.STRIPPED_PALE_OAK_LOG);
 
-    Material SPRUCE_LEAVES = MaterialImpl.get("spruce_leaves");
+    Material STRIPPED_MANGROVE_LOG = MaterialImpl.get(MaterialKeys.STRIPPED_MANGROVE_LOG);
 
-    Material BIRCH_LEAVES = MaterialImpl.get("birch_leaves");
+    Material STRIPPED_CRIMSON_STEM = MaterialImpl.get(MaterialKeys.STRIPPED_CRIMSON_STEM);
 
-    Material JUNGLE_LEAVES = MaterialImpl.get("jungle_leaves");
+    Material STRIPPED_WARPED_STEM = MaterialImpl.get(MaterialKeys.STRIPPED_WARPED_STEM);
 
-    Material ACACIA_LEAVES = MaterialImpl.get("acacia_leaves");
+    Material STRIPPED_OAK_WOOD = MaterialImpl.get(MaterialKeys.STRIPPED_OAK_WOOD);
 
-    Material CHERRY_LEAVES = MaterialImpl.get("cherry_leaves");
+    Material STRIPPED_SPRUCE_WOOD = MaterialImpl.get(MaterialKeys.STRIPPED_SPRUCE_WOOD);
 
-    Material DARK_OAK_LEAVES = MaterialImpl.get("dark_oak_leaves");
+    Material STRIPPED_BIRCH_WOOD = MaterialImpl.get(MaterialKeys.STRIPPED_BIRCH_WOOD);
 
-    Material PALE_OAK_LEAVES = MaterialImpl.get("pale_oak_leaves");
+    Material STRIPPED_JUNGLE_WOOD = MaterialImpl.get(MaterialKeys.STRIPPED_JUNGLE_WOOD);
 
-    Material MANGROVE_LEAVES = MaterialImpl.get("mangrove_leaves");
+    Material STRIPPED_ACACIA_WOOD = MaterialImpl.get(MaterialKeys.STRIPPED_ACACIA_WOOD);
 
-    Material AZALEA_LEAVES = MaterialImpl.get("azalea_leaves");
+    Material STRIPPED_CHERRY_WOOD = MaterialImpl.get(MaterialKeys.STRIPPED_CHERRY_WOOD);
 
-    Material FLOWERING_AZALEA_LEAVES = MaterialImpl.get("flowering_azalea_leaves");
+    Material STRIPPED_DARK_OAK_WOOD = MaterialImpl.get(MaterialKeys.STRIPPED_DARK_OAK_WOOD);
 
-    Material SPONGE = MaterialImpl.get("sponge");
+    Material STRIPPED_PALE_OAK_WOOD = MaterialImpl.get(MaterialKeys.STRIPPED_PALE_OAK_WOOD);
 
-    Material WET_SPONGE = MaterialImpl.get("wet_sponge");
+    Material STRIPPED_MANGROVE_WOOD = MaterialImpl.get(MaterialKeys.STRIPPED_MANGROVE_WOOD);
 
-    Material GLASS = MaterialImpl.get("glass");
+    Material STRIPPED_CRIMSON_HYPHAE = MaterialImpl.get(MaterialKeys.STRIPPED_CRIMSON_HYPHAE);
 
-    Material TINTED_GLASS = MaterialImpl.get("tinted_glass");
+    Material STRIPPED_WARPED_HYPHAE = MaterialImpl.get(MaterialKeys.STRIPPED_WARPED_HYPHAE);
 
-    Material LAPIS_BLOCK = MaterialImpl.get("lapis_block");
+    Material STRIPPED_BAMBOO_BLOCK = MaterialImpl.get(MaterialKeys.STRIPPED_BAMBOO_BLOCK);
 
-    Material SANDSTONE = MaterialImpl.get("sandstone");
+    Material OAK_WOOD = MaterialImpl.get(MaterialKeys.OAK_WOOD);
 
-    Material CHISELED_SANDSTONE = MaterialImpl.get("chiseled_sandstone");
+    Material SPRUCE_WOOD = MaterialImpl.get(MaterialKeys.SPRUCE_WOOD);
 
-    Material CUT_SANDSTONE = MaterialImpl.get("cut_sandstone");
+    Material BIRCH_WOOD = MaterialImpl.get(MaterialKeys.BIRCH_WOOD);
 
-    Material COBWEB = MaterialImpl.get("cobweb");
+    Material JUNGLE_WOOD = MaterialImpl.get(MaterialKeys.JUNGLE_WOOD);
 
-    Material SHORT_GRASS = MaterialImpl.get("short_grass");
+    Material ACACIA_WOOD = MaterialImpl.get(MaterialKeys.ACACIA_WOOD);
 
-    Material FERN = MaterialImpl.get("fern");
+    Material CHERRY_WOOD = MaterialImpl.get(MaterialKeys.CHERRY_WOOD);
 
-    Material BUSH = MaterialImpl.get("bush");
+    Material PALE_OAK_WOOD = MaterialImpl.get(MaterialKeys.PALE_OAK_WOOD);
 
-    Material AZALEA = MaterialImpl.get("azalea");
+    Material DARK_OAK_WOOD = MaterialImpl.get(MaterialKeys.DARK_OAK_WOOD);
 
-    Material FLOWERING_AZALEA = MaterialImpl.get("flowering_azalea");
+    Material MANGROVE_WOOD = MaterialImpl.get(MaterialKeys.MANGROVE_WOOD);
 
-    Material DEAD_BUSH = MaterialImpl.get("dead_bush");
+    Material CRIMSON_HYPHAE = MaterialImpl.get(MaterialKeys.CRIMSON_HYPHAE);
 
-    Material FIREFLY_BUSH = MaterialImpl.get("firefly_bush");
+    Material WARPED_HYPHAE = MaterialImpl.get(MaterialKeys.WARPED_HYPHAE);
 
-    Material SHORT_DRY_GRASS = MaterialImpl.get("short_dry_grass");
+    Material OAK_LEAVES = MaterialImpl.get(MaterialKeys.OAK_LEAVES);
 
-    Material TALL_DRY_GRASS = MaterialImpl.get("tall_dry_grass");
+    Material SPRUCE_LEAVES = MaterialImpl.get(MaterialKeys.SPRUCE_LEAVES);
 
-    Material SEAGRASS = MaterialImpl.get("seagrass");
+    Material BIRCH_LEAVES = MaterialImpl.get(MaterialKeys.BIRCH_LEAVES);
 
-    Material SEA_PICKLE = MaterialImpl.get("sea_pickle");
+    Material JUNGLE_LEAVES = MaterialImpl.get(MaterialKeys.JUNGLE_LEAVES);
 
-    Material WHITE_WOOL = MaterialImpl.get("white_wool");
+    Material ACACIA_LEAVES = MaterialImpl.get(MaterialKeys.ACACIA_LEAVES);
 
-    Material ORANGE_WOOL = MaterialImpl.get("orange_wool");
+    Material CHERRY_LEAVES = MaterialImpl.get(MaterialKeys.CHERRY_LEAVES);
 
-    Material MAGENTA_WOOL = MaterialImpl.get("magenta_wool");
+    Material DARK_OAK_LEAVES = MaterialImpl.get(MaterialKeys.DARK_OAK_LEAVES);
 
-    Material LIGHT_BLUE_WOOL = MaterialImpl.get("light_blue_wool");
+    Material PALE_OAK_LEAVES = MaterialImpl.get(MaterialKeys.PALE_OAK_LEAVES);
 
-    Material YELLOW_WOOL = MaterialImpl.get("yellow_wool");
+    Material MANGROVE_LEAVES = MaterialImpl.get(MaterialKeys.MANGROVE_LEAVES);
 
-    Material LIME_WOOL = MaterialImpl.get("lime_wool");
+    Material AZALEA_LEAVES = MaterialImpl.get(MaterialKeys.AZALEA_LEAVES);
 
-    Material PINK_WOOL = MaterialImpl.get("pink_wool");
+    Material FLOWERING_AZALEA_LEAVES = MaterialImpl.get(MaterialKeys.FLOWERING_AZALEA_LEAVES);
 
-    Material GRAY_WOOL = MaterialImpl.get("gray_wool");
+    Material SPONGE = MaterialImpl.get(MaterialKeys.SPONGE);
 
-    Material LIGHT_GRAY_WOOL = MaterialImpl.get("light_gray_wool");
+    Material WET_SPONGE = MaterialImpl.get(MaterialKeys.WET_SPONGE);
 
-    Material CYAN_WOOL = MaterialImpl.get("cyan_wool");
+    Material GLASS = MaterialImpl.get(MaterialKeys.GLASS);
 
-    Material PURPLE_WOOL = MaterialImpl.get("purple_wool");
+    Material TINTED_GLASS = MaterialImpl.get(MaterialKeys.TINTED_GLASS);
 
-    Material BLUE_WOOL = MaterialImpl.get("blue_wool");
+    Material LAPIS_BLOCK = MaterialImpl.get(MaterialKeys.LAPIS_BLOCK);
 
-    Material BROWN_WOOL = MaterialImpl.get("brown_wool");
+    Material SANDSTONE = MaterialImpl.get(MaterialKeys.SANDSTONE);
 
-    Material GREEN_WOOL = MaterialImpl.get("green_wool");
+    Material CHISELED_SANDSTONE = MaterialImpl.get(MaterialKeys.CHISELED_SANDSTONE);
 
-    Material RED_WOOL = MaterialImpl.get("red_wool");
+    Material CUT_SANDSTONE = MaterialImpl.get(MaterialKeys.CUT_SANDSTONE);
 
-    Material BLACK_WOOL = MaterialImpl.get("black_wool");
+    Material COBWEB = MaterialImpl.get(MaterialKeys.COBWEB);
 
-    Material DANDELION = MaterialImpl.get("dandelion");
+    Material SHORT_GRASS = MaterialImpl.get(MaterialKeys.SHORT_GRASS);
 
-    Material OPEN_EYEBLOSSOM = MaterialImpl.get("open_eyeblossom");
+    Material FERN = MaterialImpl.get(MaterialKeys.FERN);
 
-    Material CLOSED_EYEBLOSSOM = MaterialImpl.get("closed_eyeblossom");
+    Material BUSH = MaterialImpl.get(MaterialKeys.BUSH);
 
-    Material POPPY = MaterialImpl.get("poppy");
+    Material AZALEA = MaterialImpl.get(MaterialKeys.AZALEA);
 
-    Material BLUE_ORCHID = MaterialImpl.get("blue_orchid");
+    Material FLOWERING_AZALEA = MaterialImpl.get(MaterialKeys.FLOWERING_AZALEA);
 
-    Material ALLIUM = MaterialImpl.get("allium");
+    Material DEAD_BUSH = MaterialImpl.get(MaterialKeys.DEAD_BUSH);
 
-    Material AZURE_BLUET = MaterialImpl.get("azure_bluet");
+    Material FIREFLY_BUSH = MaterialImpl.get(MaterialKeys.FIREFLY_BUSH);
 
-    Material RED_TULIP = MaterialImpl.get("red_tulip");
+    Material SHORT_DRY_GRASS = MaterialImpl.get(MaterialKeys.SHORT_DRY_GRASS);
 
-    Material ORANGE_TULIP = MaterialImpl.get("orange_tulip");
+    Material TALL_DRY_GRASS = MaterialImpl.get(MaterialKeys.TALL_DRY_GRASS);
 
-    Material WHITE_TULIP = MaterialImpl.get("white_tulip");
+    Material SEAGRASS = MaterialImpl.get(MaterialKeys.SEAGRASS);
 
-    Material PINK_TULIP = MaterialImpl.get("pink_tulip");
+    Material SEA_PICKLE = MaterialImpl.get(MaterialKeys.SEA_PICKLE);
 
-    Material OXEYE_DAISY = MaterialImpl.get("oxeye_daisy");
+    Material WHITE_WOOL = MaterialImpl.get(MaterialKeys.WHITE_WOOL);
 
-    Material CORNFLOWER = MaterialImpl.get("cornflower");
+    Material ORANGE_WOOL = MaterialImpl.get(MaterialKeys.ORANGE_WOOL);
 
-    Material LILY_OF_THE_VALLEY = MaterialImpl.get("lily_of_the_valley");
+    Material MAGENTA_WOOL = MaterialImpl.get(MaterialKeys.MAGENTA_WOOL);
 
-    Material WITHER_ROSE = MaterialImpl.get("wither_rose");
+    Material LIGHT_BLUE_WOOL = MaterialImpl.get(MaterialKeys.LIGHT_BLUE_WOOL);
 
-    Material TORCHFLOWER = MaterialImpl.get("torchflower");
+    Material YELLOW_WOOL = MaterialImpl.get(MaterialKeys.YELLOW_WOOL);
 
-    Material PITCHER_PLANT = MaterialImpl.get("pitcher_plant");
+    Material LIME_WOOL = MaterialImpl.get(MaterialKeys.LIME_WOOL);
 
-    Material SPORE_BLOSSOM = MaterialImpl.get("spore_blossom");
+    Material PINK_WOOL = MaterialImpl.get(MaterialKeys.PINK_WOOL);
 
-    Material BROWN_MUSHROOM = MaterialImpl.get("brown_mushroom");
+    Material GRAY_WOOL = MaterialImpl.get(MaterialKeys.GRAY_WOOL);
 
-    Material RED_MUSHROOM = MaterialImpl.get("red_mushroom");
+    Material LIGHT_GRAY_WOOL = MaterialImpl.get(MaterialKeys.LIGHT_GRAY_WOOL);
 
-    Material CRIMSON_FUNGUS = MaterialImpl.get("crimson_fungus");
+    Material CYAN_WOOL = MaterialImpl.get(MaterialKeys.CYAN_WOOL);
 
-    Material WARPED_FUNGUS = MaterialImpl.get("warped_fungus");
+    Material PURPLE_WOOL = MaterialImpl.get(MaterialKeys.PURPLE_WOOL);
 
-    Material CRIMSON_ROOTS = MaterialImpl.get("crimson_roots");
+    Material BLUE_WOOL = MaterialImpl.get(MaterialKeys.BLUE_WOOL);
 
-    Material WARPED_ROOTS = MaterialImpl.get("warped_roots");
+    Material BROWN_WOOL = MaterialImpl.get(MaterialKeys.BROWN_WOOL);
 
-    Material NETHER_SPROUTS = MaterialImpl.get("nether_sprouts");
+    Material GREEN_WOOL = MaterialImpl.get(MaterialKeys.GREEN_WOOL);
 
-    Material WEEPING_VINES = MaterialImpl.get("weeping_vines");
+    Material RED_WOOL = MaterialImpl.get(MaterialKeys.RED_WOOL);
 
-    Material TWISTING_VINES = MaterialImpl.get("twisting_vines");
+    Material BLACK_WOOL = MaterialImpl.get(MaterialKeys.BLACK_WOOL);
 
-    Material SUGAR_CANE = MaterialImpl.get("sugar_cane");
+    Material DANDELION = MaterialImpl.get(MaterialKeys.DANDELION);
 
-    Material KELP = MaterialImpl.get("kelp");
+    Material GOLDEN_DANDELION = MaterialImpl.get(MaterialKeys.GOLDEN_DANDELION);
 
-    Material PINK_PETALS = MaterialImpl.get("pink_petals");
+    Material OPEN_EYEBLOSSOM = MaterialImpl.get(MaterialKeys.OPEN_EYEBLOSSOM);
 
-    Material WILDFLOWERS = MaterialImpl.get("wildflowers");
+    Material CLOSED_EYEBLOSSOM = MaterialImpl.get(MaterialKeys.CLOSED_EYEBLOSSOM);
 
-    Material LEAF_LITTER = MaterialImpl.get("leaf_litter");
+    Material POPPY = MaterialImpl.get(MaterialKeys.POPPY);
 
-    Material MOSS_CARPET = MaterialImpl.get("moss_carpet");
+    Material BLUE_ORCHID = MaterialImpl.get(MaterialKeys.BLUE_ORCHID);
 
-    Material MOSS_BLOCK = MaterialImpl.get("moss_block");
+    Material ALLIUM = MaterialImpl.get(MaterialKeys.ALLIUM);
 
-    Material PALE_MOSS_CARPET = MaterialImpl.get("pale_moss_carpet");
+    Material AZURE_BLUET = MaterialImpl.get(MaterialKeys.AZURE_BLUET);
 
-    Material PALE_HANGING_MOSS = MaterialImpl.get("pale_hanging_moss");
+    Material RED_TULIP = MaterialImpl.get(MaterialKeys.RED_TULIP);
 
-    Material PALE_MOSS_BLOCK = MaterialImpl.get("pale_moss_block");
+    Material ORANGE_TULIP = MaterialImpl.get(MaterialKeys.ORANGE_TULIP);
 
-    Material HANGING_ROOTS = MaterialImpl.get("hanging_roots");
+    Material WHITE_TULIP = MaterialImpl.get(MaterialKeys.WHITE_TULIP);
 
-    Material BIG_DRIPLEAF = MaterialImpl.get("big_dripleaf");
+    Material PINK_TULIP = MaterialImpl.get(MaterialKeys.PINK_TULIP);
 
-    Material SMALL_DRIPLEAF = MaterialImpl.get("small_dripleaf");
+    Material OXEYE_DAISY = MaterialImpl.get(MaterialKeys.OXEYE_DAISY);
 
-    Material BAMBOO = MaterialImpl.get("bamboo");
+    Material CORNFLOWER = MaterialImpl.get(MaterialKeys.CORNFLOWER);
 
-    Material OAK_SLAB = MaterialImpl.get("oak_slab");
+    Material LILY_OF_THE_VALLEY = MaterialImpl.get(MaterialKeys.LILY_OF_THE_VALLEY);
 
-    Material SPRUCE_SLAB = MaterialImpl.get("spruce_slab");
+    Material WITHER_ROSE = MaterialImpl.get(MaterialKeys.WITHER_ROSE);
 
-    Material BIRCH_SLAB = MaterialImpl.get("birch_slab");
+    Material TORCHFLOWER = MaterialImpl.get(MaterialKeys.TORCHFLOWER);
 
-    Material JUNGLE_SLAB = MaterialImpl.get("jungle_slab");
+    Material PITCHER_PLANT = MaterialImpl.get(MaterialKeys.PITCHER_PLANT);
 
-    Material ACACIA_SLAB = MaterialImpl.get("acacia_slab");
+    Material SPORE_BLOSSOM = MaterialImpl.get(MaterialKeys.SPORE_BLOSSOM);
 
-    Material CHERRY_SLAB = MaterialImpl.get("cherry_slab");
+    Material BROWN_MUSHROOM = MaterialImpl.get(MaterialKeys.BROWN_MUSHROOM);
 
-    Material DARK_OAK_SLAB = MaterialImpl.get("dark_oak_slab");
+    Material RED_MUSHROOM = MaterialImpl.get(MaterialKeys.RED_MUSHROOM);
 
-    Material PALE_OAK_SLAB = MaterialImpl.get("pale_oak_slab");
+    Material CRIMSON_FUNGUS = MaterialImpl.get(MaterialKeys.CRIMSON_FUNGUS);
 
-    Material MANGROVE_SLAB = MaterialImpl.get("mangrove_slab");
+    Material WARPED_FUNGUS = MaterialImpl.get(MaterialKeys.WARPED_FUNGUS);
 
-    Material BAMBOO_SLAB = MaterialImpl.get("bamboo_slab");
+    Material CRIMSON_ROOTS = MaterialImpl.get(MaterialKeys.CRIMSON_ROOTS);
 
-    Material BAMBOO_MOSAIC_SLAB = MaterialImpl.get("bamboo_mosaic_slab");
+    Material WARPED_ROOTS = MaterialImpl.get(MaterialKeys.WARPED_ROOTS);
 
-    Material CRIMSON_SLAB = MaterialImpl.get("crimson_slab");
+    Material NETHER_SPROUTS = MaterialImpl.get(MaterialKeys.NETHER_SPROUTS);
 
-    Material WARPED_SLAB = MaterialImpl.get("warped_slab");
+    Material WEEPING_VINES = MaterialImpl.get(MaterialKeys.WEEPING_VINES);
 
-    Material STONE_SLAB = MaterialImpl.get("stone_slab");
+    Material TWISTING_VINES = MaterialImpl.get(MaterialKeys.TWISTING_VINES);
 
-    Material SMOOTH_STONE_SLAB = MaterialImpl.get("smooth_stone_slab");
+    Material SUGAR_CANE = MaterialImpl.get(MaterialKeys.SUGAR_CANE);
 
-    Material SANDSTONE_SLAB = MaterialImpl.get("sandstone_slab");
+    Material KELP = MaterialImpl.get(MaterialKeys.KELP);
 
-    Material CUT_SANDSTONE_SLAB = MaterialImpl.get("cut_sandstone_slab");
+    Material PINK_PETALS = MaterialImpl.get(MaterialKeys.PINK_PETALS);
 
-    Material PETRIFIED_OAK_SLAB = MaterialImpl.get("petrified_oak_slab");
+    Material WILDFLOWERS = MaterialImpl.get(MaterialKeys.WILDFLOWERS);
 
-    Material COBBLESTONE_SLAB = MaterialImpl.get("cobblestone_slab");
+    Material LEAF_LITTER = MaterialImpl.get(MaterialKeys.LEAF_LITTER);
 
-    Material BRICK_SLAB = MaterialImpl.get("brick_slab");
+    Material MOSS_CARPET = MaterialImpl.get(MaterialKeys.MOSS_CARPET);
 
-    Material STONE_BRICK_SLAB = MaterialImpl.get("stone_brick_slab");
+    Material MOSS_BLOCK = MaterialImpl.get(MaterialKeys.MOSS_BLOCK);
 
-    Material MUD_BRICK_SLAB = MaterialImpl.get("mud_brick_slab");
+    Material PALE_MOSS_CARPET = MaterialImpl.get(MaterialKeys.PALE_MOSS_CARPET);
 
-    Material NETHER_BRICK_SLAB = MaterialImpl.get("nether_brick_slab");
+    Material PALE_HANGING_MOSS = MaterialImpl.get(MaterialKeys.PALE_HANGING_MOSS);
 
-    Material QUARTZ_SLAB = MaterialImpl.get("quartz_slab");
+    Material PALE_MOSS_BLOCK = MaterialImpl.get(MaterialKeys.PALE_MOSS_BLOCK);
 
-    Material RED_SANDSTONE_SLAB = MaterialImpl.get("red_sandstone_slab");
+    Material HANGING_ROOTS = MaterialImpl.get(MaterialKeys.HANGING_ROOTS);
 
-    Material CUT_RED_SANDSTONE_SLAB = MaterialImpl.get("cut_red_sandstone_slab");
+    Material BIG_DRIPLEAF = MaterialImpl.get(MaterialKeys.BIG_DRIPLEAF);
 
-    Material PURPUR_SLAB = MaterialImpl.get("purpur_slab");
+    Material SMALL_DRIPLEAF = MaterialImpl.get(MaterialKeys.SMALL_DRIPLEAF);
 
-    Material PRISMARINE_SLAB = MaterialImpl.get("prismarine_slab");
+    Material BAMBOO = MaterialImpl.get(MaterialKeys.BAMBOO);
 
-    Material PRISMARINE_BRICK_SLAB = MaterialImpl.get("prismarine_brick_slab");
+    Material OAK_SLAB = MaterialImpl.get(MaterialKeys.OAK_SLAB);
 
-    Material DARK_PRISMARINE_SLAB = MaterialImpl.get("dark_prismarine_slab");
+    Material SPRUCE_SLAB = MaterialImpl.get(MaterialKeys.SPRUCE_SLAB);
 
-    Material SMOOTH_QUARTZ = MaterialImpl.get("smooth_quartz");
+    Material BIRCH_SLAB = MaterialImpl.get(MaterialKeys.BIRCH_SLAB);
 
-    Material SMOOTH_RED_SANDSTONE = MaterialImpl.get("smooth_red_sandstone");
+    Material JUNGLE_SLAB = MaterialImpl.get(MaterialKeys.JUNGLE_SLAB);
 
-    Material SMOOTH_SANDSTONE = MaterialImpl.get("smooth_sandstone");
+    Material ACACIA_SLAB = MaterialImpl.get(MaterialKeys.ACACIA_SLAB);
 
-    Material SMOOTH_STONE = MaterialImpl.get("smooth_stone");
+    Material CHERRY_SLAB = MaterialImpl.get(MaterialKeys.CHERRY_SLAB);
 
-    Material BRICKS = MaterialImpl.get("bricks");
+    Material DARK_OAK_SLAB = MaterialImpl.get(MaterialKeys.DARK_OAK_SLAB);
 
-    Material ACACIA_SHELF = MaterialImpl.get("acacia_shelf");
+    Material PALE_OAK_SLAB = MaterialImpl.get(MaterialKeys.PALE_OAK_SLAB);
 
-    Material BAMBOO_SHELF = MaterialImpl.get("bamboo_shelf");
+    Material MANGROVE_SLAB = MaterialImpl.get(MaterialKeys.MANGROVE_SLAB);
 
-    Material BIRCH_SHELF = MaterialImpl.get("birch_shelf");
+    Material BAMBOO_SLAB = MaterialImpl.get(MaterialKeys.BAMBOO_SLAB);
 
-    Material CHERRY_SHELF = MaterialImpl.get("cherry_shelf");
+    Material BAMBOO_MOSAIC_SLAB = MaterialImpl.get(MaterialKeys.BAMBOO_MOSAIC_SLAB);
 
-    Material CRIMSON_SHELF = MaterialImpl.get("crimson_shelf");
+    Material CRIMSON_SLAB = MaterialImpl.get(MaterialKeys.CRIMSON_SLAB);
 
-    Material DARK_OAK_SHELF = MaterialImpl.get("dark_oak_shelf");
+    Material WARPED_SLAB = MaterialImpl.get(MaterialKeys.WARPED_SLAB);
 
-    Material JUNGLE_SHELF = MaterialImpl.get("jungle_shelf");
+    Material STONE_SLAB = MaterialImpl.get(MaterialKeys.STONE_SLAB);
 
-    Material MANGROVE_SHELF = MaterialImpl.get("mangrove_shelf");
+    Material SMOOTH_STONE_SLAB = MaterialImpl.get(MaterialKeys.SMOOTH_STONE_SLAB);
 
-    Material OAK_SHELF = MaterialImpl.get("oak_shelf");
+    Material SANDSTONE_SLAB = MaterialImpl.get(MaterialKeys.SANDSTONE_SLAB);
 
-    Material PALE_OAK_SHELF = MaterialImpl.get("pale_oak_shelf");
+    Material CUT_SANDSTONE_SLAB = MaterialImpl.get(MaterialKeys.CUT_SANDSTONE_SLAB);
 
-    Material SPRUCE_SHELF = MaterialImpl.get("spruce_shelf");
+    Material PETRIFIED_OAK_SLAB = MaterialImpl.get(MaterialKeys.PETRIFIED_OAK_SLAB);
 
-    Material WARPED_SHELF = MaterialImpl.get("warped_shelf");
+    Material COBBLESTONE_SLAB = MaterialImpl.get(MaterialKeys.COBBLESTONE_SLAB);
 
-    Material BOOKSHELF = MaterialImpl.get("bookshelf");
+    Material BRICK_SLAB = MaterialImpl.get(MaterialKeys.BRICK_SLAB);
 
-    Material CHISELED_BOOKSHELF = MaterialImpl.get("chiseled_bookshelf");
+    Material STONE_BRICK_SLAB = MaterialImpl.get(MaterialKeys.STONE_BRICK_SLAB);
 
-    Material DECORATED_POT = MaterialImpl.get("decorated_pot");
+    Material MUD_BRICK_SLAB = MaterialImpl.get(MaterialKeys.MUD_BRICK_SLAB);
 
-    Material MOSSY_COBBLESTONE = MaterialImpl.get("mossy_cobblestone");
+    Material NETHER_BRICK_SLAB = MaterialImpl.get(MaterialKeys.NETHER_BRICK_SLAB);
 
-    Material OBSIDIAN = MaterialImpl.get("obsidian");
+    Material QUARTZ_SLAB = MaterialImpl.get(MaterialKeys.QUARTZ_SLAB);
 
-    Material TORCH = MaterialImpl.get("torch");
+    Material RED_SANDSTONE_SLAB = MaterialImpl.get(MaterialKeys.RED_SANDSTONE_SLAB);
 
-    Material END_ROD = MaterialImpl.get("end_rod");
+    Material CUT_RED_SANDSTONE_SLAB = MaterialImpl.get(MaterialKeys.CUT_RED_SANDSTONE_SLAB);
 
-    Material CHORUS_PLANT = MaterialImpl.get("chorus_plant");
+    Material PURPUR_SLAB = MaterialImpl.get(MaterialKeys.PURPUR_SLAB);
 
-    Material CHORUS_FLOWER = MaterialImpl.get("chorus_flower");
+    Material PRISMARINE_SLAB = MaterialImpl.get(MaterialKeys.PRISMARINE_SLAB);
 
-    Material PURPUR_BLOCK = MaterialImpl.get("purpur_block");
+    Material PRISMARINE_BRICK_SLAB = MaterialImpl.get(MaterialKeys.PRISMARINE_BRICK_SLAB);
 
-    Material PURPUR_PILLAR = MaterialImpl.get("purpur_pillar");
+    Material DARK_PRISMARINE_SLAB = MaterialImpl.get(MaterialKeys.DARK_PRISMARINE_SLAB);
 
-    Material PURPUR_STAIRS = MaterialImpl.get("purpur_stairs");
+    Material SMOOTH_QUARTZ = MaterialImpl.get(MaterialKeys.SMOOTH_QUARTZ);
 
-    Material SPAWNER = MaterialImpl.get("spawner");
+    Material SMOOTH_RED_SANDSTONE = MaterialImpl.get(MaterialKeys.SMOOTH_RED_SANDSTONE);
 
-    Material CREAKING_HEART = MaterialImpl.get("creaking_heart");
+    Material SMOOTH_SANDSTONE = MaterialImpl.get(MaterialKeys.SMOOTH_SANDSTONE);
 
-    Material CHEST = MaterialImpl.get("chest");
+    Material SMOOTH_STONE = MaterialImpl.get(MaterialKeys.SMOOTH_STONE);
 
-    Material CRAFTING_TABLE = MaterialImpl.get("crafting_table");
+    Material BRICKS = MaterialImpl.get(MaterialKeys.BRICKS);
 
-    Material FARMLAND = MaterialImpl.get("farmland");
+    Material ACACIA_SHELF = MaterialImpl.get(MaterialKeys.ACACIA_SHELF);
 
-    Material FURNACE = MaterialImpl.get("furnace");
+    Material BAMBOO_SHELF = MaterialImpl.get(MaterialKeys.BAMBOO_SHELF);
 
-    Material LADDER = MaterialImpl.get("ladder");
+    Material BIRCH_SHELF = MaterialImpl.get(MaterialKeys.BIRCH_SHELF);
 
-    Material COBBLESTONE_STAIRS = MaterialImpl.get("cobblestone_stairs");
+    Material CHERRY_SHELF = MaterialImpl.get(MaterialKeys.CHERRY_SHELF);
 
-    Material SNOW = MaterialImpl.get("snow");
+    Material CRIMSON_SHELF = MaterialImpl.get(MaterialKeys.CRIMSON_SHELF);
 
-    Material ICE = MaterialImpl.get("ice");
+    Material DARK_OAK_SHELF = MaterialImpl.get(MaterialKeys.DARK_OAK_SHELF);
 
-    Material SNOW_BLOCK = MaterialImpl.get("snow_block");
+    Material JUNGLE_SHELF = MaterialImpl.get(MaterialKeys.JUNGLE_SHELF);
 
-    Material CACTUS = MaterialImpl.get("cactus");
+    Material MANGROVE_SHELF = MaterialImpl.get(MaterialKeys.MANGROVE_SHELF);
 
-    Material CACTUS_FLOWER = MaterialImpl.get("cactus_flower");
+    Material OAK_SHELF = MaterialImpl.get(MaterialKeys.OAK_SHELF);
 
-    Material CLAY = MaterialImpl.get("clay");
+    Material PALE_OAK_SHELF = MaterialImpl.get(MaterialKeys.PALE_OAK_SHELF);
 
-    Material JUKEBOX = MaterialImpl.get("jukebox");
+    Material SPRUCE_SHELF = MaterialImpl.get(MaterialKeys.SPRUCE_SHELF);
 
-    Material OAK_FENCE = MaterialImpl.get("oak_fence");
+    Material WARPED_SHELF = MaterialImpl.get(MaterialKeys.WARPED_SHELF);
 
-    Material SPRUCE_FENCE = MaterialImpl.get("spruce_fence");
+    Material BOOKSHELF = MaterialImpl.get(MaterialKeys.BOOKSHELF);
 
-    Material BIRCH_FENCE = MaterialImpl.get("birch_fence");
+    Material CHISELED_BOOKSHELF = MaterialImpl.get(MaterialKeys.CHISELED_BOOKSHELF);
 
-    Material JUNGLE_FENCE = MaterialImpl.get("jungle_fence");
+    Material DECORATED_POT = MaterialImpl.get(MaterialKeys.DECORATED_POT);
 
-    Material ACACIA_FENCE = MaterialImpl.get("acacia_fence");
+    Material MOSSY_COBBLESTONE = MaterialImpl.get(MaterialKeys.MOSSY_COBBLESTONE);
 
-    Material CHERRY_FENCE = MaterialImpl.get("cherry_fence");
+    Material OBSIDIAN = MaterialImpl.get(MaterialKeys.OBSIDIAN);
 
-    Material DARK_OAK_FENCE = MaterialImpl.get("dark_oak_fence");
+    Material TORCH = MaterialImpl.get(MaterialKeys.TORCH);
 
-    Material PALE_OAK_FENCE = MaterialImpl.get("pale_oak_fence");
+    Material END_ROD = MaterialImpl.get(MaterialKeys.END_ROD);
 
-    Material MANGROVE_FENCE = MaterialImpl.get("mangrove_fence");
+    Material CHORUS_PLANT = MaterialImpl.get(MaterialKeys.CHORUS_PLANT);
 
-    Material BAMBOO_FENCE = MaterialImpl.get("bamboo_fence");
+    Material CHORUS_FLOWER = MaterialImpl.get(MaterialKeys.CHORUS_FLOWER);
 
-    Material CRIMSON_FENCE = MaterialImpl.get("crimson_fence");
+    Material PURPUR_BLOCK = MaterialImpl.get(MaterialKeys.PURPUR_BLOCK);
 
-    Material WARPED_FENCE = MaterialImpl.get("warped_fence");
+    Material PURPUR_PILLAR = MaterialImpl.get(MaterialKeys.PURPUR_PILLAR);
 
-    Material PUMPKIN = MaterialImpl.get("pumpkin");
+    Material PURPUR_STAIRS = MaterialImpl.get(MaterialKeys.PURPUR_STAIRS);
 
-    Material CARVED_PUMPKIN = MaterialImpl.get("carved_pumpkin");
+    Material SPAWNER = MaterialImpl.get(MaterialKeys.SPAWNER);
 
-    Material JACK_O_LANTERN = MaterialImpl.get("jack_o_lantern");
+    Material CREAKING_HEART = MaterialImpl.get(MaterialKeys.CREAKING_HEART);
 
-    Material NETHERRACK = MaterialImpl.get("netherrack");
+    Material CHEST = MaterialImpl.get(MaterialKeys.CHEST);
 
-    Material SOUL_SAND = MaterialImpl.get("soul_sand");
+    Material CRAFTING_TABLE = MaterialImpl.get(MaterialKeys.CRAFTING_TABLE);
 
-    Material SOUL_SOIL = MaterialImpl.get("soul_soil");
+    Material FARMLAND = MaterialImpl.get(MaterialKeys.FARMLAND);
 
-    Material BASALT = MaterialImpl.get("basalt");
+    Material FURNACE = MaterialImpl.get(MaterialKeys.FURNACE);
 
-    Material POLISHED_BASALT = MaterialImpl.get("polished_basalt");
+    Material LADDER = MaterialImpl.get(MaterialKeys.LADDER);
 
-    Material SMOOTH_BASALT = MaterialImpl.get("smooth_basalt");
+    Material COBBLESTONE_STAIRS = MaterialImpl.get(MaterialKeys.COBBLESTONE_STAIRS);
 
-    Material SOUL_TORCH = MaterialImpl.get("soul_torch");
+    Material SNOW = MaterialImpl.get(MaterialKeys.SNOW);
 
-    Material COPPER_TORCH = MaterialImpl.get("copper_torch");
+    Material ICE = MaterialImpl.get(MaterialKeys.ICE);
 
-    Material GLOWSTONE = MaterialImpl.get("glowstone");
+    Material SNOW_BLOCK = MaterialImpl.get(MaterialKeys.SNOW_BLOCK);
 
-    Material INFESTED_STONE = MaterialImpl.get("infested_stone");
+    Material CACTUS = MaterialImpl.get(MaterialKeys.CACTUS);
 
-    Material INFESTED_COBBLESTONE = MaterialImpl.get("infested_cobblestone");
+    Material CACTUS_FLOWER = MaterialImpl.get(MaterialKeys.CACTUS_FLOWER);
 
-    Material INFESTED_STONE_BRICKS = MaterialImpl.get("infested_stone_bricks");
+    Material CLAY = MaterialImpl.get(MaterialKeys.CLAY);
 
-    Material INFESTED_MOSSY_STONE_BRICKS = MaterialImpl.get("infested_mossy_stone_bricks");
+    Material JUKEBOX = MaterialImpl.get(MaterialKeys.JUKEBOX);
 
-    Material INFESTED_CRACKED_STONE_BRICKS = MaterialImpl.get("infested_cracked_stone_bricks");
+    Material OAK_FENCE = MaterialImpl.get(MaterialKeys.OAK_FENCE);
 
-    Material INFESTED_CHISELED_STONE_BRICKS = MaterialImpl.get("infested_chiseled_stone_bricks");
+    Material SPRUCE_FENCE = MaterialImpl.get(MaterialKeys.SPRUCE_FENCE);
 
-    Material INFESTED_DEEPSLATE = MaterialImpl.get("infested_deepslate");
+    Material BIRCH_FENCE = MaterialImpl.get(MaterialKeys.BIRCH_FENCE);
 
-    Material STONE_BRICKS = MaterialImpl.get("stone_bricks");
+    Material JUNGLE_FENCE = MaterialImpl.get(MaterialKeys.JUNGLE_FENCE);
 
-    Material MOSSY_STONE_BRICKS = MaterialImpl.get("mossy_stone_bricks");
+    Material ACACIA_FENCE = MaterialImpl.get(MaterialKeys.ACACIA_FENCE);
 
-    Material CRACKED_STONE_BRICKS = MaterialImpl.get("cracked_stone_bricks");
+    Material CHERRY_FENCE = MaterialImpl.get(MaterialKeys.CHERRY_FENCE);
 
-    Material CHISELED_STONE_BRICKS = MaterialImpl.get("chiseled_stone_bricks");
+    Material DARK_OAK_FENCE = MaterialImpl.get(MaterialKeys.DARK_OAK_FENCE);
 
-    Material PACKED_MUD = MaterialImpl.get("packed_mud");
+    Material PALE_OAK_FENCE = MaterialImpl.get(MaterialKeys.PALE_OAK_FENCE);
 
-    Material MUD_BRICKS = MaterialImpl.get("mud_bricks");
+    Material MANGROVE_FENCE = MaterialImpl.get(MaterialKeys.MANGROVE_FENCE);
 
-    Material DEEPSLATE_BRICKS = MaterialImpl.get("deepslate_bricks");
+    Material BAMBOO_FENCE = MaterialImpl.get(MaterialKeys.BAMBOO_FENCE);
 
-    Material CRACKED_DEEPSLATE_BRICKS = MaterialImpl.get("cracked_deepslate_bricks");
+    Material CRIMSON_FENCE = MaterialImpl.get(MaterialKeys.CRIMSON_FENCE);
 
-    Material DEEPSLATE_TILES = MaterialImpl.get("deepslate_tiles");
+    Material WARPED_FENCE = MaterialImpl.get(MaterialKeys.WARPED_FENCE);
 
-    Material CRACKED_DEEPSLATE_TILES = MaterialImpl.get("cracked_deepslate_tiles");
+    Material PUMPKIN = MaterialImpl.get(MaterialKeys.PUMPKIN);
 
-    Material CHISELED_DEEPSLATE = MaterialImpl.get("chiseled_deepslate");
+    Material CARVED_PUMPKIN = MaterialImpl.get(MaterialKeys.CARVED_PUMPKIN);
 
-    Material REINFORCED_DEEPSLATE = MaterialImpl.get("reinforced_deepslate");
+    Material JACK_O_LANTERN = MaterialImpl.get(MaterialKeys.JACK_O_LANTERN);
 
-    Material BROWN_MUSHROOM_BLOCK = MaterialImpl.get("brown_mushroom_block");
+    Material NETHERRACK = MaterialImpl.get(MaterialKeys.NETHERRACK);
 
-    Material RED_MUSHROOM_BLOCK = MaterialImpl.get("red_mushroom_block");
+    Material SOUL_SAND = MaterialImpl.get(MaterialKeys.SOUL_SAND);
 
-    Material MUSHROOM_STEM = MaterialImpl.get("mushroom_stem");
+    Material SOUL_SOIL = MaterialImpl.get(MaterialKeys.SOUL_SOIL);
 
-    Material IRON_BARS = MaterialImpl.get("iron_bars");
+    Material BASALT = MaterialImpl.get(MaterialKeys.BASALT);
 
-    Material COPPER_BARS = MaterialImpl.get("copper_bars");
+    Material POLISHED_BASALT = MaterialImpl.get(MaterialKeys.POLISHED_BASALT);
 
-    Material EXPOSED_COPPER_BARS = MaterialImpl.get("exposed_copper_bars");
+    Material SMOOTH_BASALT = MaterialImpl.get(MaterialKeys.SMOOTH_BASALT);
 
-    Material WEATHERED_COPPER_BARS = MaterialImpl.get("weathered_copper_bars");
+    Material SOUL_TORCH = MaterialImpl.get(MaterialKeys.SOUL_TORCH);
 
-    Material OXIDIZED_COPPER_BARS = MaterialImpl.get("oxidized_copper_bars");
+    Material COPPER_TORCH = MaterialImpl.get(MaterialKeys.COPPER_TORCH);
 
-    Material WAXED_COPPER_BARS = MaterialImpl.get("waxed_copper_bars");
+    Material GLOWSTONE = MaterialImpl.get(MaterialKeys.GLOWSTONE);
 
-    Material WAXED_EXPOSED_COPPER_BARS = MaterialImpl.get("waxed_exposed_copper_bars");
+    Material INFESTED_STONE = MaterialImpl.get(MaterialKeys.INFESTED_STONE);
 
-    Material WAXED_WEATHERED_COPPER_BARS = MaterialImpl.get("waxed_weathered_copper_bars");
+    Material INFESTED_COBBLESTONE = MaterialImpl.get(MaterialKeys.INFESTED_COBBLESTONE);
 
-    Material WAXED_OXIDIZED_COPPER_BARS = MaterialImpl.get("waxed_oxidized_copper_bars");
+    Material INFESTED_STONE_BRICKS = MaterialImpl.get(MaterialKeys.INFESTED_STONE_BRICKS);
 
-    Material IRON_CHAIN = MaterialImpl.get("iron_chain");
+    Material INFESTED_MOSSY_STONE_BRICKS = MaterialImpl.get(MaterialKeys.INFESTED_MOSSY_STONE_BRICKS);
 
-    Material COPPER_CHAIN = MaterialImpl.get("copper_chain");
+    Material INFESTED_CRACKED_STONE_BRICKS = MaterialImpl.get(MaterialKeys.INFESTED_CRACKED_STONE_BRICKS);
 
-    Material EXPOSED_COPPER_CHAIN = MaterialImpl.get("exposed_copper_chain");
+    Material INFESTED_CHISELED_STONE_BRICKS = MaterialImpl.get(MaterialKeys.INFESTED_CHISELED_STONE_BRICKS);
 
-    Material WEATHERED_COPPER_CHAIN = MaterialImpl.get("weathered_copper_chain");
+    Material INFESTED_DEEPSLATE = MaterialImpl.get(MaterialKeys.INFESTED_DEEPSLATE);
 
-    Material OXIDIZED_COPPER_CHAIN = MaterialImpl.get("oxidized_copper_chain");
+    Material STONE_BRICKS = MaterialImpl.get(MaterialKeys.STONE_BRICKS);
 
-    Material WAXED_COPPER_CHAIN = MaterialImpl.get("waxed_copper_chain");
+    Material MOSSY_STONE_BRICKS = MaterialImpl.get(MaterialKeys.MOSSY_STONE_BRICKS);
 
-    Material WAXED_EXPOSED_COPPER_CHAIN = MaterialImpl.get("waxed_exposed_copper_chain");
+    Material CRACKED_STONE_BRICKS = MaterialImpl.get(MaterialKeys.CRACKED_STONE_BRICKS);
 
-    Material WAXED_WEATHERED_COPPER_CHAIN = MaterialImpl.get("waxed_weathered_copper_chain");
+    Material CHISELED_STONE_BRICKS = MaterialImpl.get(MaterialKeys.CHISELED_STONE_BRICKS);
 
-    Material WAXED_OXIDIZED_COPPER_CHAIN = MaterialImpl.get("waxed_oxidized_copper_chain");
+    Material PACKED_MUD = MaterialImpl.get(MaterialKeys.PACKED_MUD);
 
-    Material GLASS_PANE = MaterialImpl.get("glass_pane");
+    Material MUD_BRICKS = MaterialImpl.get(MaterialKeys.MUD_BRICKS);
 
-    Material MELON = MaterialImpl.get("melon");
+    Material DEEPSLATE_BRICKS = MaterialImpl.get(MaterialKeys.DEEPSLATE_BRICKS);
 
-    Material VINE = MaterialImpl.get("vine");
+    Material CRACKED_DEEPSLATE_BRICKS = MaterialImpl.get(MaterialKeys.CRACKED_DEEPSLATE_BRICKS);
 
-    Material GLOW_LICHEN = MaterialImpl.get("glow_lichen");
+    Material DEEPSLATE_TILES = MaterialImpl.get(MaterialKeys.DEEPSLATE_TILES);
 
-    Material RESIN_CLUMP = MaterialImpl.get("resin_clump");
+    Material CRACKED_DEEPSLATE_TILES = MaterialImpl.get(MaterialKeys.CRACKED_DEEPSLATE_TILES);
 
-    Material RESIN_BLOCK = MaterialImpl.get("resin_block");
+    Material CHISELED_DEEPSLATE = MaterialImpl.get(MaterialKeys.CHISELED_DEEPSLATE);
 
-    Material RESIN_BRICKS = MaterialImpl.get("resin_bricks");
+    Material REINFORCED_DEEPSLATE = MaterialImpl.get(MaterialKeys.REINFORCED_DEEPSLATE);
 
-    Material RESIN_BRICK_STAIRS = MaterialImpl.get("resin_brick_stairs");
+    Material BROWN_MUSHROOM_BLOCK = MaterialImpl.get(MaterialKeys.BROWN_MUSHROOM_BLOCK);
 
-    Material RESIN_BRICK_SLAB = MaterialImpl.get("resin_brick_slab");
+    Material RED_MUSHROOM_BLOCK = MaterialImpl.get(MaterialKeys.RED_MUSHROOM_BLOCK);
 
-    Material RESIN_BRICK_WALL = MaterialImpl.get("resin_brick_wall");
+    Material MUSHROOM_STEM = MaterialImpl.get(MaterialKeys.MUSHROOM_STEM);
 
-    Material CHISELED_RESIN_BRICKS = MaterialImpl.get("chiseled_resin_bricks");
+    Material IRON_BARS = MaterialImpl.get(MaterialKeys.IRON_BARS);
 
-    Material BRICK_STAIRS = MaterialImpl.get("brick_stairs");
+    Material COPPER_BARS = MaterialImpl.get(MaterialKeys.COPPER_BARS);
 
-    Material STONE_BRICK_STAIRS = MaterialImpl.get("stone_brick_stairs");
+    Material EXPOSED_COPPER_BARS = MaterialImpl.get(MaterialKeys.EXPOSED_COPPER_BARS);
 
-    Material MUD_BRICK_STAIRS = MaterialImpl.get("mud_brick_stairs");
+    Material WEATHERED_COPPER_BARS = MaterialImpl.get(MaterialKeys.WEATHERED_COPPER_BARS);
 
-    Material MYCELIUM = MaterialImpl.get("mycelium");
+    Material OXIDIZED_COPPER_BARS = MaterialImpl.get(MaterialKeys.OXIDIZED_COPPER_BARS);
 
-    Material LILY_PAD = MaterialImpl.get("lily_pad");
+    Material WAXED_COPPER_BARS = MaterialImpl.get(MaterialKeys.WAXED_COPPER_BARS);
 
-    Material NETHER_BRICKS = MaterialImpl.get("nether_bricks");
+    Material WAXED_EXPOSED_COPPER_BARS = MaterialImpl.get(MaterialKeys.WAXED_EXPOSED_COPPER_BARS);
 
-    Material CRACKED_NETHER_BRICKS = MaterialImpl.get("cracked_nether_bricks");
+    Material WAXED_WEATHERED_COPPER_BARS = MaterialImpl.get(MaterialKeys.WAXED_WEATHERED_COPPER_BARS);
 
-    Material CHISELED_NETHER_BRICKS = MaterialImpl.get("chiseled_nether_bricks");
+    Material WAXED_OXIDIZED_COPPER_BARS = MaterialImpl.get(MaterialKeys.WAXED_OXIDIZED_COPPER_BARS);
 
-    Material NETHER_BRICK_FENCE = MaterialImpl.get("nether_brick_fence");
+    Material IRON_CHAIN = MaterialImpl.get(MaterialKeys.IRON_CHAIN);
 
-    Material NETHER_BRICK_STAIRS = MaterialImpl.get("nether_brick_stairs");
+    Material COPPER_CHAIN = MaterialImpl.get(MaterialKeys.COPPER_CHAIN);
 
-    Material SCULK = MaterialImpl.get("sculk");
+    Material EXPOSED_COPPER_CHAIN = MaterialImpl.get(MaterialKeys.EXPOSED_COPPER_CHAIN);
 
-    Material SCULK_VEIN = MaterialImpl.get("sculk_vein");
+    Material WEATHERED_COPPER_CHAIN = MaterialImpl.get(MaterialKeys.WEATHERED_COPPER_CHAIN);
 
-    Material SCULK_CATALYST = MaterialImpl.get("sculk_catalyst");
+    Material OXIDIZED_COPPER_CHAIN = MaterialImpl.get(MaterialKeys.OXIDIZED_COPPER_CHAIN);
 
-    Material SCULK_SHRIEKER = MaterialImpl.get("sculk_shrieker");
+    Material WAXED_COPPER_CHAIN = MaterialImpl.get(MaterialKeys.WAXED_COPPER_CHAIN);
 
-    Material ENCHANTING_TABLE = MaterialImpl.get("enchanting_table");
+    Material WAXED_EXPOSED_COPPER_CHAIN = MaterialImpl.get(MaterialKeys.WAXED_EXPOSED_COPPER_CHAIN);
 
-    Material END_PORTAL_FRAME = MaterialImpl.get("end_portal_frame");
+    Material WAXED_WEATHERED_COPPER_CHAIN = MaterialImpl.get(MaterialKeys.WAXED_WEATHERED_COPPER_CHAIN);
 
-    Material END_STONE = MaterialImpl.get("end_stone");
+    Material WAXED_OXIDIZED_COPPER_CHAIN = MaterialImpl.get(MaterialKeys.WAXED_OXIDIZED_COPPER_CHAIN);
 
-    Material END_STONE_BRICKS = MaterialImpl.get("end_stone_bricks");
+    Material GLASS_PANE = MaterialImpl.get(MaterialKeys.GLASS_PANE);
 
-    Material DRAGON_EGG = MaterialImpl.get("dragon_egg");
+    Material MELON = MaterialImpl.get(MaterialKeys.MELON);
 
-    Material SANDSTONE_STAIRS = MaterialImpl.get("sandstone_stairs");
+    Material VINE = MaterialImpl.get(MaterialKeys.VINE);
 
-    Material ENDER_CHEST = MaterialImpl.get("ender_chest");
+    Material GLOW_LICHEN = MaterialImpl.get(MaterialKeys.GLOW_LICHEN);
 
-    Material EMERALD_BLOCK = MaterialImpl.get("emerald_block");
+    Material RESIN_CLUMP = MaterialImpl.get(MaterialKeys.RESIN_CLUMP);
 
-    Material OAK_STAIRS = MaterialImpl.get("oak_stairs");
+    Material RESIN_BLOCK = MaterialImpl.get(MaterialKeys.RESIN_BLOCK);
 
-    Material SPRUCE_STAIRS = MaterialImpl.get("spruce_stairs");
+    Material RESIN_BRICKS = MaterialImpl.get(MaterialKeys.RESIN_BRICKS);
 
-    Material BIRCH_STAIRS = MaterialImpl.get("birch_stairs");
+    Material RESIN_BRICK_STAIRS = MaterialImpl.get(MaterialKeys.RESIN_BRICK_STAIRS);
 
-    Material JUNGLE_STAIRS = MaterialImpl.get("jungle_stairs");
+    Material RESIN_BRICK_SLAB = MaterialImpl.get(MaterialKeys.RESIN_BRICK_SLAB);
 
-    Material ACACIA_STAIRS = MaterialImpl.get("acacia_stairs");
+    Material RESIN_BRICK_WALL = MaterialImpl.get(MaterialKeys.RESIN_BRICK_WALL);
 
-    Material CHERRY_STAIRS = MaterialImpl.get("cherry_stairs");
+    Material CHISELED_RESIN_BRICKS = MaterialImpl.get(MaterialKeys.CHISELED_RESIN_BRICKS);
 
-    Material DARK_OAK_STAIRS = MaterialImpl.get("dark_oak_stairs");
+    Material BRICK_STAIRS = MaterialImpl.get(MaterialKeys.BRICK_STAIRS);
 
-    Material PALE_OAK_STAIRS = MaterialImpl.get("pale_oak_stairs");
+    Material STONE_BRICK_STAIRS = MaterialImpl.get(MaterialKeys.STONE_BRICK_STAIRS);
 
-    Material MANGROVE_STAIRS = MaterialImpl.get("mangrove_stairs");
+    Material MUD_BRICK_STAIRS = MaterialImpl.get(MaterialKeys.MUD_BRICK_STAIRS);
 
-    Material BAMBOO_STAIRS = MaterialImpl.get("bamboo_stairs");
+    Material MYCELIUM = MaterialImpl.get(MaterialKeys.MYCELIUM);
 
-    Material BAMBOO_MOSAIC_STAIRS = MaterialImpl.get("bamboo_mosaic_stairs");
+    Material LILY_PAD = MaterialImpl.get(MaterialKeys.LILY_PAD);
 
-    Material CRIMSON_STAIRS = MaterialImpl.get("crimson_stairs");
+    Material NETHER_BRICKS = MaterialImpl.get(MaterialKeys.NETHER_BRICKS);
 
-    Material WARPED_STAIRS = MaterialImpl.get("warped_stairs");
+    Material CRACKED_NETHER_BRICKS = MaterialImpl.get(MaterialKeys.CRACKED_NETHER_BRICKS);
 
-    Material COMMAND_BLOCK = MaterialImpl.get("command_block");
+    Material CHISELED_NETHER_BRICKS = MaterialImpl.get(MaterialKeys.CHISELED_NETHER_BRICKS);
 
-    Material BEACON = MaterialImpl.get("beacon");
+    Material NETHER_BRICK_FENCE = MaterialImpl.get(MaterialKeys.NETHER_BRICK_FENCE);
 
-    Material COBBLESTONE_WALL = MaterialImpl.get("cobblestone_wall");
+    Material NETHER_BRICK_STAIRS = MaterialImpl.get(MaterialKeys.NETHER_BRICK_STAIRS);
 
-    Material MOSSY_COBBLESTONE_WALL = MaterialImpl.get("mossy_cobblestone_wall");
+    Material SCULK = MaterialImpl.get(MaterialKeys.SCULK);
 
-    Material BRICK_WALL = MaterialImpl.get("brick_wall");
+    Material SCULK_VEIN = MaterialImpl.get(MaterialKeys.SCULK_VEIN);
 
-    Material PRISMARINE_WALL = MaterialImpl.get("prismarine_wall");
+    Material SCULK_CATALYST = MaterialImpl.get(MaterialKeys.SCULK_CATALYST);
 
-    Material RED_SANDSTONE_WALL = MaterialImpl.get("red_sandstone_wall");
+    Material SCULK_SHRIEKER = MaterialImpl.get(MaterialKeys.SCULK_SHRIEKER);
 
-    Material MOSSY_STONE_BRICK_WALL = MaterialImpl.get("mossy_stone_brick_wall");
+    Material ENCHANTING_TABLE = MaterialImpl.get(MaterialKeys.ENCHANTING_TABLE);
 
-    Material GRANITE_WALL = MaterialImpl.get("granite_wall");
+    Material END_PORTAL_FRAME = MaterialImpl.get(MaterialKeys.END_PORTAL_FRAME);
 
-    Material STONE_BRICK_WALL = MaterialImpl.get("stone_brick_wall");
+    Material END_STONE = MaterialImpl.get(MaterialKeys.END_STONE);
 
-    Material MUD_BRICK_WALL = MaterialImpl.get("mud_brick_wall");
+    Material END_STONE_BRICKS = MaterialImpl.get(MaterialKeys.END_STONE_BRICKS);
 
-    Material NETHER_BRICK_WALL = MaterialImpl.get("nether_brick_wall");
+    Material DRAGON_EGG = MaterialImpl.get(MaterialKeys.DRAGON_EGG);
 
-    Material ANDESITE_WALL = MaterialImpl.get("andesite_wall");
+    Material SANDSTONE_STAIRS = MaterialImpl.get(MaterialKeys.SANDSTONE_STAIRS);
 
-    Material RED_NETHER_BRICK_WALL = MaterialImpl.get("red_nether_brick_wall");
+    Material ENDER_CHEST = MaterialImpl.get(MaterialKeys.ENDER_CHEST);
 
-    Material SANDSTONE_WALL = MaterialImpl.get("sandstone_wall");
+    Material EMERALD_BLOCK = MaterialImpl.get(MaterialKeys.EMERALD_BLOCK);
 
-    Material END_STONE_BRICK_WALL = MaterialImpl.get("end_stone_brick_wall");
+    Material OAK_STAIRS = MaterialImpl.get(MaterialKeys.OAK_STAIRS);
 
-    Material DIORITE_WALL = MaterialImpl.get("diorite_wall");
+    Material SPRUCE_STAIRS = MaterialImpl.get(MaterialKeys.SPRUCE_STAIRS);
 
-    Material BLACKSTONE_WALL = MaterialImpl.get("blackstone_wall");
+    Material BIRCH_STAIRS = MaterialImpl.get(MaterialKeys.BIRCH_STAIRS);
 
-    Material POLISHED_BLACKSTONE_WALL = MaterialImpl.get("polished_blackstone_wall");
+    Material JUNGLE_STAIRS = MaterialImpl.get(MaterialKeys.JUNGLE_STAIRS);
 
-    Material POLISHED_BLACKSTONE_BRICK_WALL = MaterialImpl.get("polished_blackstone_brick_wall");
+    Material ACACIA_STAIRS = MaterialImpl.get(MaterialKeys.ACACIA_STAIRS);
 
-    Material COBBLED_DEEPSLATE_WALL = MaterialImpl.get("cobbled_deepslate_wall");
+    Material CHERRY_STAIRS = MaterialImpl.get(MaterialKeys.CHERRY_STAIRS);
 
-    Material POLISHED_DEEPSLATE_WALL = MaterialImpl.get("polished_deepslate_wall");
+    Material DARK_OAK_STAIRS = MaterialImpl.get(MaterialKeys.DARK_OAK_STAIRS);
 
-    Material DEEPSLATE_BRICK_WALL = MaterialImpl.get("deepslate_brick_wall");
+    Material PALE_OAK_STAIRS = MaterialImpl.get(MaterialKeys.PALE_OAK_STAIRS);
 
-    Material DEEPSLATE_TILE_WALL = MaterialImpl.get("deepslate_tile_wall");
+    Material MANGROVE_STAIRS = MaterialImpl.get(MaterialKeys.MANGROVE_STAIRS);
 
-    Material ANVIL = MaterialImpl.get("anvil");
+    Material BAMBOO_STAIRS = MaterialImpl.get(MaterialKeys.BAMBOO_STAIRS);
 
-    Material CHIPPED_ANVIL = MaterialImpl.get("chipped_anvil");
+    Material BAMBOO_MOSAIC_STAIRS = MaterialImpl.get(MaterialKeys.BAMBOO_MOSAIC_STAIRS);
 
-    Material DAMAGED_ANVIL = MaterialImpl.get("damaged_anvil");
+    Material CRIMSON_STAIRS = MaterialImpl.get(MaterialKeys.CRIMSON_STAIRS);
 
-    Material CHISELED_QUARTZ_BLOCK = MaterialImpl.get("chiseled_quartz_block");
+    Material WARPED_STAIRS = MaterialImpl.get(MaterialKeys.WARPED_STAIRS);
 
-    Material QUARTZ_BLOCK = MaterialImpl.get("quartz_block");
+    Material COMMAND_BLOCK = MaterialImpl.get(MaterialKeys.COMMAND_BLOCK);
 
-    Material QUARTZ_BRICKS = MaterialImpl.get("quartz_bricks");
+    Material BEACON = MaterialImpl.get(MaterialKeys.BEACON);
 
-    Material QUARTZ_PILLAR = MaterialImpl.get("quartz_pillar");
+    Material COBBLESTONE_WALL = MaterialImpl.get(MaterialKeys.COBBLESTONE_WALL);
 
-    Material QUARTZ_STAIRS = MaterialImpl.get("quartz_stairs");
+    Material MOSSY_COBBLESTONE_WALL = MaterialImpl.get(MaterialKeys.MOSSY_COBBLESTONE_WALL);
 
-    Material WHITE_TERRACOTTA = MaterialImpl.get("white_terracotta");
+    Material BRICK_WALL = MaterialImpl.get(MaterialKeys.BRICK_WALL);
 
-    Material ORANGE_TERRACOTTA = MaterialImpl.get("orange_terracotta");
+    Material PRISMARINE_WALL = MaterialImpl.get(MaterialKeys.PRISMARINE_WALL);
 
-    Material MAGENTA_TERRACOTTA = MaterialImpl.get("magenta_terracotta");
+    Material RED_SANDSTONE_WALL = MaterialImpl.get(MaterialKeys.RED_SANDSTONE_WALL);
 
-    Material LIGHT_BLUE_TERRACOTTA = MaterialImpl.get("light_blue_terracotta");
+    Material MOSSY_STONE_BRICK_WALL = MaterialImpl.get(MaterialKeys.MOSSY_STONE_BRICK_WALL);
 
-    Material YELLOW_TERRACOTTA = MaterialImpl.get("yellow_terracotta");
+    Material GRANITE_WALL = MaterialImpl.get(MaterialKeys.GRANITE_WALL);
 
-    Material LIME_TERRACOTTA = MaterialImpl.get("lime_terracotta");
+    Material STONE_BRICK_WALL = MaterialImpl.get(MaterialKeys.STONE_BRICK_WALL);
 
-    Material PINK_TERRACOTTA = MaterialImpl.get("pink_terracotta");
+    Material MUD_BRICK_WALL = MaterialImpl.get(MaterialKeys.MUD_BRICK_WALL);
 
-    Material GRAY_TERRACOTTA = MaterialImpl.get("gray_terracotta");
+    Material NETHER_BRICK_WALL = MaterialImpl.get(MaterialKeys.NETHER_BRICK_WALL);
 
-    Material LIGHT_GRAY_TERRACOTTA = MaterialImpl.get("light_gray_terracotta");
+    Material ANDESITE_WALL = MaterialImpl.get(MaterialKeys.ANDESITE_WALL);
 
-    Material CYAN_TERRACOTTA = MaterialImpl.get("cyan_terracotta");
+    Material RED_NETHER_BRICK_WALL = MaterialImpl.get(MaterialKeys.RED_NETHER_BRICK_WALL);
 
-    Material PURPLE_TERRACOTTA = MaterialImpl.get("purple_terracotta");
+    Material SANDSTONE_WALL = MaterialImpl.get(MaterialKeys.SANDSTONE_WALL);
 
-    Material BLUE_TERRACOTTA = MaterialImpl.get("blue_terracotta");
+    Material END_STONE_BRICK_WALL = MaterialImpl.get(MaterialKeys.END_STONE_BRICK_WALL);
 
-    Material BROWN_TERRACOTTA = MaterialImpl.get("brown_terracotta");
+    Material DIORITE_WALL = MaterialImpl.get(MaterialKeys.DIORITE_WALL);
 
-    Material GREEN_TERRACOTTA = MaterialImpl.get("green_terracotta");
+    Material BLACKSTONE_WALL = MaterialImpl.get(MaterialKeys.BLACKSTONE_WALL);
 
-    Material RED_TERRACOTTA = MaterialImpl.get("red_terracotta");
+    Material POLISHED_BLACKSTONE_WALL = MaterialImpl.get(MaterialKeys.POLISHED_BLACKSTONE_WALL);
 
-    Material BLACK_TERRACOTTA = MaterialImpl.get("black_terracotta");
+    Material POLISHED_BLACKSTONE_BRICK_WALL = MaterialImpl.get(MaterialKeys.POLISHED_BLACKSTONE_BRICK_WALL);
 
-    Material BARRIER = MaterialImpl.get("barrier");
+    Material COBBLED_DEEPSLATE_WALL = MaterialImpl.get(MaterialKeys.COBBLED_DEEPSLATE_WALL);
 
-    Material LIGHT = MaterialImpl.get("light");
+    Material POLISHED_DEEPSLATE_WALL = MaterialImpl.get(MaterialKeys.POLISHED_DEEPSLATE_WALL);
 
-    Material HAY_BLOCK = MaterialImpl.get("hay_block");
+    Material DEEPSLATE_BRICK_WALL = MaterialImpl.get(MaterialKeys.DEEPSLATE_BRICK_WALL);
 
-    Material WHITE_CARPET = MaterialImpl.get("white_carpet");
+    Material DEEPSLATE_TILE_WALL = MaterialImpl.get(MaterialKeys.DEEPSLATE_TILE_WALL);
 
-    Material ORANGE_CARPET = MaterialImpl.get("orange_carpet");
+    Material ANVIL = MaterialImpl.get(MaterialKeys.ANVIL);
 
-    Material MAGENTA_CARPET = MaterialImpl.get("magenta_carpet");
+    Material CHIPPED_ANVIL = MaterialImpl.get(MaterialKeys.CHIPPED_ANVIL);
 
-    Material LIGHT_BLUE_CARPET = MaterialImpl.get("light_blue_carpet");
+    Material DAMAGED_ANVIL = MaterialImpl.get(MaterialKeys.DAMAGED_ANVIL);
 
-    Material YELLOW_CARPET = MaterialImpl.get("yellow_carpet");
+    Material CHISELED_QUARTZ_BLOCK = MaterialImpl.get(MaterialKeys.CHISELED_QUARTZ_BLOCK);
 
-    Material LIME_CARPET = MaterialImpl.get("lime_carpet");
+    Material QUARTZ_BLOCK = MaterialImpl.get(MaterialKeys.QUARTZ_BLOCK);
 
-    Material PINK_CARPET = MaterialImpl.get("pink_carpet");
+    Material QUARTZ_BRICKS = MaterialImpl.get(MaterialKeys.QUARTZ_BRICKS);
 
-    Material GRAY_CARPET = MaterialImpl.get("gray_carpet");
+    Material QUARTZ_PILLAR = MaterialImpl.get(MaterialKeys.QUARTZ_PILLAR);
 
-    Material LIGHT_GRAY_CARPET = MaterialImpl.get("light_gray_carpet");
+    Material QUARTZ_STAIRS = MaterialImpl.get(MaterialKeys.QUARTZ_STAIRS);
 
-    Material CYAN_CARPET = MaterialImpl.get("cyan_carpet");
+    Material WHITE_TERRACOTTA = MaterialImpl.get(MaterialKeys.WHITE_TERRACOTTA);
 
-    Material PURPLE_CARPET = MaterialImpl.get("purple_carpet");
+    Material ORANGE_TERRACOTTA = MaterialImpl.get(MaterialKeys.ORANGE_TERRACOTTA);
 
-    Material BLUE_CARPET = MaterialImpl.get("blue_carpet");
+    Material MAGENTA_TERRACOTTA = MaterialImpl.get(MaterialKeys.MAGENTA_TERRACOTTA);
 
-    Material BROWN_CARPET = MaterialImpl.get("brown_carpet");
+    Material LIGHT_BLUE_TERRACOTTA = MaterialImpl.get(MaterialKeys.LIGHT_BLUE_TERRACOTTA);
 
-    Material GREEN_CARPET = MaterialImpl.get("green_carpet");
+    Material YELLOW_TERRACOTTA = MaterialImpl.get(MaterialKeys.YELLOW_TERRACOTTA);
 
-    Material RED_CARPET = MaterialImpl.get("red_carpet");
+    Material LIME_TERRACOTTA = MaterialImpl.get(MaterialKeys.LIME_TERRACOTTA);
 
-    Material BLACK_CARPET = MaterialImpl.get("black_carpet");
+    Material PINK_TERRACOTTA = MaterialImpl.get(MaterialKeys.PINK_TERRACOTTA);
 
-    Material TERRACOTTA = MaterialImpl.get("terracotta");
+    Material GRAY_TERRACOTTA = MaterialImpl.get(MaterialKeys.GRAY_TERRACOTTA);
 
-    Material PACKED_ICE = MaterialImpl.get("packed_ice");
+    Material LIGHT_GRAY_TERRACOTTA = MaterialImpl.get(MaterialKeys.LIGHT_GRAY_TERRACOTTA);
 
-    Material DIRT_PATH = MaterialImpl.get("dirt_path");
+    Material CYAN_TERRACOTTA = MaterialImpl.get(MaterialKeys.CYAN_TERRACOTTA);
 
-    Material SUNFLOWER = MaterialImpl.get("sunflower");
+    Material PURPLE_TERRACOTTA = MaterialImpl.get(MaterialKeys.PURPLE_TERRACOTTA);
 
-    Material LILAC = MaterialImpl.get("lilac");
+    Material BLUE_TERRACOTTA = MaterialImpl.get(MaterialKeys.BLUE_TERRACOTTA);
 
-    Material ROSE_BUSH = MaterialImpl.get("rose_bush");
+    Material BROWN_TERRACOTTA = MaterialImpl.get(MaterialKeys.BROWN_TERRACOTTA);
 
-    Material PEONY = MaterialImpl.get("peony");
+    Material GREEN_TERRACOTTA = MaterialImpl.get(MaterialKeys.GREEN_TERRACOTTA);
 
-    Material TALL_GRASS = MaterialImpl.get("tall_grass");
+    Material RED_TERRACOTTA = MaterialImpl.get(MaterialKeys.RED_TERRACOTTA);
 
-    Material LARGE_FERN = MaterialImpl.get("large_fern");
+    Material BLACK_TERRACOTTA = MaterialImpl.get(MaterialKeys.BLACK_TERRACOTTA);
 
-    Material WHITE_STAINED_GLASS = MaterialImpl.get("white_stained_glass");
+    Material BARRIER = MaterialImpl.get(MaterialKeys.BARRIER);
 
-    Material ORANGE_STAINED_GLASS = MaterialImpl.get("orange_stained_glass");
+    Material LIGHT = MaterialImpl.get(MaterialKeys.LIGHT);
 
-    Material MAGENTA_STAINED_GLASS = MaterialImpl.get("magenta_stained_glass");
+    Material HAY_BLOCK = MaterialImpl.get(MaterialKeys.HAY_BLOCK);
 
-    Material LIGHT_BLUE_STAINED_GLASS = MaterialImpl.get("light_blue_stained_glass");
+    Material WHITE_CARPET = MaterialImpl.get(MaterialKeys.WHITE_CARPET);
 
-    Material YELLOW_STAINED_GLASS = MaterialImpl.get("yellow_stained_glass");
+    Material ORANGE_CARPET = MaterialImpl.get(MaterialKeys.ORANGE_CARPET);
 
-    Material LIME_STAINED_GLASS = MaterialImpl.get("lime_stained_glass");
+    Material MAGENTA_CARPET = MaterialImpl.get(MaterialKeys.MAGENTA_CARPET);
 
-    Material PINK_STAINED_GLASS = MaterialImpl.get("pink_stained_glass");
+    Material LIGHT_BLUE_CARPET = MaterialImpl.get(MaterialKeys.LIGHT_BLUE_CARPET);
 
-    Material GRAY_STAINED_GLASS = MaterialImpl.get("gray_stained_glass");
+    Material YELLOW_CARPET = MaterialImpl.get(MaterialKeys.YELLOW_CARPET);
 
-    Material LIGHT_GRAY_STAINED_GLASS = MaterialImpl.get("light_gray_stained_glass");
+    Material LIME_CARPET = MaterialImpl.get(MaterialKeys.LIME_CARPET);
 
-    Material CYAN_STAINED_GLASS = MaterialImpl.get("cyan_stained_glass");
+    Material PINK_CARPET = MaterialImpl.get(MaterialKeys.PINK_CARPET);
 
-    Material PURPLE_STAINED_GLASS = MaterialImpl.get("purple_stained_glass");
+    Material GRAY_CARPET = MaterialImpl.get(MaterialKeys.GRAY_CARPET);
 
-    Material BLUE_STAINED_GLASS = MaterialImpl.get("blue_stained_glass");
+    Material LIGHT_GRAY_CARPET = MaterialImpl.get(MaterialKeys.LIGHT_GRAY_CARPET);
 
-    Material BROWN_STAINED_GLASS = MaterialImpl.get("brown_stained_glass");
+    Material CYAN_CARPET = MaterialImpl.get(MaterialKeys.CYAN_CARPET);
 
-    Material GREEN_STAINED_GLASS = MaterialImpl.get("green_stained_glass");
+    Material PURPLE_CARPET = MaterialImpl.get(MaterialKeys.PURPLE_CARPET);
 
-    Material RED_STAINED_GLASS = MaterialImpl.get("red_stained_glass");
+    Material BLUE_CARPET = MaterialImpl.get(MaterialKeys.BLUE_CARPET);
 
-    Material BLACK_STAINED_GLASS = MaterialImpl.get("black_stained_glass");
+    Material BROWN_CARPET = MaterialImpl.get(MaterialKeys.BROWN_CARPET);
 
-    Material WHITE_STAINED_GLASS_PANE = MaterialImpl.get("white_stained_glass_pane");
+    Material GREEN_CARPET = MaterialImpl.get(MaterialKeys.GREEN_CARPET);
 
-    Material ORANGE_STAINED_GLASS_PANE = MaterialImpl.get("orange_stained_glass_pane");
+    Material RED_CARPET = MaterialImpl.get(MaterialKeys.RED_CARPET);
 
-    Material MAGENTA_STAINED_GLASS_PANE = MaterialImpl.get("magenta_stained_glass_pane");
+    Material BLACK_CARPET = MaterialImpl.get(MaterialKeys.BLACK_CARPET);
 
-    Material LIGHT_BLUE_STAINED_GLASS_PANE = MaterialImpl.get("light_blue_stained_glass_pane");
+    Material TERRACOTTA = MaterialImpl.get(MaterialKeys.TERRACOTTA);
 
-    Material YELLOW_STAINED_GLASS_PANE = MaterialImpl.get("yellow_stained_glass_pane");
+    Material PACKED_ICE = MaterialImpl.get(MaterialKeys.PACKED_ICE);
 
-    Material LIME_STAINED_GLASS_PANE = MaterialImpl.get("lime_stained_glass_pane");
+    Material DIRT_PATH = MaterialImpl.get(MaterialKeys.DIRT_PATH);
 
-    Material PINK_STAINED_GLASS_PANE = MaterialImpl.get("pink_stained_glass_pane");
+    Material SUNFLOWER = MaterialImpl.get(MaterialKeys.SUNFLOWER);
 
-    Material GRAY_STAINED_GLASS_PANE = MaterialImpl.get("gray_stained_glass_pane");
+    Material LILAC = MaterialImpl.get(MaterialKeys.LILAC);
 
-    Material LIGHT_GRAY_STAINED_GLASS_PANE = MaterialImpl.get("light_gray_stained_glass_pane");
+    Material ROSE_BUSH = MaterialImpl.get(MaterialKeys.ROSE_BUSH);
 
-    Material CYAN_STAINED_GLASS_PANE = MaterialImpl.get("cyan_stained_glass_pane");
+    Material PEONY = MaterialImpl.get(MaterialKeys.PEONY);
 
-    Material PURPLE_STAINED_GLASS_PANE = MaterialImpl.get("purple_stained_glass_pane");
+    Material TALL_GRASS = MaterialImpl.get(MaterialKeys.TALL_GRASS);
 
-    Material BLUE_STAINED_GLASS_PANE = MaterialImpl.get("blue_stained_glass_pane");
+    Material LARGE_FERN = MaterialImpl.get(MaterialKeys.LARGE_FERN);
 
-    Material BROWN_STAINED_GLASS_PANE = MaterialImpl.get("brown_stained_glass_pane");
+    Material WHITE_STAINED_GLASS = MaterialImpl.get(MaterialKeys.WHITE_STAINED_GLASS);
 
-    Material GREEN_STAINED_GLASS_PANE = MaterialImpl.get("green_stained_glass_pane");
+    Material ORANGE_STAINED_GLASS = MaterialImpl.get(MaterialKeys.ORANGE_STAINED_GLASS);
 
-    Material RED_STAINED_GLASS_PANE = MaterialImpl.get("red_stained_glass_pane");
+    Material MAGENTA_STAINED_GLASS = MaterialImpl.get(MaterialKeys.MAGENTA_STAINED_GLASS);
 
-    Material BLACK_STAINED_GLASS_PANE = MaterialImpl.get("black_stained_glass_pane");
+    Material LIGHT_BLUE_STAINED_GLASS = MaterialImpl.get(MaterialKeys.LIGHT_BLUE_STAINED_GLASS);
 
-    Material PRISMARINE = MaterialImpl.get("prismarine");
+    Material YELLOW_STAINED_GLASS = MaterialImpl.get(MaterialKeys.YELLOW_STAINED_GLASS);
 
-    Material PRISMARINE_BRICKS = MaterialImpl.get("prismarine_bricks");
+    Material LIME_STAINED_GLASS = MaterialImpl.get(MaterialKeys.LIME_STAINED_GLASS);
 
-    Material DARK_PRISMARINE = MaterialImpl.get("dark_prismarine");
+    Material PINK_STAINED_GLASS = MaterialImpl.get(MaterialKeys.PINK_STAINED_GLASS);
 
-    Material PRISMARINE_STAIRS = MaterialImpl.get("prismarine_stairs");
+    Material GRAY_STAINED_GLASS = MaterialImpl.get(MaterialKeys.GRAY_STAINED_GLASS);
 
-    Material PRISMARINE_BRICK_STAIRS = MaterialImpl.get("prismarine_brick_stairs");
+    Material LIGHT_GRAY_STAINED_GLASS = MaterialImpl.get(MaterialKeys.LIGHT_GRAY_STAINED_GLASS);
 
-    Material DARK_PRISMARINE_STAIRS = MaterialImpl.get("dark_prismarine_stairs");
+    Material CYAN_STAINED_GLASS = MaterialImpl.get(MaterialKeys.CYAN_STAINED_GLASS);
 
-    Material SEA_LANTERN = MaterialImpl.get("sea_lantern");
+    Material PURPLE_STAINED_GLASS = MaterialImpl.get(MaterialKeys.PURPLE_STAINED_GLASS);
 
-    Material RED_SANDSTONE = MaterialImpl.get("red_sandstone");
+    Material BLUE_STAINED_GLASS = MaterialImpl.get(MaterialKeys.BLUE_STAINED_GLASS);
 
-    Material CHISELED_RED_SANDSTONE = MaterialImpl.get("chiseled_red_sandstone");
+    Material BROWN_STAINED_GLASS = MaterialImpl.get(MaterialKeys.BROWN_STAINED_GLASS);
 
-    Material CUT_RED_SANDSTONE = MaterialImpl.get("cut_red_sandstone");
+    Material GREEN_STAINED_GLASS = MaterialImpl.get(MaterialKeys.GREEN_STAINED_GLASS);
 
-    Material RED_SANDSTONE_STAIRS = MaterialImpl.get("red_sandstone_stairs");
+    Material RED_STAINED_GLASS = MaterialImpl.get(MaterialKeys.RED_STAINED_GLASS);
 
-    Material REPEATING_COMMAND_BLOCK = MaterialImpl.get("repeating_command_block");
+    Material BLACK_STAINED_GLASS = MaterialImpl.get(MaterialKeys.BLACK_STAINED_GLASS);
 
-    Material CHAIN_COMMAND_BLOCK = MaterialImpl.get("chain_command_block");
+    Material WHITE_STAINED_GLASS_PANE = MaterialImpl.get(MaterialKeys.WHITE_STAINED_GLASS_PANE);
 
-    Material MAGMA_BLOCK = MaterialImpl.get("magma_block");
+    Material ORANGE_STAINED_GLASS_PANE = MaterialImpl.get(MaterialKeys.ORANGE_STAINED_GLASS_PANE);
 
-    Material NETHER_WART_BLOCK = MaterialImpl.get("nether_wart_block");
+    Material MAGENTA_STAINED_GLASS_PANE = MaterialImpl.get(MaterialKeys.MAGENTA_STAINED_GLASS_PANE);
 
-    Material WARPED_WART_BLOCK = MaterialImpl.get("warped_wart_block");
+    Material LIGHT_BLUE_STAINED_GLASS_PANE = MaterialImpl.get(MaterialKeys.LIGHT_BLUE_STAINED_GLASS_PANE);
 
-    Material RED_NETHER_BRICKS = MaterialImpl.get("red_nether_bricks");
+    Material YELLOW_STAINED_GLASS_PANE = MaterialImpl.get(MaterialKeys.YELLOW_STAINED_GLASS_PANE);
 
-    Material BONE_BLOCK = MaterialImpl.get("bone_block");
+    Material LIME_STAINED_GLASS_PANE = MaterialImpl.get(MaterialKeys.LIME_STAINED_GLASS_PANE);
 
-    Material STRUCTURE_VOID = MaterialImpl.get("structure_void");
+    Material PINK_STAINED_GLASS_PANE = MaterialImpl.get(MaterialKeys.PINK_STAINED_GLASS_PANE);
 
-    Material SHULKER_BOX = MaterialImpl.get("shulker_box");
+    Material GRAY_STAINED_GLASS_PANE = MaterialImpl.get(MaterialKeys.GRAY_STAINED_GLASS_PANE);
 
-    Material WHITE_SHULKER_BOX = MaterialImpl.get("white_shulker_box");
+    Material LIGHT_GRAY_STAINED_GLASS_PANE = MaterialImpl.get(MaterialKeys.LIGHT_GRAY_STAINED_GLASS_PANE);
 
-    Material ORANGE_SHULKER_BOX = MaterialImpl.get("orange_shulker_box");
+    Material CYAN_STAINED_GLASS_PANE = MaterialImpl.get(MaterialKeys.CYAN_STAINED_GLASS_PANE);
 
-    Material MAGENTA_SHULKER_BOX = MaterialImpl.get("magenta_shulker_box");
+    Material PURPLE_STAINED_GLASS_PANE = MaterialImpl.get(MaterialKeys.PURPLE_STAINED_GLASS_PANE);
 
-    Material LIGHT_BLUE_SHULKER_BOX = MaterialImpl.get("light_blue_shulker_box");
+    Material BLUE_STAINED_GLASS_PANE = MaterialImpl.get(MaterialKeys.BLUE_STAINED_GLASS_PANE);
 
-    Material YELLOW_SHULKER_BOX = MaterialImpl.get("yellow_shulker_box");
+    Material BROWN_STAINED_GLASS_PANE = MaterialImpl.get(MaterialKeys.BROWN_STAINED_GLASS_PANE);
 
-    Material LIME_SHULKER_BOX = MaterialImpl.get("lime_shulker_box");
+    Material GREEN_STAINED_GLASS_PANE = MaterialImpl.get(MaterialKeys.GREEN_STAINED_GLASS_PANE);
 
-    Material PINK_SHULKER_BOX = MaterialImpl.get("pink_shulker_box");
+    Material RED_STAINED_GLASS_PANE = MaterialImpl.get(MaterialKeys.RED_STAINED_GLASS_PANE);
 
-    Material GRAY_SHULKER_BOX = MaterialImpl.get("gray_shulker_box");
+    Material BLACK_STAINED_GLASS_PANE = MaterialImpl.get(MaterialKeys.BLACK_STAINED_GLASS_PANE);
 
-    Material LIGHT_GRAY_SHULKER_BOX = MaterialImpl.get("light_gray_shulker_box");
+    Material PRISMARINE = MaterialImpl.get(MaterialKeys.PRISMARINE);
 
-    Material CYAN_SHULKER_BOX = MaterialImpl.get("cyan_shulker_box");
+    Material PRISMARINE_BRICKS = MaterialImpl.get(MaterialKeys.PRISMARINE_BRICKS);
 
-    Material PURPLE_SHULKER_BOX = MaterialImpl.get("purple_shulker_box");
+    Material DARK_PRISMARINE = MaterialImpl.get(MaterialKeys.DARK_PRISMARINE);
 
-    Material BLUE_SHULKER_BOX = MaterialImpl.get("blue_shulker_box");
+    Material PRISMARINE_STAIRS = MaterialImpl.get(MaterialKeys.PRISMARINE_STAIRS);
 
-    Material BROWN_SHULKER_BOX = MaterialImpl.get("brown_shulker_box");
+    Material PRISMARINE_BRICK_STAIRS = MaterialImpl.get(MaterialKeys.PRISMARINE_BRICK_STAIRS);
 
-    Material GREEN_SHULKER_BOX = MaterialImpl.get("green_shulker_box");
+    Material DARK_PRISMARINE_STAIRS = MaterialImpl.get(MaterialKeys.DARK_PRISMARINE_STAIRS);
 
-    Material RED_SHULKER_BOX = MaterialImpl.get("red_shulker_box");
+    Material SEA_LANTERN = MaterialImpl.get(MaterialKeys.SEA_LANTERN);
 
-    Material BLACK_SHULKER_BOX = MaterialImpl.get("black_shulker_box");
+    Material RED_SANDSTONE = MaterialImpl.get(MaterialKeys.RED_SANDSTONE);
 
-    Material WHITE_GLAZED_TERRACOTTA = MaterialImpl.get("white_glazed_terracotta");
+    Material CHISELED_RED_SANDSTONE = MaterialImpl.get(MaterialKeys.CHISELED_RED_SANDSTONE);
 
-    Material ORANGE_GLAZED_TERRACOTTA = MaterialImpl.get("orange_glazed_terracotta");
+    Material CUT_RED_SANDSTONE = MaterialImpl.get(MaterialKeys.CUT_RED_SANDSTONE);
 
-    Material MAGENTA_GLAZED_TERRACOTTA = MaterialImpl.get("magenta_glazed_terracotta");
+    Material RED_SANDSTONE_STAIRS = MaterialImpl.get(MaterialKeys.RED_SANDSTONE_STAIRS);
 
-    Material LIGHT_BLUE_GLAZED_TERRACOTTA = MaterialImpl.get("light_blue_glazed_terracotta");
+    Material REPEATING_COMMAND_BLOCK = MaterialImpl.get(MaterialKeys.REPEATING_COMMAND_BLOCK);
 
-    Material YELLOW_GLAZED_TERRACOTTA = MaterialImpl.get("yellow_glazed_terracotta");
+    Material CHAIN_COMMAND_BLOCK = MaterialImpl.get(MaterialKeys.CHAIN_COMMAND_BLOCK);
 
-    Material LIME_GLAZED_TERRACOTTA = MaterialImpl.get("lime_glazed_terracotta");
+    Material MAGMA_BLOCK = MaterialImpl.get(MaterialKeys.MAGMA_BLOCK);
 
-    Material PINK_GLAZED_TERRACOTTA = MaterialImpl.get("pink_glazed_terracotta");
+    Material NETHER_WART_BLOCK = MaterialImpl.get(MaterialKeys.NETHER_WART_BLOCK);
 
-    Material GRAY_GLAZED_TERRACOTTA = MaterialImpl.get("gray_glazed_terracotta");
+    Material WARPED_WART_BLOCK = MaterialImpl.get(MaterialKeys.WARPED_WART_BLOCK);
 
-    Material LIGHT_GRAY_GLAZED_TERRACOTTA = MaterialImpl.get("light_gray_glazed_terracotta");
+    Material RED_NETHER_BRICKS = MaterialImpl.get(MaterialKeys.RED_NETHER_BRICKS);
 
-    Material CYAN_GLAZED_TERRACOTTA = MaterialImpl.get("cyan_glazed_terracotta");
+    Material BONE_BLOCK = MaterialImpl.get(MaterialKeys.BONE_BLOCK);
 
-    Material PURPLE_GLAZED_TERRACOTTA = MaterialImpl.get("purple_glazed_terracotta");
+    Material STRUCTURE_VOID = MaterialImpl.get(MaterialKeys.STRUCTURE_VOID);
 
-    Material BLUE_GLAZED_TERRACOTTA = MaterialImpl.get("blue_glazed_terracotta");
+    Material SHULKER_BOX = MaterialImpl.get(MaterialKeys.SHULKER_BOX);
 
-    Material BROWN_GLAZED_TERRACOTTA = MaterialImpl.get("brown_glazed_terracotta");
+    Material WHITE_SHULKER_BOX = MaterialImpl.get(MaterialKeys.WHITE_SHULKER_BOX);
 
-    Material GREEN_GLAZED_TERRACOTTA = MaterialImpl.get("green_glazed_terracotta");
+    Material ORANGE_SHULKER_BOX = MaterialImpl.get(MaterialKeys.ORANGE_SHULKER_BOX);
 
-    Material RED_GLAZED_TERRACOTTA = MaterialImpl.get("red_glazed_terracotta");
+    Material MAGENTA_SHULKER_BOX = MaterialImpl.get(MaterialKeys.MAGENTA_SHULKER_BOX);
 
-    Material BLACK_GLAZED_TERRACOTTA = MaterialImpl.get("black_glazed_terracotta");
+    Material LIGHT_BLUE_SHULKER_BOX = MaterialImpl.get(MaterialKeys.LIGHT_BLUE_SHULKER_BOX);
 
-    Material WHITE_CONCRETE = MaterialImpl.get("white_concrete");
+    Material YELLOW_SHULKER_BOX = MaterialImpl.get(MaterialKeys.YELLOW_SHULKER_BOX);
 
-    Material ORANGE_CONCRETE = MaterialImpl.get("orange_concrete");
+    Material LIME_SHULKER_BOX = MaterialImpl.get(MaterialKeys.LIME_SHULKER_BOX);
 
-    Material MAGENTA_CONCRETE = MaterialImpl.get("magenta_concrete");
+    Material PINK_SHULKER_BOX = MaterialImpl.get(MaterialKeys.PINK_SHULKER_BOX);
 
-    Material LIGHT_BLUE_CONCRETE = MaterialImpl.get("light_blue_concrete");
+    Material GRAY_SHULKER_BOX = MaterialImpl.get(MaterialKeys.GRAY_SHULKER_BOX);
 
-    Material YELLOW_CONCRETE = MaterialImpl.get("yellow_concrete");
+    Material LIGHT_GRAY_SHULKER_BOX = MaterialImpl.get(MaterialKeys.LIGHT_GRAY_SHULKER_BOX);
 
-    Material LIME_CONCRETE = MaterialImpl.get("lime_concrete");
+    Material CYAN_SHULKER_BOX = MaterialImpl.get(MaterialKeys.CYAN_SHULKER_BOX);
 
-    Material PINK_CONCRETE = MaterialImpl.get("pink_concrete");
+    Material PURPLE_SHULKER_BOX = MaterialImpl.get(MaterialKeys.PURPLE_SHULKER_BOX);
 
-    Material GRAY_CONCRETE = MaterialImpl.get("gray_concrete");
+    Material BLUE_SHULKER_BOX = MaterialImpl.get(MaterialKeys.BLUE_SHULKER_BOX);
 
-    Material LIGHT_GRAY_CONCRETE = MaterialImpl.get("light_gray_concrete");
+    Material BROWN_SHULKER_BOX = MaterialImpl.get(MaterialKeys.BROWN_SHULKER_BOX);
 
-    Material CYAN_CONCRETE = MaterialImpl.get("cyan_concrete");
+    Material GREEN_SHULKER_BOX = MaterialImpl.get(MaterialKeys.GREEN_SHULKER_BOX);
 
-    Material PURPLE_CONCRETE = MaterialImpl.get("purple_concrete");
+    Material RED_SHULKER_BOX = MaterialImpl.get(MaterialKeys.RED_SHULKER_BOX);
 
-    Material BLUE_CONCRETE = MaterialImpl.get("blue_concrete");
+    Material BLACK_SHULKER_BOX = MaterialImpl.get(MaterialKeys.BLACK_SHULKER_BOX);
 
-    Material BROWN_CONCRETE = MaterialImpl.get("brown_concrete");
+    Material WHITE_GLAZED_TERRACOTTA = MaterialImpl.get(MaterialKeys.WHITE_GLAZED_TERRACOTTA);
 
-    Material GREEN_CONCRETE = MaterialImpl.get("green_concrete");
+    Material ORANGE_GLAZED_TERRACOTTA = MaterialImpl.get(MaterialKeys.ORANGE_GLAZED_TERRACOTTA);
 
-    Material RED_CONCRETE = MaterialImpl.get("red_concrete");
+    Material MAGENTA_GLAZED_TERRACOTTA = MaterialImpl.get(MaterialKeys.MAGENTA_GLAZED_TERRACOTTA);
 
-    Material BLACK_CONCRETE = MaterialImpl.get("black_concrete");
+    Material LIGHT_BLUE_GLAZED_TERRACOTTA = MaterialImpl.get(MaterialKeys.LIGHT_BLUE_GLAZED_TERRACOTTA);
 
-    Material WHITE_CONCRETE_POWDER = MaterialImpl.get("white_concrete_powder");
+    Material YELLOW_GLAZED_TERRACOTTA = MaterialImpl.get(MaterialKeys.YELLOW_GLAZED_TERRACOTTA);
 
-    Material ORANGE_CONCRETE_POWDER = MaterialImpl.get("orange_concrete_powder");
+    Material LIME_GLAZED_TERRACOTTA = MaterialImpl.get(MaterialKeys.LIME_GLAZED_TERRACOTTA);
 
-    Material MAGENTA_CONCRETE_POWDER = MaterialImpl.get("magenta_concrete_powder");
+    Material PINK_GLAZED_TERRACOTTA = MaterialImpl.get(MaterialKeys.PINK_GLAZED_TERRACOTTA);
 
-    Material LIGHT_BLUE_CONCRETE_POWDER = MaterialImpl.get("light_blue_concrete_powder");
+    Material GRAY_GLAZED_TERRACOTTA = MaterialImpl.get(MaterialKeys.GRAY_GLAZED_TERRACOTTA);
 
-    Material YELLOW_CONCRETE_POWDER = MaterialImpl.get("yellow_concrete_powder");
+    Material LIGHT_GRAY_GLAZED_TERRACOTTA = MaterialImpl.get(MaterialKeys.LIGHT_GRAY_GLAZED_TERRACOTTA);
 
-    Material LIME_CONCRETE_POWDER = MaterialImpl.get("lime_concrete_powder");
+    Material CYAN_GLAZED_TERRACOTTA = MaterialImpl.get(MaterialKeys.CYAN_GLAZED_TERRACOTTA);
 
-    Material PINK_CONCRETE_POWDER = MaterialImpl.get("pink_concrete_powder");
+    Material PURPLE_GLAZED_TERRACOTTA = MaterialImpl.get(MaterialKeys.PURPLE_GLAZED_TERRACOTTA);
 
-    Material GRAY_CONCRETE_POWDER = MaterialImpl.get("gray_concrete_powder");
+    Material BLUE_GLAZED_TERRACOTTA = MaterialImpl.get(MaterialKeys.BLUE_GLAZED_TERRACOTTA);
 
-    Material LIGHT_GRAY_CONCRETE_POWDER = MaterialImpl.get("light_gray_concrete_powder");
+    Material BROWN_GLAZED_TERRACOTTA = MaterialImpl.get(MaterialKeys.BROWN_GLAZED_TERRACOTTA);
 
-    Material CYAN_CONCRETE_POWDER = MaterialImpl.get("cyan_concrete_powder");
+    Material GREEN_GLAZED_TERRACOTTA = MaterialImpl.get(MaterialKeys.GREEN_GLAZED_TERRACOTTA);
 
-    Material PURPLE_CONCRETE_POWDER = MaterialImpl.get("purple_concrete_powder");
+    Material RED_GLAZED_TERRACOTTA = MaterialImpl.get(MaterialKeys.RED_GLAZED_TERRACOTTA);
 
-    Material BLUE_CONCRETE_POWDER = MaterialImpl.get("blue_concrete_powder");
+    Material BLACK_GLAZED_TERRACOTTA = MaterialImpl.get(MaterialKeys.BLACK_GLAZED_TERRACOTTA);
 
-    Material BROWN_CONCRETE_POWDER = MaterialImpl.get("brown_concrete_powder");
+    Material WHITE_CONCRETE = MaterialImpl.get(MaterialKeys.WHITE_CONCRETE);
 
-    Material GREEN_CONCRETE_POWDER = MaterialImpl.get("green_concrete_powder");
+    Material ORANGE_CONCRETE = MaterialImpl.get(MaterialKeys.ORANGE_CONCRETE);
 
-    Material RED_CONCRETE_POWDER = MaterialImpl.get("red_concrete_powder");
+    Material MAGENTA_CONCRETE = MaterialImpl.get(MaterialKeys.MAGENTA_CONCRETE);
 
-    Material BLACK_CONCRETE_POWDER = MaterialImpl.get("black_concrete_powder");
+    Material LIGHT_BLUE_CONCRETE = MaterialImpl.get(MaterialKeys.LIGHT_BLUE_CONCRETE);
 
-    Material TURTLE_EGG = MaterialImpl.get("turtle_egg");
+    Material YELLOW_CONCRETE = MaterialImpl.get(MaterialKeys.YELLOW_CONCRETE);
 
-    Material SNIFFER_EGG = MaterialImpl.get("sniffer_egg");
+    Material LIME_CONCRETE = MaterialImpl.get(MaterialKeys.LIME_CONCRETE);
 
-    Material DRIED_GHAST = MaterialImpl.get("dried_ghast");
+    Material PINK_CONCRETE = MaterialImpl.get(MaterialKeys.PINK_CONCRETE);
 
-    Material DEAD_TUBE_CORAL_BLOCK = MaterialImpl.get("dead_tube_coral_block");
+    Material GRAY_CONCRETE = MaterialImpl.get(MaterialKeys.GRAY_CONCRETE);
 
-    Material DEAD_BRAIN_CORAL_BLOCK = MaterialImpl.get("dead_brain_coral_block");
+    Material LIGHT_GRAY_CONCRETE = MaterialImpl.get(MaterialKeys.LIGHT_GRAY_CONCRETE);
 
-    Material DEAD_BUBBLE_CORAL_BLOCK = MaterialImpl.get("dead_bubble_coral_block");
+    Material CYAN_CONCRETE = MaterialImpl.get(MaterialKeys.CYAN_CONCRETE);
 
-    Material DEAD_FIRE_CORAL_BLOCK = MaterialImpl.get("dead_fire_coral_block");
+    Material PURPLE_CONCRETE = MaterialImpl.get(MaterialKeys.PURPLE_CONCRETE);
 
-    Material DEAD_HORN_CORAL_BLOCK = MaterialImpl.get("dead_horn_coral_block");
+    Material BLUE_CONCRETE = MaterialImpl.get(MaterialKeys.BLUE_CONCRETE);
 
-    Material TUBE_CORAL_BLOCK = MaterialImpl.get("tube_coral_block");
+    Material BROWN_CONCRETE = MaterialImpl.get(MaterialKeys.BROWN_CONCRETE);
 
-    Material BRAIN_CORAL_BLOCK = MaterialImpl.get("brain_coral_block");
+    Material GREEN_CONCRETE = MaterialImpl.get(MaterialKeys.GREEN_CONCRETE);
 
-    Material BUBBLE_CORAL_BLOCK = MaterialImpl.get("bubble_coral_block");
+    Material RED_CONCRETE = MaterialImpl.get(MaterialKeys.RED_CONCRETE);
 
-    Material FIRE_CORAL_BLOCK = MaterialImpl.get("fire_coral_block");
+    Material BLACK_CONCRETE = MaterialImpl.get(MaterialKeys.BLACK_CONCRETE);
 
-    Material HORN_CORAL_BLOCK = MaterialImpl.get("horn_coral_block");
+    Material WHITE_CONCRETE_POWDER = MaterialImpl.get(MaterialKeys.WHITE_CONCRETE_POWDER);
 
-    Material TUBE_CORAL = MaterialImpl.get("tube_coral");
+    Material ORANGE_CONCRETE_POWDER = MaterialImpl.get(MaterialKeys.ORANGE_CONCRETE_POWDER);
 
-    Material BRAIN_CORAL = MaterialImpl.get("brain_coral");
+    Material MAGENTA_CONCRETE_POWDER = MaterialImpl.get(MaterialKeys.MAGENTA_CONCRETE_POWDER);
 
-    Material BUBBLE_CORAL = MaterialImpl.get("bubble_coral");
+    Material LIGHT_BLUE_CONCRETE_POWDER = MaterialImpl.get(MaterialKeys.LIGHT_BLUE_CONCRETE_POWDER);
 
-    Material FIRE_CORAL = MaterialImpl.get("fire_coral");
+    Material YELLOW_CONCRETE_POWDER = MaterialImpl.get(MaterialKeys.YELLOW_CONCRETE_POWDER);
 
-    Material HORN_CORAL = MaterialImpl.get("horn_coral");
+    Material LIME_CONCRETE_POWDER = MaterialImpl.get(MaterialKeys.LIME_CONCRETE_POWDER);
 
-    Material DEAD_BRAIN_CORAL = MaterialImpl.get("dead_brain_coral");
+    Material PINK_CONCRETE_POWDER = MaterialImpl.get(MaterialKeys.PINK_CONCRETE_POWDER);
 
-    Material DEAD_BUBBLE_CORAL = MaterialImpl.get("dead_bubble_coral");
+    Material GRAY_CONCRETE_POWDER = MaterialImpl.get(MaterialKeys.GRAY_CONCRETE_POWDER);
 
-    Material DEAD_FIRE_CORAL = MaterialImpl.get("dead_fire_coral");
+    Material LIGHT_GRAY_CONCRETE_POWDER = MaterialImpl.get(MaterialKeys.LIGHT_GRAY_CONCRETE_POWDER);
 
-    Material DEAD_HORN_CORAL = MaterialImpl.get("dead_horn_coral");
+    Material CYAN_CONCRETE_POWDER = MaterialImpl.get(MaterialKeys.CYAN_CONCRETE_POWDER);
 
-    Material DEAD_TUBE_CORAL = MaterialImpl.get("dead_tube_coral");
+    Material PURPLE_CONCRETE_POWDER = MaterialImpl.get(MaterialKeys.PURPLE_CONCRETE_POWDER);
 
-    Material TUBE_CORAL_FAN = MaterialImpl.get("tube_coral_fan");
+    Material BLUE_CONCRETE_POWDER = MaterialImpl.get(MaterialKeys.BLUE_CONCRETE_POWDER);
 
-    Material BRAIN_CORAL_FAN = MaterialImpl.get("brain_coral_fan");
+    Material BROWN_CONCRETE_POWDER = MaterialImpl.get(MaterialKeys.BROWN_CONCRETE_POWDER);
 
-    Material BUBBLE_CORAL_FAN = MaterialImpl.get("bubble_coral_fan");
+    Material GREEN_CONCRETE_POWDER = MaterialImpl.get(MaterialKeys.GREEN_CONCRETE_POWDER);
 
-    Material FIRE_CORAL_FAN = MaterialImpl.get("fire_coral_fan");
+    Material RED_CONCRETE_POWDER = MaterialImpl.get(MaterialKeys.RED_CONCRETE_POWDER);
 
-    Material HORN_CORAL_FAN = MaterialImpl.get("horn_coral_fan");
+    Material BLACK_CONCRETE_POWDER = MaterialImpl.get(MaterialKeys.BLACK_CONCRETE_POWDER);
 
-    Material DEAD_TUBE_CORAL_FAN = MaterialImpl.get("dead_tube_coral_fan");
+    Material TURTLE_EGG = MaterialImpl.get(MaterialKeys.TURTLE_EGG);
 
-    Material DEAD_BRAIN_CORAL_FAN = MaterialImpl.get("dead_brain_coral_fan");
+    Material SNIFFER_EGG = MaterialImpl.get(MaterialKeys.SNIFFER_EGG);
 
-    Material DEAD_BUBBLE_CORAL_FAN = MaterialImpl.get("dead_bubble_coral_fan");
+    Material DRIED_GHAST = MaterialImpl.get(MaterialKeys.DRIED_GHAST);
 
-    Material DEAD_FIRE_CORAL_FAN = MaterialImpl.get("dead_fire_coral_fan");
+    Material DEAD_TUBE_CORAL_BLOCK = MaterialImpl.get(MaterialKeys.DEAD_TUBE_CORAL_BLOCK);
 
-    Material DEAD_HORN_CORAL_FAN = MaterialImpl.get("dead_horn_coral_fan");
+    Material DEAD_BRAIN_CORAL_BLOCK = MaterialImpl.get(MaterialKeys.DEAD_BRAIN_CORAL_BLOCK);
 
-    Material BLUE_ICE = MaterialImpl.get("blue_ice");
+    Material DEAD_BUBBLE_CORAL_BLOCK = MaterialImpl.get(MaterialKeys.DEAD_BUBBLE_CORAL_BLOCK);
 
-    Material CONDUIT = MaterialImpl.get("conduit");
+    Material DEAD_FIRE_CORAL_BLOCK = MaterialImpl.get(MaterialKeys.DEAD_FIRE_CORAL_BLOCK);
 
-    Material POLISHED_GRANITE_STAIRS = MaterialImpl.get("polished_granite_stairs");
+    Material DEAD_HORN_CORAL_BLOCK = MaterialImpl.get(MaterialKeys.DEAD_HORN_CORAL_BLOCK);
 
-    Material SMOOTH_RED_SANDSTONE_STAIRS = MaterialImpl.get("smooth_red_sandstone_stairs");
+    Material TUBE_CORAL_BLOCK = MaterialImpl.get(MaterialKeys.TUBE_CORAL_BLOCK);
 
-    Material MOSSY_STONE_BRICK_STAIRS = MaterialImpl.get("mossy_stone_brick_stairs");
+    Material BRAIN_CORAL_BLOCK = MaterialImpl.get(MaterialKeys.BRAIN_CORAL_BLOCK);
 
-    Material POLISHED_DIORITE_STAIRS = MaterialImpl.get("polished_diorite_stairs");
+    Material BUBBLE_CORAL_BLOCK = MaterialImpl.get(MaterialKeys.BUBBLE_CORAL_BLOCK);
 
-    Material MOSSY_COBBLESTONE_STAIRS = MaterialImpl.get("mossy_cobblestone_stairs");
+    Material FIRE_CORAL_BLOCK = MaterialImpl.get(MaterialKeys.FIRE_CORAL_BLOCK);
 
-    Material END_STONE_BRICK_STAIRS = MaterialImpl.get("end_stone_brick_stairs");
+    Material HORN_CORAL_BLOCK = MaterialImpl.get(MaterialKeys.HORN_CORAL_BLOCK);
 
-    Material STONE_STAIRS = MaterialImpl.get("stone_stairs");
+    Material TUBE_CORAL = MaterialImpl.get(MaterialKeys.TUBE_CORAL);
 
-    Material SMOOTH_SANDSTONE_STAIRS = MaterialImpl.get("smooth_sandstone_stairs");
+    Material BRAIN_CORAL = MaterialImpl.get(MaterialKeys.BRAIN_CORAL);
 
-    Material SMOOTH_QUARTZ_STAIRS = MaterialImpl.get("smooth_quartz_stairs");
+    Material BUBBLE_CORAL = MaterialImpl.get(MaterialKeys.BUBBLE_CORAL);
 
-    Material GRANITE_STAIRS = MaterialImpl.get("granite_stairs");
+    Material FIRE_CORAL = MaterialImpl.get(MaterialKeys.FIRE_CORAL);
 
-    Material ANDESITE_STAIRS = MaterialImpl.get("andesite_stairs");
+    Material HORN_CORAL = MaterialImpl.get(MaterialKeys.HORN_CORAL);
 
-    Material RED_NETHER_BRICK_STAIRS = MaterialImpl.get("red_nether_brick_stairs");
+    Material DEAD_BRAIN_CORAL = MaterialImpl.get(MaterialKeys.DEAD_BRAIN_CORAL);
 
-    Material POLISHED_ANDESITE_STAIRS = MaterialImpl.get("polished_andesite_stairs");
+    Material DEAD_BUBBLE_CORAL = MaterialImpl.get(MaterialKeys.DEAD_BUBBLE_CORAL);
 
-    Material DIORITE_STAIRS = MaterialImpl.get("diorite_stairs");
+    Material DEAD_FIRE_CORAL = MaterialImpl.get(MaterialKeys.DEAD_FIRE_CORAL);
 
-    Material COBBLED_DEEPSLATE_STAIRS = MaterialImpl.get("cobbled_deepslate_stairs");
+    Material DEAD_HORN_CORAL = MaterialImpl.get(MaterialKeys.DEAD_HORN_CORAL);
 
-    Material POLISHED_DEEPSLATE_STAIRS = MaterialImpl.get("polished_deepslate_stairs");
+    Material DEAD_TUBE_CORAL = MaterialImpl.get(MaterialKeys.DEAD_TUBE_CORAL);
 
-    Material DEEPSLATE_BRICK_STAIRS = MaterialImpl.get("deepslate_brick_stairs");
+    Material TUBE_CORAL_FAN = MaterialImpl.get(MaterialKeys.TUBE_CORAL_FAN);
 
-    Material DEEPSLATE_TILE_STAIRS = MaterialImpl.get("deepslate_tile_stairs");
+    Material BRAIN_CORAL_FAN = MaterialImpl.get(MaterialKeys.BRAIN_CORAL_FAN);
 
-    Material POLISHED_GRANITE_SLAB = MaterialImpl.get("polished_granite_slab");
+    Material BUBBLE_CORAL_FAN = MaterialImpl.get(MaterialKeys.BUBBLE_CORAL_FAN);
 
-    Material SMOOTH_RED_SANDSTONE_SLAB = MaterialImpl.get("smooth_red_sandstone_slab");
+    Material FIRE_CORAL_FAN = MaterialImpl.get(MaterialKeys.FIRE_CORAL_FAN);
 
-    Material MOSSY_STONE_BRICK_SLAB = MaterialImpl.get("mossy_stone_brick_slab");
+    Material HORN_CORAL_FAN = MaterialImpl.get(MaterialKeys.HORN_CORAL_FAN);
 
-    Material POLISHED_DIORITE_SLAB = MaterialImpl.get("polished_diorite_slab");
+    Material DEAD_TUBE_CORAL_FAN = MaterialImpl.get(MaterialKeys.DEAD_TUBE_CORAL_FAN);
 
-    Material MOSSY_COBBLESTONE_SLAB = MaterialImpl.get("mossy_cobblestone_slab");
+    Material DEAD_BRAIN_CORAL_FAN = MaterialImpl.get(MaterialKeys.DEAD_BRAIN_CORAL_FAN);
 
-    Material END_STONE_BRICK_SLAB = MaterialImpl.get("end_stone_brick_slab");
+    Material DEAD_BUBBLE_CORAL_FAN = MaterialImpl.get(MaterialKeys.DEAD_BUBBLE_CORAL_FAN);
 
-    Material SMOOTH_SANDSTONE_SLAB = MaterialImpl.get("smooth_sandstone_slab");
+    Material DEAD_FIRE_CORAL_FAN = MaterialImpl.get(MaterialKeys.DEAD_FIRE_CORAL_FAN);
 
-    Material SMOOTH_QUARTZ_SLAB = MaterialImpl.get("smooth_quartz_slab");
+    Material DEAD_HORN_CORAL_FAN = MaterialImpl.get(MaterialKeys.DEAD_HORN_CORAL_FAN);
 
-    Material GRANITE_SLAB = MaterialImpl.get("granite_slab");
+    Material BLUE_ICE = MaterialImpl.get(MaterialKeys.BLUE_ICE);
 
-    Material ANDESITE_SLAB = MaterialImpl.get("andesite_slab");
+    Material CONDUIT = MaterialImpl.get(MaterialKeys.CONDUIT);
 
-    Material RED_NETHER_BRICK_SLAB = MaterialImpl.get("red_nether_brick_slab");
+    Material POLISHED_GRANITE_STAIRS = MaterialImpl.get(MaterialKeys.POLISHED_GRANITE_STAIRS);
 
-    Material POLISHED_ANDESITE_SLAB = MaterialImpl.get("polished_andesite_slab");
+    Material SMOOTH_RED_SANDSTONE_STAIRS = MaterialImpl.get(MaterialKeys.SMOOTH_RED_SANDSTONE_STAIRS);
 
-    Material DIORITE_SLAB = MaterialImpl.get("diorite_slab");
+    Material MOSSY_STONE_BRICK_STAIRS = MaterialImpl.get(MaterialKeys.MOSSY_STONE_BRICK_STAIRS);
 
-    Material COBBLED_DEEPSLATE_SLAB = MaterialImpl.get("cobbled_deepslate_slab");
+    Material POLISHED_DIORITE_STAIRS = MaterialImpl.get(MaterialKeys.POLISHED_DIORITE_STAIRS);
 
-    Material POLISHED_DEEPSLATE_SLAB = MaterialImpl.get("polished_deepslate_slab");
+    Material MOSSY_COBBLESTONE_STAIRS = MaterialImpl.get(MaterialKeys.MOSSY_COBBLESTONE_STAIRS);
 
-    Material DEEPSLATE_BRICK_SLAB = MaterialImpl.get("deepslate_brick_slab");
+    Material END_STONE_BRICK_STAIRS = MaterialImpl.get(MaterialKeys.END_STONE_BRICK_STAIRS);
 
-    Material DEEPSLATE_TILE_SLAB = MaterialImpl.get("deepslate_tile_slab");
+    Material STONE_STAIRS = MaterialImpl.get(MaterialKeys.STONE_STAIRS);
 
-    Material SCAFFOLDING = MaterialImpl.get("scaffolding");
+    Material SMOOTH_SANDSTONE_STAIRS = MaterialImpl.get(MaterialKeys.SMOOTH_SANDSTONE_STAIRS);
 
-    Material REDSTONE = MaterialImpl.get("redstone");
+    Material SMOOTH_QUARTZ_STAIRS = MaterialImpl.get(MaterialKeys.SMOOTH_QUARTZ_STAIRS);
 
-    Material REDSTONE_TORCH = MaterialImpl.get("redstone_torch");
+    Material GRANITE_STAIRS = MaterialImpl.get(MaterialKeys.GRANITE_STAIRS);
 
-    Material REDSTONE_BLOCK = MaterialImpl.get("redstone_block");
+    Material ANDESITE_STAIRS = MaterialImpl.get(MaterialKeys.ANDESITE_STAIRS);
 
-    Material REPEATER = MaterialImpl.get("repeater");
+    Material RED_NETHER_BRICK_STAIRS = MaterialImpl.get(MaterialKeys.RED_NETHER_BRICK_STAIRS);
 
-    Material COMPARATOR = MaterialImpl.get("comparator");
+    Material POLISHED_ANDESITE_STAIRS = MaterialImpl.get(MaterialKeys.POLISHED_ANDESITE_STAIRS);
 
-    Material PISTON = MaterialImpl.get("piston");
+    Material DIORITE_STAIRS = MaterialImpl.get(MaterialKeys.DIORITE_STAIRS);
 
-    Material STICKY_PISTON = MaterialImpl.get("sticky_piston");
+    Material COBBLED_DEEPSLATE_STAIRS = MaterialImpl.get(MaterialKeys.COBBLED_DEEPSLATE_STAIRS);
 
-    Material SLIME_BLOCK = MaterialImpl.get("slime_block");
+    Material POLISHED_DEEPSLATE_STAIRS = MaterialImpl.get(MaterialKeys.POLISHED_DEEPSLATE_STAIRS);
 
-    Material HONEY_BLOCK = MaterialImpl.get("honey_block");
+    Material DEEPSLATE_BRICK_STAIRS = MaterialImpl.get(MaterialKeys.DEEPSLATE_BRICK_STAIRS);
 
-    Material OBSERVER = MaterialImpl.get("observer");
+    Material DEEPSLATE_TILE_STAIRS = MaterialImpl.get(MaterialKeys.DEEPSLATE_TILE_STAIRS);
 
-    Material HOPPER = MaterialImpl.get("hopper");
+    Material POLISHED_GRANITE_SLAB = MaterialImpl.get(MaterialKeys.POLISHED_GRANITE_SLAB);
 
-    Material DISPENSER = MaterialImpl.get("dispenser");
+    Material SMOOTH_RED_SANDSTONE_SLAB = MaterialImpl.get(MaterialKeys.SMOOTH_RED_SANDSTONE_SLAB);
 
-    Material DROPPER = MaterialImpl.get("dropper");
+    Material MOSSY_STONE_BRICK_SLAB = MaterialImpl.get(MaterialKeys.MOSSY_STONE_BRICK_SLAB);
 
-    Material LECTERN = MaterialImpl.get("lectern");
+    Material POLISHED_DIORITE_SLAB = MaterialImpl.get(MaterialKeys.POLISHED_DIORITE_SLAB);
 
-    Material TARGET = MaterialImpl.get("target");
+    Material MOSSY_COBBLESTONE_SLAB = MaterialImpl.get(MaterialKeys.MOSSY_COBBLESTONE_SLAB);
 
-    Material LEVER = MaterialImpl.get("lever");
+    Material END_STONE_BRICK_SLAB = MaterialImpl.get(MaterialKeys.END_STONE_BRICK_SLAB);
 
-    Material LIGHTNING_ROD = MaterialImpl.get("lightning_rod");
+    Material SMOOTH_SANDSTONE_SLAB = MaterialImpl.get(MaterialKeys.SMOOTH_SANDSTONE_SLAB);
 
-    Material EXPOSED_LIGHTNING_ROD = MaterialImpl.get("exposed_lightning_rod");
+    Material SMOOTH_QUARTZ_SLAB = MaterialImpl.get(MaterialKeys.SMOOTH_QUARTZ_SLAB);
 
-    Material WEATHERED_LIGHTNING_ROD = MaterialImpl.get("weathered_lightning_rod");
+    Material GRANITE_SLAB = MaterialImpl.get(MaterialKeys.GRANITE_SLAB);
 
-    Material OXIDIZED_LIGHTNING_ROD = MaterialImpl.get("oxidized_lightning_rod");
+    Material ANDESITE_SLAB = MaterialImpl.get(MaterialKeys.ANDESITE_SLAB);
 
-    Material WAXED_LIGHTNING_ROD = MaterialImpl.get("waxed_lightning_rod");
+    Material RED_NETHER_BRICK_SLAB = MaterialImpl.get(MaterialKeys.RED_NETHER_BRICK_SLAB);
 
-    Material WAXED_EXPOSED_LIGHTNING_ROD = MaterialImpl.get("waxed_exposed_lightning_rod");
+    Material POLISHED_ANDESITE_SLAB = MaterialImpl.get(MaterialKeys.POLISHED_ANDESITE_SLAB);
 
-    Material WAXED_WEATHERED_LIGHTNING_ROD = MaterialImpl.get("waxed_weathered_lightning_rod");
+    Material DIORITE_SLAB = MaterialImpl.get(MaterialKeys.DIORITE_SLAB);
 
-    Material WAXED_OXIDIZED_LIGHTNING_ROD = MaterialImpl.get("waxed_oxidized_lightning_rod");
+    Material COBBLED_DEEPSLATE_SLAB = MaterialImpl.get(MaterialKeys.COBBLED_DEEPSLATE_SLAB);
 
-    Material DAYLIGHT_DETECTOR = MaterialImpl.get("daylight_detector");
+    Material POLISHED_DEEPSLATE_SLAB = MaterialImpl.get(MaterialKeys.POLISHED_DEEPSLATE_SLAB);
 
-    Material SCULK_SENSOR = MaterialImpl.get("sculk_sensor");
+    Material DEEPSLATE_BRICK_SLAB = MaterialImpl.get(MaterialKeys.DEEPSLATE_BRICK_SLAB);
 
-    Material CALIBRATED_SCULK_SENSOR = MaterialImpl.get("calibrated_sculk_sensor");
+    Material DEEPSLATE_TILE_SLAB = MaterialImpl.get(MaterialKeys.DEEPSLATE_TILE_SLAB);
 
-    Material TRIPWIRE_HOOK = MaterialImpl.get("tripwire_hook");
+    Material SCAFFOLDING = MaterialImpl.get(MaterialKeys.SCAFFOLDING);
 
-    Material TRAPPED_CHEST = MaterialImpl.get("trapped_chest");
+    Material REDSTONE = MaterialImpl.get(MaterialKeys.REDSTONE);
 
-    Material TNT = MaterialImpl.get("tnt");
+    Material REDSTONE_TORCH = MaterialImpl.get(MaterialKeys.REDSTONE_TORCH);
 
-    Material REDSTONE_LAMP = MaterialImpl.get("redstone_lamp");
+    Material REDSTONE_BLOCK = MaterialImpl.get(MaterialKeys.REDSTONE_BLOCK);
 
-    Material NOTE_BLOCK = MaterialImpl.get("note_block");
+    Material REPEATER = MaterialImpl.get(MaterialKeys.REPEATER);
 
-    Material STONE_BUTTON = MaterialImpl.get("stone_button");
+    Material COMPARATOR = MaterialImpl.get(MaterialKeys.COMPARATOR);
 
-    Material POLISHED_BLACKSTONE_BUTTON = MaterialImpl.get("polished_blackstone_button");
+    Material PISTON = MaterialImpl.get(MaterialKeys.PISTON);
 
-    Material OAK_BUTTON = MaterialImpl.get("oak_button");
+    Material STICKY_PISTON = MaterialImpl.get(MaterialKeys.STICKY_PISTON);
 
-    Material SPRUCE_BUTTON = MaterialImpl.get("spruce_button");
+    Material SLIME_BLOCK = MaterialImpl.get(MaterialKeys.SLIME_BLOCK);
 
-    Material BIRCH_BUTTON = MaterialImpl.get("birch_button");
+    Material HONEY_BLOCK = MaterialImpl.get(MaterialKeys.HONEY_BLOCK);
 
-    Material JUNGLE_BUTTON = MaterialImpl.get("jungle_button");
+    Material OBSERVER = MaterialImpl.get(MaterialKeys.OBSERVER);
 
-    Material ACACIA_BUTTON = MaterialImpl.get("acacia_button");
+    Material HOPPER = MaterialImpl.get(MaterialKeys.HOPPER);
 
-    Material CHERRY_BUTTON = MaterialImpl.get("cherry_button");
+    Material DISPENSER = MaterialImpl.get(MaterialKeys.DISPENSER);
 
-    Material DARK_OAK_BUTTON = MaterialImpl.get("dark_oak_button");
+    Material DROPPER = MaterialImpl.get(MaterialKeys.DROPPER);
 
-    Material PALE_OAK_BUTTON = MaterialImpl.get("pale_oak_button");
+    Material LECTERN = MaterialImpl.get(MaterialKeys.LECTERN);
 
-    Material MANGROVE_BUTTON = MaterialImpl.get("mangrove_button");
+    Material TARGET = MaterialImpl.get(MaterialKeys.TARGET);
 
-    Material BAMBOO_BUTTON = MaterialImpl.get("bamboo_button");
+    Material LEVER = MaterialImpl.get(MaterialKeys.LEVER);
 
-    Material CRIMSON_BUTTON = MaterialImpl.get("crimson_button");
+    Material LIGHTNING_ROD = MaterialImpl.get(MaterialKeys.LIGHTNING_ROD);
 
-    Material WARPED_BUTTON = MaterialImpl.get("warped_button");
+    Material EXPOSED_LIGHTNING_ROD = MaterialImpl.get(MaterialKeys.EXPOSED_LIGHTNING_ROD);
 
-    Material STONE_PRESSURE_PLATE = MaterialImpl.get("stone_pressure_plate");
+    Material WEATHERED_LIGHTNING_ROD = MaterialImpl.get(MaterialKeys.WEATHERED_LIGHTNING_ROD);
 
-    Material POLISHED_BLACKSTONE_PRESSURE_PLATE = MaterialImpl.get("polished_blackstone_pressure_plate");
+    Material OXIDIZED_LIGHTNING_ROD = MaterialImpl.get(MaterialKeys.OXIDIZED_LIGHTNING_ROD);
 
-    Material LIGHT_WEIGHTED_PRESSURE_PLATE = MaterialImpl.get("light_weighted_pressure_plate");
+    Material WAXED_LIGHTNING_ROD = MaterialImpl.get(MaterialKeys.WAXED_LIGHTNING_ROD);
 
-    Material HEAVY_WEIGHTED_PRESSURE_PLATE = MaterialImpl.get("heavy_weighted_pressure_plate");
+    Material WAXED_EXPOSED_LIGHTNING_ROD = MaterialImpl.get(MaterialKeys.WAXED_EXPOSED_LIGHTNING_ROD);
 
-    Material OAK_PRESSURE_PLATE = MaterialImpl.get("oak_pressure_plate");
+    Material WAXED_WEATHERED_LIGHTNING_ROD = MaterialImpl.get(MaterialKeys.WAXED_WEATHERED_LIGHTNING_ROD);
 
-    Material SPRUCE_PRESSURE_PLATE = MaterialImpl.get("spruce_pressure_plate");
+    Material WAXED_OXIDIZED_LIGHTNING_ROD = MaterialImpl.get(MaterialKeys.WAXED_OXIDIZED_LIGHTNING_ROD);
 
-    Material BIRCH_PRESSURE_PLATE = MaterialImpl.get("birch_pressure_plate");
+    Material DAYLIGHT_DETECTOR = MaterialImpl.get(MaterialKeys.DAYLIGHT_DETECTOR);
 
-    Material JUNGLE_PRESSURE_PLATE = MaterialImpl.get("jungle_pressure_plate");
+    Material SCULK_SENSOR = MaterialImpl.get(MaterialKeys.SCULK_SENSOR);
 
-    Material ACACIA_PRESSURE_PLATE = MaterialImpl.get("acacia_pressure_plate");
+    Material CALIBRATED_SCULK_SENSOR = MaterialImpl.get(MaterialKeys.CALIBRATED_SCULK_SENSOR);
 
-    Material CHERRY_PRESSURE_PLATE = MaterialImpl.get("cherry_pressure_plate");
+    Material TRIPWIRE_HOOK = MaterialImpl.get(MaterialKeys.TRIPWIRE_HOOK);
 
-    Material DARK_OAK_PRESSURE_PLATE = MaterialImpl.get("dark_oak_pressure_plate");
+    Material TRAPPED_CHEST = MaterialImpl.get(MaterialKeys.TRAPPED_CHEST);
 
-    Material PALE_OAK_PRESSURE_PLATE = MaterialImpl.get("pale_oak_pressure_plate");
+    Material TNT = MaterialImpl.get(MaterialKeys.TNT);
 
-    Material MANGROVE_PRESSURE_PLATE = MaterialImpl.get("mangrove_pressure_plate");
+    Material REDSTONE_LAMP = MaterialImpl.get(MaterialKeys.REDSTONE_LAMP);
 
-    Material BAMBOO_PRESSURE_PLATE = MaterialImpl.get("bamboo_pressure_plate");
+    Material NOTE_BLOCK = MaterialImpl.get(MaterialKeys.NOTE_BLOCK);
 
-    Material CRIMSON_PRESSURE_PLATE = MaterialImpl.get("crimson_pressure_plate");
+    Material STONE_BUTTON = MaterialImpl.get(MaterialKeys.STONE_BUTTON);
 
-    Material WARPED_PRESSURE_PLATE = MaterialImpl.get("warped_pressure_plate");
+    Material POLISHED_BLACKSTONE_BUTTON = MaterialImpl.get(MaterialKeys.POLISHED_BLACKSTONE_BUTTON);
 
-    Material IRON_DOOR = MaterialImpl.get("iron_door");
+    Material OAK_BUTTON = MaterialImpl.get(MaterialKeys.OAK_BUTTON);
 
-    Material OAK_DOOR = MaterialImpl.get("oak_door");
+    Material SPRUCE_BUTTON = MaterialImpl.get(MaterialKeys.SPRUCE_BUTTON);
 
-    Material SPRUCE_DOOR = MaterialImpl.get("spruce_door");
+    Material BIRCH_BUTTON = MaterialImpl.get(MaterialKeys.BIRCH_BUTTON);
 
-    Material BIRCH_DOOR = MaterialImpl.get("birch_door");
+    Material JUNGLE_BUTTON = MaterialImpl.get(MaterialKeys.JUNGLE_BUTTON);
 
-    Material JUNGLE_DOOR = MaterialImpl.get("jungle_door");
+    Material ACACIA_BUTTON = MaterialImpl.get(MaterialKeys.ACACIA_BUTTON);
 
-    Material ACACIA_DOOR = MaterialImpl.get("acacia_door");
+    Material CHERRY_BUTTON = MaterialImpl.get(MaterialKeys.CHERRY_BUTTON);
 
-    Material CHERRY_DOOR = MaterialImpl.get("cherry_door");
+    Material DARK_OAK_BUTTON = MaterialImpl.get(MaterialKeys.DARK_OAK_BUTTON);
 
-    Material DARK_OAK_DOOR = MaterialImpl.get("dark_oak_door");
+    Material PALE_OAK_BUTTON = MaterialImpl.get(MaterialKeys.PALE_OAK_BUTTON);
 
-    Material PALE_OAK_DOOR = MaterialImpl.get("pale_oak_door");
+    Material MANGROVE_BUTTON = MaterialImpl.get(MaterialKeys.MANGROVE_BUTTON);
 
-    Material MANGROVE_DOOR = MaterialImpl.get("mangrove_door");
+    Material BAMBOO_BUTTON = MaterialImpl.get(MaterialKeys.BAMBOO_BUTTON);
 
-    Material BAMBOO_DOOR = MaterialImpl.get("bamboo_door");
+    Material CRIMSON_BUTTON = MaterialImpl.get(MaterialKeys.CRIMSON_BUTTON);
 
-    Material CRIMSON_DOOR = MaterialImpl.get("crimson_door");
+    Material WARPED_BUTTON = MaterialImpl.get(MaterialKeys.WARPED_BUTTON);
 
-    Material WARPED_DOOR = MaterialImpl.get("warped_door");
+    Material STONE_PRESSURE_PLATE = MaterialImpl.get(MaterialKeys.STONE_PRESSURE_PLATE);
 
-    Material COPPER_DOOR = MaterialImpl.get("copper_door");
+    Material POLISHED_BLACKSTONE_PRESSURE_PLATE = MaterialImpl.get(MaterialKeys.POLISHED_BLACKSTONE_PRESSURE_PLATE);
 
-    Material EXPOSED_COPPER_DOOR = MaterialImpl.get("exposed_copper_door");
+    Material LIGHT_WEIGHTED_PRESSURE_PLATE = MaterialImpl.get(MaterialKeys.LIGHT_WEIGHTED_PRESSURE_PLATE);
 
-    Material WEATHERED_COPPER_DOOR = MaterialImpl.get("weathered_copper_door");
+    Material HEAVY_WEIGHTED_PRESSURE_PLATE = MaterialImpl.get(MaterialKeys.HEAVY_WEIGHTED_PRESSURE_PLATE);
 
-    Material OXIDIZED_COPPER_DOOR = MaterialImpl.get("oxidized_copper_door");
+    Material OAK_PRESSURE_PLATE = MaterialImpl.get(MaterialKeys.OAK_PRESSURE_PLATE);
 
-    Material WAXED_COPPER_DOOR = MaterialImpl.get("waxed_copper_door");
+    Material SPRUCE_PRESSURE_PLATE = MaterialImpl.get(MaterialKeys.SPRUCE_PRESSURE_PLATE);
 
-    Material WAXED_EXPOSED_COPPER_DOOR = MaterialImpl.get("waxed_exposed_copper_door");
+    Material BIRCH_PRESSURE_PLATE = MaterialImpl.get(MaterialKeys.BIRCH_PRESSURE_PLATE);
 
-    Material WAXED_WEATHERED_COPPER_DOOR = MaterialImpl.get("waxed_weathered_copper_door");
+    Material JUNGLE_PRESSURE_PLATE = MaterialImpl.get(MaterialKeys.JUNGLE_PRESSURE_PLATE);
 
-    Material WAXED_OXIDIZED_COPPER_DOOR = MaterialImpl.get("waxed_oxidized_copper_door");
+    Material ACACIA_PRESSURE_PLATE = MaterialImpl.get(MaterialKeys.ACACIA_PRESSURE_PLATE);
 
-    Material IRON_TRAPDOOR = MaterialImpl.get("iron_trapdoor");
+    Material CHERRY_PRESSURE_PLATE = MaterialImpl.get(MaterialKeys.CHERRY_PRESSURE_PLATE);
 
-    Material OAK_TRAPDOOR = MaterialImpl.get("oak_trapdoor");
+    Material DARK_OAK_PRESSURE_PLATE = MaterialImpl.get(MaterialKeys.DARK_OAK_PRESSURE_PLATE);
 
-    Material SPRUCE_TRAPDOOR = MaterialImpl.get("spruce_trapdoor");
+    Material PALE_OAK_PRESSURE_PLATE = MaterialImpl.get(MaterialKeys.PALE_OAK_PRESSURE_PLATE);
 
-    Material BIRCH_TRAPDOOR = MaterialImpl.get("birch_trapdoor");
+    Material MANGROVE_PRESSURE_PLATE = MaterialImpl.get(MaterialKeys.MANGROVE_PRESSURE_PLATE);
 
-    Material JUNGLE_TRAPDOOR = MaterialImpl.get("jungle_trapdoor");
+    Material BAMBOO_PRESSURE_PLATE = MaterialImpl.get(MaterialKeys.BAMBOO_PRESSURE_PLATE);
 
-    Material ACACIA_TRAPDOOR = MaterialImpl.get("acacia_trapdoor");
+    Material CRIMSON_PRESSURE_PLATE = MaterialImpl.get(MaterialKeys.CRIMSON_PRESSURE_PLATE);
 
-    Material CHERRY_TRAPDOOR = MaterialImpl.get("cherry_trapdoor");
+    Material WARPED_PRESSURE_PLATE = MaterialImpl.get(MaterialKeys.WARPED_PRESSURE_PLATE);
 
-    Material DARK_OAK_TRAPDOOR = MaterialImpl.get("dark_oak_trapdoor");
+    Material IRON_DOOR = MaterialImpl.get(MaterialKeys.IRON_DOOR);
 
-    Material PALE_OAK_TRAPDOOR = MaterialImpl.get("pale_oak_trapdoor");
+    Material OAK_DOOR = MaterialImpl.get(MaterialKeys.OAK_DOOR);
 
-    Material MANGROVE_TRAPDOOR = MaterialImpl.get("mangrove_trapdoor");
+    Material SPRUCE_DOOR = MaterialImpl.get(MaterialKeys.SPRUCE_DOOR);
 
-    Material BAMBOO_TRAPDOOR = MaterialImpl.get("bamboo_trapdoor");
+    Material BIRCH_DOOR = MaterialImpl.get(MaterialKeys.BIRCH_DOOR);
 
-    Material CRIMSON_TRAPDOOR = MaterialImpl.get("crimson_trapdoor");
+    Material JUNGLE_DOOR = MaterialImpl.get(MaterialKeys.JUNGLE_DOOR);
 
-    Material WARPED_TRAPDOOR = MaterialImpl.get("warped_trapdoor");
+    Material ACACIA_DOOR = MaterialImpl.get(MaterialKeys.ACACIA_DOOR);
 
-    Material COPPER_TRAPDOOR = MaterialImpl.get("copper_trapdoor");
+    Material CHERRY_DOOR = MaterialImpl.get(MaterialKeys.CHERRY_DOOR);
 
-    Material EXPOSED_COPPER_TRAPDOOR = MaterialImpl.get("exposed_copper_trapdoor");
+    Material DARK_OAK_DOOR = MaterialImpl.get(MaterialKeys.DARK_OAK_DOOR);
 
-    Material WEATHERED_COPPER_TRAPDOOR = MaterialImpl.get("weathered_copper_trapdoor");
+    Material PALE_OAK_DOOR = MaterialImpl.get(MaterialKeys.PALE_OAK_DOOR);
 
-    Material OXIDIZED_COPPER_TRAPDOOR = MaterialImpl.get("oxidized_copper_trapdoor");
+    Material MANGROVE_DOOR = MaterialImpl.get(MaterialKeys.MANGROVE_DOOR);
 
-    Material WAXED_COPPER_TRAPDOOR = MaterialImpl.get("waxed_copper_trapdoor");
+    Material BAMBOO_DOOR = MaterialImpl.get(MaterialKeys.BAMBOO_DOOR);
 
-    Material WAXED_EXPOSED_COPPER_TRAPDOOR = MaterialImpl.get("waxed_exposed_copper_trapdoor");
+    Material CRIMSON_DOOR = MaterialImpl.get(MaterialKeys.CRIMSON_DOOR);
 
-    Material WAXED_WEATHERED_COPPER_TRAPDOOR = MaterialImpl.get("waxed_weathered_copper_trapdoor");
+    Material WARPED_DOOR = MaterialImpl.get(MaterialKeys.WARPED_DOOR);
 
-    Material WAXED_OXIDIZED_COPPER_TRAPDOOR = MaterialImpl.get("waxed_oxidized_copper_trapdoor");
+    Material COPPER_DOOR = MaterialImpl.get(MaterialKeys.COPPER_DOOR);
 
-    Material OAK_FENCE_GATE = MaterialImpl.get("oak_fence_gate");
+    Material EXPOSED_COPPER_DOOR = MaterialImpl.get(MaterialKeys.EXPOSED_COPPER_DOOR);
 
-    Material SPRUCE_FENCE_GATE = MaterialImpl.get("spruce_fence_gate");
+    Material WEATHERED_COPPER_DOOR = MaterialImpl.get(MaterialKeys.WEATHERED_COPPER_DOOR);
 
-    Material BIRCH_FENCE_GATE = MaterialImpl.get("birch_fence_gate");
+    Material OXIDIZED_COPPER_DOOR = MaterialImpl.get(MaterialKeys.OXIDIZED_COPPER_DOOR);
 
-    Material JUNGLE_FENCE_GATE = MaterialImpl.get("jungle_fence_gate");
+    Material WAXED_COPPER_DOOR = MaterialImpl.get(MaterialKeys.WAXED_COPPER_DOOR);
 
-    Material ACACIA_FENCE_GATE = MaterialImpl.get("acacia_fence_gate");
+    Material WAXED_EXPOSED_COPPER_DOOR = MaterialImpl.get(MaterialKeys.WAXED_EXPOSED_COPPER_DOOR);
 
-    Material CHERRY_FENCE_GATE = MaterialImpl.get("cherry_fence_gate");
+    Material WAXED_WEATHERED_COPPER_DOOR = MaterialImpl.get(MaterialKeys.WAXED_WEATHERED_COPPER_DOOR);
 
-    Material DARK_OAK_FENCE_GATE = MaterialImpl.get("dark_oak_fence_gate");
+    Material WAXED_OXIDIZED_COPPER_DOOR = MaterialImpl.get(MaterialKeys.WAXED_OXIDIZED_COPPER_DOOR);
 
-    Material PALE_OAK_FENCE_GATE = MaterialImpl.get("pale_oak_fence_gate");
+    Material IRON_TRAPDOOR = MaterialImpl.get(MaterialKeys.IRON_TRAPDOOR);
 
-    Material MANGROVE_FENCE_GATE = MaterialImpl.get("mangrove_fence_gate");
+    Material OAK_TRAPDOOR = MaterialImpl.get(MaterialKeys.OAK_TRAPDOOR);
 
-    Material BAMBOO_FENCE_GATE = MaterialImpl.get("bamboo_fence_gate");
+    Material SPRUCE_TRAPDOOR = MaterialImpl.get(MaterialKeys.SPRUCE_TRAPDOOR);
 
-    Material CRIMSON_FENCE_GATE = MaterialImpl.get("crimson_fence_gate");
+    Material BIRCH_TRAPDOOR = MaterialImpl.get(MaterialKeys.BIRCH_TRAPDOOR);
 
-    Material WARPED_FENCE_GATE = MaterialImpl.get("warped_fence_gate");
+    Material JUNGLE_TRAPDOOR = MaterialImpl.get(MaterialKeys.JUNGLE_TRAPDOOR);
 
-    Material POWERED_RAIL = MaterialImpl.get("powered_rail");
+    Material ACACIA_TRAPDOOR = MaterialImpl.get(MaterialKeys.ACACIA_TRAPDOOR);
 
-    Material DETECTOR_RAIL = MaterialImpl.get("detector_rail");
+    Material CHERRY_TRAPDOOR = MaterialImpl.get(MaterialKeys.CHERRY_TRAPDOOR);
 
-    Material RAIL = MaterialImpl.get("rail");
+    Material DARK_OAK_TRAPDOOR = MaterialImpl.get(MaterialKeys.DARK_OAK_TRAPDOOR);
 
-    Material ACTIVATOR_RAIL = MaterialImpl.get("activator_rail");
+    Material PALE_OAK_TRAPDOOR = MaterialImpl.get(MaterialKeys.PALE_OAK_TRAPDOOR);
 
-    Material SADDLE = MaterialImpl.get("saddle");
+    Material MANGROVE_TRAPDOOR = MaterialImpl.get(MaterialKeys.MANGROVE_TRAPDOOR);
 
-    Material WHITE_HARNESS = MaterialImpl.get("white_harness");
+    Material BAMBOO_TRAPDOOR = MaterialImpl.get(MaterialKeys.BAMBOO_TRAPDOOR);
 
-    Material ORANGE_HARNESS = MaterialImpl.get("orange_harness");
+    Material CRIMSON_TRAPDOOR = MaterialImpl.get(MaterialKeys.CRIMSON_TRAPDOOR);
 
-    Material MAGENTA_HARNESS = MaterialImpl.get("magenta_harness");
+    Material WARPED_TRAPDOOR = MaterialImpl.get(MaterialKeys.WARPED_TRAPDOOR);
 
-    Material LIGHT_BLUE_HARNESS = MaterialImpl.get("light_blue_harness");
+    Material COPPER_TRAPDOOR = MaterialImpl.get(MaterialKeys.COPPER_TRAPDOOR);
 
-    Material YELLOW_HARNESS = MaterialImpl.get("yellow_harness");
+    Material EXPOSED_COPPER_TRAPDOOR = MaterialImpl.get(MaterialKeys.EXPOSED_COPPER_TRAPDOOR);
 
-    Material LIME_HARNESS = MaterialImpl.get("lime_harness");
+    Material WEATHERED_COPPER_TRAPDOOR = MaterialImpl.get(MaterialKeys.WEATHERED_COPPER_TRAPDOOR);
 
-    Material PINK_HARNESS = MaterialImpl.get("pink_harness");
+    Material OXIDIZED_COPPER_TRAPDOOR = MaterialImpl.get(MaterialKeys.OXIDIZED_COPPER_TRAPDOOR);
 
-    Material GRAY_HARNESS = MaterialImpl.get("gray_harness");
+    Material WAXED_COPPER_TRAPDOOR = MaterialImpl.get(MaterialKeys.WAXED_COPPER_TRAPDOOR);
 
-    Material LIGHT_GRAY_HARNESS = MaterialImpl.get("light_gray_harness");
+    Material WAXED_EXPOSED_COPPER_TRAPDOOR = MaterialImpl.get(MaterialKeys.WAXED_EXPOSED_COPPER_TRAPDOOR);
 
-    Material CYAN_HARNESS = MaterialImpl.get("cyan_harness");
+    Material WAXED_WEATHERED_COPPER_TRAPDOOR = MaterialImpl.get(MaterialKeys.WAXED_WEATHERED_COPPER_TRAPDOOR);
 
-    Material PURPLE_HARNESS = MaterialImpl.get("purple_harness");
+    Material WAXED_OXIDIZED_COPPER_TRAPDOOR = MaterialImpl.get(MaterialKeys.WAXED_OXIDIZED_COPPER_TRAPDOOR);
 
-    Material BLUE_HARNESS = MaterialImpl.get("blue_harness");
+    Material OAK_FENCE_GATE = MaterialImpl.get(MaterialKeys.OAK_FENCE_GATE);
 
-    Material BROWN_HARNESS = MaterialImpl.get("brown_harness");
+    Material SPRUCE_FENCE_GATE = MaterialImpl.get(MaterialKeys.SPRUCE_FENCE_GATE);
 
-    Material GREEN_HARNESS = MaterialImpl.get("green_harness");
+    Material BIRCH_FENCE_GATE = MaterialImpl.get(MaterialKeys.BIRCH_FENCE_GATE);
 
-    Material RED_HARNESS = MaterialImpl.get("red_harness");
+    Material JUNGLE_FENCE_GATE = MaterialImpl.get(MaterialKeys.JUNGLE_FENCE_GATE);
 
-    Material BLACK_HARNESS = MaterialImpl.get("black_harness");
+    Material ACACIA_FENCE_GATE = MaterialImpl.get(MaterialKeys.ACACIA_FENCE_GATE);
 
-    Material MINECART = MaterialImpl.get("minecart");
+    Material CHERRY_FENCE_GATE = MaterialImpl.get(MaterialKeys.CHERRY_FENCE_GATE);
 
-    Material CHEST_MINECART = MaterialImpl.get("chest_minecart");
+    Material DARK_OAK_FENCE_GATE = MaterialImpl.get(MaterialKeys.DARK_OAK_FENCE_GATE);
 
-    Material FURNACE_MINECART = MaterialImpl.get("furnace_minecart");
+    Material PALE_OAK_FENCE_GATE = MaterialImpl.get(MaterialKeys.PALE_OAK_FENCE_GATE);
 
-    Material TNT_MINECART = MaterialImpl.get("tnt_minecart");
+    Material MANGROVE_FENCE_GATE = MaterialImpl.get(MaterialKeys.MANGROVE_FENCE_GATE);
 
-    Material HOPPER_MINECART = MaterialImpl.get("hopper_minecart");
+    Material BAMBOO_FENCE_GATE = MaterialImpl.get(MaterialKeys.BAMBOO_FENCE_GATE);
 
-    Material CARROT_ON_A_STICK = MaterialImpl.get("carrot_on_a_stick");
+    Material CRIMSON_FENCE_GATE = MaterialImpl.get(MaterialKeys.CRIMSON_FENCE_GATE);
 
-    Material WARPED_FUNGUS_ON_A_STICK = MaterialImpl.get("warped_fungus_on_a_stick");
+    Material WARPED_FENCE_GATE = MaterialImpl.get(MaterialKeys.WARPED_FENCE_GATE);
 
-    Material PHANTOM_MEMBRANE = MaterialImpl.get("phantom_membrane");
+    Material POWERED_RAIL = MaterialImpl.get(MaterialKeys.POWERED_RAIL);
 
-    Material ELYTRA = MaterialImpl.get("elytra");
+    Material DETECTOR_RAIL = MaterialImpl.get(MaterialKeys.DETECTOR_RAIL);
 
-    Material OAK_BOAT = MaterialImpl.get("oak_boat");
+    Material RAIL = MaterialImpl.get(MaterialKeys.RAIL);
 
-    Material OAK_CHEST_BOAT = MaterialImpl.get("oak_chest_boat");
+    Material ACTIVATOR_RAIL = MaterialImpl.get(MaterialKeys.ACTIVATOR_RAIL);
 
-    Material SPRUCE_BOAT = MaterialImpl.get("spruce_boat");
+    Material SADDLE = MaterialImpl.get(MaterialKeys.SADDLE);
 
-    Material SPRUCE_CHEST_BOAT = MaterialImpl.get("spruce_chest_boat");
+    Material WHITE_HARNESS = MaterialImpl.get(MaterialKeys.WHITE_HARNESS);
 
-    Material BIRCH_BOAT = MaterialImpl.get("birch_boat");
+    Material ORANGE_HARNESS = MaterialImpl.get(MaterialKeys.ORANGE_HARNESS);
 
-    Material BIRCH_CHEST_BOAT = MaterialImpl.get("birch_chest_boat");
+    Material MAGENTA_HARNESS = MaterialImpl.get(MaterialKeys.MAGENTA_HARNESS);
 
-    Material JUNGLE_BOAT = MaterialImpl.get("jungle_boat");
+    Material LIGHT_BLUE_HARNESS = MaterialImpl.get(MaterialKeys.LIGHT_BLUE_HARNESS);
 
-    Material JUNGLE_CHEST_BOAT = MaterialImpl.get("jungle_chest_boat");
+    Material YELLOW_HARNESS = MaterialImpl.get(MaterialKeys.YELLOW_HARNESS);
 
-    Material ACACIA_BOAT = MaterialImpl.get("acacia_boat");
+    Material LIME_HARNESS = MaterialImpl.get(MaterialKeys.LIME_HARNESS);
 
-    Material ACACIA_CHEST_BOAT = MaterialImpl.get("acacia_chest_boat");
+    Material PINK_HARNESS = MaterialImpl.get(MaterialKeys.PINK_HARNESS);
 
-    Material CHERRY_BOAT = MaterialImpl.get("cherry_boat");
+    Material GRAY_HARNESS = MaterialImpl.get(MaterialKeys.GRAY_HARNESS);
 
-    Material CHERRY_CHEST_BOAT = MaterialImpl.get("cherry_chest_boat");
+    Material LIGHT_GRAY_HARNESS = MaterialImpl.get(MaterialKeys.LIGHT_GRAY_HARNESS);
 
-    Material DARK_OAK_BOAT = MaterialImpl.get("dark_oak_boat");
+    Material CYAN_HARNESS = MaterialImpl.get(MaterialKeys.CYAN_HARNESS);
 
-    Material DARK_OAK_CHEST_BOAT = MaterialImpl.get("dark_oak_chest_boat");
+    Material PURPLE_HARNESS = MaterialImpl.get(MaterialKeys.PURPLE_HARNESS);
 
-    Material PALE_OAK_BOAT = MaterialImpl.get("pale_oak_boat");
+    Material BLUE_HARNESS = MaterialImpl.get(MaterialKeys.BLUE_HARNESS);
 
-    Material PALE_OAK_CHEST_BOAT = MaterialImpl.get("pale_oak_chest_boat");
+    Material BROWN_HARNESS = MaterialImpl.get(MaterialKeys.BROWN_HARNESS);
 
-    Material MANGROVE_BOAT = MaterialImpl.get("mangrove_boat");
+    Material GREEN_HARNESS = MaterialImpl.get(MaterialKeys.GREEN_HARNESS);
 
-    Material MANGROVE_CHEST_BOAT = MaterialImpl.get("mangrove_chest_boat");
+    Material RED_HARNESS = MaterialImpl.get(MaterialKeys.RED_HARNESS);
 
-    Material BAMBOO_RAFT = MaterialImpl.get("bamboo_raft");
+    Material BLACK_HARNESS = MaterialImpl.get(MaterialKeys.BLACK_HARNESS);
 
-    Material BAMBOO_CHEST_RAFT = MaterialImpl.get("bamboo_chest_raft");
+    Material MINECART = MaterialImpl.get(MaterialKeys.MINECART);
 
-    Material STRUCTURE_BLOCK = MaterialImpl.get("structure_block");
+    Material CHEST_MINECART = MaterialImpl.get(MaterialKeys.CHEST_MINECART);
 
-    Material JIGSAW = MaterialImpl.get("jigsaw");
+    Material FURNACE_MINECART = MaterialImpl.get(MaterialKeys.FURNACE_MINECART);
 
-    Material TEST_BLOCK = MaterialImpl.get("test_block");
+    Material TNT_MINECART = MaterialImpl.get(MaterialKeys.TNT_MINECART);
 
-    Material TEST_INSTANCE_BLOCK = MaterialImpl.get("test_instance_block");
+    Material HOPPER_MINECART = MaterialImpl.get(MaterialKeys.HOPPER_MINECART);
 
-    Material TURTLE_HELMET = MaterialImpl.get("turtle_helmet");
+    Material CARROT_ON_A_STICK = MaterialImpl.get(MaterialKeys.CARROT_ON_A_STICK);
 
-    Material TURTLE_SCUTE = MaterialImpl.get("turtle_scute");
+    Material WARPED_FUNGUS_ON_A_STICK = MaterialImpl.get(MaterialKeys.WARPED_FUNGUS_ON_A_STICK);
 
-    Material ARMADILLO_SCUTE = MaterialImpl.get("armadillo_scute");
+    Material PHANTOM_MEMBRANE = MaterialImpl.get(MaterialKeys.PHANTOM_MEMBRANE);
 
-    Material WOLF_ARMOR = MaterialImpl.get("wolf_armor");
+    Material ELYTRA = MaterialImpl.get(MaterialKeys.ELYTRA);
 
-    Material FLINT_AND_STEEL = MaterialImpl.get("flint_and_steel");
+    Material OAK_BOAT = MaterialImpl.get(MaterialKeys.OAK_BOAT);
 
-    Material BOWL = MaterialImpl.get("bowl");
+    Material OAK_CHEST_BOAT = MaterialImpl.get(MaterialKeys.OAK_CHEST_BOAT);
 
-    Material APPLE = MaterialImpl.get("apple");
+    Material SPRUCE_BOAT = MaterialImpl.get(MaterialKeys.SPRUCE_BOAT);
 
-    Material BOW = MaterialImpl.get("bow");
+    Material SPRUCE_CHEST_BOAT = MaterialImpl.get(MaterialKeys.SPRUCE_CHEST_BOAT);
 
-    Material ARROW = MaterialImpl.get("arrow");
+    Material BIRCH_BOAT = MaterialImpl.get(MaterialKeys.BIRCH_BOAT);
 
-    Material COAL = MaterialImpl.get("coal");
+    Material BIRCH_CHEST_BOAT = MaterialImpl.get(MaterialKeys.BIRCH_CHEST_BOAT);
 
-    Material CHARCOAL = MaterialImpl.get("charcoal");
+    Material JUNGLE_BOAT = MaterialImpl.get(MaterialKeys.JUNGLE_BOAT);
 
-    Material DIAMOND = MaterialImpl.get("diamond");
+    Material JUNGLE_CHEST_BOAT = MaterialImpl.get(MaterialKeys.JUNGLE_CHEST_BOAT);
 
-    Material EMERALD = MaterialImpl.get("emerald");
+    Material ACACIA_BOAT = MaterialImpl.get(MaterialKeys.ACACIA_BOAT);
 
-    Material LAPIS_LAZULI = MaterialImpl.get("lapis_lazuli");
+    Material ACACIA_CHEST_BOAT = MaterialImpl.get(MaterialKeys.ACACIA_CHEST_BOAT);
 
-    Material QUARTZ = MaterialImpl.get("quartz");
+    Material CHERRY_BOAT = MaterialImpl.get(MaterialKeys.CHERRY_BOAT);
 
-    Material AMETHYST_SHARD = MaterialImpl.get("amethyst_shard");
+    Material CHERRY_CHEST_BOAT = MaterialImpl.get(MaterialKeys.CHERRY_CHEST_BOAT);
 
-    Material RAW_IRON = MaterialImpl.get("raw_iron");
+    Material DARK_OAK_BOAT = MaterialImpl.get(MaterialKeys.DARK_OAK_BOAT);
 
-    Material IRON_INGOT = MaterialImpl.get("iron_ingot");
+    Material DARK_OAK_CHEST_BOAT = MaterialImpl.get(MaterialKeys.DARK_OAK_CHEST_BOAT);
 
-    Material RAW_COPPER = MaterialImpl.get("raw_copper");
+    Material PALE_OAK_BOAT = MaterialImpl.get(MaterialKeys.PALE_OAK_BOAT);
 
-    Material COPPER_INGOT = MaterialImpl.get("copper_ingot");
+    Material PALE_OAK_CHEST_BOAT = MaterialImpl.get(MaterialKeys.PALE_OAK_CHEST_BOAT);
 
-    Material RAW_GOLD = MaterialImpl.get("raw_gold");
+    Material MANGROVE_BOAT = MaterialImpl.get(MaterialKeys.MANGROVE_BOAT);
 
-    Material GOLD_INGOT = MaterialImpl.get("gold_ingot");
+    Material MANGROVE_CHEST_BOAT = MaterialImpl.get(MaterialKeys.MANGROVE_CHEST_BOAT);
 
-    Material NETHERITE_INGOT = MaterialImpl.get("netherite_ingot");
+    Material BAMBOO_RAFT = MaterialImpl.get(MaterialKeys.BAMBOO_RAFT);
 
-    Material NETHERITE_SCRAP = MaterialImpl.get("netherite_scrap");
+    Material BAMBOO_CHEST_RAFT = MaterialImpl.get(MaterialKeys.BAMBOO_CHEST_RAFT);
 
-    Material WOODEN_SWORD = MaterialImpl.get("wooden_sword");
+    Material STRUCTURE_BLOCK = MaterialImpl.get(MaterialKeys.STRUCTURE_BLOCK);
 
-    Material WOODEN_SHOVEL = MaterialImpl.get("wooden_shovel");
+    Material JIGSAW = MaterialImpl.get(MaterialKeys.JIGSAW);
 
-    Material WOODEN_PICKAXE = MaterialImpl.get("wooden_pickaxe");
+    Material TEST_BLOCK = MaterialImpl.get(MaterialKeys.TEST_BLOCK);
 
-    Material WOODEN_AXE = MaterialImpl.get("wooden_axe");
+    Material TEST_INSTANCE_BLOCK = MaterialImpl.get(MaterialKeys.TEST_INSTANCE_BLOCK);
 
-    Material WOODEN_HOE = MaterialImpl.get("wooden_hoe");
+    Material TURTLE_HELMET = MaterialImpl.get(MaterialKeys.TURTLE_HELMET);
 
-    Material COPPER_SWORD = MaterialImpl.get("copper_sword");
+    Material TURTLE_SCUTE = MaterialImpl.get(MaterialKeys.TURTLE_SCUTE);
 
-    Material COPPER_SHOVEL = MaterialImpl.get("copper_shovel");
+    Material ARMADILLO_SCUTE = MaterialImpl.get(MaterialKeys.ARMADILLO_SCUTE);
 
-    Material COPPER_PICKAXE = MaterialImpl.get("copper_pickaxe");
+    Material WOLF_ARMOR = MaterialImpl.get(MaterialKeys.WOLF_ARMOR);
 
-    Material COPPER_AXE = MaterialImpl.get("copper_axe");
+    Material FLINT_AND_STEEL = MaterialImpl.get(MaterialKeys.FLINT_AND_STEEL);
 
-    Material COPPER_HOE = MaterialImpl.get("copper_hoe");
+    Material BOWL = MaterialImpl.get(MaterialKeys.BOWL);
 
-    Material STONE_SWORD = MaterialImpl.get("stone_sword");
+    Material APPLE = MaterialImpl.get(MaterialKeys.APPLE);
 
-    Material STONE_SHOVEL = MaterialImpl.get("stone_shovel");
+    Material BOW = MaterialImpl.get(MaterialKeys.BOW);
 
-    Material STONE_PICKAXE = MaterialImpl.get("stone_pickaxe");
+    Material ARROW = MaterialImpl.get(MaterialKeys.ARROW);
 
-    Material STONE_AXE = MaterialImpl.get("stone_axe");
+    Material COAL = MaterialImpl.get(MaterialKeys.COAL);
 
-    Material STONE_HOE = MaterialImpl.get("stone_hoe");
+    Material CHARCOAL = MaterialImpl.get(MaterialKeys.CHARCOAL);
 
-    Material GOLDEN_SWORD = MaterialImpl.get("golden_sword");
+    Material DIAMOND = MaterialImpl.get(MaterialKeys.DIAMOND);
 
-    Material GOLDEN_SHOVEL = MaterialImpl.get("golden_shovel");
+    Material EMERALD = MaterialImpl.get(MaterialKeys.EMERALD);
 
-    Material GOLDEN_PICKAXE = MaterialImpl.get("golden_pickaxe");
+    Material LAPIS_LAZULI = MaterialImpl.get(MaterialKeys.LAPIS_LAZULI);
 
-    Material GOLDEN_AXE = MaterialImpl.get("golden_axe");
+    Material QUARTZ = MaterialImpl.get(MaterialKeys.QUARTZ);
 
-    Material GOLDEN_HOE = MaterialImpl.get("golden_hoe");
+    Material AMETHYST_SHARD = MaterialImpl.get(MaterialKeys.AMETHYST_SHARD);
 
-    Material IRON_SWORD = MaterialImpl.get("iron_sword");
+    Material RAW_IRON = MaterialImpl.get(MaterialKeys.RAW_IRON);
 
-    Material IRON_SHOVEL = MaterialImpl.get("iron_shovel");
+    Material IRON_INGOT = MaterialImpl.get(MaterialKeys.IRON_INGOT);
 
-    Material IRON_PICKAXE = MaterialImpl.get("iron_pickaxe");
+    Material RAW_COPPER = MaterialImpl.get(MaterialKeys.RAW_COPPER);
 
-    Material IRON_AXE = MaterialImpl.get("iron_axe");
+    Material COPPER_INGOT = MaterialImpl.get(MaterialKeys.COPPER_INGOT);
 
-    Material IRON_HOE = MaterialImpl.get("iron_hoe");
+    Material RAW_GOLD = MaterialImpl.get(MaterialKeys.RAW_GOLD);
 
-    Material DIAMOND_SWORD = MaterialImpl.get("diamond_sword");
+    Material GOLD_INGOT = MaterialImpl.get(MaterialKeys.GOLD_INGOT);
 
-    Material DIAMOND_SHOVEL = MaterialImpl.get("diamond_shovel");
+    Material NETHERITE_INGOT = MaterialImpl.get(MaterialKeys.NETHERITE_INGOT);
 
-    Material DIAMOND_PICKAXE = MaterialImpl.get("diamond_pickaxe");
+    Material NETHERITE_SCRAP = MaterialImpl.get(MaterialKeys.NETHERITE_SCRAP);
 
-    Material DIAMOND_AXE = MaterialImpl.get("diamond_axe");
+    Material WOODEN_SWORD = MaterialImpl.get(MaterialKeys.WOODEN_SWORD);
 
-    Material DIAMOND_HOE = MaterialImpl.get("diamond_hoe");
+    Material WOODEN_SHOVEL = MaterialImpl.get(MaterialKeys.WOODEN_SHOVEL);
 
-    Material NETHERITE_SWORD = MaterialImpl.get("netherite_sword");
+    Material WOODEN_PICKAXE = MaterialImpl.get(MaterialKeys.WOODEN_PICKAXE);
 
-    Material NETHERITE_SHOVEL = MaterialImpl.get("netherite_shovel");
+    Material WOODEN_AXE = MaterialImpl.get(MaterialKeys.WOODEN_AXE);
 
-    Material NETHERITE_PICKAXE = MaterialImpl.get("netherite_pickaxe");
+    Material WOODEN_HOE = MaterialImpl.get(MaterialKeys.WOODEN_HOE);
 
-    Material NETHERITE_AXE = MaterialImpl.get("netherite_axe");
+    Material COPPER_SWORD = MaterialImpl.get(MaterialKeys.COPPER_SWORD);
 
-    Material NETHERITE_HOE = MaterialImpl.get("netherite_hoe");
+    Material COPPER_SHOVEL = MaterialImpl.get(MaterialKeys.COPPER_SHOVEL);
 
-    Material STICK = MaterialImpl.get("stick");
+    Material COPPER_PICKAXE = MaterialImpl.get(MaterialKeys.COPPER_PICKAXE);
 
-    Material MUSHROOM_STEW = MaterialImpl.get("mushroom_stew");
+    Material COPPER_AXE = MaterialImpl.get(MaterialKeys.COPPER_AXE);
 
-    Material STRING = MaterialImpl.get("string");
+    Material COPPER_HOE = MaterialImpl.get(MaterialKeys.COPPER_HOE);
 
-    Material FEATHER = MaterialImpl.get("feather");
+    Material STONE_SWORD = MaterialImpl.get(MaterialKeys.STONE_SWORD);
 
-    Material GUNPOWDER = MaterialImpl.get("gunpowder");
+    Material STONE_SHOVEL = MaterialImpl.get(MaterialKeys.STONE_SHOVEL);
 
-    Material WHEAT_SEEDS = MaterialImpl.get("wheat_seeds");
+    Material STONE_PICKAXE = MaterialImpl.get(MaterialKeys.STONE_PICKAXE);
 
-    Material WHEAT = MaterialImpl.get("wheat");
+    Material STONE_AXE = MaterialImpl.get(MaterialKeys.STONE_AXE);
 
-    Material BREAD = MaterialImpl.get("bread");
+    Material STONE_HOE = MaterialImpl.get(MaterialKeys.STONE_HOE);
 
-    Material LEATHER_HELMET = MaterialImpl.get("leather_helmet");
+    Material GOLDEN_SWORD = MaterialImpl.get(MaterialKeys.GOLDEN_SWORD);
 
-    Material LEATHER_CHESTPLATE = MaterialImpl.get("leather_chestplate");
+    Material GOLDEN_SHOVEL = MaterialImpl.get(MaterialKeys.GOLDEN_SHOVEL);
 
-    Material LEATHER_LEGGINGS = MaterialImpl.get("leather_leggings");
+    Material GOLDEN_PICKAXE = MaterialImpl.get(MaterialKeys.GOLDEN_PICKAXE);
 
-    Material LEATHER_BOOTS = MaterialImpl.get("leather_boots");
+    Material GOLDEN_AXE = MaterialImpl.get(MaterialKeys.GOLDEN_AXE);
 
-    Material COPPER_HELMET = MaterialImpl.get("copper_helmet");
+    Material GOLDEN_HOE = MaterialImpl.get(MaterialKeys.GOLDEN_HOE);
 
-    Material COPPER_CHESTPLATE = MaterialImpl.get("copper_chestplate");
+    Material IRON_SWORD = MaterialImpl.get(MaterialKeys.IRON_SWORD);
 
-    Material COPPER_LEGGINGS = MaterialImpl.get("copper_leggings");
+    Material IRON_SHOVEL = MaterialImpl.get(MaterialKeys.IRON_SHOVEL);
 
-    Material COPPER_BOOTS = MaterialImpl.get("copper_boots");
+    Material IRON_PICKAXE = MaterialImpl.get(MaterialKeys.IRON_PICKAXE);
 
-    Material CHAINMAIL_HELMET = MaterialImpl.get("chainmail_helmet");
+    Material IRON_AXE = MaterialImpl.get(MaterialKeys.IRON_AXE);
 
-    Material CHAINMAIL_CHESTPLATE = MaterialImpl.get("chainmail_chestplate");
+    Material IRON_HOE = MaterialImpl.get(MaterialKeys.IRON_HOE);
 
-    Material CHAINMAIL_LEGGINGS = MaterialImpl.get("chainmail_leggings");
+    Material DIAMOND_SWORD = MaterialImpl.get(MaterialKeys.DIAMOND_SWORD);
 
-    Material CHAINMAIL_BOOTS = MaterialImpl.get("chainmail_boots");
+    Material DIAMOND_SHOVEL = MaterialImpl.get(MaterialKeys.DIAMOND_SHOVEL);
 
-    Material IRON_HELMET = MaterialImpl.get("iron_helmet");
+    Material DIAMOND_PICKAXE = MaterialImpl.get(MaterialKeys.DIAMOND_PICKAXE);
 
-    Material IRON_CHESTPLATE = MaterialImpl.get("iron_chestplate");
+    Material DIAMOND_AXE = MaterialImpl.get(MaterialKeys.DIAMOND_AXE);
 
-    Material IRON_LEGGINGS = MaterialImpl.get("iron_leggings");
+    Material DIAMOND_HOE = MaterialImpl.get(MaterialKeys.DIAMOND_HOE);
 
-    Material IRON_BOOTS = MaterialImpl.get("iron_boots");
+    Material NETHERITE_SWORD = MaterialImpl.get(MaterialKeys.NETHERITE_SWORD);
 
-    Material DIAMOND_HELMET = MaterialImpl.get("diamond_helmet");
+    Material NETHERITE_SHOVEL = MaterialImpl.get(MaterialKeys.NETHERITE_SHOVEL);
 
-    Material DIAMOND_CHESTPLATE = MaterialImpl.get("diamond_chestplate");
+    Material NETHERITE_PICKAXE = MaterialImpl.get(MaterialKeys.NETHERITE_PICKAXE);
 
-    Material DIAMOND_LEGGINGS = MaterialImpl.get("diamond_leggings");
+    Material NETHERITE_AXE = MaterialImpl.get(MaterialKeys.NETHERITE_AXE);
 
-    Material DIAMOND_BOOTS = MaterialImpl.get("diamond_boots");
+    Material NETHERITE_HOE = MaterialImpl.get(MaterialKeys.NETHERITE_HOE);
 
-    Material GOLDEN_HELMET = MaterialImpl.get("golden_helmet");
+    Material STICK = MaterialImpl.get(MaterialKeys.STICK);
 
-    Material GOLDEN_CHESTPLATE = MaterialImpl.get("golden_chestplate");
+    Material MUSHROOM_STEW = MaterialImpl.get(MaterialKeys.MUSHROOM_STEW);
 
-    Material GOLDEN_LEGGINGS = MaterialImpl.get("golden_leggings");
+    Material STRING = MaterialImpl.get(MaterialKeys.STRING);
 
-    Material GOLDEN_BOOTS = MaterialImpl.get("golden_boots");
+    Material FEATHER = MaterialImpl.get(MaterialKeys.FEATHER);
 
-    Material NETHERITE_HELMET = MaterialImpl.get("netherite_helmet");
+    Material GUNPOWDER = MaterialImpl.get(MaterialKeys.GUNPOWDER);
 
-    Material NETHERITE_CHESTPLATE = MaterialImpl.get("netherite_chestplate");
+    Material WHEAT_SEEDS = MaterialImpl.get(MaterialKeys.WHEAT_SEEDS);
 
-    Material NETHERITE_LEGGINGS = MaterialImpl.get("netherite_leggings");
+    Material WHEAT = MaterialImpl.get(MaterialKeys.WHEAT);
 
-    Material NETHERITE_BOOTS = MaterialImpl.get("netherite_boots");
+    Material BREAD = MaterialImpl.get(MaterialKeys.BREAD);
 
-    Material FLINT = MaterialImpl.get("flint");
+    Material LEATHER_HELMET = MaterialImpl.get(MaterialKeys.LEATHER_HELMET);
 
-    Material PORKCHOP = MaterialImpl.get("porkchop");
+    Material LEATHER_CHESTPLATE = MaterialImpl.get(MaterialKeys.LEATHER_CHESTPLATE);
 
-    Material COOKED_PORKCHOP = MaterialImpl.get("cooked_porkchop");
+    Material LEATHER_LEGGINGS = MaterialImpl.get(MaterialKeys.LEATHER_LEGGINGS);
 
-    Material PAINTING = MaterialImpl.get("painting");
+    Material LEATHER_BOOTS = MaterialImpl.get(MaterialKeys.LEATHER_BOOTS);
 
-    Material GOLDEN_APPLE = MaterialImpl.get("golden_apple");
+    Material COPPER_HELMET = MaterialImpl.get(MaterialKeys.COPPER_HELMET);
 
-    Material ENCHANTED_GOLDEN_APPLE = MaterialImpl.get("enchanted_golden_apple");
+    Material COPPER_CHESTPLATE = MaterialImpl.get(MaterialKeys.COPPER_CHESTPLATE);
 
-    Material OAK_SIGN = MaterialImpl.get("oak_sign");
+    Material COPPER_LEGGINGS = MaterialImpl.get(MaterialKeys.COPPER_LEGGINGS);
 
-    Material SPRUCE_SIGN = MaterialImpl.get("spruce_sign");
+    Material COPPER_BOOTS = MaterialImpl.get(MaterialKeys.COPPER_BOOTS);
 
-    Material BIRCH_SIGN = MaterialImpl.get("birch_sign");
+    Material CHAINMAIL_HELMET = MaterialImpl.get(MaterialKeys.CHAINMAIL_HELMET);
 
-    Material JUNGLE_SIGN = MaterialImpl.get("jungle_sign");
+    Material CHAINMAIL_CHESTPLATE = MaterialImpl.get(MaterialKeys.CHAINMAIL_CHESTPLATE);
 
-    Material ACACIA_SIGN = MaterialImpl.get("acacia_sign");
+    Material CHAINMAIL_LEGGINGS = MaterialImpl.get(MaterialKeys.CHAINMAIL_LEGGINGS);
 
-    Material CHERRY_SIGN = MaterialImpl.get("cherry_sign");
+    Material CHAINMAIL_BOOTS = MaterialImpl.get(MaterialKeys.CHAINMAIL_BOOTS);
 
-    Material DARK_OAK_SIGN = MaterialImpl.get("dark_oak_sign");
+    Material IRON_HELMET = MaterialImpl.get(MaterialKeys.IRON_HELMET);
 
-    Material PALE_OAK_SIGN = MaterialImpl.get("pale_oak_sign");
+    Material IRON_CHESTPLATE = MaterialImpl.get(MaterialKeys.IRON_CHESTPLATE);
 
-    Material MANGROVE_SIGN = MaterialImpl.get("mangrove_sign");
+    Material IRON_LEGGINGS = MaterialImpl.get(MaterialKeys.IRON_LEGGINGS);
 
-    Material BAMBOO_SIGN = MaterialImpl.get("bamboo_sign");
+    Material IRON_BOOTS = MaterialImpl.get(MaterialKeys.IRON_BOOTS);
 
-    Material CRIMSON_SIGN = MaterialImpl.get("crimson_sign");
+    Material DIAMOND_HELMET = MaterialImpl.get(MaterialKeys.DIAMOND_HELMET);
 
-    Material WARPED_SIGN = MaterialImpl.get("warped_sign");
+    Material DIAMOND_CHESTPLATE = MaterialImpl.get(MaterialKeys.DIAMOND_CHESTPLATE);
 
-    Material OAK_HANGING_SIGN = MaterialImpl.get("oak_hanging_sign");
+    Material DIAMOND_LEGGINGS = MaterialImpl.get(MaterialKeys.DIAMOND_LEGGINGS);
 
-    Material SPRUCE_HANGING_SIGN = MaterialImpl.get("spruce_hanging_sign");
+    Material DIAMOND_BOOTS = MaterialImpl.get(MaterialKeys.DIAMOND_BOOTS);
 
-    Material BIRCH_HANGING_SIGN = MaterialImpl.get("birch_hanging_sign");
+    Material GOLDEN_HELMET = MaterialImpl.get(MaterialKeys.GOLDEN_HELMET);
 
-    Material JUNGLE_HANGING_SIGN = MaterialImpl.get("jungle_hanging_sign");
+    Material GOLDEN_CHESTPLATE = MaterialImpl.get(MaterialKeys.GOLDEN_CHESTPLATE);
 
-    Material ACACIA_HANGING_SIGN = MaterialImpl.get("acacia_hanging_sign");
+    Material GOLDEN_LEGGINGS = MaterialImpl.get(MaterialKeys.GOLDEN_LEGGINGS);
 
-    Material CHERRY_HANGING_SIGN = MaterialImpl.get("cherry_hanging_sign");
+    Material GOLDEN_BOOTS = MaterialImpl.get(MaterialKeys.GOLDEN_BOOTS);
 
-    Material DARK_OAK_HANGING_SIGN = MaterialImpl.get("dark_oak_hanging_sign");
+    Material NETHERITE_HELMET = MaterialImpl.get(MaterialKeys.NETHERITE_HELMET);
 
-    Material PALE_OAK_HANGING_SIGN = MaterialImpl.get("pale_oak_hanging_sign");
+    Material NETHERITE_CHESTPLATE = MaterialImpl.get(MaterialKeys.NETHERITE_CHESTPLATE);
 
-    Material MANGROVE_HANGING_SIGN = MaterialImpl.get("mangrove_hanging_sign");
+    Material NETHERITE_LEGGINGS = MaterialImpl.get(MaterialKeys.NETHERITE_LEGGINGS);
 
-    Material BAMBOO_HANGING_SIGN = MaterialImpl.get("bamboo_hanging_sign");
+    Material NETHERITE_BOOTS = MaterialImpl.get(MaterialKeys.NETHERITE_BOOTS);
 
-    Material CRIMSON_HANGING_SIGN = MaterialImpl.get("crimson_hanging_sign");
+    Material FLINT = MaterialImpl.get(MaterialKeys.FLINT);
 
-    Material WARPED_HANGING_SIGN = MaterialImpl.get("warped_hanging_sign");
+    Material PORKCHOP = MaterialImpl.get(MaterialKeys.PORKCHOP);
 
-    Material BUCKET = MaterialImpl.get("bucket");
+    Material COOKED_PORKCHOP = MaterialImpl.get(MaterialKeys.COOKED_PORKCHOP);
 
-    Material WATER_BUCKET = MaterialImpl.get("water_bucket");
+    Material PAINTING = MaterialImpl.get(MaterialKeys.PAINTING);
 
-    Material LAVA_BUCKET = MaterialImpl.get("lava_bucket");
+    Material GOLDEN_APPLE = MaterialImpl.get(MaterialKeys.GOLDEN_APPLE);
 
-    Material POWDER_SNOW_BUCKET = MaterialImpl.get("powder_snow_bucket");
+    Material ENCHANTED_GOLDEN_APPLE = MaterialImpl.get(MaterialKeys.ENCHANTED_GOLDEN_APPLE);
 
-    Material SNOWBALL = MaterialImpl.get("snowball");
+    Material OAK_SIGN = MaterialImpl.get(MaterialKeys.OAK_SIGN);
 
-    Material LEATHER = MaterialImpl.get("leather");
+    Material SPRUCE_SIGN = MaterialImpl.get(MaterialKeys.SPRUCE_SIGN);
 
-    Material MILK_BUCKET = MaterialImpl.get("milk_bucket");
+    Material BIRCH_SIGN = MaterialImpl.get(MaterialKeys.BIRCH_SIGN);
 
-    Material PUFFERFISH_BUCKET = MaterialImpl.get("pufferfish_bucket");
+    Material JUNGLE_SIGN = MaterialImpl.get(MaterialKeys.JUNGLE_SIGN);
 
-    Material SALMON_BUCKET = MaterialImpl.get("salmon_bucket");
+    Material ACACIA_SIGN = MaterialImpl.get(MaterialKeys.ACACIA_SIGN);
 
-    Material COD_BUCKET = MaterialImpl.get("cod_bucket");
+    Material CHERRY_SIGN = MaterialImpl.get(MaterialKeys.CHERRY_SIGN);
 
-    Material TROPICAL_FISH_BUCKET = MaterialImpl.get("tropical_fish_bucket");
+    Material DARK_OAK_SIGN = MaterialImpl.get(MaterialKeys.DARK_OAK_SIGN);
 
-    Material AXOLOTL_BUCKET = MaterialImpl.get("axolotl_bucket");
+    Material PALE_OAK_SIGN = MaterialImpl.get(MaterialKeys.PALE_OAK_SIGN);
 
-    Material TADPOLE_BUCKET = MaterialImpl.get("tadpole_bucket");
+    Material MANGROVE_SIGN = MaterialImpl.get(MaterialKeys.MANGROVE_SIGN);
 
-    Material BRICK = MaterialImpl.get("brick");
+    Material BAMBOO_SIGN = MaterialImpl.get(MaterialKeys.BAMBOO_SIGN);
 
-    Material CLAY_BALL = MaterialImpl.get("clay_ball");
+    Material CRIMSON_SIGN = MaterialImpl.get(MaterialKeys.CRIMSON_SIGN);
 
-    Material DRIED_KELP_BLOCK = MaterialImpl.get("dried_kelp_block");
+    Material WARPED_SIGN = MaterialImpl.get(MaterialKeys.WARPED_SIGN);
 
-    Material PAPER = MaterialImpl.get("paper");
+    Material OAK_HANGING_SIGN = MaterialImpl.get(MaterialKeys.OAK_HANGING_SIGN);
 
-    Material BOOK = MaterialImpl.get("book");
+    Material SPRUCE_HANGING_SIGN = MaterialImpl.get(MaterialKeys.SPRUCE_HANGING_SIGN);
 
-    Material SLIME_BALL = MaterialImpl.get("slime_ball");
+    Material BIRCH_HANGING_SIGN = MaterialImpl.get(MaterialKeys.BIRCH_HANGING_SIGN);
 
-    Material EGG = MaterialImpl.get("egg");
+    Material JUNGLE_HANGING_SIGN = MaterialImpl.get(MaterialKeys.JUNGLE_HANGING_SIGN);
 
-    Material BLUE_EGG = MaterialImpl.get("blue_egg");
+    Material ACACIA_HANGING_SIGN = MaterialImpl.get(MaterialKeys.ACACIA_HANGING_SIGN);
 
-    Material BROWN_EGG = MaterialImpl.get("brown_egg");
+    Material CHERRY_HANGING_SIGN = MaterialImpl.get(MaterialKeys.CHERRY_HANGING_SIGN);
 
-    Material COMPASS = MaterialImpl.get("compass");
+    Material DARK_OAK_HANGING_SIGN = MaterialImpl.get(MaterialKeys.DARK_OAK_HANGING_SIGN);
 
-    Material RECOVERY_COMPASS = MaterialImpl.get("recovery_compass");
+    Material PALE_OAK_HANGING_SIGN = MaterialImpl.get(MaterialKeys.PALE_OAK_HANGING_SIGN);
 
-    Material BUNDLE = MaterialImpl.get("bundle");
+    Material MANGROVE_HANGING_SIGN = MaterialImpl.get(MaterialKeys.MANGROVE_HANGING_SIGN);
 
-    Material WHITE_BUNDLE = MaterialImpl.get("white_bundle");
+    Material BAMBOO_HANGING_SIGN = MaterialImpl.get(MaterialKeys.BAMBOO_HANGING_SIGN);
 
-    Material ORANGE_BUNDLE = MaterialImpl.get("orange_bundle");
+    Material CRIMSON_HANGING_SIGN = MaterialImpl.get(MaterialKeys.CRIMSON_HANGING_SIGN);
 
-    Material MAGENTA_BUNDLE = MaterialImpl.get("magenta_bundle");
+    Material WARPED_HANGING_SIGN = MaterialImpl.get(MaterialKeys.WARPED_HANGING_SIGN);
 
-    Material LIGHT_BLUE_BUNDLE = MaterialImpl.get("light_blue_bundle");
+    Material BUCKET = MaterialImpl.get(MaterialKeys.BUCKET);
 
-    Material YELLOW_BUNDLE = MaterialImpl.get("yellow_bundle");
+    Material WATER_BUCKET = MaterialImpl.get(MaterialKeys.WATER_BUCKET);
 
-    Material LIME_BUNDLE = MaterialImpl.get("lime_bundle");
+    Material LAVA_BUCKET = MaterialImpl.get(MaterialKeys.LAVA_BUCKET);
 
-    Material PINK_BUNDLE = MaterialImpl.get("pink_bundle");
+    Material POWDER_SNOW_BUCKET = MaterialImpl.get(MaterialKeys.POWDER_SNOW_BUCKET);
 
-    Material GRAY_BUNDLE = MaterialImpl.get("gray_bundle");
+    Material SNOWBALL = MaterialImpl.get(MaterialKeys.SNOWBALL);
 
-    Material LIGHT_GRAY_BUNDLE = MaterialImpl.get("light_gray_bundle");
+    Material LEATHER = MaterialImpl.get(MaterialKeys.LEATHER);
 
-    Material CYAN_BUNDLE = MaterialImpl.get("cyan_bundle");
+    Material MILK_BUCKET = MaterialImpl.get(MaterialKeys.MILK_BUCKET);
 
-    Material PURPLE_BUNDLE = MaterialImpl.get("purple_bundle");
+    Material PUFFERFISH_BUCKET = MaterialImpl.get(MaterialKeys.PUFFERFISH_BUCKET);
 
-    Material BLUE_BUNDLE = MaterialImpl.get("blue_bundle");
+    Material SALMON_BUCKET = MaterialImpl.get(MaterialKeys.SALMON_BUCKET);
 
-    Material BROWN_BUNDLE = MaterialImpl.get("brown_bundle");
+    Material COD_BUCKET = MaterialImpl.get(MaterialKeys.COD_BUCKET);
 
-    Material GREEN_BUNDLE = MaterialImpl.get("green_bundle");
+    Material TROPICAL_FISH_BUCKET = MaterialImpl.get(MaterialKeys.TROPICAL_FISH_BUCKET);
 
-    Material RED_BUNDLE = MaterialImpl.get("red_bundle");
+    Material AXOLOTL_BUCKET = MaterialImpl.get(MaterialKeys.AXOLOTL_BUCKET);
 
-    Material BLACK_BUNDLE = MaterialImpl.get("black_bundle");
+    Material SULFUR_CUBE_BUCKET = MaterialImpl.get(MaterialKeys.SULFUR_CUBE_BUCKET);
 
-    Material FISHING_ROD = MaterialImpl.get("fishing_rod");
+    Material TADPOLE_BUCKET = MaterialImpl.get(MaterialKeys.TADPOLE_BUCKET);
 
-    Material CLOCK = MaterialImpl.get("clock");
+    Material BRICK = MaterialImpl.get(MaterialKeys.BRICK);
 
-    Material SPYGLASS = MaterialImpl.get("spyglass");
+    Material CLAY_BALL = MaterialImpl.get(MaterialKeys.CLAY_BALL);
 
-    Material GLOWSTONE_DUST = MaterialImpl.get("glowstone_dust");
+    Material DRIED_KELP_BLOCK = MaterialImpl.get(MaterialKeys.DRIED_KELP_BLOCK);
 
-    Material COD = MaterialImpl.get("cod");
+    Material PAPER = MaterialImpl.get(MaterialKeys.PAPER);
 
-    Material SALMON = MaterialImpl.get("salmon");
+    Material BOOK = MaterialImpl.get(MaterialKeys.BOOK);
 
-    Material TROPICAL_FISH = MaterialImpl.get("tropical_fish");
+    Material SLIME_BALL = MaterialImpl.get(MaterialKeys.SLIME_BALL);
 
-    Material PUFFERFISH = MaterialImpl.get("pufferfish");
+    Material EGG = MaterialImpl.get(MaterialKeys.EGG);
 
-    Material COOKED_COD = MaterialImpl.get("cooked_cod");
+    Material BLUE_EGG = MaterialImpl.get(MaterialKeys.BLUE_EGG);
 
-    Material COOKED_SALMON = MaterialImpl.get("cooked_salmon");
+    Material BROWN_EGG = MaterialImpl.get(MaterialKeys.BROWN_EGG);
 
-    Material INK_SAC = MaterialImpl.get("ink_sac");
+    Material COMPASS = MaterialImpl.get(MaterialKeys.COMPASS);
 
-    Material GLOW_INK_SAC = MaterialImpl.get("glow_ink_sac");
+    Material RECOVERY_COMPASS = MaterialImpl.get(MaterialKeys.RECOVERY_COMPASS);
 
-    Material COCOA_BEANS = MaterialImpl.get("cocoa_beans");
+    Material BUNDLE = MaterialImpl.get(MaterialKeys.BUNDLE);
 
-    Material WHITE_DYE = MaterialImpl.get("white_dye");
+    Material WHITE_BUNDLE = MaterialImpl.get(MaterialKeys.WHITE_BUNDLE);
 
-    Material ORANGE_DYE = MaterialImpl.get("orange_dye");
+    Material ORANGE_BUNDLE = MaterialImpl.get(MaterialKeys.ORANGE_BUNDLE);
 
-    Material MAGENTA_DYE = MaterialImpl.get("magenta_dye");
+    Material MAGENTA_BUNDLE = MaterialImpl.get(MaterialKeys.MAGENTA_BUNDLE);
 
-    Material LIGHT_BLUE_DYE = MaterialImpl.get("light_blue_dye");
+    Material LIGHT_BLUE_BUNDLE = MaterialImpl.get(MaterialKeys.LIGHT_BLUE_BUNDLE);
 
-    Material YELLOW_DYE = MaterialImpl.get("yellow_dye");
+    Material YELLOW_BUNDLE = MaterialImpl.get(MaterialKeys.YELLOW_BUNDLE);
 
-    Material LIME_DYE = MaterialImpl.get("lime_dye");
+    Material LIME_BUNDLE = MaterialImpl.get(MaterialKeys.LIME_BUNDLE);
 
-    Material PINK_DYE = MaterialImpl.get("pink_dye");
+    Material PINK_BUNDLE = MaterialImpl.get(MaterialKeys.PINK_BUNDLE);
 
-    Material GRAY_DYE = MaterialImpl.get("gray_dye");
+    Material GRAY_BUNDLE = MaterialImpl.get(MaterialKeys.GRAY_BUNDLE);
 
-    Material LIGHT_GRAY_DYE = MaterialImpl.get("light_gray_dye");
+    Material LIGHT_GRAY_BUNDLE = MaterialImpl.get(MaterialKeys.LIGHT_GRAY_BUNDLE);
 
-    Material CYAN_DYE = MaterialImpl.get("cyan_dye");
+    Material CYAN_BUNDLE = MaterialImpl.get(MaterialKeys.CYAN_BUNDLE);
 
-    Material PURPLE_DYE = MaterialImpl.get("purple_dye");
+    Material PURPLE_BUNDLE = MaterialImpl.get(MaterialKeys.PURPLE_BUNDLE);
 
-    Material BLUE_DYE = MaterialImpl.get("blue_dye");
+    Material BLUE_BUNDLE = MaterialImpl.get(MaterialKeys.BLUE_BUNDLE);
 
-    Material BROWN_DYE = MaterialImpl.get("brown_dye");
+    Material BROWN_BUNDLE = MaterialImpl.get(MaterialKeys.BROWN_BUNDLE);
 
-    Material GREEN_DYE = MaterialImpl.get("green_dye");
+    Material GREEN_BUNDLE = MaterialImpl.get(MaterialKeys.GREEN_BUNDLE);
 
-    Material RED_DYE = MaterialImpl.get("red_dye");
+    Material RED_BUNDLE = MaterialImpl.get(MaterialKeys.RED_BUNDLE);
 
-    Material BLACK_DYE = MaterialImpl.get("black_dye");
+    Material BLACK_BUNDLE = MaterialImpl.get(MaterialKeys.BLACK_BUNDLE);
 
-    Material BONE_MEAL = MaterialImpl.get("bone_meal");
+    Material FISHING_ROD = MaterialImpl.get(MaterialKeys.FISHING_ROD);
 
-    Material BONE = MaterialImpl.get("bone");
+    Material CLOCK = MaterialImpl.get(MaterialKeys.CLOCK);
 
-    Material SUGAR = MaterialImpl.get("sugar");
+    Material SPYGLASS = MaterialImpl.get(MaterialKeys.SPYGLASS);
 
-    Material CAKE = MaterialImpl.get("cake");
+    Material GLOWSTONE_DUST = MaterialImpl.get(MaterialKeys.GLOWSTONE_DUST);
 
-    Material WHITE_BED = MaterialImpl.get("white_bed");
+    Material COD = MaterialImpl.get(MaterialKeys.COD);
 
-    Material ORANGE_BED = MaterialImpl.get("orange_bed");
+    Material SALMON = MaterialImpl.get(MaterialKeys.SALMON);
 
-    Material MAGENTA_BED = MaterialImpl.get("magenta_bed");
+    Material TROPICAL_FISH = MaterialImpl.get(MaterialKeys.TROPICAL_FISH);
 
-    Material LIGHT_BLUE_BED = MaterialImpl.get("light_blue_bed");
+    Material PUFFERFISH = MaterialImpl.get(MaterialKeys.PUFFERFISH);
 
-    Material YELLOW_BED = MaterialImpl.get("yellow_bed");
+    Material COOKED_COD = MaterialImpl.get(MaterialKeys.COOKED_COD);
 
-    Material LIME_BED = MaterialImpl.get("lime_bed");
+    Material COOKED_SALMON = MaterialImpl.get(MaterialKeys.COOKED_SALMON);
 
-    Material PINK_BED = MaterialImpl.get("pink_bed");
+    Material INK_SAC = MaterialImpl.get(MaterialKeys.INK_SAC);
 
-    Material GRAY_BED = MaterialImpl.get("gray_bed");
+    Material GLOW_INK_SAC = MaterialImpl.get(MaterialKeys.GLOW_INK_SAC);
 
-    Material LIGHT_GRAY_BED = MaterialImpl.get("light_gray_bed");
+    Material COCOA_BEANS = MaterialImpl.get(MaterialKeys.COCOA_BEANS);
 
-    Material CYAN_BED = MaterialImpl.get("cyan_bed");
+    Material WHITE_DYE = MaterialImpl.get(MaterialKeys.WHITE_DYE);
 
-    Material PURPLE_BED = MaterialImpl.get("purple_bed");
+    Material ORANGE_DYE = MaterialImpl.get(MaterialKeys.ORANGE_DYE);
 
-    Material BLUE_BED = MaterialImpl.get("blue_bed");
+    Material MAGENTA_DYE = MaterialImpl.get(MaterialKeys.MAGENTA_DYE);
 
-    Material BROWN_BED = MaterialImpl.get("brown_bed");
+    Material LIGHT_BLUE_DYE = MaterialImpl.get(MaterialKeys.LIGHT_BLUE_DYE);
 
-    Material GREEN_BED = MaterialImpl.get("green_bed");
+    Material YELLOW_DYE = MaterialImpl.get(MaterialKeys.YELLOW_DYE);
 
-    Material RED_BED = MaterialImpl.get("red_bed");
+    Material LIME_DYE = MaterialImpl.get(MaterialKeys.LIME_DYE);
 
-    Material BLACK_BED = MaterialImpl.get("black_bed");
+    Material PINK_DYE = MaterialImpl.get(MaterialKeys.PINK_DYE);
 
-    Material COOKIE = MaterialImpl.get("cookie");
+    Material GRAY_DYE = MaterialImpl.get(MaterialKeys.GRAY_DYE);
 
-    Material CRAFTER = MaterialImpl.get("crafter");
+    Material LIGHT_GRAY_DYE = MaterialImpl.get(MaterialKeys.LIGHT_GRAY_DYE);
 
-    Material FILLED_MAP = MaterialImpl.get("filled_map");
+    Material CYAN_DYE = MaterialImpl.get(MaterialKeys.CYAN_DYE);
 
-    Material SHEARS = MaterialImpl.get("shears");
+    Material PURPLE_DYE = MaterialImpl.get(MaterialKeys.PURPLE_DYE);
 
-    Material MELON_SLICE = MaterialImpl.get("melon_slice");
+    Material BLUE_DYE = MaterialImpl.get(MaterialKeys.BLUE_DYE);
 
-    Material DRIED_KELP = MaterialImpl.get("dried_kelp");
+    Material BROWN_DYE = MaterialImpl.get(MaterialKeys.BROWN_DYE);
 
-    Material PUMPKIN_SEEDS = MaterialImpl.get("pumpkin_seeds");
+    Material GREEN_DYE = MaterialImpl.get(MaterialKeys.GREEN_DYE);
 
-    Material MELON_SEEDS = MaterialImpl.get("melon_seeds");
+    Material RED_DYE = MaterialImpl.get(MaterialKeys.RED_DYE);
 
-    Material BEEF = MaterialImpl.get("beef");
+    Material BLACK_DYE = MaterialImpl.get(MaterialKeys.BLACK_DYE);
 
-    Material COOKED_BEEF = MaterialImpl.get("cooked_beef");
+    Material BONE_MEAL = MaterialImpl.get(MaterialKeys.BONE_MEAL);
 
-    Material CHICKEN = MaterialImpl.get("chicken");
+    Material BONE = MaterialImpl.get(MaterialKeys.BONE);
 
-    Material COOKED_CHICKEN = MaterialImpl.get("cooked_chicken");
+    Material SUGAR = MaterialImpl.get(MaterialKeys.SUGAR);
 
-    Material ROTTEN_FLESH = MaterialImpl.get("rotten_flesh");
+    Material CAKE = MaterialImpl.get(MaterialKeys.CAKE);
 
-    Material ENDER_PEARL = MaterialImpl.get("ender_pearl");
+    Material WHITE_BED = MaterialImpl.get(MaterialKeys.WHITE_BED);
 
-    Material BLAZE_ROD = MaterialImpl.get("blaze_rod");
+    Material ORANGE_BED = MaterialImpl.get(MaterialKeys.ORANGE_BED);
 
-    Material GHAST_TEAR = MaterialImpl.get("ghast_tear");
+    Material MAGENTA_BED = MaterialImpl.get(MaterialKeys.MAGENTA_BED);
 
-    Material GOLD_NUGGET = MaterialImpl.get("gold_nugget");
+    Material LIGHT_BLUE_BED = MaterialImpl.get(MaterialKeys.LIGHT_BLUE_BED);
 
-    Material NETHER_WART = MaterialImpl.get("nether_wart");
+    Material YELLOW_BED = MaterialImpl.get(MaterialKeys.YELLOW_BED);
 
-    Material GLASS_BOTTLE = MaterialImpl.get("glass_bottle");
+    Material LIME_BED = MaterialImpl.get(MaterialKeys.LIME_BED);
 
-    Material POTION = MaterialImpl.get("potion");
+    Material PINK_BED = MaterialImpl.get(MaterialKeys.PINK_BED);
 
-    Material SPIDER_EYE = MaterialImpl.get("spider_eye");
+    Material GRAY_BED = MaterialImpl.get(MaterialKeys.GRAY_BED);
 
-    Material FERMENTED_SPIDER_EYE = MaterialImpl.get("fermented_spider_eye");
+    Material LIGHT_GRAY_BED = MaterialImpl.get(MaterialKeys.LIGHT_GRAY_BED);
 
-    Material BLAZE_POWDER = MaterialImpl.get("blaze_powder");
+    Material CYAN_BED = MaterialImpl.get(MaterialKeys.CYAN_BED);
 
-    Material MAGMA_CREAM = MaterialImpl.get("magma_cream");
+    Material PURPLE_BED = MaterialImpl.get(MaterialKeys.PURPLE_BED);
 
-    Material BREWING_STAND = MaterialImpl.get("brewing_stand");
+    Material BLUE_BED = MaterialImpl.get(MaterialKeys.BLUE_BED);
 
-    Material CAULDRON = MaterialImpl.get("cauldron");
+    Material BROWN_BED = MaterialImpl.get(MaterialKeys.BROWN_BED);
 
-    Material ENDER_EYE = MaterialImpl.get("ender_eye");
+    Material GREEN_BED = MaterialImpl.get(MaterialKeys.GREEN_BED);
 
-    Material GLISTERING_MELON_SLICE = MaterialImpl.get("glistering_melon_slice");
+    Material RED_BED = MaterialImpl.get(MaterialKeys.RED_BED);
 
-    Material CHICKEN_SPAWN_EGG = MaterialImpl.get("chicken_spawn_egg");
+    Material BLACK_BED = MaterialImpl.get(MaterialKeys.BLACK_BED);
 
-    Material COW_SPAWN_EGG = MaterialImpl.get("cow_spawn_egg");
+    Material COOKIE = MaterialImpl.get(MaterialKeys.COOKIE);
 
-    Material PIG_SPAWN_EGG = MaterialImpl.get("pig_spawn_egg");
+    Material CRAFTER = MaterialImpl.get(MaterialKeys.CRAFTER);
 
-    Material SHEEP_SPAWN_EGG = MaterialImpl.get("sheep_spawn_egg");
+    Material FILLED_MAP = MaterialImpl.get(MaterialKeys.FILLED_MAP);
 
-    Material CAMEL_SPAWN_EGG = MaterialImpl.get("camel_spawn_egg");
+    Material SHEARS = MaterialImpl.get(MaterialKeys.SHEARS);
 
-    Material DONKEY_SPAWN_EGG = MaterialImpl.get("donkey_spawn_egg");
+    Material MELON_SLICE = MaterialImpl.get(MaterialKeys.MELON_SLICE);
 
-    Material HORSE_SPAWN_EGG = MaterialImpl.get("horse_spawn_egg");
+    Material DRIED_KELP = MaterialImpl.get(MaterialKeys.DRIED_KELP);
 
-    Material MULE_SPAWN_EGG = MaterialImpl.get("mule_spawn_egg");
+    Material PUMPKIN_SEEDS = MaterialImpl.get(MaterialKeys.PUMPKIN_SEEDS);
 
-    Material CAT_SPAWN_EGG = MaterialImpl.get("cat_spawn_egg");
+    Material MELON_SEEDS = MaterialImpl.get(MaterialKeys.MELON_SEEDS);
 
-    Material PARROT_SPAWN_EGG = MaterialImpl.get("parrot_spawn_egg");
+    Material BEEF = MaterialImpl.get(MaterialKeys.BEEF);
 
-    Material WOLF_SPAWN_EGG = MaterialImpl.get("wolf_spawn_egg");
+    Material COOKED_BEEF = MaterialImpl.get(MaterialKeys.COOKED_BEEF);
 
-    Material ARMADILLO_SPAWN_EGG = MaterialImpl.get("armadillo_spawn_egg");
+    Material CHICKEN = MaterialImpl.get(MaterialKeys.CHICKEN);
 
-    Material BAT_SPAWN_EGG = MaterialImpl.get("bat_spawn_egg");
+    Material COOKED_CHICKEN = MaterialImpl.get(MaterialKeys.COOKED_CHICKEN);
 
-    Material BEE_SPAWN_EGG = MaterialImpl.get("bee_spawn_egg");
+    Material ROTTEN_FLESH = MaterialImpl.get(MaterialKeys.ROTTEN_FLESH);
 
-    Material FOX_SPAWN_EGG = MaterialImpl.get("fox_spawn_egg");
+    Material ENDER_PEARL = MaterialImpl.get(MaterialKeys.ENDER_PEARL);
 
-    Material GOAT_SPAWN_EGG = MaterialImpl.get("goat_spawn_egg");
+    Material BLAZE_ROD = MaterialImpl.get(MaterialKeys.BLAZE_ROD);
 
-    Material LLAMA_SPAWN_EGG = MaterialImpl.get("llama_spawn_egg");
+    Material GHAST_TEAR = MaterialImpl.get(MaterialKeys.GHAST_TEAR);
 
-    Material OCELOT_SPAWN_EGG = MaterialImpl.get("ocelot_spawn_egg");
+    Material GOLD_NUGGET = MaterialImpl.get(MaterialKeys.GOLD_NUGGET);
 
-    Material PANDA_SPAWN_EGG = MaterialImpl.get("panda_spawn_egg");
+    Material NETHER_WART = MaterialImpl.get(MaterialKeys.NETHER_WART);
 
-    Material POLAR_BEAR_SPAWN_EGG = MaterialImpl.get("polar_bear_spawn_egg");
+    Material GLASS_BOTTLE = MaterialImpl.get(MaterialKeys.GLASS_BOTTLE);
 
-    Material RABBIT_SPAWN_EGG = MaterialImpl.get("rabbit_spawn_egg");
+    Material POTION = MaterialImpl.get(MaterialKeys.POTION);
 
-    Material AXOLOTL_SPAWN_EGG = MaterialImpl.get("axolotl_spawn_egg");
+    Material SPIDER_EYE = MaterialImpl.get(MaterialKeys.SPIDER_EYE);
 
-    Material COD_SPAWN_EGG = MaterialImpl.get("cod_spawn_egg");
+    Material FERMENTED_SPIDER_EYE = MaterialImpl.get(MaterialKeys.FERMENTED_SPIDER_EYE);
 
-    Material DOLPHIN_SPAWN_EGG = MaterialImpl.get("dolphin_spawn_egg");
+    Material BLAZE_POWDER = MaterialImpl.get(MaterialKeys.BLAZE_POWDER);
 
-    Material FROG_SPAWN_EGG = MaterialImpl.get("frog_spawn_egg");
+    Material MAGMA_CREAM = MaterialImpl.get(MaterialKeys.MAGMA_CREAM);
 
-    Material GLOW_SQUID_SPAWN_EGG = MaterialImpl.get("glow_squid_spawn_egg");
+    Material BREWING_STAND = MaterialImpl.get(MaterialKeys.BREWING_STAND);
 
-    Material NAUTILUS_SPAWN_EGG = MaterialImpl.get("nautilus_spawn_egg");
+    Material CAULDRON = MaterialImpl.get(MaterialKeys.CAULDRON);
 
-    Material PUFFERFISH_SPAWN_EGG = MaterialImpl.get("pufferfish_spawn_egg");
+    Material ENDER_EYE = MaterialImpl.get(MaterialKeys.ENDER_EYE);
 
-    Material SALMON_SPAWN_EGG = MaterialImpl.get("salmon_spawn_egg");
+    Material GLISTERING_MELON_SLICE = MaterialImpl.get(MaterialKeys.GLISTERING_MELON_SLICE);
 
-    Material SQUID_SPAWN_EGG = MaterialImpl.get("squid_spawn_egg");
+    Material CHICKEN_SPAWN_EGG = MaterialImpl.get(MaterialKeys.CHICKEN_SPAWN_EGG);
 
-    Material TADPOLE_SPAWN_EGG = MaterialImpl.get("tadpole_spawn_egg");
+    Material COW_SPAWN_EGG = MaterialImpl.get(MaterialKeys.COW_SPAWN_EGG);
 
-    Material TROPICAL_FISH_SPAWN_EGG = MaterialImpl.get("tropical_fish_spawn_egg");
+    Material PIG_SPAWN_EGG = MaterialImpl.get(MaterialKeys.PIG_SPAWN_EGG);
 
-    Material TURTLE_SPAWN_EGG = MaterialImpl.get("turtle_spawn_egg");
+    Material SHEEP_SPAWN_EGG = MaterialImpl.get(MaterialKeys.SHEEP_SPAWN_EGG);
 
-    Material ALLAY_SPAWN_EGG = MaterialImpl.get("allay_spawn_egg");
+    Material CAMEL_SPAWN_EGG = MaterialImpl.get(MaterialKeys.CAMEL_SPAWN_EGG);
 
-    Material MOOSHROOM_SPAWN_EGG = MaterialImpl.get("mooshroom_spawn_egg");
+    Material DONKEY_SPAWN_EGG = MaterialImpl.get(MaterialKeys.DONKEY_SPAWN_EGG);
 
-    Material SNIFFER_SPAWN_EGG = MaterialImpl.get("sniffer_spawn_egg");
+    Material HORSE_SPAWN_EGG = MaterialImpl.get(MaterialKeys.HORSE_SPAWN_EGG);
 
-    Material COPPER_GOLEM_SPAWN_EGG = MaterialImpl.get("copper_golem_spawn_egg");
+    Material MULE_SPAWN_EGG = MaterialImpl.get(MaterialKeys.MULE_SPAWN_EGG);
 
-    Material IRON_GOLEM_SPAWN_EGG = MaterialImpl.get("iron_golem_spawn_egg");
+    Material CAT_SPAWN_EGG = MaterialImpl.get(MaterialKeys.CAT_SPAWN_EGG);
 
-    Material SNOW_GOLEM_SPAWN_EGG = MaterialImpl.get("snow_golem_spawn_egg");
+    Material PARROT_SPAWN_EGG = MaterialImpl.get(MaterialKeys.PARROT_SPAWN_EGG);
 
-    Material TRADER_LLAMA_SPAWN_EGG = MaterialImpl.get("trader_llama_spawn_egg");
+    Material WOLF_SPAWN_EGG = MaterialImpl.get(MaterialKeys.WOLF_SPAWN_EGG);
 
-    Material VILLAGER_SPAWN_EGG = MaterialImpl.get("villager_spawn_egg");
+    Material ARMADILLO_SPAWN_EGG = MaterialImpl.get(MaterialKeys.ARMADILLO_SPAWN_EGG);
 
-    Material WANDERING_TRADER_SPAWN_EGG = MaterialImpl.get("wandering_trader_spawn_egg");
+    Material BAT_SPAWN_EGG = MaterialImpl.get(MaterialKeys.BAT_SPAWN_EGG);
 
-    Material BOGGED_SPAWN_EGG = MaterialImpl.get("bogged_spawn_egg");
+    Material BEE_SPAWN_EGG = MaterialImpl.get(MaterialKeys.BEE_SPAWN_EGG);
 
-    Material CAMEL_HUSK_SPAWN_EGG = MaterialImpl.get("camel_husk_spawn_egg");
+    Material FOX_SPAWN_EGG = MaterialImpl.get(MaterialKeys.FOX_SPAWN_EGG);
 
-    Material DROWNED_SPAWN_EGG = MaterialImpl.get("drowned_spawn_egg");
+    Material GOAT_SPAWN_EGG = MaterialImpl.get(MaterialKeys.GOAT_SPAWN_EGG);
 
-    Material HUSK_SPAWN_EGG = MaterialImpl.get("husk_spawn_egg");
+    Material LLAMA_SPAWN_EGG = MaterialImpl.get(MaterialKeys.LLAMA_SPAWN_EGG);
 
-    Material PARCHED_SPAWN_EGG = MaterialImpl.get("parched_spawn_egg");
+    Material OCELOT_SPAWN_EGG = MaterialImpl.get(MaterialKeys.OCELOT_SPAWN_EGG);
 
-    Material SKELETON_SPAWN_EGG = MaterialImpl.get("skeleton_spawn_egg");
+    Material PANDA_SPAWN_EGG = MaterialImpl.get(MaterialKeys.PANDA_SPAWN_EGG);
 
-    Material SKELETON_HORSE_SPAWN_EGG = MaterialImpl.get("skeleton_horse_spawn_egg");
+    Material POLAR_BEAR_SPAWN_EGG = MaterialImpl.get(MaterialKeys.POLAR_BEAR_SPAWN_EGG);
 
-    Material STRAY_SPAWN_EGG = MaterialImpl.get("stray_spawn_egg");
+    Material RABBIT_SPAWN_EGG = MaterialImpl.get(MaterialKeys.RABBIT_SPAWN_EGG);
 
-    Material WITHER_SPAWN_EGG = MaterialImpl.get("wither_spawn_egg");
+    Material AXOLOTL_SPAWN_EGG = MaterialImpl.get(MaterialKeys.AXOLOTL_SPAWN_EGG);
 
-    Material WITHER_SKELETON_SPAWN_EGG = MaterialImpl.get("wither_skeleton_spawn_egg");
+    Material COD_SPAWN_EGG = MaterialImpl.get(MaterialKeys.COD_SPAWN_EGG);
 
-    Material ZOMBIE_SPAWN_EGG = MaterialImpl.get("zombie_spawn_egg");
+    Material DOLPHIN_SPAWN_EGG = MaterialImpl.get(MaterialKeys.DOLPHIN_SPAWN_EGG);
 
-    Material ZOMBIE_HORSE_SPAWN_EGG = MaterialImpl.get("zombie_horse_spawn_egg");
+    Material FROG_SPAWN_EGG = MaterialImpl.get(MaterialKeys.FROG_SPAWN_EGG);
 
-    Material ZOMBIE_NAUTILUS_SPAWN_EGG = MaterialImpl.get("zombie_nautilus_spawn_egg");
+    Material GLOW_SQUID_SPAWN_EGG = MaterialImpl.get(MaterialKeys.GLOW_SQUID_SPAWN_EGG);
 
-    Material ZOMBIE_VILLAGER_SPAWN_EGG = MaterialImpl.get("zombie_villager_spawn_egg");
+    Material NAUTILUS_SPAWN_EGG = MaterialImpl.get(MaterialKeys.NAUTILUS_SPAWN_EGG);
 
-    Material CAVE_SPIDER_SPAWN_EGG = MaterialImpl.get("cave_spider_spawn_egg");
+    Material PUFFERFISH_SPAWN_EGG = MaterialImpl.get(MaterialKeys.PUFFERFISH_SPAWN_EGG);
 
-    Material SPIDER_SPAWN_EGG = MaterialImpl.get("spider_spawn_egg");
+    Material SALMON_SPAWN_EGG = MaterialImpl.get(MaterialKeys.SALMON_SPAWN_EGG);
 
-    Material BREEZE_SPAWN_EGG = MaterialImpl.get("breeze_spawn_egg");
+    Material SQUID_SPAWN_EGG = MaterialImpl.get(MaterialKeys.SQUID_SPAWN_EGG);
 
-    Material CREAKING_SPAWN_EGG = MaterialImpl.get("creaking_spawn_egg");
+    Material TADPOLE_SPAWN_EGG = MaterialImpl.get(MaterialKeys.TADPOLE_SPAWN_EGG);
 
-    Material CREEPER_SPAWN_EGG = MaterialImpl.get("creeper_spawn_egg");
+    Material TROPICAL_FISH_SPAWN_EGG = MaterialImpl.get(MaterialKeys.TROPICAL_FISH_SPAWN_EGG);
 
-    Material ELDER_GUARDIAN_SPAWN_EGG = MaterialImpl.get("elder_guardian_spawn_egg");
+    Material TURTLE_SPAWN_EGG = MaterialImpl.get(MaterialKeys.TURTLE_SPAWN_EGG);
 
-    Material GUARDIAN_SPAWN_EGG = MaterialImpl.get("guardian_spawn_egg");
+    Material ALLAY_SPAWN_EGG = MaterialImpl.get(MaterialKeys.ALLAY_SPAWN_EGG);
 
-    Material PHANTOM_SPAWN_EGG = MaterialImpl.get("phantom_spawn_egg");
+    Material MOOSHROOM_SPAWN_EGG = MaterialImpl.get(MaterialKeys.MOOSHROOM_SPAWN_EGG);
 
-    Material SILVERFISH_SPAWN_EGG = MaterialImpl.get("silverfish_spawn_egg");
+    Material SNIFFER_SPAWN_EGG = MaterialImpl.get(MaterialKeys.SNIFFER_SPAWN_EGG);
 
-    Material SLIME_SPAWN_EGG = MaterialImpl.get("slime_spawn_egg");
+    Material SULFUR_CUBE_SPAWN_EGG = MaterialImpl.get(MaterialKeys.SULFUR_CUBE_SPAWN_EGG);
 
-    Material WARDEN_SPAWN_EGG = MaterialImpl.get("warden_spawn_egg");
+    Material COPPER_GOLEM_SPAWN_EGG = MaterialImpl.get(MaterialKeys.COPPER_GOLEM_SPAWN_EGG);
 
-    Material WITCH_SPAWN_EGG = MaterialImpl.get("witch_spawn_egg");
+    Material IRON_GOLEM_SPAWN_EGG = MaterialImpl.get(MaterialKeys.IRON_GOLEM_SPAWN_EGG);
 
-    Material EVOKER_SPAWN_EGG = MaterialImpl.get("evoker_spawn_egg");
+    Material SNOW_GOLEM_SPAWN_EGG = MaterialImpl.get(MaterialKeys.SNOW_GOLEM_SPAWN_EGG);
 
-    Material PILLAGER_SPAWN_EGG = MaterialImpl.get("pillager_spawn_egg");
+    Material TRADER_LLAMA_SPAWN_EGG = MaterialImpl.get(MaterialKeys.TRADER_LLAMA_SPAWN_EGG);
 
-    Material RAVAGER_SPAWN_EGG = MaterialImpl.get("ravager_spawn_egg");
+    Material VILLAGER_SPAWN_EGG = MaterialImpl.get(MaterialKeys.VILLAGER_SPAWN_EGG);
 
-    Material VINDICATOR_SPAWN_EGG = MaterialImpl.get("vindicator_spawn_egg");
+    Material WANDERING_TRADER_SPAWN_EGG = MaterialImpl.get(MaterialKeys.WANDERING_TRADER_SPAWN_EGG);
 
-    Material VEX_SPAWN_EGG = MaterialImpl.get("vex_spawn_egg");
+    Material BOGGED_SPAWN_EGG = MaterialImpl.get(MaterialKeys.BOGGED_SPAWN_EGG);
 
-    Material BLAZE_SPAWN_EGG = MaterialImpl.get("blaze_spawn_egg");
+    Material CAMEL_HUSK_SPAWN_EGG = MaterialImpl.get(MaterialKeys.CAMEL_HUSK_SPAWN_EGG);
 
-    Material GHAST_SPAWN_EGG = MaterialImpl.get("ghast_spawn_egg");
+    Material DROWNED_SPAWN_EGG = MaterialImpl.get(MaterialKeys.DROWNED_SPAWN_EGG);
 
-    Material HAPPY_GHAST_SPAWN_EGG = MaterialImpl.get("happy_ghast_spawn_egg");
+    Material HUSK_SPAWN_EGG = MaterialImpl.get(MaterialKeys.HUSK_SPAWN_EGG);
 
-    Material HOGLIN_SPAWN_EGG = MaterialImpl.get("hoglin_spawn_egg");
+    Material PARCHED_SPAWN_EGG = MaterialImpl.get(MaterialKeys.PARCHED_SPAWN_EGG);
 
-    Material MAGMA_CUBE_SPAWN_EGG = MaterialImpl.get("magma_cube_spawn_egg");
+    Material SKELETON_SPAWN_EGG = MaterialImpl.get(MaterialKeys.SKELETON_SPAWN_EGG);
 
-    Material PIGLIN_SPAWN_EGG = MaterialImpl.get("piglin_spawn_egg");
+    Material SKELETON_HORSE_SPAWN_EGG = MaterialImpl.get(MaterialKeys.SKELETON_HORSE_SPAWN_EGG);
 
-    Material PIGLIN_BRUTE_SPAWN_EGG = MaterialImpl.get("piglin_brute_spawn_egg");
+    Material STRAY_SPAWN_EGG = MaterialImpl.get(MaterialKeys.STRAY_SPAWN_EGG);
 
-    Material STRIDER_SPAWN_EGG = MaterialImpl.get("strider_spawn_egg");
+    Material WITHER_SPAWN_EGG = MaterialImpl.get(MaterialKeys.WITHER_SPAWN_EGG);
 
-    Material ZOGLIN_SPAWN_EGG = MaterialImpl.get("zoglin_spawn_egg");
+    Material WITHER_SKELETON_SPAWN_EGG = MaterialImpl.get(MaterialKeys.WITHER_SKELETON_SPAWN_EGG);
 
-    Material ZOMBIFIED_PIGLIN_SPAWN_EGG = MaterialImpl.get("zombified_piglin_spawn_egg");
+    Material ZOMBIE_SPAWN_EGG = MaterialImpl.get(MaterialKeys.ZOMBIE_SPAWN_EGG);
 
-    Material ENDER_DRAGON_SPAWN_EGG = MaterialImpl.get("ender_dragon_spawn_egg");
+    Material ZOMBIE_HORSE_SPAWN_EGG = MaterialImpl.get(MaterialKeys.ZOMBIE_HORSE_SPAWN_EGG);
 
-    Material ENDERMAN_SPAWN_EGG = MaterialImpl.get("enderman_spawn_egg");
+    Material ZOMBIE_NAUTILUS_SPAWN_EGG = MaterialImpl.get(MaterialKeys.ZOMBIE_NAUTILUS_SPAWN_EGG);
 
-    Material ENDERMITE_SPAWN_EGG = MaterialImpl.get("endermite_spawn_egg");
+    Material ZOMBIE_VILLAGER_SPAWN_EGG = MaterialImpl.get(MaterialKeys.ZOMBIE_VILLAGER_SPAWN_EGG);
 
-    Material SHULKER_SPAWN_EGG = MaterialImpl.get("shulker_spawn_egg");
+    Material CAVE_SPIDER_SPAWN_EGG = MaterialImpl.get(MaterialKeys.CAVE_SPIDER_SPAWN_EGG);
 
-    Material EXPERIENCE_BOTTLE = MaterialImpl.get("experience_bottle");
+    Material SPIDER_SPAWN_EGG = MaterialImpl.get(MaterialKeys.SPIDER_SPAWN_EGG);
 
-    Material FIRE_CHARGE = MaterialImpl.get("fire_charge");
+    Material BREEZE_SPAWN_EGG = MaterialImpl.get(MaterialKeys.BREEZE_SPAWN_EGG);
 
-    Material WIND_CHARGE = MaterialImpl.get("wind_charge");
+    Material CREAKING_SPAWN_EGG = MaterialImpl.get(MaterialKeys.CREAKING_SPAWN_EGG);
 
-    Material WRITABLE_BOOK = MaterialImpl.get("writable_book");
+    Material CREEPER_SPAWN_EGG = MaterialImpl.get(MaterialKeys.CREEPER_SPAWN_EGG);
 
-    Material WRITTEN_BOOK = MaterialImpl.get("written_book");
+    Material ELDER_GUARDIAN_SPAWN_EGG = MaterialImpl.get(MaterialKeys.ELDER_GUARDIAN_SPAWN_EGG);
 
-    Material BREEZE_ROD = MaterialImpl.get("breeze_rod");
+    Material GUARDIAN_SPAWN_EGG = MaterialImpl.get(MaterialKeys.GUARDIAN_SPAWN_EGG);
 
-    Material MACE = MaterialImpl.get("mace");
+    Material PHANTOM_SPAWN_EGG = MaterialImpl.get(MaterialKeys.PHANTOM_SPAWN_EGG);
 
-    Material ITEM_FRAME = MaterialImpl.get("item_frame");
+    Material SILVERFISH_SPAWN_EGG = MaterialImpl.get(MaterialKeys.SILVERFISH_SPAWN_EGG);
 
-    Material GLOW_ITEM_FRAME = MaterialImpl.get("glow_item_frame");
+    Material SLIME_SPAWN_EGG = MaterialImpl.get(MaterialKeys.SLIME_SPAWN_EGG);
 
-    Material FLOWER_POT = MaterialImpl.get("flower_pot");
+    Material WARDEN_SPAWN_EGG = MaterialImpl.get(MaterialKeys.WARDEN_SPAWN_EGG);
 
-    Material CARROT = MaterialImpl.get("carrot");
+    Material WITCH_SPAWN_EGG = MaterialImpl.get(MaterialKeys.WITCH_SPAWN_EGG);
 
-    Material POTATO = MaterialImpl.get("potato");
+    Material EVOKER_SPAWN_EGG = MaterialImpl.get(MaterialKeys.EVOKER_SPAWN_EGG);
 
-    Material BAKED_POTATO = MaterialImpl.get("baked_potato");
+    Material PILLAGER_SPAWN_EGG = MaterialImpl.get(MaterialKeys.PILLAGER_SPAWN_EGG);
 
-    Material POISONOUS_POTATO = MaterialImpl.get("poisonous_potato");
+    Material RAVAGER_SPAWN_EGG = MaterialImpl.get(MaterialKeys.RAVAGER_SPAWN_EGG);
 
-    Material MAP = MaterialImpl.get("map");
+    Material VINDICATOR_SPAWN_EGG = MaterialImpl.get(MaterialKeys.VINDICATOR_SPAWN_EGG);
 
-    Material GOLDEN_CARROT = MaterialImpl.get("golden_carrot");
+    Material VEX_SPAWN_EGG = MaterialImpl.get(MaterialKeys.VEX_SPAWN_EGG);
 
-    Material SKELETON_SKULL = MaterialImpl.get("skeleton_skull");
+    Material BLAZE_SPAWN_EGG = MaterialImpl.get(MaterialKeys.BLAZE_SPAWN_EGG);
 
-    Material WITHER_SKELETON_SKULL = MaterialImpl.get("wither_skeleton_skull");
+    Material GHAST_SPAWN_EGG = MaterialImpl.get(MaterialKeys.GHAST_SPAWN_EGG);
 
-    Material PLAYER_HEAD = MaterialImpl.get("player_head");
+    Material HAPPY_GHAST_SPAWN_EGG = MaterialImpl.get(MaterialKeys.HAPPY_GHAST_SPAWN_EGG);
 
-    Material ZOMBIE_HEAD = MaterialImpl.get("zombie_head");
+    Material HOGLIN_SPAWN_EGG = MaterialImpl.get(MaterialKeys.HOGLIN_SPAWN_EGG);
 
-    Material CREEPER_HEAD = MaterialImpl.get("creeper_head");
+    Material MAGMA_CUBE_SPAWN_EGG = MaterialImpl.get(MaterialKeys.MAGMA_CUBE_SPAWN_EGG);
 
-    Material DRAGON_HEAD = MaterialImpl.get("dragon_head");
+    Material PIGLIN_SPAWN_EGG = MaterialImpl.get(MaterialKeys.PIGLIN_SPAWN_EGG);
 
-    Material PIGLIN_HEAD = MaterialImpl.get("piglin_head");
+    Material PIGLIN_BRUTE_SPAWN_EGG = MaterialImpl.get(MaterialKeys.PIGLIN_BRUTE_SPAWN_EGG);
 
-    Material NETHER_STAR = MaterialImpl.get("nether_star");
+    Material STRIDER_SPAWN_EGG = MaterialImpl.get(MaterialKeys.STRIDER_SPAWN_EGG);
 
-    Material PUMPKIN_PIE = MaterialImpl.get("pumpkin_pie");
+    Material ZOGLIN_SPAWN_EGG = MaterialImpl.get(MaterialKeys.ZOGLIN_SPAWN_EGG);
 
-    Material FIREWORK_ROCKET = MaterialImpl.get("firework_rocket");
+    Material ZOMBIFIED_PIGLIN_SPAWN_EGG = MaterialImpl.get(MaterialKeys.ZOMBIFIED_PIGLIN_SPAWN_EGG);
 
-    Material FIREWORK_STAR = MaterialImpl.get("firework_star");
+    Material ENDER_DRAGON_SPAWN_EGG = MaterialImpl.get(MaterialKeys.ENDER_DRAGON_SPAWN_EGG);
 
-    Material ENCHANTED_BOOK = MaterialImpl.get("enchanted_book");
+    Material ENDERMAN_SPAWN_EGG = MaterialImpl.get(MaterialKeys.ENDERMAN_SPAWN_EGG);
 
-    Material NETHER_BRICK = MaterialImpl.get("nether_brick");
+    Material ENDERMITE_SPAWN_EGG = MaterialImpl.get(MaterialKeys.ENDERMITE_SPAWN_EGG);
 
-    Material RESIN_BRICK = MaterialImpl.get("resin_brick");
+    Material SHULKER_SPAWN_EGG = MaterialImpl.get(MaterialKeys.SHULKER_SPAWN_EGG);
 
-    Material PRISMARINE_SHARD = MaterialImpl.get("prismarine_shard");
+    Material EXPERIENCE_BOTTLE = MaterialImpl.get(MaterialKeys.EXPERIENCE_BOTTLE);
 
-    Material PRISMARINE_CRYSTALS = MaterialImpl.get("prismarine_crystals");
+    Material FIRE_CHARGE = MaterialImpl.get(MaterialKeys.FIRE_CHARGE);
 
-    Material RABBIT = MaterialImpl.get("rabbit");
+    Material WIND_CHARGE = MaterialImpl.get(MaterialKeys.WIND_CHARGE);
 
-    Material COOKED_RABBIT = MaterialImpl.get("cooked_rabbit");
+    Material WRITABLE_BOOK = MaterialImpl.get(MaterialKeys.WRITABLE_BOOK);
 
-    Material RABBIT_STEW = MaterialImpl.get("rabbit_stew");
+    Material WRITTEN_BOOK = MaterialImpl.get(MaterialKeys.WRITTEN_BOOK);
 
-    Material RABBIT_FOOT = MaterialImpl.get("rabbit_foot");
+    Material BREEZE_ROD = MaterialImpl.get(MaterialKeys.BREEZE_ROD);
 
-    Material RABBIT_HIDE = MaterialImpl.get("rabbit_hide");
+    Material MACE = MaterialImpl.get(MaterialKeys.MACE);
 
-    Material ARMOR_STAND = MaterialImpl.get("armor_stand");
+    Material ITEM_FRAME = MaterialImpl.get(MaterialKeys.ITEM_FRAME);
 
-    Material COPPER_HORSE_ARMOR = MaterialImpl.get("copper_horse_armor");
+    Material GLOW_ITEM_FRAME = MaterialImpl.get(MaterialKeys.GLOW_ITEM_FRAME);
 
-    Material IRON_HORSE_ARMOR = MaterialImpl.get("iron_horse_armor");
+    Material FLOWER_POT = MaterialImpl.get(MaterialKeys.FLOWER_POT);
 
-    Material GOLDEN_HORSE_ARMOR = MaterialImpl.get("golden_horse_armor");
+    Material CARROT = MaterialImpl.get(MaterialKeys.CARROT);
 
-    Material DIAMOND_HORSE_ARMOR = MaterialImpl.get("diamond_horse_armor");
+    Material POTATO = MaterialImpl.get(MaterialKeys.POTATO);
 
-    Material NETHERITE_HORSE_ARMOR = MaterialImpl.get("netherite_horse_armor");
+    Material BAKED_POTATO = MaterialImpl.get(MaterialKeys.BAKED_POTATO);
 
-    Material LEATHER_HORSE_ARMOR = MaterialImpl.get("leather_horse_armor");
+    Material POISONOUS_POTATO = MaterialImpl.get(MaterialKeys.POISONOUS_POTATO);
 
-    Material LEAD = MaterialImpl.get("lead");
+    Material MAP = MaterialImpl.get(MaterialKeys.MAP);
 
-    Material NAME_TAG = MaterialImpl.get("name_tag");
+    Material GOLDEN_CARROT = MaterialImpl.get(MaterialKeys.GOLDEN_CARROT);
 
-    Material COMMAND_BLOCK_MINECART = MaterialImpl.get("command_block_minecart");
+    Material SKELETON_SKULL = MaterialImpl.get(MaterialKeys.SKELETON_SKULL);
 
-    Material MUTTON = MaterialImpl.get("mutton");
+    Material WITHER_SKELETON_SKULL = MaterialImpl.get(MaterialKeys.WITHER_SKELETON_SKULL);
 
-    Material COOKED_MUTTON = MaterialImpl.get("cooked_mutton");
+    Material PLAYER_HEAD = MaterialImpl.get(MaterialKeys.PLAYER_HEAD);
 
-    Material WHITE_BANNER = MaterialImpl.get("white_banner");
+    Material ZOMBIE_HEAD = MaterialImpl.get(MaterialKeys.ZOMBIE_HEAD);
 
-    Material ORANGE_BANNER = MaterialImpl.get("orange_banner");
+    Material CREEPER_HEAD = MaterialImpl.get(MaterialKeys.CREEPER_HEAD);
 
-    Material MAGENTA_BANNER = MaterialImpl.get("magenta_banner");
+    Material DRAGON_HEAD = MaterialImpl.get(MaterialKeys.DRAGON_HEAD);
 
-    Material LIGHT_BLUE_BANNER = MaterialImpl.get("light_blue_banner");
+    Material PIGLIN_HEAD = MaterialImpl.get(MaterialKeys.PIGLIN_HEAD);
 
-    Material YELLOW_BANNER = MaterialImpl.get("yellow_banner");
+    Material NETHER_STAR = MaterialImpl.get(MaterialKeys.NETHER_STAR);
 
-    Material LIME_BANNER = MaterialImpl.get("lime_banner");
+    Material PUMPKIN_PIE = MaterialImpl.get(MaterialKeys.PUMPKIN_PIE);
 
-    Material PINK_BANNER = MaterialImpl.get("pink_banner");
+    Material FIREWORK_ROCKET = MaterialImpl.get(MaterialKeys.FIREWORK_ROCKET);
 
-    Material GRAY_BANNER = MaterialImpl.get("gray_banner");
+    Material FIREWORK_STAR = MaterialImpl.get(MaterialKeys.FIREWORK_STAR);
 
-    Material LIGHT_GRAY_BANNER = MaterialImpl.get("light_gray_banner");
+    Material ENCHANTED_BOOK = MaterialImpl.get(MaterialKeys.ENCHANTED_BOOK);
 
-    Material CYAN_BANNER = MaterialImpl.get("cyan_banner");
+    Material NETHER_BRICK = MaterialImpl.get(MaterialKeys.NETHER_BRICK);
 
-    Material PURPLE_BANNER = MaterialImpl.get("purple_banner");
+    Material RESIN_BRICK = MaterialImpl.get(MaterialKeys.RESIN_BRICK);
 
-    Material BLUE_BANNER = MaterialImpl.get("blue_banner");
+    Material PRISMARINE_SHARD = MaterialImpl.get(MaterialKeys.PRISMARINE_SHARD);
 
-    Material BROWN_BANNER = MaterialImpl.get("brown_banner");
+    Material PRISMARINE_CRYSTALS = MaterialImpl.get(MaterialKeys.PRISMARINE_CRYSTALS);
 
-    Material GREEN_BANNER = MaterialImpl.get("green_banner");
+    Material RABBIT = MaterialImpl.get(MaterialKeys.RABBIT);
 
-    Material RED_BANNER = MaterialImpl.get("red_banner");
+    Material COOKED_RABBIT = MaterialImpl.get(MaterialKeys.COOKED_RABBIT);
 
-    Material BLACK_BANNER = MaterialImpl.get("black_banner");
+    Material RABBIT_STEW = MaterialImpl.get(MaterialKeys.RABBIT_STEW);
 
-    Material END_CRYSTAL = MaterialImpl.get("end_crystal");
+    Material RABBIT_FOOT = MaterialImpl.get(MaterialKeys.RABBIT_FOOT);
 
-    Material CHORUS_FRUIT = MaterialImpl.get("chorus_fruit");
+    Material RABBIT_HIDE = MaterialImpl.get(MaterialKeys.RABBIT_HIDE);
 
-    Material POPPED_CHORUS_FRUIT = MaterialImpl.get("popped_chorus_fruit");
+    Material ARMOR_STAND = MaterialImpl.get(MaterialKeys.ARMOR_STAND);
 
-    Material TORCHFLOWER_SEEDS = MaterialImpl.get("torchflower_seeds");
+    Material COPPER_HORSE_ARMOR = MaterialImpl.get(MaterialKeys.COPPER_HORSE_ARMOR);
 
-    Material PITCHER_POD = MaterialImpl.get("pitcher_pod");
+    Material IRON_HORSE_ARMOR = MaterialImpl.get(MaterialKeys.IRON_HORSE_ARMOR);
 
-    Material BEETROOT = MaterialImpl.get("beetroot");
+    Material GOLDEN_HORSE_ARMOR = MaterialImpl.get(MaterialKeys.GOLDEN_HORSE_ARMOR);
 
-    Material BEETROOT_SEEDS = MaterialImpl.get("beetroot_seeds");
+    Material DIAMOND_HORSE_ARMOR = MaterialImpl.get(MaterialKeys.DIAMOND_HORSE_ARMOR);
 
-    Material BEETROOT_SOUP = MaterialImpl.get("beetroot_soup");
+    Material NETHERITE_HORSE_ARMOR = MaterialImpl.get(MaterialKeys.NETHERITE_HORSE_ARMOR);
 
-    Material DRAGON_BREATH = MaterialImpl.get("dragon_breath");
+    Material LEATHER_HORSE_ARMOR = MaterialImpl.get(MaterialKeys.LEATHER_HORSE_ARMOR);
 
-    Material SPLASH_POTION = MaterialImpl.get("splash_potion");
+    Material LEAD = MaterialImpl.get(MaterialKeys.LEAD);
 
-    Material SPECTRAL_ARROW = MaterialImpl.get("spectral_arrow");
+    Material NAME_TAG = MaterialImpl.get(MaterialKeys.NAME_TAG);
 
-    Material TIPPED_ARROW = MaterialImpl.get("tipped_arrow");
+    Material COMMAND_BLOCK_MINECART = MaterialImpl.get(MaterialKeys.COMMAND_BLOCK_MINECART);
 
-    Material LINGERING_POTION = MaterialImpl.get("lingering_potion");
+    Material MUTTON = MaterialImpl.get(MaterialKeys.MUTTON);
 
-    Material SHIELD = MaterialImpl.get("shield");
+    Material COOKED_MUTTON = MaterialImpl.get(MaterialKeys.COOKED_MUTTON);
 
-    Material WOODEN_SPEAR = MaterialImpl.get("wooden_spear");
+    Material WHITE_BANNER = MaterialImpl.get(MaterialKeys.WHITE_BANNER);
 
-    Material STONE_SPEAR = MaterialImpl.get("stone_spear");
+    Material ORANGE_BANNER = MaterialImpl.get(MaterialKeys.ORANGE_BANNER);
 
-    Material COPPER_SPEAR = MaterialImpl.get("copper_spear");
+    Material MAGENTA_BANNER = MaterialImpl.get(MaterialKeys.MAGENTA_BANNER);
 
-    Material IRON_SPEAR = MaterialImpl.get("iron_spear");
+    Material LIGHT_BLUE_BANNER = MaterialImpl.get(MaterialKeys.LIGHT_BLUE_BANNER);
 
-    Material GOLDEN_SPEAR = MaterialImpl.get("golden_spear");
+    Material YELLOW_BANNER = MaterialImpl.get(MaterialKeys.YELLOW_BANNER);
 
-    Material DIAMOND_SPEAR = MaterialImpl.get("diamond_spear");
+    Material LIME_BANNER = MaterialImpl.get(MaterialKeys.LIME_BANNER);
 
-    Material NETHERITE_SPEAR = MaterialImpl.get("netherite_spear");
+    Material PINK_BANNER = MaterialImpl.get(MaterialKeys.PINK_BANNER);
 
-    Material TOTEM_OF_UNDYING = MaterialImpl.get("totem_of_undying");
+    Material GRAY_BANNER = MaterialImpl.get(MaterialKeys.GRAY_BANNER);
 
-    Material SHULKER_SHELL = MaterialImpl.get("shulker_shell");
+    Material LIGHT_GRAY_BANNER = MaterialImpl.get(MaterialKeys.LIGHT_GRAY_BANNER);
 
-    Material IRON_NUGGET = MaterialImpl.get("iron_nugget");
+    Material CYAN_BANNER = MaterialImpl.get(MaterialKeys.CYAN_BANNER);
 
-    Material COPPER_NUGGET = MaterialImpl.get("copper_nugget");
+    Material PURPLE_BANNER = MaterialImpl.get(MaterialKeys.PURPLE_BANNER);
 
-    Material KNOWLEDGE_BOOK = MaterialImpl.get("knowledge_book");
+    Material BLUE_BANNER = MaterialImpl.get(MaterialKeys.BLUE_BANNER);
 
-    Material DEBUG_STICK = MaterialImpl.get("debug_stick");
+    Material BROWN_BANNER = MaterialImpl.get(MaterialKeys.BROWN_BANNER);
 
-    Material MUSIC_DISC_13 = MaterialImpl.get("music_disc_13");
+    Material GREEN_BANNER = MaterialImpl.get(MaterialKeys.GREEN_BANNER);
 
-    Material MUSIC_DISC_CAT = MaterialImpl.get("music_disc_cat");
+    Material RED_BANNER = MaterialImpl.get(MaterialKeys.RED_BANNER);
 
-    Material MUSIC_DISC_BLOCKS = MaterialImpl.get("music_disc_blocks");
+    Material BLACK_BANNER = MaterialImpl.get(MaterialKeys.BLACK_BANNER);
 
-    Material MUSIC_DISC_CHIRP = MaterialImpl.get("music_disc_chirp");
+    Material END_CRYSTAL = MaterialImpl.get(MaterialKeys.END_CRYSTAL);
 
-    Material MUSIC_DISC_CREATOR = MaterialImpl.get("music_disc_creator");
+    Material CHORUS_FRUIT = MaterialImpl.get(MaterialKeys.CHORUS_FRUIT);
 
-    Material MUSIC_DISC_CREATOR_MUSIC_BOX = MaterialImpl.get("music_disc_creator_music_box");
+    Material POPPED_CHORUS_FRUIT = MaterialImpl.get(MaterialKeys.POPPED_CHORUS_FRUIT);
 
-    Material MUSIC_DISC_FAR = MaterialImpl.get("music_disc_far");
+    Material TORCHFLOWER_SEEDS = MaterialImpl.get(MaterialKeys.TORCHFLOWER_SEEDS);
 
-    Material MUSIC_DISC_LAVA_CHICKEN = MaterialImpl.get("music_disc_lava_chicken");
+    Material PITCHER_POD = MaterialImpl.get(MaterialKeys.PITCHER_POD);
 
-    Material MUSIC_DISC_MALL = MaterialImpl.get("music_disc_mall");
+    Material BEETROOT = MaterialImpl.get(MaterialKeys.BEETROOT);
 
-    Material MUSIC_DISC_MELLOHI = MaterialImpl.get("music_disc_mellohi");
+    Material BEETROOT_SEEDS = MaterialImpl.get(MaterialKeys.BEETROOT_SEEDS);
 
-    Material MUSIC_DISC_STAL = MaterialImpl.get("music_disc_stal");
+    Material BEETROOT_SOUP = MaterialImpl.get(MaterialKeys.BEETROOT_SOUP);
 
-    Material MUSIC_DISC_STRAD = MaterialImpl.get("music_disc_strad");
+    Material DRAGON_BREATH = MaterialImpl.get(MaterialKeys.DRAGON_BREATH);
 
-    Material MUSIC_DISC_WARD = MaterialImpl.get("music_disc_ward");
+    Material SPLASH_POTION = MaterialImpl.get(MaterialKeys.SPLASH_POTION);
 
-    Material MUSIC_DISC_11 = MaterialImpl.get("music_disc_11");
+    Material SPECTRAL_ARROW = MaterialImpl.get(MaterialKeys.SPECTRAL_ARROW);
 
-    Material MUSIC_DISC_WAIT = MaterialImpl.get("music_disc_wait");
+    Material TIPPED_ARROW = MaterialImpl.get(MaterialKeys.TIPPED_ARROW);
 
-    Material MUSIC_DISC_OTHERSIDE = MaterialImpl.get("music_disc_otherside");
+    Material LINGERING_POTION = MaterialImpl.get(MaterialKeys.LINGERING_POTION);
 
-    Material MUSIC_DISC_RELIC = MaterialImpl.get("music_disc_relic");
+    Material SHIELD = MaterialImpl.get(MaterialKeys.SHIELD);
 
-    Material MUSIC_DISC_5 = MaterialImpl.get("music_disc_5");
+    Material WOODEN_SPEAR = MaterialImpl.get(MaterialKeys.WOODEN_SPEAR);
 
-    Material MUSIC_DISC_PIGSTEP = MaterialImpl.get("music_disc_pigstep");
+    Material STONE_SPEAR = MaterialImpl.get(MaterialKeys.STONE_SPEAR);
 
-    Material MUSIC_DISC_PRECIPICE = MaterialImpl.get("music_disc_precipice");
+    Material COPPER_SPEAR = MaterialImpl.get(MaterialKeys.COPPER_SPEAR);
 
-    Material MUSIC_DISC_TEARS = MaterialImpl.get("music_disc_tears");
+    Material IRON_SPEAR = MaterialImpl.get(MaterialKeys.IRON_SPEAR);
 
-    Material DISC_FRAGMENT_5 = MaterialImpl.get("disc_fragment_5");
+    Material GOLDEN_SPEAR = MaterialImpl.get(MaterialKeys.GOLDEN_SPEAR);
 
-    Material TRIDENT = MaterialImpl.get("trident");
+    Material DIAMOND_SPEAR = MaterialImpl.get(MaterialKeys.DIAMOND_SPEAR);
 
-    Material NAUTILUS_SHELL = MaterialImpl.get("nautilus_shell");
+    Material NETHERITE_SPEAR = MaterialImpl.get(MaterialKeys.NETHERITE_SPEAR);
 
-    Material IRON_NAUTILUS_ARMOR = MaterialImpl.get("iron_nautilus_armor");
+    Material TOTEM_OF_UNDYING = MaterialImpl.get(MaterialKeys.TOTEM_OF_UNDYING);
 
-    Material GOLDEN_NAUTILUS_ARMOR = MaterialImpl.get("golden_nautilus_armor");
+    Material SHULKER_SHELL = MaterialImpl.get(MaterialKeys.SHULKER_SHELL);
 
-    Material DIAMOND_NAUTILUS_ARMOR = MaterialImpl.get("diamond_nautilus_armor");
+    Material IRON_NUGGET = MaterialImpl.get(MaterialKeys.IRON_NUGGET);
 
-    Material NETHERITE_NAUTILUS_ARMOR = MaterialImpl.get("netherite_nautilus_armor");
+    Material COPPER_NUGGET = MaterialImpl.get(MaterialKeys.COPPER_NUGGET);
 
-    Material COPPER_NAUTILUS_ARMOR = MaterialImpl.get("copper_nautilus_armor");
+    Material KNOWLEDGE_BOOK = MaterialImpl.get(MaterialKeys.KNOWLEDGE_BOOK);
 
-    Material HEART_OF_THE_SEA = MaterialImpl.get("heart_of_the_sea");
+    Material DEBUG_STICK = MaterialImpl.get(MaterialKeys.DEBUG_STICK);
 
-    Material CROSSBOW = MaterialImpl.get("crossbow");
+    Material MUSIC_DISC_13 = MaterialImpl.get(MaterialKeys.MUSIC_DISC_13);
 
-    Material SUSPICIOUS_STEW = MaterialImpl.get("suspicious_stew");
+    Material MUSIC_DISC_CAT = MaterialImpl.get(MaterialKeys.MUSIC_DISC_CAT);
 
-    Material LOOM = MaterialImpl.get("loom");
+    Material MUSIC_DISC_BLOCKS = MaterialImpl.get(MaterialKeys.MUSIC_DISC_BLOCKS);
 
-    Material FLOWER_BANNER_PATTERN = MaterialImpl.get("flower_banner_pattern");
+    Material MUSIC_DISC_BOUNCE = MaterialImpl.get(MaterialKeys.MUSIC_DISC_BOUNCE);
 
-    Material CREEPER_BANNER_PATTERN = MaterialImpl.get("creeper_banner_pattern");
+    Material MUSIC_DISC_CHIRP = MaterialImpl.get(MaterialKeys.MUSIC_DISC_CHIRP);
 
-    Material SKULL_BANNER_PATTERN = MaterialImpl.get("skull_banner_pattern");
+    Material MUSIC_DISC_CREATOR = MaterialImpl.get(MaterialKeys.MUSIC_DISC_CREATOR);
 
-    Material MOJANG_BANNER_PATTERN = MaterialImpl.get("mojang_banner_pattern");
+    Material MUSIC_DISC_CREATOR_MUSIC_BOX = MaterialImpl.get(MaterialKeys.MUSIC_DISC_CREATOR_MUSIC_BOX);
 
-    Material GLOBE_BANNER_PATTERN = MaterialImpl.get("globe_banner_pattern");
+    Material MUSIC_DISC_FAR = MaterialImpl.get(MaterialKeys.MUSIC_DISC_FAR);
 
-    Material PIGLIN_BANNER_PATTERN = MaterialImpl.get("piglin_banner_pattern");
+    Material MUSIC_DISC_LAVA_CHICKEN = MaterialImpl.get(MaterialKeys.MUSIC_DISC_LAVA_CHICKEN);
 
-    Material FLOW_BANNER_PATTERN = MaterialImpl.get("flow_banner_pattern");
+    Material MUSIC_DISC_MALL = MaterialImpl.get(MaterialKeys.MUSIC_DISC_MALL);
 
-    Material GUSTER_BANNER_PATTERN = MaterialImpl.get("guster_banner_pattern");
+    Material MUSIC_DISC_MELLOHI = MaterialImpl.get(MaterialKeys.MUSIC_DISC_MELLOHI);
 
-    Material FIELD_MASONED_BANNER_PATTERN = MaterialImpl.get("field_masoned_banner_pattern");
+    Material MUSIC_DISC_STAL = MaterialImpl.get(MaterialKeys.MUSIC_DISC_STAL);
 
-    Material BORDURE_INDENTED_BANNER_PATTERN = MaterialImpl.get("bordure_indented_banner_pattern");
+    Material MUSIC_DISC_STRAD = MaterialImpl.get(MaterialKeys.MUSIC_DISC_STRAD);
 
-    Material GOAT_HORN = MaterialImpl.get("goat_horn");
+    Material MUSIC_DISC_WARD = MaterialImpl.get(MaterialKeys.MUSIC_DISC_WARD);
 
-    Material COMPOSTER = MaterialImpl.get("composter");
+    Material MUSIC_DISC_11 = MaterialImpl.get(MaterialKeys.MUSIC_DISC_11);
 
-    Material BARREL = MaterialImpl.get("barrel");
+    Material MUSIC_DISC_WAIT = MaterialImpl.get(MaterialKeys.MUSIC_DISC_WAIT);
 
-    Material SMOKER = MaterialImpl.get("smoker");
+    Material MUSIC_DISC_OTHERSIDE = MaterialImpl.get(MaterialKeys.MUSIC_DISC_OTHERSIDE);
 
-    Material BLAST_FURNACE = MaterialImpl.get("blast_furnace");
+    Material MUSIC_DISC_RELIC = MaterialImpl.get(MaterialKeys.MUSIC_DISC_RELIC);
 
-    Material CARTOGRAPHY_TABLE = MaterialImpl.get("cartography_table");
+    Material MUSIC_DISC_5 = MaterialImpl.get(MaterialKeys.MUSIC_DISC_5);
 
-    Material FLETCHING_TABLE = MaterialImpl.get("fletching_table");
+    Material MUSIC_DISC_PIGSTEP = MaterialImpl.get(MaterialKeys.MUSIC_DISC_PIGSTEP);
 
-    Material GRINDSTONE = MaterialImpl.get("grindstone");
+    Material MUSIC_DISC_PRECIPICE = MaterialImpl.get(MaterialKeys.MUSIC_DISC_PRECIPICE);
 
-    Material SMITHING_TABLE = MaterialImpl.get("smithing_table");
+    Material MUSIC_DISC_TEARS = MaterialImpl.get(MaterialKeys.MUSIC_DISC_TEARS);
 
-    Material STONECUTTER = MaterialImpl.get("stonecutter");
+    Material DISC_FRAGMENT_5 = MaterialImpl.get(MaterialKeys.DISC_FRAGMENT_5);
 
-    Material BELL = MaterialImpl.get("bell");
+    Material TRIDENT = MaterialImpl.get(MaterialKeys.TRIDENT);
 
-    Material LANTERN = MaterialImpl.get("lantern");
+    Material NAUTILUS_SHELL = MaterialImpl.get(MaterialKeys.NAUTILUS_SHELL);
 
-    Material SOUL_LANTERN = MaterialImpl.get("soul_lantern");
+    Material IRON_NAUTILUS_ARMOR = MaterialImpl.get(MaterialKeys.IRON_NAUTILUS_ARMOR);
 
-    Material COPPER_LANTERN = MaterialImpl.get("copper_lantern");
+    Material GOLDEN_NAUTILUS_ARMOR = MaterialImpl.get(MaterialKeys.GOLDEN_NAUTILUS_ARMOR);
 
-    Material EXPOSED_COPPER_LANTERN = MaterialImpl.get("exposed_copper_lantern");
+    Material DIAMOND_NAUTILUS_ARMOR = MaterialImpl.get(MaterialKeys.DIAMOND_NAUTILUS_ARMOR);
 
-    Material WEATHERED_COPPER_LANTERN = MaterialImpl.get("weathered_copper_lantern");
+    Material NETHERITE_NAUTILUS_ARMOR = MaterialImpl.get(MaterialKeys.NETHERITE_NAUTILUS_ARMOR);
 
-    Material OXIDIZED_COPPER_LANTERN = MaterialImpl.get("oxidized_copper_lantern");
+    Material COPPER_NAUTILUS_ARMOR = MaterialImpl.get(MaterialKeys.COPPER_NAUTILUS_ARMOR);
 
-    Material WAXED_COPPER_LANTERN = MaterialImpl.get("waxed_copper_lantern");
+    Material HEART_OF_THE_SEA = MaterialImpl.get(MaterialKeys.HEART_OF_THE_SEA);
 
-    Material WAXED_EXPOSED_COPPER_LANTERN = MaterialImpl.get("waxed_exposed_copper_lantern");
+    Material CROSSBOW = MaterialImpl.get(MaterialKeys.CROSSBOW);
 
-    Material WAXED_WEATHERED_COPPER_LANTERN = MaterialImpl.get("waxed_weathered_copper_lantern");
+    Material SUSPICIOUS_STEW = MaterialImpl.get(MaterialKeys.SUSPICIOUS_STEW);
 
-    Material WAXED_OXIDIZED_COPPER_LANTERN = MaterialImpl.get("waxed_oxidized_copper_lantern");
+    Material LOOM = MaterialImpl.get(MaterialKeys.LOOM);
 
-    Material SWEET_BERRIES = MaterialImpl.get("sweet_berries");
+    Material FLOWER_BANNER_PATTERN = MaterialImpl.get(MaterialKeys.FLOWER_BANNER_PATTERN);
 
-    Material GLOW_BERRIES = MaterialImpl.get("glow_berries");
+    Material CREEPER_BANNER_PATTERN = MaterialImpl.get(MaterialKeys.CREEPER_BANNER_PATTERN);
 
-    Material CAMPFIRE = MaterialImpl.get("campfire");
+    Material SKULL_BANNER_PATTERN = MaterialImpl.get(MaterialKeys.SKULL_BANNER_PATTERN);
 
-    Material SOUL_CAMPFIRE = MaterialImpl.get("soul_campfire");
+    Material MOJANG_BANNER_PATTERN = MaterialImpl.get(MaterialKeys.MOJANG_BANNER_PATTERN);
 
-    Material SHROOMLIGHT = MaterialImpl.get("shroomlight");
+    Material GLOBE_BANNER_PATTERN = MaterialImpl.get(MaterialKeys.GLOBE_BANNER_PATTERN);
 
-    Material HONEYCOMB = MaterialImpl.get("honeycomb");
+    Material PIGLIN_BANNER_PATTERN = MaterialImpl.get(MaterialKeys.PIGLIN_BANNER_PATTERN);
 
-    Material BEE_NEST = MaterialImpl.get("bee_nest");
+    Material FLOW_BANNER_PATTERN = MaterialImpl.get(MaterialKeys.FLOW_BANNER_PATTERN);
 
-    Material BEEHIVE = MaterialImpl.get("beehive");
+    Material GUSTER_BANNER_PATTERN = MaterialImpl.get(MaterialKeys.GUSTER_BANNER_PATTERN);
 
-    Material HONEY_BOTTLE = MaterialImpl.get("honey_bottle");
+    Material FIELD_MASONED_BANNER_PATTERN = MaterialImpl.get(MaterialKeys.FIELD_MASONED_BANNER_PATTERN);
 
-    Material HONEYCOMB_BLOCK = MaterialImpl.get("honeycomb_block");
+    Material BORDURE_INDENTED_BANNER_PATTERN = MaterialImpl.get(MaterialKeys.BORDURE_INDENTED_BANNER_PATTERN);
 
-    Material LODESTONE = MaterialImpl.get("lodestone");
+    Material GOAT_HORN = MaterialImpl.get(MaterialKeys.GOAT_HORN);
 
-    Material CRYING_OBSIDIAN = MaterialImpl.get("crying_obsidian");
+    Material COMPOSTER = MaterialImpl.get(MaterialKeys.COMPOSTER);
 
-    Material BLACKSTONE = MaterialImpl.get("blackstone");
+    Material BARREL = MaterialImpl.get(MaterialKeys.BARREL);
 
-    Material BLACKSTONE_SLAB = MaterialImpl.get("blackstone_slab");
+    Material SMOKER = MaterialImpl.get(MaterialKeys.SMOKER);
 
-    Material BLACKSTONE_STAIRS = MaterialImpl.get("blackstone_stairs");
+    Material BLAST_FURNACE = MaterialImpl.get(MaterialKeys.BLAST_FURNACE);
 
-    Material GILDED_BLACKSTONE = MaterialImpl.get("gilded_blackstone");
+    Material CARTOGRAPHY_TABLE = MaterialImpl.get(MaterialKeys.CARTOGRAPHY_TABLE);
 
-    Material POLISHED_BLACKSTONE = MaterialImpl.get("polished_blackstone");
+    Material FLETCHING_TABLE = MaterialImpl.get(MaterialKeys.FLETCHING_TABLE);
 
-    Material POLISHED_BLACKSTONE_SLAB = MaterialImpl.get("polished_blackstone_slab");
+    Material GRINDSTONE = MaterialImpl.get(MaterialKeys.GRINDSTONE);
 
-    Material POLISHED_BLACKSTONE_STAIRS = MaterialImpl.get("polished_blackstone_stairs");
+    Material SMITHING_TABLE = MaterialImpl.get(MaterialKeys.SMITHING_TABLE);
 
-    Material CHISELED_POLISHED_BLACKSTONE = MaterialImpl.get("chiseled_polished_blackstone");
+    Material STONECUTTER = MaterialImpl.get(MaterialKeys.STONECUTTER);
 
-    Material POLISHED_BLACKSTONE_BRICKS = MaterialImpl.get("polished_blackstone_bricks");
+    Material BELL = MaterialImpl.get(MaterialKeys.BELL);
 
-    Material POLISHED_BLACKSTONE_BRICK_SLAB = MaterialImpl.get("polished_blackstone_brick_slab");
+    Material LANTERN = MaterialImpl.get(MaterialKeys.LANTERN);
 
-    Material POLISHED_BLACKSTONE_BRICK_STAIRS = MaterialImpl.get("polished_blackstone_brick_stairs");
+    Material SOUL_LANTERN = MaterialImpl.get(MaterialKeys.SOUL_LANTERN);
 
-    Material CRACKED_POLISHED_BLACKSTONE_BRICKS = MaterialImpl.get("cracked_polished_blackstone_bricks");
+    Material COPPER_LANTERN = MaterialImpl.get(MaterialKeys.COPPER_LANTERN);
 
-    Material RESPAWN_ANCHOR = MaterialImpl.get("respawn_anchor");
+    Material EXPOSED_COPPER_LANTERN = MaterialImpl.get(MaterialKeys.EXPOSED_COPPER_LANTERN);
 
-    Material CANDLE = MaterialImpl.get("candle");
+    Material WEATHERED_COPPER_LANTERN = MaterialImpl.get(MaterialKeys.WEATHERED_COPPER_LANTERN);
 
-    Material WHITE_CANDLE = MaterialImpl.get("white_candle");
+    Material OXIDIZED_COPPER_LANTERN = MaterialImpl.get(MaterialKeys.OXIDIZED_COPPER_LANTERN);
 
-    Material ORANGE_CANDLE = MaterialImpl.get("orange_candle");
+    Material WAXED_COPPER_LANTERN = MaterialImpl.get(MaterialKeys.WAXED_COPPER_LANTERN);
 
-    Material MAGENTA_CANDLE = MaterialImpl.get("magenta_candle");
+    Material WAXED_EXPOSED_COPPER_LANTERN = MaterialImpl.get(MaterialKeys.WAXED_EXPOSED_COPPER_LANTERN);
 
-    Material LIGHT_BLUE_CANDLE = MaterialImpl.get("light_blue_candle");
+    Material WAXED_WEATHERED_COPPER_LANTERN = MaterialImpl.get(MaterialKeys.WAXED_WEATHERED_COPPER_LANTERN);
 
-    Material YELLOW_CANDLE = MaterialImpl.get("yellow_candle");
+    Material WAXED_OXIDIZED_COPPER_LANTERN = MaterialImpl.get(MaterialKeys.WAXED_OXIDIZED_COPPER_LANTERN);
 
-    Material LIME_CANDLE = MaterialImpl.get("lime_candle");
+    Material SWEET_BERRIES = MaterialImpl.get(MaterialKeys.SWEET_BERRIES);
 
-    Material PINK_CANDLE = MaterialImpl.get("pink_candle");
+    Material GLOW_BERRIES = MaterialImpl.get(MaterialKeys.GLOW_BERRIES);
 
-    Material GRAY_CANDLE = MaterialImpl.get("gray_candle");
+    Material CAMPFIRE = MaterialImpl.get(MaterialKeys.CAMPFIRE);
 
-    Material LIGHT_GRAY_CANDLE = MaterialImpl.get("light_gray_candle");
+    Material SOUL_CAMPFIRE = MaterialImpl.get(MaterialKeys.SOUL_CAMPFIRE);
 
-    Material CYAN_CANDLE = MaterialImpl.get("cyan_candle");
+    Material SHROOMLIGHT = MaterialImpl.get(MaterialKeys.SHROOMLIGHT);
 
-    Material PURPLE_CANDLE = MaterialImpl.get("purple_candle");
+    Material HONEYCOMB = MaterialImpl.get(MaterialKeys.HONEYCOMB);
 
-    Material BLUE_CANDLE = MaterialImpl.get("blue_candle");
+    Material BEE_NEST = MaterialImpl.get(MaterialKeys.BEE_NEST);
 
-    Material BROWN_CANDLE = MaterialImpl.get("brown_candle");
+    Material BEEHIVE = MaterialImpl.get(MaterialKeys.BEEHIVE);
 
-    Material GREEN_CANDLE = MaterialImpl.get("green_candle");
+    Material HONEY_BOTTLE = MaterialImpl.get(MaterialKeys.HONEY_BOTTLE);
 
-    Material RED_CANDLE = MaterialImpl.get("red_candle");
+    Material HONEYCOMB_BLOCK = MaterialImpl.get(MaterialKeys.HONEYCOMB_BLOCK);
 
-    Material BLACK_CANDLE = MaterialImpl.get("black_candle");
+    Material LODESTONE = MaterialImpl.get(MaterialKeys.LODESTONE);
 
-    Material SMALL_AMETHYST_BUD = MaterialImpl.get("small_amethyst_bud");
+    Material CRYING_OBSIDIAN = MaterialImpl.get(MaterialKeys.CRYING_OBSIDIAN);
 
-    Material MEDIUM_AMETHYST_BUD = MaterialImpl.get("medium_amethyst_bud");
+    Material BLACKSTONE = MaterialImpl.get(MaterialKeys.BLACKSTONE);
 
-    Material LARGE_AMETHYST_BUD = MaterialImpl.get("large_amethyst_bud");
+    Material BLACKSTONE_SLAB = MaterialImpl.get(MaterialKeys.BLACKSTONE_SLAB);
 
-    Material AMETHYST_CLUSTER = MaterialImpl.get("amethyst_cluster");
+    Material BLACKSTONE_STAIRS = MaterialImpl.get(MaterialKeys.BLACKSTONE_STAIRS);
 
-    Material POINTED_DRIPSTONE = MaterialImpl.get("pointed_dripstone");
+    Material GILDED_BLACKSTONE = MaterialImpl.get(MaterialKeys.GILDED_BLACKSTONE);
 
-    Material OCHRE_FROGLIGHT = MaterialImpl.get("ochre_froglight");
+    Material POLISHED_BLACKSTONE = MaterialImpl.get(MaterialKeys.POLISHED_BLACKSTONE);
 
-    Material VERDANT_FROGLIGHT = MaterialImpl.get("verdant_froglight");
+    Material POLISHED_BLACKSTONE_SLAB = MaterialImpl.get(MaterialKeys.POLISHED_BLACKSTONE_SLAB);
 
-    Material PEARLESCENT_FROGLIGHT = MaterialImpl.get("pearlescent_froglight");
+    Material POLISHED_BLACKSTONE_STAIRS = MaterialImpl.get(MaterialKeys.POLISHED_BLACKSTONE_STAIRS);
 
-    Material FROGSPAWN = MaterialImpl.get("frogspawn");
+    Material CHISELED_POLISHED_BLACKSTONE = MaterialImpl.get(MaterialKeys.CHISELED_POLISHED_BLACKSTONE);
 
-    Material ECHO_SHARD = MaterialImpl.get("echo_shard");
+    Material POLISHED_BLACKSTONE_BRICKS = MaterialImpl.get(MaterialKeys.POLISHED_BLACKSTONE_BRICKS);
 
-    Material BRUSH = MaterialImpl.get("brush");
+    Material POLISHED_BLACKSTONE_BRICK_SLAB = MaterialImpl.get(MaterialKeys.POLISHED_BLACKSTONE_BRICK_SLAB);
 
-    Material NETHERITE_UPGRADE_SMITHING_TEMPLATE = MaterialImpl.get("netherite_upgrade_smithing_template");
+    Material POLISHED_BLACKSTONE_BRICK_STAIRS = MaterialImpl.get(MaterialKeys.POLISHED_BLACKSTONE_BRICK_STAIRS);
 
-    Material SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("sentry_armor_trim_smithing_template");
+    Material CRACKED_POLISHED_BLACKSTONE_BRICKS = MaterialImpl.get(MaterialKeys.CRACKED_POLISHED_BLACKSTONE_BRICKS);
 
-    Material DUNE_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("dune_armor_trim_smithing_template");
+    Material RESPAWN_ANCHOR = MaterialImpl.get(MaterialKeys.RESPAWN_ANCHOR);
 
-    Material COAST_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("coast_armor_trim_smithing_template");
+    Material CANDLE = MaterialImpl.get(MaterialKeys.CANDLE);
 
-    Material WILD_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("wild_armor_trim_smithing_template");
+    Material WHITE_CANDLE = MaterialImpl.get(MaterialKeys.WHITE_CANDLE);
 
-    Material WARD_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("ward_armor_trim_smithing_template");
+    Material ORANGE_CANDLE = MaterialImpl.get(MaterialKeys.ORANGE_CANDLE);
 
-    Material EYE_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("eye_armor_trim_smithing_template");
+    Material MAGENTA_CANDLE = MaterialImpl.get(MaterialKeys.MAGENTA_CANDLE);
 
-    Material VEX_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("vex_armor_trim_smithing_template");
+    Material LIGHT_BLUE_CANDLE = MaterialImpl.get(MaterialKeys.LIGHT_BLUE_CANDLE);
 
-    Material TIDE_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("tide_armor_trim_smithing_template");
+    Material YELLOW_CANDLE = MaterialImpl.get(MaterialKeys.YELLOW_CANDLE);
 
-    Material SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("snout_armor_trim_smithing_template");
+    Material LIME_CANDLE = MaterialImpl.get(MaterialKeys.LIME_CANDLE);
 
-    Material RIB_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("rib_armor_trim_smithing_template");
+    Material PINK_CANDLE = MaterialImpl.get(MaterialKeys.PINK_CANDLE);
 
-    Material SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("spire_armor_trim_smithing_template");
+    Material GRAY_CANDLE = MaterialImpl.get(MaterialKeys.GRAY_CANDLE);
 
-    Material WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("wayfinder_armor_trim_smithing_template");
+    Material LIGHT_GRAY_CANDLE = MaterialImpl.get(MaterialKeys.LIGHT_GRAY_CANDLE);
 
-    Material SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("shaper_armor_trim_smithing_template");
+    Material CYAN_CANDLE = MaterialImpl.get(MaterialKeys.CYAN_CANDLE);
 
-    Material SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("silence_armor_trim_smithing_template");
+    Material PURPLE_CANDLE = MaterialImpl.get(MaterialKeys.PURPLE_CANDLE);
 
-    Material RAISER_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("raiser_armor_trim_smithing_template");
+    Material BLUE_CANDLE = MaterialImpl.get(MaterialKeys.BLUE_CANDLE);
 
-    Material HOST_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("host_armor_trim_smithing_template");
+    Material BROWN_CANDLE = MaterialImpl.get(MaterialKeys.BROWN_CANDLE);
 
-    Material FLOW_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("flow_armor_trim_smithing_template");
+    Material GREEN_CANDLE = MaterialImpl.get(MaterialKeys.GREEN_CANDLE);
 
-    Material BOLT_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("bolt_armor_trim_smithing_template");
+    Material RED_CANDLE = MaterialImpl.get(MaterialKeys.RED_CANDLE);
 
-    Material ANGLER_POTTERY_SHERD = MaterialImpl.get("angler_pottery_sherd");
+    Material BLACK_CANDLE = MaterialImpl.get(MaterialKeys.BLACK_CANDLE);
 
-    Material ARCHER_POTTERY_SHERD = MaterialImpl.get("archer_pottery_sherd");
+    Material SMALL_AMETHYST_BUD = MaterialImpl.get(MaterialKeys.SMALL_AMETHYST_BUD);
 
-    Material ARMS_UP_POTTERY_SHERD = MaterialImpl.get("arms_up_pottery_sherd");
+    Material MEDIUM_AMETHYST_BUD = MaterialImpl.get(MaterialKeys.MEDIUM_AMETHYST_BUD);
 
-    Material BLADE_POTTERY_SHERD = MaterialImpl.get("blade_pottery_sherd");
+    Material LARGE_AMETHYST_BUD = MaterialImpl.get(MaterialKeys.LARGE_AMETHYST_BUD);
 
-    Material BREWER_POTTERY_SHERD = MaterialImpl.get("brewer_pottery_sherd");
+    Material AMETHYST_CLUSTER = MaterialImpl.get(MaterialKeys.AMETHYST_CLUSTER);
 
-    Material BURN_POTTERY_SHERD = MaterialImpl.get("burn_pottery_sherd");
+    Material POINTED_DRIPSTONE = MaterialImpl.get(MaterialKeys.POINTED_DRIPSTONE);
 
-    Material DANGER_POTTERY_SHERD = MaterialImpl.get("danger_pottery_sherd");
+    Material SULFUR_SPIKE = MaterialImpl.get(MaterialKeys.SULFUR_SPIKE);
 
-    Material EXPLORER_POTTERY_SHERD = MaterialImpl.get("explorer_pottery_sherd");
+    Material OCHRE_FROGLIGHT = MaterialImpl.get(MaterialKeys.OCHRE_FROGLIGHT);
 
-    Material FLOW_POTTERY_SHERD = MaterialImpl.get("flow_pottery_sherd");
+    Material VERDANT_FROGLIGHT = MaterialImpl.get(MaterialKeys.VERDANT_FROGLIGHT);
 
-    Material FRIEND_POTTERY_SHERD = MaterialImpl.get("friend_pottery_sherd");
+    Material PEARLESCENT_FROGLIGHT = MaterialImpl.get(MaterialKeys.PEARLESCENT_FROGLIGHT);
 
-    Material GUSTER_POTTERY_SHERD = MaterialImpl.get("guster_pottery_sherd");
+    Material FROGSPAWN = MaterialImpl.get(MaterialKeys.FROGSPAWN);
 
-    Material HEART_POTTERY_SHERD = MaterialImpl.get("heart_pottery_sherd");
+    Material ECHO_SHARD = MaterialImpl.get(MaterialKeys.ECHO_SHARD);
 
-    Material HEARTBREAK_POTTERY_SHERD = MaterialImpl.get("heartbreak_pottery_sherd");
+    Material BRUSH = MaterialImpl.get(MaterialKeys.BRUSH);
 
-    Material HOWL_POTTERY_SHERD = MaterialImpl.get("howl_pottery_sherd");
+    Material NETHERITE_UPGRADE_SMITHING_TEMPLATE = MaterialImpl.get(MaterialKeys.NETHERITE_UPGRADE_SMITHING_TEMPLATE);
 
-    Material MINER_POTTERY_SHERD = MaterialImpl.get("miner_pottery_sherd");
+    Material SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get(MaterialKeys.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE);
 
-    Material MOURNER_POTTERY_SHERD = MaterialImpl.get("mourner_pottery_sherd");
+    Material DUNE_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get(MaterialKeys.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE);
 
-    Material PLENTY_POTTERY_SHERD = MaterialImpl.get("plenty_pottery_sherd");
+    Material COAST_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get(MaterialKeys.COAST_ARMOR_TRIM_SMITHING_TEMPLATE);
 
-    Material PRIZE_POTTERY_SHERD = MaterialImpl.get("prize_pottery_sherd");
+    Material WILD_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get(MaterialKeys.WILD_ARMOR_TRIM_SMITHING_TEMPLATE);
 
-    Material SCRAPE_POTTERY_SHERD = MaterialImpl.get("scrape_pottery_sherd");
+    Material WARD_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get(MaterialKeys.WARD_ARMOR_TRIM_SMITHING_TEMPLATE);
 
-    Material SHEAF_POTTERY_SHERD = MaterialImpl.get("sheaf_pottery_sherd");
+    Material EYE_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get(MaterialKeys.EYE_ARMOR_TRIM_SMITHING_TEMPLATE);
 
-    Material SHELTER_POTTERY_SHERD = MaterialImpl.get("shelter_pottery_sherd");
+    Material VEX_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get(MaterialKeys.VEX_ARMOR_TRIM_SMITHING_TEMPLATE);
 
-    Material SKULL_POTTERY_SHERD = MaterialImpl.get("skull_pottery_sherd");
+    Material TIDE_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get(MaterialKeys.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE);
 
-    Material SNORT_POTTERY_SHERD = MaterialImpl.get("snort_pottery_sherd");
+    Material SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get(MaterialKeys.SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE);
 
-    Material COPPER_GRATE = MaterialImpl.get("copper_grate");
+    Material RIB_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get(MaterialKeys.RIB_ARMOR_TRIM_SMITHING_TEMPLATE);
 
-    Material EXPOSED_COPPER_GRATE = MaterialImpl.get("exposed_copper_grate");
+    Material SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get(MaterialKeys.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE);
 
-    Material WEATHERED_COPPER_GRATE = MaterialImpl.get("weathered_copper_grate");
+    Material WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get(MaterialKeys.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE);
 
-    Material OXIDIZED_COPPER_GRATE = MaterialImpl.get("oxidized_copper_grate");
+    Material SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get(MaterialKeys.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE);
 
-    Material WAXED_COPPER_GRATE = MaterialImpl.get("waxed_copper_grate");
+    Material SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get(MaterialKeys.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE);
 
-    Material WAXED_EXPOSED_COPPER_GRATE = MaterialImpl.get("waxed_exposed_copper_grate");
+    Material RAISER_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get(MaterialKeys.RAISER_ARMOR_TRIM_SMITHING_TEMPLATE);
 
-    Material WAXED_WEATHERED_COPPER_GRATE = MaterialImpl.get("waxed_weathered_copper_grate");
+    Material HOST_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get(MaterialKeys.HOST_ARMOR_TRIM_SMITHING_TEMPLATE);
 
-    Material WAXED_OXIDIZED_COPPER_GRATE = MaterialImpl.get("waxed_oxidized_copper_grate");
+    Material FLOW_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get(MaterialKeys.FLOW_ARMOR_TRIM_SMITHING_TEMPLATE);
 
-    Material COPPER_BULB = MaterialImpl.get("copper_bulb");
+    Material BOLT_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get(MaterialKeys.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE);
 
-    Material EXPOSED_COPPER_BULB = MaterialImpl.get("exposed_copper_bulb");
+    Material ANGLER_POTTERY_SHERD = MaterialImpl.get(MaterialKeys.ANGLER_POTTERY_SHERD);
 
-    Material WEATHERED_COPPER_BULB = MaterialImpl.get("weathered_copper_bulb");
+    Material ARCHER_POTTERY_SHERD = MaterialImpl.get(MaterialKeys.ARCHER_POTTERY_SHERD);
 
-    Material OXIDIZED_COPPER_BULB = MaterialImpl.get("oxidized_copper_bulb");
+    Material ARMS_UP_POTTERY_SHERD = MaterialImpl.get(MaterialKeys.ARMS_UP_POTTERY_SHERD);
 
-    Material WAXED_COPPER_BULB = MaterialImpl.get("waxed_copper_bulb");
+    Material BLADE_POTTERY_SHERD = MaterialImpl.get(MaterialKeys.BLADE_POTTERY_SHERD);
 
-    Material WAXED_EXPOSED_COPPER_BULB = MaterialImpl.get("waxed_exposed_copper_bulb");
+    Material BREWER_POTTERY_SHERD = MaterialImpl.get(MaterialKeys.BREWER_POTTERY_SHERD);
 
-    Material WAXED_WEATHERED_COPPER_BULB = MaterialImpl.get("waxed_weathered_copper_bulb");
+    Material BURN_POTTERY_SHERD = MaterialImpl.get(MaterialKeys.BURN_POTTERY_SHERD);
 
-    Material WAXED_OXIDIZED_COPPER_BULB = MaterialImpl.get("waxed_oxidized_copper_bulb");
+    Material DANGER_POTTERY_SHERD = MaterialImpl.get(MaterialKeys.DANGER_POTTERY_SHERD);
 
-    Material COPPER_CHEST = MaterialImpl.get("copper_chest");
+    Material EXPLORER_POTTERY_SHERD = MaterialImpl.get(MaterialKeys.EXPLORER_POTTERY_SHERD);
 
-    Material EXPOSED_COPPER_CHEST = MaterialImpl.get("exposed_copper_chest");
+    Material FLOW_POTTERY_SHERD = MaterialImpl.get(MaterialKeys.FLOW_POTTERY_SHERD);
 
-    Material WEATHERED_COPPER_CHEST = MaterialImpl.get("weathered_copper_chest");
+    Material FRIEND_POTTERY_SHERD = MaterialImpl.get(MaterialKeys.FRIEND_POTTERY_SHERD);
 
-    Material OXIDIZED_COPPER_CHEST = MaterialImpl.get("oxidized_copper_chest");
+    Material GUSTER_POTTERY_SHERD = MaterialImpl.get(MaterialKeys.GUSTER_POTTERY_SHERD);
 
-    Material WAXED_COPPER_CHEST = MaterialImpl.get("waxed_copper_chest");
+    Material HEART_POTTERY_SHERD = MaterialImpl.get(MaterialKeys.HEART_POTTERY_SHERD);
 
-    Material WAXED_EXPOSED_COPPER_CHEST = MaterialImpl.get("waxed_exposed_copper_chest");
+    Material HEARTBREAK_POTTERY_SHERD = MaterialImpl.get(MaterialKeys.HEARTBREAK_POTTERY_SHERD);
 
-    Material WAXED_WEATHERED_COPPER_CHEST = MaterialImpl.get("waxed_weathered_copper_chest");
+    Material HOWL_POTTERY_SHERD = MaterialImpl.get(MaterialKeys.HOWL_POTTERY_SHERD);
 
-    Material WAXED_OXIDIZED_COPPER_CHEST = MaterialImpl.get("waxed_oxidized_copper_chest");
+    Material MINER_POTTERY_SHERD = MaterialImpl.get(MaterialKeys.MINER_POTTERY_SHERD);
 
-    Material COPPER_GOLEM_STATUE = MaterialImpl.get("copper_golem_statue");
+    Material MOURNER_POTTERY_SHERD = MaterialImpl.get(MaterialKeys.MOURNER_POTTERY_SHERD);
 
-    Material EXPOSED_COPPER_GOLEM_STATUE = MaterialImpl.get("exposed_copper_golem_statue");
+    Material PLENTY_POTTERY_SHERD = MaterialImpl.get(MaterialKeys.PLENTY_POTTERY_SHERD);
 
-    Material WEATHERED_COPPER_GOLEM_STATUE = MaterialImpl.get("weathered_copper_golem_statue");
+    Material PRIZE_POTTERY_SHERD = MaterialImpl.get(MaterialKeys.PRIZE_POTTERY_SHERD);
 
-    Material OXIDIZED_COPPER_GOLEM_STATUE = MaterialImpl.get("oxidized_copper_golem_statue");
+    Material SCRAPE_POTTERY_SHERD = MaterialImpl.get(MaterialKeys.SCRAPE_POTTERY_SHERD);
 
-    Material WAXED_COPPER_GOLEM_STATUE = MaterialImpl.get("waxed_copper_golem_statue");
+    Material SHEAF_POTTERY_SHERD = MaterialImpl.get(MaterialKeys.SHEAF_POTTERY_SHERD);
 
-    Material WAXED_EXPOSED_COPPER_GOLEM_STATUE = MaterialImpl.get("waxed_exposed_copper_golem_statue");
+    Material SHELTER_POTTERY_SHERD = MaterialImpl.get(MaterialKeys.SHELTER_POTTERY_SHERD);
 
-    Material WAXED_WEATHERED_COPPER_GOLEM_STATUE = MaterialImpl.get("waxed_weathered_copper_golem_statue");
+    Material SKULL_POTTERY_SHERD = MaterialImpl.get(MaterialKeys.SKULL_POTTERY_SHERD);
 
-    Material WAXED_OXIDIZED_COPPER_GOLEM_STATUE = MaterialImpl.get("waxed_oxidized_copper_golem_statue");
+    Material SNORT_POTTERY_SHERD = MaterialImpl.get(MaterialKeys.SNORT_POTTERY_SHERD);
 
-    Material TRIAL_SPAWNER = MaterialImpl.get("trial_spawner");
+    Material COPPER_GRATE = MaterialImpl.get(MaterialKeys.COPPER_GRATE);
 
-    Material TRIAL_KEY = MaterialImpl.get("trial_key");
+    Material EXPOSED_COPPER_GRATE = MaterialImpl.get(MaterialKeys.EXPOSED_COPPER_GRATE);
 
-    Material OMINOUS_TRIAL_KEY = MaterialImpl.get("ominous_trial_key");
+    Material WEATHERED_COPPER_GRATE = MaterialImpl.get(MaterialKeys.WEATHERED_COPPER_GRATE);
 
-    Material VAULT = MaterialImpl.get("vault");
+    Material OXIDIZED_COPPER_GRATE = MaterialImpl.get(MaterialKeys.OXIDIZED_COPPER_GRATE);
 
-    Material OMINOUS_BOTTLE = MaterialImpl.get("ominous_bottle");
+    Material WAXED_COPPER_GRATE = MaterialImpl.get(MaterialKeys.WAXED_COPPER_GRATE);
+
+    Material WAXED_EXPOSED_COPPER_GRATE = MaterialImpl.get(MaterialKeys.WAXED_EXPOSED_COPPER_GRATE);
+
+    Material WAXED_WEATHERED_COPPER_GRATE = MaterialImpl.get(MaterialKeys.WAXED_WEATHERED_COPPER_GRATE);
+
+    Material WAXED_OXIDIZED_COPPER_GRATE = MaterialImpl.get(MaterialKeys.WAXED_OXIDIZED_COPPER_GRATE);
+
+    Material COPPER_BULB = MaterialImpl.get(MaterialKeys.COPPER_BULB);
+
+    Material EXPOSED_COPPER_BULB = MaterialImpl.get(MaterialKeys.EXPOSED_COPPER_BULB);
+
+    Material WEATHERED_COPPER_BULB = MaterialImpl.get(MaterialKeys.WEATHERED_COPPER_BULB);
+
+    Material OXIDIZED_COPPER_BULB = MaterialImpl.get(MaterialKeys.OXIDIZED_COPPER_BULB);
+
+    Material WAXED_COPPER_BULB = MaterialImpl.get(MaterialKeys.WAXED_COPPER_BULB);
+
+    Material WAXED_EXPOSED_COPPER_BULB = MaterialImpl.get(MaterialKeys.WAXED_EXPOSED_COPPER_BULB);
+
+    Material WAXED_WEATHERED_COPPER_BULB = MaterialImpl.get(MaterialKeys.WAXED_WEATHERED_COPPER_BULB);
+
+    Material WAXED_OXIDIZED_COPPER_BULB = MaterialImpl.get(MaterialKeys.WAXED_OXIDIZED_COPPER_BULB);
+
+    Material COPPER_CHEST = MaterialImpl.get(MaterialKeys.COPPER_CHEST);
+
+    Material EXPOSED_COPPER_CHEST = MaterialImpl.get(MaterialKeys.EXPOSED_COPPER_CHEST);
+
+    Material WEATHERED_COPPER_CHEST = MaterialImpl.get(MaterialKeys.WEATHERED_COPPER_CHEST);
+
+    Material OXIDIZED_COPPER_CHEST = MaterialImpl.get(MaterialKeys.OXIDIZED_COPPER_CHEST);
+
+    Material WAXED_COPPER_CHEST = MaterialImpl.get(MaterialKeys.WAXED_COPPER_CHEST);
+
+    Material WAXED_EXPOSED_COPPER_CHEST = MaterialImpl.get(MaterialKeys.WAXED_EXPOSED_COPPER_CHEST);
+
+    Material WAXED_WEATHERED_COPPER_CHEST = MaterialImpl.get(MaterialKeys.WAXED_WEATHERED_COPPER_CHEST);
+
+    Material WAXED_OXIDIZED_COPPER_CHEST = MaterialImpl.get(MaterialKeys.WAXED_OXIDIZED_COPPER_CHEST);
+
+    Material COPPER_GOLEM_STATUE = MaterialImpl.get(MaterialKeys.COPPER_GOLEM_STATUE);
+
+    Material EXPOSED_COPPER_GOLEM_STATUE = MaterialImpl.get(MaterialKeys.EXPOSED_COPPER_GOLEM_STATUE);
+
+    Material WEATHERED_COPPER_GOLEM_STATUE = MaterialImpl.get(MaterialKeys.WEATHERED_COPPER_GOLEM_STATUE);
+
+    Material OXIDIZED_COPPER_GOLEM_STATUE = MaterialImpl.get(MaterialKeys.OXIDIZED_COPPER_GOLEM_STATUE);
+
+    Material WAXED_COPPER_GOLEM_STATUE = MaterialImpl.get(MaterialKeys.WAXED_COPPER_GOLEM_STATUE);
+
+    Material WAXED_EXPOSED_COPPER_GOLEM_STATUE = MaterialImpl.get(MaterialKeys.WAXED_EXPOSED_COPPER_GOLEM_STATUE);
+
+    Material WAXED_WEATHERED_COPPER_GOLEM_STATUE = MaterialImpl.get(MaterialKeys.WAXED_WEATHERED_COPPER_GOLEM_STATUE);
+
+    Material WAXED_OXIDIZED_COPPER_GOLEM_STATUE = MaterialImpl.get(MaterialKeys.WAXED_OXIDIZED_COPPER_GOLEM_STATUE);
+
+    Material TRIAL_SPAWNER = MaterialImpl.get(MaterialKeys.TRIAL_SPAWNER);
+
+    Material TRIAL_KEY = MaterialImpl.get(MaterialKeys.TRIAL_KEY);
+
+    Material OMINOUS_TRIAL_KEY = MaterialImpl.get(MaterialKeys.OMINOUS_TRIAL_KEY);
+
+    Material VAULT = MaterialImpl.get(MaterialKeys.VAULT);
+
+    Material OMINOUS_BOTTLE = MaterialImpl.get(MaterialKeys.OMINOUS_BOTTLE);
 }

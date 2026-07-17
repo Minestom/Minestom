@@ -65,7 +65,7 @@ public class AttributeCommand extends Command {
     }
 
     private Component description(Attribute attribute) {
-        return translatable(attribute.registry().translationKey());
+        return translatable(attribute);
     }
 
     private double value(CommandContext ctx) {

@@ -49,11 +49,11 @@ sealed interface Biomes permits Biome {
 
     RegistryKey<Biome> WINDSWEPT_HILLS = RegistryKey.unsafeOf("windswept_hills");
 
-    RegistryKey<Biome> DARK_FOREST = RegistryKey.unsafeOf("dark_forest");
-
     RegistryKey<Biome> RIVER = RegistryKey.unsafeOf("river");
 
     RegistryKey<Biome> SAVANNA = RegistryKey.unsafeOf("savanna");
+
+    RegistryKey<Biome> DARK_FOREST = RegistryKey.unsafeOf("dark_forest");
 
     RegistryKey<Biome> FROZEN_PEAKS = RegistryKey.unsafeOf("frozen_peaks");
 
@@ -120,6 +120,8 @@ sealed interface Biomes permits Biome {
     RegistryKey<Biome> SUNFLOWER_PLAINS = RegistryKey.unsafeOf("sunflower_plains");
 
     RegistryKey<Biome> WARM_OCEAN = RegistryKey.unsafeOf("warm_ocean");
+
+    RegistryKey<Biome> SULFUR_CAVES = RegistryKey.unsafeOf("sulfur_caves");
 
     RegistryKey<Biome> ICE_SPIKES = RegistryKey.unsafeOf("ice_spikes");
 

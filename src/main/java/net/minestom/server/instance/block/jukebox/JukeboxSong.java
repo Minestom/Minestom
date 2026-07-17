@@ -1,6 +1,5 @@
 package net.minestom.server.instance.block.jukebox;
 
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
@@ -51,13 +50,13 @@ public sealed interface JukeboxSong extends Holder.Direct<JukeboxSong>, JukeboxS
     }
 
     /**
-     * <p>Creates a new registry for banner patterns, loading the vanilla banner patterns.</p>
+     * <p>Creates a new registry for jukebox songs, loading the vanilla jukebox songs.</p>
      *
      * @see net.minestom.server.MinecraftServer to get an existing instance of the registry
      */
     @ApiStatus.Internal
     static DynamicRegistry<JukeboxSong> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("jukebox_song"), REGISTRY_CODEC, RegistryData.Resource.JUKEBOX_SONGS);
+        return DynamicRegistry.create(BuiltinRegistries.JUKEBOX_SONG, REGISTRY_CODEC);
     }
 
     SoundEvent soundEvent();

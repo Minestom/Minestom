@@ -128,9 +128,9 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     @Override
     public RegistryKey<T> register(Key key, T object, DataPack pack) {
         if (isFrozen()) throw new UnsupportedOperationException(UNSAFE_REMOVE_MESSAGE);
-        Check.notNull(key, "Key cannot be null");
-        Check.notNull(object, "Object cannot be null");
-        Check.notNull(pack, "Pack cannot be null");
+        Objects.requireNonNull(key, "Key cannot be null");
+        Objects.requireNonNull(object, "Object cannot be null");
+        Objects.requireNonNull(pack, "Pack cannot be null");
 
         final RegistryKey<T> registryKey = new RegistryKeyImpl<>(key);
         synchronized (REGISTRY_LOCK) {
@@ -157,7 +157,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     @Override
     public boolean remove(Key key) throws UnsupportedOperationException {
         if (isFrozen()) throw new UnsupportedOperationException(UNSAFE_REMOVE_MESSAGE);
-        Check.notNull(key, "Key cannot be null");
+        Objects.requireNonNull(key, "Key cannot be null");
 
         final RegistryKey<T> registryKey = new RegistryKeyImpl<>(key);
         synchronized (REGISTRY_LOCK) {
@@ -260,7 +260,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     private RegistryDataPacket createRegistryDataPacket(Registries registries, boolean excludeVanilla) {
-        Check.notNull(codec, "Cannot create registry data packet for server-only registry");
+        Objects.requireNonNull(codec, "Cannot create registry data packet for server-only registry");
         Transcoder<BinaryTag> transcoder = new RegistryTranscoder<>(Transcoder.NBT, registries);
         // Copy to avoid concurrent modification issues while iterating, as we are not synchronized on the registry
         final List<T> idToValue;
@@ -328,30 +328,27 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         return !ServerFlag.REGISTRY_UNSAFE_OPS && !ServerFlag.INSIDE_TEST;
     }
 
-    static <T> void loadStaticJsonRegistry(@Nullable Registries registries, DynamicRegistryImpl<T> registry, RegistryData.Resource resource, @Nullable Comparator<String> idComparator, Codec<T> codec) {
-        Check.argCondition(!resource.fileName().endsWith(".json"), "Resource must be a JSON file: {0}", resource.fileName());
-        try (InputStream resourceStream = RegistryData.loadRegistryFile(String.format("%s.json", registry.key().value()))) {
-            Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
+    void loadStaticJsonRegistry(@Nullable Registries registries, @Nullable Comparator<String> idComparator, Codec<T> codec) {
+        // Tags must exist before entries are decoded because registry codecs can resolve tags while loading values.
+        tags.putAll(RegistryData.loadTags(key()));
+        try (InputStream resourceStream = RegistryData.loadRegistryFile(String.format("%s.json", key().value()))) {
+            Check.notNull(resourceStream, "Registry resource {0}.json does not exist!", key().value());
             final JsonElement json = JsonUtil.fromJson(new InputStreamReader(resourceStream, StandardCharsets.UTF_8));
             if (!(json instanceof JsonObject root))
-                throw new IllegalStateException("Failed to load registry " + registry.key() + ": expected a JSON object, got " + json);
+                throw new IllegalStateException("Failed to load registry " + key() + ": expected a JSON object, got " + json);
 
-            final Transcoder<JsonElement> transcoder = registries != null ? new RegistryTranscoder<>(Transcoder.JSON, registries, false, true) : Transcoder.JSON;
+            final Transcoder<JsonElement> transcoder = registries != null ? new RegistryTranscoder<>(Transcoder.JSON, registries) : Transcoder.JSON;
             List<Map.Entry<String, JsonElement>> entries = new ArrayList<>(root.entrySet());
             if (idComparator != null) entries.sort(Map.Entry.comparingByKey(idComparator));
             for (Map.Entry<String, JsonElement> entry : entries) {
                 final String namespace = entry.getKey();
                 final Result<T> valueResult = codec.decode(transcoder, entry.getValue());
                 if (valueResult instanceof Result.Ok(T value)) {
-                    registry.register(namespace, value, DataPack.MINECRAFT_CORE);
+                    register(namespace, value, DataPack.MINECRAFT_CORE);
                 } else {
-                    throw new IllegalStateException("Failed to decode registry entry " + namespace + " for registry " + registry.key() + ": " + valueResult);
+                    throw new IllegalStateException("Failed to decode registry entry " + namespace + " for registry " + key() + ": " + valueResult);
                 }
             }
-
-            // Load tags if present
-            Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags = RegistryData.loadTags(registry.key());
-            registry.tags.putAll(tags);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -1,28 +1,14 @@
+# OS
 .DS_Store
-**.hprof
-/.profileconfig.json
 
-# Registry files
-/minecraft_data/
-/.minestom_tmp/
-
-/chunks/
-
-# Created by .ignore support plugin (hsz.mobi)
-### Java template
-# Compiled class file
+# Java
 *.class
-
-# Log file
 *.log
-
-# BlueJ files
 *.ctxt
+hs_err_pid*
+**.hprof
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
+# Archives
 *.jar
 *.war
 *.nar
@@ -30,41 +16,38 @@
 *.zip
 *.tar.gz
 *.rar
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-
-### Gradle template
-**/.gradle
-**/build/
-
-# Ignore Gradle GUI config
-gradle-app.setting
-
-# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
 
-# Cache of project
+# Gradle
+**/.gradle
+**/build/
+gradle-app.setting
 .gradletasknamecache
 
-# IDEA files
+# IDEs
 .idea/
-**/out/
-
-# VSCode files
 .vscode/
+.mtj.tmp/
+**/out/
 **/bin/
 
-# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
-# gradle/wrapper/gradle-wrapper.properties
+# Kotlin
+.kotlin/
 
-/src/main/java/com/mcecraft/
+# Coding agents
+.claude/
+.cursor/
+.aider*
+.aiderignore
+.codeium/
+.continue/
+.windsurf/
+.zed/
+.github/copilot/
+CLAUDE.md
+AGENTS.md
+GEMINI.md
 
-# When running the demo we generate the extensions folder
-# Incase people are using IntelliJ to run the server, this will exclude extensions from any folder.
-/demo/extensions
-/extensions
+# JFR
+/.profileconfig.json
 
-# When saving the world in the demo we generate the world folder
-# Incase people are using IntelliJ to run the server, this will exclude the world folder.
-/demo/world

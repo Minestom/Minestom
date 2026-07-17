@@ -2,100 +2,89 @@ package net.minestom.codegen;
 
 import com.google.gson.JsonObject;
 import com.palantir.javapoet.*;
+import org.jetbrains.annotations.ApiStatus;
 
 import javax.lang.model.element.Modifier;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.file.Path;
-import java.util.Objects;
+import java.util.function.Function;
 
-public record RegistryGenerator(Path outputFolder) implements MinestomCodeGenerator {
-    public RegistryGenerator {
-        Objects.requireNonNull(outputFolder, "Output folder cannot be null");
-    }
+record RegistryGenerator(Codegen codegen) {
 
-    public void generate(InputStream resourceFile, String packageName, String typeName, String loaderName, String generatedName) {
-        ensureDirectory(outputFolder);
-
-        ClassName typeClass = ClassName.get(packageName, typeName);
-        ClassName loaderClass = ClassName.get(packageName, loaderName);
-        JsonObject json = GSON.fromJson(new InputStreamReader(resourceFile), JsonObject.class);
-        ClassName generatedCN = ClassName.get(packageName, generatedName);
-        // BlockConstants class
-        TypeSpec.Builder blockConstantsClass = TypeSpec.interfaceBuilder(generatedCN)
-                // Add @SuppressWarnings("unused")
-                .addModifiers(Modifier.SEALED)
-                .addPermittedSubclass(typeClass)
-                .addAnnotation(AnnotationSpec.builder(SuppressWarnings.class).addMember("value", "$S", "unused").build())
-                .addJavadoc(generateJavadoc(typeClass));
-
-        // Use data
-        json.keySet().forEach(namespace -> {
-            final String constantName = toConstant(namespace);
-            final String namespaceString = namespaceShort(namespace);
-            blockConstantsClass.addField(
-                    FieldSpec.builder(typeClass, constantName)
-                            .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                            .initializer(
-                                    // TypeClass.CONSTANT_NAME = LoaderClass.get(namespaceString)
-                                    "$T.get($S)",
-                                    loaderClass,
-                                    namespaceString
-                            )
-                            .build()
-            );
-        });
-        writeFiles(JavaFile.builder(packageName, blockConstantsClass.build())
-                .indent("    ")
-                .skipJavaLangImports(true)
-                .build()
+    void generate(Generators.StaticRegistrySpec spec) {
+        ClassName typeClass = ClassName.get(spec.packageName(), spec.typeName());
+        ClassName loaderClass = ClassName.get(spec.packageName(), spec.loaderName());
+        ClassName keysClass = ClassName.get(spec.packageName(), spec.typeName() + "Keys");
+        generateKeys(spec.key(), typeClass, keysClass, true);
+        generateConstants(
+                spec.key(),
+                typeClass,
+                ClassName.get(spec.packageName(), spec.generatedName()),
+                typeClass,
+                namespace -> CodeBlock.of("$T.get($T.$L)", loaderClass, keysClass, codegen.constantName(namespace))
         );
+        generateTags(spec.key(), typeClass);
     }
 
-    public void generateKeys(InputStream resourceFile, String packageName, String typeName) {
-        ensureDirectory(outputFolder);
-
-        ClassName typeClass = ClassName.bestGuess(packageName + "." + typeName); // Use bestGuess to handle nested class
+    void generate(Generators.DynamicRegistrySpec spec) {
+        ClassName typeClass = ClassName.bestGuess(spec.packageName() + "." + spec.typeName());
         ClassName registryKeyClass = ClassName.get("net.minestom.server.registry", "RegistryKey");
-        ParameterizedTypeName typedRegistryKeyClass = ParameterizedTypeName.get(registryKeyClass, typeClass);
-
-        JsonObject json = GSON.fromJson(new InputStreamReader(resourceFile), JsonObject.class);
-        ClassName generatedCN = ClassName.get(packageName, typeName + "s");
-        // BlockConstants class
-        TypeSpec.Builder blockConstantsClass = TypeSpec.interfaceBuilder(generatedCN)
-                // Add @SuppressWarnings("unused")
-                .addModifiers(Modifier.SEALED)
-                .addPermittedSubclass(typeClass)
-                .addAnnotation(AnnotationSpec.builder(SuppressWarnings.class).addMember("value", "$S", "unused").build())
-                .addJavadoc(generateJavadoc(typeClass));
-
-        // Use data
-        json.keySet().forEach(namespace -> {
-            final String constantName = toConstant(namespace);
-            final String namespaceString = namespaceShort(namespace);
-            blockConstantsClass.addField(
-                    FieldSpec.builder(typedRegistryKeyClass, constantName)
-                            .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                            .initializer(
-                                    // RegistryKey<Biome> CONSTANT_NAME = RegistryKey.unsafeOf(nameSpaceString)
-                                    "$T.unsafeOf($S)",
-                                    registryKeyClass,
-                                    namespaceString
-                            )
-                            .build()
-            );
-        });
-
-        // Write files
-        writeFiles(JavaFile.builder(packageName, blockConstantsClass.build())
-                .indent("    ")
-                .skipJavaLangImports(true)
-                .build()
+        generateConstants(
+                spec.key(),
+                typeClass,
+                ClassName.get(spec.packageName(), spec.generatedName()),
+                ParameterizedTypeName.get(registryKeyClass, typeClass),
+                namespace -> CodeBlock.of("$T.unsafeOf($S)", registryKeyClass, codegen.namespaceShort(namespace))
         );
+        generateTags(spec.key(), typeClass);
     }
 
-    @Override
-    public void generate() {
-        throw new UnsupportedOperationException("Use generate(InputStream, String, String, String, String) instead");
+    void generateKeys(String key, ClassName typeClass, ClassName generatedClass, boolean publicKeys) {
+        final ClassName registryKeyClass = ClassName.get("net.minestom.server.registry", "RegistryKey");
+        final TypeSpec.Builder constants = constantsBuilder(typeClass, generatedClass, publicKeys);
+        addFields(codegen.objectResource(key), constants,
+                ParameterizedTypeName.get(registryKeyClass, typeClass),
+                namespace -> CodeBlock.of("$T.unsafeOf($S)", registryKeyClass, codegen.namespaceShort(namespace)));
+        codegen.write(codegen.javaFile(generatedClass.packageName(), constants.build()));
+    }
+
+    void generateTags(String key, ClassName typeClass) {
+        final JsonObject tags = codegen.optionalObjectResource("tags/" + key);
+        if (tags == null) return;
+
+        final ClassName tagKeyClass = ClassName.get("net.minestom.server.registry", "TagKey");
+        final ClassName generatedClass = ClassName.get(typeClass.packageName(), typeClass.simpleName() + "Tags");
+        final TypeSpec.Builder constants = constantsBuilder(typeClass, generatedClass, true);
+        addFields(tags, constants, ParameterizedTypeName.get(tagKeyClass, typeClass),
+                namespace -> CodeBlock.of("$T.unsafeOf($S)", tagKeyClass, codegen.namespaceShort(namespace)));
+        codegen.write(codegen.javaFile(generatedClass.packageName(), constants.build()));
+    }
+
+    private void generateConstants(String key, ClassName permittedType, ClassName generatedClass,
+                                   TypeName fieldType, Function<String, CodeBlock> initializer) {
+        JsonObject json = codegen.objectResource(key);
+        TypeSpec.Builder constants = constantsBuilder(permittedType, generatedClass, false);
+        addFields(json, constants, fieldType, initializer);
+        codegen.write(codegen.javaFile(generatedClass.packageName(), constants.build()));
+    }
+
+    private TypeSpec.Builder constantsBuilder(ClassName permittedType, ClassName generatedClass, boolean publicConstants) {
+        final TypeSpec.Builder constants = TypeSpec.interfaceBuilder(generatedClass)
+                .addAnnotation(codegen.suppressUnused())
+                .addJavadoc(codegen.constantsJavadoc(permittedType));
+        if (publicConstants) {
+            constants.addModifiers(Modifier.PUBLIC).addAnnotation(ApiStatus.NonExtendable.class);
+        } else {
+            constants.addModifiers(Modifier.SEALED).addPermittedSubclass(permittedType);
+        }
+        return constants;
+    }
+
+    private void addFields(JsonObject json, TypeSpec.Builder constants, TypeName fieldType,
+                           Function<String, CodeBlock> initializer) {
+        json.keySet().forEach(namespace -> constants.addField(
+                FieldSpec.builder(fieldType, codegen.constantName(namespace))
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                        .initializer(initializer.apply(namespace))
+                        .build()
+        ));
     }
 }

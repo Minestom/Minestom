@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with: # We have to fetch full history because we need old tags
           fetch-depth: 0
       - name: Setup Java
@@ -18,6 +18,20 @@ jobs:
           java-version: 25
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6
+
+      - name: Run Tracing Agent # There is a slight race that we have to solve by rerunning
+        run: ./gradlew -Pagent test
+
+      - name: Copy Reachability Metadata
+        run: ./gradlew metadataCopy
+
+      - name: Verify Metadata
+        run: |
+          if ! git diff --quiet src/main/resources/META-INF/native-image; then
+            echo "Reachability metadata generated during the release build does not match the committed files in the repository."
+          else
+            echo "Reachability metadata is fully synchronized."
+          fi
 
       - name: Gradle pre-run
         run: ./gradlew determineMinecraftVersion --no-configuration-cache
@@ -51,7 +65,7 @@ jobs:
           MINESTOM_VERSION: ${{ steps.version.outputs.version }}
 
       - name: Publish to Maven Central
-        if: github.repository_owner == 'Minestom'
+        if: github.repository == 'Minestom/Minestom'
         run: ./gradlew publishAggregationToCentralPortal
         env:
           MINESTOM_VERSION: ${{ steps.version.outputs.version }}

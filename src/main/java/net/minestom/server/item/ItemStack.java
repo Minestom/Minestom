@@ -20,6 +20,7 @@ import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.component.CustomData;
 import net.minestom.server.item.component.CustomModelData;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
@@ -55,7 +56,7 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
     Codec<ItemStack> CODEC = new StructCodec<>() {
         // These exist because Mojang optionally decodes count (ie missing will default to 1),
         // but when encoding they always include the 1. We want to preserve this behavior and
-        // since its currently a one off we can just do it here in a gross way.
+        // since it's currently a one off we can just do it here in a gross way.
         private static final StructCodec<ItemStack> DECODER = StructCodec.struct(
                 "id", Material.CODEC, ItemStack::material,
                 "count", Codec.INT.optional(1), ItemStack::amount,
@@ -112,9 +113,21 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
      * Converts this item to an NBT tag containing the id (material), count (amount), and components.
      *
      * @param nbtCompound The nbt representation of the item
+     * @deprecated Use {@link #fromItemNBT(CompoundBinaryTag, Registries)} instead.
      */
+    @Deprecated
     static ItemStack fromItemNBT(CompoundBinaryTag nbtCompound) {
-        final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
+        return fromItemNBT(nbtCompound, MinecraftServer.process());
+    }
+
+    /**
+     * Converts this item to an NBT tag containing the id (material), count (amount), and components.
+     *
+     * @param nbtCompound The nbt representation of the item
+     * @param registries The registries to use when decoding
+     */
+    static ItemStack fromItemNBT(CompoundBinaryTag nbtCompound, Registries registries) {
+        final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, registries);
         return CODEC.decode(coder, nbtCompound).orElseThrow("Invalid NBT for ItemStack");
     }
 
@@ -126,6 +139,14 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
 
     @Contract(pure = true)
     DataComponentMap componentPatch();
+
+    /**
+     * Returns the resolved component map, including material defaults and explicit overrides.
+     *
+     * @return the complete resolved component map
+     */
+    @Contract(pure = true)
+    DataComponentMap components();
 
     @Contract(value = "_, -> new", pure = true)
     ItemStack with(Consumer<Builder> consumer);
@@ -195,6 +216,15 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
      */
     @Contract(value = "_, -> new", pure = true)
     ItemStack without(DataComponent<?> component);
+
+    /**
+     * Returns a new ItemStack with the given component reset to the material default.
+     *
+     * @param component The component to reset
+     * @return A new ItemStack without an explicit override for the given component
+     */
+    @Contract(value = "_, -> new", pure = true)
+    ItemStack reset(DataComponent<?> component);
 
     @Contract(value = "_, -> new", pure = true)
     default ItemStack withCustomName(Component customName) {
@@ -277,8 +307,20 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
      * Converts this item to an NBT tag containing the id (material), count (amount), and components (diff)
      *
      * @return The nbt representation of the item
+     * @deprecated Use {@link #toItemNBT(Registries)} instead.
      */
-    CompoundBinaryTag toItemNBT();
+    @Deprecated
+    default CompoundBinaryTag toItemNBT() {
+        return toItemNBT(MinecraftServer.process());
+    }
+
+    /**
+     * Converts this item to an NBT tag containing the id (material), count (amount), and components (diff)
+     *
+     * @param registries The registries to use.
+     * @return The nbt representation of the item
+     */
+    CompoundBinaryTag toItemNBT(Registries registries);
 
     @Override
     default HoverEvent<HoverEvent.ShowItem> asHoverEvent(UnaryOperator<HoverEvent.ShowItem> op) {
@@ -317,8 +359,27 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
     sealed interface Hash permits ItemStackHashImpl.Air, ItemStackHashImpl.Item {
         Hash AIR = new ItemStackHashImpl.Air();
 
+        /**
+         * Creates a hash of an {@link ItemStack} using the server registries. Used in packets to identify the item.
+         *
+         * @param itemStack The item stack to hash
+         * @return the {@link Hash}
+         * @deprecated Use {@link #of(ItemStack, Registries)} instead.
+         */
+        @Deprecated
         static Hash of(ItemStack itemStack) {
-            return ItemStackHashImpl.of(new RegistryTranscoder<>(Transcoder.CRC32_HASH, MinecraftServer.process()), itemStack);
+            return of(itemStack, MinecraftServer.process());
+        }
+
+        /**
+         * Creates a hash of an {@link ItemStack} using the passed registries. Used in packets to identify the item.
+         *
+         * @param itemStack The item stack to hash
+         * @param registries The registries to use
+         * @return the {@link Hash}
+         */
+        static Hash of(ItemStack itemStack, Registries registries) {
+            return ItemStackHashImpl.of(new RegistryTranscoder<>(Transcoder.CRC32_HASH, registries), itemStack);
         }
 
         NetworkBuffer.Type<Hash> NETWORK_TYPE = ItemStackHashImpl.NETWORK_TYPE;

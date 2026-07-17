@@ -102,6 +102,18 @@ final class TranscoderJsonImpl implements Transcoder<JsonElement> {
     }
 
     @Override
+    public Result<Number> getNumber(JsonElement value) {
+        if (value instanceof JsonPrimitive primitive && primitive.isNumber())
+            return new Result.Ok<>(primitive.getAsNumber());
+        return new Result.Error<>("Not a number: " + value);
+    }
+
+    @Override
+    public JsonElement createNumber(Number value) {
+        return new JsonPrimitive(value);
+    }
+
+    @Override
     public Result<String> getString(JsonElement value) {
         if (!(value instanceof JsonPrimitive primitive))
             return new Result.Error<>("Not a string: " + value);

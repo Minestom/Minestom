@@ -14,7 +14,7 @@ import java.util.Collection;
 public sealed interface VillagerProfession extends StaticProtocolObject<VillagerProfession>, VillagerProfessions permits VillagerProfessionImpl {
 
     NetworkBuffer.Type<VillagerProfession> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(VillagerProfession::fromId, VillagerProfession::id);
-    Codec<VillagerProfession> NBT_TYPE = Codec.STRING.transform(VillagerProfession::fromKey, VillagerProfession::name);
+    Codec<VillagerProfession> NBT_TYPE = Codec.KEY.transform(VillagerProfession::fromKey, VillagerProfession::key);
 
     @Override
     default Key key() {

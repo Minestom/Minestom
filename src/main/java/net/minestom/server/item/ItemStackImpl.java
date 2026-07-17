@@ -2,7 +2,6 @@ package net.minestom.server.item;
 
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
@@ -10,16 +9,17 @@ import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.component.CustomData;
 import net.minestom.server.item.component.TooltipDisplay;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 
-record ItemStackImpl(Material material, int amount, DataComponentMap components) implements ItemStack {
+record ItemStackImpl(Material material, int amount, DataComponentMap componentPatch) implements ItemStack {
 
     static NetworkBuffer.Type<ItemStack> networkType(NetworkBuffer.Type<DataComponentMap> componentPatchType) {
         return new NetworkBuffer.Type<>() {
@@ -36,15 +36,15 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
 
                 buffer.write(NetworkBuffer.VAR_INT, value.amount());
                 buffer.write(NetworkBuffer.VAR_INT, value.material().id());
-                buffer.write(componentPatchType, ((ItemStackImpl) value).components());
+                buffer.write(componentPatchType, ((ItemStackImpl) value).componentPatch());
             }
 
             @Override
             public ItemStack read(NetworkBuffer buffer) {
-                int amount = buffer.read(NetworkBuffer.VAR_INT);
+                final int amount = buffer.read(NetworkBuffer.VAR_INT);
                 if (amount <= 0) return ItemStack.AIR;
-                Material material = Material.fromId(buffer.read(NetworkBuffer.VAR_INT));
-                DataComponentMap components = buffer.read(componentPatchType);
+                final Material material = buffer.read(Material.NETWORK_TYPE);
+                final DataComponentMap components = buffer.read(componentPatchType);
                 return ItemStackImpl.create(material, amount, components);
             }
         };
@@ -60,7 +60,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
     }
 
     public ItemStackImpl {
-        Check.notNull(material, "Material cannot be null");
+        Objects.requireNonNull(material, "Material cannot be null");
 
         // It is relevant to create the minimal diff of the prototype so that #isSimilar returns consistent
         // results for ItemStacks which would resolve to the same thing. For example, consider two items
@@ -71,8 +71,8 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         // max stack size of 64. If we did not do this, #isSimilar would return false for these two items because of
         // their different patches.
         // It is worth noting that the client would handle both cases perfectly fine.
-        if (components != DataComponentMap.EMPTY) {
-            components = DataComponentMap.diff(material.prototype(), components);
+        if (componentPatch != DataComponentMap.EMPTY) {
+            componentPatch = DataComponentMap.diff(material.prototype(), componentPatch);
         }
 
         // Having items with amount being 0 and material not being air kicks players
@@ -80,18 +80,18 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
     }
 
     @Override
-    public DataComponentMap componentPatch() {
-        return this.components;
+    public DataComponentMap components() {
+        return DataComponentMap.applyPatch(material.prototype(), componentPatch);
     }
 
     @Override
     public <T> @Nullable T get(DataComponent<T> component) {
-        return components.get(material.prototype(), component);
+        return componentPatch.get(material.prototype(), component);
     }
 
     @Override
     public boolean has(DataComponent<?> component) {
-        return components.has(material.prototype(), component);
+        return componentPatch.has(material.prototype(), component);
     }
 
     @Override
@@ -103,19 +103,18 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
 
     @Override
     public ItemStack withMaterial(Material material) {
-        if (material == Material.AIR) return ItemStack.AIR;
-        return new ItemStackImpl(material, Math.max(1, amount), components);
+        return create(material, Math.max(1, amount), componentPatch);
     }
 
     @Override
     public ItemStack withAmount(int amount) {
         if (amount <= 0) return ItemStack.AIR;
-        return create(material, amount, components);
+        return create(material, amount, componentPatch);
     }
 
     @Override
     public <T> ItemStack with(DataComponent<T> component, T value) {
-        return new ItemStackImpl(material, amount, components.set(component, value));
+        return create(material, amount, componentPatch.set(component, value));
     }
 
     @Override
@@ -123,7 +122,14 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         // We can be slightly smart here. If the component is not present, this will always be a noop.
         // No need to make a new patch with the removal only for it to be removed again when doing a diff.
         if (get(component) == null) return this;
-        return new ItemStackImpl(material, amount, components.remove(component));
+        return create(material, amount, componentPatch.remove(component));
+    }
+
+    @Override
+    public ItemStack reset(DataComponent<?> component) {
+        final DataComponentMap newComponentPatch = componentPatch.reset(component);
+        if (newComponentPatch == componentPatch) return this;
+        return create(material, amount, newComponentPatch);
     }
 
     @Override
@@ -145,25 +151,35 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
 
     @Override
     public boolean isSimilar(ItemStack itemStack) {
-        return material == itemStack.material() && components.equals(((ItemStackImpl) itemStack).components);
+        return material == itemStack.material() && componentPatch.equals(((ItemStackImpl) itemStack).componentPatch);
     }
 
     @Override
-    public CompoundBinaryTag toItemNBT() {
-        final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
+    public CompoundBinaryTag toItemNBT(Registries registries) {
+        final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, registries);
         return (CompoundBinaryTag) CODEC.encode(coder, this).orElseThrow("Invalid NBT for ItemStack");
     }
 
     @Override
     @Contract(value = "-> new", pure = true)
     public ItemStack.Builder builder() {
-        return new Builder(material, amount, components.toPatchBuilder());
+        return new Builder(material, amount, componentPatch.toPatchBuilder());
     }
 
     static final class Builder implements ItemStack.Builder {
+        private static final TooltipDisplay EXTRA_TOOLTIP_HIDE = new TooltipDisplay(false, Set.of(
+                DataComponents.BANNER_PATTERNS, DataComponents.BEES, DataComponents.BLOCK_ENTITY_DATA,
+                DataComponents.BLOCK_STATE, DataComponents.BUNDLE_CONTENTS, DataComponents.CHARGED_PROJECTILES,
+                DataComponents.CONTAINER, DataComponents.CONTAINER_LOOT, DataComponents.FIREWORK_EXPLOSION,
+                DataComponents.FIREWORKS, DataComponents.INSTRUMENT, DataComponents.MAP_ID,
+                DataComponents.PAINTING_VARIANT, DataComponents.POT_DECORATIONS, DataComponents.POTION_CONTENTS,
+                DataComponents.TROPICAL_FISH_PATTERN, DataComponents.WRITTEN_BOOK_CONTENT,
+                DataComponents.UNBREAKABLE, DataComponents.ATTRIBUTE_MODIFIERS
+        ));
+
         private Material material;
         private int amount;
-        private DataComponentMap.PatchBuilder components;
+        private final DataComponentMap.PatchBuilder components;
 
         Builder(Material material, int amount, DataComponentMap.PatchBuilder components) {
             this.material = material;
@@ -209,15 +225,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
 
         @Override
         public ItemStack.Builder hideExtraTooltip() {
-            return set(DataComponents.TOOLTIP_DISPLAY, new TooltipDisplay(false, Set.of(
-                    DataComponents.BANNER_PATTERNS, DataComponents.BEES, DataComponents.BLOCK_ENTITY_DATA,
-                    DataComponents.BLOCK_STATE, DataComponents.BUNDLE_CONTENTS, DataComponents.CHARGED_PROJECTILES,
-                    DataComponents.CONTAINER, DataComponents.CONTAINER_LOOT, DataComponents.FIREWORK_EXPLOSION,
-                    DataComponents.FIREWORKS, DataComponents.INSTRUMENT, DataComponents.MAP_ID,
-                    DataComponents.PAINTING_VARIANT, DataComponents.POT_DECORATIONS, DataComponents.POTION_CONTENTS,
-                    DataComponents.TROPICAL_FISH_PATTERN, DataComponents.WRITTEN_BOOK_CONTENT,
-                    DataComponents.UNBREAKABLE, DataComponents.ATTRIBUTE_MODIFIERS
-            )));
+            return set(DataComponents.TOOLTIP_DISPLAY, EXTRA_TOOLTIP_HIDE);
         }
 
         @Override

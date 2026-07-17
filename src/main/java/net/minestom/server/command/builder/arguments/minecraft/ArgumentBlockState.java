@@ -1,6 +1,5 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
-import net.kyori.adventure.key.InvalidKeyException;
 import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
@@ -40,12 +39,7 @@ public class ArgumentBlockState extends Argument<Block> {
 
         if (nbtIndex == -1) {
             // Only block name
-            Block block;
-            try {
-                block = Block.fromKey(input);
-            } catch (InvalidKeyException ignored) {
-                block = null;
-            }
+            Block block = Block.fromKey(input);
             if (block == null)
                 throw new ArgumentSyntaxException("Invalid block type", input, INVALID_BLOCK);
             return block;

@@ -2,9 +2,7 @@ package net.minestom.server.adventure.audience;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
-import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
-import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.Component;
@@ -36,7 +34,7 @@ public interface PacketGroupingAudience extends ForwardingAudience {
      * @param players the players
      * @return the audience
      */
-    static PacketGroupingAudience of(Collection<Player> players) {
+    static PacketGroupingAudience of(Collection<? extends Player> players) {
         return () -> players;
     }
 
@@ -45,7 +43,7 @@ public interface PacketGroupingAudience extends ForwardingAudience {
      *
      * @return the connections
      */
-    Collection<Player> getPlayers();
+    Collection<? extends Player> getPlayers();
 
     /**
      * Broadcast a ServerPacket to all players of this audience
@@ -56,10 +54,9 @@ public interface PacketGroupingAudience extends ForwardingAudience {
         PacketSendingUtils.sendGroupedPacket(getPlayers(), packet);
     }
 
-    @Deprecated
     @Override
-    default void sendMessage(Identity source, Component message, MessageType type) {
-        Messenger.sendMessage(this.getPlayers(), message, ChatPosition.fromMessageType(type), source.uuid());
+    default void sendMessage(Component message) {
+        Messenger.sendMessage(this.getPlayers(), message, ChatPosition.SYSTEM_MESSAGE);
     }
 
     @Override

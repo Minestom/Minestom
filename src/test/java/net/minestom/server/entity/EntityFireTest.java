@@ -33,7 +33,7 @@ public class EntityFireTest
         }
 
         assertFalse(entity.getEntityMeta().isOnFire());
-        assertEquals(entity.getFireTicks(), 0);
+        assertEquals(0, entity.getFireTicks());
     }
 
     @Test
@@ -55,12 +55,10 @@ public class EntityFireTest
         assertEquals(0, entity.getFireTicks());
 
         // Explicit negative in event
-        env.listen(EntitySetFireEvent.class).followup(e -> {
-            e.setFireTicks(-1);
-        });
+        env.listen(EntitySetFireEvent.class).followup(e -> e.setFireTicks(-1));
 
         entity.setFireTicks(1);
-        assertEquals(entity.getFireTicks(), 0);
+        assertEquals(0, entity.getFireTicks());
     }
 
     @Test
@@ -116,9 +114,7 @@ public class EntityFireTest
         assertEquals(2, callCount.get());
 
         // Don't call if cancelled EntitySetFireEvent
-        env.listen(EntitySetFireEvent.class).followup(e -> {
-            e.setCancelled(true);
-        });
+        env.listen(EntitySetFireEvent.class).followup(e -> e.setCancelled(true));
         entity.setFireTicks(5);
         assertEquals(2, callCount.get());
     }
