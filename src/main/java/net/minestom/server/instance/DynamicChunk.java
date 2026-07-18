@@ -30,6 +30,7 @@ import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
@@ -377,53 +378,48 @@ public class DynamicChunk extends Chunk {
      */
     @Override
     public @Unmodifiable Map<Point, Block> getBlockEntities() {
-        synchronized (this) {
-            return this.entries.int2ObjectEntrySet().stream()
-                    .collect(Collectors.toUnmodifiableMap(e -> {
-                        final int index = e.getIntKey();
-                        final int x = CoordConversion.chunkBlockIndexGetX(index);
-                        final int y = CoordConversion.chunkBlockIndexGetY(index);
-                        final int z = CoordConversion.chunkBlockIndexGetZ(index);
-                        return new BlockVec(x, y, z);
-                    }, Map.Entry::getValue));
+        assertReadLock();
+        final Map<Point, Block> result = new HashMap<>();
+        for (final Int2ObjectMap.Entry<Block> entry : this.entries.int2ObjectEntrySet()) {
+            final int index = entry.getIntKey();
+            final int x = CoordConversion.chunkBlockIndexGetX(index);
+            final int y = CoordConversion.chunkBlockIndexGetY(index);
+            final int z = CoordConversion.chunkBlockIndexGetZ(index);
+            final BlockVec pos = new BlockVec(x, y, z);
+            final Block block = entry.getValue();
+            result.put(pos, block);
         }
+        return result;
     }
 
     @Override
     public void forEachBlockEntity(BiConsumer<Point, Block> consumer) {
-        synchronized (this) {
-            this.entries.int2ObjectEntrySet().forEach(e -> {
-                final int index = e.getIntKey();
-                final int x = CoordConversion.chunkBlockIndexGetX(index);
-                final int y = CoordConversion.chunkBlockIndexGetY(index);
-                final int z = CoordConversion.chunkBlockIndexGetZ(index);
-                final BlockVec pos = new BlockVec(x, y, z);
-                consumer.accept(pos, e.getValue());
-            });
-        }
+        assertReadLock();
+        this.entries.int2ObjectEntrySet().forEach(e -> {
+            final int index = e.getIntKey();
+            final int x = CoordConversion.chunkBlockIndexGetX(index);
+            final int y = CoordConversion.chunkBlockIndexGetY(index);
+            final int z = CoordConversion.chunkBlockIndexGetZ(index);
+            final BlockVec pos = new BlockVec(x, y, z);
+            consumer.accept(pos, e.getValue());
+        });
     }
 
     @Override
     public Map<Point, Block> filterBlockEntities(BiPredicate<Point, Block> filter) {
-        synchronized (this) {
-            final Map<Point, Block> accepted = new HashMap<>();
-            for (final Int2ObjectMap.Entry<Block> entry : this.entries.int2ObjectEntrySet()) {
-                final int index = entry.getIntKey();
-                final int x = CoordConversion.chunkBlockIndexGetX(index);
-                final int y = CoordConversion.chunkBlockIndexGetY(index);
-                final int z = CoordConversion.chunkBlockIndexGetZ(index);
-                final BlockVec pos = new BlockVec(x, y, z);
-                final Block block = entry.getValue();
-                if (filter.test(pos, block)) {
-                    accepted.put(pos, block);
-                }
+        assertReadLock();
+        final Map<Point, Block> accepted = new HashMap<>();
+        for (final Int2ObjectMap.Entry<Block> entry : this.entries.int2ObjectEntrySet()) {
+            final int index = entry.getIntKey();
+            final int x = CoordConversion.chunkBlockIndexGetX(index);
+            final int y = CoordConversion.chunkBlockIndexGetY(index);
+            final int z = CoordConversion.chunkBlockIndexGetZ(index);
+            final BlockVec pos = new BlockVec(x, y, z);
+            final Block block = entry.getValue();
+            if (filter.test(pos, block)) {
+                accepted.put(pos, block);
             }
-            return accepted;
         }
-    }
-
-    @ApiStatus.Internal
-    void assertLock() {
-        assert Thread.holdsLock(this) : "Chunk must be locked before access";
+        return accepted;
     }
 }
