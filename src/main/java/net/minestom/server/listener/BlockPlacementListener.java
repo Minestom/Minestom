@@ -104,7 +104,10 @@ public class BlockPlacementListener {
         //todo it feels like it should be possible to have better replacement rules than this, feels pretty scuffed.
         Point placementPosition = blockPosition;
         var interactedPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(interactedBlock);
-        if (!interactedBlock.isAir() && (interactedPlacementRule == null || !interactedPlacementRule.isSelfReplaceable(
+        // A replaceable clicked block (grass, snow layers, water) is replaced in place, like vanilla and the
+        // client's own prediction; the same check the neighbor position already gets below.
+        if (!interactedBlock.isAir() && !interactedBlock.registry().isReplaceable()
+                && (interactedPlacementRule == null || !interactedPlacementRule.isSelfReplaceable(
                 new BlockPlacementRule.Replacement(interactedBlock, blockFace, cursorPosition, false, useMaterial)))) {
             // If the block is not replaceable, try to place next to it.
             placementPosition = blockPosition.relative(blockFace);
