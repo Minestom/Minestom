@@ -135,6 +135,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected boolean hasPhysics = true;
     protected boolean collidesWithEntities = true;
     protected boolean preventBlockPlacement = true;
+    private volatile @Nullable Predicate<? super Player> placementRule;
 
     private Aerodynamics aerodynamics;
     protected int gravityTickCount; // Number of tick where gravity tick was applied
@@ -1901,6 +1902,26 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         // Can be overridden to allow for custom behaviour
         if (entityMeta instanceof ArmorStandMeta armorStandMeta && armorStandMeta.isMarker()) return false;
         return preventBlockPlacement;
+    }
+
+    /**
+     * Gets whether this entity prevents {@code placer} from placing a block it collides with: the
+     * {@link #updatePlacementRule(Predicate) placement rule} when one is set, {@link #preventBlockPlacement()} otherwise.
+     */
+    public boolean preventBlockPlacement(Player placer) {
+        final Predicate<? super Player> rule = placementRule;
+        return rule != null ? rule.test(placer) : preventBlockPlacement();
+    }
+
+    /**
+     * Changes which players this entity blocks placements for; {@code null} restores
+     * {@link #preventBlockPlacement()} for everyone.
+     * <p>
+     * Lets an entity hidden from some players (vanish, {@link #updateViewableRule(Predicate) viewable rules},
+     * virtual worlds) opt out of physically obstructing the players it does not exist for.
+     */
+    public void updatePlacementRule(@Nullable Predicate<? super Player> predicate) {
+        this.placementRule = predicate;
     }
 
     protected void updateCollisions() {

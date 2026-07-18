@@ -148,7 +148,7 @@ public class BlockPlacementListener {
         final ItemBlockState blockState = usedItem.get(DataComponents.BLOCK_STATE, ItemBlockState.EMPTY);
         final Block placedBlock = blockState.apply(useMaterial.block());
 
-        Entity collisionEntity = CollisionUtils.canPlaceBlockAt(instance, placementPosition, placedBlock);
+        Entity collisionEntity = CollisionUtils.canPlaceBlockAt(instance, placementPosition, placedBlock, player);
         if (collisionEntity != null) {
             // If a player is trying to place a block on themselves, the client sends a block change but does not set
             // the block on its own client, so it only needs an acknowledgement.
