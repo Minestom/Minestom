@@ -153,7 +153,7 @@ public final class MinecraftServer implements MinecraftConstants {
      * @throws NullPointerException if the server has not been initialized
      */
     public static Registries getRegistries() {
-        return Objects.requireNonNull(serverProcess, "serverProcess");
+        return Objects.requireNonNull(serverProcess, "serverProcess").registries();
     }
 
     public static GlobalEventHandler getGlobalEventHandler() {

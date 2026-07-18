@@ -15,7 +15,7 @@ public class ServerProcessTest {
     @Test
     public void registries() {
         var process = MinecraftServer.updateProcess();
-        assertSame(process, MinecraftServer.getRegistries());
+        assertSame(process.registries(), MinecraftServer.getRegistries());
     }
 
     @Test
