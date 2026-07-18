@@ -1,6 +1,5 @@
 package net.minestom.server.entity.player;
 
-import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.ChunkRange;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;

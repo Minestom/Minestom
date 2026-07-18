@@ -1,26 +1,30 @@
 package net.minestom.server.world;
 
-import net.kyori.adventure.key.Key;
+import net.minestom.server.registry.RegistryKey;
+import net.minestom.server.registry.RegistryTag;
+import net.minestom.server.utils.IntProvider;
+import net.minestom.server.world.attribute.EnvironmentAttributeMap;
+import net.minestom.server.world.clock.WorldClock;
+import net.minestom.server.world.timeline.Timeline;
 import org.jetbrains.annotations.Nullable;
 
 record DimensionTypeImpl(
-        boolean ultrawarm,
-        boolean natural,
-        double coordinateScale,
+        boolean hasFixedTime,
         boolean hasSkylight,
         boolean hasCeiling,
-        float ambientLight,
-        @Nullable Long fixedTime,
-        boolean piglinSafe,
-        boolean bedWorks,
-        boolean respawnAnchorWorks,
-        boolean hasRaids,
-        int logicalHeight,
+        boolean hasEnderDragonFight,
+        double coordinateScale,
         int minY,
         int height,
+        int logicalHeight,
         String infiniburn,
-        Key effects,
+        float ambientLight,
+        IntProvider monsterSpawnLightLevel,
         int monsterSpawnBlockLightLimit,
-        int monsterSpawnLightLevel
+        Skybox skybox,
+        CardinalLight cardinalLight,
+        EnvironmentAttributeMap attributes,
+        RegistryTag<Timeline> timelines,
+        @Nullable RegistryKey<WorldClock> defaultClock
 ) implements DimensionType {
 }

@@ -7,309 +7,319 @@ package net.minestom.server.entity;
  */
 @SuppressWarnings("unused")
 sealed interface EntityTypes permits EntityType {
-    EntityType ACACIA_BOAT = EntityTypeImpl.get("acacia_boat");
+    EntityType ACACIA_BOAT = EntityTypeImpl.get(EntityTypeKeys.ACACIA_BOAT);
 
-    EntityType ACACIA_CHEST_BOAT = EntityTypeImpl.get("acacia_chest_boat");
+    EntityType ACACIA_CHEST_BOAT = EntityTypeImpl.get(EntityTypeKeys.ACACIA_CHEST_BOAT);
 
-    EntityType ALLAY = EntityTypeImpl.get("allay");
+    EntityType ALLAY = EntityTypeImpl.get(EntityTypeKeys.ALLAY);
 
-    EntityType AREA_EFFECT_CLOUD = EntityTypeImpl.get("area_effect_cloud");
+    EntityType AREA_EFFECT_CLOUD = EntityTypeImpl.get(EntityTypeKeys.AREA_EFFECT_CLOUD);
 
-    EntityType ARMADILLO = EntityTypeImpl.get("armadillo");
+    EntityType ARMADILLO = EntityTypeImpl.get(EntityTypeKeys.ARMADILLO);
 
-    EntityType ARMOR_STAND = EntityTypeImpl.get("armor_stand");
+    EntityType ARMOR_STAND = EntityTypeImpl.get(EntityTypeKeys.ARMOR_STAND);
 
-    EntityType ARROW = EntityTypeImpl.get("arrow");
+    EntityType ARROW = EntityTypeImpl.get(EntityTypeKeys.ARROW);
 
-    EntityType AXOLOTL = EntityTypeImpl.get("axolotl");
+    EntityType AXOLOTL = EntityTypeImpl.get(EntityTypeKeys.AXOLOTL);
 
-    EntityType BAMBOO_CHEST_RAFT = EntityTypeImpl.get("bamboo_chest_raft");
+    EntityType BAMBOO_CHEST_RAFT = EntityTypeImpl.get(EntityTypeKeys.BAMBOO_CHEST_RAFT);
 
-    EntityType BAMBOO_RAFT = EntityTypeImpl.get("bamboo_raft");
+    EntityType BAMBOO_RAFT = EntityTypeImpl.get(EntityTypeKeys.BAMBOO_RAFT);
 
-    EntityType BAT = EntityTypeImpl.get("bat");
+    EntityType BAT = EntityTypeImpl.get(EntityTypeKeys.BAT);
 
-    EntityType BEE = EntityTypeImpl.get("bee");
+    EntityType BEE = EntityTypeImpl.get(EntityTypeKeys.BEE);
 
-    EntityType BIRCH_BOAT = EntityTypeImpl.get("birch_boat");
+    EntityType BIRCH_BOAT = EntityTypeImpl.get(EntityTypeKeys.BIRCH_BOAT);
 
-    EntityType BIRCH_CHEST_BOAT = EntityTypeImpl.get("birch_chest_boat");
+    EntityType BIRCH_CHEST_BOAT = EntityTypeImpl.get(EntityTypeKeys.BIRCH_CHEST_BOAT);
 
-    EntityType BLAZE = EntityTypeImpl.get("blaze");
+    EntityType BLAZE = EntityTypeImpl.get(EntityTypeKeys.BLAZE);
 
-    EntityType BLOCK_DISPLAY = EntityTypeImpl.get("block_display");
+    EntityType BLOCK_DISPLAY = EntityTypeImpl.get(EntityTypeKeys.BLOCK_DISPLAY);
 
-    EntityType BOGGED = EntityTypeImpl.get("bogged");
+    EntityType BOGGED = EntityTypeImpl.get(EntityTypeKeys.BOGGED);
 
-    EntityType BREEZE = EntityTypeImpl.get("breeze");
+    EntityType BREEZE = EntityTypeImpl.get(EntityTypeKeys.BREEZE);
 
-    EntityType BREEZE_WIND_CHARGE = EntityTypeImpl.get("breeze_wind_charge");
+    EntityType BREEZE_WIND_CHARGE = EntityTypeImpl.get(EntityTypeKeys.BREEZE_WIND_CHARGE);
 
-    EntityType CAMEL = EntityTypeImpl.get("camel");
+    EntityType CAMEL = EntityTypeImpl.get(EntityTypeKeys.CAMEL);
 
-    EntityType CAT = EntityTypeImpl.get("cat");
+    EntityType CAMEL_HUSK = EntityTypeImpl.get(EntityTypeKeys.CAMEL_HUSK);
 
-    EntityType CAVE_SPIDER = EntityTypeImpl.get("cave_spider");
+    EntityType CAT = EntityTypeImpl.get(EntityTypeKeys.CAT);
 
-    EntityType CHERRY_BOAT = EntityTypeImpl.get("cherry_boat");
+    EntityType CAVE_SPIDER = EntityTypeImpl.get(EntityTypeKeys.CAVE_SPIDER);
 
-    EntityType CHERRY_CHEST_BOAT = EntityTypeImpl.get("cherry_chest_boat");
+    EntityType CHERRY_BOAT = EntityTypeImpl.get(EntityTypeKeys.CHERRY_BOAT);
 
-    EntityType CHEST_MINECART = EntityTypeImpl.get("chest_minecart");
+    EntityType CHERRY_CHEST_BOAT = EntityTypeImpl.get(EntityTypeKeys.CHERRY_CHEST_BOAT);
 
-    EntityType CHICKEN = EntityTypeImpl.get("chicken");
+    EntityType CHEST_MINECART = EntityTypeImpl.get(EntityTypeKeys.CHEST_MINECART);
 
-    EntityType COD = EntityTypeImpl.get("cod");
+    EntityType CHICKEN = EntityTypeImpl.get(EntityTypeKeys.CHICKEN);
 
-    EntityType COPPER_GOLEM = EntityTypeImpl.get("copper_golem");
+    EntityType COD = EntityTypeImpl.get(EntityTypeKeys.COD);
 
-    EntityType COMMAND_BLOCK_MINECART = EntityTypeImpl.get("command_block_minecart");
+    EntityType COPPER_GOLEM = EntityTypeImpl.get(EntityTypeKeys.COPPER_GOLEM);
 
-    EntityType COW = EntityTypeImpl.get("cow");
+    EntityType COMMAND_BLOCK_MINECART = EntityTypeImpl.get(EntityTypeKeys.COMMAND_BLOCK_MINECART);
 
-    EntityType CREAKING = EntityTypeImpl.get("creaking");
+    EntityType COW = EntityTypeImpl.get(EntityTypeKeys.COW);
 
-    EntityType CREEPER = EntityTypeImpl.get("creeper");
+    EntityType CREAKING = EntityTypeImpl.get(EntityTypeKeys.CREAKING);
 
-    EntityType DARK_OAK_BOAT = EntityTypeImpl.get("dark_oak_boat");
+    EntityType CREEPER = EntityTypeImpl.get(EntityTypeKeys.CREEPER);
 
-    EntityType DARK_OAK_CHEST_BOAT = EntityTypeImpl.get("dark_oak_chest_boat");
+    EntityType DARK_OAK_BOAT = EntityTypeImpl.get(EntityTypeKeys.DARK_OAK_BOAT);
 
-    EntityType DOLPHIN = EntityTypeImpl.get("dolphin");
+    EntityType DARK_OAK_CHEST_BOAT = EntityTypeImpl.get(EntityTypeKeys.DARK_OAK_CHEST_BOAT);
 
-    EntityType DONKEY = EntityTypeImpl.get("donkey");
+    EntityType DOLPHIN = EntityTypeImpl.get(EntityTypeKeys.DOLPHIN);
 
-    EntityType DRAGON_FIREBALL = EntityTypeImpl.get("dragon_fireball");
+    EntityType DONKEY = EntityTypeImpl.get(EntityTypeKeys.DONKEY);
 
-    EntityType DROWNED = EntityTypeImpl.get("drowned");
+    EntityType DRAGON_FIREBALL = EntityTypeImpl.get(EntityTypeKeys.DRAGON_FIREBALL);
 
-    EntityType EGG = EntityTypeImpl.get("egg");
+    EntityType DROWNED = EntityTypeImpl.get(EntityTypeKeys.DROWNED);
 
-    EntityType ELDER_GUARDIAN = EntityTypeImpl.get("elder_guardian");
+    EntityType EGG = EntityTypeImpl.get(EntityTypeKeys.EGG);
 
-    EntityType ENDERMAN = EntityTypeImpl.get("enderman");
+    EntityType ELDER_GUARDIAN = EntityTypeImpl.get(EntityTypeKeys.ELDER_GUARDIAN);
 
-    EntityType ENDERMITE = EntityTypeImpl.get("endermite");
+    EntityType ENDERMAN = EntityTypeImpl.get(EntityTypeKeys.ENDERMAN);
 
-    EntityType ENDER_DRAGON = EntityTypeImpl.get("ender_dragon");
+    EntityType ENDERMITE = EntityTypeImpl.get(EntityTypeKeys.ENDERMITE);
 
-    EntityType ENDER_PEARL = EntityTypeImpl.get("ender_pearl");
+    EntityType ENDER_DRAGON = EntityTypeImpl.get(EntityTypeKeys.ENDER_DRAGON);
 
-    EntityType END_CRYSTAL = EntityTypeImpl.get("end_crystal");
+    EntityType ENDER_PEARL = EntityTypeImpl.get(EntityTypeKeys.ENDER_PEARL);
 
-    EntityType EVOKER = EntityTypeImpl.get("evoker");
+    EntityType END_CRYSTAL = EntityTypeImpl.get(EntityTypeKeys.END_CRYSTAL);
 
-    EntityType EVOKER_FANGS = EntityTypeImpl.get("evoker_fangs");
+    EntityType EVOKER = EntityTypeImpl.get(EntityTypeKeys.EVOKER);
 
-    EntityType EXPERIENCE_BOTTLE = EntityTypeImpl.get("experience_bottle");
+    EntityType EVOKER_FANGS = EntityTypeImpl.get(EntityTypeKeys.EVOKER_FANGS);
 
-    EntityType EXPERIENCE_ORB = EntityTypeImpl.get("experience_orb");
+    EntityType EXPERIENCE_BOTTLE = EntityTypeImpl.get(EntityTypeKeys.EXPERIENCE_BOTTLE);
 
-    EntityType EYE_OF_ENDER = EntityTypeImpl.get("eye_of_ender");
+    EntityType EXPERIENCE_ORB = EntityTypeImpl.get(EntityTypeKeys.EXPERIENCE_ORB);
 
-    EntityType FALLING_BLOCK = EntityTypeImpl.get("falling_block");
+    EntityType EYE_OF_ENDER = EntityTypeImpl.get(EntityTypeKeys.EYE_OF_ENDER);
 
-    EntityType FIREBALL = EntityTypeImpl.get("fireball");
+    EntityType FALLING_BLOCK = EntityTypeImpl.get(EntityTypeKeys.FALLING_BLOCK);
 
-    EntityType FIREWORK_ROCKET = EntityTypeImpl.get("firework_rocket");
+    EntityType FIREBALL = EntityTypeImpl.get(EntityTypeKeys.FIREBALL);
 
-    EntityType FOX = EntityTypeImpl.get("fox");
+    EntityType FIREWORK_ROCKET = EntityTypeImpl.get(EntityTypeKeys.FIREWORK_ROCKET);
 
-    EntityType FROG = EntityTypeImpl.get("frog");
+    EntityType FOX = EntityTypeImpl.get(EntityTypeKeys.FOX);
 
-    EntityType FURNACE_MINECART = EntityTypeImpl.get("furnace_minecart");
+    EntityType FROG = EntityTypeImpl.get(EntityTypeKeys.FROG);
 
-    EntityType GHAST = EntityTypeImpl.get("ghast");
+    EntityType FURNACE_MINECART = EntityTypeImpl.get(EntityTypeKeys.FURNACE_MINECART);
 
-    EntityType HAPPY_GHAST = EntityTypeImpl.get("happy_ghast");
+    EntityType GHAST = EntityTypeImpl.get(EntityTypeKeys.GHAST);
 
-    EntityType GIANT = EntityTypeImpl.get("giant");
+    EntityType HAPPY_GHAST = EntityTypeImpl.get(EntityTypeKeys.HAPPY_GHAST);
 
-    EntityType GLOW_ITEM_FRAME = EntityTypeImpl.get("glow_item_frame");
+    EntityType GIANT = EntityTypeImpl.get(EntityTypeKeys.GIANT);
 
-    EntityType GLOW_SQUID = EntityTypeImpl.get("glow_squid");
+    EntityType GLOW_ITEM_FRAME = EntityTypeImpl.get(EntityTypeKeys.GLOW_ITEM_FRAME);
 
-    EntityType GOAT = EntityTypeImpl.get("goat");
+    EntityType GLOW_SQUID = EntityTypeImpl.get(EntityTypeKeys.GLOW_SQUID);
 
-    EntityType GUARDIAN = EntityTypeImpl.get("guardian");
+    EntityType GOAT = EntityTypeImpl.get(EntityTypeKeys.GOAT);
 
-    EntityType HOGLIN = EntityTypeImpl.get("hoglin");
+    EntityType GUARDIAN = EntityTypeImpl.get(EntityTypeKeys.GUARDIAN);
 
-    EntityType HOPPER_MINECART = EntityTypeImpl.get("hopper_minecart");
+    EntityType HOGLIN = EntityTypeImpl.get(EntityTypeKeys.HOGLIN);
 
-    EntityType HORSE = EntityTypeImpl.get("horse");
+    EntityType HOPPER_MINECART = EntityTypeImpl.get(EntityTypeKeys.HOPPER_MINECART);
 
-    EntityType HUSK = EntityTypeImpl.get("husk");
+    EntityType HORSE = EntityTypeImpl.get(EntityTypeKeys.HORSE);
 
-    EntityType ILLUSIONER = EntityTypeImpl.get("illusioner");
+    EntityType HUSK = EntityTypeImpl.get(EntityTypeKeys.HUSK);
 
-    EntityType INTERACTION = EntityTypeImpl.get("interaction");
+    EntityType ILLUSIONER = EntityTypeImpl.get(EntityTypeKeys.ILLUSIONER);
 
-    EntityType IRON_GOLEM = EntityTypeImpl.get("iron_golem");
+    EntityType INTERACTION = EntityTypeImpl.get(EntityTypeKeys.INTERACTION);
 
-    EntityType ITEM = EntityTypeImpl.get("item");
+    EntityType IRON_GOLEM = EntityTypeImpl.get(EntityTypeKeys.IRON_GOLEM);
 
-    EntityType ITEM_DISPLAY = EntityTypeImpl.get("item_display");
+    EntityType ITEM = EntityTypeImpl.get(EntityTypeKeys.ITEM);
 
-    EntityType ITEM_FRAME = EntityTypeImpl.get("item_frame");
+    EntityType ITEM_DISPLAY = EntityTypeImpl.get(EntityTypeKeys.ITEM_DISPLAY);
 
-    EntityType JUNGLE_BOAT = EntityTypeImpl.get("jungle_boat");
+    EntityType ITEM_FRAME = EntityTypeImpl.get(EntityTypeKeys.ITEM_FRAME);
 
-    EntityType JUNGLE_CHEST_BOAT = EntityTypeImpl.get("jungle_chest_boat");
+    EntityType JUNGLE_BOAT = EntityTypeImpl.get(EntityTypeKeys.JUNGLE_BOAT);
 
-    EntityType LEASH_KNOT = EntityTypeImpl.get("leash_knot");
+    EntityType JUNGLE_CHEST_BOAT = EntityTypeImpl.get(EntityTypeKeys.JUNGLE_CHEST_BOAT);
 
-    EntityType LIGHTNING_BOLT = EntityTypeImpl.get("lightning_bolt");
+    EntityType LEASH_KNOT = EntityTypeImpl.get(EntityTypeKeys.LEASH_KNOT);
 
-    EntityType LLAMA = EntityTypeImpl.get("llama");
+    EntityType LIGHTNING_BOLT = EntityTypeImpl.get(EntityTypeKeys.LIGHTNING_BOLT);
 
-    EntityType LLAMA_SPIT = EntityTypeImpl.get("llama_spit");
+    EntityType LLAMA = EntityTypeImpl.get(EntityTypeKeys.LLAMA);
 
-    EntityType MAGMA_CUBE = EntityTypeImpl.get("magma_cube");
+    EntityType LLAMA_SPIT = EntityTypeImpl.get(EntityTypeKeys.LLAMA_SPIT);
 
-    EntityType MANGROVE_BOAT = EntityTypeImpl.get("mangrove_boat");
+    EntityType MAGMA_CUBE = EntityTypeImpl.get(EntityTypeKeys.MAGMA_CUBE);
 
-    EntityType MANGROVE_CHEST_BOAT = EntityTypeImpl.get("mangrove_chest_boat");
+    EntityType MANGROVE_BOAT = EntityTypeImpl.get(EntityTypeKeys.MANGROVE_BOAT);
 
-    EntityType MANNEQUIN = EntityTypeImpl.get("mannequin");
+    EntityType MANGROVE_CHEST_BOAT = EntityTypeImpl.get(EntityTypeKeys.MANGROVE_CHEST_BOAT);
 
-    EntityType MARKER = EntityTypeImpl.get("marker");
+    EntityType MANNEQUIN = EntityTypeImpl.get(EntityTypeKeys.MANNEQUIN);
 
-    EntityType MINECART = EntityTypeImpl.get("minecart");
+    EntityType MARKER = EntityTypeImpl.get(EntityTypeKeys.MARKER);
 
-    EntityType MOOSHROOM = EntityTypeImpl.get("mooshroom");
+    EntityType MINECART = EntityTypeImpl.get(EntityTypeKeys.MINECART);
 
-    EntityType MULE = EntityTypeImpl.get("mule");
+    EntityType MOOSHROOM = EntityTypeImpl.get(EntityTypeKeys.MOOSHROOM);
 
-    EntityType OAK_BOAT = EntityTypeImpl.get("oak_boat");
+    EntityType MULE = EntityTypeImpl.get(EntityTypeKeys.MULE);
 
-    EntityType OAK_CHEST_BOAT = EntityTypeImpl.get("oak_chest_boat");
+    EntityType NAUTILUS = EntityTypeImpl.get(EntityTypeKeys.NAUTILUS);
 
-    EntityType OCELOT = EntityTypeImpl.get("ocelot");
+    EntityType OAK_BOAT = EntityTypeImpl.get(EntityTypeKeys.OAK_BOAT);
 
-    EntityType OMINOUS_ITEM_SPAWNER = EntityTypeImpl.get("ominous_item_spawner");
+    EntityType OAK_CHEST_BOAT = EntityTypeImpl.get(EntityTypeKeys.OAK_CHEST_BOAT);
 
-    EntityType PAINTING = EntityTypeImpl.get("painting");
+    EntityType OCELOT = EntityTypeImpl.get(EntityTypeKeys.OCELOT);
 
-    EntityType PALE_OAK_BOAT = EntityTypeImpl.get("pale_oak_boat");
+    EntityType OMINOUS_ITEM_SPAWNER = EntityTypeImpl.get(EntityTypeKeys.OMINOUS_ITEM_SPAWNER);
 
-    EntityType PALE_OAK_CHEST_BOAT = EntityTypeImpl.get("pale_oak_chest_boat");
+    EntityType PAINTING = EntityTypeImpl.get(EntityTypeKeys.PAINTING);
 
-    EntityType PANDA = EntityTypeImpl.get("panda");
+    EntityType PALE_OAK_BOAT = EntityTypeImpl.get(EntityTypeKeys.PALE_OAK_BOAT);
 
-    EntityType PARROT = EntityTypeImpl.get("parrot");
+    EntityType PALE_OAK_CHEST_BOAT = EntityTypeImpl.get(EntityTypeKeys.PALE_OAK_CHEST_BOAT);
 
-    EntityType PHANTOM = EntityTypeImpl.get("phantom");
+    EntityType PANDA = EntityTypeImpl.get(EntityTypeKeys.PANDA);
 
-    EntityType PIG = EntityTypeImpl.get("pig");
+    EntityType PARCHED = EntityTypeImpl.get(EntityTypeKeys.PARCHED);
 
-    EntityType PIGLIN = EntityTypeImpl.get("piglin");
+    EntityType PARROT = EntityTypeImpl.get(EntityTypeKeys.PARROT);
 
-    EntityType PIGLIN_BRUTE = EntityTypeImpl.get("piglin_brute");
+    EntityType PHANTOM = EntityTypeImpl.get(EntityTypeKeys.PHANTOM);
 
-    EntityType PILLAGER = EntityTypeImpl.get("pillager");
+    EntityType PIG = EntityTypeImpl.get(EntityTypeKeys.PIG);
 
-    EntityType POLAR_BEAR = EntityTypeImpl.get("polar_bear");
+    EntityType PIGLIN = EntityTypeImpl.get(EntityTypeKeys.PIGLIN);
 
-    EntityType SPLASH_POTION = EntityTypeImpl.get("splash_potion");
+    EntityType PIGLIN_BRUTE = EntityTypeImpl.get(EntityTypeKeys.PIGLIN_BRUTE);
 
-    EntityType LINGERING_POTION = EntityTypeImpl.get("lingering_potion");
+    EntityType PILLAGER = EntityTypeImpl.get(EntityTypeKeys.PILLAGER);
 
-    EntityType PUFFERFISH = EntityTypeImpl.get("pufferfish");
+    EntityType POLAR_BEAR = EntityTypeImpl.get(EntityTypeKeys.POLAR_BEAR);
 
-    EntityType RABBIT = EntityTypeImpl.get("rabbit");
+    EntityType SPLASH_POTION = EntityTypeImpl.get(EntityTypeKeys.SPLASH_POTION);
 
-    EntityType RAVAGER = EntityTypeImpl.get("ravager");
+    EntityType LINGERING_POTION = EntityTypeImpl.get(EntityTypeKeys.LINGERING_POTION);
 
-    EntityType SALMON = EntityTypeImpl.get("salmon");
+    EntityType PUFFERFISH = EntityTypeImpl.get(EntityTypeKeys.PUFFERFISH);
 
-    EntityType SHEEP = EntityTypeImpl.get("sheep");
+    EntityType RABBIT = EntityTypeImpl.get(EntityTypeKeys.RABBIT);
 
-    EntityType SHULKER = EntityTypeImpl.get("shulker");
+    EntityType RAVAGER = EntityTypeImpl.get(EntityTypeKeys.RAVAGER);
 
-    EntityType SHULKER_BULLET = EntityTypeImpl.get("shulker_bullet");
+    EntityType SALMON = EntityTypeImpl.get(EntityTypeKeys.SALMON);
 
-    EntityType SILVERFISH = EntityTypeImpl.get("silverfish");
+    EntityType SHEEP = EntityTypeImpl.get(EntityTypeKeys.SHEEP);
 
-    EntityType SKELETON = EntityTypeImpl.get("skeleton");
+    EntityType SHULKER = EntityTypeImpl.get(EntityTypeKeys.SHULKER);
 
-    EntityType SKELETON_HORSE = EntityTypeImpl.get("skeleton_horse");
+    EntityType SHULKER_BULLET = EntityTypeImpl.get(EntityTypeKeys.SHULKER_BULLET);
 
-    EntityType SLIME = EntityTypeImpl.get("slime");
+    EntityType SILVERFISH = EntityTypeImpl.get(EntityTypeKeys.SILVERFISH);
 
-    EntityType SMALL_FIREBALL = EntityTypeImpl.get("small_fireball");
+    EntityType SKELETON = EntityTypeImpl.get(EntityTypeKeys.SKELETON);
 
-    EntityType SNIFFER = EntityTypeImpl.get("sniffer");
+    EntityType SKELETON_HORSE = EntityTypeImpl.get(EntityTypeKeys.SKELETON_HORSE);
 
-    EntityType SNOWBALL = EntityTypeImpl.get("snowball");
+    EntityType SLIME = EntityTypeImpl.get(EntityTypeKeys.SLIME);
 
-    EntityType SNOW_GOLEM = EntityTypeImpl.get("snow_golem");
+    EntityType SMALL_FIREBALL = EntityTypeImpl.get(EntityTypeKeys.SMALL_FIREBALL);
 
-    EntityType SPAWNER_MINECART = EntityTypeImpl.get("spawner_minecart");
+    EntityType SNIFFER = EntityTypeImpl.get(EntityTypeKeys.SNIFFER);
 
-    EntityType SPECTRAL_ARROW = EntityTypeImpl.get("spectral_arrow");
+    EntityType SNOWBALL = EntityTypeImpl.get(EntityTypeKeys.SNOWBALL);
 
-    EntityType SPIDER = EntityTypeImpl.get("spider");
+    EntityType SNOW_GOLEM = EntityTypeImpl.get(EntityTypeKeys.SNOW_GOLEM);
 
-    EntityType SPRUCE_BOAT = EntityTypeImpl.get("spruce_boat");
+    EntityType SPAWNER_MINECART = EntityTypeImpl.get(EntityTypeKeys.SPAWNER_MINECART);
 
-    EntityType SPRUCE_CHEST_BOAT = EntityTypeImpl.get("spruce_chest_boat");
+    EntityType SPECTRAL_ARROW = EntityTypeImpl.get(EntityTypeKeys.SPECTRAL_ARROW);
 
-    EntityType SQUID = EntityTypeImpl.get("squid");
+    EntityType SPIDER = EntityTypeImpl.get(EntityTypeKeys.SPIDER);
 
-    EntityType STRAY = EntityTypeImpl.get("stray");
+    EntityType SPRUCE_BOAT = EntityTypeImpl.get(EntityTypeKeys.SPRUCE_BOAT);
 
-    EntityType STRIDER = EntityTypeImpl.get("strider");
+    EntityType SPRUCE_CHEST_BOAT = EntityTypeImpl.get(EntityTypeKeys.SPRUCE_CHEST_BOAT);
 
-    EntityType TADPOLE = EntityTypeImpl.get("tadpole");
+    EntityType SQUID = EntityTypeImpl.get(EntityTypeKeys.SQUID);
 
-    EntityType TEXT_DISPLAY = EntityTypeImpl.get("text_display");
+    EntityType STRAY = EntityTypeImpl.get(EntityTypeKeys.STRAY);
 
-    EntityType TNT = EntityTypeImpl.get("tnt");
+    EntityType STRIDER = EntityTypeImpl.get(EntityTypeKeys.STRIDER);
 
-    EntityType TNT_MINECART = EntityTypeImpl.get("tnt_minecart");
+    EntityType SULFUR_CUBE = EntityTypeImpl.get(EntityTypeKeys.SULFUR_CUBE);
 
-    EntityType TRADER_LLAMA = EntityTypeImpl.get("trader_llama");
+    EntityType TADPOLE = EntityTypeImpl.get(EntityTypeKeys.TADPOLE);
 
-    EntityType TRIDENT = EntityTypeImpl.get("trident");
+    EntityType TEXT_DISPLAY = EntityTypeImpl.get(EntityTypeKeys.TEXT_DISPLAY);
 
-    EntityType TROPICAL_FISH = EntityTypeImpl.get("tropical_fish");
+    EntityType TNT = EntityTypeImpl.get(EntityTypeKeys.TNT);
 
-    EntityType TURTLE = EntityTypeImpl.get("turtle");
+    EntityType TNT_MINECART = EntityTypeImpl.get(EntityTypeKeys.TNT_MINECART);
 
-    EntityType VEX = EntityTypeImpl.get("vex");
+    EntityType TRADER_LLAMA = EntityTypeImpl.get(EntityTypeKeys.TRADER_LLAMA);
 
-    EntityType VILLAGER = EntityTypeImpl.get("villager");
+    EntityType TRIDENT = EntityTypeImpl.get(EntityTypeKeys.TRIDENT);
 
-    EntityType VINDICATOR = EntityTypeImpl.get("vindicator");
+    EntityType TROPICAL_FISH = EntityTypeImpl.get(EntityTypeKeys.TROPICAL_FISH);
 
-    EntityType WANDERING_TRADER = EntityTypeImpl.get("wandering_trader");
+    EntityType TURTLE = EntityTypeImpl.get(EntityTypeKeys.TURTLE);
 
-    EntityType WARDEN = EntityTypeImpl.get("warden");
+    EntityType VEX = EntityTypeImpl.get(EntityTypeKeys.VEX);
 
-    EntityType WIND_CHARGE = EntityTypeImpl.get("wind_charge");
+    EntityType VILLAGER = EntityTypeImpl.get(EntityTypeKeys.VILLAGER);
 
-    EntityType WITCH = EntityTypeImpl.get("witch");
+    EntityType VINDICATOR = EntityTypeImpl.get(EntityTypeKeys.VINDICATOR);
 
-    EntityType WITHER = EntityTypeImpl.get("wither");
+    EntityType WANDERING_TRADER = EntityTypeImpl.get(EntityTypeKeys.WANDERING_TRADER);
 
-    EntityType WITHER_SKELETON = EntityTypeImpl.get("wither_skeleton");
+    EntityType WARDEN = EntityTypeImpl.get(EntityTypeKeys.WARDEN);
 
-    EntityType WITHER_SKULL = EntityTypeImpl.get("wither_skull");
+    EntityType WIND_CHARGE = EntityTypeImpl.get(EntityTypeKeys.WIND_CHARGE);
 
-    EntityType WOLF = EntityTypeImpl.get("wolf");
+    EntityType WITCH = EntityTypeImpl.get(EntityTypeKeys.WITCH);
 
-    EntityType ZOGLIN = EntityTypeImpl.get("zoglin");
+    EntityType WITHER = EntityTypeImpl.get(EntityTypeKeys.WITHER);
 
-    EntityType ZOMBIE = EntityTypeImpl.get("zombie");
+    EntityType WITHER_SKELETON = EntityTypeImpl.get(EntityTypeKeys.WITHER_SKELETON);
 
-    EntityType ZOMBIE_HORSE = EntityTypeImpl.get("zombie_horse");
+    EntityType WITHER_SKULL = EntityTypeImpl.get(EntityTypeKeys.WITHER_SKULL);
 
-    EntityType ZOMBIE_VILLAGER = EntityTypeImpl.get("zombie_villager");
+    EntityType WOLF = EntityTypeImpl.get(EntityTypeKeys.WOLF);
 
-    EntityType ZOMBIFIED_PIGLIN = EntityTypeImpl.get("zombified_piglin");
+    EntityType ZOGLIN = EntityTypeImpl.get(EntityTypeKeys.ZOGLIN);
 
-    EntityType PLAYER = EntityTypeImpl.get("player");
+    EntityType ZOMBIE = EntityTypeImpl.get(EntityTypeKeys.ZOMBIE);
 
-    EntityType FISHING_BOBBER = EntityTypeImpl.get("fishing_bobber");
+    EntityType ZOMBIE_HORSE = EntityTypeImpl.get(EntityTypeKeys.ZOMBIE_HORSE);
+
+    EntityType ZOMBIE_NAUTILUS = EntityTypeImpl.get(EntityTypeKeys.ZOMBIE_NAUTILUS);
+
+    EntityType ZOMBIE_VILLAGER = EntityTypeImpl.get(EntityTypeKeys.ZOMBIE_VILLAGER);
+
+    EntityType ZOMBIFIED_PIGLIN = EntityTypeImpl.get(EntityTypeKeys.ZOMBIFIED_PIGLIN);
+
+    EntityType PLAYER = EntityTypeImpl.get(EntityTypeKeys.PLAYER);
+
+    EntityType FISHING_BOBBER = EntityTypeImpl.get(EntityTypeKeys.FISHING_BOBBER);
 }

@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
@@ -20,9 +21,9 @@ public record EntityPositionPacket(int entityId, short deltaX, short deltaY, sho
     public static EntityPositionPacket getPacket(int entityId,
                                                  Pos newPosition, Pos oldPosition,
                                                  boolean onGround) {
-        final short deltaX = (short) ((newPosition.x() * 32 - oldPosition.x() * 32) * 128);
-        final short deltaY = (short) ((newPosition.y() * 32 - oldPosition.y() * 32) * 128);
-        final short deltaZ = (short) ((newPosition.z() * 32 - oldPosition.z() * 32) * 128);
+        final short deltaX = CoordConversion.deltaShort4096(newPosition.x(), oldPosition.x());
+        final short deltaY = CoordConversion.deltaShort4096(newPosition.y(), oldPosition.y());
+        final short deltaZ = CoordConversion.deltaShort4096(newPosition.z(), oldPosition.z());
         return new EntityPositionPacket(entityId, deltaX, deltaY, deltaZ, onGround);
     }
 }

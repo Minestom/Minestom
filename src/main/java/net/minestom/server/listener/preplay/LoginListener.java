@@ -32,15 +32,17 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.security.KeyPair;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
 public final class LoginListener {
+    private static final SecureRandom NONCE_RANDOM = new SecureRandom();
+
     private static final Component ALREADY_CONNECTED = Component.text("You are already on this server", NamedTextColor.RED);
     private static final Component ERROR_DURING_LOGIN = Component.text("Error during login!", NamedTextColor.RED);
     private static final Component ERROR_MALFORMED_USERNAME = Component.text("Error malformed username", NamedTextColor.RED);
@@ -74,7 +76,7 @@ public final class LoginListener {
 
             final byte[] publicKey = keyPair.getPublic().getEncoded();
             byte[] nonce = new byte[4];
-            ThreadLocalRandom.current().nextBytes(nonce);
+            NONCE_RANDOM.nextBytes(nonce);
             socketConnection.setNonce(nonce);
             socketConnection.sendPacket(new EncryptionRequestPacket("", publicKey, nonce, true));
         } else {

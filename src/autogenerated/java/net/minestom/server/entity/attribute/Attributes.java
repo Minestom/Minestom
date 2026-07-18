@@ -7,73 +7,83 @@ package net.minestom.server.entity.attribute;
  */
 @SuppressWarnings("unused")
 sealed interface Attributes permits Attribute {
-    Attribute ARMOR = AttributeImpl.get("armor");
+    Attribute AIR_DRAG_MODIFIER = AttributeImpl.get(AttributeKeys.AIR_DRAG_MODIFIER);
 
-    Attribute ARMOR_TOUGHNESS = AttributeImpl.get("armor_toughness");
+    Attribute ARMOR = AttributeImpl.get(AttributeKeys.ARMOR);
 
-    Attribute ATTACK_DAMAGE = AttributeImpl.get("attack_damage");
+    Attribute ARMOR_TOUGHNESS = AttributeImpl.get(AttributeKeys.ARMOR_TOUGHNESS);
 
-    Attribute ATTACK_KNOCKBACK = AttributeImpl.get("attack_knockback");
+    Attribute ATTACK_DAMAGE = AttributeImpl.get(AttributeKeys.ATTACK_DAMAGE);
 
-    Attribute ATTACK_SPEED = AttributeImpl.get("attack_speed");
+    Attribute ATTACK_KNOCKBACK = AttributeImpl.get(AttributeKeys.ATTACK_KNOCKBACK);
 
-    Attribute BLOCK_BREAK_SPEED = AttributeImpl.get("block_break_speed");
+    Attribute ATTACK_SPEED = AttributeImpl.get(AttributeKeys.ATTACK_SPEED);
 
-    Attribute BLOCK_INTERACTION_RANGE = AttributeImpl.get("block_interaction_range");
+    Attribute BELOW_NAME_DISTANCE = AttributeImpl.get(AttributeKeys.BELOW_NAME_DISTANCE);
 
-    Attribute BURNING_TIME = AttributeImpl.get("burning_time");
+    Attribute BLOCK_BREAK_SPEED = AttributeImpl.get(AttributeKeys.BLOCK_BREAK_SPEED);
 
-    Attribute CAMERA_DISTANCE = AttributeImpl.get("camera_distance");
+    Attribute BLOCK_INTERACTION_RANGE = AttributeImpl.get(AttributeKeys.BLOCK_INTERACTION_RANGE);
 
-    Attribute EXPLOSION_KNOCKBACK_RESISTANCE = AttributeImpl.get("explosion_knockback_resistance");
+    Attribute BOUNCINESS = AttributeImpl.get(AttributeKeys.BOUNCINESS);
 
-    Attribute ENTITY_INTERACTION_RANGE = AttributeImpl.get("entity_interaction_range");
+    Attribute BURNING_TIME = AttributeImpl.get(AttributeKeys.BURNING_TIME);
 
-    Attribute FALL_DAMAGE_MULTIPLIER = AttributeImpl.get("fall_damage_multiplier");
+    Attribute CAMERA_DISTANCE = AttributeImpl.get(AttributeKeys.CAMERA_DISTANCE);
 
-    Attribute FLYING_SPEED = AttributeImpl.get("flying_speed");
+    Attribute EXPLOSION_KNOCKBACK_RESISTANCE = AttributeImpl.get(AttributeKeys.EXPLOSION_KNOCKBACK_RESISTANCE);
 
-    Attribute FOLLOW_RANGE = AttributeImpl.get("follow_range");
+    Attribute ENTITY_INTERACTION_RANGE = AttributeImpl.get(AttributeKeys.ENTITY_INTERACTION_RANGE);
 
-    Attribute GRAVITY = AttributeImpl.get("gravity");
+    Attribute FALL_DAMAGE_MULTIPLIER = AttributeImpl.get(AttributeKeys.FALL_DAMAGE_MULTIPLIER);
 
-    Attribute JUMP_STRENGTH = AttributeImpl.get("jump_strength");
+    Attribute FLYING_SPEED = AttributeImpl.get(AttributeKeys.FLYING_SPEED);
 
-    Attribute KNOCKBACK_RESISTANCE = AttributeImpl.get("knockback_resistance");
+    Attribute FOLLOW_RANGE = AttributeImpl.get(AttributeKeys.FOLLOW_RANGE);
 
-    Attribute LUCK = AttributeImpl.get("luck");
+    Attribute FRICTION_MODIFIER = AttributeImpl.get(AttributeKeys.FRICTION_MODIFIER);
 
-    Attribute MAX_ABSORPTION = AttributeImpl.get("max_absorption");
+    Attribute GRAVITY = AttributeImpl.get(AttributeKeys.GRAVITY);
 
-    Attribute MAX_HEALTH = AttributeImpl.get("max_health");
+    Attribute JUMP_STRENGTH = AttributeImpl.get(AttributeKeys.JUMP_STRENGTH);
 
-    Attribute MINING_EFFICIENCY = AttributeImpl.get("mining_efficiency");
+    Attribute KNOCKBACK_RESISTANCE = AttributeImpl.get(AttributeKeys.KNOCKBACK_RESISTANCE);
 
-    Attribute MOVEMENT_EFFICIENCY = AttributeImpl.get("movement_efficiency");
+    Attribute LUCK = AttributeImpl.get(AttributeKeys.LUCK);
 
-    Attribute MOVEMENT_SPEED = AttributeImpl.get("movement_speed");
+    Attribute MAX_ABSORPTION = AttributeImpl.get(AttributeKeys.MAX_ABSORPTION);
 
-    Attribute OXYGEN_BONUS = AttributeImpl.get("oxygen_bonus");
+    Attribute MAX_HEALTH = AttributeImpl.get(AttributeKeys.MAX_HEALTH);
 
-    Attribute SAFE_FALL_DISTANCE = AttributeImpl.get("safe_fall_distance");
+    Attribute MINING_EFFICIENCY = AttributeImpl.get(AttributeKeys.MINING_EFFICIENCY);
 
-    Attribute SCALE = AttributeImpl.get("scale");
+    Attribute MOVEMENT_EFFICIENCY = AttributeImpl.get(AttributeKeys.MOVEMENT_EFFICIENCY);
 
-    Attribute SNEAKING_SPEED = AttributeImpl.get("sneaking_speed");
+    Attribute MOVEMENT_SPEED = AttributeImpl.get(AttributeKeys.MOVEMENT_SPEED);
 
-    Attribute SPAWN_REINFORCEMENTS = AttributeImpl.get("spawn_reinforcements");
+    Attribute NAME_TAG_DISTANCE = AttributeImpl.get(AttributeKeys.NAME_TAG_DISTANCE);
 
-    Attribute STEP_HEIGHT = AttributeImpl.get("step_height");
+    Attribute OXYGEN_BONUS = AttributeImpl.get(AttributeKeys.OXYGEN_BONUS);
 
-    Attribute SUBMERGED_MINING_SPEED = AttributeImpl.get("submerged_mining_speed");
+    Attribute SAFE_FALL_DISTANCE = AttributeImpl.get(AttributeKeys.SAFE_FALL_DISTANCE);
 
-    Attribute SWEEPING_DAMAGE_RATIO = AttributeImpl.get("sweeping_damage_ratio");
+    Attribute SCALE = AttributeImpl.get(AttributeKeys.SCALE);
 
-    Attribute TEMPT_RANGE = AttributeImpl.get("tempt_range");
+    Attribute SNEAKING_SPEED = AttributeImpl.get(AttributeKeys.SNEAKING_SPEED);
 
-    Attribute WATER_MOVEMENT_EFFICIENCY = AttributeImpl.get("water_movement_efficiency");
+    Attribute SPAWN_REINFORCEMENTS = AttributeImpl.get(AttributeKeys.SPAWN_REINFORCEMENTS);
 
-    Attribute WAYPOINT_TRANSMIT_RANGE = AttributeImpl.get("waypoint_transmit_range");
+    Attribute STEP_HEIGHT = AttributeImpl.get(AttributeKeys.STEP_HEIGHT);
 
-    Attribute WAYPOINT_RECEIVE_RANGE = AttributeImpl.get("waypoint_receive_range");
+    Attribute SUBMERGED_MINING_SPEED = AttributeImpl.get(AttributeKeys.SUBMERGED_MINING_SPEED);
+
+    Attribute SWEEPING_DAMAGE_RATIO = AttributeImpl.get(AttributeKeys.SWEEPING_DAMAGE_RATIO);
+
+    Attribute TEMPT_RANGE = AttributeImpl.get(AttributeKeys.TEMPT_RANGE);
+
+    Attribute WATER_MOVEMENT_EFFICIENCY = AttributeImpl.get(AttributeKeys.WATER_MOVEMENT_EFFICIENCY);
+
+    Attribute WAYPOINT_TRANSMIT_RANGE = AttributeImpl.get(AttributeKeys.WAYPOINT_TRANSMIT_RANGE);
+
+    Attribute WAYPOINT_RECEIVE_RANGE = AttributeImpl.get(AttributeKeys.WAYPOINT_RECEIVE_RANGE);
 }

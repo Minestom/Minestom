@@ -35,7 +35,7 @@ public class MannequinEntity extends Entity {
 
         // Enable skin layers
         player.sendPackets(new EntityMetaDataPacket(getEntityId(), Map.of(
-                MetadataDef.Avatar.DISPLAYED_MODEL_PARTS_FLAGS.index(), Metadata.Byte((byte) 127)
+                MetadataDef.Player.DISPLAYED_MODEL_PARTS_FLAGS.index(), Metadata.Byte((byte) 127)
         )));
     }
 

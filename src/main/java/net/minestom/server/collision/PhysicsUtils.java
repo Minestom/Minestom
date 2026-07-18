@@ -38,7 +38,7 @@ public final class PhysicsUtils {
         Vec newVelocity = physicsResult.newVelocity();
 
         Pos positionWithinBorder = CollisionUtils.applyWorldBorder(worldBorder, entityPosition, newPosition);
-        newVelocity = updateVelocity(entityPosition, newVelocity, blockGetter, aerodynamics, !positionWithinBorder.samePoint(entityPosition), entityFlying, entityOnGround, entityNoGravity);
+        newVelocity = updateVelocity(positionWithinBorder, newVelocity, blockGetter, aerodynamics, !positionWithinBorder.samePoint(entityPosition), entityFlying, entityOnGround, entityNoGravity);
 
         final boolean stillCached = physicsResult.cached() && newVelocity.samePoint(physicsResult.newVelocity()) && positionWithinBorder.samePoint(physicsResult.newPosition());
 
@@ -46,7 +46,23 @@ public final class PhysicsUtils {
                 physicsResult.originalDelta(), physicsResult.collisionPoints(), physicsResult.collisionShapes(), physicsResult.collisionShapePositions(), physicsResult.hasCollision(), physicsResult.res(), stillCached);
     }
 
-    private static Vec updateVelocity(Pos entityPosition, Vec currentVelocity, Block.Getter blockGetter, Aerodynamics aerodynamics,
+    /**
+     * Calculates an updated velocity for an entity
+     * <p>
+     * If the position has not changed then the x and z values will not be touched, and only gravity will be accounted for if the entity is not flying.
+     * Otherwise, the velocity will be adjusted by applying air resistance, gravity, and friction (only if the entity is on the ground).
+     *
+     * @param entityPosition the current entity position
+     * @param currentVelocity the current entity velocity in blocks/tick
+     * @param blockGetter the block getter to test block collisions against
+     * @param aerodynamics the current entity aerodynamics
+     * @param positionChanged whether the position changed for the entity
+     * @param entityFlying whether the entity is flying
+     * @param entityOnGround whether the entity is on the ground
+     * @param entityNoGravity whether the entity has gravity
+     * @return the updated velocity or {@link Vec#ZERO} if the entity is flying
+     */
+    public static Vec updateVelocity(Pos entityPosition, Vec currentVelocity, Block.Getter blockGetter, Aerodynamics aerodynamics,
                                                boolean positionChanged, boolean entityFlying, boolean entityOnGround, boolean entityNoGravity) {
         if (!positionChanged) {
             if (entityFlying) return Vec.ZERO;

@@ -1,9 +1,7 @@
 package net.minestom.server.item;
 
-import net.kyori.adventure.nbt.TagStringIO;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
@@ -16,6 +14,7 @@ import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,16 +22,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class ItemTest {
-
-    static {
-        MinecraftServer.init();
-    }
-
     @Test
-    public void testFields() {
+    public void testFields(Env env) {
         var item = ItemStack.of(Material.DIAMOND_SWORD);
-        assertEquals(item.material(), Material.DIAMOND_SWORD, "Material must be the same");
-        assertEquals(item.amount(), 1, "Default item amount must be 1");
+        assertEquals(Material.DIAMOND_SWORD, item.material(), "Material must be the same");
+        assertEquals(1, item.amount(), "Default item amount must be 1");
 
         // Should have the exact same components as the material prototype
         var prototype = Material.DIAMOND_SWORD.registry().prototype();
@@ -49,15 +43,15 @@ public class ItemTest {
         assertThrows(UnsupportedOperationException.class, () -> finalItem.get(DataComponents.LORE).add(Component.text("Hey!")), "Lore list cannot be modified directly");
 
         item = item.withAmount(5);
-        assertEquals(item.amount(), 5, "Items with different amount should not be equals");
-        assertEquals(item.withAmount(amount -> amount * 2).amount(), 10, "Amount must be multiplied by 2");
+        assertEquals(5, item.amount(), "Items with different amount should not be equals");
+        assertEquals(10, item.withAmount(amount -> amount * 2).amount(), "Amount must be multiplied by 2");
     }
 
     @Test
-    public void defaultBuilder() {
+    public void defaultBuilder(Env env) {
         var item = ItemStack.builder(Material.DIAMOND_SWORD).build();
-        assertEquals(item.material(), Material.DIAMOND_SWORD, "Material must be the same");
-        assertEquals(item.amount(), 1, "Default item amount must be 1");
+        assertEquals(Material.DIAMOND_SWORD, item.material(), "Material must be the same");
+        assertEquals(1, item.amount(), "Default item amount must be 1");
 
         // Should have the exact same components as the material prototype
         var prototype = Material.DIAMOND_SWORD.registry().prototype();
@@ -74,12 +68,12 @@ public class ItemTest {
         assertThrows(UnsupportedOperationException.class, () -> finalItem.get(DataComponents.LORE).add(Component.text("Hey!")), "Lore list cannot be modified directly");
 
         item = item.withAmount(5);
-        assertEquals(item.amount(), 5, "Items with different amount should not be equals");
-        assertEquals(item.withAmount(amount -> amount * 2).amount(), 10, "Amount must be multiplied by 2");
+        assertEquals(5, item.amount(), "Items with different amount should not be equals");
+        assertEquals(10, item.withAmount(amount -> amount * 2).amount(), "Amount must be multiplied by 2");
     }
 
     @Test
-    public void testEquality() {
+    public void testEquality(Env env) {
         var item1 = ItemStack.of(Material.DIAMOND_SWORD);
         var item2 = ItemStack.of(Material.DIAMOND_SWORD);
         assertEquals(item1, item2);
@@ -108,6 +102,28 @@ public class ItemTest {
     }
 
     @Test
+    public void testImmutableLore(Env env) {
+        List<Component> lore = new ArrayList<>();
+        lore.add(Component.text("Hey!"));
+        var itemStack = ItemStack.of(Material.LAPIS_BLOCK).withLore(lore);
+        var itemStackLore = itemStack.get(DataComponents.LORE);
+        assertNotNull(itemStackLore);
+        assertEquals(lore, itemStackLore, "Lore list should have the same content");
+        assertThrows(UnsupportedOperationException.class, () -> itemStackLore.add(Component.text("Hey!")), "Should be immutable");
+    }
+
+    @Test
+    public void testBuilderImmutableLore(Env env) {
+        List<Component> lore = new ArrayList<>();
+        lore.add(Component.text("Hey!"));
+        var itemStack = ItemStack.builder(Material.LAPIS_BLOCK).lore(lore).build();
+        var itemStackLore = itemStack.get(DataComponents.LORE);
+        assertNotNull(itemStackLore);
+        assertEquals(lore, itemStackLore, "Lore list should have the same content");
+        assertThrows(UnsupportedOperationException.class, () -> itemStackLore.add(Component.text("Hey!")), "Should be immutable");
+    }
+
+    @Test
     public void testFromNbt(Env env) {
         var itemNbt = createItem().toItemNBT();
         var item = ItemStack.fromItemNBT(itemNbt);
@@ -116,7 +132,7 @@ public class ItemTest {
     }
 
     @Test
-    public void testBuilderReuse() {
+    public void testBuilderReuse(Env env) {
         var builder = ItemStack.builder(Material.DIAMOND);
         var item1 = builder.build();
         var item2 = builder.set(DataComponents.CUSTOM_NAME, Component.text("Name")).build();
@@ -126,7 +142,7 @@ public class ItemTest {
     }
 
     @Test
-    public void materialUpdate() {
+    public void materialUpdate(Env env) {
         var item1 = ItemStack.builder(Material.DIAMOND)
                 .amount(5).set(DataComponents.CUSTOM_NAME, Component.text("Name"))
                 .build();
@@ -157,6 +173,16 @@ public class ItemTest {
         var item2 = ItemStack.of(Material.CAMEL_SPAWN_EGG, 1);
         assertNotNull(item2.material().registry().spawnEntityType());
         assertEquals(EntityType.CAMEL, item2.material().registry().spawnEntityType());
+    }
+
+    @Test
+    public void testModifyMaterialAmountNonzero() {
+        var airItem = ItemStack.of(Material.AIR, 0);
+        assertEquals(0, airItem.amount());
+        var nonAirItem = airItem.withMaterial(Material.DIAMOND);
+        assertEquals(1, nonAirItem.amount());
+        var airAgainItem = nonAirItem.withMaterial(Material.AIR);
+        assertEquals(0, airAgainItem.amount());
     }
 
     static ItemStack createItem() {

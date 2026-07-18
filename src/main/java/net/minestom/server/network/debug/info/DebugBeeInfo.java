@@ -13,7 +13,7 @@ public record DebugBeeInfo(
         int travelTicks,
         List<Point> blacklistedHives
 ) {
-    public static NetworkBuffer.Type<DebugBeeInfo> SERIALIZER = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<DebugBeeInfo> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.BLOCK_POSITION.optional(), DebugBeeInfo::hivePosition,
             NetworkBuffer.BLOCK_POSITION.optional(), DebugBeeInfo::flowerPosition,
             NetworkBuffer.VAR_INT, DebugBeeInfo::travelTicks,

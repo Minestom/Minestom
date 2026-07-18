@@ -1,22 +1,24 @@
 package net.minestom.server.entity.metadata.avatar;
 
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MainHand;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
+import org.jetbrains.annotations.Nullable;
 
 public class AvatarMeta extends LivingEntityMeta {
 
-    protected AvatarMeta(Entity entity, MetadataHolder metadata) {
+    protected AvatarMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
     
-    public boolean isRightMainHand() {
-        return metadata.get(MetadataDef.Avatar.MAIN_HAND) == (byte) 1;
+    public MainHand getMainHand() {
+        return metadata.get(MetadataDef.Avatar.MAIN_HAND);
     }
 
-    public void setRightMainHand(boolean value) {
-        metadata.set(MetadataDef.Avatar.MAIN_HAND, value ? (byte) 1 : (byte) 0);
+    public void setMainHand(MainHand value) {
+        metadata.set(MetadataDef.Avatar.MAIN_HAND, value);
     }
 
     public boolean isCapeEnabled() {

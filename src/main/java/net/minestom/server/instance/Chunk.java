@@ -22,7 +22,11 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.*;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.function.Supplier;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 
@@ -45,6 +49,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     public static final int CHUNK_SECTION_SIZE = 16;
 
     private final UUID identifier;
+    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
     protected Instance instance;
     protected final int chunkX, chunkZ;
@@ -81,7 +86,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      * <p>
      * WARNING: this method is not thread-safe (in order to bring performance improvement with {@link net.minestom.server.instance.batch.Batch batches})
      * The thread-safe version is {@link Instance#setBlock(int, int, int, Block)} (or any similar instance methods)
-     * Otherwise, you can simply do not forget to have this chunk synchronized when this is called.
+     * Otherwise, remember to have this chunk {@link #lockWriteLock() locked} when this is called.
      *
      * @param x     the block X
      * @param y     the block Y
@@ -90,6 +95,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      */
     @Override
     public void setBlock(int x, int y, int z, Block block) {
+        assertWriteLock();
         setBlock(x, y, z, block, null, null);
     }
 
@@ -253,6 +259,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      * @param readOnly true to make the chunk read-only, false otherwise
      */
     public void setReadOnly(boolean readOnly) {
+        assertWriteLock();
         this.readOnly = readOnly;
     }
 
@@ -312,7 +319,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     }
 
     @Override
-    public Set<Player> getViewers() {
+    public Set<? extends Player> getViewers() {
         return viewable.getViewers();
     }
 
@@ -332,4 +339,51 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      * Invalidate the chunk caches
      */
     public abstract void invalidate();
+
+    @ApiStatus.Internal
+    protected final void assertWriteLock() {
+        assert holdsWriteLock() : "Not holding write-lock for chunk " + chunkX + "," + chunkZ;
+    }
+
+    @ApiStatus.Internal
+    protected final void assertReadLock() {
+        assert holdsReadLock() : "Not holding read-lock for chunk " + chunkX + "," + chunkZ;
+    }
+
+    @ApiStatus.Experimental
+    public final void lockWriteLock() {
+        assert holdsWriteLock() || lock.getReadHoldCount() == 0 : "Cannot acquire write-lock while holding read-lock for chunk " + chunkX + "," + chunkZ;
+        lock.writeLock().lock();
+    }
+
+    @ApiStatus.Experimental
+    public final void unlockWriteLock() {
+        lock.writeLock().unlock();
+    }
+
+    @ApiStatus.Experimental
+    public final void lockReadLock() {
+        lock.readLock().lock();
+    }
+
+    @ApiStatus.Experimental
+    public final void unlockReadLock() {
+        lock.readLock().unlock();
+    }
+
+    /**
+     * @return whether the calling thread holds the chunk write-lock
+     */
+    @ApiStatus.Experimental
+    public final boolean holdsWriteLock() {
+        return lock.isWriteLockedByCurrentThread();
+    }
+
+    /**
+     * @return whether the calling thread holds the chunk read-lock
+     */
+    @ApiStatus.Experimental
+    public final boolean holdsReadLock() {
+        return holdsWriteLock() || lock.getReadHoldCount() > 0;
+    }
 }

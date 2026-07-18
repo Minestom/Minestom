@@ -55,7 +55,7 @@ public record DebugPathInfo(Path path, float maxNodeDistance) {
         DAMAGE_CAUTIOUS,
         DANGER_TRAPDOOR;
 
-        public static NetworkBuffer.Type<NodeType> SERIALIZER = NetworkBuffer.Enum(NodeType.class);
+        public static final NetworkBuffer.Type<NodeType> SERIALIZER = NetworkBuffer.Enum(NodeType.class);
     }
 
     public record Node(int x, int y, int z, float walkedDistance, float costMalus, boolean closed, NodeType type,

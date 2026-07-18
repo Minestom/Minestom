@@ -66,6 +66,15 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
         return new DataComponentMapImpl.CodecImpl(idToType, nameToType, true);
     }
 
+    /**
+     * Minimizes a component patch relative to a prototype without changing its resolved result.
+     * Overrides matching the prototype and removals of components absent from the prototype are omitted; components
+     * not mentioned by the patch remain inherited from the prototype.
+     *
+     * @param prototype the component defaults to compare against
+     * @param patch the component overrides to minimize
+     * @return the minimal equivalent patch, or {@link #EMPTY} when no explicit overrides are needed
+     */
     static DataComponentMap diff(DataComponentMap prototype, DataComponentMap patch) {
         final DataComponentMapImpl patchImpl = (DataComponentMapImpl) patch;
         if (patchImpl.components().isEmpty()) return EMPTY;
@@ -88,7 +97,32 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
             }
         }
 
-        return new DataComponentMapImpl(diff);
+        return DataComponentMapImpl.fromMap(diff);
+    }
+
+    /**
+     * Resolves a component patch against a prototype into an absolute component map.
+     * Components set by the patch replace prototype values, components removed by the patch are omitted, and
+     * components not mentioned by the patch retain their prototype values.
+     *
+     * @param prototype the component defaults to resolve against
+     * @param patch the component overrides to apply
+     * @return the resolved component map, or {@code prototype} when the patch is empty
+     */
+    static DataComponentMap applyPatch(DataComponentMap prototype, DataComponentMap patch) {
+        final DataComponentMapImpl patchImpl = (DataComponentMapImpl) patch;
+        if (patchImpl.components().isEmpty()) return prototype;
+
+        final DataComponentMapImpl protoImpl = (DataComponentMapImpl) prototype;
+        final Int2ObjectArrayMap<@Nullable Object> result = new Int2ObjectArrayMap<>(protoImpl.components());
+        for (var entry : patchImpl.components().int2ObjectEntrySet()) {
+            if (entry.getValue() == null) {
+                result.remove(entry.getIntKey());
+            } else {
+                result.put(entry.getIntKey(), entry.getValue());
+            }
+        }
+        return DataComponentMapImpl.fromMap(result);
     }
 
     boolean isEmpty();
@@ -116,7 +150,12 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
 
     /**
      * Adds the component, overwriting any prior value if present.
+     * <br>
+     * Note: {@link DataComponent#freeze(Object)} will be called, so identity may be mutated.
      *
+     * @param component component to set
+     * @param value value of T
+     * @param <T> the data component type
      * @return A new map with the component set to the value
      */
     <T> DataComponentMap set(DataComponent<T> component, T value);
@@ -132,6 +171,17 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
      * @return A new map with the component removed
      */
     DataComponentMap remove(DataComponent<?> component);
+
+    /**
+     * Removes the explicit override for a component from this patch.
+     *
+     * <p>This operation is only meaningful for component patches. When the patch is applied to a prototype,
+     * the component will resolve to the prototype value.</p>
+     *
+     * @param component the component whose override should be reset
+     * @return a new patch without an override for the component, or this patch if none was present
+     */
+    DataComponentMap reset(DataComponent<?> component);
 
     Collection<DataComponent.Value> entrySet();
 
@@ -159,6 +209,14 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
         }
 
         PatchBuilder remove(DataComponent<?> component);
+
+        /**
+         * Removes the explicit override for a component from this patch builder.
+         *
+         * @param component the component whose override should be reset
+         * @return this builder
+         */
+        PatchBuilder reset(DataComponent<?> component);
 
         DataComponentMap build();
     }

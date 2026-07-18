@@ -1,13 +1,11 @@
+@SuppressWarnings({"UnstableApiUsage"}) // We are allowed to implement these
 module net.minestom.server {
     requires transitive static org.jetbrains.annotations;  // TODO remove this when jspecify matures.
     requires transitive com.google.gson;
     requires it.unimi.dsi.fastutil;
     requires space.vectrix.flare.fastutil;
-    requires jdk.unsupported; // Unsafe
-    requires transitive net.kyori.adventure;
+    requires transitive net.kyori.adventure.api;
     requires transitive net.kyori.adventure.nbt;
-    requires transitive net.kyori.adventure.key;
-    requires transitive net.kyori.examination.api;
     requires net.kyori.adventure.text.logger.slf4j;
     requires net.kyori.adventure.text.serializer.legacy;
     requires net.kyori.adventure.text.serializer.gson;
@@ -18,7 +16,7 @@ module net.minestom.server {
     requires org.jctools.core;
     requires jdk.jfr;
     requires java.desktop;
-    requires java.management;
+    requires net.minestom.data;
 
     // EXPORTS
     exports net.minestom.server;
@@ -87,14 +85,8 @@ module net.minestom.server {
     exports net.minestom.server.event.server;
     exports net.minestom.server.event.trait;
     exports net.minestom.server.exception;
-    exports net.minestom.server.extras;
-    exports net.minestom.server.extras.bungee;
     exports net.minestom.server.extras.lan;
     exports net.minestom.server.extras.mojangAuth;
-    exports net.minestom.server.extras.query;
-    exports net.minestom.server.extras.query.event;
-    exports net.minestom.server.extras.query.response;
-    exports net.minestom.server.extras.velocity;
     exports net.minestom.server.game;
     exports net.minestom.server.gamedata;
     exports net.minestom.server.instance;
@@ -106,6 +98,7 @@ module net.minestom.server {
     exports net.minestom.server.instance.block.predicate;
     exports net.minestom.server.instance.block.rule;
     exports net.minestom.server.instance.fluid;
+    exports net.minestom.server.instance.gamerule;
     exports net.minestom.server.instance.generator;
     exports net.minestom.server.instance.heightmap;
     exports net.minestom.server.instance.light;
@@ -181,6 +174,18 @@ module net.minestom.server {
     exports net.minestom.server.utils.url;
     exports net.minestom.server.utils.validate;
     exports net.minestom.server.world;
+    exports net.minestom.server.worldevent;
+    exports net.minestom.server.world.attribute;
     exports net.minestom.server.world.biome;
+    exports net.minestom.server.world.timeline;
+    exports net.minestom.server.world.clock;
+    exports net.minestom.server.entity.metadata.cube;
 
+    provides net.kyori.adventure.text.logger.slf4j.ComponentLoggerProvider with net.minestom.server.adventure.provider.MinestomComponentLoggerProvider;
+    provides net.kyori.adventure.text.serializer.ansi.ANSIComponentSerializer.Provider with net.minestom.server.adventure.provider.MinestomAnsiComponentSerializerProvider;
+    provides net.kyori.adventure.text.event.ClickCallback.Provider with net.minestom.server.adventure.provider.MinestomClickCallbackProvider;
+    provides net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.Provider with net.minestom.server.adventure.provider.MinestomPlainTextComponentSerializerProvider;
+    provides net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.Provider with net.minestom.server.adventure.provider.MinestomLegacyComponentSerializerProvider;
+    provides net.kyori.adventure.text.serializer.gson.GsonComponentSerializer.Provider with net.minestom.server.adventure.provider.MinestomGsonComponentSerializerProvider;
+    provides net.kyori.adventure.text.event.DataComponentValueConverterRegistry.Provider with net.minestom.server.adventure.provider.MinestomDataComponentValueConverterProvider;
 }

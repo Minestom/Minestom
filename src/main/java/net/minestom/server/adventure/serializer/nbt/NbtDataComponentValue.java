@@ -4,10 +4,10 @@ import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.event.DataComponentValue;
 import org.jetbrains.annotations.Nullable;
 
-public sealed interface NbtDataComponentValue extends DataComponentValue permits NbtDataComponentValueImpl {
+public sealed interface NbtDataComponentValue extends DataComponentValue permits NbtDataComponentValueImpl, NbtDataComponentValueImpl.Removed {
 
     static NbtDataComponentValue removed() {
-        return new NbtDataComponentValueImpl.Removed();
+        return NbtDataComponentValueImpl.Removed.INSTANCE;
     }
 
     static NbtDataComponentValue nbtDataComponentValue(BinaryTag tag) {

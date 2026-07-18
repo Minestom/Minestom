@@ -10,7 +10,7 @@ import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.Nullable;
 
 public class MooshroomMeta extends AnimalMeta {
-    public MooshroomMeta(Entity entity, MetadataHolder metadata) {
+    public MooshroomMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

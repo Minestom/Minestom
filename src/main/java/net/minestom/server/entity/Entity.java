@@ -2,7 +2,6 @@ package net.minestom.server.entity;
 
 import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.identity.Identity;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.pointer.Pointered;
 import net.kyori.adventure.pointer.Pointers;
 import net.kyori.adventure.pointer.PointersSupplier;
@@ -38,6 +37,7 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.item.component.CustomData;
 import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.*;
@@ -93,12 +93,13 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         HoverEventSource<ShowEntity>, Sound.Emitter, Shape, AcquirableSource<Entity>, DataComponent.Holder, Pointered, Identified {
     // This is somewhat arbitrary, but we don't want to hit the max int ever because it is very easy to
     // overflow while working with a position at the max int (for example, looping over a bounding box)
-    static final int MAX_COORDINATE = 2_000_000_000;
+    @ApiStatus.Internal
+    public static final int MAX_COORDINATE = 2_000_000_000;
 
     private static final AtomicInteger LAST_ENTITY_ID = new AtomicInteger();
 
     // Protected due to PointersSupplier.Builder#parent
-    protected static PointersSupplier<Entity> ENTITY_POINTERS_SUPPLIER = PointersSupplier.<Entity>builder()
+    protected static final PointersSupplier<Entity> ENTITY_POINTERS_SUPPLIER = PointersSupplier.<Entity>builder()
             .resolving(Identity.DISPLAY_NAME, (entity) -> entity.get(DataComponents.CUSTOM_NAME))
             .resolving(Identity.UUID, Entity::getUuid)
             .build();
@@ -125,13 +126,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected boolean onGround;
 
     protected BoundingBox boundingBox;
-    private PhysicsResult previousPhysicsResult = null;
+    private @Nullable PhysicsResult previousPhysicsResult = null;
 
-    protected Entity vehicle;
+    protected @Nullable Entity vehicle;
 
     // Velocity
     protected Vec velocity = Vec.ZERO; // Movement in block per second
-    protected boolean lastVelocityWasZero = true;
     protected boolean hasPhysics = true;
     protected boolean collidesWithEntities = true;
     protected boolean preventBlockPlacement = true;
@@ -174,7 +174,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private boolean isActive; // False if entity has only been instanced without being added somewhere
     protected boolean removed;
 
-    private final Set<Entity> passengers = new CopyOnWriteArraySet<>();
+    private final List<Entity> passengers = new CopyOnWriteArrayList<>();
 
     private final Set<Entity> leashedEntities = new CopyOnWriteArraySet<>();
     private Entity leashHolder;
@@ -185,7 +185,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private long synchronizationTicks = ServerFlag.ENTITY_SYNCHRONIZATION_TICKS;
     private long nextSynchronizationTick = synchronizationTicks;
 
-    protected MetadataHolder metadata = new MetadataHolder(this);
+    protected MetadataHolder metadata = new MetadataHolder(this::notifyMetadataChanges);
     protected EntityMeta entityMeta;
 
     private final List<TimedPotion> effects = new CopyOnWriteArrayList<>();
@@ -228,17 +228,28 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this(entityType, UUID.randomUUID());
     }
 
-    protected void setPositionInternal(Pos newPosition, float headRotation) {
-        if (newPosition.x() >= MAX_COORDINATE || newPosition.x() <= -MAX_COORDINATE ||
-                newPosition.y() >= MAX_COORDINATE || newPosition.y() <= -MAX_COORDINATE ||
-                newPosition.z() >= MAX_COORDINATE || newPosition.z() <= -MAX_COORDINATE) {
+    /// Clamps position to {@link Entity#MAX_COORDINATE}
+    protected Pos clampPosition(Pos newPosition) {
+        double x = newPosition.x();
+        double y = newPosition.y();
+        double z = newPosition.z();
+        if (Double.isNaN(x) || Double.isNaN(y) || Double.isNaN(z)) {
+            return new Pos(0, 0, 0, newPosition.yaw(), newPosition.pitch());
+        }
+        if (x >= MAX_COORDINATE || x <= -MAX_COORDINATE ||
+                y >= MAX_COORDINATE || y <= -MAX_COORDINATE ||
+                z >= MAX_COORDINATE || z <= -MAX_COORDINATE) {
             newPosition = newPosition.withCoord(
-                    MathUtils.clamp(newPosition.x(), -MAX_COORDINATE, MAX_COORDINATE),
-                    MathUtils.clamp(newPosition.y(), -MAX_COORDINATE, MAX_COORDINATE),
-                    MathUtils.clamp(newPosition.z(), -MAX_COORDINATE, MAX_COORDINATE)
+                    MathUtils.clamp(x, -MAX_COORDINATE, MAX_COORDINATE),
+                    MathUtils.clamp(y, -MAX_COORDINATE, MAX_COORDINATE),
+                    MathUtils.clamp(z, -MAX_COORDINATE, MAX_COORDINATE)
             );
         }
-        this.position = newPosition;
+        return newPosition;
+    }
+
+    protected void setPositionInternal(Pos newPosition, float headRotation) {
+        this.position = clampPosition(newPosition);
         this.headRotation = headRotation;
     }
 
@@ -247,7 +258,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      *
      * @param callback the task to execute during the next entity tick
      */
-    public void scheduleNextTick(Consumer<Entity> callback) {
+    public void scheduleNextTick(Consumer<? super Entity> callback) {
         this.scheduler.scheduleNextTick(() -> callback.accept(this));
     }
 
@@ -303,14 +314,14 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     @Override
     public <T> @Nullable T get(DataComponent<T> component) {
         if (component == DataComponents.CUSTOM_DATA)
-            return (T) tagHandler.asCompound();
+            return (T) new CustomData(tagHandler.asCompound());
         return EntityMeta.getComponent(getEntityMeta(), component);
     }
 
     public <T> void set(DataComponent<T> component, T value) {
-        if (component == DataComponents.CUSTOM_DATA)
-            tagHandler.updateContent((CompoundBinaryTag) value);
-        else EntityMeta.setComponent(getEntityMeta(), component, value);
+        if (component == DataComponents.CUSTOM_DATA) {
+            tagHandler.updateContent(((CustomData) value).nbt());
+        } else EntityMeta.setComponent(getEntityMeta(), component, value);
     }
 
     /**
@@ -374,10 +385,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         EntityTeleportEvent event = new EntityTeleportEvent(this, position, flags);
         EventDispatcher.call(event);
 
-        final Pos globalPosition = PositionUtils.getPositionWithRelativeFlags(this.position, position, flags);
+        final Pos globalPosition = clampPosition(PositionUtils.getPositionWithRelativeFlags(this.position, position, flags));
         final Vec globalVelocity = PositionUtils.getVelocityWithRelativeFlags(this.velocity, velocity, flags);
 
         final Runnable endCallback = () -> {
+            final float previousHeadRotation = this.headRotation;
             this.previousPosition = this.position;
             setPositionInternal(globalPosition, globalPosition.yaw());
             this.velocity = globalVelocity;
@@ -385,12 +397,15 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             if (this instanceof Player player)
                 player.synchronizePositionAfterTeleport(position, velocity, flags, shouldConfirm);
             else synchronizePosition();
+            if (headRotation != previousHeadRotation)
+                sendPacketToViewers(new EntityHeadLookPacket(getEntityId(), headRotation));
         };
 
         if (chunks != null && chunks.length > 0) {
             // Chunks need to be loaded before the teleportation can happen
             return ChunkUtils.optionalLoadAll(instance, chunks, null).thenRun(endCallback);
         }
+        // Assumes globalPosition is already clamped
         final Pos currentPosition = this.position;
         if (!currentPosition.sameChunk(globalPosition)) {
             // Ensure that the chunk is loaded
@@ -474,7 +489,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.viewEngine.viewableOption.updateAuto(autoViewable);
     }
 
-    public void updateViewableRule(@Nullable Predicate<Player> predicate) {
+    public void updateViewableRule(@Nullable Predicate<? super Player> predicate) {
         this.viewEngine.viewableOption.updateRule(predicate);
     }
 
@@ -501,7 +516,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.viewEngine.viewerOption.updateAuto(autoViewer);
     }
 
-    public void updateViewerRule(@Nullable Predicate<Entity> predicate) {
+    public void updateViewerRule(@Nullable Predicate<? super Entity> predicate) {
         this.viewEngine.viewerOption.updateRule(predicate);
     }
 
@@ -563,7 +578,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     @Override
-    public Set<Player> getViewers() {
+    public Set<? extends Player> getViewers() {
         return viewers;
     }
 
@@ -587,7 +602,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public synchronized void switchEntityType(EntityType entityType) {
         this.entityType = entityType;
-        this.metadata = new MetadataHolder(this);
+        this.metadata = new MetadataHolder(this::notifyMetadataChanges);
         this.entityMeta = MetadataHolder.createMeta(entityType, this, this.metadata);
 
         final RegistryData.EntityEntry registry = entityType.registry();
@@ -635,9 +650,14 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             effectTick();
         }
         // Scheduled synchronization
-        if (vehicle == null && ticks >= nextSynchronizationTick) {
-            synchronizePosition();
-            sendPacketToViewers(getVelocityPacket());
+        if (ticks >= nextSynchronizationTick) {
+            if (vehicle == null) {
+                synchronizePosition();
+                sendPacketToViewers(getVelocityPacket());
+            } else {
+                synchronizeView();
+                nextSynchronizationTick = ticks + synchronizationTicks;
+            }
         }
         // End of tick scheduled tasks
         this.scheduler.processTickEnd();
@@ -754,6 +774,24 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
+     * Returns whether this entity will run physics calculations.
+     *
+     * @return whether the entity will have physics calculations running
+     */
+    public boolean hasPhysics() {
+        return hasPhysics;
+    }
+
+    /**
+     * Changes whether this entity has physics calculations running.
+     *
+     * @param hasPhysics whether the entity will have physics calculations running
+     */
+    public void setHasPhysics(boolean hasPhysics) {
+        this.hasPhysics = hasPhysics;
+    }
+
+    /**
      * Returns false just after instantiation, set to true after calling {@link #setInstance(Instance)}.
      *
      * @return true if the entity has been linked to an instance, false otherwise
@@ -848,6 +886,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         if (this instanceof Player player) instance.bossBars().forEach(player::showBossBar);
         EventsJFR.newInstanceJoin(getUuid(), instance.getUuid()).commit();
 
+        spawnPosition = clampPosition(spawnPosition); // Cap spawnPositon to Entity max distance.
+
         this.isActive = true;
         setPositionInternal(spawnPosition, spawnPosition.yaw());
         this.previousPosition = spawnPosition;
@@ -856,14 +896,14 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.instance = instance;
         return instance.loadOptionalChunk(spawnPosition).thenAccept(chunk -> {
             try {
-                Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
+                Objects.requireNonNull(chunk, "Entity has been placed in an unloaded chunk!");
                 refreshCurrentChunk(chunk);
                 if (this instanceof Player player) {
                     player.sendPacket(instance.createInitializeWorldBorderPacket());
                     player.sendPacket(instance.createTimePacket());
                     player.sendPackets(instance.getWeather().createWeatherPackets());
                 }
-                instance.getEntityTracker().register(this, spawnPosition, trackingTarget, trackingUpdate);
+                instance.getEntityTracker().register(this, position, trackingTarget, trackingUpdate);
                 spawn();
                 EventDispatcher.call(new EntitySpawnEvent(this, instance));
             } catch (Exception e) {
@@ -1013,12 +1053,13 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         Check.stateCondition(entity == getVehicle(), "Cannot add the entity vehicle as a passenger");
         final Entity vehicle = entity.getVehicle();
         if (vehicle != null) vehicle.removePassenger(entity);
+        if (this.passengers.contains(entity)) return;
         if (!currentInstance.equals(entity.getInstance()))
             entity.setInstance(currentInstance, position).join();
         this.passengers.add(entity);
         entity.vehicle = this;
         sendPacketToViewersAndSelf(getPassengersPacket());
-        updatePassengerPosition(position, entity);
+        updatePassengerPosition(position, entity, this.passengers.size() - 1);
         entity.synchronizePosition();
     }
 
@@ -1052,8 +1093,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      *
      * @return an unmodifiable list containing all the entity passengers
      */
-    public Set<Entity> getPassengers() {
-        return Collections.unmodifiableSet(passengers);
+    public List<Entity> getPassengers() {
+        return Collections.unmodifiableList(passengers);
     }
 
     protected SetPassengersPacket getPassengersPacket() {
@@ -1305,7 +1346,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     @ApiStatus.Internal
     public void refreshPosition(final Pos newPosition, boolean ignoreView, boolean sendPackets) {
         final var previousPosition = this.position;
-        final Pos position = ignoreView ? previousPosition.withCoord(newPosition) : newPosition;
+        final Pos position = clampPosition(ignoreView ? previousPosition.withCoord(newPosition) : newPosition);
+        final Pos lastSyncedPosition = this.lastSyncedPosition;
         if (position.equals(lastSyncedPosition)) return;
         setPositionInternal(position, ignoreView ? headRotation : position.yaw());
         this.previousPosition = previousPosition;
@@ -1358,16 +1400,14 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
-     * Sets the coordinates of the passenger to the coordinates of this vehicle + {@link EntityUtils#getPassengerHeightOffset(Entity, Entity)}
+     * Sets the coordinates of the passenger to the coordinates of this vehicle + {@link EntityUtils#getPassengerPositionOffset(Entity, Entity, int)}
      *
      * @param newPosition the new position of this vehicle
      * @param passenger   the passenger to be moved
      */
-    private void updatePassengerPosition(Point newPosition, Entity passenger) {
+    private void updatePassengerPosition(Point newPosition, Entity passenger, int passengerIndex) {
         final Pos oldPassengerPos = passenger.position;
-        final Pos newPassengerPos = oldPassengerPos.withCoord(newPosition.x(),
-                newPosition.y() + EntityUtils.getPassengerHeightOffset(this, passenger),
-                newPosition.z());
+        final Pos newPassengerPos = passenger.clampPosition(newPosition.add(EntityUtils.getPassengerPositionOffset(this, passenger, passengerIndex)).asPos());
         passenger.setPositionInternal(newPassengerPos, newPassengerPos.yaw());
         passenger.previousPosition = oldPassengerPos;
         passenger.refreshCoordinate(newPassengerPos);
@@ -1386,10 +1426,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     @ApiStatus.Internal
     protected void refreshCoordinate(Point newPosition) {
         // Passengers update
-        final Set<Entity> passengers = getPassengers();
+        final List<Entity> passengers = getPassengers();
         if (!passengers.isEmpty()) {
-            for (Entity passenger : passengers) {
-                updatePassengerPosition(newPosition, passenger);
+            for (int i = 0; i < passengers.size(); i++) {
+                updatePassengerPosition(newPosition, passengers.get(i), i);
             }
         }
         // Handle chunk switch
@@ -1547,7 +1587,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
 
         // Remove passengers if any (also done with LivingEntity#kill)
-        Set<Entity> passengers = getPassengers();
+        Collection<Entity> passengers = getPassengers();
         if (!passengers.isEmpty()) passengers.forEach(this::removePassenger);
         final Entity vehicle = this.vehicle;
         if (vehicle != null) vehicle.removePassenger(this);
@@ -1638,6 +1678,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return new EntityMetaDataPacket(getEntityId(), metadata.getEntries());
     }
 
+    // Currently file-private so it can be used in MetadataHolder, planned to be private.
+    void notifyMetadataChanges(Map<Integer, Metadata.Entry<?>> changes) {
+        if (!isActive()) return;
+        sendPacketToViewersAndSelf(new EntityMetaDataPacket(getEntityId(), changes));
+    }
+
     /**
      * Used to synchronize entity position with viewers by sending a full
      * {@link EntityPositionSyncPacket} to viewers.
@@ -1651,7 +1697,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.lastSyncedPosition = posCache;
     }
 
-    private void synchronizeView() {
+    /**
+     * Used to synchronize the head position and rotation of the entity
+     */
+    @ApiStatus.Internal
+    protected void synchronizeView() {
+        final Pos position = this.position;
         sendPacketToViewers(new EntityHeadLookPacket(getEntityId(), headRotation));
         sendPacketToViewers(new EntityRotationPacket(getEntityId(), position.yaw(), position.pitch(), onGround));
     }
@@ -1795,7 +1846,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param predicate optional predicate
      * @return resulting entity whether there're any, null otherwise.
      */
-    public @Nullable Entity getLineOfSightEntity(double range, Predicate<Entity> predicate) {
+    public @Nullable Entity getLineOfSightEntity(double range, Predicate<? super Entity> predicate) {
         Instance instance = getInstance();
         if (instance == null) {
             return null;

@@ -1,10 +1,13 @@
 package net.minestom.server.entity;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.sound.Sound.Source;
+import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeInstance;
@@ -26,7 +29,7 @@ import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.component.AttributeList;
 import net.minestom.server.network.ConnectionState;
-import net.minestom.server.network.packet.server.LazyPacket;
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.registry.RegistryKey;
@@ -372,7 +375,10 @@ public class LivingEntity extends Entity implements EquipmentHandler {
                     // TODO: separate living entity categories
                     soundCategory = Source.HOSTILE;
                 }
-                sendPacketToViewersAndSelf(new SoundEffectPacket(sound, soundCategory, getPosition(), 1.0f, 1.0f, 0));
+
+                Pos pos = getPosition();
+                ServerPacket packet = AdventurePacketConvertor.createSoundPacket(Sound.sound(sound, soundCategory, 1f, 1f), pos.x(), pos.y(), pos.z());
+                sendPacketToViewersAndSelf(packet);
             }
         });
 
@@ -443,7 +449,10 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public AttributeInstance getAttribute(Attribute attribute) {
         return attributeModifiers.computeIfAbsent(attribute.name(),
-                s -> new AttributeInstance(attribute, this::onAttributeChanged));
+                s -> {
+                    double defaultValue = entityType.registry().defaultAttributes().getOrDefault(attribute, attribute.defaultValue());
+                    return new AttributeInstance(attribute, defaultValue, new ArrayList<>(), this::onAttributeChanged);
+                });
     }
 
     /**
@@ -490,7 +499,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public double getAttributeValue(Attribute attribute) {
         AttributeInstance instance = attributeModifiers.get(attribute.name());
-        return (instance != null) ? instance.getValue() : attribute.defaultValue();
+        if (instance != null) return instance.getValue();
+        return entityType.registry().defaultAttributes().getOrDefault(attribute, attribute.defaultValue());
     }
 
     /**
@@ -533,10 +543,10 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     @Override
     public void updateNewViewer(Player player) {
         super.updateNewViewer(player);
-        player.sendPacket(new LazyPacket(this::getEquipmentsPacket));
+        player.sendPacket(this.getEquipmentsPacket());
 
         if (shouldSendAttributes())
-            player.sendPacket(new LazyPacket(this::getPropertiesPacket));
+            player.sendPacket(this.getPropertiesPacket());
     }
 
     @Override

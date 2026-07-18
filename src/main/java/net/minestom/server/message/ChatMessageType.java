@@ -36,28 +36,4 @@ public enum ChatMessageType {
     public boolean accepts(ChatPosition chatPosition) {
         return this.acceptedPositions.contains(chatPosition);
     }
-
-    /**
-     * Gets the packet ID for this chat message type.
-     *
-     * @return the packet ID
-     */
-    public int getPacketID() {
-        return this.ordinal();
-    }
-
-    /**
-     * Gets a chat message type from a packet ID.
-     *
-     * @param id the packet ID
-     * @return the chat message type
-     */
-    public static ChatMessageType fromPacketID(int id) {
-        return switch (id) {
-            case 0 -> FULL;
-            case 1 -> SYSTEM;
-            case 2 -> NONE;
-            default -> throw new IllegalArgumentException("id must be between 0-2 (inclusive)");
-        };
-    }
 }

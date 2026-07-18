@@ -4,7 +4,6 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.UnknownNullability;
 
 /**

@@ -56,7 +56,7 @@ public sealed interface PaintingVariant extends Holder.Direct<PaintingVariant>, 
      */
     @ApiStatus.Internal
     static DynamicRegistry<PaintingVariant> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("painting_variant"), REGISTRY_CODEC, RegistryData.Resource.PAINTING_VARIANTS);
+        return DynamicRegistry.create(BuiltinRegistries.PAINTING_VARIANT, REGISTRY_CODEC);
     }
 
     Key assetId();

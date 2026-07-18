@@ -11,10 +11,10 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.instance.heightmap.MotionBlockingHeightmap;
 import net.minestom.server.instance.heightmap.WorldSurfaceHeightmap;
-import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
@@ -22,7 +22,6 @@ import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
-import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.snapshot.ChunkSnapshot;
 import net.minestom.server.snapshot.SnapshotImpl;
@@ -31,7 +30,6 @@ import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
@@ -43,7 +41,6 @@ import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
 import static net.minestom.server.coordinate.CoordConversion.globalToSectionRelative;
-import static net.minestom.server.network.NetworkBuffer.SHORT;
 
 /**
  * Represents a {@link Chunk} which store each individual block in memory.
@@ -55,7 +52,7 @@ public class DynamicChunk extends Chunk {
 
     protected final List<Section> sections;
 
-    private boolean needsCompleteHeightmapRefresh = true;
+    private volatile boolean needsCompleteHeightmapRefresh = true;
 
     protected Heightmap motionBlocking = new MotionBlockingHeightmap(this);
     protected Heightmap worldSurface = new WorldSurfaceHeightmap(this);
@@ -65,13 +62,12 @@ public class DynamicChunk extends Chunk {
     protected final Int2ObjectOpenHashMap<Block> tickableMap = new Int2ObjectOpenHashMap<>(0);
 
     final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
-    private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
 
     public DynamicChunk(Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ, true);
         // Required to be here because the super call populates the min and max section.
         var sectionsTemp = new Section[maxSection - minSection];
-        Arrays.setAll(sectionsTemp, value -> new Section());
+        Arrays.setAll(sectionsTemp, _ -> new Section());
         this.sections = List.of(sectionsTemp);
     }
 
@@ -84,13 +80,13 @@ public class DynamicChunk extends Chunk {
     public void setBlock(int x, int y, int z, Block block,
                          @Nullable BlockHandler.Placement placement,
                          @Nullable BlockHandler.Destroy destroy) {
+        assertWriteLock();
         final DimensionType instanceDim = instance.getCachedDimensionType();
         if (y >= instanceDim.maxY() || y < instanceDim.minY()) {
             LOGGER.warn("tried to set a block outside the world bounds, should be within [{}, {}): {}",
                     instanceDim.minY(), instanceDim.maxY(), y);
             return;
         }
-        assertLock();
 
         this.chunkCache.invalidate();
 
@@ -144,11 +140,11 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void setBiome(int x, int y, int z, RegistryKey<Biome> biome) {
-        assertLock();
+        assertWriteLock();
         this.chunkCache.invalidate();
         Section section = getSectionAt(y);
 
-        var id = BIOME_REGISTRY.getId(biome);
+        var id = instance.registries().biome().getId(biome);
         if (id == -1) throw new IllegalStateException("Biome has not been registered: " + biome.key());
 
         section.biomePalette().set(
@@ -179,6 +175,7 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void loadHeightmapsFromNBT(CompoundBinaryTag heightmapsNBT) {
+        assertWriteLock();
         if (heightmapsNBT.get(motionBlockingHeightmap().type().name()) instanceof LongArrayBinaryTag array) {
             motionBlockingHeightmap().loadFrom(array.value());
         }
@@ -203,7 +200,7 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public @Nullable Block getBlock(int x, int y, int z, Condition condition) {
-        assertLock();
+        assertReadLock();
         if (y < minSection * CHUNK_SECTION_SIZE || y >= maxSection * CHUNK_SECTION_SIZE)
             return Block.AIR; // Out of bounds
 
@@ -224,12 +221,12 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public RegistryKey<Biome> getBiome(int x, int y, int z) {
-        assertLock();
+        assertReadLock();
         final Section section = getSectionAt(y);
         final int id = section.biomePalette()
                 .get(globalToSectionRelative(x) / 4, globalToSectionRelative(y) / 4, globalToSectionRelative(z) / 4);
 
-        RegistryKey<Biome> biome = BIOME_REGISTRY.getKey(id);
+        RegistryKey<Biome> biome = instance.registries().biome().getKey(id);
         Check.notNull(biome, "Biome with id {0} is not registered", id);
         return biome;
     }
@@ -241,6 +238,7 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public Chunk copy(Instance instance, int chunkX, int chunkZ) {
+        assertReadLock();
         var sections = this.sections.stream().map(Section::clone).toList();
         DynamicChunk dynamicChunk = new DynamicChunk(instance, chunkX, chunkZ, sections);
         dynamicChunk.entries.putAll(entries);
@@ -249,6 +247,7 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void reset() {
+        assertWriteLock();
         for (Section section : sections) section.clear();
         this.entries.clear();
     }
@@ -260,25 +259,51 @@ public class DynamicChunk extends Chunk {
     }
 
     private ChunkDataPacket createChunkPacket() {
-        final byte[] data;
         final Map<Heightmap.Type, long[]> heightmaps;
-        synchronized (this) {
+        lockWriteLock();
+        try {
             heightmaps = getHeightmaps();
+        } finally {
+            unlockWriteLock();
+        }
+        // Compute light data outside any locks. This *should* prevent deadlocks
+        var lightData = createLightData(true);
 
-            NetworkBuffer.Type<Palette> biomeSerializer = Palette.biomeSerializer(MinecraftServer.getBiomeRegistry().size());
-            data = NetworkBuffer.makeArray(networkBuffer -> {
+        lockReadLock();
+        try {
+            NetworkBuffer.Type<ChunkData.Section> sectionSerializer = ChunkData.Section.networkType(instance.registries().biome().size());
+            final byte[] data = NetworkBuffer.makeArray(networkBuffer -> {
                 for (Section section : sections) {
-                    networkBuffer.write(SHORT, (short) section.blockPalette().count());
-                    networkBuffer.write(Palette.BLOCK_SERIALIZER, section.blockPalette());
-                    networkBuffer.write(biomeSerializer, section.biomePalette());
+                    final Palette blockPalette = section.blockPalette();
+                    final short blockCount = (short) blockPalette.count();
+                    final short fluidCount = (short) countFluids(blockPalette);
+                    networkBuffer.write(sectionSerializer, new ChunkData.Section(blockCount, fluidCount, blockPalette, section.biomePalette()));
                 }
             });
-        }
 
-        return new ChunkDataPacket(chunkX, chunkZ,
-                new ChunkData(heightmaps, data, entries),
-                createLightData(true)
-        );
+            return new ChunkDataPacket(chunkX, chunkZ,
+                    new ChunkData(heightmaps, data, entries),
+                    lightData
+            );
+        } finally {
+            unlockReadLock();
+        }
+    }
+
+    // blocks with a non-empty fluid (liquids or waterlogged)
+    private static int countFluids(Palette blockPalette) {
+        final int single = blockPalette.singleValue();
+        if (single != -1) return isFluid(single) ? blockPalette.count() : 0;
+        final int[] count = {0};
+        blockPalette.getAllPresent((_, _, _, stateId) -> {
+            if (isFluid(stateId)) count[0]++;
+        });
+        return count[0];
+    }
+
+    private static boolean isFluid(int blockStateId) {
+        final Block block = Block.fromStateId(blockStateId);
+        return block != null && block.isFluid();
     }
 
     UpdateLightPacket createLightPacket() {
@@ -319,6 +344,7 @@ public class DynamicChunk extends Chunk {
     }
 
     protected Map<Heightmap.Type, long[]> getHeightmaps() {
+        assertReadLock();
         if (needsCompleteHeightmapRefresh) calculateFullHeightmap();
         return Map.of(
                 motionBlocking.type(), motionBlocking.getNBT(),
@@ -327,6 +353,7 @@ public class DynamicChunk extends Chunk {
     }
 
     private void calculateFullHeightmap() {
+        assertWriteLock();
         final int startY = Heightmap.getHighestBlockSection(this);
         this.motionBlocking.refresh(startY);
         this.worldSurface.refresh(startY);
@@ -342,7 +369,7 @@ public class DynamicChunk extends Chunk {
         final int[] entityIds = ArrayUtils.mapToIntArray(entities, Entity::getEntityId);
         return new SnapshotImpl.Chunk(minSection, chunkX, chunkZ,
                 clonedSections, entries.clone(), entityIds, updater.reference(instance),
-                tagHandler().readableCopy());
+                instance.registries().biome(), tagHandler().readableCopy());
     }
 
     /**
@@ -399,5 +426,4 @@ public class DynamicChunk extends Chunk {
     void assertLock() {
         assert Thread.holdsLock(this) : "Chunk must be locked before access";
     }
-
 }

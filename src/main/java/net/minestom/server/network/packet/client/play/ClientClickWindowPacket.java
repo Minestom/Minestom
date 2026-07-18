@@ -12,7 +12,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public record ClientClickWindowPacket(int windowId, int stateId,
                                       short slot, byte button, ClickType clickType,
                                       Map<Short, ItemStack.Hash> changedSlots,
-                                      ItemStack.Hash clickedItem) implements ClientPacket {
+                                      ItemStack.Hash clickedItem) implements ClientPacket.Play {
     public static final int MAX_CHANGED_SLOTS = 128;
 
     public static final NetworkBuffer.Type<ClientClickWindowPacket> SERIALIZER = NetworkBufferTemplate.template(

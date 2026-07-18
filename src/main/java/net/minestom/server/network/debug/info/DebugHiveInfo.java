@@ -10,7 +10,7 @@ public record DebugHiveInfo(
         int honeyLevel,
         boolean sedated
 ) {
-    public static NetworkBuffer.Type<DebugHiveInfo> SERIALIZER = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<DebugHiveInfo> SERIALIZER = NetworkBufferTemplate.template(
             Block.ID_NETWORK_TYPE, DebugHiveInfo::type,
             NetworkBuffer.INT, DebugHiveInfo::occupantCount,
             NetworkBuffer.INT, DebugHiveInfo::honeyLevel,

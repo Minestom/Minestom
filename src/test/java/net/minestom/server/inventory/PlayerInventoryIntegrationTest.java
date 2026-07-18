@@ -107,7 +107,7 @@ public class PlayerInventoryIntegrationTest {
 
         // Make sure EntityEquipmentPacket is empty
         equipmentTracker.assertSingle(entityEquipmentPacket -> {
-            assertEquals(7, entityEquipmentPacket.equipments().size());
+            assertEquals(EquipmentSlot.values().length, entityEquipmentPacket.equipments().size());
             for (Map.Entry<EquipmentSlot, ItemStack> entry : entityEquipmentPacket.equipments().entrySet()) {
                 assertEquals(ItemStack.AIR, entry.getValue());
             }
@@ -129,9 +129,7 @@ public class PlayerInventoryIntegrationTest {
 
         // Setting to an item should send EntityEquipmentPacket to viewer
         playerArmored.setEquipment(EquipmentSlot.HELMET, MAGIC_STACK);
-        equipmentTracker.assertSingle(entityEquipmentPacket -> {
-            assertEquals(MAGIC_STACK, entityEquipmentPacket.equipments().get(EquipmentSlot.HELMET));
-        });
+        equipmentTracker.assertSingle(entityEquipmentPacket -> assertEquals(MAGIC_STACK, entityEquipmentPacket.equipments().get(EquipmentSlot.HELMET)));
 
         // Setting to the same item shouldn't send packet
         equipmentTracker = connectionViewer.trackIncoming(EntityEquipmentPacket.class);
@@ -141,9 +139,7 @@ public class PlayerInventoryIntegrationTest {
         // Setting to air should send packet
         equipmentTracker = connectionViewer.trackIncoming(EntityEquipmentPacket.class);
         playerArmored.setEquipment(EquipmentSlot.HELMET, ItemStack.AIR);
-        equipmentTracker.assertSingle(entityEquipmentPacket -> {
-            assertEquals(ItemStack.AIR, entityEquipmentPacket.equipments().get(EquipmentSlot.HELMET));
-        });
+        equipmentTracker.assertSingle(entityEquipmentPacket -> assertEquals(ItemStack.AIR, entityEquipmentPacket.equipments().get(EquipmentSlot.HELMET)));
     }
 
     @Test
@@ -162,23 +158,17 @@ public class PlayerInventoryIntegrationTest {
         // Setting held item
         var equipmentTracker = connectionViewer.trackIncoming(EntityEquipmentPacket.class);
         playerHolder.setItemInMainHand(MAGIC_STACK);
-        equipmentTracker.assertSingle(entityEquipmentPacket -> {
-            assertEquals(MAGIC_STACK, entityEquipmentPacket.equipments().get(EquipmentSlot.MAIN_HAND));
-        });
+        equipmentTracker.assertSingle(entityEquipmentPacket -> assertEquals(MAGIC_STACK, entityEquipmentPacket.equipments().get(EquipmentSlot.MAIN_HAND)));
 
         // Changing held slot to an empty slot should update MAIN_HAND to empty item
         equipmentTracker = connectionViewer.trackIncoming(EntityEquipmentPacket.class);
         playerHolder.setHeldItemSlot((byte) 3);
-        equipmentTracker.assertSingle(entityEquipmentPacket -> {
-            assertEquals(ItemStack.AIR, entityEquipmentPacket.equipments().get(EquipmentSlot.MAIN_HAND));
-        });
+        equipmentTracker.assertSingle(entityEquipmentPacket -> assertEquals(ItemStack.AIR, entityEquipmentPacket.equipments().get(EquipmentSlot.MAIN_HAND)));
 
         // Changing held slot to the original slot should update MAIN_HAND to original item
         equipmentTracker = connectionViewer.trackIncoming(EntityEquipmentPacket.class);
         playerHolder.setHeldItemSlot((byte) 0);
-        equipmentTracker.assertSingle(entityEquipmentPacket -> {
-            assertEquals(MAGIC_STACK, entityEquipmentPacket.equipments().get(EquipmentSlot.MAIN_HAND));
-        });
+        equipmentTracker.assertSingle(entityEquipmentPacket -> assertEquals(MAGIC_STACK, entityEquipmentPacket.equipments().get(EquipmentSlot.MAIN_HAND)));
     }
 
     @Test

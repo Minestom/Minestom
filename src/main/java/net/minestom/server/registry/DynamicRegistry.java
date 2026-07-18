@@ -2,10 +2,8 @@ package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
-import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.Player;
 import net.minestom.server.gamedata.DataPack;
-import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.network.packet.server.SendablePacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -13,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiFunction;
 
 /**
  * <p>Holds registry data for any of the registries controlled by the server. Entries in registries should be referenced
@@ -56,8 +55,8 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> DynamicRegistry<T> create(Key key, Codec<T> codec, RegistryData.Resource resource) {
-        return create(key, codec, null, resource, null, null);
+    static <T> DynamicRegistry<T> create(RegistryKey<Registry<T>> key, Codec<T> codec) {
+        return create(key, codec, null, null, null);
     }
 
     /**
@@ -66,8 +65,8 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> DynamicRegistry<T> create(Key key, Codec<T> codec, @Nullable Registries registries, RegistryData.Resource resource) {
-        return create(key, codec, registries, resource, null, null);
+    static <T> DynamicRegistry<T> create(RegistryKey<Registry<T>> key, Codec<T> codec, @Nullable Registries registries) {
+        return create(key, codec, registries, null, null);
     }
 
     /**
@@ -76,40 +75,21 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> DynamicRegistry<T> create(Key key, Codec<T> codec, @Nullable Registries registries, RegistryData.Resource resource, @Nullable Comparator<String> idComparator, @Nullable Codec<T> readCodec) {
-        final DynamicRegistryImpl<T> registry = new DynamicRegistryImpl<>(key, codec);
-        DynamicRegistryImpl.loadStaticJsonRegistry(registries, registry, resource, idComparator, Objects.requireNonNullElse(readCodec, codec));
+    static <T> DynamicRegistry<T> create(RegistryKey<Registry<T>> key, Codec<T> codec, @Nullable Registries registries, @Nullable Comparator<String> idComparator, @Nullable Codec<T> readCodec) {
+        final DynamicRegistryImpl<T> registry = new DynamicRegistryImpl<>(key.key(), codec);
+        registry.loadStaticJsonRegistry(registries, idComparator, Objects.requireNonNullElse(readCodec, codec));
         return registry.compact();
     }
 
     @ApiStatus.Internal
-    static DynamicRegistry<Enchantment> createForEnchantmentsWithSelfReferentialLoadingNightmare(
-            Key key, Codec<Enchantment> codec,
-            RegistryData.Resource resource, Registries registries
+    static <T> DynamicRegistry<T> create(
+            RegistryKey<Registry<T>> key, Codec<T> codec, Registries registries,
+            BiFunction<Registries, DynamicRegistry<T>, Registries> loadingRegistries
     ) {
-        final DynamicRegistryImpl<Enchantment> registry = new DynamicRegistryImpl<>(key, codec);
-        DynamicRegistryImpl.loadStaticJsonRegistry(new Registries.Delegating(registries) {
-            @Override
-            public DynamicRegistry<Enchantment> enchantment() {
-                return registry;
-            }
-        }, registry, resource, null, codec);
+        final DynamicRegistryImpl<T> registry = new DynamicRegistryImpl<>(key.key(), codec);
+        final Registries effectiveRegistries = loadingRegistries.apply(registries, registry);
+        registry.loadStaticJsonRegistry(effectiveRegistries, null, codec);
         return registry.compact();
-    }
-
-    @ApiStatus.Internal
-    static DynamicRegistry<Dialog> createForDialogWithSelfReferentialLoadingNightmare(
-            Key key, Codec<Dialog> codec,
-            RegistryData.Resource resource, Registries registries
-    ) {
-        final DynamicRegistryImpl<Dialog> registry = new DynamicRegistryImpl<>(key, codec);
-        DynamicRegistryImpl.loadStaticJsonRegistry(new Registries.Delegating(registries) {
-            @Override
-            public DynamicRegistry<Dialog> dialog() {
-                return registry;
-            }
-        }, registry, resource, null, codec);
-        return registry;
     }
 
     /**

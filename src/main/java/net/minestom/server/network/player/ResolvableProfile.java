@@ -71,8 +71,8 @@ public record ResolvableProfile(
                 Partial::new);
         public static final StructCodec<Partial> CODEC = StructCodec.struct(
                 "name", Codec.STRING.optional(), Partial::name,
-                "uuid", Codec.UUID.optional(), Partial::uuid,
-                "properties", GameProfile.Property.LIST_CODEC, Partial::properties,
+                "id", Codec.UUID.optional(), Partial::uuid,
+                "properties", GameProfile.Property.LIST_CODEC.optional(List.of()), Partial::properties,
                 Partial::new);
 
         public Partial {
@@ -102,14 +102,12 @@ public record ResolvableProfile(
             case Either.Left(GameProfile gameProfile) -> {
                 builder.name(gameProfile.name());
                 builder.id(gameProfile.uuid());
-                for (GameProfile.Property property : gameProfile.properties())
-                    builder.profileProperty(property);
+                builder.profileProperties(gameProfile.properties());
             }
             case Either.Right(Partial partial) -> {
                 builder.name(partial.name());
                 builder.id(partial.uuid());
-                for (GameProfile.Property property : partial.properties())
-                    builder.profileProperty(property);
+                builder.profileProperties(partial.properties());
             }
         }
     }

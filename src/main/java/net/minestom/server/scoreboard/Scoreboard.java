@@ -6,6 +6,7 @@ import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.DisplayScoreboardPacket;
 import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
+import net.minestom.server.network.packet.server.play.UpdateScorePacket;
 
 import java.util.Collection;
 
@@ -64,8 +65,7 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
      * @param score  The new score
      */
     default void updateScore(Player player, int score) {
-        //todo
-//        sendPacketsToViewers(new UpdateScorePacket(player.getUsername(), (byte) 0, getObjectiveName(), score));
+        sendPacketsToViewers(new UpdateScorePacket(player.getUsername(), getObjectiveName(), score, null, null));
     }
 
     /**
@@ -76,7 +76,7 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
     String getObjectiveName();
 
     @Override
-    default Collection<Player> getPlayers() {
+    default Collection<? extends Player> getPlayers() {
         return this.getViewers();
     }
 }
