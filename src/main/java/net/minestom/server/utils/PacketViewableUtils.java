@@ -75,7 +75,8 @@ public final class PacketViewableUtils {
 
     private static final class ViewableStorage {
         private static final ObjectPool<NetworkBuffer> POOL = ObjectPool.pool(
-                () -> NetworkBuffer.resizableBuffer(ServerFlag.POOLED_BUFFER_SIZE, MinecraftServer.process()),
+                () -> NetworkBuffer.resizableBuffer(
+                        ServerFlag.POOLED_BUFFER_SIZE, MinecraftServer.getRegistries()),
                 NetworkBuffer::clear);
         // Player id -> list of offsets to ignore (32:32 bits)
         private final Int2ObjectMap<LongArrayList> entityIdMap = new Int2ObjectOpenHashMap<>();

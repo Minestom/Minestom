@@ -126,7 +126,7 @@ public record BlockPredicate(
             return false; // If a block has no NBT (it's not a block entity), any component predicates must return false
 
         CompoundBinaryTag componentsTag = block.nbt().getCompound("components");
-        final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
+        final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.getRegistries());
         final var componentMapResult = DataComponent.MAP_NBT_TYPE.decode(coder, componentsTag);
         return componentMapResult instanceof Result.Ok(DataComponentMap componentMap) && components.test(componentMap);
     }

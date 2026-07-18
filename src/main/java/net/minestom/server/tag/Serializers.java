@@ -29,11 +29,13 @@ final class Serializers {
 
     static final Entry<java.util.UUID, IntArrayBinaryTag> UUID = new Entry<>(BinaryTagTypes.INT_ARRAY, UUIDUtils::fromNbt, UUIDUtils::toNbt);
     static final Entry<ItemStack, CompoundBinaryTag> ITEM = new Entry<>(BinaryTagTypes.COMPOUND,
-            input -> ItemStack.fromItemNBT(input, MinecraftServer.process()),
-            itemStack -> itemStack.toItemNBT(MinecraftServer.process()));
+            input -> ItemStack.fromItemNBT(input, MinecraftServer.getRegistries()),
+            itemStack -> itemStack.toItemNBT(MinecraftServer.getRegistries()));
     static final Entry<Component, BinaryTag> COMPONENT = new Entry<>(null,
-            input -> Codec.COMPONENT.decode(new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process()), input).orElse(null),
-            component -> Codec.COMPONENT.encode(new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process()), component).orElse(null)
+            input -> Codec.COMPONENT.decode(
+                    new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.getRegistries()), input).orElse(null),
+            component -> Codec.COMPONENT.encode(
+                    new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.getRegistries()), component).orElse(null)
     );
 
     static final Entry<Object, ByteBinaryTag> EMPTY = new Entry<>(BinaryTagTypes.BYTE, _ -> null, _ -> null);

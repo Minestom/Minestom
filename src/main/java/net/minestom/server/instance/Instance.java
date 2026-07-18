@@ -150,7 +150,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
      * @param dimensionType the {@link DimensionType} of the instance
      */
     public Instance(UUID uuid, RegistryKey<DimensionType> dimensionType, Key dimensionName) {
-        this(MinecraftServer.process(), uuid, dimensionType, dimensionName);
+        this(MinecraftServer.getRegistries(), uuid, dimensionType, dimensionName);
     }
 
     /**

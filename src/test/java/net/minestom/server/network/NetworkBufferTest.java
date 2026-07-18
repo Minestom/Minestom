@@ -833,7 +833,7 @@ public class NetworkBufferTest {
     }
 
     static <T> void assertBufferType(NetworkBuffer.Type<T> type, @UnknownNullability T value, byte[] expected, Action<T> action) {
-        var buffer = NetworkBuffer.resizableBuffer(MinecraftServer.process());
+        var buffer = NetworkBuffer.resizableBuffer(MinecraftServer.getRegistries());
         action.write(buffer, type, value);
         assertEquals(0, buffer.readIndex());
         if (expected != null) assertEquals(expected.length, buffer.writeIndex());
@@ -902,7 +902,7 @@ public class NetworkBufferTest {
     }
 
     static <T> void assertBufferTypeCollection(NetworkBuffer.Type<T> type, List<T> values, byte @Nullable [] expected) {
-        var buffer = NetworkBuffer.resizableBuffer(MinecraftServer.process());
+        var buffer = NetworkBuffer.resizableBuffer(MinecraftServer.getRegistries());
         buffer.write(type.list(), values);
         assertEquals(0, buffer.readIndex());
         if (expected != null) assertEquals(expected.length, buffer.writeIndex());
