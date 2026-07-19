@@ -79,7 +79,7 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     // Data from client packets
     private @Nullable String loginUsername;
-    private @Nullable GameProfile gameProfile;
+    private volatile @Nullable GameProfile gameProfile;
     private @Nullable String serverAddress;
     private int serverPort;
     private int protocolVersion;

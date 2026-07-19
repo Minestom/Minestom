@@ -209,6 +209,10 @@ public final class ConnectionManager {
             connection.kick(LoginListener.INVALID_PROXY_RESPONSE);
             throw new RuntimeException("Error getting replies for login plugin messages", t);
         }
+        // Publish the final profile before the client could possibly respond
+        if (connection instanceof PlayerSocketConnection socketConnection) {
+            socketConnection.UNSAFE_setProfile(gameProfile);
+        }
         // Send login success packet (and switch to configuration phase)
         connection.sendPacket(new LoginSuccessPacket(gameProfile, new UUID(0L, 0L)));
         return gameProfile;
