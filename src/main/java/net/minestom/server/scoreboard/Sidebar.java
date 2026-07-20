@@ -428,10 +428,10 @@ public class Sidebar implements Scoreboard {
         private final String entityName;
 
         private final Component teamDisplayName = Component.text("displaynametest");
-        private final byte friendlyFlags = 0x00;
-        private final TeamsPacket.NameTagVisibility nameTagVisibility = TeamsPacket.NameTagVisibility.NEVER;
-        private final TeamsPacket.CollisionRule collisionRule = TeamsPacket.CollisionRule.NEVER;
-        private final @Nullable TeamColor color = null;
+        private static final byte friendlyFlags = 0x00;
+        private static final TeamsPacket.NameTagVisibility nameTagVisibility = TeamsPacket.NameTagVisibility.NEVER;
+        private static final TeamsPacket.CollisionRule collisionRule = TeamsPacket.CollisionRule.NEVER;
+        private static final @Nullable TeamColor color = null;
 
         /**
          * The constructor to creates a team

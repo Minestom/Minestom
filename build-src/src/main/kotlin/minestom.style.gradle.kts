@@ -24,6 +24,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "EqualsUsingHashCode",
                 "ErroneousBitwiseExpression",
                 "FieldCanBeLocal",
+                "FieldCanBeStatic",
                 "Finalize",
                 "Finally",
                 "FloatCast",
