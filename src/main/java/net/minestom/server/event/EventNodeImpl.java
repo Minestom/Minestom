@@ -393,7 +393,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
             // Children
             final Consumer<E>[] childrenListeners = node.children.stream()
                     .filter(child -> child.eventType.isAssignableFrom(eventType)) // Invalid event type
-                    .sorted(Comparator.comparing(EventNode::getPriority))
+                    .sorted(Comparator.comparingInt(EventNode::getPriority))
                     .map(child -> ((Handle<E>) child.getHandle(eventType)).updatedListener())
                     .filter(Objects::nonNull)
                     .toArray(Consumer[]::new);
