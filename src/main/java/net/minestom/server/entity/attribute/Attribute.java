@@ -17,6 +17,7 @@ public sealed interface Attribute extends StaticProtocolObject<Attribute>, Attri
     NetworkBuffer.Type<Attribute> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Attribute::fromId, Attribute::id);
     Codec<Attribute> CODEC = Codec.KEY.transform(Attribute::fromKey, Attribute::key);
 
+    @Override
     @Contract(pure = true)
     RegistryData.AttributeEntry registry();
 

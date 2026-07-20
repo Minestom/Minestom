@@ -26,6 +26,7 @@ public class WaterNodeFollower implements NodeFollower {
      * @param direction the targeted position
      * @param speed     define how far the entity will move
      */
+    @Override
     public void moveTowards(Point direction, double speed, Point lookAt) {
         final Pos position = entity.getPosition();
         final double dx = direction.x() - position.x();

@@ -86,6 +86,7 @@ public class LightingChunk extends DynamicChunk {
             Block.LAVA.key()
     );
 
+    @Override
     public void invalidate() {
         this.partialLightCache.invalidate();
         this.chunkCache.invalidate();

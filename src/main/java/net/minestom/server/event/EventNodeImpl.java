@@ -73,6 +73,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
         }
     }
 
+    @Override
     @Contract(pure = true)
     public Set<EventNode<T>> getChildren() {
         return Collections.unmodifiableSet(children);

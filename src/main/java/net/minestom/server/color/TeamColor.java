@@ -65,6 +65,7 @@ public enum TeamColor implements RGBLike {
         return this.textColor.blue();
     }
 
+    @Override
     public HSVLike asHSV() {
         return textColor.asHSV();
     }

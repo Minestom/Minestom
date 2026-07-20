@@ -47,6 +47,7 @@ final class RegistryTagImpl {
             this.key = key;
         }
 
+        @Override
         public TagKey<T> key() {
             return key;
         }

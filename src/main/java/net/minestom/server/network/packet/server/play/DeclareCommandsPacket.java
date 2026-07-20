@@ -69,6 +69,7 @@ public record DeclareCommandsPacket(List<Node> nodes,
                 }
             }
 
+            @Override
             public Node read(NetworkBuffer reader) {
                 Node node = new Node();
                 node.flags = reader.read(BYTE);

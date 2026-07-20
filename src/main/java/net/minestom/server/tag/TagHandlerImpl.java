@@ -331,6 +331,15 @@ final class TagHandlerImpl implements TagHandler {
             while ((tmp = tmp.parent) != null);
             TagHandlerImpl.this.copy = null;
         }
+
+        @Override
+        public String toString() {
+            return "Node{" +
+                    "parent=" + parent +
+                    ", entries=" + entries +
+                    ", compound=" + compound +
+                    '}';
+        }
     }
 
     private static final class Entry<T> {

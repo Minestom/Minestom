@@ -1033,7 +1033,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         sendPacket(new ShowDialogPacket(Dialog.unwrap(dialog)));
     }
 
-    // TODO(1.21.6): Implementation for pending adventure method in 4.24.0.
+    @Override
     public void closeDialog() {
         sendPacket(new ClearDialogPacket());
     }
@@ -2021,6 +2021,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      *
      * @param invulnerable should the player be invulnerable
      */
+    @Override
     public void setInvulnerable(boolean invulnerable) {
         super.setInvulnerable(invulnerable);
         refreshAbilities();

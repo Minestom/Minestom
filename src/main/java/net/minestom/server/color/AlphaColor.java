@@ -100,6 +100,7 @@ public final class AlphaColor extends Color implements ARGBLike {
         return new AlphaColor(alpha(), red(), green(), blue);
     }
 
+    @Override
     public AlphaColor withAlpha(int alpha) {
         return new AlphaColor(alpha, red(), green(), blue());
     }

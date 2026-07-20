@@ -14,6 +14,8 @@ tasks.withType<JavaCompile>().configureEach {
 
         error(
                 "FutureReturnValueIgnored",
+                "MissingOverride",
+                "ObjectToString",
                 "UnnecessarilyFullyQualified",
                 "NullArgumentForNonNullParameter",
                 "NullableConstructor",
@@ -24,6 +26,11 @@ tasks.withType<JavaCompile>().configureEach {
                 "NullableTypeParameter",
                 "NullableVoid",
                 "NullableWildcard",
+        )
+
+        disable(
+                "InlineMeSuggester",
+                "EnumOrdinal"
         )
     }
 }

@@ -562,6 +562,7 @@ public class InstanceContainer extends Instance {
      *
      * @return the current {@link ChunkSupplier}
      */
+    @Override
     public ChunkSupplier getChunkSupplier() {
         return chunkSupplier;
     }

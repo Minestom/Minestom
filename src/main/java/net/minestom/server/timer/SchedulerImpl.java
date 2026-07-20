@@ -132,4 +132,15 @@ final class SchedulerImpl implements Scheduler {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        return "SchedulerImpl{" +
+                "tasksToExecute=" + tasksToExecute +
+                ", tickEndTasksToExecute=" + tickEndTasksToExecute +
+                ", tickStartTaskQueue=" + tickStartTaskQueue +
+                ", tickEndTaskQueue=" + tickEndTaskQueue +
+                ", tickState=" + tickState +
+                '}';
+    }
 }
