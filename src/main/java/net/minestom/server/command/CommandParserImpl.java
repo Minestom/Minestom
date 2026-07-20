@@ -458,7 +458,7 @@ final class CommandParserImpl implements CommandParser {
 
     private record NodeResult(Node node, Chain chain, ArgumentResult<Object> argumentResult,
                               SuggestionCallback callback) {
-        public String name() {
+        String name() {
             return node.argument().getId();
         }
     }

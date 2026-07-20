@@ -283,7 +283,7 @@ public abstract class Argument<T> {
     }
 
     private static final class ArgumentMap<I, O> extends Argument<O> {
-        public static final int INVALID_MAP = 555;
+        static final int INVALID_MAP = 555;
         final Argument<I> argument;
         final BiFunction<CommandSender, I, O> mapper;
 
@@ -318,7 +318,7 @@ public abstract class Argument<T> {
     }
 
     private static final class ArgumentFilter<T> extends Argument<T> {
-        public static final int INVALID_FILTER = 556;
+        static final int INVALID_FILTER = 556;
         final Argument<T> argument;
         final Predicate<T> predicate;
 

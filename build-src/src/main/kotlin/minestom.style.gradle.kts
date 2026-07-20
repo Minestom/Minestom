@@ -14,6 +14,7 @@ tasks.withType<JavaCompile>().configureEach {
 
         error(
                 "DefaultCharset",
+                "EffectivelyPrivate",
                 "FutureReturnValueIgnored",
                 "MissingSummary",
                 "StringCaseLocaleUsage",

@@ -218,16 +218,16 @@ final class EntityTrackerImpl implements EntityTracker {
             this.lastPosition = lastPosition;
         }
 
-        public Entity getEntity() {
+        Entity getEntity() {
             return entity;
         }
 
         @Nullable
-        public Point getLastPosition() {
+        Point getLastPosition() {
             return lastPosition;
         }
 
-        public void setLastPosition(Point lastPosition) {
+        void setLastPosition(Point lastPosition) {
             this.lastPosition = lastPosition;
         }
     }

@@ -152,7 +152,7 @@ record GraphImpl(NodeImpl root) implements Graph {
         ExecutionImpl execution;
         final Map<Argument<?>, ConversionNode> nextMap;
 
-        public ConversionNode(Argument<?> argument, ExecutionImpl execution, Map<Argument<?>, ConversionNode> nextMap) {
+        ConversionNode(Argument<?> argument, ExecutionImpl execution, Map<Argument<?>, ConversionNode> nextMap) {
             this.argument = argument;
             this.execution = execution;
             this.nextMap = nextMap;
