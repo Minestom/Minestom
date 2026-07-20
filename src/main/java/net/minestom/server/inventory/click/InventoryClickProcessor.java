@@ -85,7 +85,7 @@ public final class InventoryClickProcessor {
     }
 
     public InventoryClickResult changeHeld(ItemStack clicked, ItemStack cursor) {
-        return new InventoryClickResult(cursor, clicked); // Swap items
+        return new InventoryClickResult(/* clicked= */ cursor, /* cursor= */ clicked); // Swap items
     }
 
     public InventoryClickResult shiftClick(AbstractInventory inventory, AbstractInventory targetInventory,
