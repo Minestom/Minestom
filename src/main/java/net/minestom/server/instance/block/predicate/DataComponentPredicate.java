@@ -400,7 +400,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      *
      * @param delegate A predicate to match against the object's firework explosion
      */
-    record FireworkExplosion(Fireworks.FireworkExplosionPredicate delegate) implements Registered {
+    record FireworkExplosion(FireworkExplosionPredicate delegate) implements Registered {
         public static final Codec<FireworkExplosion> CODEC = FireworkExplosionPredicate.CODEC.transform(FireworkExplosion::new, FireworkExplosion::delegate);
 
         public FireworkExplosion(@Nullable Shape shape,
