@@ -44,6 +44,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
     };
     Codec<Particle> CODEC = new Codec<>() {
         @Override
+        @SuppressWarnings("unchecked")
         public <D> Result<Particle> decode(Transcoder<D> coder, D value) {
             Result<Transcoder.MapLike<D>> mapResult = coder.getMap(value);
             if (!(mapResult instanceof Result.Ok(Transcoder.MapLike<D> map)))
@@ -54,15 +55,13 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
             if (!(particleResult instanceof Result.Ok(Particle particle)))
                 return particleResult.cast();
 
-            //noinspection unchecked
             return (Result<Particle>) particle.codec().decodeFromMap(coder, map);
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public <D> Result<D> encode(Transcoder<D> coder, @Nullable Particle value) {
             if (value == null) return new Result.Error<>("null");
-
-            //noinspection unchecked
             return ((StructCodec<@NotNull Particle>) value.codec()).encode(coder, value);
         }
     };

@@ -43,8 +43,8 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T> @Nullable T get(DataComponent<T> component) {
-        //noinspection unchecked
         return (T) components.get(component.id());
     }
 
@@ -58,9 +58,9 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T> @Nullable T get(DataComponentMap prototype, DataComponent<T> component) {
         if (components.containsKey(component.id())) {
-            //noinspection unchecked
             return (T) components.get(component.id());
         } else {
             return prototype.get(component);
@@ -116,8 +116,8 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public <T> @Nullable T get(DataComponent<T> component) {
-            //noinspection unchecked
             return (T) components.get(component.id());
         }
 
@@ -141,8 +141,8 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public <T> @Nullable T get(DataComponent<T> component) {
-            //noinspection unchecked
             return (T) components.get(component.id());
         }
 
@@ -190,7 +190,7 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
                 if (entry.getValue() == null) continue;
 
                 buffer.write(NetworkBuffer.VAR_INT, entry.getIntKey());
-                //noinspection unchecked
+                @SuppressWarnings("unchecked")
                 DataComponent<Object> type = (DataComponent<@NotNull Object>) this.idToType.apply(entry.getIntKey());
                 Check.notNull(type, "Unknown component id: {0}", entry.getIntKey());
                 if (isTrusted) {
@@ -218,7 +218,7 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
             Int2ObjectMap<@Nullable Object> patch = new Int2ObjectArrayMap<>(added + removed);
             for (int i = 0; i < added; i++) {
                 int id = buffer.read(NetworkBuffer.VAR_INT);
-                //noinspection unchecked
+                @SuppressWarnings("unchecked")
                 DataComponent<Object> type = (DataComponent<@NotNull Object>) this.idToType.apply(id);
                 Check.notNull(type, "Unknown component: {0}", id);
                 if (isTrusted) {
@@ -287,7 +287,7 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
 
             final Transcoder.MapBuilder<D> map = coder.createMap();
             for (var entry : patch.components.int2ObjectEntrySet()) {
-                //noinspection unchecked
+                @SuppressWarnings("unchecked")
                 DataComponent<Object> type = (DataComponent<@NotNull Object>) this.idToType.apply(entry.getIntKey());
                 if (type == null) return new Result.Error<>("unknown data component id: " + entry.getIntKey());
                 if (entry.getValue() == null) {

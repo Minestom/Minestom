@@ -13,7 +13,7 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
     private IdentityHashMap<Snapshotable, AtomicReference<Snapshot>> readOnlyReferenceMap;
     private List<Entry> queue = new ArrayList<>();
 
-    @SuppressWarnings("TypeParameterUnusedInFormals")
+    @SuppressWarnings({"unchecked", "TypeParameterUnusedInFormals"})
     static <T extends Snapshot> T update(Snapshotable snapshotable) {
         var updater = new SnapshotUpdaterImpl();
         var ref = updater.reference(snapshotable);
@@ -22,6 +22,7 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends Snapshot> AtomicReference<T> reference(Snapshotable snapshotable) {
         AtomicReference<Snapshot> ref;
         // Very often the same snapshotable is referenced multiple times.
@@ -42,6 +43,7 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
     record Entry(Snapshotable snapshotable, AtomicReference<Snapshot> ref) {
     }
 
+    @SuppressWarnings("unchecked")
     void update() {
         List<Entry> temp = new ArrayList<>(queue);
         while (!temp.isEmpty()) {

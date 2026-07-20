@@ -116,6 +116,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
 
     private final EntityTracker entityTracker = new EntityTrackerImpl();
 
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     private final ChunkCache blockRetriever = new ChunkCache(this, null, null);
 
     protected int chunkViewDistance = ServerFlag.CHUNK_VIEW_DISTANCE;
@@ -158,6 +159,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
      * @param uuid          the {@link UUID} of the instance
      * @param dimensionType the {@link DimensionType} of the instance
      */
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     public Instance(Registries registries, UUID uuid, RegistryKey<DimensionType> dimensionType, Key dimensionName) {
         this.registries = registries;
         this.uuid = uuid;

@@ -713,7 +713,7 @@ public class AreaTest {
     public void containsRejectsBlocksOutsideBounds() {
         for (Area area : areas()) {
             Area.Cuboid bound = area.bound();
-            BlockVec outside = bound.max().add(100, 100, 100).asBlockVec();
+            BlockVec outside = bound.max().add(100, 100, 100);
             assertFalse(area.contains(outside),
                     "contains should reject far-outside block for " + area);
         }
@@ -860,8 +860,8 @@ public class AreaTest {
     public void boundOfOffsetMatchesOffsetOfBound() {
         for (Area area : areas()) {
             Area.Cuboid expected = Area.cuboid(
-                    area.bound().min().add(2, 3, 4).asBlockVec(),
-                    area.bound().max().add(2, 3, 4).asBlockVec());
+                    area.bound().min().add(2, 3, 4),
+                    area.bound().max().add(2, 3, 4));
             Area.Cuboid actual = area.offset(2, 3, 4).bound();
             assertEquals(expected, actual, "bound mismatch after offset for " + area);
         }

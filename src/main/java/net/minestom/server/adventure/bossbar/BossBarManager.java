@@ -23,6 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @see Audience#hideBossBar(BossBar)
  */
 public class BossBarManager {
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     private final BossBarListener listener = new BossBarListener(this);
     private final Map<UUID, Set<BossBarHolder>> playerBars = new ConcurrentHashMap<>();
     final Map<BossBar, BossBarHolder> bars = new ConcurrentHashMap<>();

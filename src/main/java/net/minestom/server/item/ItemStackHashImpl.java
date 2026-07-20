@@ -13,6 +13,7 @@ import java.util.Set;
 //TODO(1.21.5) hashes of components should be cached. Vanilla does it on a per player basis, could also do it globally perhaps.
 final class ItemStackHashImpl {
 
+    @SuppressWarnings("unchecked")
     public static ItemStack.Hash of(Transcoder<Integer> hashCoder, ItemStack itemStack) {
         if (itemStack.isAir()) return ItemStack.Hash.AIR;
 

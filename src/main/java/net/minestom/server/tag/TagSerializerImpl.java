@@ -14,7 +14,7 @@ final class TagSerializerImpl {
 
         @Override
         public void write(TagWritable writer, CompoundBinaryTag value) {
-            TagNbtSeparator.separate(value, entry -> writer.setTag(entry.tag(), entry.value()));
+            TagNbtSeparator.separate(value, entry -> entry.write(writer));
         }
     };
 

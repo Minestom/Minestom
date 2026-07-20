@@ -35,7 +35,8 @@ final class EntityTrackerImpl implements EntityTracker {
 
     // Store all data associated to a Target
     // The array index is the Target enum ordinal
-    final TargetEntry<Entity>[] targetEntries = EntityTracker.Target.TARGETS.stream().map((Function<Target<?>, TargetEntry>) TargetEntry::new).toArray(TargetEntry[]::new);
+    @SuppressWarnings("unchecked")
+    final TargetEntry<Entity>[] targetEntries = EntityTracker.Target.TARGETS.stream().map((Function<Target<?>, TargetEntry<?>>) TargetEntry::new).toArray(TargetEntry[]::new);
 
     private final Int2ObjectSyncMap<EntityTrackerEntry> entriesByEntityId = Int2ObjectSyncMap.hashmap();
     private final Map<UUID, EntityTrackerEntry> entriesByEntityUuid = new ConcurrentHashMap<>();
@@ -140,7 +141,7 @@ final class EntityTrackerImpl implements EntityTracker {
     @Override
     public @Unmodifiable <T extends Entity> List<T> chunkEntities(int chunkX, int chunkZ, Target<T> target) {
         final TargetEntry<Entity> entry = targetEntries[target.ordinal()];
-        //noinspection unchecked
+        @SuppressWarnings("unchecked")
         var chunkEntities = (List<T>) entry.chunkEntities(CoordConversion.chunkIndex(chunkX, chunkZ));
         return Collections.unmodifiableList(chunkEntities);
     }
@@ -150,6 +151,7 @@ final class EntityTrackerImpl implements EntityTracker {
         final Long2ObjectSyncMap<List<Entity>> entities = targetEntries[target.ordinal()].chunkEntities;
         if (chunkRange == 0) {
             // Single chunk
+            @SuppressWarnings("unchecked")
             final var chunkEntities = (List<T>) entities.get(CoordConversion.chunkIndex(point));
             if (chunkEntities != null && !chunkEntities.isEmpty()) {
                 chunkEntities.forEach(query);
@@ -157,6 +159,7 @@ final class EntityTrackerImpl implements EntityTracker {
         } else {
             // Multiple chunks
             ChunkRange.chunksInRange(point, chunkRange, (chunkX, chunkZ) -> {
+                @SuppressWarnings("unchecked")
                 final var chunkEntities = (List<T>) entities.get(CoordConversion.chunkIndex(chunkX, chunkZ));
                 if (chunkEntities == null || chunkEntities.isEmpty()) return;
                 chunkEntities.forEach(query);
@@ -174,6 +177,7 @@ final class EntityTrackerImpl implements EntityTracker {
         final double squaredRange = range * range;
         if (minChunkX == maxChunkX && minChunkZ == maxChunkZ) {
             // Single chunk
+            @SuppressWarnings("unchecked")
             final var chunkEntities = (List<T>) entities.get(CoordConversion.chunkIndex(point));
             if (chunkEntities != null && !chunkEntities.isEmpty()) {
                 chunkEntities.forEach(entity -> {
@@ -185,6 +189,7 @@ final class EntityTrackerImpl implements EntityTracker {
             // Multiple chunks
             final int chunkRange = (int) (range / Chunk.CHUNK_SECTION_SIZE) + 1;
             ChunkRange.chunksInRange(point, chunkRange, (chunkX, chunkZ) -> {
+                @SuppressWarnings("unchecked")
                 final var chunkEntities = (List<T>) entities.get(CoordConversion.chunkIndex(chunkX, chunkZ));
                 if (chunkEntities == null || chunkEntities.isEmpty()) return;
                 chunkEntities.forEach(entity -> {
@@ -198,8 +203,8 @@ final class EntityTrackerImpl implements EntityTracker {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public @UnmodifiableView <T extends Entity> Set<T> entities(Target<T> target) {
-        //noinspection unchecked
         return (Set<T>) targetEntries[target.ordinal()].entitiesView;
     }
 
@@ -232,6 +237,7 @@ final class EntityTrackerImpl implements EntityTracker {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private <T extends Entity> void difference(Point oldPoint, Point newPoint,
                                                Target<T> target, Update<T> update) {
         final TargetEntry<Entity> entry = targetEntries[target.ordinal()];
@@ -273,7 +279,7 @@ final class EntityTrackerImpl implements EntityTracker {
         }
 
         List<T> chunkEntities(long index) {
-            return chunkEntities.computeIfAbsent(index, _ -> (List<T>) new CopyOnWriteArrayList());
+            return chunkEntities.computeIfAbsent(index, _ -> new CopyOnWriteArrayList<>());
         }
 
         void addToChunk(long index, T entity) {

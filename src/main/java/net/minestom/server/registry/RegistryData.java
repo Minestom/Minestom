@@ -511,7 +511,7 @@ public final class RegistryData {
             final Transcoder<Object> coder = new RegistryTranscoder<>(Transcoder.JAVA, registries);
             DataComponentMap.Builder builder = DataComponentMap.builder();
             for (Map.Entry<String, Object> entry : components) {
-                //noinspection unchecked
+                @SuppressWarnings("unchecked")
                 DataComponent<Object> component = (DataComponent<Object>) DataComponent.fromKey(entry.getKey());
                 Check.notNull(component, "Unknown component {0} in {1}", entry.getKey(), key);
 
@@ -888,9 +888,8 @@ public final class RegistryData {
             return map;
         }
 
-        @SuppressWarnings("TypeParameterUnusedInFormals")
+        @SuppressWarnings({"unchecked", "TypeParameterUnusedInFormals"})
         private <T> T element(String name) {
-            //noinspection unchecked
             return (T) map.get(name);
         }
 

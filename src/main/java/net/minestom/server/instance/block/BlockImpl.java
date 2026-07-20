@@ -108,7 +108,7 @@ record BlockImpl(RegistryData.BlockEntry registry,
                             long propertiesValue = 0;
                             for (Map.Entry<String, String> entry : propertyMap.entrySet()) {
                                 final byte keyIndex = loadingSchema.findKeyIndexThrow(entry.getKey(), null);
-                                final byte valueIndex = loadingSchema.findValueIndexThrow(propertyTypes[keyIndex], entry.getValue(), null);
+                                final byte valueIndex = BlockSchema.findValueIndexThrow(propertyTypes[keyIndex], entry.getValue(), null);
                                 propertiesValue = updateIndex(propertiesValue, keyIndex, valueIndex);
                             }
 
@@ -170,7 +170,7 @@ record BlockImpl(RegistryData.BlockEntry registry,
     public Block withProperty(String property, String value) {
         final BlockSchema schema = schema();
         final byte keyIndex = schema.findKeyIndexThrow(property, this);
-        final byte valueIndex = schema.findValueIndexThrow(schema.properties[keyIndex], value, this);
+        final byte valueIndex = BlockSchema.findValueIndexThrow(schema.properties[keyIndex], value, this);
         final long updatedProperties = updateIndex(propertiesArray, keyIndex, valueIndex);
         return compute(updatedProperties);
     }
@@ -182,7 +182,7 @@ record BlockImpl(RegistryData.BlockEntry registry,
         long updatedProperties = this.propertiesArray;
         for (Map.Entry<String, String> entry : properties.entrySet()) {
             final byte keyIndex = schema.findKeyIndexThrow(entry.getKey(), this);
-            final byte valueIndex = schema.findValueIndexThrow(schema.properties[keyIndex], entry.getValue(), this);
+            final byte valueIndex = BlockSchema.findValueIndexThrow(schema.properties[keyIndex], entry.getValue(), this);
             updatedProperties = updateIndex(updatedProperties, keyIndex, valueIndex);
         }
         return compute(updatedProperties);

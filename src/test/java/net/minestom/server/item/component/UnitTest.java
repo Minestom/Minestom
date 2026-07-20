@@ -37,6 +37,7 @@ public class UnitTest extends AbstractItemComponentTest<Unit> {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void ensureUnitComponentsPresent(Env env) {
         var fails = new ArrayList<String>();
         for (var component : DataComponent.values()) {
@@ -44,7 +45,6 @@ public class UnitTest extends AbstractItemComponentTest<Unit> {
 
             // Try to write as a Unit and if it fails we can ignore that type
             try {
-                //noinspection unchecked
                 ((DataComponent<Unit>) component).write(NetworkBuffer.resizableBuffer(env.process()), Unit.INSTANCE);
             } catch (ClassCastException | IllegalArgumentException _) {
                 continue;

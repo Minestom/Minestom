@@ -66,8 +66,8 @@ public sealed interface Timeline extends Timelines permits TimelineImpl {
             List<Keyframe<Arg>> keyframes,
             EaseFunction ease
     ) {
+        @SuppressWarnings("unchecked")
         public static <T, Arg> Codec<Track<T, Arg>> codec(EnvironmentAttribute<T> attribute) {
-            //noinspection unchecked
             return attribute.type().modifierCodec().optional(new Modifier.Override<>(attribute.valueCodec()))
                     .unionType("modifier", modifier -> fullCodec((Modifier<T, Arg>) modifier), Track::modifier);
         }

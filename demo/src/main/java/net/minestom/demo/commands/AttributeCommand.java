@@ -9,6 +9,7 @@ import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentResource;
 import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.attribute.Attribute;
@@ -91,7 +92,8 @@ public class AttributeCommand extends Command {
         if (entity instanceof NamedAndIdentified named) {
             return named.getName();
         }
-        return entity.getCustomName() == null ? entity.getCustomName() : text(entity.getEntityType().name());
+        final Component customName = entity.get(DataComponents.CUSTOM_NAME);
+        return customName == null ? null : text(entity.getEntityType().name());
     }
 
     @Contract("!null, _, _ -> false; null, _, _ -> true")

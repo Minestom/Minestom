@@ -13,6 +13,7 @@ public class ExperienceOrb extends Entity {
     private @Nullable Player target;
     private long lastTargetUpdateTick;
 
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     public ExperienceOrb(short experienceCount) {
         super(EntityType.EXPERIENCE_ORB);
         setBoundingBox(0.5f, 0.5f, 0.5f);

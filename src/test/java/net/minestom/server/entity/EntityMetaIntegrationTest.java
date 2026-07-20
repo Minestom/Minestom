@@ -86,6 +86,7 @@ public class EntityMetaIntegrationTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation") // deliberately keeps coverage of the deprecated API until its removal
     public void customName(Env env) {
         //Base things.
         var connection = env.createConnection();

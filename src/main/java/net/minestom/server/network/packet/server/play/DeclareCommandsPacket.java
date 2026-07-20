@@ -84,7 +84,7 @@ public record DeclareCommandsPacket(List<Node> nodes,
 
                 if (node.isArgument()) {
                     node.parser = reader.read(ArgumentParserType.NETWORK_TYPE);
-                    node.properties = node.getProperties(reader, node.parser);
+                    node.properties = Node.getProperties(reader, node.parser);
                 }
 
                 if ((node.flags & HAS_SUGGESTION_TYPE) != 0) {

@@ -92,6 +92,7 @@ public class ItemTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation") // deliberately keeps coverage of the deprecated API until its removal
     public void testFromNbtLoreSpace(Env env) throws IOException {
         var itemStack = ItemStack.of(Material.LAPIS_BLOCK)
                 .withLore(Component.text("Hey!", NamedTextColor.RED), Component.empty(), Component.text("hello"))
@@ -124,6 +125,7 @@ public class ItemTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation") // deliberately keeps coverage of the deprecated API until its removal
     public void testFromNbt(Env env) {
         var itemNbt = createItem().toItemNBT();
         var item = ItemStack.fromItemNBT(itemNbt);
@@ -142,6 +144,7 @@ public class ItemTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation") // deliberately keeps coverage of the deprecated API until its removal
     public void materialUpdate(Env env) {
         var item1 = ItemStack.builder(Material.DIAMOND)
                 .amount(5).set(DataComponents.CUSTOM_NAME, Component.text("Name"))

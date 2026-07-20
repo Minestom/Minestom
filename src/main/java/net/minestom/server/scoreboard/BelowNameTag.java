@@ -42,6 +42,7 @@ public class BelowNameTag implements Scoreboard {
      * @param name  The objective name of the scoreboard
      * @param value The value of the scoreboard
      */
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     public BelowNameTag(String name, Component value) {
         this.objectiveName = BELOW_NAME_TAG_PREFIX + name;
         this.scoreboardObjectivePacket = this.getCreationObjectivePacket(value, ScoreboardObjectivePacket.Type.INTEGER);

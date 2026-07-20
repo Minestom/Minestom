@@ -172,10 +172,10 @@ public sealed interface EventNode<T extends Event> permits EventNodeImpl {
         return create(name, filter, (_, h) -> consumer.test(h.getTag(tag)));
     }
 
+    @SuppressWarnings("unchecked")
     private static <E extends Event, V> EventNode<E> create(String name,
                                                             EventFilter<E, V> filter,
                                                             @Nullable BiPredicate<E, V> predicate) {
-        //noinspection unchecked
         return new EventNodeImpl<>(name, filter, predicate != null ? (e, o) -> predicate.test(e, (V) o) : null);
     }
 
@@ -184,8 +184,8 @@ public sealed interface EventNode<T extends Event> permits EventNodeImpl {
      *
      * @param event the event to call
      */
+    @SuppressWarnings("unchecked")
     default void call(T event) {
-        //noinspection unchecked
         getHandle((Class<T>) event.getClass()).call(event);
     }
 

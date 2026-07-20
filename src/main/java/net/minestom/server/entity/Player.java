@@ -237,6 +237,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     // The future is non-null when a resource pack is in-flight, and completed when all statuses have been received.
     private @Nullable CompletableFuture<Void> resourcePackFuture = null;
 
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     public Player(PlayerConnection playerConnection, GameProfile gameProfile) {
         super(EntityType.PLAYER, gameProfile.uuid());
         this.gameProfile = gameProfile;

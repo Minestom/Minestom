@@ -35,6 +35,7 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
     abstract Function<String, ? extends Number> getAbsoluteNumberParser();
 
     @Override
+    @SuppressWarnings("fallthrough") // local coordinates deliberately continue into the relative branch
     public RelativeVec parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         final String[] split = input.split(StringUtils.SPACE, 0);
         if (split.length != getNumberCount()) {

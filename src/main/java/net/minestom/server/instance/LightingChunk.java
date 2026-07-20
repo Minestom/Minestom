@@ -38,6 +38,7 @@ public class LightingChunk extends DynamicChunk {
     private static final ExecutorService pool = Executors.newWorkStealingPool();
 
     private volatile @Nullable OcclusionData occlusionData;
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     final CachedPacket partialLightCache = new CachedPacket(this::createLightPacket);
     private @Nullable LightData partialLightData;
     private @Nullable LightData fullLightData;

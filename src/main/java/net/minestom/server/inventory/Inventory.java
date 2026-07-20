@@ -27,6 +27,7 @@ public non-sealed class Inventory extends AbstractInventory {
 
     private final int offset;
 
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     public Inventory(InventoryType inventoryType, Component title) {
         super(inventoryType.getSize());
         this.id = generateId();

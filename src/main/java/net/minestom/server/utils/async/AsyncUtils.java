@@ -9,8 +9,8 @@ import java.util.concurrent.CompletableFuture;
 public final class AsyncUtils {
     public static final CompletableFuture<Void> VOID_FUTURE = CompletableFuture.completedFuture(null);
 
+    @SuppressWarnings("unchecked")
     public static <T extends @Nullable Object> CompletableFuture<T> empty() {
-        //noinspection unchecked
         return (CompletableFuture<T>) VOID_FUTURE;
     }
 }

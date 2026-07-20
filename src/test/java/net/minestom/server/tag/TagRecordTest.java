@@ -101,11 +101,13 @@ public class TagRecordTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void forceRecord() {
         assertThrows(Throwable.class, () -> Tag.Structure("entity", Class.class.cast(Entity.class)));
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void invalidItem() {
         // ItemStack cannot become a record due to `ItemStack#toItemNBT` being serialized differently, and independently of
         // the item record components

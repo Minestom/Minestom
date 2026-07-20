@@ -24,7 +24,7 @@ import static net.minestom.server.coordinate.CoordConversion.*;
 
 @ApiStatus.Internal
 public final class GeneratorImpl {
-    public record GenSection(Palette blocks, Palette biomes, Int2ObjectMap<Block> specials) {
+public record GenSection(Palette blocks, Palette biomes, Int2ObjectMap<Block> specials) {
         public GenSection(Palette blocks, Palette biomes) {
             this(blocks, biomes, new Int2ObjectOpenHashMap<>(0));
         }

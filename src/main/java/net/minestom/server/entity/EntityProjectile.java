@@ -33,12 +33,14 @@ public class EntityProjectile extends Entity {
     private final Entity shooter;
     private boolean wasStuck;
 
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     public EntityProjectile(@Nullable Entity shooter, EntityType entityType) {
         super(entityType);
         this.shooter = shooter;
         setup();
     }
 
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     private void setup() {
         super.hasPhysics = false;
         if (getEntityMeta() instanceof ProjectileMeta) {

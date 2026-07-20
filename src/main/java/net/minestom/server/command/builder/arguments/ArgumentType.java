@@ -44,6 +44,7 @@ public class ArgumentType {
      * @see ArgumentLoop
      */
     @SafeVarargs
+    @SuppressWarnings("varargs")
     public static <T> ArgumentLoop<T> Loop(String id, Argument<T>... arguments) {
         return new ArgumentLoop<>(id, arguments);
     }

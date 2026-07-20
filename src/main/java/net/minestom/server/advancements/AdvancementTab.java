@@ -33,6 +33,7 @@ public class AdvancementTab implements Viewable {
     // will never change (since the root identifier is always the same)
     protected final AdvancementsPacket removePacket;
 
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     protected AdvancementTab(String rootIdentifier, AdvancementRoot root) {
         this.root = root;
         cacheAdvancement(rootIdentifier, root, null);
@@ -99,6 +100,7 @@ public class AdvancementTab implements Viewable {
      * @param advancement the advancement
      * @param parent      the parent of this advancement, only null for the root advancement
      */
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     private void cacheAdvancement(String identifier, Advancement advancement, @Nullable Advancement parent) {
         Check.stateCondition(advancement.getTab() != null,
                 "You tried to add an advancement already linked to a tab");

@@ -40,6 +40,7 @@ public class ItemComponentReadWriteIntegrationTest {
     );
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testReadWrite(Env env) throws IOException {
         var componentEntries = new ArrayList<>(EXTRA_CASES.entrySet());
         try (InputStream is = MinestomData.resource("item.json")) {
@@ -56,7 +57,6 @@ public class ItemComponentReadWriteIntegrationTest {
         assertAll(componentEntries.stream().map(entry -> () -> {
             var component = DataComponent.fromKey(entry.getKey());
             assertNotNull(component, "Component not found: " + entry.getKey());
-            //noinspection unchecked
             readWriteTestImpl((DataComponent<Object>) component, entry.getValue(), env.process());
         }));
     }

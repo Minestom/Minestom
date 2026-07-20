@@ -223,6 +223,7 @@ public record BoundingBox(Vec relativeStart, Vec relativeEnd) implements Shape {
         public PointIterator() {
         }
 
+        @SuppressWarnings("this-escape") // reset is effectively final, subclassing this iterator is unsupported
         public PointIterator(BoundingBox boundingBox, Point p, AxisMask axisMask, double axis) {
             reset(boundingBox, p, axisMask, axis);
         }

@@ -31,9 +31,9 @@ public interface EventBinding<E extends Event> {
             this.predicate = predicate;
         }
 
+        @SuppressWarnings("unchecked")
         public <M extends E> FilteredBuilder<E, T> map(Class<M> eventType,
                                                        BiConsumer<T, M> consumer) {
-            //noinspection unchecked
             this.mapped.put(eventType, (BiConsumer<Object, E>) consumer);
             return this;
         }

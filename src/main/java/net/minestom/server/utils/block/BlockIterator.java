@@ -52,6 +52,7 @@ public class BlockIterator implements Iterator<Point> {
      *                    trace. Setting this value above 140 may lead to problems with
      *                    unloaded chunks. A value of 0 indicates no limit
      */
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     public BlockIterator(Vec start, Vec direction, double yOffset, double maxDistance, boolean smooth) {
         reset(start, direction, yOffset, maxDistance, smooth);
     }

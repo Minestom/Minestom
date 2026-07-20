@@ -144,7 +144,7 @@ final class GraphConverter {
                     }
                 }
                 throw new RuntimeException("Arg group must have child args.");
-            } else if (argument instanceof ArgumentLoop special) {
+            } else if (argument instanceof ArgumentLoop<?> special) {
                 AtomicInteger r = new AtomicInteger();
                 int[] res = new int[special.arguments().size()];
                 List<?> arguments = special.arguments();

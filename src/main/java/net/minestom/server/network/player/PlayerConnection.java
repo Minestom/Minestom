@@ -50,6 +50,7 @@ public abstract class PlayerConnection {
     volatile boolean online;
     private volatile boolean wasTransferred;
 
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     private @Nullable LoginPluginMessageProcessor loginPluginMessageProcessor = new LoginPluginMessageProcessor(this);
 
     private @Nullable CompletableFuture<List<SelectKnownPacksPacket.Entry>> knownPacksFuture = null; // Present only when waiting for a response from the client.

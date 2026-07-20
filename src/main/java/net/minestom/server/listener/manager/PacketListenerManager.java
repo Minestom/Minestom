@@ -32,6 +32,7 @@ public final class PacketListenerManager {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(PacketListenerManager.class);
 
+    @SuppressWarnings({"unchecked", "rawtypes"}) // generic array creation
     private final Map<Class<? extends ClientPacket>, PacketPrePlayListenerConsumer>[] listeners = new Map[ConnectionState.values().length];
 
     public PacketListenerManager() {
@@ -129,7 +130,8 @@ public final class PacketListenerManager {
         final ConnectionState nextState = PacketVanilla.nextClientState(packet, currState);
         if (nextState != currState) connection.setClientState(nextState);
 
-        final Class clazz = packet.getClass();
+        final Class<?> clazz = packet.getClass();
+        @SuppressWarnings("unchecked")
         PacketPrePlayListenerConsumer<T> packetListenerConsumer = listeners[currState.ordinal()].get(clazz);
 
         // Listener can be null if none has been set before, call PacketConsumer anyway

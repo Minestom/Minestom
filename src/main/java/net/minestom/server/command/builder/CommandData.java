@@ -15,7 +15,7 @@ public class CommandData {
     }
 
     @Nullable
-    @SuppressWarnings("TypeParameterUnusedInFormals")
+    @SuppressWarnings({"unchecked", "TypeParameterUnusedInFormals"})
     public <T> T get(String key) {
         return (T) dataMap.get(key);
     }

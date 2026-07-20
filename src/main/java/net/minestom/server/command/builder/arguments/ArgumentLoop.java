@@ -16,6 +16,7 @@ public class ArgumentLoop<T> extends Argument<List<T>> {
     private final List<Argument<T>> arguments = new ArrayList<>();
 
     @SafeVarargs
+    @SuppressWarnings("varargs")
     public ArgumentLoop(String id, Argument<T>... arguments) {
         super(id, true, true);
         this.arguments.addAll(Arrays.asList(arguments));

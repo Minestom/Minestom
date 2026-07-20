@@ -16,14 +16,13 @@ final class ParticleImpl {
     static final Registry<Particle> REGISTRY = RegistryData.createStaticRegistry(BuiltinRegistries.PARTICLE_TYPE,
             (namespace, properties) -> defaultParticle(Key.key(namespace), properties.getInt("id")));
 
+    @SuppressWarnings("unchecked")
     static <P extends Particle> @UnknownNullability P get(RegistryKey<P> key) {
-        //noinspection unchecked
         return (P) REGISTRY.get(key.key());
     }
 
-    @SuppressWarnings("TypeParameterUnusedInFormals")
+    @SuppressWarnings({"unchecked", "TypeParameterUnusedInFormals"})
     static <P extends Particle> @UnknownNullability P get(Key key) {
-        //noinspection unchecked
         return (P) REGISTRY.get(key);
     }
 

@@ -1,5 +1,6 @@
 package net.minestom.server.listener;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
@@ -76,7 +77,7 @@ public class WindowListener {
 
         // Resync in case the client sent item does not match what we think it should be.
         ItemStack cursorItem = player.getInventory().getCursorItem();
-        if (!ItemStack.Hash.of(cursorItem).equals(packet.clickedItem()))
+        if (!ItemStack.Hash.of(cursorItem, MinecraftServer.process()).equals(packet.clickedItem()))
             player.sendPacket(new SetCursorItemPacket(cursorItem));
     }
 

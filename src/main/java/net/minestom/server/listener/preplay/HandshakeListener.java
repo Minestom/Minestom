@@ -46,6 +46,7 @@ public final class HandshakeListener {
         return MinecraftServer.process().auth() instanceof Auth.Bungee bungee ? (bungee.guard() ? 2500 : Short.MAX_VALUE) : 255;
     }
 
+    @SuppressWarnings("fallthrough") // transfers deliberately continue with the regular login flow
     public static void listener(ClientHandshakePacket packet, PlayerConnection connection) {
         String address = packet.serverAddress();
         if (address.length() > maxHandshakeLength()) {
@@ -60,7 +61,6 @@ public final class HandshakeListener {
                     connection.kick(TRANSFERS_DISABLED_TEXT);
                     return;
                 }
-                // fall through, transfers continue with the regular login flow
             case LOGIN:
                 if (packet.protocolVersion() != MinecraftServer.PROTOCOL_VERSION) {
                     // Incorrect client version
@@ -74,7 +74,6 @@ public final class HandshakeListener {
                 if (auth instanceof Auth.Bungee bungee && connection instanceof PlayerSocketConnection socketConnection) {
                     address = handleBungeeForwarding(address, socketConnection, bungee);
                 }
-                // fall through
             default:
                 break;
         }
