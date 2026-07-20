@@ -24,7 +24,7 @@ public class ArgumentLoop<T> extends Argument<List<T>> {
     @Override
     public List<T> parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         List<T> result = new ArrayList<>();
-        final String[] split = input.split(StringUtils.SPACE);
+        final String[] split = input.split(StringUtils.SPACE, 0);
 
         final StringBuilder builder = new StringBuilder();
         boolean success = false;

@@ -77,7 +77,7 @@ final class ProxyProtocolDecoder {
             throw new IOException("PROXY protocol v1 header exceeds " + V1_HEADER_MAX_LENGTH + " bytes");
         }
 
-        final String[] parts = new String(bytes, 0, headerLength - 2, StandardCharsets.US_ASCII).split(" ");
+        final String[] parts = new String(bytes, 0, headerLength - 2, StandardCharsets.US_ASCII).split(" ", 0);
         final SocketAddress clientAddress;
         if (parts.length >= 2 && parts[1].equals("UNKNOWN")) {
             clientAddress = originalAddress;

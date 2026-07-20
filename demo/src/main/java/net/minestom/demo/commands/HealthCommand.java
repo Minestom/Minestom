@@ -1,5 +1,6 @@
 package net.minestom.demo.commands;
 
+import java.util.Locale;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
@@ -61,7 +62,7 @@ public class HealthCommand extends Command {
         final String mode = context.get("mode");
         final int value = context.get("value");
 
-        switch (mode.toLowerCase()) {
+        switch (mode.toLowerCase(Locale.ROOT)) {
             case "set":
                 player.setHealth(value);
                 break;

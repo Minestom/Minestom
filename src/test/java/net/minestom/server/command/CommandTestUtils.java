@@ -41,7 +41,7 @@ public class CommandTestUtils {
                 '!', s -> {
                     final String[] strings = splitDeclaration(s);
                     final ArrayList<String> result = new ArrayList<>();
-                    for (String s1 : strings[0].split(" ")) {
+                    for (String s1 : strings[0].split(" ", 0)) {
                         result.add(s1 + "=" + (strings[1].replaceAll("!", s1)));
                     }
                     return result;
@@ -49,7 +49,7 @@ public class CommandTestUtils {
                 '%', s -> {
                     final String[] strings = splitDeclaration(s);
                     final ArrayList<String> result = new ArrayList<>();
-                    for (String s1 : strings[0].split(" ")) {
+                    for (String s1 : strings[0].split(" ", 0)) {
                         result.add(s1 + "=" + (strings[1].replaceAll("%", "'" + s1 + "'")));
                     }
                     return result;
@@ -57,7 +57,7 @@ public class CommandTestUtils {
                 '§', s -> {
                     final String[] strings = splitDeclaration(s);
                     final ArrayList<String> result = new ArrayList<>();
-                    for (String s1 : strings[0].split(" ")) {
+                    for (String s1 : strings[0].split(" ", 0)) {
                         result.add(s1 + "=" + (strings[1].replaceAll("§", "'" + (s1.toUpperCase(Locale.ROOT)) + "'")));
                     }
                     return result;
@@ -139,7 +139,7 @@ public class CommandTestUtils {
                         final int spaceIndex = s.indexOf(" ");
                         if (spaceIndex > -1 && spaceIndex < s.indexOf('=')) {
                             final String[] split = s.split("=", 2);
-                            for (String s1 : split[0].split(" ")) {
+                            for (String s1 : split[0].split(" ", 0)) {
                                 result.add(s1 + "=" + split[1]);
                             }
                         } else {
@@ -150,12 +150,12 @@ public class CommandTestUtils {
                     final int spaceIndex = s.indexOf(" ");
                     if (spaceIndex > -1 && spaceIndex < s.indexOf('-')) {
                         final String[] split = s.split("-", 2);
-                        for (String s1 : split[0].split(" ")) {
+                        for (String s1 : split[0].split(" ", 0)) {
                             result.add(s1 + "-" + split[1]);
                         }
                     } else if (spaceIndex > -1 && spaceIndex < s.indexOf('+')) {
                         final String[] split = s.split("\\+", 2);
-                        for (String s1 : split[0].split(" ")) {
+                        for (String s1 : split[0].split(" ", 0)) {
                             result.add(s1 + "+" + split[1]);
                         }
                     } else {

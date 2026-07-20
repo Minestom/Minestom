@@ -29,7 +29,7 @@ public class CommandContext {
 
     public CommandContext(String input) {
         this.input = input;
-        this.commandName = input.split(StringUtils.SPACE)[0];
+        this.commandName = input.split(StringUtils.SPACE, 0)[0];
     }
 
     public String getInput() {

@@ -1,5 +1,6 @@
 package net.minestom.demo;
 
+import java.util.Locale;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.StringBinaryTag;
 import net.kyori.adventure.key.Key;
@@ -299,7 +300,7 @@ public class PlayerInit {
                 var pos = event.getBlockPosition();
                 if (block.getProperty("part") == null || block.getProperty("facing") == null) return;
                 var isHead = "head".equals(block.getProperty("part"));
-                var facing = BlockFace.valueOf(block.getProperty("facing").toUpperCase());
+                var facing = BlockFace.valueOf(block.getProperty("facing").toUpperCase(Locale.ROOT));
                 var other = (isHead ? pos.add(facing.getOppositeFace().toDirection().vec().asPos()) : pos.add(facing.toDirection().vec().asPos()));
                 var otherBlock = instance.getBlock(other);
                 if (otherBlock.id() == block.id()) {
@@ -314,7 +315,7 @@ public class PlayerInit {
                     var pos = event.getBlockPosition();
                     if (block.getProperty("part") == null || block.getProperty("facing") == null) return;
                     var isHead = "head".equals(block.getProperty("part"));
-                    var facing = BlockFace.valueOf(block.getProperty("facing").toUpperCase());
+                    var facing = BlockFace.valueOf(block.getProperty("facing").toUpperCase(Locale.ROOT));
                     var other = (isHead ? pos.add(facing.getOppositeFace().toDirection().vec().asPos()) : pos.add(facing.toDirection().vec().asPos()));
                     var otherBlock = instance.getBlock(other);
                     if (otherBlock.id() == block.id()) {

@@ -36,7 +36,7 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
 
     @Override
     public RelativeVec parse(CommandSender sender, String input) throws ArgumentSyntaxException {
-        final String[] split = input.split(StringUtils.SPACE);
+        final String[] split = input.split(StringUtils.SPACE, 0);
         if (split.length != getNumberCount()) {
             throw new ArgumentSyntaxException("Invalid number of values", input, INVALID_NUMBER_COUNT_ERROR);
         }

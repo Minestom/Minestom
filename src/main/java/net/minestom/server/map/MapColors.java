@@ -1,5 +1,6 @@
 package net.minestom.server.map;
 
+import java.util.Locale;
 import net.minestom.server.ServerFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,7 +84,7 @@ public enum MapColors {
     static {
         ColorMappingStrategy strategy;
         try {
-            strategy = ColorMappingStrategy.valueOf(ServerFlag.MAP_RGB_MAPPING.toUpperCase());
+            strategy = ColorMappingStrategy.valueOf(ServerFlag.MAP_RGB_MAPPING.toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException e) {
             logger.warn("Unknown color mapping strategy '{}', defaulting to LAZY.", ServerFlag.MAP_RGB_MAPPING);
             strategy = ColorMappingStrategy.LAZY;

@@ -3,6 +3,7 @@ package net.minestom.server.item.component;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import java.nio.charset.StandardCharsets;
 import net.minestom.data.MinestomData;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
@@ -44,7 +45,7 @@ public class ItemComponentReadWriteIntegrationTest {
         try (InputStream is = MinestomData.resource("item.json")) {
             Objects.requireNonNull(is, "item.json not found");
 
-            var object = GSON.fromJson(new InputStreamReader(is), JsonObject.class);
+            var object = GSON.fromJson(new InputStreamReader(is, StandardCharsets.UTF_8), JsonObject.class);
             for (var itemEntry : object.entrySet()) {
                 for (var componentEntry : itemEntry.getValue().getAsJsonObject().getAsJsonObject("components").entrySet()) {
                     componentEntries.add(entry(componentEntry.getKey(), componentEntry.getValue()));

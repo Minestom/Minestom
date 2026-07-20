@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
+import java.nio.charset.StandardCharsets;
 import net.kyori.adventure.key.Key;
 import net.minestom.data.MinestomData;
 import net.minestom.server.MinecraftServer;
@@ -126,7 +127,7 @@ public final class RegistryData {
         try (InputStream resourceStream = loadRegistryFile(resourcePath)) {
             if (resourceStream != null) {
                 final Map<String, Object> map = new HashMap<>();
-                try (JsonReader reader = new JsonReader(new InputStreamReader(resourceStream))) {
+                try (JsonReader reader = new JsonReader(new InputStreamReader(resourceStream, StandardCharsets.UTF_8))) {
                     reader.beginObject();
                     while (reader.hasNext()) map.put(reader.nextName(), readObject(reader));
                     reader.endObject();

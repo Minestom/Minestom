@@ -85,7 +85,7 @@ public final class HandshakeListener {
     private static String handleBungeeForwarding(String address,
                                                  PlayerSocketConnection socketConnection,
                                                  Auth.Bungee bungee) {
-        final String[] split = address.split("\00");
+        final String[] split = address.split("\00", 0);
 
         if (split.length == 3 || split.length == 4) {
             final boolean hasProperties = split.length == 4;

@@ -1,5 +1,6 @@
 package net.minestom.server.item.component;
 
+import java.util.Locale;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 
@@ -15,8 +16,8 @@ public enum ItemRarity {
     EPIC;
 
     private static final Map<String, ItemRarity> BY_ID = Arrays.stream(values())
-            .collect(Collectors.toMap(v -> v.name().toLowerCase(), Function.identity()));
+            .collect(Collectors.toMap(v -> v.name().toLowerCase(Locale.ROOT), Function.identity()));
 
     public static final NetworkBuffer.Type<ItemRarity> NETWORK_TYPE = NetworkBuffer.Enum(ItemRarity.class);
-    public static final Codec<ItemRarity> CODEC = Codec.STRING.transform(BY_ID::get, v -> v.name().toLowerCase());
+    public static final Codec<ItemRarity> CODEC = Codec.STRING.transform(BY_ID::get, v -> v.name().toLowerCase(Locale.ROOT));
 }

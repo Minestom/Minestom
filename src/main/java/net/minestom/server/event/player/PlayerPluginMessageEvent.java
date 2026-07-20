@@ -1,5 +1,6 @@
 package net.minestom.server.event.player;
 
+import java.nio.charset.StandardCharsets;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.network.packet.client.common.ClientPluginMessagePacket;
@@ -43,7 +44,7 @@ public class PlayerPluginMessageEvent implements PlayerInstanceEvent {
      * @return the message
      */
     public String getMessageString() {
-        return new String(message);
+        return new String(message, StandardCharsets.UTF_8);
     }
 
     @Override
