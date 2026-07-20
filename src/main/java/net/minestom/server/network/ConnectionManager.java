@@ -83,14 +83,16 @@ public final class ConnectionManager {
     /**
      * Returns an unmodifiable set containing the players currently in the play state.
      */
-    public Set<Player> getOnlinePlayers() {
+    @SuppressWarnings("PreferredInterfaceType") // wider type kept for binary compatibility until the next breaking release
+    public Collection<Player> getOnlinePlayers() {
         return unmodifiablePlayPlayers;
     }
 
     /**
      * Returns an unmodifiable set containing the players currently in the configuration state.
      */
-    public Set<Player> getConfigPlayers() {
+    @SuppressWarnings("PreferredInterfaceType") // wider type kept for binary compatibility until the next breaking release
+    public Collection<Player> getConfigPlayers() {
         return unmodifiableConfigurationPlayers;
     }
 

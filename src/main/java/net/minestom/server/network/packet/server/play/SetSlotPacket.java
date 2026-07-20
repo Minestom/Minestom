@@ -23,7 +23,8 @@ public record SetSlotPacket(int windowId, int stateId, short slot,
             SetSlotPacket::new);
 
     @Override
-    public List<Component> components() {
+    @SuppressWarnings("PreferredInterfaceType") // wider type kept for binary compatibility until the next breaking release
+    public Collection<Component> components() {
         return ItemStack.textComponents(itemStack);
     }
 

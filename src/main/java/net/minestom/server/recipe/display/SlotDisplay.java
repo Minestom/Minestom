@@ -62,7 +62,8 @@ public sealed interface SlotDisplay extends ComponentHolder<SlotDisplay> {
                 ItemStack::new);
 
         @Override
-        public List<Component> components() {
+        @SuppressWarnings("PreferredInterfaceType") // wider type kept for binary compatibility until the next breaking release
+        public Collection<Component> components() {
             return net.minestom.server.item.ItemStack.textComponents(itemStack);
         }
 

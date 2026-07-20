@@ -27,7 +27,7 @@ public class SuggestionEntry {
     }
 
     @Override
-    public final boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (!(o instanceof SuggestionEntry that)) return false;
         return getEntry().equals(that.getEntry()) && Objects.equals(getTooltip(), that.getTooltip());
     }
