@@ -20,7 +20,10 @@ public final class LightCompute {
     static final int SECTION_SIZE = 16;
 
     public static final byte[] UNSET_CONTENT = new byte[0];
+    // Shared sentinel arrays compared by identity
+    @SuppressWarnings("MutablePublicArray")
     public static final byte[] EMPTY_CONTENT = new byte[LIGHT_LENGTH];
+    @SuppressWarnings("MutablePublicArray")
     public static final byte[] CONTENT_FULLY_LIT = new byte[LIGHT_LENGTH];
 
     static {
@@ -68,7 +71,7 @@ public final class LightCompute {
                     };
 
                     if (content != null) {
-                        final int internalEmission = (byte) (Math.max(getLight(content, posTo) - 1, 0));
+                        final int internalEmission = (byte) Math.max(getLight(content, posTo) - 1, 0);
                         if (lightEmission <= internalEmission) continue;
                     }
 

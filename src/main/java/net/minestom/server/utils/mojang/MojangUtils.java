@@ -112,10 +112,11 @@ public final class MojangUtils {
         final String encodedServerId = encode(serverId);
 
         final String url;
-        if (ServerFlag.AUTH_PREVENT_PROXY_CONNECTIONS
+        // getAddress() is null for unresolved addresses, fall back to the base URL then
+        final InetAddress address = ServerFlag.AUTH_PREVENT_PROXY_CONNECTIONS
                 && userSocket instanceof InetSocketAddress inetSocketAddress
-                && inetSocketAddress.getAddress() instanceof InetAddress address
-        ) {
+                ? inetSocketAddress.getAddress() : null;
+        if (address != null) {
             url = String.format(PREVENT_PROXY_CONNECTIONS_AUTH_URL, username, encodedServerId, encode(address.getHostAddress()));
         } else {
             url = String.format(BASE_AUTH_URL, username, encodedServerId);

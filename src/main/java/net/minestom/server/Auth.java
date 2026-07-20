@@ -1,5 +1,6 @@
 package net.minestom.server;
 
+import java.nio.charset.StandardCharsets;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.Nullable;
@@ -54,7 +55,7 @@ public sealed interface Auth {
         }
 
         public static Key secretKey(String secret) {
-            return new SecretKeySpec(secret.getBytes(), MAC_ALGORITHM);
+            return new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), MAC_ALGORITHM);
         }
     }
 

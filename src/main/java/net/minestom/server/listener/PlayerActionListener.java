@@ -190,7 +190,7 @@ public final class PlayerActionListener {
                 final Pos playerPosition = player.getPosition();
                 // Teleport the player back if he broke a solid block just below him
                 if (playerPosition.sub(0, 1, 0).samePoint(blockPosition)) {
-                    player.teleport(playerPosition);
+                    var _ = player.teleport(playerPosition);
                 }
             }
         }

@@ -384,9 +384,9 @@ public final class ComponentCodecs {
                 };
 
                 return baseResult
-                        .map(ignored -> childrenCodec.encodeToMap(coder, value.children(), map))
-                        .map(ignored -> STYLE.encodeToMap(coder, value.style(), map))
-                        .mapResult(ignored -> map.build());
+                        .map(_ -> childrenCodec.encodeToMap(coder, value.children(), map))
+                        .map(_ -> STYLE.encodeToMap(coder, value.style(), map))
+                        .mapResult(_ -> map.build());
             }
         };
     });

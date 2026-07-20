@@ -9,6 +9,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.EquipmentSlotGroup;
+import net.minestom.server.entity.VillagerType;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeOperation;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
@@ -17,6 +18,7 @@ import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.item.book.FilteredText;
 import net.minestom.server.item.component.*;
+import net.minestom.server.item.component.FireworkExplosion.Shape;
 import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.item.predicate.ItemPredicate;
 import net.minestom.server.potion.PotionType;
@@ -95,6 +97,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @param damage     Damage value ({@link DataComponents#DAMAGE})
      */
     record Damage(@Nullable Range.Int durability, @Nullable Range.Int damage) implements Registered {
+        @SuppressWarnings("ConstantField") // kept not final for binary compatibility until the next breaking release
         public static Codec<Damage> CODEC = StructCodec.struct(
                 "durability", Range.Int.CODEC.optional(), Damage::durability,
                 "damage", Range.Int.CODEC.optional(), Damage::damage,
@@ -340,12 +343,12 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
     }
 
-    record FireworkExplosionPredicate(@Nullable net.minestom.server.item.component.FireworkExplosion.Shape shape,
+    record FireworkExplosionPredicate(@Nullable Shape shape,
                                       @Nullable Boolean hasTrail,
                                       @Nullable Boolean hasTwinkle) implements Predicate<net.minestom.server.item.component.FireworkExplosion> {
 
         public static final Codec<FireworkExplosionPredicate> CODEC = StructCodec.struct(
-                "shape", Codec.Enum(net.minestom.server.item.component.FireworkExplosion.Shape.class).optional(), FireworkExplosionPredicate::shape,
+                "shape", Codec.Enum(Shape.class).optional(), FireworkExplosionPredicate::shape,
                 "has_trail", Codec.BOOLEAN.optional(), FireworkExplosionPredicate::hasTrail,
                 "has_twinkle", Codec.BOOLEAN.optional(), FireworkExplosionPredicate::hasTwinkle,
                 FireworkExplosionPredicate::new
@@ -398,10 +401,10 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      *
      * @param delegate A predicate to match against the object's firework explosion
      */
-    record FireworkExplosion(Fireworks.FireworkExplosionPredicate delegate) implements Registered {
+    record FireworkExplosion(FireworkExplosionPredicate delegate) implements Registered {
         public static final Codec<FireworkExplosion> CODEC = FireworkExplosionPredicate.CODEC.transform(FireworkExplosion::new, FireworkExplosion::delegate);
 
-        public FireworkExplosion(@Nullable net.minestom.server.item.component.FireworkExplosion.Shape shape,
+        public FireworkExplosion(@Nullable Shape shape,
                                  @Nullable Boolean hasTrail,
                                  @Nullable Boolean hasTwinkle) {
             this(new FireworkExplosionPredicate(shape, hasTrail, hasTwinkle));
@@ -426,9 +429,9 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @see CollectionPredicate
      */
     record WritableBook(
-            @Nullable CollectionPredicate<FilteredText<String>, PagePredicate> pages) implements Registered {
+            @Nullable CollectionPredicate<FilteredText<String>, WritableBook.PagePredicate> pages) implements Registered {
         public static final Codec<WritableBook> CODEC = StructCodec.struct(
-                "pages", CollectionPredicate.codec(PagePredicate.CODEC).optional(), WritableBook::pages,
+                "pages", CollectionPredicate.codec(WritableBook.PagePredicate.CODEC).optional(), WritableBook::pages,
                 WritableBook::new
         );
 
@@ -465,13 +468,13 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @param resolved   The expected value of {@link WrittenBookContent#resolved()}, or null to ignore
      * @see CollectionPredicate
      */
-    record WrittenBook(@Nullable CollectionPredicate<FilteredText<Component>, PagePredicate> pages,
+    record WrittenBook(@Nullable CollectionPredicate<FilteredText<Component>, WrittenBook.PagePredicate> pages,
                        @Nullable String author,
                        @Nullable String title,
                        @Nullable Range.Int generation, @Nullable Boolean resolved) implements Registered {
 
         public static final Codec<WrittenBook> CODEC = StructCodec.struct(
-                "pages", CollectionPredicate.codec(PagePredicate.CODEC).optional(), WrittenBook::pages,
+                "pages", CollectionPredicate.codec(WrittenBook.PagePredicate.CODEC).optional(), WrittenBook::pages,
                 "author", Codec.STRING.optional(), WrittenBook::author,
                 "title", Codec.STRING.optional(), WrittenBook::title,
                 "generation", Range.Int.CODEC.optional(), WrittenBook::generation,
@@ -635,8 +638,8 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      *
      * @param villagerTypes The types of villagers to match
      */
-    record VillagerVariant(List<net.minestom.server.entity.VillagerType> villagerTypes) implements Registered {
-        public static final Codec<VillagerVariant> CODEC = net.minestom.server.entity.VillagerType.CODEC.listOrSingle().transform(VillagerVariant::new, VillagerVariant::villagerTypes);
+    record VillagerVariant(List<VillagerType> villagerTypes) implements Registered {
+        public static final Codec<VillagerVariant> CODEC = VillagerType.CODEC.listOrSingle().transform(VillagerVariant::new, VillagerVariant::villagerTypes);
 
         public VillagerVariant {
             villagerTypes = List.copyOf(villagerTypes);

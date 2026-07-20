@@ -61,7 +61,7 @@ public class EntityBlockTouchTickIntegrationTest {
     @Test
     public void entityPhysicsCheckTouchTickFarZ(Env env) {
         var instance = env.createFlatInstance();
-        instance.loadChunk(new Pos(1000, 1000, 1000));
+        instance.loadChunk(new Pos(1000, 1000, 1000)).join();
 
         Set<Point> positions = new HashSet<>();
         var handler = new BlockHandler() {
@@ -101,7 +101,7 @@ public class EntityBlockTouchTickIntegrationTest {
     @Test
     public void entityPhysicsCheckTouchTickFarX(Env env) {
         var instance = env.createFlatInstance();
-        instance.loadChunk(new Pos(1000, 1000, 1000));
+        instance.loadChunk(new Pos(1000, 1000, 1000)).join();
 
         Set<Point> positions = new HashSet<>();
         var handler = new BlockHandler() {
@@ -149,7 +149,7 @@ public class EntityBlockTouchTickIntegrationTest {
     @Test
     public void entityPhysicsCheckTouchTickFarNegative(Env env) {
         var instance = env.createFlatInstance();
-        instance.loadChunk(new Pos(-1000, 44, -1000));
+        instance.loadChunk(new Pos(-1000, 44, -1000)).join();
 
         Set<Point> positions = new HashSet<>();
         var handler = new BlockHandler() {

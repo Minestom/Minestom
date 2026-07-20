@@ -151,8 +151,8 @@ public sealed interface SulfurCubeArchetype extends SulfurCubeArchetypes permits
         private RegistryTag<Material> items = RegistryTag.empty();
         private List<AttributeEntry> attributeModifiers = List.of();
         private boolean buoyant = false;
-        private Explosion explosion = null;
-        private ContactDamage contactDamage = null;
+        private @Nullable Explosion explosion = null;
+        private @Nullable ContactDamage contactDamage = null;
         private KnockbackModifiers knockbackModifiers = KnockbackModifiers.DEFAULT;
         private SoundSettings soundSettings = SoundSettings.DEFAULT;
 

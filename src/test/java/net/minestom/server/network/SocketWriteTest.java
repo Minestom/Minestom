@@ -54,8 +54,8 @@ public class SocketWriteTest {
     @Test
     public void writeSingleCompressed() {
         var string = "Hello world!".repeat(200);
-        var stringLength = string.getBytes(StandardCharsets.UTF_8).length;
-        var lengthLength = getVarIntSize(stringLength);
+        int stringLength = string.getBytes(StandardCharsets.UTF_8).length;
+        int lengthLength = getVarIntSize(stringLength);
 
         var packet = new CompressiblePacket(string);
 

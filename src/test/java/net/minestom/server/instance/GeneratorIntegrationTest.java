@@ -155,7 +155,7 @@ public class GeneratorIntegrationTest {
     @ValueSource(booleans = {false, true})
     public void loaderExceptionCompletesChunkFuture(boolean parallel, Env env) {
         var exception = new RuntimeException("loader failure");
-        env.process().exception().setExceptionHandler(throwable -> {
+        env.process().exception().setExceptionHandler(_ -> {
         });
         ChunkLoader chunkLoader = new ChunkLoader() {
             @Override

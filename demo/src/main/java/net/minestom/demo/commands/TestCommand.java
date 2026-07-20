@@ -15,20 +15,20 @@ public class TestCommand extends Command {
 
     public TestCommand() {
         super("testcmd");
-        setDefaultExecutor(this::usage);
+        setDefaultExecutor(TestCommand::usage);
 
         var block = ArgumentType.BlockState("block");
-        block.setCallback((sender, exception) -> exception.printStackTrace());
+        block.setCallback((_, exception) -> exception.printStackTrace());
 
-        setDefaultExecutor((sender, context) -> {
+        setDefaultExecutor((sender, _) -> {
             sender.playSound(Sound.sound(Key.key("item.trumpet.doot"), Sound.Source.PLAYER, 1, 1));
             AdventurePacketConvertor.createSoundPacket(Sound.sound(Key.key(SoundEvent.BLOCK_ANVIL_HIT.name()), Sound.Source.HOSTILE, 1, 1), (Player) sender);
         });
-        addSyntax((sender, context) -> System.out.println("executed"), block);
+        addSyntax((_, _) -> System.out.println("executed"), block);
 
     }
 
-    private void usage(CommandSender sender, CommandContext context) {
+    private static void usage(CommandSender sender, CommandContext context) {
         sender.sendMessage(Component.text("Incorrect usage"));
     }
 

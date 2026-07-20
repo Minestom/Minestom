@@ -25,6 +25,7 @@ public sealed interface Material extends StaticProtocolObject<Material>, Materia
     /**
      * Returns the raw registry data for the material.
      */
+    @Override
     @Contract(pure = true)
     RegistryData.MaterialEntry registry();
 

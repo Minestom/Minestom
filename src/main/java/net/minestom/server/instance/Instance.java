@@ -116,6 +116,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
 
     private final EntityTracker entityTracker = new EntityTrackerImpl();
 
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     private final ChunkCache blockRetriever = new ChunkCache(this, null, null);
 
     protected int chunkViewDistance = ServerFlag.CHUNK_VIEW_DISTANCE;
@@ -126,7 +127,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
     // instance custom data
     protected TagHandler tagHandler = TagHandler.newHandler();
     private final Scheduler scheduler = Scheduler.newScheduler();
-    private final EventNode<InstanceEvent> eventNode;
+    private final @Nullable EventNode<InstanceEvent> eventNode;
     private final Registries registries;
 
     // the explosion supplier
@@ -158,6 +159,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
      * @param uuid          the {@link UUID} of the instance
      * @param dimensionType the {@link DimensionType} of the instance
      */
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     public Instance(Registries registries, UUID uuid, RegistryKey<DimensionType> dimensionType, Key dimensionName) {
         this.registries = registries;
         this.uuid = uuid;
@@ -338,6 +340,8 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
     public abstract @Nullable Chunk getChunk(int chunkX, int chunkZ);
 
     /**
+     * Checks whether the chunk at the given chunk coordinates is loaded.
+     *
      * @param chunkX the chunk X
      * @param chunkZ this chunk Z
      * @return true if the chunk is loaded
@@ -347,6 +351,8 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
     }
 
     /**
+     * Checks whether the chunk containing the given point is loaded.
+     *
      * @param point coordinate of a block or other
      * @return true if the chunk is loaded
      */
@@ -518,6 +524,8 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
         if (clock != null) clock.time(time);
     }
 
+    /// Sets the current time (in ticks) of the given clock.
+    ///
     /// @throws IllegalArgumentException if the clock was not registered when the instance was created.
     public void setTime(RegistryKey<WorldClock> clock, long time) {
         clock(clock).time(time);

@@ -25,6 +25,7 @@ public sealed interface EntityType extends StaticProtocolObject<EntityType>, Ent
      *
      * @return the entity registry
      */
+    @Override
     @Contract(pure = true)
     RegistryData.EntityEntry registry();
 

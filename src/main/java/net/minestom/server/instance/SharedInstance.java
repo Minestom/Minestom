@@ -47,7 +47,7 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public CompletableFuture<Chunk> loadOptionalChunk(int chunkX, int chunkZ) {
+    public CompletableFuture<@Nullable Chunk> loadOptionalChunk(int chunkX, int chunkZ) {
         return instanceContainer.loadOptionalChunk(chunkX, chunkZ);
     }
 
@@ -140,13 +140,13 @@ public class SharedInstance extends Instance {
      */
     public static boolean areLinked(Instance instance1, Instance instance2) {
         // SharedInstance check
-        if (instance1 instanceof InstanceContainer && instance2 instanceof SharedInstance) {
-            return ((SharedInstance) instance2).getInstanceContainer().equals(instance1);
-        } else if (instance2 instanceof InstanceContainer && instance1 instanceof SharedInstance) {
-            return ((SharedInstance) instance1).getInstanceContainer().equals(instance2);
-        } else if (instance1 instanceof SharedInstance && instance2 instanceof SharedInstance) {
-            final InstanceContainer container1 = ((SharedInstance) instance1).getInstanceContainer();
-            final InstanceContainer container2 = ((SharedInstance) instance2).getInstanceContainer();
+        if (instance1 instanceof InstanceContainer && instance2 instanceof SharedInstance shared2) {
+            return shared2.getInstanceContainer().equals(instance1);
+        } else if (instance2 instanceof InstanceContainer && instance1 instanceof SharedInstance shared1) {
+            return shared1.getInstanceContainer().equals(instance2);
+        } else if (instance1 instanceof SharedInstance shared1 && instance2 instanceof SharedInstance shared2) {
+            final InstanceContainer container1 = shared1.getInstanceContainer();
+            final InstanceContainer container2 = shared2.getInstanceContainer();
             return container1.equals(container2);
         }
 

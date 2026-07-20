@@ -10,10 +10,12 @@ public class BlazeMeta extends MonsterMeta {
         super(entity, metadata);
     }
 
+    @Override
     public boolean isOnFire() {
         return metadata.get(MetadataDef.Blaze.IS_ON_FIRE);
     }
 
+    @Override
     public void setOnFire(boolean value) {
         metadata.set(MetadataDef.Blaze.IS_ON_FIRE, value);
     }

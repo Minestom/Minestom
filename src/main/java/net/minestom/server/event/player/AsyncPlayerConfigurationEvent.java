@@ -32,7 +32,7 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent, AsyncEvent {
     private boolean hardcore;
     private boolean clearChat;
     private boolean sendRegistryData;
-    private Instance spawningInstance;
+    private @Nullable Instance spawningInstance;
 
     public AsyncPlayerConfigurationEvent(Player player, boolean isFirstConfig) {
         this.player = player;

@@ -59,9 +59,6 @@ public class SalmonMeta extends AbstractFishMeta {
         public static final NetworkBuffer.Type<Size> NETWORK_TYPE = NetworkBuffer.Enum(Size.class);
         public static final Codec<Size> CODEC = Codec.Enum(Size.class);
 
-        private static final Map<String, Size> BY_ID = Arrays.stream(values())
-                .collect(Collectors.toMap(Size::id, (size) -> size));
-
         private final String id;
 
         Size(String id) {

@@ -62,7 +62,7 @@ final class VanillaRegistries implements Registries {
 
     VanillaRegistries() {
         // The order of initialization here is relevant, we must load the enchantment util registries before the vanilla data is loaded.
-        var ignoredForInit = DataComponents.ITEM_NAME;
+        var _ = DataComponents.ITEM_NAME;
 
         this.enchantmentLevelBasedValues = LevelBasedValue.createDefaultRegistry();
         this.enchantmentValueEffects = ValueEffect.createDefaultRegistry();

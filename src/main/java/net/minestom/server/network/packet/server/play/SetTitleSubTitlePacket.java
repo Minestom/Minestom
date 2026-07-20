@@ -18,7 +18,7 @@ public record SetTitleSubTitlePacket(
             SetTitleSubTitlePacket::new);
 
     @Override
-    public Collection<Component> components() {
+    public List<Component> components() {
         return List.of(this.subtitle);
     }
 

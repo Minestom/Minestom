@@ -35,12 +35,12 @@ public class DripstonePlacementRule extends BlockPlacementRule {
 
     @Override
     public Block blockUpdate(UpdateState updateState) {
-        var direction = updateState.currentBlock().getProperty(PROP_VERTICAL_DIRECTION).equals("up");
+        boolean direction = updateState.currentBlock().getProperty(PROP_VERTICAL_DIRECTION).equals("up");
         var newThickness = getThickness(updateState.instance(), updateState.blockPosition(), direction);
         return updateState.currentBlock().withProperty(PROP_THICKNESS, newThickness);
     }
 
-    private String getThickness(Block.Getter instance, Point blockPosition, boolean direction) {
+    private static String getThickness(Block.Getter instance, Point blockPosition, boolean direction) {
         var abovePosition = blockPosition.add(0, direction ? 1 : -1, 0);
         var aboveBlock = instance.getBlock(abovePosition, Block.Getter.Condition.TYPE);
 

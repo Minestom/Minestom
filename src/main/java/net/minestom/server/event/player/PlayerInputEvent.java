@@ -42,84 +42,84 @@ public final class PlayerInputEvent implements PlayerInstanceEvent {
     // Movement keys
 
     /**
-     * @return true if the player is currently holding the forward key (typically the 'W' key).
+     * {@return true if the player is currently holding the forward key (typically the 'W' key)}
      */
     public boolean isHoldingForwardKey() {
         return this.player.inputs().forward();
     }
 
     /**
-     * @return true if the player has just pressed the forward key (typically the 'W' key).
+     * {@return true if the player has just pressed the forward key (typically the 'W' key)}
      */
     public boolean hasPressedForwardKey() {
         return !this.oldForward && this.player.inputs().forward();
     }
 
     /**
-     * @return true if the player has just released the forward key (typically the 'W' key).
+     * {@return true if the player has just released the forward key (typically the 'W' key)}
      */
     public boolean hasReleasedForwardKey() {
         return this.oldForward && !this.player.inputs().forward();
     }
 
     /**
-     * @return true if the player is currently holding the backward key (typically the 'S' key).
+     * {@return true if the player is currently holding the backward key (typically the 'S' key)}
      */
     public boolean isHoldingBackwardKey() {
         return this.player.inputs().backward();
     }
 
     /**
-     * @return true if the player has just pressed the backward key (typically the 'S' key).
+     * {@return true if the player has just pressed the backward key (typically the 'S' key)}
      */
     public boolean hasPressedBackwardKey() {
         return !this.oldBackward && this.player.inputs().backward();
     }
 
     /**
-     * @return true if the player has just released the backward key (typically the 'S' key).
+     * {@return true if the player has just released the backward key (typically the 'S' key)}
      */
     public boolean hasReleasedBackwardKey() {
         return this.oldBackward && !this.player.inputs().backward();
     }
 
     /**
-     * @return true if the player is currently holding the left key (typically the 'A' key).
+     * {@return true if the player is currently holding the left key (typically the 'A' key)}
      */
     public boolean isHoldingLeftKey() {
         return this.player.inputs().left();
     }
 
     /**
-     * @return true if the player has just pressed the left key (typically the 'A' key).
+     * {@return true if the player has just pressed the left key (typically the 'A' key)}
      */
     public boolean hasPressedLeftKey() {
         return !this.oldLeft && this.player.inputs().left();
     }
 
     /**
-     * @return true if the player has just released the left key (typically the 'A' key).
+     * {@return true if the player has just released the left key (typically the 'A' key)}
      */
     public boolean hasReleasedLeftKey() {
         return this.oldLeft && !this.player.inputs().left();
     }
 
     /**
-     * @return true if the player is currently holding the right key (typically the 'D' key).
+     * {@return true if the player is currently holding the right key (typically the 'D' key)}
      */
     public boolean isHoldingRightKey() {
         return this.player.inputs().right();
     }
 
     /**
-     * @return true if the player has just pressed the right key (typically the 'D' key).
+     * {@return true if the player has just pressed the right key (typically the 'D' key)}
      */
     public boolean hasPressedRightKey() {
         return !this.oldRight && this.player.inputs().right();
     }
 
     /**
-     * @return true if the player has just released the right key (typically the 'D' key).
+     * {@return true if the player has just released the right key (typically the 'D' key)}
      */
     public boolean hasReleasedRightKey() {
         return this.oldRight && !this.player.inputs().right();
@@ -128,7 +128,7 @@ public final class PlayerInputEvent implements PlayerInstanceEvent {
     // Action Keys
 
     /**
-     * @return true if the player is currently holding the jump key (typically the spacebar).
+     * {@return true if the player is currently holding the jump key (typically the spacebar)}
      * @apiNote If the player has auto-jump enabled, for 1 tick this will return true even if the player is not actually holding the jump key but may continue if they start holding it themselves.
      */
     public boolean isHoldingJumpKey() {
@@ -136,7 +136,7 @@ public final class PlayerInputEvent implements PlayerInstanceEvent {
     }
 
     /**
-     * @return true if the player has just pressed the jump key (typically the spacebar).
+     * {@return true if the player has just pressed the jump key (typically the spacebar)}
      * @apiNote If the player has auto-jump enabled, for 1 tick this will return true even if the player did not actually press the jump key.
      */
     public boolean hasPressedJumpKey() {
@@ -144,7 +144,7 @@ public final class PlayerInputEvent implements PlayerInstanceEvent {
     }
 
     /**
-     * @return true if the player has just released the jump key (typically the spacebar).
+     * {@return true if the player has just released the jump key (typically the spacebar)}
      * @apiNote If the player has auto-jump enabled, for 1 tick after auto-jump triggers if the player does not start holding the key themselves this will return true.
      */
     public boolean hasReleasedJumpKey() {
@@ -152,28 +152,28 @@ public final class PlayerInputEvent implements PlayerInstanceEvent {
     }
 
     /**
-     * @return true if the player is currently holding the shift key (typically the left shift key).
+     * {@return true if the player is currently holding the shift key (typically the left shift key)}
      */
     public boolean isHoldingShiftKey() {
         return this.player.inputs().shift();
     }
 
     /**
-     * @return true if the player has just pressed the shift key (typically the left shift key).
+     * {@return true if the player has just pressed the shift key (typically the left shift key)}
      */
     public boolean hasPressedShiftKey() {
         return !this.oldShift && this.player.inputs().shift();
     }
 
     /**
-     * @return true if the player has just released the shift key (typically the left shift key).
+     * {@return true if the player has just released the shift key (typically the left shift key)}
      */
     public boolean hasReleasedShiftKey() {
         return this.oldShift && !this.player.inputs().shift();
     }
 
     /**
-     * @return true if the player is currently holding the sprint key (typically the left control key).
+     * {@return true if the player is currently holding the sprint key (typically the left control key)}
      * @apiNote This method only reports the state of the sprint key itself, not other ways to start sprinting such as double-tapping the forward key.
      */
     public boolean isHoldingSprintKey() {
@@ -181,7 +181,7 @@ public final class PlayerInputEvent implements PlayerInstanceEvent {
     }
 
     /**
-     * @return true if the player has just pressed the sprint key (typically the left control key).
+     * {@return true if the player has just pressed the sprint key (typically the left control key)}
      * @apiNote This method only reports the state of the sprint key itself, not other ways to start sprinting such as double-tapping the forward key.
      */
     public boolean hasPressedSprintKey() {
@@ -189,7 +189,7 @@ public final class PlayerInputEvent implements PlayerInstanceEvent {
     }
 
     /**
-     * @return true if the player has just released the sprint key (typically the left control key).
+     * {@return true if the player has just released the sprint key (typically the left control key)}
      * @apiNote This method only reports the state of the sprint key itself, not other ways to start sprinting such as double-tapping the forward key.
      */
     public boolean hasReleasedSprintKey() {

@@ -2,6 +2,7 @@ package net.minestom.codegen;
 
 import com.google.gson.*;
 import com.palantir.javapoet.*;
+import java.nio.charset.StandardCharsets;
 import net.minestom.data.MinestomData;
 import org.jetbrains.annotations.Nullable;
 
@@ -113,7 +114,7 @@ final class Codegen {
     }
 
     private static <T> T parse(InputStream inputStream, Class<T> type) {
-        try (inputStream; Reader reader = new InputStreamReader(inputStream)) {
+        try (inputStream; Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
             return GSON.fromJson(reader, type);
         } catch (IOException e) {
             throw new IllegalStateException("Failed to read generator input", e);

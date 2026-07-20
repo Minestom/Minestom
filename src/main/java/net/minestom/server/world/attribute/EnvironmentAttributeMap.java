@@ -46,8 +46,8 @@ public record EnvironmentAttributeMap(Map<EnvironmentAttribute<?>, Entry<?, ?>> 
                             ? Either.left((T) entry.argument) : Either.right(entry));
         }
 
+        @SuppressWarnings({"unchecked", "rawtypes"})
         private static Codec<Entry<?, ?>> codec0(EnvironmentAttribute<?> attribute) {
-            //noinspection unchecked,rawtypes
             return (Codec) codec(attribute);
         }
 

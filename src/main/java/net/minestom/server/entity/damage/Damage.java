@@ -168,8 +168,8 @@ public class Damage implements Taggable {
      * @return the sound to play when the given entity is hurt by this damage type. Can be null if no sound should play
      */
     public @Nullable SoundEvent getSound(LivingEntity entity) {
-        if (entity instanceof Player) {
-            return getPlayerSound((Player) entity);
+        if (entity instanceof Player player) {
+            return getPlayerSound(player);
         }
         return getGenericSound(entity);
     }

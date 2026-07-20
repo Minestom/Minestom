@@ -42,6 +42,7 @@ public class ItemEntity extends Entity {
     // pickup delay in nanos
     private long pickupDelay;
 
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     public ItemEntity(ItemStack itemStack) {
         super(EntityType.ITEM);
         setItemStack(itemStack);

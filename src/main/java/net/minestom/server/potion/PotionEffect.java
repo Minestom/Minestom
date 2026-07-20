@@ -18,6 +18,7 @@ public sealed interface PotionEffect extends StaticProtocolObject<PotionEffect>,
     NetworkBuffer.Type<PotionEffect> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(PotionEffect::fromId, PotionEffect::id);
     Codec<PotionEffect> CODEC = Codec.KEY.transform(PotionEffect::fromKey, PotionEffect::key);
 
+    @Override
     @Contract(pure = true)
     RegistryData.PotionEffectEntry registry();
 

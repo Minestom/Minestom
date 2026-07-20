@@ -106,11 +106,11 @@ public sealed interface ConsumeEffect {
 
     private static ConsumeEffectType consumeEffectToType(ConsumeEffect consumeEffect) {
         return switch (consumeEffect) {
-            case ApplyEffects ignored -> ConsumeEffectType.APPLY_EFFECTS;
-            case RemoveEffects ignored -> ConsumeEffectType.REMOVE_EFFECTS;
-            case ClearAllEffects ignored -> ConsumeEffectType.CLEAR_ALL_EFFECTS;
-            case TeleportRandomly ignored -> ConsumeEffectType.TELEPORT_RANDOMLY;
-            case PlaySound ignored -> ConsumeEffectType.PLAY_SOUND;
+            case ApplyEffects _ -> ConsumeEffectType.APPLY_EFFECTS;
+            case RemoveEffects _ -> ConsumeEffectType.REMOVE_EFFECTS;
+            case ClearAllEffects _ -> ConsumeEffectType.CLEAR_ALL_EFFECTS;
+            case TeleportRandomly _ -> ConsumeEffectType.TELEPORT_RANDOMLY;
+            case PlaySound _ -> ConsumeEffectType.PLAY_SOUND;
         };
     }
 

@@ -44,7 +44,7 @@ public class TargetedBlockUpdateIntegrationTest {
         batch.setBlock(1, 40, 1, Block.STONE);
         batch.setBlock(2, 42, 2, Block.STONE);
         CountDownLatch latch = new CountDownLatch(1);
-        batch.apply(instance, 0, 0, c -> latch.countDown());
+        batch.apply(instance, 0, 0, _ -> latch.countDown());
         env.tickWhile(() -> latch.getCount() > 0, Duration.ofSeconds(1));
 
         multiBlock.assertCount(1);

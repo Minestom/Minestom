@@ -19,7 +19,7 @@ public class EntityCancellableEffectIntegrationTest {
         instance.loadChunk(0, 0).join();
 
         LivingEntity entity = new LivingEntity(EntityType.ZOMBIE);
-        entity.setInstance(instance, new Vec(0, 0, 0));
+        entity.setInstance(instance, new Vec(0, 0, 0)).join();
 
         Potion potion = new Potion(PotionEffect.ABSORPTION, 0, Potion.INFINITE_DURATION);
         env.process().eventHandler().addListener(EntityPotionAddEvent.class, event -> event.setCancelled(true));

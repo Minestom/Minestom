@@ -18,7 +18,7 @@ public class GiveCommand extends Command {
     public GiveCommand() {
         super("give");
 
-        setDefaultExecutor((sender, context) ->
+        setDefaultExecutor((sender, _) ->
                 sender.sendMessage(Component.text("Usage: /give <target> <item> [<count>]")));
 
         addSyntax((sender, context) -> {

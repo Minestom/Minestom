@@ -1,5 +1,6 @@
 package net.minestom.demo;
 
+import java.util.Locale;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.StringBinaryTag;
 import net.kyori.adventure.key.Key;
@@ -77,7 +78,7 @@ public class PlayerInit {
 
     private final Inventory inventory;
 
-    private final EventNode<Event> DEMO_NODE = EventNode.all("demo")
+    private static final EventNode<Event> DEMO_NODE = EventNode.all("demo")
             .addListener(EntityAttackEvent.class, event -> {
                 final Entity source = event.getEntity();
                 final Entity entity = event.getTarget();
@@ -88,17 +89,17 @@ public class PlayerInit {
                     target.damage(Damage.fromEntity(source, 5));
                 }
 
-                if (source instanceof Player) {
-                    ((Player) source).sendMessage("You attacked something!");
+                if (source instanceof Player player) {
+                    player.sendMessage("You attacked something!");
                 }
             })
             .addListener(PlayerDeathEvent.class, event -> event.setChatMessage(Component.text("custom death message")))
             .addListener(PickupItemEvent.class, event -> {
                 final Entity entity = event.getLivingEntity();
-                if (entity instanceof Player) {
+                if (entity instanceof Player player) {
                     // Cancel event if player does not have enough inventory space
                     final ItemStack itemStack = event.getItemEntity().getItemStack();
-                    event.setCancelled(!((Player) entity).getInventory().addItemStack(itemStack));
+                    event.setCancelled(!player.getInventory().addItemStack(itemStack));
                 }
             })
             .addListener(ItemDropEvent.class, event -> {
@@ -108,7 +109,7 @@ public class PlayerInit {
                 Pos playerPos = player.getPosition();
                 ItemEntity itemEntity = new ItemEntity(droppedItem);
                 itemEntity.setPickupDelay(Duration.of(500, TimeUnit.MILLISECOND));
-                itemEntity.setInstance(player.getInstance(), playerPos.withY(y -> y + 1.5));
+                itemEntity.setInstance(player.getInstance(), playerPos.withY(y -> y + 1.5)).join();
                 Vec velocity = playerPos.direction().mul(6);
                 itemEntity.setVelocity(velocity);
             })
@@ -122,8 +123,6 @@ public class PlayerInit {
                 var instances = MinecraftServer.getInstanceManager().getInstances();
                 Instance instance = instances.stream().skip(new Random().nextInt(instances.size())).findFirst().orElse(null);
                 event.setSpawningInstance(instance);
-                int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
-                int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
                 player.setRespawnPoint(new Pos(0, 40f, 0));
             })
             .addListener(PlayerSpawnEvent.class, event -> {
@@ -193,13 +192,13 @@ public class PlayerInit {
                     var happyGhast = new LivingEntity(EntityType.HAPPY_GHAST);
                     happyGhast.setNoGravity(true);
                     happyGhast.setBodyEquipment(ItemStack.of(Material.GREEN_HARNESS));
-                    happyGhast.setInstance(player.getInstance(), new Pos(10, 43, 5, 45, 0));
+                    var _ = happyGhast.setInstance(player.getInstance(), new Pos(10, 43, 5, 45, 0));
 
                     var copperGolem = new LivingEntity(EntityType.COPPER_GOLEM);
                     copperGolem.setNoGravity(true);
                     copperGolem.setItemInMainHand(ItemStack.of(Material.STICK));
                     ((CopperGolemMeta) copperGolem.getEntityMeta()).setState(CopperGolemMeta.State.GETTING_ITEM);
-                    copperGolem.setInstance(player.getInstance(), new Pos(-10, 40, 5, -133, 0));
+                    var _ = copperGolem.setInstance(player.getInstance(), new Pos(-10, 40, 5, -133, 0));
 
                     player.getInstance().setBlock(new Vec(-12, 40, 5), Block.WEATHERED_COPPER_GOLEM_STATUE.withProperty("copper_golem_pose", "star"));
 
@@ -210,7 +209,7 @@ public class PlayerInit {
                     )));
 
                     var playerEntity = new PlayerEntity();
-                    playerEntity.setInstance(player.getInstance(), new Pos(-2.5, 40, 6.7, -163, 0));
+                    var _ = playerEntity.setInstance(player.getInstance(), new Pos(-2.5, 40, 6.7, -163, 0));
                     player.sendPacket(new TrackedWaypointPacket(TrackedWaypointPacket.Operation.TRACK, new TrackedWaypointPacket.Waypoint(
                             Either.left(playerEntity.getUuid()),
                             TrackedWaypointPacket.Icon.DEFAULT,
@@ -225,7 +224,7 @@ public class PlayerInit {
                     mannequinMeta.setProfile(new ResolvableProfile(new ResolvableProfile.Partial("Minestom", null, List.of())));
                     mannequinMeta.setImmovable(true);
                     mannequinMeta.setDescription(Component.text("npc"));
-                    mannequinEntity.setInstance(player.getInstance(), new Pos(-4, 40, 6, -131, 0));
+                    var _ = mannequinEntity.setInstance(player.getInstance(), new Pos(-4, 40, 6, -131, 0));
                     mannequinEntity.setItemInMainHand(ItemStack.of(Material.PLAYER_HEAD).with(DataComponents.PROFILE,
                             new ResolvableProfile(new ResolvableProfile.Partial("Minestom", null, List.of()))));
                     player.sendPacket(new TrackedWaypointPacket(TrackedWaypointPacket.Operation.TRACK, new TrackedWaypointPacket.Waypoint(
@@ -296,10 +295,10 @@ public class PlayerInit {
                 }
                 System.out.println(event.getKey() + " -> " + payload);
             })
-            .addListener(PlayerPacketOutEvent.class, event -> {
+            .addListener(PlayerPacketOutEvent.class, _ -> {
                 //System.out.println("out " + event.getPacket().getClass().getSimpleName());
             })
-            .addListener(PlayerPacketEvent.class, event -> {
+            .addListener(PlayerPacketEvent.class, _ -> {
 
                 //System.out.println("in " + event.getPacket().getClass().getSimpleName());
             })
@@ -308,8 +307,8 @@ public class PlayerInit {
                 var block = event.getBlock();
                 var pos = event.getBlockPosition();
                 if (block.getProperty("part") == null || block.getProperty("facing") == null) return;
-                var isHead = "head".equals(block.getProperty("part"));
-                var facing = BlockFace.valueOf(block.getProperty("facing").toUpperCase());
+                boolean isHead = "head".equals(block.getProperty("part"));
+                var facing = BlockFace.valueOf(block.getProperty("facing").toUpperCase(Locale.ROOT));
                 var other = (isHead ? pos.add(facing.getOppositeFace().toDirection().vec().asPos()) : pos.add(facing.toDirection().vec().asPos()));
                 var otherBlock = instance.getBlock(other);
                 if (otherBlock.id() == block.id()) {
@@ -323,8 +322,8 @@ public class PlayerInit {
                 if (event.getBlock().key().asMinimalString().endsWith("_bed")) {
                     var pos = event.getBlockPosition();
                     if (block.getProperty("part") == null || block.getProperty("facing") == null) return;
-                    var isHead = "head".equals(block.getProperty("part"));
-                    var facing = BlockFace.valueOf(block.getProperty("facing").toUpperCase());
+                    boolean isHead = "head".equals(block.getProperty("part"));
+                    var facing = BlockFace.valueOf(block.getProperty("facing").toUpperCase(Locale.ROOT));
                     var other = (isHead ? pos.add(facing.getOppositeFace().toDirection().vec().asPos()) : pos.add(facing.toDirection().vec().asPos()));
                     var otherBlock = instance.getBlock(other);
                     if (otherBlock.id() == block.id()) {
@@ -448,7 +447,7 @@ public class PlayerInit {
         inventory.setItemStack(3, ItemStack.of(Material.DIAMOND, 34));
     }
 
-    private final AtomicReference<TickMonitor> LAST_TICK = new AtomicReference<>();
+    private static final AtomicReference<TickMonitor> LAST_TICK = new AtomicReference<>();
 
     public void init() {
         var eventHandler = MinecraftServer.getGlobalEventHandler();
@@ -461,7 +460,7 @@ public class PlayerInit {
                 return;
 
             long ramUsage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-            ramUsage /= 1e6; // bytes to MB
+            ramUsage /= 1_000_000; // bytes to MB
 
             TickMonitor tickMonitor = LAST_TICK.get();
             final Component header = Component.text("RAM USAGE: " + ramUsage + " MB")

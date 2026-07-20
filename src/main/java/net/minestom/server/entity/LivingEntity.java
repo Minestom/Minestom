@@ -449,7 +449,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public AttributeInstance getAttribute(Attribute attribute) {
         return attributeModifiers.computeIfAbsent(attribute.name(),
-                s -> {
+                _ -> {
                     double defaultValue = entityType.registry().defaultAttributes().getOrDefault(attribute, attribute.defaultValue());
                     return new AttributeInstance(attribute, defaultValue, new ArrayList<>(), this::onAttributeChanged);
                 });
@@ -482,7 +482,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
                 new EntityAttributesPacket.Property(
                         attributeInstance.attribute(),
                         attributeInstance.getBaseValue(),
-                        attributeInstance.getModifiers())
+                        attributeInstance.modifiers())
         ));
         if (self) {
             sendPacketToViewersAndSelf(propertiesPacket);
@@ -664,7 +664,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     protected EntityAttributesPacket getPropertiesPacket() {
         List<EntityAttributesPacket.Property> properties = new ArrayList<>();
         for (AttributeInstance instance : attributeModifiers.values()) {
-            properties.add(new EntityAttributesPacket.Property(instance.attribute(), instance.getBaseValue(), instance.getModifiers()));
+            properties.add(new EntityAttributesPacket.Property(instance.attribute(), instance.getBaseValue(), instance.modifiers()));
         }
         return new EntityAttributesPacket(getEntityId(), properties);
     }

@@ -13,6 +13,7 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
     private IdentityHashMap<Snapshotable, AtomicReference<Snapshot>> readOnlyReferenceMap;
     private List<Entry> queue = new ArrayList<>();
 
+    @SuppressWarnings({"unchecked", "TypeParameterUnusedInFormals"})
     static <T extends Snapshot> T update(Snapshotable snapshotable) {
         var updater = new SnapshotUpdaterImpl();
         var ref = updater.reference(snapshotable);
@@ -21,6 +22,7 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends Snapshot> AtomicReference<T> reference(Snapshotable snapshotable) {
         AtomicReference<Snapshot> ref;
         // Very often the same snapshotable is referenced multiple times.
@@ -41,15 +43,17 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
     record Entry(Snapshotable snapshotable, AtomicReference<Snapshot> ref) {
     }
 
+    @SuppressWarnings("unchecked")
     void update() {
-        List<Entry> temp;
-        while (!(temp = new ArrayList<>(queue)).isEmpty()) {
+        List<Entry> temp = new ArrayList<>(queue);
+        while (!temp.isEmpty()) {
             queue = new ArrayList<>();
             readOnlyReferenceMap = (IdentityHashMap<Snapshotable, AtomicReference<Snapshot>>) referenceMap.clone();
             temp.parallelStream().forEach(entry -> {
                 Snapshotable snap = entry.snapshotable;
                 entry.ref.set(Objects.requireNonNull(snap.updateSnapshot(this), "Snapshot must not be null after an update!"));
             });
+            temp = new ArrayList<>(queue);
         }
     }
 }

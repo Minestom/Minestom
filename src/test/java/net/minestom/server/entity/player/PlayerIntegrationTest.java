@@ -119,7 +119,7 @@ public class PlayerIntegrationTest {
         assertEquals(ClientSettings.ParticleSetting.ALL, player.getSettings().particleSetting());
     }
 
-    private void assertAbilities(Player player, boolean isInvulnerable, boolean isFlying, boolean isAllowFlying,
+    private static void assertAbilities(Player player, boolean isInvulnerable, boolean isFlying, boolean isAllowFlying,
                                  boolean isInstantBreak) {
         assertEquals(isInvulnerable, player.isInvulnerable());
         assertEquals(isFlying, player.isFlying());
@@ -297,7 +297,7 @@ public class PlayerIntegrationTest {
 
         player.setListed(false);
 
-        var listedPackets = tracker.collect().stream().filter((packet) ->
+        long listedPackets = tracker.collect().stream().filter((packet) ->
                         packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_LISTED))
                 .count();
 
@@ -316,7 +316,7 @@ public class PlayerIntegrationTest {
 
         player.setListOrder(1);
 
-        var orderPackets = tracker.collect().stream().filter((packet) ->
+        long orderPackets = tracker.collect().stream().filter((packet) ->
                         packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_LIST_ORDER))
                 .count();
 
@@ -356,7 +356,7 @@ public class PlayerIntegrationTest {
 
         tracker = connection.trackIncoming(FacePlayerPacket.class);
         Entity entity = new Entity(EntityType.ZOMBIE);
-        entity.setInstance(player.getInstance(), new Pos(9, 9, 9));
+        entity.setInstance(player.getInstance(), new Pos(9, 9, 9)).join();
         player.lookAt(entity);
         tracker.assertSingle(FacePlayerPacket.class, packet -> assertEquals(entity.getEntityId(), packet.entityId()));
 
