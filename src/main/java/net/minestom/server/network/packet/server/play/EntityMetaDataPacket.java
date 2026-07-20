@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.network.NetworkBuffer;
@@ -50,7 +51,7 @@ public record EntityMetaDataPacket(int entityId,
     }
 
     @Override
-    public Collection<Component> components() {
+    public List<Component> components() {
         return this.entries.values()
                 .stream()
                 .map(Metadata.Entry::value)

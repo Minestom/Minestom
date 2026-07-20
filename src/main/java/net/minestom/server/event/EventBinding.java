@@ -1,5 +1,6 @@
 package net.minestom.server.event;
 
+import java.util.Set;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Collection;
@@ -52,7 +53,7 @@ public interface EventBinding<E extends Event> {
             }
             return new EventBinding<>() {
                 @Override
-                public Collection<Class<? extends Event>> eventTypes() {
+                public Set<Class<? extends Event>> eventTypes() {
                     return eventTypes;
                 }
 

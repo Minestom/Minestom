@@ -236,7 +236,7 @@ record BlockImpl(RegistryData.BlockEntry registry,
     }
 
     @Override
-    public Collection<Block> possibleStates() {
+    public List<Block> possibleStates() {
         final BlockSchema schema = schema();
         if (schema.properties.length == 0) return List.of(defaultState());
         return new AbstractList<>() {

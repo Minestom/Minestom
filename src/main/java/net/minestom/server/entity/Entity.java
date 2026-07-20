@@ -1587,7 +1587,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
 
         // Remove passengers if any (also done with LivingEntity#kill)
-        Collection<Entity> passengers = getPassengers();
+        final List<Entity> passengers = getPassengers();
         if (!passengers.isEmpty()) passengers.forEach(this::removePassenger);
         final Entity vehicle = this.vehicle;
         if (vehicle != null) vehicle.removePassenger(this);

@@ -86,6 +86,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "ParameterMissingNullable",
                 "ShortCircuitBoolean",
                 "PatternMatchingInstanceof",
+                "PreferredInterfaceType",
                 "RedundantControlFlow",
                 "SameNameButDifferent",
                 "UnnamedVariable",

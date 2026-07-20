@@ -1,5 +1,6 @@
 package net.minestom.server.collision;
 
+import java.util.List;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -50,7 +51,7 @@ public final class CollisionUtils {
      *                     This is used to extend the search radius for entities we collide with
      *                     For players this is (0.3^2 + 0.3^2 + 1.8^2) ^ (1/3) ~= 1.51
      */
-    public static Collection<EntityCollisionResult> checkEntityCollisions(Instance instance, BoundingBox boundingBox, Point pos, Vec velocity, double extendRadius, Function<Entity, Boolean> entityFilter, @Nullable PhysicsResult physicsResult) {
+    public static List<EntityCollisionResult> checkEntityCollisions(Instance instance, BoundingBox boundingBox, Point pos, Vec velocity, double extendRadius, Function<Entity, Boolean> entityFilter, @Nullable PhysicsResult physicsResult) {
         return EntityCollision.checkCollision(instance.getEntityTracker(), boundingBox, pos, velocity, extendRadius, entityFilter, physicsResult);
     }
 
@@ -64,7 +65,7 @@ public final class CollisionUtils {
      * @param physicsResult optional physics result
      * @return the entity collision results
      */
-    public static Collection<EntityCollisionResult> checkEntityCollisions(Entity entity, Vec velocity, double extendRadius, Function<Entity, Boolean> entityFilter, @Nullable PhysicsResult physicsResult) {
+    public static List<EntityCollisionResult> checkEntityCollisions(Entity entity, Vec velocity, double extendRadius, Function<Entity, Boolean> entityFilter, @Nullable PhysicsResult physicsResult) {
         return EntityCollision.checkCollision(entity.getInstance().getEntityTracker(), entity.getBoundingBox(), entity.getPosition(), velocity, extendRadius, entityFilter, physicsResult);
     }
 

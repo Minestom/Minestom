@@ -138,7 +138,7 @@ final class EntityTrackerImpl implements EntityTracker {
     }
 
     @Override
-    public @Unmodifiable <T extends Entity> Collection<T> chunkEntities(int chunkX, int chunkZ, Target<T> target) {
+    public @Unmodifiable <T extends Entity> List<T> chunkEntities(int chunkX, int chunkZ, Target<T> target) {
         final TargetEntry<Entity> entry = targetEntries[target.ordinal()];
         //noinspection unchecked
         var chunkEntities = (List<T>) entry.chunkEntities(CoordConversion.chunkIndex(chunkX, chunkZ));

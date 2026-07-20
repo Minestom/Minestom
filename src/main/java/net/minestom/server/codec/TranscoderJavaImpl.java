@@ -157,7 +157,7 @@ final class TranscoderJavaImpl implements Transcoder<Object> {
             return new Result.Error<>("Not a map: " + value);
         return new Result.Ok<>(new MapLike<>() {
             @Override
-            public Collection<String> keys() {
+            public List<String> keys() {
                 if (map.isEmpty()) return List.of();
                 var keys = List.copyOf(map.keySet());
                 if (keys.getFirst() instanceof String)

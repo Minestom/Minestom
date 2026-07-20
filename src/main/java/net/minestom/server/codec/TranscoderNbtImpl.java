@@ -1,5 +1,6 @@
 package net.minestom.server.codec;
 
+import java.util.Set;
 import net.kyori.adventure.nbt.*;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -168,7 +169,7 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
             return new Result.Error<>("Not a compound: " + value);
         return new Result.Ok<>(new MapLike<>() {
             @Override
-            public Collection<String> keys() {
+            public Set<String> keys() {
                 return compoundTag.keySet();
             }
 

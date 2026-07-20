@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
@@ -18,7 +19,7 @@ public record SetPlayerInventorySlotPacket(int slot, ItemStack itemStack) implem
             SetPlayerInventorySlotPacket::new);
 
     @Override
-    public Collection<Component> components() {
+    public List<Component> components() {
         return ItemStack.textComponents(itemStack);
     }
 

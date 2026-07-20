@@ -90,7 +90,7 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
     }
 
     @Override
-    public Collection<DataComponent.Value> entrySet() {
+    public List<DataComponent.Value> entrySet() {
         if (components.isEmpty()) return List.of();
         final List<DataComponent.Value> entries = new ArrayList<>(components.size());
         for (var entry : components.int2ObjectEntrySet())

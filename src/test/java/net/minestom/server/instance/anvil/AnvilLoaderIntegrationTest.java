@@ -237,7 +237,7 @@ public class AnvilLoaderIntegrationTest {
         assertEquals(block, instance.getBlock(BlockVec.ZERO));
     }
 
-    private static Collection<BlockVec> provideLocationsForLoadAndSaveBlockHandler() {
+    private static List<BlockVec> provideLocationsForLoadAndSaveBlockHandler() {
         return List.of(BlockVec.ZERO,
                 new BlockVec(0, 15, 0),
                 new BlockVec(0, 16, 0),

@@ -1,5 +1,6 @@
 package net.minestom.server.entity;
 
+import java.util.Set;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
@@ -130,7 +131,7 @@ public class EntityProjectile extends Entity {
         }
 
         Chunk chunk = null;
-        Collection<LivingEntity> entities = null;
+        Set<LivingEntity> entities = null;
         final BoundingBox bb = getBoundingBox();
 
         /*

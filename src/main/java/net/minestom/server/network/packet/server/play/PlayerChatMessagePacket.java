@@ -41,7 +41,7 @@ public record PlayerChatMessagePacket(int globalIndex, UUID sender, int index, @
     );
 
     @Override
-    public Collection<Component> components() {
+    public List<Component> components() {
         final ArrayList<Component> list = new ArrayList<>();
         list.add(msgTypeName);
         if (unsignedContent != null) list.add(unsignedContent);

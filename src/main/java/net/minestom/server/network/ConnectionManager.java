@@ -83,14 +83,14 @@ public final class ConnectionManager {
     /**
      * Returns an unmodifiable set containing the players currently in the play state.
      */
-    public Collection<Player> getOnlinePlayers() {
+    public Set<Player> getOnlinePlayers() {
         return unmodifiablePlayPlayers;
     }
 
     /**
      * Returns an unmodifiable set containing the players currently in the configuration state.
      */
-    public Collection<Player> getConfigPlayers() {
+    public Set<Player> getConfigPlayers() {
         return unmodifiableConfigurationPlayers;
     }
 

@@ -1,5 +1,6 @@
 package net.minestom.server.event.player;
 
+import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
@@ -14,7 +15,7 @@ import java.util.Collection;
  */
 public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
     private final Player player;
-    private final Collection<Player> recipients;
+    private final List<Player> recipients;
     private final String rawMessage;
     private Component formattedMessage;
     private boolean cancelled;
@@ -34,7 +35,7 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
      *
      * @return a modifiable list of the message's targets
      */
-    public Collection<Player> getRecipients() {
+    public List<Player> getRecipients() {
         return recipients;
     }
 

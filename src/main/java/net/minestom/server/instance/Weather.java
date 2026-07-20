@@ -73,7 +73,7 @@ public record Weather(float rainLevel, float thunderLevel) {
         return new ChangeGameStatePacket(ChangeGameStatePacket.Reason.THUNDER_LEVEL_CHANGE, thunderLevel);
     }
 
-    public Collection<SendablePacket> createWeatherPackets() {
+    public List<SendablePacket> createWeatherPackets() {
         return List.of(createIsRainingPacket(), createRainLevelPacket(), createThunderLevelPacket());
     }
 }

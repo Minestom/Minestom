@@ -32,7 +32,7 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
         }
 
         @Override
-        public Collection<Component> components() {
+        public List<Component> components() {
             final var components = new ArrayList<Component>();
             for (SlotDisplay ingredient : ingredients)
                 components.addAll(ingredient.components());
@@ -73,7 +73,7 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
         }
 
         @Override
-        public Collection<Component> components() {
+        public List<Component> components() {
             final var components = new ArrayList<Component>();
             for (SlotDisplay ingredient : ingredients)
                 components.addAll(ingredient.components());
@@ -108,7 +108,7 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
                 Furnace::new);
 
         @Override
-        public Collection<Component> components() {
+        public List<Component> components() {
             final var components = new ArrayList<Component>();
             components.addAll(ingredient.components());
             components.addAll(fuel.components());
@@ -137,7 +137,7 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
                 Stonecutter::new);
 
         @Override
-        public Collection<Component> components() {
+        public List<Component> components() {
             final var components = new ArrayList<Component>();
             components.addAll(ingredient.components());
             components.addAll(result.components());
@@ -168,7 +168,7 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
                 Smithing::new);
 
         @Override
-        public Collection<Component> components() {
+        public List<Component> components() {
             final var components = new ArrayList<Component>();
             components.addAll(template.components());
             components.addAll(base.components());

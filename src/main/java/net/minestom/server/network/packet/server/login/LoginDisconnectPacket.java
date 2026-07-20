@@ -18,7 +18,7 @@ public record LoginDisconnectPacket(Component kickMessage) implements ServerPack
             LoginDisconnectPacket::new);
 
     @Override
-    public Collection<Component> components() {
+    public List<Component> components() {
         return List.of(this.kickMessage);
     }
 

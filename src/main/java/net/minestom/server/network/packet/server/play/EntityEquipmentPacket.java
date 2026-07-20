@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.item.ItemStack;
@@ -41,7 +42,7 @@ public record EntityEquipmentPacket(int entityId,
     };
 
     @Override
-    public Collection<Component> components() {
+    public List<Component> components() {
         final var components = new ArrayList<Component>();
         for (var itemStack : this.equipments.values())
             components.addAll(ItemStack.textComponents(itemStack));

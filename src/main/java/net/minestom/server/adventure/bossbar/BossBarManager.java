@@ -1,5 +1,6 @@
 package net.minestom.server.adventure.bossbar;
 
+import java.util.List;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
 import net.minestom.server.MinecraftServer;
@@ -72,7 +73,7 @@ public class BossBarManager {
      */
     public void addBossBar(Collection<? extends Player> players, BossBar bar) {
         BossBarHolder holder = this.getOrCreateHandler(bar);
-        Collection<? extends Player> addedPlayers = players.stream().filter(holder::addViewer).toList();
+        List<? extends Player> addedPlayers = players.stream().filter(holder::addViewer).toList();
         if (!addedPlayers.isEmpty()) {
             PacketSendingUtils.sendGroupedPacket(addedPlayers, holder.createAddPacket());
         }
@@ -87,7 +88,7 @@ public class BossBarManager {
     public void removeBossBar(Collection<? extends Player> players, BossBar bar) {
         BossBarHolder holder = this.bars.get(bar);
         if (holder != null) {
-            Collection<? extends Player> removedPlayers = players.stream().filter(holder::removeViewer).toList();
+            List<? extends Player> removedPlayers = players.stream().filter(holder::removeViewer).toList();
             if (!removedPlayers.isEmpty()) {
                 PacketSendingUtils.sendGroupedPacket(removedPlayers, holder.createRemovePacket());
             }
@@ -132,7 +133,7 @@ public class BossBarManager {
      * @return the boss bars
      */
     public Collection<BossBar> getPlayerBossBars(Player player) {
-        Collection<BossBarHolder> holders = this.playerBars.get(player.getUuid());
+        Set<BossBarHolder> holders = this.playerBars.get(player.getUuid());
         return holders != null ?
                 holders.stream().map(holder -> holder.bar).toList() : List.of();
     }

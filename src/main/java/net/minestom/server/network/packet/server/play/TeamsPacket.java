@@ -76,7 +76,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
                 Settings::new);
 
         @Override
-        public Collection<Component> components() {
+        public List<Component> components() {
             return List.of(this.displayName, this.teamPrefix, this.teamSuffix);
         }
 
@@ -120,7 +120,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         }
 
         @Override
-        public Collection<Component> components() {
+        public List<Component> components() {
             return settings.components();
         }
 
@@ -153,7 +153,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         }
 
         @Override
-        public Collection<Component> components() {
+        public List<Component> components() {
             return settings.components();
         }
 
