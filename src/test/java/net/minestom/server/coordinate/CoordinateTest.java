@@ -95,8 +95,8 @@ public class CoordinateTest {
     public void vecNegCompare() {
         assertFalse(Vec.ZERO.samePoint(Vec.ONE.neg()));
         assertTrue(Vec.ZERO.samePoint(Vec.ZERO.neg()));
-        assertTrue(Vec.ZERO.samePoint(new Vec(-0, 0, 0)));
-        assertTrue(Vec.ZERO.samePoint(new Vec(-0, -0, -0)));
+        assertTrue(Vec.ZERO.samePoint(new Vec(-0.0, 0, 0)));
+        assertTrue(Vec.ZERO.samePoint(new Vec(-0.0, -0.0, -0.0)));
     }
 
     @Test
