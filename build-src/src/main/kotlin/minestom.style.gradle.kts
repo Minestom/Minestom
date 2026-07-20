@@ -29,34 +29,19 @@ tasks.withType<JavaCompile>().configureEach {
 
 // Foreign annotations cannot be excluded from the classpath because Adventure modules
 // declare "requires transitive org.jspecify", so ban them at the source level instead
-val forbiddenImportsCheck = tasks.register("forbiddenImportsCheck") {
+tasks.register<CheckImportsTask>("forbiddenImportsCheck") {
     group = LifecycleBasePlugin.VERIFICATION_GROUP
     description = "Checks that Java sources only use JetBrains annotations."
-    val sources = project.extensions.getByType<SourceSetContainer>().map { it.allJava.sourceDirectories }
-    inputs.files(sources)
-    doLast {
-        val violations = inputs.files.asFileTree.matching { include("**/*.java") }.flatMap { file ->
-            file.useLines { lines ->
-                lines.withIndex()
-                        .filter { (_, line) -> line.startsWith("import ") }
-                        .filter { (_, line) -> "org.jspecify" in line || "org.checkerframework" in line }
-                        .map { (i, line) -> "$file:${i + 1}: $line" }
-                        .toList()
-            }
-        }
-        if (violations.isNotEmpty()) {
-            throw GradleException("Forbidden annotation imports, use org.jetbrains.annotations instead:\n"
-                    + violations.joinToString("\n"))
-        }
-    }
+    sources.from(project.extensions.getByType<SourceSetContainer>().map { it.allJava })
+    forbiddenPackages = listOf("org.jspecify", "org.checkerframework")
 }
 
-val errorproneCheck = tasks.register("errorproneCheck") {
+tasks.register("errorproneCheck") {
     group = LifecycleBasePlugin.VERIFICATION_GROUP
     description = "Compiles all Java source sets with Error Prone checks applied."
-    dependsOn(tasks.withType<JavaCompile>(), forbiddenImportsCheck)
+    dependsOn(tasks.withType<JavaCompile>())
 }
 
 tasks.named(LifecycleBasePlugin.CHECK_TASK_NAME) {
-    dependsOn(errorproneCheck)
+    dependsOn("errorproneCheck", "forbiddenImportsCheck")
 }
