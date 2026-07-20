@@ -15,6 +15,7 @@ tasks.withType<JavaCompile>().configureEach {
         error(
                 "AttemptedNegativeZero",
                 "BadImport",
+                "BadInstanceof",
                 "BooleanLiteral",
                 "BoxingComparator",
                 "ClassInitializationDeadlock",
