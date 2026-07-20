@@ -25,6 +25,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "MissingOverride",
                 "ObjectToString",
                 "OperatorPrecedence",
+                "ShortCircuitBoolean",
                 "PatternMatchingInstanceof",
                 "UnnamedVariable",
                 "UnusedMethod",
