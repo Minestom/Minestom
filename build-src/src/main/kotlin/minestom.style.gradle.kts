@@ -34,6 +34,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "LongDoubleConversion",
                 "MissingCasesInEnumSwitch",
                 "MissingSummary",
+                "MutablePublicArray",
                 "NarrowingCompoundAssignment",
                 "NonApiType",
                 "NonCanonicalType",
