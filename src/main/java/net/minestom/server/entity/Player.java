@@ -105,6 +105,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
@@ -224,7 +225,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     private float flyingSpeed = 0.05f;
     private float fieldViewModifier = 0.1f;
 
-    private final Map<PlayerStatistic, Integer> statisticValueMap = new Hashtable<>();
+    private final Map<PlayerStatistic, Integer> statisticValueMap = new ConcurrentHashMap<>();
 
     private final PlayerInputs inputs = new PlayerInputs();
 

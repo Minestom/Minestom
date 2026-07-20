@@ -20,6 +20,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "EqualsGetClass",
                 "EmptyBlockTag",
                 "FutureReturnValueIgnored",
+                "JdkObsolete",
                 "LongDoubleConversion",
                 "MissingSummary",
                 "NarrowingCompoundAssignment",
