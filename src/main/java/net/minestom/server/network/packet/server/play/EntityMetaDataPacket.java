@@ -64,7 +64,7 @@ public record EntityMetaDataPacket(int entityId,
         final var entries = new HashMap<Integer, Metadata.Entry<?>>();
 
         this.entries.forEach((key, value) -> {
-            final var t = value.type();
+            final int t = value.type();
             final var v = value.value();
 
             if (v instanceof Component c) {

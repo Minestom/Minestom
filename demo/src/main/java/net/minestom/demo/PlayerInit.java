@@ -299,7 +299,7 @@ public class PlayerInit {
                 var block = event.getBlock();
                 var pos = event.getBlockPosition();
                 if (block.getProperty("part") == null || block.getProperty("facing") == null) return;
-                var isHead = "head".equals(block.getProperty("part"));
+                boolean isHead = "head".equals(block.getProperty("part"));
                 var facing = BlockFace.valueOf(block.getProperty("facing").toUpperCase(Locale.ROOT));
                 var other = (isHead ? pos.add(facing.getOppositeFace().toDirection().vec().asPos()) : pos.add(facing.toDirection().vec().asPos()));
                 var otherBlock = instance.getBlock(other);
@@ -314,7 +314,7 @@ public class PlayerInit {
                 if (event.getBlock().key().asMinimalString().endsWith("_bed")) {
                     var pos = event.getBlockPosition();
                     if (block.getProperty("part") == null || block.getProperty("facing") == null) return;
-                    var isHead = "head".equals(block.getProperty("part"));
+                    boolean isHead = "head".equals(block.getProperty("part"));
                     var facing = BlockFace.valueOf(block.getProperty("facing").toUpperCase(Locale.ROOT));
                     var other = (isHead ? pos.add(facing.getOppositeFace().toDirection().vec().asPos()) : pos.add(facing.toDirection().vec().asPos()));
                     var otherBlock = instance.getBlock(other);

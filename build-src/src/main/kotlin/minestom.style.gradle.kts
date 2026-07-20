@@ -87,6 +87,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "SameNameButDifferent",
                 "UnnamedVariable",
                 "UnusedTypeParameter",
+                "VarWithPrimitive",
                 "VariableNameSameAsType",
                 "UnusedMethod",
                 "UnusedVariable",

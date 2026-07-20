@@ -297,7 +297,7 @@ public class PlayerIntegrationTest {
 
         player.setListed(false);
 
-        var listedPackets = tracker.collect().stream().filter((packet) ->
+        long listedPackets = tracker.collect().stream().filter((packet) ->
                         packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_LISTED))
                 .count();
 
@@ -316,7 +316,7 @@ public class PlayerIntegrationTest {
 
         player.setListOrder(1);
 
-        var orderPackets = tracker.collect().stream().filter((packet) ->
+        long orderPackets = tracker.collect().stream().filter((packet) ->
                         packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_LIST_ORDER))
                 .count();
 

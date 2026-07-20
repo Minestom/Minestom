@@ -33,7 +33,7 @@ public class NetworkCachedPacketBenchmark {
     public void setup() {
         random = new Random(151243);
         packet = new KeepAlivePacket(0);
-        var packetTime = this.packetTime;
+        int packetTime = this.packetTime;
         cachedPacket = new CachedPacket(() -> {
             Blackhole.consumeCPU(packetTime);
             return packet;

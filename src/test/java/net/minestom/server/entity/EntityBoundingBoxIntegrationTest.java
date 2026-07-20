@@ -63,7 +63,7 @@ public class EntityBoundingBoxIntegrationTest {
         entity.setInstance(instance, spawnPos).join();
 
         // 0 is fine here, it's just a delta
-        var time = 0L;
+        long time = 0L;
 
         dropItem(instance, spawnPos);
         listener.followup();

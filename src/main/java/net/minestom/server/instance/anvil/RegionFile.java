@@ -215,7 +215,7 @@ final class RegionFile implements AutoCloseable {
     }
 
     private int allocSectors(int count) throws IOException {
-        var eof = file.length();
+        final long eof = file.length();
         file.seek(eof);
 
         byte[] emptySector = new byte[SECTOR_SIZE];

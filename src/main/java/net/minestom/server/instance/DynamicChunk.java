@@ -137,7 +137,7 @@ public class DynamicChunk extends Chunk {
         this.chunkCache.invalidate();
         Section section = getSectionAt(y);
 
-        var id = instance.registries().biome().getId(biome);
+        final int id = instance.registries().biome().getId(biome);
         if (id == -1) throw new IllegalStateException("Biome has not been registered: " + biome.key());
 
         section.biomePalette().set(
