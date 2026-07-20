@@ -15,8 +15,7 @@ public record SetCursorItemPacket(ItemStack itemStack) implements ServerPacket.P
             SetCursorItemPacket::new);
 
     @Override
-    @SuppressWarnings("PreferredInterfaceType") // wider type kept for binary compatibility until the next breaking release
-    public Collection<Component> components() {
+    public List<Component> components() {
         return ItemStack.textComponents(itemStack);
     }
 
