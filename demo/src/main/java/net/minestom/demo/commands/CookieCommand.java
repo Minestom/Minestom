@@ -52,13 +52,13 @@ public class CookieCommand extends Command {
 
             String key = context.get(keyArg).asString();
 
-            player.getPlayerConnection().fetchCookie(key).thenAccept(value -> {
+            var _ = player.getPlayerConnection().fetchCookie(key).thenAccept(value -> {
                 if (value == null) {
                     player.sendMessage(key + ": null");
                 } else {
                     player.sendMessage(key + ": " + new String(value, StandardCharsets.UTF_8));
                 }
-            }).join();
+            });
         }
     }
 }
