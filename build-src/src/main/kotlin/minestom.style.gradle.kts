@@ -30,6 +30,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "InlineFormatString",
                 "JdkObsolete",
                 "LongDoubleConversion",
+                "MissingCasesInEnumSwitch",
                 "MissingSummary",
                 "NarrowingCompoundAssignment",
                 "NonApiType",
