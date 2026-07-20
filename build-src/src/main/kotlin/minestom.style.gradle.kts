@@ -41,6 +41,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "OperatorPrecedence",
                 "ShortCircuitBoolean",
                 "PatternMatchingInstanceof",
+                "RedundantControlFlow",
                 "UnnamedVariable",
                 "UnusedMethod",
                 "UnusedVariable",
