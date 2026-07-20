@@ -167,6 +167,8 @@ public class ItemTest {
     }
 
     @Test
+    // Deliberately keeps coverage of the deprecated accessor until its removal
+    @SuppressWarnings("removal")
     public void testEntityType() {
         var item1 = ItemStack.of(Material.DIAMOND, 1);
         assertNull(item1.material().registry().spawnEntityType());
