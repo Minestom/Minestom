@@ -41,6 +41,9 @@ import java.util.function.UnaryOperator;
  * <p>
  * An item stack cannot be null, {@link ItemStack#AIR} should be used instead.
  */
+// Static fields intentionally construct the implementation subclass; the cycle cannot
+// race because the implementation types are only ever reached through this interface
+@SuppressWarnings("ClassInitializationDeadlock")
 public sealed interface ItemStack extends TagReadable, DataComponent.Holder, HoverEventSource<HoverEvent.ShowItem>
         permits ItemStackImpl {
 

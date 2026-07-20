@@ -49,6 +49,9 @@ import java.util.function.Supplier;
  *
  * @param <T> The type to be represented by this codec, nullable T will provide nullable results.
  */
+// Static fields intentionally construct the implementation subclass; the cycle cannot
+// race because the implementation types are only ever reached through this interface
+@SuppressWarnings("ClassInitializationDeadlock")
 public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>, Decoder<T> {
 
     /**
