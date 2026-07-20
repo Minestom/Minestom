@@ -11,6 +11,8 @@ import net.minestom.server.world.attribute.EnvironmentAttributeMap;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
+import java.util.Comparator;
+
 public sealed interface Biome extends Biomes permits BiomeImpl {
     Codec<Biome> REGISTRY_CODEC = StructCodec.struct(
             "has_precipitation", Codec.BOOLEAN, Biome::hasPrecipitation,
@@ -52,9 +54,12 @@ public sealed interface Biome extends Biomes permits BiomeImpl {
     static DynamicRegistry<Biome> createDefaultRegistry() {
         return DynamicRegistry.create(
                 BuiltinRegistries.WORLDGEN_BIOME, NETWORK_CODEC, null,
-                // We force plains to be first because it allows convenient palette initialization.
-                // Maybe worth switching to fetching plains in the palette in the future to avoid this.
-                (a, b) -> a.equals("minecraft:plains") ? -1 : b.equals("minecraft:plains") ? 1 : 0,
+                // Emit entries in vanilla (alphabetical by id) order so the network ids assigned to
+                // biomes match a vanilla/Paper server.
+                //
+                // Note: this no longer forces plains to id 0, so the empty-section biome default is
+                // resolved dynamically instead - see Section#defaultBiomeId.
+                Comparator.naturalOrder(),
                 REGISTRY_CODEC
         );
     }

@@ -56,7 +56,8 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      */
     @ApiStatus.Internal
     static <T> DynamicRegistry<T> create(RegistryKey<Registry<T>> key, Codec<T> codec) {
-        return create(key, codec, null, null, null);
+        // Default to vanilla (alphabetical by id) ordering so network ids match a vanilla/Paper server.
+        return create(key, codec, null, Comparator.naturalOrder(), null);
     }
 
     /**
@@ -66,7 +67,8 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      */
     @ApiStatus.Internal
     static <T> DynamicRegistry<T> create(RegistryKey<Registry<T>> key, Codec<T> codec, @Nullable Registries registries) {
-        return create(key, codec, registries, null, null);
+        // Default to vanilla (alphabetical by id) ordering so network ids match a vanilla/Paper server.
+        return create(key, codec, registries, Comparator.naturalOrder(), null);
     }
 
     /**
@@ -88,7 +90,8 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
     ) {
         final DynamicRegistryImpl<T> registry = new DynamicRegistryImpl<>(key.key(), codec);
         final Registries effectiveRegistries = loadingRegistries.apply(registries, registry);
-        registry.loadStaticJsonRegistry(effectiveRegistries, null, codec);
+        // Default to vanilla (alphabetical by id) ordering so network ids match a vanilla/Paper server.
+        registry.loadStaticJsonRegistry(effectiveRegistries, Comparator.naturalOrder(), codec);
         return registry.compact();
     }
 
