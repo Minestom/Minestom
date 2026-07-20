@@ -19,6 +19,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "EqualsGetClass",
                 "EmptyBlockTag",
                 "FutureReturnValueIgnored",
+                "LongDoubleConversion",
                 "MissingSummary",
                 "StringCaseLocaleUsage",
                 "StringSplitter",

@@ -613,7 +613,7 @@ final class AreaImpl {
     }
 
     private static long floorSqrt(long value) {
-        long sqrt = (long) Math.sqrt(value);
+        long sqrt = (long) Math.sqrt((double) value);
         // Math.sqrt may round up to an exact integer for value > 2^52; correct by one if so.
         if (sqrt > 0 && sqrt * sqrt > value) sqrt--;
         return sqrt;
