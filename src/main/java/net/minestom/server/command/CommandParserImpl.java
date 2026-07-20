@@ -337,7 +337,7 @@ final class CommandParserImpl implements CommandParser {
         }
     }
 
-    record InvalidCommand(String input, CommandCondition condition, ArgumentCallback callback,
+    record InvalidCommand(String input, CommandCondition condition, @Nullable ArgumentCallback callback,
                           ArgumentResult.SyntaxError<?> error,
                           Map<String, ArgumentResult<Object>> arguments, CommandExecutor globalListener,
                           @Nullable SuggestionCallback suggestionCallback, List<Argument<?>> args)
@@ -448,7 +448,7 @@ final class CommandParserImpl implements CommandParser {
         return context;
     }
 
-    record ExecutionResultImpl(Type type, CommandData commandData) implements ExecutableCommand.Result {
+    record ExecutionResultImpl(Type type, @Nullable CommandData commandData) implements ExecutableCommand.Result {
         static final ExecutableCommand.Result CANCELLED = new ExecutionResultImpl(Type.CANCELLED, null);
         static final ExecutableCommand.Result UNKNOWN = new ExecutionResultImpl(Type.UNKNOWN, null);
         static final ExecutableCommand.Result EXECUTOR_EXCEPTION = new ExecutionResultImpl(Type.EXECUTOR_EXCEPTION, null);
@@ -549,7 +549,7 @@ final class CommandParserImpl implements CommandParser {
                 implements ArgumentResult<T> {
         }
 
-        record SyntaxError<T>(String message, String input, int code)
+        record SyntaxError<T>(String message, @Nullable String input, int code)
                 implements ArgumentResult<T> {
         }
     }

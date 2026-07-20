@@ -811,7 +811,7 @@ public final class RegistryData {
         }
 
         @Override
-        public String getString(String name, String defaultValue) {
+        public String getString(String name, @Nullable String defaultValue) {
             var element = element(name);
             return element != null ? (String) element : defaultValue;
         }
@@ -908,7 +908,7 @@ public final class RegistryData {
             return new PropertiesMap(map);
         }
 
-        String getString(String name, String defaultValue);
+        String getString(String name, @Nullable String defaultValue);
 
         String getString(String name);
 

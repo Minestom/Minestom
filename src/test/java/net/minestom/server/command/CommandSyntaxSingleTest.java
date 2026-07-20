@@ -5,6 +5,7 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -145,7 +146,7 @@ public class CommandSyntaxSingleTest {
         assertSyntax(groupLoop, "minecraft:stone minecraft:stone", ExpectedExecution.DEFAULT);
     }
 
-    private static void assertSyntax(List<Argument<?>> args, String input, ExpectedExecution expectedExecution, Map<String, Object> expectedValues) {
+    private static void assertSyntax(List<Argument<?>> args, String input, ExpectedExecution expectedExecution, @Nullable Map<String, Object> expectedValues) {
         final String commandName = "name";
 
         var manager = new CommandManager();

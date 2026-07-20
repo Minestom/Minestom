@@ -82,6 +82,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "MissingOverride",
                 "ObjectToString",
                 "OperatorPrecedence",
+                "ParameterMissingNullable",
                 "ShortCircuitBoolean",
                 "PatternMatchingInstanceof",
                 "RedundantControlFlow",
