@@ -78,7 +78,7 @@ public class PlayerInit {
 
     private final Inventory inventory;
 
-    private final EventNode<Event> DEMO_NODE = EventNode.all("demo")
+    private static final EventNode<Event> DEMO_NODE = EventNode.all("demo")
             .addListener(EntityAttackEvent.class, event -> {
                 final Entity source = event.getEntity();
                 final Entity entity = event.getTarget();
@@ -439,7 +439,7 @@ public class PlayerInit {
         inventory.setItemStack(3, ItemStack.of(Material.DIAMOND, 34));
     }
 
-    private final AtomicReference<TickMonitor> LAST_TICK = new AtomicReference<>();
+    private static final AtomicReference<TickMonitor> LAST_TICK = new AtomicReference<>();
 
     public void init() {
         var eventHandler = MinecraftServer.getGlobalEventHandler();

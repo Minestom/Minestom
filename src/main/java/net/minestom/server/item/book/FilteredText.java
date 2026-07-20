@@ -9,11 +9,11 @@ import org.jetbrains.annotations.Nullable;
 
 public record FilteredText<T>(T text, @Nullable T filtered) {
 
-    public static NetworkBuffer.Type<FilteredText<String>> STRING_NETWORK_TYPE = createNetworkType(NetworkBuffer.STRING);
-    public static Codec<FilteredText<String>> STRING_CODEC = createCodec(Codec.STRING);
+    public static final NetworkBuffer.Type<FilteredText<String>> STRING_NETWORK_TYPE = createNetworkType(NetworkBuffer.STRING);
+    public static final Codec<FilteredText<String>> STRING_CODEC = createCodec(Codec.STRING);
 
-    public static NetworkBuffer.Type<FilteredText<Component>> COMPONENT_NETWORK_TYPE = createNetworkType(NetworkBuffer.COMPONENT);
-    public static Codec<FilteredText<Component>> COMPONENT_CODEC = createCodec(Codec.COMPONENT);
+    public static final NetworkBuffer.Type<FilteredText<Component>> COMPONENT_NETWORK_TYPE = createNetworkType(NetworkBuffer.COMPONENT);
+    public static final Codec<FilteredText<Component>> COMPONENT_CODEC = createCodec(Codec.COMPONENT);
 
     private static <T> NetworkBuffer.Type<FilteredText<T>> createNetworkType(NetworkBuffer.Type<T> inner) {
         return NetworkBufferTemplate.template(

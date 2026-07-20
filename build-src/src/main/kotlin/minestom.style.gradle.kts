@@ -17,6 +17,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "AlmostJavadoc",
                 "BoxedPrimitiveConstructor",
                 "CompareToZero",
+                "ConstantField",
                 "DeprecatedVariable",
                 "EqualsIncompatibleType",
                 "EqualsUnsafeCast",

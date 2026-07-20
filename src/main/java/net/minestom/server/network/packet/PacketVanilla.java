@@ -69,16 +69,16 @@ public final class PacketVanilla {
     }
 
 
-    static PacketRegistry<ClientPacket.Handshake> CLIENT_HANDSHAKE = registry(ConnectionState.HANDSHAKE, PacketRegistry.ConnectionSide.CLIENT,
+    static final PacketRegistry<ClientPacket.Handshake> CLIENT_HANDSHAKE = registry(ConnectionState.HANDSHAKE, PacketRegistry.ConnectionSide.CLIENT,
             entry(ClientHandshakePacket.class, ClientHandshakePacket.SERIALIZER)
     );
 
-    static PacketRegistry<ClientPacket.Status> CLIENT_STATUS = registry(ConnectionState.STATUS, PacketRegistry.ConnectionSide.CLIENT,
+    static final PacketRegistry<ClientPacket.Status> CLIENT_STATUS = registry(ConnectionState.STATUS, PacketRegistry.ConnectionSide.CLIENT,
             entry(StatusRequestPacket.class, StatusRequestPacket.SERIALIZER),
             entry(ClientPingRequestPacket.class, ClientPingRequestPacket.SERIALIZER)
     );
 
-    static PacketRegistry<ClientPacket.Login> CLIENT_LOGIN = registry(ConnectionState.LOGIN, PacketRegistry.ConnectionSide.CLIENT,
+    static final PacketRegistry<ClientPacket.Login> CLIENT_LOGIN = registry(ConnectionState.LOGIN, PacketRegistry.ConnectionSide.CLIENT,
             entry(ClientLoginStartPacket.class, ClientLoginStartPacket.SERIALIZER),
             entry(ClientEncryptionResponsePacket.class, ClientEncryptionResponsePacket.SERIALIZER),
             entry(ClientLoginPluginResponsePacket.class, ClientLoginPluginResponsePacket.SERIALIZER),
@@ -86,7 +86,7 @@ public final class PacketVanilla {
             entry(ClientCookieResponsePacket.class, ClientCookieResponsePacket.SERIALIZER)
     );
 
-    static PacketRegistry<ClientPacket.Configuration> CLIENT_CONFIGURATION = registry(ConnectionState.CONFIGURATION, PacketRegistry.ConnectionSide.CLIENT,
+    static final PacketRegistry<ClientPacket.Configuration> CLIENT_CONFIGURATION = registry(ConnectionState.CONFIGURATION, PacketRegistry.ConnectionSide.CLIENT,
             entry(ClientSettingsPacket.class, ClientSettingsPacket.SERIALIZER),
             entry(ClientCookieResponsePacket.class, ClientCookieResponsePacket.SERIALIZER),
             entry(ClientPluginMessagePacket.class, ClientPluginMessagePacket.SERIALIZER),
@@ -99,7 +99,7 @@ public final class PacketVanilla {
             entry(ClientAcceptCodeOfConductPacket.class, ClientAcceptCodeOfConductPacket.SERIALIZER)
     );
 
-    static PacketRegistry<ClientPacket.Play> CLIENT_PLAY = PacketRegistry.<ClientPacket.Play>registry(ConnectionState.PLAY, PacketRegistry.ConnectionSide.CLIENT,
+    static final PacketRegistry<ClientPacket.Play> CLIENT_PLAY = PacketRegistry.<ClientPacket.Play>registry(ConnectionState.PLAY, PacketRegistry.ConnectionSide.CLIENT,
             entry(ClientTeleportConfirmPacket.class, ClientTeleportConfirmPacket.SERIALIZER),
             entry(ClientAttackPacket.class, ClientAttackPacket.SERIALIZER),
             entry(ClientQueryBlockNbtPacket.class, ClientQueryBlockNbtPacket.SERIALIZER),
@@ -171,14 +171,14 @@ public final class PacketVanilla {
             entry(ClientCustomClickActionPacket.class, ClientCustomClickActionPacket.SERIALIZER)
     );
 
-    static PacketRegistry<ServerPacket.Handshake> SERVER_HANDSHAKE = registry(ConnectionState.HANDSHAKE, PacketRegistry.ConnectionSide.SERVER);
+    static final PacketRegistry<ServerPacket.Handshake> SERVER_HANDSHAKE = registry(ConnectionState.HANDSHAKE, PacketRegistry.ConnectionSide.SERVER);
 
-    static PacketRegistry<ServerPacket.Status> SERVER_STATUS = registry(ConnectionState.STATUS, PacketRegistry.ConnectionSide.SERVER,
+    static final PacketRegistry<ServerPacket.Status> SERVER_STATUS = registry(ConnectionState.STATUS, PacketRegistry.ConnectionSide.SERVER,
             entry(ResponsePacket.class, ResponsePacket.SERIALIZER),
             entry(PingResponsePacket.class, PingResponsePacket.SERIALIZER)
     );
 
-    static PacketRegistry<ServerPacket.Login> SERVER_LOGIN = registry(ConnectionState.LOGIN, PacketRegistry.ConnectionSide.SERVER,
+    static final PacketRegistry<ServerPacket.Login> SERVER_LOGIN = registry(ConnectionState.LOGIN, PacketRegistry.ConnectionSide.SERVER,
             entry(LoginDisconnectPacket.class, LoginDisconnectPacket.SERIALIZER),
             entry(EncryptionRequestPacket.class, EncryptionRequestPacket.SERIALIZER),
             entry(LoginSuccessPacket.class, LoginSuccessPacket.SERIALIZER),
@@ -187,7 +187,7 @@ public final class PacketVanilla {
             entry(CookieRequestPacket.class, CookieRequestPacket.SERIALIZER)
     );
 
-    static PacketRegistry<ServerPacket.Configuration> SERVER_CONFIGURATION = registry(ConnectionState.CONFIGURATION, PacketRegistry.ConnectionSide.SERVER,
+    static final PacketRegistry<ServerPacket.Configuration> SERVER_CONFIGURATION = registry(ConnectionState.CONFIGURATION, PacketRegistry.ConnectionSide.SERVER,
             entry(CookieRequestPacket.class, CookieRequestPacket.SERIALIZER),
             entry(PluginMessagePacket.class, PluginMessagePacket.SERIALIZER),
             entry(DisconnectPacket.class, DisconnectPacket.SERIALIZER),
@@ -210,7 +210,7 @@ public final class PacketVanilla {
             entry(CodeOfConductPacket.class, CodeOfConductPacket.SERIALIZER)
     );
 
-    static PacketRegistry<ServerPacket.Play> SERVER_PLAY = PacketRegistry.<ServerPacket.Play>registry(ConnectionState.PLAY, PacketRegistry.ConnectionSide.SERVER,
+    static final PacketRegistry<ServerPacket.Play> SERVER_PLAY = PacketRegistry.<ServerPacket.Play>registry(ConnectionState.PLAY, PacketRegistry.ConnectionSide.SERVER,
             entry(BundlePacket.class, BundlePacket.SERIALIZER),
             entry(SpawnEntityPacket.class, SpawnEntityPacket.SERIALIZER),
             entry(EntityAnimationPacket.class, EntityAnimationPacket.SERIALIZER),
