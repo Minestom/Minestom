@@ -58,6 +58,8 @@ tasks.withType<JavaCompile>().configureEach {
                 "EnumOrdinal",
                 "ImmutableEnumChecker",
                 "ReferenceEquality",
+                "ExposedPrivateType",
+                "ArrayRecordComponent",
         )
     }
 }
