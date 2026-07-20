@@ -58,7 +58,7 @@ public final class RegistryData {
     }
 
     @ApiStatus.Internal
-    public static BlockEntry block(String namespace, Properties main, HashMap<Object, Object> internCache, @Nullable BlockEntry parent, @Nullable Properties parentProperties) {
+    public static BlockEntry block(String namespace, Properties main, Map<Object, Object> internCache, @Nullable BlockEntry parent, @Nullable Properties parentProperties) {
         return new BlockEntry(namespace, main, internCache, parent, parentProperties);
     }
 

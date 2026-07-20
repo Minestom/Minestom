@@ -27,6 +27,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "LongDoubleConversion",
                 "MissingSummary",
                 "NarrowingCompoundAssignment",
+                "NonApiType",
                 "StringCaseLocaleUsage",
                 "StringSplitter",
                 "MissingOverride",

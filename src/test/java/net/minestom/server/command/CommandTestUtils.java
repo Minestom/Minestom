@@ -197,7 +197,7 @@ public class CommandTestUtils {
         }
 
         private static String resolveNode(String id, Map<String, String[]> references,
-                                          Map<String, TestNode> nodes, ArrayList<TestNode> result,
+                                          Map<String, TestNode> nodes, List<TestNode> result,
                                           Map<String, String> nameToMetaPath,
                                           List<Runnable> redirectSetters, String metaPath) {
             final TestNode node = nodes.get(id);
