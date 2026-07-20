@@ -329,7 +329,7 @@ public record GenSection(Palette blocks, Palette biomes, Int2ObjectMap<Block> sp
         }
 
         private static boolean requireCache(Block block) {
-            return block.hasNbt() || block.handler() != null || block.blockEntity();
+            return block.hasNbt() || block.handler() != null || block.blockEntityType() != null;
         }
 
         private void fillRelative(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, Block block) {

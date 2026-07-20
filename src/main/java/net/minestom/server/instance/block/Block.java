@@ -468,16 +468,6 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
     }
 
     /**
-     * Returns whether this block state has an associated block entity type.
-     *
-     * @return {@code true} if this block state has a block entity type
-     */
-    @Contract(pure = true)
-    default boolean blockEntity() {
-        return blockEntityType() != null;
-    }
-
-    /**
      * Returns the block entity type associated with this block state.
      *
      * @return the block entity type, or {@code null} when absent

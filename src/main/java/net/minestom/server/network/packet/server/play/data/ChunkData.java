@@ -26,7 +26,7 @@ public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte[] data,
         data = data.clone();
         blockEntities = blockEntities.entrySet()
                 .stream()
-                .filter((entry) -> entry.getValue().blockEntity())
+                .filter((entry) -> entry.getValue().blockEntityType() != null)
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
