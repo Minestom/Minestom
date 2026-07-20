@@ -183,10 +183,8 @@ public class EntityVelocityIntegrationTest {
         AtomicInteger i = new AtomicInteger();
         BooleanSupplier tickLoopCondition = () -> i.getAndIncrement() < Math.max(entity.getSynchronizationTicks() - 1, 19);
 
-        var tracker = viewerConnection.trackIncoming(EntityVelocityPacket.class);
-
         entity.setVelocity(new Vec(0, 5, 0));
-        tracker = viewerConnection.trackIncoming(EntityVelocityPacket.class);
+        var tracker = viewerConnection.trackIncoming(EntityVelocityPacket.class);
         i.set(0);
         env.tickWhile(tickLoopCondition, null);
         tracker.assertCount(1); // Verify the update is only sent once

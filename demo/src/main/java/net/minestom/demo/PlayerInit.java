@@ -122,8 +122,6 @@ public class PlayerInit {
                 var instances = MinecraftServer.getInstanceManager().getInstances();
                 Instance instance = instances.stream().skip(new Random().nextInt(instances.size())).findFirst().orElse(null);
                 event.setSpawningInstance(instance);
-                int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
-                int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
                 player.setRespawnPoint(new Pos(0, 40f, 0));
             })
             .addListener(PlayerSpawnEvent.class, event -> {

@@ -16,6 +16,8 @@ tasks.withType<JavaCompile>().configureEach {
                 "FutureReturnValueIgnored",
                 "MissingOverride",
                 "ObjectToString",
+                "UnusedMethod",
+                "UnusedVariable",
                 "UnnecessarilyFullyQualified",
                 "NullArgumentForNonNullParameter",
                 "NullableConstructor",

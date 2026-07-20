@@ -101,6 +101,7 @@ public final class ServerFlag {
         return System.getProperty(name, defaultValue);
     }
 
+    @SuppressWarnings("unused")
     private static String stringProperty(String name) {
         return System.getProperty(name);
     }

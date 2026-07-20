@@ -61,7 +61,6 @@ public sealed interface TrimMaterial extends Holder.Direct<TrimMaterial>, TrimMa
 
     final class Builder {
         private String assetName;
-        private Material ingredient;
         private final Map<String, String> overrideArmorMaterials = new HashMap<>();
         private Component description;
 

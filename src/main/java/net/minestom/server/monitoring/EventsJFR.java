@@ -13,7 +13,7 @@ import java.util.UUID;
  * JFR events for monitoring Minestom server activities.
  */
 @ApiStatus.Internal
-@SuppressWarnings("ALL")
+@SuppressWarnings({"ALL", "unused"})
 public final class EventsJFR {
     public static final boolean JFR_AVAILABLE = jfrAvailable();
 

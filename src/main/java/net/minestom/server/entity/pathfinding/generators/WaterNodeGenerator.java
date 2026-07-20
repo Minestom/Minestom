@@ -13,7 +13,6 @@ import java.util.Set;
 
 public class WaterNodeGenerator implements NodeGenerator {
     private PNode tempNode = null;
-    private final BoundingBox.PointIterator pointIterator = new BoundingBox.PointIterator();
 
     @Override
     public Collection<? extends PNode> getWalkable(Block.Getter getter, Set<PNode> visited, PNode current, Point goal, BoundingBox boundingBox) {

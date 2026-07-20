@@ -31,7 +31,6 @@ public class ExperienceOrb extends Entity {
 
         //todo lava
 
-        double d = 8.0;
         if (lastTargetUpdateTick < time - 20 + getEntityId() % 100) {
             if (target == null || target.getPosition().distanceSquared(getPosition()) > 64) {
                 this.target = getClosestPlayer(this, 8);

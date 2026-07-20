@@ -352,14 +352,21 @@ public class AnvilLoaderIntegrationTest {
             for (int chunkZ = 0; chunkZ < 16; chunkZ++) {
                 final Chunk originalChunk = instance.loadChunk(chunkX, chunkZ).join();
                 final Chunk chunk = secondInstance.loadChunk(chunkX, chunkZ).join();
-                for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
-                    for (int y = secondInstance.getCachedDimensionType().minY(); y < secondInstance.getCachedDimensionType().maxY(); y++) {
-                        for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
-                            final Block originalBlock = instance.getBlock(x, y, z);
-                            final Block block = secondInstance.getBlock(x, y, z);
-                            assertEquals(originalBlock, block);
+                originalChunk.lockReadLock();
+                chunk.lockReadLock();
+                try {
+                    for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
+                        for (int y = secondInstance.getCachedDimensionType().minY(); y < secondInstance.getCachedDimensionType().maxY(); y++) {
+                            for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
+                                final Block originalBlock = originalChunk.getBlock(x, y, z);
+                                final Block block = chunk.getBlock(x, y, z);
+                                assertEquals(originalBlock, block);
+                            }
                         }
                     }
+                } finally {
+                    chunk.unlockReadLock();
+                    originalChunk.unlockReadLock();
                 }
             }
         }

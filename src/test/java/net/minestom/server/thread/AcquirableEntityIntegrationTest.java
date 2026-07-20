@@ -15,7 +15,6 @@ public class AcquirableEntityIntegrationTest {
 
     @Test
     public void instanceSet(Env env) throws InterruptedException {
-        var instance = env.createFlatInstance();
         var zombie = new Entity(EntityType.ZOMBIE);
         CountDownLatch latch = new CountDownLatch(1);
         Thread.startVirtualThread(() -> {

@@ -3,7 +3,6 @@ package net.minestom.server.command;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandResult;
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -101,17 +100,6 @@ public class CommandManagerTest {
         assertEquals(CommandResult.Type.SUCCESS, result.getType());
         assertFalse(checkA.get());
         assertTrue(checkAB.get());
-    }
-
-    private static void assertNodeEquals(DeclareCommandsPacket.Node node, byte flags, int[] children, int redirectedNode,
-                                         String name, String parser, byte[] properties, String suggestionsType) {
-        assertEquals(flags, node.flags);
-        assertArrayEquals(children, node.children);
-        assertEquals(redirectedNode, node.redirectedNode);
-        assertEquals(name, node.name);
-        assertEquals(parser, node.parser);
-        assertArrayEquals(properties, node.properties);
-        assertEquals(suggestionsType, node.suggestionsType);
     }
 
 }

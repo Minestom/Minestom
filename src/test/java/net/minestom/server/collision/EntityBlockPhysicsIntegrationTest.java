@@ -647,13 +647,6 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEqualsPoint(new Pos(0.7, 42, 0), res.newPosition());
     }
 
-    @Test
-    public void tmp(Env env) {
-        BoundingBox boundingBox = new BoundingBox(3,2.8,3);
-        Vec velocity = new Vec(1,3,5);
-        Pos entityPosition = new Pos(0,0,0);
-    }
-
     // Checks C include all checks for crossing one intermediate block (3 block checks)
     @Test
     public void entityPhysicsSmallMoveC0(Env env) {

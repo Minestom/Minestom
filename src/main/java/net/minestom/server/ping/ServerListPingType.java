@@ -61,8 +61,6 @@ public enum ServerListPingType {
     }
 
     private static final String LAN_PING_FORMAT = "[MOTD]%s[/MOTD][AD]%s[/AD]";
-    private static final GsonComponentSerializer FULL_RGB = GsonComponentSerializer.gson(),
-            NAMED_RGB = GsonComponentSerializer.colorDownsamplingGson();
     private static final LegacyComponentSerializer SECTION = LegacyComponentSerializer.legacySection();
 
     /**

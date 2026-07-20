@@ -489,15 +489,6 @@ public class Sidebar implements Scoreboard {
         }
 
         /**
-         * Gets the entity name of the team
-         *
-         * @return the entity name
-         */
-        private String getEntityName() {
-            return entityName;
-        }
-
-        /**
          * Gets the prefix of the team
          *
          * @return the prefix
