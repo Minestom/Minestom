@@ -136,12 +136,20 @@ public class PlayerInit {
                 ItemStack itemStack = ItemStack.builder(Material.STONE)
                         .amount(64)
                         .set(DataComponents.CAN_PLACE_ON, new BlockPredicates(List.of(
-                                new BlockPredicate(RegistryTag.direct(Block.OAK_SIGN), PropertiesPredicate.exact("rotation", "1"), null, DataComponentPredicates.EMPTY),
-                                new BlockPredicate(RegistryTag.direct(Block.PLAYER_HEAD, Block.PLAYER_WALL_HEAD), null, new NbtPredicate(CompoundBinaryTag.builder().put("Owner", StringBinaryTag.stringBinaryTag("test")).build())),
-                                new BlockPredicate(RegistryTag.direct(Block.BEEHIVE, Block.BEE_NEST), null, null,
+                                new BlockPredicate(RegistryTag.direct(Block.OAK_SIGN.registryKey()),
+                                        PropertiesPredicate.exact("rotation", "1"), null,
+                                        DataComponentPredicates.EMPTY),
+                                new BlockPredicate(RegistryTag.direct(
+                                        Block.PLAYER_HEAD.registryKey(), Block.PLAYER_WALL_HEAD.registryKey()), null,
+                                        new NbtPredicate(CompoundBinaryTag.builder()
+                                                .put("Owner", StringBinaryTag.stringBinaryTag("test")).build())),
+                                new BlockPredicate(RegistryTag.direct(
+                                        Block.BEEHIVE.registryKey(), Block.BEE_NEST.registryKey()), null, null,
                                         new DataComponentPredicates(DataComponentMap.builder().set(DataComponents.BEES, List.of(new Bee(new TypedCustomData<>(EntityType.BEE, CompoundBinaryTag.empty()), 10, 5))).build(), ComponentPredicateSet.EMPTY)
                                 ),
-                                new BlockPredicate(RegistryTag.direct(Block.PLAYER_HEAD, Block.PLAYER_WALL_HEAD), null, null,
+                                new BlockPredicate(RegistryTag.direct(
+                                        Block.PLAYER_HEAD.registryKey(),
+                                        Block.PLAYER_WALL_HEAD.registryKey()), null, null,
                                         new DataComponentPredicates(DataComponentMap.EMPTY, ComponentPredicateSet.EMPTY.add(new DataComponentPredicate.CustomData(CompoundBinaryTag.builder().put("Owner", StringBinaryTag.stringBinaryTag("test")).build())))
                                 )
                         )))

@@ -146,7 +146,10 @@ public class DataComponentPredicateTest {
 
     @Test
     void testPotionContents() {
-        var potions = new DataComponentPredicate.Potions(RegistryTag.direct(PotionType.FIRE_RESISTANCE, PotionType.HEALING, PotionType.HARMING));
+        var potions = new DataComponentPredicate.Potions(RegistryTag.direct(
+                PotionType.FIRE_RESISTANCE.registryKey(),
+                PotionType.HEALING.registryKey(),
+                PotionType.HARMING.registryKey()));
         assertPass(potions, DataComponents.POTION_CONTENTS, new PotionContents(PotionType.HEALING));
         assertFail(potions, DataComponents.POTION_CONTENTS, new PotionContents(PotionType.STRENGTH)); // Potion type isn't contained in the predicate's list
         assertFail(potions, DataComponents.POTION_CONTENTS, new PotionContents(null, null, List.of(), null));

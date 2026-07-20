@@ -103,7 +103,7 @@ public final class InventoryClickProcessor {
             if (equippableComponent != null) {
                 final EquipmentSlot equipmentSlot = equippableComponent.slot();
                 RegistryTag<EntityType> allowed = equippableComponent.allowedEntities();
-                if ((allowed == null || allowed.contains(EntityType.PLAYER))
+                if ((allowed == null || allowed.contains(EntityType.PLAYER.registryKey()))
                         && (equipmentSlot.isArmor() || equipmentSlot == EquipmentSlot.OFF_HAND)
                         && !craftingGridClick) {
                     // Shift-click equip

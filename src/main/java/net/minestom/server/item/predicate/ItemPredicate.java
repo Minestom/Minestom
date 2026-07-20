@@ -30,11 +30,12 @@ public record ItemPredicate(
     public static final NetworkBuffer.Type<ItemPredicate> NETWORK_TYPE = NetworkBuffer.TypedNBT(CODEC);
 
     public ItemPredicate(List<Material> items) {
-        this(RegistryTag.direct(items), null, null);
+        this(RegistryTag.direct(items.stream().map(Material::registryKey).toList()), null, null);
     }
 
     public ItemPredicate(Range.Int count, @Nullable List<Material> items) {
-        this(items == null ? null : RegistryTag.direct(items), count, null);
+        this(items == null ? null : RegistryTag.direct(
+                items.stream().map(Material::registryKey).toList()), count, null);
     }
 
     public ItemPredicate(DataComponentPredicates predicates) {
@@ -43,7 +44,7 @@ public record ItemPredicate(
 
     @Override
     public boolean test(ItemStack itemStack) {
-        if (items != null && !items.contains(itemStack.material()))
+        if (items != null && !items.contains(itemStack.material().registryKey()))
             return false;
         if (count != null && !count.inRange(itemStack.amount()))
             return false;
