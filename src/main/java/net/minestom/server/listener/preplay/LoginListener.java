@@ -233,10 +233,7 @@ public final class LoginListener {
     private static void enterConfig(PlayerConnection connection, GameProfile gameProfile) {
         Thread.startVirtualThread(() -> {
             try {
-                var newGameProfile = MinecraftServer.getConnectionManager().transitionLoginToConfig(connection, gameProfile);
-                if (connection instanceof PlayerSocketConnection socketConnection) {
-                    socketConnection.UNSAFE_setProfile(newGameProfile);
-                }
+                MinecraftServer.getConnectionManager().transitionLoginToConfig(connection, gameProfile);
             } catch (Throwable t) {
                 MinecraftServer.getExceptionManager().handleException(t);
             }

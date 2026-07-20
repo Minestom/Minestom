@@ -75,17 +75,6 @@
       "type": "java.lang.reflect.RecordComponent"
     },
     {
-      "type": "java.nio.Buffer",
-      "fields": [
-        {
-          "name": "address"
-        },
-        {
-          "name": "capacity"
-        }
-      ]
-    },
-    {
       "type": "java.sql.Date"
     },
     {
@@ -688,9 +677,6 @@
       "type": "net.minestom.server.entity.MetadataDef$Player"
     },
     {
-      "type": "net.minestom.server.entity.MetadataDef$Slime"
-    },
-    {
       "type": "net.minestom.server.entity.MetadataHolder",
       "fields": [
         {
@@ -860,56 +846,7 @@
       "type": "space.vectrix.flare.fastutil.Long2ObjectSyncMapImpl$ExpungingEntryImpl"
     },
     {
-      "type": "sun.management.VMManagementImpl",
-      "jniAccessible": true,
-      "fields": [
-        {
-          "name": "compTimeMonitoringSupport"
-        },
-        {
-          "name": "currentThreadCpuTimeSupport"
-        },
-        {
-          "name": "objectMonitorUsageSupport"
-        },
-        {
-          "name": "otherThreadCpuTimeSupport"
-        },
-        {
-          "name": "remoteDiagnosticCommandsSupport"
-        },
-        {
-          "name": "synchronizerUsageSupport"
-        },
-        {
-          "name": "threadAllocatedMemorySupport"
-        },
-        {
-          "name": "threadContentionMonitoringSupport"
-        }
-      ]
-    },
-    {
-      "type": "sun.misc.Unsafe",
-      "fields": [
-        {
-          "name": "theUnsafe"
-        }
-      ]
-    },
-    {
       "type": "sun.security.provider.NativePRNG",
-      "methods": [
-        {
-          "name": "<init>",
-          "parameterTypes": [
-            "java.security.SecureRandomParameters"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "sun.security.provider.NativePRNG$NonBlocking",
       "methods": [
         {
           "name": "<init>",
@@ -953,16 +890,10 @@
       "type": "sun.text.resources.cldr.FormatData_en"
     },
     {
-      "type": "sun.text.resources.cldr.FormatData_en_US"
-    },
-    {
       "type": "sun.util.resources.cldr.CalendarData"
     }
   ],
   "resources": [
-    {
-      "glob": "META-INF/services/java.net.spi.InetAddressResolverProvider"
-    },
     {
       "glob": "META-INF/services/java.nio.channels.spi.SelectorProvider"
     },
@@ -1013,9 +944,6 @@
     },
     {
       "glob": "net/minestom/data/block_entity_type.json"
-    },
-    {
-      "glob": "net/minestom/data/block_entity_types.json"
     },
     {
       "glob": "net/minestom/data/block_sound_type.json"
@@ -1087,9 +1015,6 @@
       "glob": "net/minestom/data/painting_variant.json"
     },
     {
-      "glob": "net/minestom/data/particle.json"
-    },
-    {
       "glob": "net/minestom/data/particle_type.json"
     },
     {
@@ -1100,12 +1025,6 @@
     },
     {
       "glob": "net/minestom/data/potion.json"
-    },
-    {
-      "glob": "net/minestom/data/potion_effect.json"
-    },
-    {
-      "glob": "net/minestom/data/potion_type.json"
     },
     {
       "glob": "net/minestom/data/sound_event.json"
@@ -1124,9 +1043,6 @@
     },
     {
       "glob": "net/minestom/data/tags/block_entity_type.json"
-    },
-    {
-      "glob": "net/minestom/data/tags/block_entity_types.json"
     },
     {
       "glob": "net/minestom/data/tags/block_sound_type.json"
@@ -1198,9 +1114,6 @@
       "glob": "net/minestom/data/tags/painting_variant.json"
     },
     {
-      "glob": "net/minestom/data/tags/particle.json"
-    },
-    {
       "glob": "net/minestom/data/tags/particle_type.json"
     },
     {
@@ -1211,12 +1124,6 @@
     },
     {
       "glob": "net/minestom/data/tags/potion.json"
-    },
-    {
-      "glob": "net/minestom/data/tags/potion_effect.json"
-    },
-    {
-      "glob": "net/minestom/data/tags/potion_type.json"
     },
     {
       "glob": "net/minestom/data/tags/sound_event.json"
@@ -1283,10 +1190,6 @@
     },
     {
       "glob": "org/slf4j/impl/StaticLoggerBinder.class"
-    },
-    {
-      "module": "jdk.jfr",
-      "glob": "jdk/jfr/internal/types/metadata.bin"
     }
   ]
 }
