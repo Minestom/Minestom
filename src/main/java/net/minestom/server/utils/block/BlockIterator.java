@@ -8,13 +8,14 @@ import net.minestom.server.entity.Entity;
 import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This class performs ray tracing and iterates along blocks on a line
  */
 public class BlockIterator implements Iterator<Point> {
     private final short[] signums = new short[3];
-    private Vec end;
+    private @Nullable Vec end;
     private boolean smooth;
 
     private boolean foundEnd = false;

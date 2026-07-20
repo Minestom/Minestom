@@ -10,9 +10,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.OptionalDouble;
 import java.util.Set;
+import org.jetbrains.annotations.Nullable;
 
 public class GroundNodeGenerator implements NodeGenerator {
-    private PNode tempNode = null;
+    private @Nullable PNode tempNode = null;
     private final BoundingBox.PointIterator pointIterator = new BoundingBox.PointIterator();
     private final static int MAX_FALL_DISTANCE = 5;
 

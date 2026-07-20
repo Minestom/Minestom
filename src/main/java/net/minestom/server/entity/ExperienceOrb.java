@@ -5,11 +5,12 @@ import net.minestom.server.thread.Acquirable;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Comparator;
+import org.jetbrains.annotations.Nullable;
 
 public class ExperienceOrb extends Entity {
 
     private short experienceCount;
-    private Player target;
+    private @Nullable Player target;
     private long lastTargetUpdateTick;
 
     public ExperienceOrb(short experienceCount) {

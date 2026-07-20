@@ -704,7 +704,7 @@ public final class RegistryData {
     public static final class VillagerProfessionEntry implements Entry {
         private final Key key;
         private final int id;
-        private final SoundEvent workSound;
+        private final @Nullable SoundEvent workSound;
 
         public VillagerProfessionEntry(String namespace, Properties main) {
             this.key = Key.key(namespace);

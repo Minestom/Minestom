@@ -2,6 +2,7 @@ package net.minestom.server.map;
 
 import java.util.Locale;
 import net.minestom.server.ServerFlag;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,7 +78,7 @@ public enum MapColors {
     private static final Logger logger = LoggerFactory.getLogger(MapColors.class);
     private static final ConcurrentHashMap<Integer, PreciseMapColor> rgbMap = new ConcurrentHashMap<>();
     // only used if mappingStrategy == ColorMappingStrategy.PRECISE
-    private static volatile PreciseMapColor[] rgbArray = null;
+    private static volatile PreciseMapColor @Nullable [] rgbArray = null;
 
     private static final ColorMappingStrategy mappingStrategy;
     private static final int colorReduction;

@@ -149,7 +149,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     private int listOrder;
     private PlayerSkin skin;
 
-    private Instance pendingInstance = null;
+    private @Nullable Instance pendingInstance = null;
     private int dimensionTypeId;
     private GameMode gameMode;
     private WorldPos deathLocation;
@@ -189,7 +189,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     protected ClickPreprocessor clickPreprocessor = new ClickPreprocessor();
     protected PlayerInventory inventory;
-    private AbstractInventory openInventory;
+    private @Nullable AbstractInventory openInventory;
     // Used internally to allow the closing of inventory within the inventory listener
     private boolean didCloseInventory;
 
@@ -235,7 +235,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     private final Map<UUID, PendingResourcePack> pendingResourcePacks = new HashMap<>();
     // The future is non-null when a resource pack is in-flight, and completed when all statuses have been received.
-    private CompletableFuture<Void> resourcePackFuture = null;
+    private @Nullable CompletableFuture<Void> resourcePackFuture = null;
 
     public Player(PlayerConnection playerConnection, GameProfile gameProfile) {
         super(EntityType.PLAYER, gameProfile.uuid());

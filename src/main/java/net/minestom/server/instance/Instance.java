@@ -126,7 +126,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
     // instance custom data
     protected TagHandler tagHandler = TagHandler.newHandler();
     private final Scheduler scheduler = Scheduler.newScheduler();
-    private final EventNode<InstanceEvent> eventNode;
+    private final @Nullable EventNode<InstanceEvent> eventNode;
     private final Registries registries;
 
     // the explosion supplier

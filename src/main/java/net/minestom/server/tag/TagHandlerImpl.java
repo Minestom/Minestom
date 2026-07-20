@@ -17,7 +17,7 @@ final class TagHandlerImpl implements TagHandler {
     static final Serializers.Entry<Node, CompoundBinaryTag> NODE_SERIALIZER = new Serializers.Entry<>(BinaryTagTypes.COMPOUND, entries -> fromCompound(entries).root, Node::compound, true);
 
     private final Node root;
-    private volatile Node copy;
+    private volatile @Nullable Node copy;
 
     TagHandlerImpl(Node root) {
         this.root = root;

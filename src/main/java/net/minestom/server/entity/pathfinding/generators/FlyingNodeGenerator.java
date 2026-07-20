@@ -10,9 +10,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.OptionalDouble;
 import java.util.Set;
+import org.jetbrains.annotations.Nullable;
 
 public class FlyingNodeGenerator implements NodeGenerator {
-    private PNode tempNode = null;
+    private @Nullable PNode tempNode = null;
 
     @Override
     public Collection<? extends PNode> getWalkable(Block.Getter getter, Set<PNode> visited, PNode current, Point goal, BoundingBox boundingBox) {

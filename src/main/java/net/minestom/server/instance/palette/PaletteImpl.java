@@ -22,13 +22,13 @@ final class PaletteImpl implements Palette {
     byte bitsPerEntry = 0;
     int count = 0; // Serve as the single value if bitsPerEntry == 0
 
-    long @UnknownNullability [] values; // null when bitsPerEntry == 0
+    long @Nullable [] values; // null when bitsPerEntry == 0
     // palette index = value
     @UnknownNullability
-    IntArrayList paletteToValueList; // null when using direct mode (bitsPerEntry > maxBitsPerEntry)
+    @Nullable IntArrayList paletteToValueList; // null when using direct mode (bitsPerEntry > maxBitsPerEntry)
     // value = palette index
     @UnknownNullability
-    Int2IntOpenHashMap valueToPaletteMap; // null when using direct mode (bitsPerEntry > maxBitsPerEntry)
+    @Nullable Int2IntOpenHashMap valueToPaletteMap; // null when using direct mode (bitsPerEntry > maxBitsPerEntry)
 
     PaletteImpl(byte dimension, byte minBitsPerEntry, byte maxBitsPerEntry, byte directBits) {
         validateDimension(dimension);

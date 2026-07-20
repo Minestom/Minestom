@@ -13,6 +13,7 @@ import net.minestom.server.utils.validate.Check;
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.function.Function;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Allows entity to perform both melee and ranged attacks.
@@ -34,7 +35,7 @@ public class CombinedAttackGoal extends GoalSelector {
 
     private long lastAttack;
     private boolean stop;
-    private Entity cachedTarget;
+    private @Nullable Entity cachedTarget;
 
     /**
      * @param entityCreature the entity to add the goal to.

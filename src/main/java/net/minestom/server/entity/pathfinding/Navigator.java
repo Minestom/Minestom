@@ -23,12 +23,12 @@ import java.util.function.Supplier;
  * Necessary object for all {@link NavigableEntity}.
  */
 public final class Navigator {
-    private Point goalPosition;
+    private @Nullable Point goalPosition;
     private final Entity entity;
 
     // Essentially a double buffer. Wait until a path is done computing before replacing the old one.
-    private PPath computingPath;
-    private PPath path;
+    private @Nullable PPath computingPath;
+    private @Nullable PPath path;
 
     private double minimumDistance;
 

@@ -117,7 +117,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             EntityType.BLOCK_DISPLAY);
     private final CachedPacket destroyPacketCache = new CachedPacket(() -> new DestroyEntitiesPacket(getEntityId()));
 
-    protected Instance instance;
+    protected @Nullable Instance instance;
     protected Chunk currentChunk;
     protected Pos position; // Should be updated by setPositionInternal only.
     protected float headRotation;
@@ -168,7 +168,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected final Set<Player> viewers = viewEngine.set;
     private final TagHandler tagHandler = TagHandler.newHandler();
     private final Scheduler scheduler = Scheduler.newScheduler();
-    private final EventNode<EntityEvent> eventNode;
+    private final @Nullable EventNode<EntityEvent> eventNode;
 
     private final UUID uuid;
     private boolean isActive; // False if entity has only been instanced without being added somewhere
