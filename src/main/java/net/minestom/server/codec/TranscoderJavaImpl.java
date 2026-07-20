@@ -122,10 +122,10 @@ final class TranscoderJavaImpl implements Transcoder<Object> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Result<List<Object>> getList(Object value) {
         if (!(value instanceof List<?> list))
             return new Result.Error<>("Not a list: " + value);
-        //noinspection unchecked
         return new Result.Ok<>((List<Object>) list);
     }
 
@@ -157,11 +157,11 @@ final class TranscoderJavaImpl implements Transcoder<Object> {
             return new Result.Error<>("Not a map: " + value);
         return new Result.Ok<>(new MapLike<>() {
             @Override
-            public Collection<String> keys() {
+            @SuppressWarnings("unchecked")
+            public List<String> keys() {
                 if (map.isEmpty()) return List.of();
                 var keys = List.copyOf(map.keySet());
                 if (keys.getFirst() instanceof String)
-                    //noinspection unchecked
                     return (List<String>) keys;
                 return List.of(); // No string keys
             }

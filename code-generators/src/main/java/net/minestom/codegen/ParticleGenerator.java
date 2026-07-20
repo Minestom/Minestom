@@ -6,6 +6,7 @@ import com.palantir.javapoet.ClassName;
 import com.palantir.javapoet.FieldSpec;
 import com.palantir.javapoet.ParameterizedTypeName;
 import com.palantir.javapoet.TypeSpec;
+import java.util.Locale;
 import org.jetbrains.annotations.ApiStatus;
 
 import javax.lang.model.element.Modifier;
@@ -62,7 +63,7 @@ record ParticleGenerator(Codegen codegen) {
     private static String toPascalCase(String input) {
         String camelCase = PASCAL_PATTERN
                 .matcher(input)
-                .replaceAll(match -> match.group(1).toUpperCase());
-        return camelCase.substring(0, 1).toUpperCase() + camelCase.substring(1);
+                .replaceAll(match -> match.group(1).toUpperCase(Locale.ROOT));
+        return camelCase.substring(0, 1).toUpperCase(Locale.ROOT) + camelCase.substring(1);
     }
 }

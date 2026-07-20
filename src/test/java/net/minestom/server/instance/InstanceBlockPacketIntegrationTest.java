@@ -53,7 +53,7 @@ public class InstanceBlockPacketIntegrationTest {
 
         BlockHandler signHandler = new BlockHandler() {
             @Override
-            public Collection<Tag<?>> getBlockEntityTags() {
+            public List<Tag<?>> getBlockEntityTags() {
                 return List.of(Tag.Byte("is_waxed"));
             }
 

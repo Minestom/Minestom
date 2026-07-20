@@ -14,6 +14,7 @@ import net.minestom.server.utils.validate.Check;
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.function.Function;
+import org.jetbrains.annotations.Nullable;
 
 public class RangedAttackGoal extends GoalSelector {
     private final Cooldown cooldown = new Cooldown(Duration.of(5, TimeUnit.SERVER_TICK));
@@ -29,7 +30,7 @@ public class RangedAttackGoal extends GoalSelector {
     private ProjectileGenerator projectileGenerator;
 
     private boolean stop;
-    private Entity cachedTarget;
+    private @Nullable Entity cachedTarget;
 
     /**
      * @param entityCreature the entity to add the goal to.
@@ -76,7 +77,7 @@ public class RangedAttackGoal extends GoalSelector {
     public void setProjectileGenerator(Function<Entity, EntityProjectile> projectileGenerator) {
         this.projectileGenerator = (shooter, target, pow, spr) -> {
             EntityProjectile projectile = projectileGenerator.apply(shooter);
-            projectile.setInstance(shooter.getInstance(), shooter.getPosition().add(0D, shooter.getEyeHeight(), 0D));
+            projectile.setInstance(shooter.getInstance(), shooter.getPosition().add(0D, shooter.getEyeHeight(), 0D)).join();
             projectile.shoot(target, pow, spr);
         };
     }

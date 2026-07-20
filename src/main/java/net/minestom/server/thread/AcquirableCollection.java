@@ -102,6 +102,9 @@ public class AcquirableCollection<E> implements Collection<Acquirable<E>> {
     }
 
     /**
+     * Separates a collection of acquirable elements into a map of thread to elements,
+     * consuming immediately the elements already owned by the current thread.
+     *
      * @param collection the acquirable collection
      * @param consumer   the consumer to execute when an element is already in the current thread
      * @return a new Thread to acquirable elements map
@@ -119,7 +122,7 @@ public class AcquirableCollection<E> implements Collection<Acquirable<E>> {
                 consumer.accept(value);
             } else {
                 // The element is manager in a different thread, cache it
-                List<T> threadCacheList = threadCacheMap.computeIfAbsent(elementThread, tickThread -> new ArrayList<>());
+                List<T> threadCacheList = threadCacheMap.computeIfAbsent(elementThread, _ -> new ArrayList<>());
                 threadCacheList.add(value);
             }
         }

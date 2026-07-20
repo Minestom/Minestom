@@ -26,6 +26,7 @@ public sealed interface VillagerProfession extends StaticProtocolObject<Villager
         return registry().id();
     }
 
+    @Override
     @Contract(pure = true)
     RegistryData.VillagerProfessionEntry registry();
 

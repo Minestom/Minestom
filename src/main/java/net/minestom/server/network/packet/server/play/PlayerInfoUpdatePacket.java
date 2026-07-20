@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.crypto.ChatSession;
 import net.minestom.server.entity.GameMode;
@@ -53,7 +54,7 @@ public record PlayerInfoUpdatePacket(
     };
 
     @Override
-    public Collection<Component> components() {
+    public List<Component> components() {
         final List<Component> components = new ArrayList<>();
         for (final Entry entry : entries) {
             if (entry.displayName() == null) continue;

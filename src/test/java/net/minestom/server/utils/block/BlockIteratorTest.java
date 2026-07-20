@@ -10,7 +10,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BlockIteratorTest {
-    private void assertContains(List<Point> points, Point point) {
+    private static void assertContains(List<Point> points, Point point) {
         assertTrue(points.contains(point), "Expected " + points + " to contain " + point);
     }
 

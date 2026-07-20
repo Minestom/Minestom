@@ -62,6 +62,8 @@ public class TestRegistries implements Registries {
     public @Nullable DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects = null;
     public @Nullable DynamicRegistry<Codec<? extends DataComponentPredicate>> componentPredicateTypes = null;
 
+    @SuppressWarnings("this-escape") // test helper, init consumer runs last
+
     public TestRegistries(Consumer<TestRegistries> init) {
         init.accept(this);
     }

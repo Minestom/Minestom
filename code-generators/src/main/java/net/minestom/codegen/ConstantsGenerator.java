@@ -42,7 +42,7 @@ record ConstantsGenerator(Codegen codegen) {
     }
 
     private static void addMajorMinorField(TypeSpec.Builder typeSpec, String name, String value) {
-        String[] parts = value.split("\\.");
+        String[] parts = value.split("\\.", -1);
         if (parts.length != 2) throw new IllegalArgumentException("Invalid version format for " + name + ": " + value);
 
         ClassName majorMinorClass = ClassName.get("net.minestom.server.utils", "MajorMinorVersion");

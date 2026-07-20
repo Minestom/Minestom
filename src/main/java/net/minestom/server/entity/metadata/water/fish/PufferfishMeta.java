@@ -6,6 +6,7 @@ import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.Nullable;
 
 public class PufferfishMeta extends AbstractFishMeta {
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     public PufferfishMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
         updateBoundingBox(State.UNPUFFED);
@@ -20,6 +21,7 @@ public class PufferfishMeta extends AbstractFishMeta {
         updateBoundingBox(state);
     }
 
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     private void updateBoundingBox(State state) {
         this.consumeEntity((entity) -> {
             switch (state) {

@@ -23,7 +23,8 @@ public final class AutoIncrementMap<K> {
                 var write = this.write;
                 index = write.getInt(key);
                 if (index == -1) {
-                    write.put(key, (index = lastIndex++));
+                    index = lastIndex++;
+                    write.put(key, index);
                     read = write.clone();
                 }
             }

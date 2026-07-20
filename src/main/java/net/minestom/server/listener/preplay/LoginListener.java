@@ -60,7 +60,8 @@ public final class LoginListener {
             socketConnection.UNSAFE_setLoginUsername(packet.username());
             // Velocity support
             if (auth instanceof Auth.Velocity) {
-                connection.loginPluginMessageProcessor().request(Auth.Velocity.PLAYER_INFO_CHANNEL, new byte[0])
+                // Dont block the connection so we can still read more packets
+                var _ = connection.loginPluginMessageProcessor().request(Auth.Velocity.PLAYER_INFO_CHANNEL, new byte[0])
                         .thenAccept(response -> handleVelocityProxyResponse(socketConnection, response));
                 return;
             }

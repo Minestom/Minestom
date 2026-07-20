@@ -187,7 +187,7 @@ public abstract class Argument<T> {
      * @return 'this' for chaining
      */
     public Argument<T> setDefaultValue(@Nullable Supplier<T> defaultValue) {
-        this.defaultValue = defaultValue == null ? null : unused -> defaultValue.get();
+        this.defaultValue = defaultValue == null ? null : _ -> defaultValue.get();
         return this;
     }
 
@@ -203,7 +203,7 @@ public abstract class Argument<T> {
      * @return 'this' for chaining
      */
     public Argument<T> setDefaultValue(T defaultValue) {
-        this.defaultValue = unused -> defaultValue;
+        this.defaultValue = _ -> defaultValue;
         return this;
     }
 
@@ -249,7 +249,7 @@ public abstract class Argument<T> {
      * @return A new ArgumentMap that can get this complex object type.
      */
     public <O> Argument<O> map(Function<T, O> mapper) {
-        return new ArgumentMap<>(this, (p, i) -> mapper.apply(i));
+        return new ArgumentMap<>(this, (_, i) -> mapper.apply(i));
     }
 
     public <O> Argument<O> map(BiFunction<CommandSender, T, O> mapper) {
@@ -267,6 +267,9 @@ public abstract class Argument<T> {
         return new ArgumentFilter<>(this, predicate);
     }
 
+    // getClass is required: arguments of different types sharing an id must stay distinct,
+    // the command graph merges nodes keyed by this equality
+    @SuppressWarnings("EqualsGetClass")
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -283,7 +286,7 @@ public abstract class Argument<T> {
     }
 
     private static final class ArgumentMap<I, O> extends Argument<O> {
-        public static final int INVALID_MAP = 555;
+        static final int INVALID_MAP = 555;
         final Argument<I> argument;
         final BiFunction<CommandSender, I, O> mapper;
 
@@ -318,7 +321,7 @@ public abstract class Argument<T> {
     }
 
     private static final class ArgumentFilter<T> extends Argument<T> {
-        public static final int INVALID_FILTER = 556;
+        static final int INVALID_FILTER = 556;
         final Argument<T> argument;
         final Predicate<T> predicate;
 

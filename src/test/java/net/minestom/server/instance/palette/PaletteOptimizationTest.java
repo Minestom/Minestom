@@ -26,20 +26,20 @@ public class PaletteOptimizationTest {
     public void random() {
         var random = new Random(12345);
         var palette = createPalette();
-        palette.setAll((x, y, z) -> random.nextInt(256));
+        palette.setAll((_, _, _) -> random.nextInt(256));
         paletteEqualsOptimized(palette);
-        palette.setAll((x, y, z) -> random.nextInt(2));
+        palette.setAll((_, _, _) -> random.nextInt(2));
         paletteEqualsOptimized(palette);
     }
 
     @Test
     public void manualFill() {
         var palette = createPalette();
-        palette.setAll((x, y, z) -> 1);
+        palette.setAll((_, _, _) -> 1);
         paletteEqualsOptimized(palette);
-        palette.setAll((x, y, z) -> 2);
+        palette.setAll((_, _, _) -> 2);
         paletteEqualsOptimized(palette);
-        palette.setAll((x, y, z) -> 0);
+        palette.setAll((_, _, _) -> 0);
         paletteEqualsOptimized(palette);
     }
 

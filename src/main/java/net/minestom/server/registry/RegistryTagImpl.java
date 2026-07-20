@@ -47,6 +47,7 @@ final class RegistryTagImpl {
             this.key = key;
         }
 
+        @Override
         public TagKey<T> key() {
             return key;
         }
@@ -78,7 +79,7 @@ final class RegistryTagImpl {
                 invalidate();
         }
 
-        private void invalidate() {
+        private static void invalidate() {
             var process = MinecraftServer.process();
             if (process == null) return;
             process.connection().invalidateTags();

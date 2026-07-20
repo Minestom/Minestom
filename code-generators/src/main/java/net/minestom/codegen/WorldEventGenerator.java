@@ -2,6 +2,7 @@ package net.minestom.codegen;
 
 import com.google.gson.JsonObject;
 import com.palantir.javapoet.*;
+import java.util.Locale;
 import org.jetbrains.annotations.Nullable;
 
 import javax.lang.model.element.Modifier;
@@ -53,7 +54,7 @@ record WorldEventGenerator(Codegen codegen, String packageName, String worldEven
         ));
 
         for (JsonObject entryObject : codegen.orderedObjects(resource)) {
-            String entryName = entryObject.get("name").getAsString().toUpperCase();
+            String entryName = entryObject.get("name").getAsString().toUpperCase(Locale.ROOT);
             int id = entryObject.get("id").getAsInt();
             entryEnum.addEnumConstant(entryName, TypeSpec.anonymousClassBuilder("$L", id).build());
         }

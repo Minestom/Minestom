@@ -98,7 +98,7 @@ public sealed interface InventoryClickHandler permits AbstractInventory {
      * Called when a {@link Player} press the drop button
      *
      * @param player the player who clicked
-     * @param all
+     * @param all    true to drop the whole stack, false to drop a single item
      * @param slot   the slot number (-999 if clicking outside, i.e. dropping cursor)
      * @return true if the drop hasn't been cancelled, false otherwise
      */

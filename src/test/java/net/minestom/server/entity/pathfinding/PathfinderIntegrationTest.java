@@ -27,7 +27,7 @@ public class PathfinderIntegrationTest {
      * @param nodes the nodes to validate
      * @return true if the path is valid
      */
-    private boolean validateNodes(List<PNode> nodes, Instance instance) {
+    private static boolean validateNodes(List<PNode> nodes, Instance instance) {
         if (nodes == null) fail("Path is null");
         if (nodes.isEmpty()) fail("Path is empty");
 
@@ -47,7 +47,7 @@ public class PathfinderIntegrationTest {
         ChunkRange.chunksInRange(0, 0, 10, (x, z) -> i.loadChunk(x, z).join());
 
         var zombie = new LivingEntity(EntityType.ZOMBIE);
-        zombie.setInstance(i, new Pos(0, 40, 0));
+        zombie.setInstance(i, new Pos(0, 40, 0)).join();
         zombie.setBoundingBox(3f, 6.5f, 3f);
 
         i.setBlock(1, 46, 7, Block.STONE);
@@ -68,7 +68,7 @@ public class PathfinderIntegrationTest {
         ChunkRange.chunksInRange(0, 0, 10, (x, z) -> i.loadChunk(x, z).join());
 
         var zombie = new LivingEntity(EntityType.ZOMBIE);
-        zombie.setInstance(i, new Pos(0, 40, 0));
+        zombie.setInstance(i, new Pos(0, 40, 0)).join();
 
         Navigator nav = new Navigator(zombie);
         nav.setPathTo(new Pos(0, 40, 10));
@@ -86,7 +86,7 @@ public class PathfinderIntegrationTest {
         ChunkRange.chunksInRange(0, 0, 10, (x, z) -> i.loadChunk(x, z).join());
 
         var zombie = new LivingEntity(EntityType.ZOMBIE);
-        zombie.setInstance(i, new Pos(0, 40, 0));
+        zombie.setInstance(i, new Pos(0, 40, 0)).join();
 
         Navigator nav = new Navigator(zombie);
         nav.setPathTo(new Pos(2, 40, 2));
@@ -105,7 +105,7 @@ public class PathfinderIntegrationTest {
         ChunkRange.chunksInRange(0, 0, 10, (x, z) -> i.loadChunk(x, z).join());
 
         var zombie = new LivingEntity(EntityType.ZOMBIE);
-        zombie.setInstance(i, new Pos(43.972731367054266, 40.000000000040735, -39.89155139999369));
+        zombie.setInstance(i, new Pos(43.972731367054266, 40.000000000040735, -39.89155139999369)).join();
 
         zombie.tick(0);
         zombie.tick(0);
@@ -170,7 +170,7 @@ public class PathfinderIntegrationTest {
         i.setBlock(7, 41, 5, Block.STONE);
 
         var zombie = new LivingEntity(EntityType.ZOMBIE);
-        zombie.setInstance(i, new Pos(0, 40, 0));
+        zombie.setInstance(i, new Pos(0, 40, 0)).join();
         zombie.setBoundingBox(zombie.getBoundingBox().expand(4f, 4f, 4f));
 
         Navigator nav = new Navigator(zombie);

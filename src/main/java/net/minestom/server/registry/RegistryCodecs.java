@@ -52,13 +52,13 @@ final class RegistryCodecs {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public <D> Result<Holder<T>> decode(Transcoder<D> coder, D value) {
             if (!(coder instanceof RegistryTranscoder<D> context))
                 return new Result.Error<>("Missing registries in transcoder");
             final var registry = selector.select(context.registries());
             final Result<T> directResult = registryCodec.decode(coder, value);
             if (directResult instanceof Result.Ok(T direct))
-                //noinspection unchecked
                 return new Result.Ok<>((Holder<T>) direct);
             final Result<String> referenceResult = coder.getString(value);
             if (!(referenceResult instanceof Result.Ok(@Subst("a")String reference)))
@@ -180,6 +180,7 @@ final class RegistryCodecs {
             Objects.requireNonNull(directCodec, "directCodec");
         }
         @Override
+        @SuppressWarnings({"unchecked", "rawtypes"}) // heterogeneous holder entries by design
         public <D> Result<HolderSet<T>> decode(Transcoder<D> coder, D value) {
             // First try to decode as a tag
             final Result<RegistryTag<T>> tagResult = tagCodec.decode(coder, value);
@@ -207,6 +208,7 @@ final class RegistryCodecs {
         }
 
         @Override
+        @SuppressWarnings({"unchecked", "rawtypes"}) // heterogeneous holder entries by design
         public <D> Result<D> encode(Transcoder<D> coder, @Nullable HolderSet<T> value) {
             if (value == null) return new Result.Error<>("null");
             return switch (value) {
@@ -217,6 +219,7 @@ final class RegistryCodecs {
                 case HolderSet.Direct d -> {
                     final Transcoder.ListBuilder<D> result = coder.createList(d.values().size());
                     for (final Object rawValue : d.values()) {
+                        @SuppressWarnings("unchecked")
                         final var directResult = directCodec.encode(coder, (T) rawValue);
                         if (directResult instanceof Result.Ok(D direct)) {
                             result.add(direct);

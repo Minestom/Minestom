@@ -36,7 +36,7 @@ public class StatusIntegrationTest {
         assertEquals(3, unlimitedInfo.onlinePlayers());
         assertEquals(2, unlimitedInfo.sample().size());
 
-        var containsHiddenPlayer = unlimitedInfo.sample().stream()
+        boolean containsHiddenPlayer = unlimitedInfo.sample().stream()
                 .anyMatch(entry -> entry.getUuid().equals(player3.getUuid()));
         assertFalse(containsHiddenPlayer);
 

@@ -32,13 +32,13 @@ public class SummonCommand extends Command {
                 .setFormat(ArgumentEnum.Format.LOWER_CASED)
                 .setDefaultValue(EntityClass.CREATURE);
         addSyntax(this::execute, entity, pos, entityClass);
-        setDefaultExecutor((sender, context) -> sender.sendMessage("Usage: /summon <type> <x> <y> <z> <class>"));
+        setDefaultExecutor((sender, _) -> sender.sendMessage("Usage: /summon <type> <x> <y> <z> <class>"));
     }
 
     private void execute(CommandSender commandSender, CommandContext commandContext) {
         final Entity entity = commandContext.get(entityClass).instantiate(commandContext.get(this.entity));
         //noinspection ConstantConditions - One couldn't possibly execute a command without being in an instance
-        entity.setInstance(((Player) commandSender).getInstance(), commandContext.get(pos).fromSender(commandSender));
+        entity.setInstance(((Player) commandSender).getInstance(), commandContext.get(pos).fromSender(commandSender)).join();
     }
 
     @SuppressWarnings("unused")

@@ -20,6 +20,7 @@ public sealed interface BlockSoundType extends StaticProtocolObject<BlockSoundTy
     /**
      * Returns the 'registry' data for the block sound type. Note: Block sound types are not an actual minecraft registry
      */
+    @Override
     @Contract(pure = true)
     RegistryData.BlockSoundTypeEntry registry();
 
@@ -56,6 +57,7 @@ public sealed interface BlockSoundType extends StaticProtocolObject<BlockSoundTy
         return registry().stepSound();
     }
 
+    @Override
     default int id() {
         return 0; // Not sent through packets in the protocol, also must be between 0 and [size of block sound type list] because id mappings are stored in an array
     }

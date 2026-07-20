@@ -24,7 +24,7 @@ import static net.minestom.server.coordinate.CoordConversion.*;
 
 @ApiStatus.Internal
 public final class GeneratorImpl {
-    public record GenSection(Palette blocks, Palette biomes, Int2ObjectMap<Block> specials) {
+public record GenSection(Palette blocks, Palette biomes, Int2ObjectMap<Block> specials) {
         public GenSection(Palette blocks, Palette biomes) {
             this(blocks, biomes, new Int2ObjectOpenHashMap<>(0));
         }
@@ -328,7 +328,7 @@ public final class GeneratorImpl {
             }
         }
 
-        private boolean requireCache(Block block) {
+        private static boolean requireCache(Block block) {
             return block.hasNbt() || block.handler() != null || block.registry().isBlockEntity();
         }
 
@@ -453,8 +453,8 @@ public final class GeneratorImpl {
                 }
             }
             // Middle sections (to fill)
-            final int startSection = (minMultiple) / SECTION_SIZE + (startOffset ? 1 : 0);
-            final int endSection = (maxMultiple) / SECTION_SIZE + (endOffset ? -1 : 0);
+            final int startSection = minMultiple / SECTION_SIZE + (startOffset ? 1 : 0);
+            final int endSection = maxMultiple / SECTION_SIZE + (endOffset ? -1 : 0);
             for (int i = startSection; i < endSection; i++) {
                 for (int x = 0; x < width; x++) {
                     for (int z = 0; z < depth; z++) {

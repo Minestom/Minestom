@@ -19,6 +19,9 @@ import java.util.function.IntFunction;
  * set of components. See {@link #diff(DataComponentMap, DataComponentMap)}.</p>
  */
 @ApiStatus.Experimental
+// Static fields intentionally construct the implementation subclass; the cycle cannot
+// race because the implementation types are only ever reached through this interface
+@SuppressWarnings("ClassInitializationDeadlock")
 public sealed interface DataComponentMap extends DataComponent.Holder permits DataComponentMapImpl {
     DataComponentMap EMPTY = new DataComponentMapImpl(Int2ObjectMaps.emptyMap());
 

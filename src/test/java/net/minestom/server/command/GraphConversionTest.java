@@ -43,13 +43,13 @@ public class GraphConversionTest {
 
     @Test
     public void doubleSyntax() {
-        enum A {A, B, C, D, E}
+        enum Letter {A, B, C, D, E}
         final Command foo = new Command("foo");
 
         var bar = Literal("bar");
 
         var baz = Literal("baz");
-        var a = Enum("a", A.class);
+        var a = Enum("a", Letter.class);
 
         foo.addSyntax(GraphConversionTest::dummyExecutor, bar);
         foo.addSyntax(GraphConversionTest::dummyExecutor, baz, a);

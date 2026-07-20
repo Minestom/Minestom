@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 public interface StaticProtocolObject<T> extends RegistryKey<T> {
 
+    @Override
     @Contract(pure = true)
     default String name() {
         return key().asString();

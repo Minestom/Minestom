@@ -15,30 +15,30 @@ public class TeleportCommand extends Command {
     public TeleportCommand() {
         super("tp");
 
-        setDefaultExecutor((source, context) -> source.sendMessage(Component.text("Usage: /tp x y z")));
+        setDefaultExecutor((source, _) -> source.sendMessage(Component.text("Usage: /tp x y z")));
 
         var posArg = ArgumentType.RelativeVec3("pos");
         var playerArg = ArgumentType.Word("player");
 
-        addSyntax(this::onPlayerTeleport, playerArg);
-        addSyntax(this::onPositionTeleport, posArg);
+        addSyntax(TeleportCommand::onPlayerTeleport, playerArg);
+        addSyntax(TeleportCommand::onPositionTeleport, posArg);
     }
 
-    private void onPlayerTeleport(CommandSender sender, CommandContext context) {
+    private static void onPlayerTeleport(CommandSender sender, CommandContext context) {
         final String playerName = context.get("player");
         Player pl = MinecraftServer.getConnectionManager().getOnlinePlayerByUsername(playerName);
         if (sender instanceof Player player) {
-            player.teleport(pl.getPosition());
+            player.teleport(pl.getPosition()).join();
         }
         sender.sendMessage(Component.text("Teleported to player " + playerName));
     }
 
-    private void onPositionTeleport(CommandSender sender, CommandContext context) {
+    private static void onPositionTeleport(CommandSender sender, CommandContext context) {
         final Player player = (Player) sender;
 
         final RelativeVec relativeVec = context.get("pos");
         final Pos position = player.getPosition().withCoord(relativeVec.from(player));
-        player.teleport(position);
+        player.teleport(position).join();
         player.sendMessage(Component.text("You have been teleported to " + position));
     }
 }

@@ -82,7 +82,7 @@ public class GamemodeCommand extends Command {
      * Sets the gamemode for the specified entities, and
      * notifies them (and the sender) in the chat.
      */
-    private void executeOthers(CommandSender sender, GameMode mode, List<Entity> entities) {
+    private static void executeOthers(CommandSender sender, GameMode mode, List<Entity> entities) {
         if (entities.isEmpty()) {
             //If there are no players that could be modified, display an error message
             if (sender instanceof Player)
@@ -113,7 +113,7 @@ public class GamemodeCommand extends Command {
      * Sets the gamemode for the executing Player, and
      * notifies them in the chat.
      */
-    private void executeSelf(Player sender, GameMode mode) {
+    private static void executeSelf(Player sender, GameMode mode) {
         sender.setGameMode(mode);
 
         //The translation keys 'gameMode.survival', 'gameMode.creative', etc.

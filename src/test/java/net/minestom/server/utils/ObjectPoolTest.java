@@ -36,12 +36,12 @@ public class ObjectPoolTest {
     public void autoClose() {
         var pool = PacketVanilla.PACKET_POOL;
         assertEquals(0, pool.count());
-        try (var ignored = pool.hold()) {
+        try (var _ = pool.hold()) {
             assertEquals(0, pool.count());
         }
         assertEquals(1, pool.count());
 
-        try (var ignored = pool.hold()) {
+        try (var _ = pool.hold()) {
             assertEquals(0, pool.count());
         }
         assertEquals(1, pool.count());

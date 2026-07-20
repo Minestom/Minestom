@@ -22,39 +22,39 @@ public class HorseCommand extends Command {
     public HorseCommand() {
         super("horse");
         setCondition(Conditions::playerOnly);
-        setDefaultExecutor(this::defaultExecutor);
+        setDefaultExecutor(HorseCommand::defaultExecutor);
         var babyArg = ArgumentType.Boolean("baby");
         var markingArg = ArgumentType.Enum("marking", HorseMeta.Marking.class).setFormat(ArgumentEnum.Format.LOWER_CASED);
         var variantArg = ArgumentType.Enum("variant", HorseMeta.Variant.class).setFormat(ArgumentEnum.Format.LOWER_CASED);
-        setArgumentCallback(this::onBabyError, babyArg);
-        setArgumentCallback(this::onMarkingError, markingArg);
-        setArgumentCallback(this::onVariantError, variantArg);
-        addSyntax(this::onHorseCommand, babyArg, markingArg, variantArg);
+        setArgumentCallback(HorseCommand::onBabyError, babyArg);
+        setArgumentCallback(HorseCommand::onMarkingError, markingArg);
+        setArgumentCallback(HorseCommand::onVariantError, variantArg);
+        addSyntax(HorseCommand::onHorseCommand, babyArg, markingArg, variantArg);
     }
 
-    private void defaultExecutor(CommandSender sender, CommandContext context) {
+    private static void defaultExecutor(CommandSender sender, CommandContext context) {
         sender.sendMessage(Component.text("Correct usage: /horse <baby> <marking> <variant>"));
     }
 
-    private void onBabyError(CommandSender sender, ArgumentSyntaxException exception) {
+    private static void onBabyError(CommandSender sender, ArgumentSyntaxException exception) {
         sender.sendMessage(Component.text("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by 'true' or 'false'"));
     }
 
-    private void onMarkingError(CommandSender sender, ArgumentSyntaxException exception) {
+    private static void onMarkingError(CommandSender sender, ArgumentSyntaxException exception) {
         String values = Stream.of(HorseMeta.Marking.values())
                 .map(value -> "'" + value.name().toLowerCase(Locale.ROOT) + "'")
                 .collect(Collectors.joining(", "));
         sender.sendMessage(Component.text("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by " + values + "."));
     }
 
-    private void onVariantError(CommandSender sender, ArgumentSyntaxException exception) {
+    private static void onVariantError(CommandSender sender, ArgumentSyntaxException exception) {
         String values = Stream.of(HorseMeta.Variant.values())
                 .map(value -> "'" + value.name().toLowerCase(Locale.ROOT) + "'")
                 .collect(Collectors.joining(", "));
         sender.sendMessage(Component.text("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by " + values + "."));
     }
 
-    private void onHorseCommand(CommandSender sender, CommandContext context) {
+    private static void onHorseCommand(CommandSender sender, CommandContext context) {
         var player = (Player) sender;
 
         boolean baby = context.get("baby");
@@ -65,7 +65,7 @@ public class HorseCommand extends Command {
         meta.setBaby(baby);
         meta.setVariantAndMarking(variant, marking);
         //noinspection ConstantConditions - It should be impossible to execute a command without being in an instance
-        horse.setInstance(player.getInstance(), player.getPosition());
+        horse.setInstance(player.getInstance(), player.getPosition()).join();
     }
 
 }

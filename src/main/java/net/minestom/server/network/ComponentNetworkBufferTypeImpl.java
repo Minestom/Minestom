@@ -51,7 +51,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
     private static final byte TAG_COMPOUND = 10;
     private static final byte TAG_INT_ARRAY = 11;
 
-    private void writeInnerComponent(NetworkBuffer buffer, Component component) {
+    private static void writeInnerComponent(NetworkBuffer buffer, Component component) {
         buffer.write(BYTE, TAG_STRING); // Start first tag (always the type)
         buffer.write(STRING_IO_UTF8, "type");
         switch (component) {
@@ -239,7 +239,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
         buffer.write(BYTE, TAG_END);
     }
 
-    private void writeComponentStyle(NetworkBuffer buffer, Style style) {
+    private static void writeComponentStyle(NetworkBuffer buffer, Style style) {
         final TextColor color = style.color();
         if (color != null) {
             buffer.write(BYTE, TAG_STRING);
@@ -312,7 +312,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
         if (hoverEvent != null) writeHoverEvent(buffer, hoverEvent);
     }
 
-    private void writeClickEvent(NetworkBuffer buffer, ClickEvent<?> clickEvent) {
+    private static void writeClickEvent(NetworkBuffer buffer, ClickEvent<?> clickEvent) {
         buffer.write(BYTE, TAG_COMPOUND);
         buffer.write(STRING_IO_UTF8, "click_event");
 
@@ -387,7 +387,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
         buffer.write(BYTE, TAG_END);
     }
 
-    private <T extends ClickEvent.Payload> T checkPayload(ClickEvent<?> clickEvent, Class<T> expected) {
+    private static <T extends ClickEvent.Payload> T checkPayload(ClickEvent<?> clickEvent, Class<T> expected) {
         final ClickEvent.Payload payload = clickEvent.payload();
         if (!expected.isInstance(payload))
             throw new IllegalArgumentException(
@@ -396,7 +396,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
     }
 
     @SuppressWarnings("unchecked")
-    private void writeHoverEvent(NetworkBuffer buffer, HoverEvent<?> hoverEvent) {
+    private static void writeHoverEvent(NetworkBuffer buffer, HoverEvent<?> hoverEvent) {
         buffer.write(BYTE, TAG_COMPOUND);
         buffer.write(STRING_IO_UTF8, "hover_event");
 

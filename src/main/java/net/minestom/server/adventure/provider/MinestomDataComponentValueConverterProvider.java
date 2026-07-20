@@ -28,7 +28,7 @@ public final class MinestomDataComponentValueConverterProvider implements DataCo
 
     @Override
     @SuppressWarnings("unchecked")
-    public Iterable<DataComponentValueConverterRegistry.Conversion<?, ?>> conversions() {
+    public List<DataComponentValueConverterRegistry.Conversion<?, ?>> conversions() {
         return List.of(
                 // GSON
                 convert(GsonDataComponentValue.class, MinestomDataComponentValue.class, (key, gsonValue) -> {

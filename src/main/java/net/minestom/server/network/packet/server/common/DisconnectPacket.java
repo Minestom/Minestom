@@ -17,7 +17,7 @@ public record DisconnectPacket(Component message) implements ServerPacket.Config
             COMPONENT, DisconnectPacket::message, DisconnectPacket::new);
 
     @Override
-    public Collection<Component> components() {
+    public List<Component> components() {
         return List.of(message);
     }
 

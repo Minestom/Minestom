@@ -49,6 +49,7 @@ final class EventNodeLazyImpl<E extends Event> extends EventNodeImpl<E> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <E1 extends E, H> EventNode<E1> map(H value, EventFilter<E1, H> filter) {
         final Object owner = retrieveOwner();
         if (owner != value) {
@@ -63,6 +64,7 @@ final class EventNodeLazyImpl<E extends Event> extends EventNodeImpl<E> {
         super.register(binding);
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"}) // owner map mixes capture types by design
     private void ensureMap() {
         if (MAPPED.compareAndSet(this, false, true)) {
             synchronized (GLOBAL_CHILD_LOCK) {

@@ -157,15 +157,15 @@ public class HeldClickIntegrationTest {
         }
     }
 
-    private void heldClickOpenInventory(Player player, int slot, int target) {
+    private static void heldClickOpenInventory(Player player, int slot, int target) {
         _heldClick(player.getOpenInventory(), true, player, slot, target);
     }
 
-    private void heldClick(Player player, int slot, int target) {
+    private static void heldClick(Player player, int slot, int target) {
         _heldClick(player.getOpenInventory(), false, player, slot, target);
     }
 
-    private void _heldClick(AbstractInventory openInventory, boolean clickOpenInventory, Player player, int slot, int target) {
+    private static void _heldClick(AbstractInventory openInventory, boolean clickOpenInventory, Player player, int slot, int target) {
         final byte windowId = openInventory != null ? openInventory.getWindowId() : 0;
         if (clickOpenInventory) {
             assertNotNull(openInventory);

@@ -76,7 +76,7 @@ non-sealed interface ColorModifier<Arg> extends EnvironmentAttribute.Modifier<RG
         @java.lang.Override
         public RGBLike modify(RGBLike subject, ARGBLike argument) {
             int subAlpha = subject instanceof ARGBLike argb ? argb.alpha() : 255;
-            int argAlpha = argument instanceof ARGBLike argb ? argb.alpha() : 255;
+            int argAlpha = argument.alpha();
             return new AlphaColor(
                     (subAlpha * argAlpha) / 255,
                     (subject.red() * argument.red()) / 255,

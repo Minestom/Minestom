@@ -84,7 +84,7 @@ public class EntityProjectileCollisionIntegrationTest {
         }
     }
 
-    private void singleEntityShoot(
+    private static void singleEntityShoot(
             Env env,
             Instance instance,
             Entity shooter,

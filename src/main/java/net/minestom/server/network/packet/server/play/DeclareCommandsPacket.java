@@ -69,6 +69,7 @@ public record DeclareCommandsPacket(List<Node> nodes,
                 }
             }
 
+            @Override
             public Node read(NetworkBuffer reader) {
                 Node node = new Node();
                 node.flags = reader.read(BYTE);
@@ -83,7 +84,7 @@ public record DeclareCommandsPacket(List<Node> nodes,
 
                 if (node.isArgument()) {
                     node.parser = reader.read(ArgumentParserType.NETWORK_TYPE);
-                    node.properties = node.getProperties(reader, node.parser);
+                    node.properties = Node.getProperties(reader, node.parser);
                 }
 
                 if ((node.flags & HAS_SUGGESTION_TYPE) != 0) {
@@ -93,7 +94,7 @@ public record DeclareCommandsPacket(List<Node> nodes,
             }
         };
 
-        private byte[] getProperties(NetworkBuffer reader, ArgumentParserType parser) {
+        private static byte[] getProperties(NetworkBuffer reader, ArgumentParserType parser) {
             final Function<Consumer<NetworkBuffer>, byte[]> minMaxExtractor = (via) -> reader.extractBytes((extractor) -> {
                 byte flags = extractor.read(BYTE);
                 if ((flags & 0x01) == 0x01) {

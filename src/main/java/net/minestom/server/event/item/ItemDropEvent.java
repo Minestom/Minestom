@@ -23,6 +23,7 @@ public class ItemDropEvent implements PlayerInstanceEvent, ItemEvent, Cancellabl
         return player;
     }
 
+    @Override
     public ItemStack getItemStack() {
         return itemStack;
     }

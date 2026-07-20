@@ -33,6 +33,7 @@ final class TagRecord {
 
     static final ClassValue<Serializer<? extends Record>> serializers = new ClassValue<>() {
         @Override
+        @SuppressWarnings("unchecked")
         protected Serializer<? extends Record> computeValue(Class<?> type) {
             assert type.isRecord();
             final RecordComponent[] components = type.getRecordComponents();
@@ -63,9 +64,9 @@ final class TagRecord {
         }
     };
 
+    @SuppressWarnings("unchecked")
     static <T extends Record> Serializer<T> serializer(Class<T> type) {
         assert type.isRecord();
-        //noinspection unchecked
         return (Serializer<T>) serializers.get(type);
     }
 

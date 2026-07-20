@@ -8,7 +8,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 @ApiStatus.Internal
@@ -28,24 +27,20 @@ public final class ChunkUtils {
      * @param instance     the instance to load the chunks from
      * @param chunks       the chunks to loaded, long value from {@link CoordConversion#chunkIndex(int, int)}
      * @param eachCallback the optional callback when a chunk get loaded
-     * @return a {@link CompletableFuture} completed once all chunks have been processed
+     * @return a {@link CompletableFuture} completed once all chunks have been processed,
+     * or completed exceptionally if any chunk fails to load
      */
     public static CompletableFuture<Void> optionalLoadAll(Instance instance, long [] chunks,
                                                                    @Nullable Consumer<Chunk> eachCallback) {
-        CompletableFuture<Void> completableFuture = new CompletableFuture<>();
-        AtomicInteger counter = new AtomicInteger(0);
-        for (long visibleChunk : chunks) {
+        CompletableFuture<?>[] futures = new CompletableFuture<?>[chunks.length];
+        for (int i = 0; i < chunks.length; i++) {
+            final long visibleChunk = chunks[i];
             // WARNING: if autoload is disabled and no chunks are loaded beforehand, player will be stuck.
-            instance.loadOptionalChunk(CoordConversion.chunkIndexGetX(visibleChunk), CoordConversion.chunkIndexGetZ(visibleChunk))
-                    .thenAccept((chunk) -> {
-                        if (eachCallback != null) eachCallback.accept(chunk);
-                        if (counter.incrementAndGet() == chunks.length) {
-                            // This is the last chunk to be loaded , spawn player
-                            completableFuture.complete(null);
-                        }
-                    });
+            CompletableFuture<Chunk> future = instance.loadOptionalChunk(
+                    CoordConversion.chunkIndexGetX(visibleChunk), CoordConversion.chunkIndexGetZ(visibleChunk));
+            futures[i] = eachCallback != null ? future.thenAccept(eachCallback) : future;
         }
-        return completableFuture;
+        return CompletableFuture.allOf(futures);
     }
 
     public static boolean isLoaded(@Nullable Chunk chunk) {
