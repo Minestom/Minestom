@@ -47,10 +47,10 @@ public interface NodeGenerator {
     /**
      * Check if we can move directly from one point to another
      *
-     * @param getter
-     * @param start
-     * @param end
-     * @param boundingBox
+     * @param getter      the block getter
+     * @param start       the starting point
+     * @param end         the ending point
+     * @param boundingBox the bounding box of the moving entity
      * @return true if we can move directly from start to end
      */
     default boolean canMoveTowards(Block.Getter getter, Point start, Point end, BoundingBox boundingBox) {
@@ -65,9 +65,9 @@ public interface NodeGenerator {
     /**
      * Check if the point is invalid
      *
-     * @param getter
-     * @param point
-     * @param boundingBox
+     * @param getter      the block getter
+     * @param point       the point to check
+     * @param boundingBox the bounding box of the moving entity
      * @return true if the point is invalid
      */
     default boolean pointInvalid(Block.Getter getter, Point point, BoundingBox boundingBox) {
@@ -85,8 +85,8 @@ public interface NodeGenerator {
     /**
      * Heuristic use for the distance from the node to the target
      *
-     * @param node
-     * @param target
+     * @param node   the node position
+     * @param target the target position
      * @return the heuristic
      */
     default double heuristic(Point node, Point target) {
