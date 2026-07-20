@@ -48,7 +48,7 @@ public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte[] data,
                 final var registry = block.registry();
 
                 final Point point = CoordConversion.chunkBlockIndexGetGlobal(index, 0, 0);
-                buffer.write(BYTE, (byte) ((point.blockX() & 15) << 4 | point.blockZ() & 15)); // xz
+                buffer.write(BYTE, (byte) (((point.blockX() & 15) << 4) | (point.blockZ() & 15))); // xz
                 buffer.write(SHORT, (short) point.blockY()); // y
 
                 buffer.write(BlockEntityType.NETWORK_TYPE, registry.blockEntityType());

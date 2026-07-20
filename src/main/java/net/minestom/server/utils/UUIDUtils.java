@@ -43,8 +43,8 @@ public final class UUIDUtils {
     }
 
     public static UUID intArrayToUuid(int[] array) {
-        final long uuidMost = (long) array[0] << 32 | array[1] & 0xFFFFFFFFL;
-        final long uuidLeast = (long) array[2] << 32 | array[3] & 0xFFFFFFFFL;
+        final long uuidMost = ((long) array[0] << 32) | (array[1] & 0xFFFFFFFFL);
+        final long uuidLeast = ((long) array[2] << 32) | (array[3] & 0xFFFFFFFFL);
 
         return new UUID(uuidMost, uuidLeast);
     }

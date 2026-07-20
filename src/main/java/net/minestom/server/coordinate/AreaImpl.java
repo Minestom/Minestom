@@ -600,7 +600,7 @@ final class AreaImpl {
         final boolean adjacentX = Math.abs(nextX - endX) == 1;
         final boolean adjacentY = Math.abs(nextY - endY) == 1;
         final boolean adjacentZ = Math.abs(nextZ - endZ) == 1;
-        return sameY && sameZ && adjacentX || sameX && sameZ && adjacentY || sameX && sameY && adjacentZ;
+        return (sameY && sameZ && adjacentX) || (sameX && sameZ && adjacentY) || (sameX && sameY && adjacentZ);
     }
 
     private static boolean sectionInsideSphere(int sectionMinX, int sectionMinY, int sectionMinZ,

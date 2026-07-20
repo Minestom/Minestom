@@ -266,8 +266,8 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             buffer.ensureWritable(3);
             final long startIndex = buffer.writeIndex();
             var impl = impl(buffer);
-            impl._putByte(startIndex, (byte) (value & 0x7F | 0x80));
-            impl._putByte(startIndex + 1, (byte) ((value >>> 7) & 0x7F | 0x80));
+            impl._putByte(startIndex, (byte) ((value & 0x7F) | 0x80));
+            impl._putByte(startIndex + 1, (byte) (((value >>> 7) & 0x7F) | 0x80));
             impl._putByte(startIndex + 2, (byte) (value >>> 14));
             buffer.advanceWrite(3);
         }
@@ -291,7 +291,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
                     buffer.advanceWrite(size + 1);
                     return;
                 }
-                impl(buffer)._putByte(buffer.writeIndex() + size, (byte) (value & SEGMENT_BITS | CONTINUE_BIT));
+                impl(buffer)._putByte(buffer.writeIndex() + size, (byte) ((value & SEGMENT_BITS) | CONTINUE_BIT));
                 size++;
                 // Note: >>> means that the sign bit is shifted with the rest of the number rather than being left alone
                 value >>>= 7;
@@ -638,7 +638,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             } else {
                 long i = MathUtils.ceilLong(max);
                 boolean hasContinuation = (i & SCALE_BITS_MASK) != i;
-                long flags = hasContinuation ? i & SCALE_BITS_MASK | CONTINUATION_FLAG : i;
+                long flags = hasContinuation ? (i & SCALE_BITS_MASK) | CONTINUATION_FLAG : i;
                 long px = pack(x / i) << X_OFFSET;
                 long py = pack(y / i) << Y_OFFSET;
                 long pz = pack(z / i) << Z_OFFSET;

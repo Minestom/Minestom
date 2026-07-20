@@ -610,7 +610,7 @@ final class PaletteImpl implements Palette {
             final int endIndex = Math.min(startIndex + valuesPerLong, size);
             for (int index = startIndex; index < endIndex; index++) {
                 final int bitIndex = (index - startIndex) * bitsPerEntry;
-                block = block & ~(clear << bitIndex) | ((long) paletteValues[index] << bitIndex);
+                block = (block & ~(clear << bitIndex)) | ((long) paletteValues[index] << bitIndex);
             }
             values[i] = block;
         }

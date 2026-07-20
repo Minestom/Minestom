@@ -184,8 +184,8 @@ public record ComponentPredicateSet(List<DataComponentPredicate> predicates) imp
 
     @Override
     public boolean equals(Object obj) {
-        return this == obj || obj instanceof ComponentPredicateSet(var otherPredicates) &&
-                predicates.size() == otherPredicates.size() && predicates.containsAll(otherPredicates);
+        return this == obj || (obj instanceof ComponentPredicateSet(var otherPredicates) &&
+                predicates.size() == otherPredicates.size() && predicates.containsAll(otherPredicates));
     }
 
     @Override

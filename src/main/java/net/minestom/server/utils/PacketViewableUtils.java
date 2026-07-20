@@ -87,7 +87,7 @@ public final class PacketViewableUtils {
             PacketWriting.writeFramedPacket(buffer, ConnectionState.PLAY, serverPacket, MinecraftServer.getCompressionThreshold());
             final long end = buffer.writeIndex();
             if (exception != null) {
-                final long offsets = start << 32 | end & 0xFFFFFFFFL;
+                final long offsets = (start << 32) | (end & 0xFFFFFFFFL);
                 LongList list = entityIdMap.computeIfAbsent(exception.getEntityId(), id -> new LongArrayList());
                 list.add(offsets);
             }

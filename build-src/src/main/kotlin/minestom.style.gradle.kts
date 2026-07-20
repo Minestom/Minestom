@@ -21,6 +21,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "StringSplitter",
                 "MissingOverride",
                 "ObjectToString",
+                "OperatorPrecedence",
                 "UnusedMethod",
                 "UnusedVariable",
                 "UnnecessaryLambda",
