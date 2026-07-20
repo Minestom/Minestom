@@ -6,7 +6,8 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.scoreboard.BelowNameTag;
+import net.minestom.server.scoreboard.DisplaySlot;
+import net.minestom.server.scoreboard.Objective;
 
 import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
 
@@ -18,15 +19,19 @@ public class BelowNameCommand extends Command {
     public BelowNameCommand() {
         super("belowname");
 
-        BelowNameTag belowNameTag = new BelowNameTag("test", Component.text("lorum"));
+        Objective objective = Objective.create("belowname-test", Component.text("lorum"));
 
         addSyntax((sender, context) -> {
             if (!(sender instanceof Player player)) return;
             Player targetPlayer = context.get(target).findFirstPlayer(player);
             if (targetPlayer == null) return;
-            belowNameTag.addViewer(player);
-            Integer targetValue = context.get(value);
-            belowNameTag.updateScore(targetPlayer, targetValue);
+            player.setDisplayedObjective(DisplaySlot.BELOW_NAME, objective);
+            objective.updateScore(targetPlayer, context.get(value));
         }, Literal("set"), target, value);
+
+        addSyntax((sender, context) -> {
+            if (!(sender instanceof Player player)) return;
+            player.setDisplayedObjective(DisplaySlot.BELOW_NAME, null);
+        }, Literal("clear"));
     }
 }
