@@ -73,8 +73,7 @@ public record Weather(float rainLevel, float thunderLevel) {
         return new ChangeGameStatePacket(ChangeGameStatePacket.Reason.THUNDER_LEVEL_CHANGE, thunderLevel);
     }
 
-    @SuppressWarnings("PreferredInterfaceType") // wider type kept for binary compatibility until the next breaking release
-    public Collection<SendablePacket> createWeatherPackets() {
+    public List<SendablePacket> createWeatherPackets() {
         return List.of(createIsRainingPacket(), createRainLevelPacket(), createThunderLevelPacket());
     }
 }

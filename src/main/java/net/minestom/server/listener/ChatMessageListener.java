@@ -51,12 +51,12 @@ public class ChatMessageListener {
             return;
         }
 
-        final Collection<Player> players = CONNECTION_MANAGER.getOnlinePlayers();
+        final Set<Player> players = CONNECTION_MANAGER.getOnlinePlayers();
         PlayerChatEvent playerChatEvent = new PlayerChatEvent(player, players, message);
 
         // Call the event
         EventDispatcher.callCancellable(playerChatEvent, () -> {
-            final Collection<Player> recipients = playerChatEvent.getRecipients();
+            final List<Player> recipients = playerChatEvent.getRecipients();
 
             if (!recipients.isEmpty()) {
                 // delegate to the messenger to avoid sending messages we shouldn't be
