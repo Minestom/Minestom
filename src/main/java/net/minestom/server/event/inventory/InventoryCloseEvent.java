@@ -4,7 +4,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.inventory.AbstractInventory;
-import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.ViewableInventory;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -15,7 +15,7 @@ public class InventoryCloseEvent implements InventoryEvent, PlayerInstanceEvent 
     private final AbstractInventory inventory;
     private final Player player;
     private final boolean fromClient;
-    private Inventory newInventory;
+    private ViewableInventory newInventory;
 
     public InventoryCloseEvent(AbstractInventory inventory, Player player, boolean fromClient) {
         this.inventory = inventory;
@@ -47,7 +47,7 @@ public class InventoryCloseEvent implements InventoryEvent, PlayerInstanceEvent 
      * @return the new inventory to open, null if there isn't any
      */
     @Nullable
-    public Inventory getNewInventory() {
+    public ViewableInventory getNewInventory() {
         return newInventory;
     }
 
@@ -56,7 +56,7 @@ public class InventoryCloseEvent implements InventoryEvent, PlayerInstanceEvent 
      *
      * @param newInventory the inventory to open, null to do not open any
      */
-    public void setNewInventory(@Nullable Inventory newInventory) {
+    public void setNewInventory(@Nullable ViewableInventory newInventory) {
         this.newInventory = newInventory;
     }
 
