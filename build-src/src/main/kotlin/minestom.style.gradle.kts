@@ -27,6 +27,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "EmptyBlockTag",
                 "EmptyCatch",
                 "FutureReturnValueIgnored",
+                "InlineFormatString",
                 "JdkObsolete",
                 "LongDoubleConversion",
                 "MissingSummary",

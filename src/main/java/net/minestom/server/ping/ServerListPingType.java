@@ -60,7 +60,6 @@ public enum ServerListPingType {
         return this.pingResponseCreator.apply(status);
     }
 
-    private static final String LAN_PING_FORMAT = "[MOTD]%s[/MOTD][AD]%s[/AD]";
     private static final LegacyComponentSerializer SECTION = LegacyComponentSerializer.legacySection();
 
     /**
@@ -71,7 +70,7 @@ public enum ServerListPingType {
      * @see OpenToLAN
      */
     public static String getOpenToLANPing(Status status) {
-        return String.format(LAN_PING_FORMAT, SECTION.serialize(status.description()), MinecraftServer.getServer().getPort());
+        return String.format("[MOTD]%s[/MOTD][AD]%s[/AD]", SECTION.serialize(status.description()), MinecraftServer.getServer().getPort());
     }
 
     /**
