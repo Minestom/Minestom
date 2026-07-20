@@ -267,6 +267,9 @@ public abstract class Argument<T> {
         return new ArgumentFilter<>(this, predicate);
     }
 
+    // getClass is required: arguments of different types sharing an id must stay distinct,
+    // the command graph merges nodes keyed by this equality
+    @SuppressWarnings("EqualsGetClass")
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

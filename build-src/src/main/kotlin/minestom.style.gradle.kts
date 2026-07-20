@@ -16,6 +16,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "ClassInitializationDeadlock",
                 "DefaultCharset",
                 "EffectivelyPrivate",
+                "EqualsGetClass",
                 "EmptyBlockTag",
                 "FutureReturnValueIgnored",
                 "MissingSummary",
