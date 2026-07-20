@@ -15,7 +15,7 @@ public class TestCommand extends Command {
 
     public TestCommand() {
         super("testcmd");
-        setDefaultExecutor(this::usage);
+        setDefaultExecutor(TestCommand::usage);
 
         var block = ArgumentType.BlockState("block");
         block.setCallback((_, exception) -> exception.printStackTrace());
@@ -28,7 +28,7 @@ public class TestCommand extends Command {
 
     }
 
-    private void usage(CommandSender sender, CommandContext context) {
+    private static void usage(CommandSender sender, CommandContext context) {
         sender.sendMessage(Component.text("Incorrect usage"));
     }
 

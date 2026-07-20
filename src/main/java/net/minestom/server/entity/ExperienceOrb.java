@@ -96,7 +96,7 @@ public class ExperienceOrb extends Entity {
         getViewers().forEach(this::addViewer);
     }
 
-    private Player getClosestPlayer(Entity entity, float maxDistance) {
+    private static Player getClosestPlayer(Entity entity, float maxDistance) {
         Player closest = entity.getInstance()
                 .getPlayers()
                 .stream()

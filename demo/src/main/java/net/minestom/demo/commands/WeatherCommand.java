@@ -14,10 +14,10 @@ public class WeatherCommand extends Command {
         var rainLevel = ArgumentType.Float("rainLevel").setDefaultValue(0.0f);
         var thunderLevel = ArgumentType.Float("thunderLevel").setDefaultValue(0.0f);
         var transitionTicks = ArgumentType.Integer("transition").setDefaultValue(0);
-        addSyntax(this::handleWeather, rainLevel, thunderLevel, transitionTicks);
+        addSyntax(WeatherCommand::handleWeather, rainLevel, thunderLevel, transitionTicks);
     }
 
-    private void handleWeather(CommandSender source, CommandContext context) {
+    private static void handleWeather(CommandSender source, CommandContext context) {
         Player player = (Player) source;
         float rainLevel = context.get("rainLevel");
         float thunderLevel = context.get("thunderLevel");

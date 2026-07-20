@@ -27,7 +27,7 @@ public class PathfinderIntegrationTest {
      * @param nodes the nodes to validate
      * @return true if the path is valid
      */
-    private boolean validateNodes(List<PNode> nodes, Instance instance) {
+    private static boolean validateNodes(List<PNode> nodes, Instance instance) {
         if (nodes == null) fail("Path is null");
         if (nodes.isEmpty()) fail("Path is empty");
 

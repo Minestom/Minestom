@@ -376,7 +376,7 @@ record BlockImpl(RegistryData.BlockEntry registry,
             return index;
         }
 
-        private byte findValueIndexThrow(PropertyType propertyType, String value, @Nullable BlockImpl block) {
+        private static byte findValueIndexThrow(PropertyType propertyType, String value, @Nullable BlockImpl block) {
             final byte index = propertyType.findValueIndex(value);
             if (index == -1) {
                 if (block != null) {

@@ -102,7 +102,7 @@ public class LightingChunk extends DynamicChunk {
         super(instance, chunkX, chunkZ, sections);
     }
 
-    private boolean checkSkyOcclusion(Block block) {
+    private static boolean checkSkyOcclusion(Block block) {
         if (block == Block.AIR) return false;
         if (DIFFUSE_SKY_LIGHT.contains(block.key())) return true;
 

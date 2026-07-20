@@ -128,7 +128,7 @@ public class TestInstabreakCommand extends Command {
         });
     }
 
-    private void giveItems(Player player) {
+    private static void giveItems(Player player) {
         List<ItemStack> items = new ArrayList<>();
         items.add(ItemStack.builder(Material.SHEARS).set(DataComponents.ENCHANTMENTS, EnchantmentList.EMPTY.with(Enchantment.EFFICIENCY, 5)).build());
         items.add(ItemStack.builder(Material.WHITE_WOOL).amount(64).build());

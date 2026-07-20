@@ -410,7 +410,7 @@ public class Command {
         return false;
     }
 
-    private void processNode(Node node, JsonObject jsonObject) {
+    private static void processNode(Node node, JsonObject jsonObject) {
         BiConsumer<String, Consumer<JsonArray>> processor = (s, consumer) -> {
             JsonArray array = new JsonArray();
             consumer.accept(array);

@@ -215,7 +215,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      * @param index the block position computed using {@link CoordConversion#chunkBlockIndex(int, int, int)}
      * @param block the block to place
      */
-    private void apply(Chunk chunk, int index, Block block, @Nullable ChunkBatch inverse) {
+    private static void apply(Chunk chunk, int index, Block block, @Nullable ChunkBatch inverse) {
         final int x = CoordConversion.chunkBlockIndexGetX(index);
         final int y = CoordConversion.chunkBlockIndexGetY(index);
         final int z = CoordConversion.chunkBlockIndexGetZ(index);

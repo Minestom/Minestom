@@ -76,7 +76,7 @@ public class EntityMetaIntegrationTest {
         assertEquals(4, packets.size());
     }
 
-    private void validMetaDataPackets(List<EntityMetaDataPacket> packets, int entityId, Consumer<Metadata.Entry<?>> contentChecker) {
+    private static void validMetaDataPackets(List<EntityMetaDataPacket> packets, int entityId, Consumer<Metadata.Entry<?>> contentChecker) {
         for (var packet : packets) {
             assertEquals(packet.entityId(), entityId);
             for (var entry : packet.entries().values()) {

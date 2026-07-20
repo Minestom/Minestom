@@ -23,10 +23,10 @@ public class TestBiomeAmbientParticleCommand extends Command {
 
     public TestBiomeAmbientParticleCommand() {
         super("testbiomeambientparticle");
-        setDefaultExecutor(this::usage);
+        setDefaultExecutor(TestBiomeAmbientParticleCommand::usage);
     }
 
-    private void usage(CommandSender sender, CommandContext context) {
+    private static void usage(CommandSender sender, CommandContext context) {
         if (!(sender instanceof Player player)) {
             sender.sendMessage(Component.text("This command is only available for players"));
             return;

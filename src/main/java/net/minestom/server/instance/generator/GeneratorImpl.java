@@ -328,7 +328,7 @@ public final class GeneratorImpl {
             }
         }
 
-        private boolean requireCache(Block block) {
+        private static boolean requireCache(Block block) {
             return block.hasNbt() || block.handler() != null || block.registry().isBlockEntity();
         }
 

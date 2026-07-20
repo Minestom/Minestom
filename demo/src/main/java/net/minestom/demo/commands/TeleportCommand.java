@@ -20,11 +20,11 @@ public class TeleportCommand extends Command {
         var posArg = ArgumentType.RelativeVec3("pos");
         var playerArg = ArgumentType.Word("player");
 
-        addSyntax(this::onPlayerTeleport, playerArg);
-        addSyntax(this::onPositionTeleport, posArg);
+        addSyntax(TeleportCommand::onPlayerTeleport, playerArg);
+        addSyntax(TeleportCommand::onPositionTeleport, posArg);
     }
 
-    private void onPlayerTeleport(CommandSender sender, CommandContext context) {
+    private static void onPlayerTeleport(CommandSender sender, CommandContext context) {
         final String playerName = context.get("player");
         Player pl = MinecraftServer.getConnectionManager().getOnlinePlayerByUsername(playerName);
         if (sender instanceof Player player) {
@@ -33,7 +33,7 @@ public class TeleportCommand extends Command {
         sender.sendMessage(Component.text("Teleported to player " + playerName));
     }
 
-    private void onPositionTeleport(CommandSender sender, CommandContext context) {
+    private static void onPositionTeleport(CommandSender sender, CommandContext context) {
         final Player player = (Player) sender;
 
         final RelativeVec relativeVec = context.get("pos");

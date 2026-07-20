@@ -16,13 +16,13 @@ public class FindCommand extends Command {
         super("find");
 
         this.addSyntax(
-                this::executorEntity,
+                FindCommand::executorEntity,
                 Literal("entity"),
                 Float("range")
         );
     }
 
-    private void executorEntity(CommandSender sender, CommandContext context) {
+    private static void executorEntity(CommandSender sender, CommandContext context) {
         Player player = (Player) sender;
         float range = context.get("range");
 

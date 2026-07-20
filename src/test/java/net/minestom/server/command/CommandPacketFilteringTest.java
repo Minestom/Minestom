@@ -199,7 +199,7 @@ public class CommandPacketFilteringTest {
                 """);
     }
 
-    private void assertFiltering(Command command, String expectedStructure) {
+    private static void assertFiltering(Command command, String expectedStructure) {
         final DeclareCommandsPacket packet = GraphConverter.createPacket(new CommandManager(), Graph.merge(Set.of(command)), PLAYER);
         CommandTestUtils.assertPacket(packet, expectedStructure);
     }

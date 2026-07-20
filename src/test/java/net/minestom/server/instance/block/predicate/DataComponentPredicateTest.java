@@ -50,19 +50,19 @@ public class DataComponentPredicateTest {
         }
     };
 
-    private <T> void assertPass(DataComponentPredicate predicate, DataComponent<T> component, T value) {
+    private static <T> void assertPass(DataComponentPredicate predicate, DataComponent<T> component, T value) {
         assertPass(predicate, holderOf(component, value));
     }
 
-    private void assertPass(DataComponentPredicate predicate, DataComponent.Holder holder) {
+    private static void assertPass(DataComponentPredicate predicate, DataComponent.Holder holder) {
         assertTrue(predicate.test(holder));
     }
 
-    private <T> void assertFail(DataComponentPredicate predicate, DataComponent<T> component, T value) {
+    private static <T> void assertFail(DataComponentPredicate predicate, DataComponent<T> component, T value) {
         assertFail(predicate, holderOf(component, value));
     }
 
-    private void assertFail(DataComponentPredicate predicate, DataComponent.Holder holder) {
+    private static void assertFail(DataComponentPredicate predicate, DataComponent.Holder holder) {
         assertFalse(predicate.test(holder));
     }
 

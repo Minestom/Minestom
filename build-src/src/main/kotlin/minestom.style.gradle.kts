@@ -67,6 +67,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "InlineFormatString",
                 "JdkObsolete",
                 "LongDoubleConversion",
+                "MethodCanBeStatic",
                 "MissingCasesInEnumSwitch",
                 "MissingSummary",
                 "MutablePublicArray",

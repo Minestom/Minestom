@@ -140,19 +140,19 @@ public final class MetadataHolder {
         }
     }
 
-    private boolean getMaskBit(byte maskValue, byte bit) {
+    private static boolean getMaskBit(byte maskValue, byte bit) {
         return (maskValue & bit) == bit;
     }
 
-    private byte setMaskBit(byte mask, byte bit, boolean value) {
+    private static byte setMaskBit(byte mask, byte bit, boolean value) {
         return value ? (byte) (mask | bit) : (byte) (mask & ~bit);
     }
 
-    private byte getMaskByte(byte data, byte byteMask, int offset) {
+    private static byte getMaskByte(byte data, byte byteMask, int offset) {
         return (byte) ((data & byteMask) >> offset);
     }
 
-    private byte setMaskByte(byte data, byte byteMask, int offset, byte newValue) {
+    private static byte setMaskByte(byte data, byte byteMask, int offset, byte newValue) {
         return (byte) ((data & ~byteMask) | ((newValue << offset) & byteMask));
     }
 

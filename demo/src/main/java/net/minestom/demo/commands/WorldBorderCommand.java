@@ -24,13 +24,13 @@ public class WorldBorderCommand extends Command {
 
         var warningDistanceOption = ArgumentType.Word("warningDistanceOption").from("warning-distance");
 
-        addSyntax(this::handleDiameter, diameterOptions, sizeInBlocks, timeInSeconds);
-        addSyntax(this::handleCenter, centerOption, centerCoordinate);
-        addSyntax(this::handleWarningTime, warningTimeOption, timeInSeconds);
-        addSyntax(this::handleWarningDistance, warningDistanceOption, sizeInBlocks);
+        addSyntax(WorldBorderCommand::handleDiameter, diameterOptions, sizeInBlocks, timeInSeconds);
+        addSyntax(WorldBorderCommand::handleCenter, centerOption, centerCoordinate);
+        addSyntax(WorldBorderCommand::handleWarningTime, warningTimeOption, timeInSeconds);
+        addSyntax(WorldBorderCommand::handleWarningDistance, warningDistanceOption, sizeInBlocks);
     }
 
-    private void handleDiameter(CommandSender source, CommandContext context) {
+    private static void handleDiameter(CommandSender source, CommandContext context) {
         Player player = (Player) source;
         int size = context.get("sizeInBlocks");
         double timeInSeconds = context.get("timeInSeconds");
@@ -42,20 +42,20 @@ public class WorldBorderCommand extends Command {
         player.getInstance().setWorldBorder(player.getInstance().getWorldBorder().withDiameter(diameter), timeInSeconds);
     }
 
-    private void handleCenter(CommandSender source, CommandContext context) {
+    private static void handleCenter(CommandSender source, CommandContext context) {
         Player player = (Player) source;
         RelativeVec coords = context.get("coordinate");
         Vec vec = coords.from(new Pos(0, 0, 0));
         player.getInstance().setWorldBorder(player.getInstance().getWorldBorder().withCenter(vec.x(), vec.z()));
     }
 
-    private void handleWarningTime(CommandSender source, CommandContext context) {
+    private static void handleWarningTime(CommandSender source, CommandContext context) {
         Player player = (Player) source;
         double timeInSeconds = context.get("timeInSeconds");
         player.getInstance().setWorldBorder(player.getInstance().getWorldBorder().withWarningTime((int)timeInSeconds));
     }
 
-    private void handleWarningDistance(CommandSender source, CommandContext context) {
+    private static void handleWarningDistance(CommandSender source, CommandContext context) {
         Player player = (Player) source;
         int sizeInBlocks = context.get("sizeInBlocks");
         player.getInstance().setWorldBorder(player.getInstance().getWorldBorder().withWarningDistance(sizeInBlocks));

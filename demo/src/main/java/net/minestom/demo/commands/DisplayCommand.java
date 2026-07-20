@@ -80,7 +80,7 @@ public class DisplayCommand extends Command {
         }
     }
 
-    private void startSmoothFollow(Entity entity, Player player) {
+    private static void startSmoothFollow(Entity entity, Player player) {
 //        entity.setCustomName(Component.text("MY CUSTOM NAME"));
 //        entity.setCustomNameVisible(true);
         MinecraftServer.getSchedulerManager().buildTask(() -> {

@@ -119,7 +119,7 @@ public class PlayerIntegrationTest {
         assertEquals(ClientSettings.ParticleSetting.ALL, player.getSettings().particleSetting());
     }
 
-    private void assertAbilities(Player player, boolean isInvulnerable, boolean isFlying, boolean isAllowFlying,
+    private static void assertAbilities(Player player, boolean isInvulnerable, boolean isFlying, boolean isAllowFlying,
                                  boolean isInstantBreak) {
         assertEquals(isInvulnerable, player.isInvulnerable());
         assertEquals(isFlying, player.isFlying());

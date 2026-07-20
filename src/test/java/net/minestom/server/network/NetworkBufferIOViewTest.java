@@ -812,7 +812,7 @@ public class NetworkBufferIOViewTest {
     }
 
     //TODO: remove with applicable NetworkBuffer method
-    private byte[] extractWrittenBytes(NetworkBuffer buffer, Consumer<NetworkBuffer> extractor) {
+    private static byte[] extractWrittenBytes(NetworkBuffer buffer, Consumer<NetworkBuffer> extractor) {
         final long startingPosition = buffer.writeIndex();
         extractor.accept(buffer);
         final long endingPosition = buffer.writeIndex();

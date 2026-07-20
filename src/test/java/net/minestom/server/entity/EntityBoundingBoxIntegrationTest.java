@@ -74,7 +74,7 @@ public class EntityBoundingBoxIntegrationTest {
         entity.update(time + 1_000L);
     }
 
-    private void dropItem(final Instance instance, final Pos position) {
+    private static void dropItem(final Instance instance, final Pos position) {
         final var entity = new ItemEntity(ItemStack.of(Material.STONE));
         entity.hasPhysics = false;
         entity.setNoGravity(true);

@@ -40,7 +40,7 @@ public class DripstonePlacementRule extends BlockPlacementRule {
         return updateState.currentBlock().withProperty(PROP_THICKNESS, newThickness);
     }
 
-    private String getThickness(Block.Getter instance, Point blockPosition, boolean direction) {
+    private static String getThickness(Block.Getter instance, Point blockPosition, boolean direction) {
         var abovePosition = blockPosition.add(0, direction ? 1 : -1, 0);
         var aboveBlock = instance.getBlock(abovePosition, Block.Getter.Condition.TYPE);
 

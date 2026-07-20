@@ -405,7 +405,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         }
     }
 
-    private boolean writeBuffer(NetworkBuffer buffer, NetworkBuffer body, long index, long length) {
+    private static boolean writeBuffer(NetworkBuffer buffer, NetworkBuffer body, long index, long length) {
         if (buffer.writableBytes() < length) {
             // Not enough space in the buffer
             return false;

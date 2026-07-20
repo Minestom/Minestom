@@ -326,7 +326,7 @@ public final class InventoryClickProcessor {
         return clickResult;
     }
 
-    private void callClickEvent(Player player, AbstractInventory inventory, int slot,
+    private static void callClickEvent(Player player, AbstractInventory inventory, int slot,
                                 ClickType clickType, ItemStack clicked, ItemStack cursor) {
         EventDispatcher.call(new InventoryClickEvent(inventory, player, slot, clickType, clicked, cursor));
     }

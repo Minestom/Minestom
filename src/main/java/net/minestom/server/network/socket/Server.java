@@ -102,7 +102,7 @@ public final class Server {
         });
     }
 
-    private void configureSocket(SocketChannel channel) throws IOException {
+    private static void configureSocket(SocketChannel channel) throws IOException {
         if (channel.getLocalAddress() instanceof InetSocketAddress) {
             Socket socket = channel.socket();
             socket.setSendBufferSize(ServerFlag.SOCKET_SEND_BUFFER_SIZE);

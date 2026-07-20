@@ -94,7 +94,7 @@ public record DeclareCommandsPacket(List<Node> nodes,
             }
         };
 
-        private byte[] getProperties(NetworkBuffer reader, ArgumentParserType parser) {
+        private static byte[] getProperties(NetworkBuffer reader, ArgumentParserType parser) {
             final Function<Consumer<NetworkBuffer>, byte[]> minMaxExtractor = (via) -> reader.extractBytes((extractor) -> {
                 byte flags = extractor.read(BYTE);
                 if ((flags & 0x01) == 0x01) {

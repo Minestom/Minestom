@@ -139,7 +139,7 @@ final class RegionFile implements AutoCloseable {
         file.close();
     }
 
-    private int getChunkIndex(int chunkX, int chunkZ) {
+    private static int getChunkIndex(int chunkX, int chunkZ) {
         return (CoordConversion.chunkToRegionLocal(chunkZ) << 5) | CoordConversion.chunkToRegionLocal(chunkX);
     }
 

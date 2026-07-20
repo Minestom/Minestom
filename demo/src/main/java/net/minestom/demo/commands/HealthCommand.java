@@ -18,28 +18,28 @@ public class HealthCommand extends Command {
 
         setCondition(Conditions::playerOnly);
 
-        setDefaultExecutor(this::defaultExecutor);
+        setDefaultExecutor(HealthCommand::defaultExecutor);
 
         var modeArg = ArgumentType.Word("mode").from("set", "add");
 
         var valueArg = ArgumentType.Integer("value").between(0, 100);
 
-        setArgumentCallback(this::onModeError, modeArg);
-        setArgumentCallback(this::onValueError, valueArg);
+        setArgumentCallback(HealthCommand::onModeError, modeArg);
+        setArgumentCallback(HealthCommand::onValueError, valueArg);
 
-        addSyntax(this::sendSuggestionMessage, modeArg);
-        addSyntax(this::onHealthCommand, modeArg, valueArg);
+        addSyntax(HealthCommand::sendSuggestionMessage, modeArg);
+        addSyntax(HealthCommand::onHealthCommand, modeArg, valueArg);
     }
 
-    private void defaultExecutor(CommandSender sender, CommandContext context) {
+    private static void defaultExecutor(CommandSender sender, CommandContext context) {
         sender.sendMessage(Component.text("Correct usage: health set|add <number>"));
     }
 
-    private void onModeError(CommandSender sender, ArgumentSyntaxException exception) {
+    private static void onModeError(CommandSender sender, ArgumentSyntaxException exception) {
         sender.sendMessage(Component.text("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by 'set' or 'add'"));
     }
 
-    private void onValueError(CommandSender sender, ArgumentSyntaxException exception) {
+    private static void onValueError(CommandSender sender, ArgumentSyntaxException exception) {
         final int error = exception.getErrorCode();
         final String input = exception.getInput();
         switch (error) {
@@ -52,11 +52,11 @@ public class HealthCommand extends Command {
         }
     }
 
-    private void sendSuggestionMessage(CommandSender sender, CommandContext context) {
+    private static void sendSuggestionMessage(CommandSender sender, CommandContext context) {
         sender.sendMessage(Component.text("/health " + context.get("mode") + " [Integer]"));
     }
 
-    private void onHealthCommand(CommandSender sender, CommandContext context) {
+    private static void onHealthCommand(CommandSender sender, CommandContext context) {
         final Player player = (Player) sender;
         final String mode = context.get("mode");
         final int value = context.get("value");

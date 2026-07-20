@@ -320,7 +320,7 @@ public class InstanceContainer extends Instance {
         return optionalAsync(chunkLoader.supportsParallelSaving(), () -> chunkLoader.saveChunks(getChunks()));
     }
 
-    private CompletableFuture<Void> optionalAsync(boolean async, Runnable runnable) {
+    private static CompletableFuture<Void> optionalAsync(boolean async, Runnable runnable) {
         if (!async) {
             runnable.run();
             return AsyncUtils.empty();
@@ -466,7 +466,7 @@ public class InstanceContainer extends Instance {
         });
     }
 
-    private void applyFork(Chunk chunk, GeneratorImpl.SectionModifierImpl sectionModifier) {
+    private static void applyFork(Chunk chunk, GeneratorImpl.SectionModifierImpl sectionModifier) {
         chunk.lockWriteLock();
         try {
             Section section = chunk.getSectionAt(sectionModifier.start().blockY());
@@ -480,7 +480,7 @@ public class InstanceContainer extends Instance {
     }
 
     // Sends a fork's section changes to viewers as a single multi-block update instead of a full chunk resend.
-    private void sendForkSectionUpdate(Chunk forkChunk, GeneratorImpl.SectionModifierImpl sectionModifier) {
+    private static void sendForkSectionUpdate(Chunk forkChunk, GeneratorImpl.SectionModifierImpl sectionModifier) {
         final int section = CoordConversion.globalToChunk(sectionModifier.start().blockY());
         final LongList packed = new LongArrayList();
         sectionModifier.genSection().blocks().getAllPresent((x, y, z, value) ->
@@ -503,7 +503,7 @@ public class InstanceContainer extends Instance {
                 forkChunk.getChunkX(), section, forkChunk.getChunkZ(), packed.toLongArray()));
     }
 
-    private void applyGenerationData(Chunk chunk, GeneratorImpl.SectionModifierImpl section) {
+    private static void applyGenerationData(Chunk chunk, GeneratorImpl.SectionModifierImpl section) {
         var cache = section.genSection().specials();
         if (cache.isEmpty()) return;
         final int height = section.start().blockY();

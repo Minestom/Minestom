@@ -19,21 +19,21 @@ public class ShootCommand extends Command {
     public ShootCommand() {
         super("shoot");
         setCondition(Conditions::playerOnly);
-        setDefaultExecutor(this::defaultExecutor);
+        setDefaultExecutor(ShootCommand::defaultExecutor);
         var typeArg = ArgumentType.Word("type").from("default", "spectral", "colored");
-        setArgumentCallback(this::onTypeError, typeArg);
-        addSyntax(this::onShootCommand, typeArg);
+        setArgumentCallback(ShootCommand::onTypeError, typeArg);
+        addSyntax(ShootCommand::onShootCommand, typeArg);
     }
 
-    private void defaultExecutor(CommandSender sender, CommandContext context) {
+    private static void defaultExecutor(CommandSender sender, CommandContext context) {
         sender.sendMessage(Component.text("Correct usage: shoot [default/spectral/colored]"));
     }
 
-    private void onTypeError(CommandSender sender, ArgumentSyntaxException exception) {
+    private static void onTypeError(CommandSender sender, ArgumentSyntaxException exception) {
         sender.sendMessage(Component.text("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by 'default', 'spectral' or 'colored'"));
     }
 
-    private void onShootCommand(CommandSender sender, CommandContext context) {
+    private static void onShootCommand(CommandSender sender, CommandContext context) {
         Player player = (Player) sender;
         String mode = context.get("type");
         EntityProjectile projectile;

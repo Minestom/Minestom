@@ -223,7 +223,7 @@ public class EntityVelocityIntegrationTest {
         assertNotEquals(initialVelocity.x() * expectedOldDrag, entity.getVelocity().x(), Vec.EPSILON);
     }
 
-    private void testMovement(Env env, Entity entity, Vec... sample) {
+    private static void testMovement(Env env, Entity entity, Vec... sample) {
         final double epsilon = 0.003;
         for (Vec vec : sample) {
             assertEquals(vec.x(), entity.getPosition().x(), epsilon);
@@ -233,7 +233,7 @@ public class EntityVelocityIntegrationTest {
         }
     }
 
-    private void loadChunks(Instance instance) {
+    private static void loadChunks(Instance instance) {
         ChunkUtils.optionalLoadAll(instance, new long[]{
                 CoordConversion.chunkIndex(-1, -1),
                 CoordConversion.chunkIndex(-1, 0),

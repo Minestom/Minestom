@@ -100,7 +100,7 @@ public class InstanceUnregisterIntegrationTest {
         waitUntilCleared(ref);
     }
 
-    private void tmp(InstanceContainer instanceContainer) {
+    private static void tmp(InstanceContainer instanceContainer) {
         instanceContainer.eventNode().addListener(InstanceTickEvent.class, _ -> {
             Assertions.assertNotNull(instanceContainer.getUuid());
         });

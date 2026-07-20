@@ -17,10 +17,10 @@ public class TitleCommand extends Command {
 
         var content = ArgumentType.String("content");
 
-        addSyntax(this::handleTitle, content);
+        addSyntax(TitleCommand::handleTitle, content);
     }
 
-    private void handleTitle(CommandSender source, CommandContext context) {
+    private static void handleTitle(CommandSender source, CommandContext context) {
         Player player = (Player) source;
         String titleContent = context.get("content");
 

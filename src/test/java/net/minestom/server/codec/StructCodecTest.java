@@ -149,7 +149,7 @@ public class StructCodecTest {
         assertEquals(snbt("{name: \"test\", value: \"innerValue\"}"), assertOk(encodeResult));
     }
 
-    private BinaryTag snbt(String snbt) {
+    private static BinaryTag snbt(String snbt) {
         return assertDoesNotThrow(() -> MinestomAdventure.tagStringIO().asTag(snbt));
     }
 
