@@ -4,6 +4,9 @@ import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Result;
 import net.minestom.server.codec.Transcoder;
+import net.minestom.server.registry.RegistryTagImpl.Backed;
+import net.minestom.server.registry.RegistryTagImpl.Direct;
+import net.minestom.server.registry.RegistryTagImpl.Empty;
 import net.minestom.server.utils.Either;
 import org.intellij.lang.annotations.Subst;
 import org.jetbrains.annotations.Nullable;
@@ -152,10 +155,10 @@ final class RegistryCodecs {
         public <D> Result<D> encode(Transcoder<D> coder, @Nullable RegistryTag<T> value) {
             if (value == null) return new Result.Error<>("null");
             return switch (value) {
-                case net.minestom.server.registry.RegistryTagImpl.Backed<T> backed ->
+                case Backed<T> backed ->
                         new Result.Ok<>(coder.createString(backed.key().hashedKey()));
-                case net.minestom.server.registry.RegistryTagImpl.Empty() -> new Result.Ok<>(coder.emptyList());
-                case net.minestom.server.registry.RegistryTagImpl.Direct(var entries) -> {
+                case Empty() -> new Result.Ok<>(coder.emptyList());
+                case Direct(var entries) -> {
                     if (entries.isEmpty()) yield new Result.Ok<>(coder.emptyList());
                     if (entries.size() == 1)
                         yield new Result.Ok<>(coder.createString(entries.getFirst().key().asString()));

@@ -9,6 +9,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.EquipmentSlotGroup;
+import net.minestom.server.entity.VillagerType;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeOperation;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
@@ -17,6 +18,7 @@ import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.item.book.FilteredText;
 import net.minestom.server.item.component.*;
+import net.minestom.server.item.component.FireworkExplosion.Shape;
 import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.item.predicate.ItemPredicate;
 import net.minestom.server.potion.PotionType;
@@ -340,12 +342,12 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
     }
 
-    record FireworkExplosionPredicate(@Nullable net.minestom.server.item.component.FireworkExplosion.Shape shape,
+    record FireworkExplosionPredicate(@Nullable Shape shape,
                                       @Nullable Boolean hasTrail,
                                       @Nullable Boolean hasTwinkle) implements Predicate<net.minestom.server.item.component.FireworkExplosion> {
 
         public static final Codec<FireworkExplosionPredicate> CODEC = StructCodec.struct(
-                "shape", Codec.Enum(net.minestom.server.item.component.FireworkExplosion.Shape.class).optional(), FireworkExplosionPredicate::shape,
+                "shape", Codec.Enum(Shape.class).optional(), FireworkExplosionPredicate::shape,
                 "has_trail", Codec.BOOLEAN.optional(), FireworkExplosionPredicate::hasTrail,
                 "has_twinkle", Codec.BOOLEAN.optional(), FireworkExplosionPredicate::hasTwinkle,
                 FireworkExplosionPredicate::new
@@ -401,7 +403,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
     record FireworkExplosion(Fireworks.FireworkExplosionPredicate delegate) implements Registered {
         public static final Codec<FireworkExplosion> CODEC = FireworkExplosionPredicate.CODEC.transform(FireworkExplosion::new, FireworkExplosion::delegate);
 
-        public FireworkExplosion(@Nullable net.minestom.server.item.component.FireworkExplosion.Shape shape,
+        public FireworkExplosion(@Nullable Shape shape,
                                  @Nullable Boolean hasTrail,
                                  @Nullable Boolean hasTwinkle) {
             this(new FireworkExplosionPredicate(shape, hasTrail, hasTwinkle));
@@ -635,8 +637,8 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      *
      * @param villagerTypes The types of villagers to match
      */
-    record VillagerVariant(List<net.minestom.server.entity.VillagerType> villagerTypes) implements Registered {
-        public static final Codec<VillagerVariant> CODEC = net.minestom.server.entity.VillagerType.CODEC.listOrSingle().transform(VillagerVariant::new, VillagerVariant::villagerTypes);
+    record VillagerVariant(List<VillagerType> villagerTypes) implements Registered {
+        public static final Codec<VillagerVariant> CODEC = VillagerType.CODEC.listOrSingle().transform(VillagerVariant::new, VillagerVariant::villagerTypes);
 
         public VillagerVariant {
             villagerTypes = List.copyOf(villagerTypes);

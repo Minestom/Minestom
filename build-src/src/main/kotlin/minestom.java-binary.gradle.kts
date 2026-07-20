@@ -1,6 +1,7 @@
 plugins {
     java
     application
+    id("minestom.style")
 }
 
 val javaVersion = System.getenv("JAVA_VERSION") ?: "25"

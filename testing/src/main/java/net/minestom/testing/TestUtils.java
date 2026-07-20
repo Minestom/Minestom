@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -62,7 +63,7 @@ public final class TestUtils {
 
     private static String stripExtraSpaces(String s) {
         StringBuilder formattedString = new StringBuilder();
-        java.util.StringTokenizer st = new java.util.StringTokenizer(s);
+        StringTokenizer st = new StringTokenizer(s);
         while (st.hasMoreTokens()) {
             formattedString.append(st.nextToken());
         }

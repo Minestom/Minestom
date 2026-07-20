@@ -6,7 +6,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityPose;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.metadata.animal.CamelMeta;
-import org.jspecify.annotations.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Set;

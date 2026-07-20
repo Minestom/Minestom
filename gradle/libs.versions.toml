@@ -18,6 +18,7 @@ jcTools = "4.0.6"
 junit = "6.1.1"
 jmh = "1.37"
 jcstress = "0.16"
+errorprone = "2.50.0"
 
 # Code Generation
 javaPoet = "0.17.0"
@@ -31,6 +32,7 @@ nmcp = "1.6.1"
 graaltools = "1.1.4"
 jmh-plugin = "0.7.3"
 jcstress-plugin = "0.9.0"
+errorprone-plugin = "5.1.0"
 
 [libraries]
 
@@ -65,6 +67,7 @@ junit-suite-engine = { group = "org.junit.platform", name = "junit-platform-suit
 jmh-core = { group = "org.openjdk.jmh", name = "jmh-core", version.ref = "jmh" }
 jmh-annotationprocessor = { group = "org.openjdk.jmh", name = "jmh-generator-annprocess", version.ref = "jmh" }
 jcstress-core = { group = "org.openjdk.jcstress", name = "jcstress-core", version.ref = "jcstress" }
+errorprone-core = { group = "com.google.errorprone", name = "error_prone_core", version.ref = "errorprone" }
 
 # Code Generation
 javaPoet = { group = "com.palantir.javapoet", name = "javapoet", version.ref = "javaPoet" }
@@ -84,6 +87,7 @@ logback = ["logback-core", "logback-classic"]
 blossom = { id = "net.kyori.blossom", version.ref = "blossom" }
 jmh-plugin = { id = "me.champeau.jmh", version.ref = "jmh-plugin" }
 jcstress-plugin = { id = "io.github.reyerizo.gradle.jcstress", version.ref = "jcstress-plugin" }
+errorprone-plugin = { id = "net.ltgt.errorprone", version.ref = "errorprone-plugin" }
 nmcp = { id = "com.gradleup.nmcp", version.ref = "nmcp" }
 nmcp-aggregation = { id = "com.gradleup.nmcp.aggregation", version.ref = "nmcp" }
 graalvm-native = { id = "org.graalvm.buildtools.native", version.ref = "graaltools" }
