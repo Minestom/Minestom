@@ -21,6 +21,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "FutureReturnValueIgnored",
                 "LongDoubleConversion",
                 "MissingSummary",
+                "NarrowingCompoundAssignment",
                 "StringCaseLocaleUsage",
                 "StringSplitter",
                 "MissingOverride",
