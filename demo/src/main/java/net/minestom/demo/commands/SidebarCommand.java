@@ -44,24 +44,14 @@ public class SidebarCommand extends Command {
         int targetLine = context.get("target line");
         if (targetLine == -1) targetLine = currentLine;
         switch (option) {
-            case "add-line":
-                addLine(content, null);
-                break;
-            case "remove-line":
-                removeLine();
-                break;
-            case "set-title":
-                setTitle(content);
-                break;
-            case "toggle":
-                toggleSidebar(player);
-                break;
-            case "update-content":
-                updateLineContent(content, String.valueOf(targetLine));
-                break;
-            case "update-score":
-                updateLineScore(Integer.parseInt(content), String.valueOf(targetLine));
-                break;
+            case "add-line" -> addLine(content, null);
+            case "remove-line" -> removeLine();
+            case "set-title" -> setTitle(content);
+            case "toggle" -> toggleSidebar(player);
+            case "update-content" -> updateLineContent(content, String.valueOf(targetLine));
+            case "update-score" -> updateLineScore(Integer.parseInt(content), String.valueOf(targetLine));
+            default -> {
+            }
         }
     }
 

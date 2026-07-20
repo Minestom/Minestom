@@ -38,19 +38,16 @@ public class ShootCommand extends Command {
         String mode = context.get("type");
         EntityProjectile projectile;
         switch (mode) {
-            case "default":
-                projectile = new EntityProjectile(player, EntityType.ARROW);
-                break;
-            case "spectral":
-                projectile = new EntityProjectile(player, EntityType.SPECTRAL_ARROW);
-                break;
-            case "colored":
+            case "default" -> projectile = new EntityProjectile(player, EntityType.ARROW);
+            case "spectral" -> projectile = new EntityProjectile(player, EntityType.SPECTRAL_ARROW);
+            case "colored" -> {
                 projectile = new EntityProjectile(player, EntityType.ARROW);
                 var meta = (ArrowMeta) projectile.getEntityMeta();
                 meta.setColor(ThreadLocalRandom.current().nextInt());
-                break;
-            default:
+            }
+            default -> {
                 return;
+            }
         }
         var pos = player.getPosition().add(0D, player.getEyeHeight(), 0D);
         //noinspection ConstantConditions - It should be impossible to execute a command without being in an instance

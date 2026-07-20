@@ -28,6 +28,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "MissingSummary",
                 "NarrowingCompoundAssignment",
                 "NonApiType",
+                "StatementSwitchToExpressionSwitch",
                 "StringCaseLocaleUsage",
                 "StringSplitter",
                 "MissingOverride",

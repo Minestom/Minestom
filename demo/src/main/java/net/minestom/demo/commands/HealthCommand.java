@@ -43,13 +43,12 @@ public class HealthCommand extends Command {
         final int error = exception.getErrorCode();
         final String input = exception.getInput();
         switch (error) {
-            case ArgumentNumber.NOT_NUMBER_ERROR:
-                sender.sendMessage(Component.text("SYNTAX ERROR: '" + input + "' isn't a number!"));
-                break;
-            case ArgumentNumber.TOO_LOW_ERROR:
-            case ArgumentNumber.TOO_HIGH_ERROR:
-                sender.sendMessage(Component.text("SYNTAX ERROR: " + input + " is not between 0 and 100"));
-                break;
+            case ArgumentNumber.NOT_NUMBER_ERROR ->
+                    sender.sendMessage(Component.text("SYNTAX ERROR: '" + input + "' isn't a number!"));
+            case ArgumentNumber.TOO_LOW_ERROR, ArgumentNumber.TOO_HIGH_ERROR ->
+                    sender.sendMessage(Component.text("SYNTAX ERROR: " + input + " is not between 0 and 100"));
+            default -> {
+            }
         }
     }
 
@@ -63,12 +62,10 @@ public class HealthCommand extends Command {
         final int value = context.get("value");
 
         switch (mode.toLowerCase(Locale.ROOT)) {
-            case "set":
-                player.setHealth(value);
-                break;
-            case "add":
-                player.setHealth(player.getHealth() + value);
-                break;
+            case "set" -> player.setHealth(value);
+            case "add" -> player.setHealth(player.getHealth() + value);
+            default -> {
+            }
         }
 
         player.sendMessage(Component.text("You have now " + player.getHealth() + " health"));
