@@ -272,7 +272,9 @@ public abstract class PlayerConnection {
     public CompletableFuture<List<SelectKnownPacksPacket.Entry>> requestKnownPacks(List<SelectKnownPacksPacket.Entry> serverPacks) {
         Check.stateCondition(knownPacksFuture != null, "Known packs already pending");
         sendPacket(new SelectKnownPacksPacket(serverPacks));
-        return knownPacksFuture = new CompletableFuture<>();
+        final CompletableFuture<List<SelectKnownPacksPacket.Entry>> future = new CompletableFuture<>();
+        this.knownPacksFuture = future;
+        return future;
     }
 
     @ApiStatus.Internal

@@ -42,14 +42,15 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
     }
 
     void update() {
-        List<Entry> temp;
-        while (!(temp = new ArrayList<>(queue)).isEmpty()) {
+        List<Entry> temp = new ArrayList<>(queue);
+        while (!temp.isEmpty()) {
             queue = new ArrayList<>();
             readOnlyReferenceMap = (IdentityHashMap<Snapshotable, AtomicReference<Snapshot>>) referenceMap.clone();
             temp.parallelStream().forEach(entry -> {
                 Snapshotable snap = entry.snapshotable;
                 entry.ref.set(Objects.requireNonNull(snap.updateSnapshot(this), "Snapshot must not be null after an update!"));
             });
+            temp = new ArrayList<>(queue);
         }
     }
 }

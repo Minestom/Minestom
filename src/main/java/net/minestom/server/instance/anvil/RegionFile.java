@@ -165,7 +165,8 @@ final class RegionFile implements AutoCloseable {
 
         // Parse locations from buffer
         for (int i = 0; i < MAX_ENTRY_COUNT; i++) {
-            int location = locations[i] = headerBuffer.getInt();
+            final int location = headerBuffer.getInt();
+            locations[i] = location;
             if (location != 0) {
                 markLocationInBitSet(location, false);
             }
