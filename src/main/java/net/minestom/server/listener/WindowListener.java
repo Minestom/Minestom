@@ -21,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class WindowListener {
 
+    @SuppressWarnings("LabelledBreakTarget")
     public static void clickWindowListener(ClientClickWindowPacket packet, Player player) {
         final int windowId = packet.windowId();
         final boolean playerInventory = windowId == 0;

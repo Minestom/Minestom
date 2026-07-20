@@ -188,6 +188,7 @@ public final class Palettes {
                     consumer.accept(x, y, z, value);
     }
 
+    @SuppressWarnings("LabelledBreakTarget")
     public static long[] remap(int dimension, int oldBitsPerEntry, int newBitsPerEntry,
                                long[] values, Int2IntFunction function) {
         final long[] result = new long[arrayLength(dimension, newBitsPerEntry)];
