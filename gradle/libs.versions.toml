@@ -15,7 +15,7 @@ gson = "2.14.0"
 jcTools = "4.0.6"
 
 # Quality
-junit = "6.1.1"
+junit = "6.1.2"
 jmh = "1.37"
 jcstress = "0.16"
 errorprone = "2.50.0"
@@ -29,7 +29,7 @@ logback = "1.5.38"
 # Gradle plugins
 blossom = "2.2.0"
 nmcp = "1.6.1"
-graaltools = "1.1.4"
+graaltools = "1.1.5"
 jmh-plugin = "0.7.3"
 jcstress-plugin = "0.9.0"
 errorprone-plugin = "5.1.0"
