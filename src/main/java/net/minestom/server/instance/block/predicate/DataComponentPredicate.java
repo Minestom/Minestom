@@ -428,9 +428,9 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @see CollectionPredicate
      */
     record WritableBook(
-            @Nullable CollectionPredicate<FilteredText<String>, PagePredicate> pages) implements Registered {
+            @Nullable CollectionPredicate<FilteredText<String>, WritableBook.PagePredicate> pages) implements Registered {
         public static final Codec<WritableBook> CODEC = StructCodec.struct(
-                "pages", CollectionPredicate.codec(PagePredicate.CODEC).optional(), WritableBook::pages,
+                "pages", CollectionPredicate.codec(WritableBook.PagePredicate.CODEC).optional(), WritableBook::pages,
                 WritableBook::new
         );
 
@@ -467,13 +467,13 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @param resolved   The expected value of {@link WrittenBookContent#resolved()}, or null to ignore
      * @see CollectionPredicate
      */
-    record WrittenBook(@Nullable CollectionPredicate<FilteredText<Component>, PagePredicate> pages,
+    record WrittenBook(@Nullable CollectionPredicate<FilteredText<Component>, WrittenBook.PagePredicate> pages,
                        @Nullable String author,
                        @Nullable String title,
                        @Nullable Range.Int generation, @Nullable Boolean resolved) implements Registered {
 
         public static final Codec<WrittenBook> CODEC = StructCodec.struct(
-                "pages", CollectionPredicate.codec(PagePredicate.CODEC).optional(), WrittenBook::pages,
+                "pages", CollectionPredicate.codec(WrittenBook.PagePredicate.CODEC).optional(), WrittenBook::pages,
                 "author", Codec.STRING.optional(), WrittenBook::author,
                 "title", Codec.STRING.optional(), WrittenBook::title,
                 "generation", Range.Int.CODEC.optional(), WrittenBook::generation,

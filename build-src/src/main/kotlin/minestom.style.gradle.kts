@@ -45,6 +45,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "ShortCircuitBoolean",
                 "PatternMatchingInstanceof",
                 "RedundantControlFlow",
+                "SameNameButDifferent",
                 "UnnamedVariable",
                 "VariableNameSameAsType",
                 "UnusedMethod",

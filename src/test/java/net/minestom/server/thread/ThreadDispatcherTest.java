@@ -29,7 +29,7 @@ public class ThreadDispatcherTest {
 
     @Test
     public void basic() {
-        final class Element implements Tickable {
+        final class Counter implements Tickable {
             int value;
 
             @Override
@@ -38,9 +38,9 @@ public class ThreadDispatcherTest {
             }
         }
         World world = new World();
-        Element element = new Element();
+        Counter element = new Counter();
 
-        ThreadDispatcher<World, Element> dispatcher = ThreadDispatcher.singleThread();
+        ThreadDispatcher<World, Counter> dispatcher = ThreadDispatcher.singleThread();
         dispatcher.createPartition(world);
         dispatcher.updateElement(element, world);
         dispatcher.start();

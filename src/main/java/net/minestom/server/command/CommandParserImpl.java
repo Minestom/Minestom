@@ -296,7 +296,7 @@ final class CommandParserImpl implements CommandParser {
     }
 
     record UnknownCommandResult() implements Result.UnknownCommand {
-        private static final Result INSTANCE = new UnknownCommandResult();
+        private static final CommandParser.Result INSTANCE = new UnknownCommandResult();
 
         @Override
         public ExecutableCommand executable() {
@@ -391,7 +391,7 @@ final class CommandParserImpl implements CommandParser {
         static final ExecutableCommand INSTANCE = new UnknownExecutableCmd();
 
         @Override
-        public Result execute(CommandSender sender) {
+        public ExecutableCommand.Result execute(CommandSender sender) {
             return ExecutionResultImpl.UNKNOWN;
         }
     }
@@ -400,7 +400,7 @@ final class CommandParserImpl implements CommandParser {
                               String input,
                               Map<String, ArgumentResult<Object>> arguments) implements ExecutableCommand {
         @Override
-        public Result execute(CommandSender sender) {
+        public ExecutableCommand.Result execute(CommandSender sender) {
             final CommandContext context = createCommandContext(input, arguments);
 
             globalListener().apply(sender, context);
@@ -422,7 +422,7 @@ final class CommandParserImpl implements CommandParser {
                                 ArgumentResult.SyntaxError<?> error, String input,
                                 Map<String, ArgumentResult<Object>> arguments) implements ExecutableCommand {
         @Override
-        public Result execute(CommandSender sender) {
+        public ExecutableCommand.Result execute(CommandSender sender) {
             globalListener().apply(sender, createCommandContext(input, arguments));
 
             if (condition != null && !condition.canUse(sender, input())) {
