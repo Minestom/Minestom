@@ -92,6 +92,10 @@ public interface ChunkLoader {
 
     /**
      * Supports for instance/chunk loading in virtual threads.
+     * <p>
+     * When true, chunks may load in parallel on virtual threads. When false,
+     * {@link #loadChunk(Instance, int, int)} runs synchronously on the thread
+     * requesting the load.
      *
      * @return true if the chunk loader supports parallel loading
      */

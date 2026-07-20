@@ -42,7 +42,7 @@ public class DisplayCommand extends Command {
         var meta = (ItemDisplayMeta) entity.getEntityMeta();
         meta.setTransformationInterpolationDuration(20);
         meta.setItemStack(ItemStack.of(Material.STICK));
-        entity.setInstance(player.getInstance(), player.getPosition());
+        entity.setInstance(player.getInstance(), player.getPosition()).join();
 
         if (context.has("follow")) {
             startSmoothFollow(entity, player);
@@ -73,7 +73,7 @@ public class DisplayCommand extends Command {
         meta.setTransformationInterpolationDuration(20);
         meta.setBillboardRenderConstraints(AbstractDisplayMeta.BillboardConstraints.CENTER);
         meta.setText(Component.text("Hello, world!"));
-        entity.setInstance(player.getInstance(), player.getPosition());
+        entity.setInstance(player.getInstance(), player.getPosition()).join();
 
         if (context.has("follow")) {
             startSmoothFollow(entity, player);

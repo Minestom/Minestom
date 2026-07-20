@@ -47,7 +47,7 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public CompletableFuture<Chunk> loadOptionalChunk(int chunkX, int chunkZ) {
+    public CompletableFuture<@Nullable Chunk> loadOptionalChunk(int chunkX, int chunkZ) {
         return instanceContainer.loadOptionalChunk(chunkX, chunkZ);
     }
 

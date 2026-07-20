@@ -156,7 +156,7 @@ public class EntityProjectile extends Entity {
                 EventDispatcher.call(event);
                 if (isRemoved()) return true;
                 if (!event.isCancelled()) {
-                    teleport(pos);
+                    teleport(pos).join();
                     return true;
                 }
             }

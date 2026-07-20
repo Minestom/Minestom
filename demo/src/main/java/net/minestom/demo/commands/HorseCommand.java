@@ -65,7 +65,7 @@ public class HorseCommand extends Command {
         meta.setBaby(baby);
         meta.setVariantAndMarking(variant, marking);
         //noinspection ConstantConditions - It should be impossible to execute a command without being in an instance
-        horse.setInstance(player.getInstance(), player.getPosition());
+        horse.setInstance(player.getInstance(), player.getPosition()).join();
     }
 
 }

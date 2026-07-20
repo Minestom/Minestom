@@ -57,7 +57,7 @@ public class CookieCommand extends Command {
                 } else {
                     player.sendMessage(key + ": " + new String(value));
                 }
-            });
+            }).join();
         }
     }
 }

@@ -180,7 +180,7 @@ public class CombinedAttackGoal extends GoalSelector {
                         projectileGenerator = shooter -> new EntityProjectile(shooter, EntityType.ARROW);
                     }
                     EntityProjectile projectile = projectileGenerator.apply(this.entityCreature);
-                    projectile.setInstance(this.entityCreature.getInstance(), this.entityCreature.getPosition());
+                    projectile.setInstance(this.entityCreature.getInstance(), this.entityCreature.getPosition()).join();
 
                     projectile.shoot(to, this.rangedPower, this.rangedSpread);
                     this.lastAttack = time;

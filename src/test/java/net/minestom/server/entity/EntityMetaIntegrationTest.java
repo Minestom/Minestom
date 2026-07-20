@@ -104,7 +104,7 @@ public class EntityMetaIntegrationTest {
         entity.getEntityMeta().setNotifyAboutChanges(false);
         entity.setCustomName(Component.text("Custom Name"));
         entity.setCustomNameVisible(true);
-        entity.setInstance(instance, startPos);
+        entity.setInstance(instance, startPos).join();
         entity.getEntityMeta().setNotifyAboutChanges(true);
         entity.addViewer(player);
 
@@ -151,7 +151,7 @@ public class EntityMetaIntegrationTest {
         var incomingPackets = connection.trackIncoming(EntityMetaDataPacket.class);
 
         var entity = new Entity(EntityType.ITEM_DISPLAY);
-        entity.setInstance(instance, startPos);
+        entity.setInstance(instance, startPos).join();
         var meta = (ItemDisplayMeta) entity.getEntityMeta();
 
         meta.setTransformationInterpolationStartDelta(1);

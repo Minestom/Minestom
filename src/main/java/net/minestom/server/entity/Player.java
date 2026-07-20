@@ -168,7 +168,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     final ChunkRange.ChunkConsumer chunkAdder = (chunkX, chunkZ) -> {
         // Load new chunks
-        this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(this::sendChunk);
+        var _ = this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(this::sendChunk);
     };
     final ChunkRange.ChunkConsumer chunkRemover = (chunkX, chunkZ) -> {
         // Unload old chunks
@@ -518,7 +518,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                         entity.updateNewViewer(this);
                     }
                 });
-        teleport(respawnPosition).thenRun(this::refreshAfterTeleport);
+        teleport(respawnPosition).thenRun(this::refreshAfterTeleport).join();
     }
 
     /**
@@ -665,7 +665,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             }
         };
 
-        CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new))
+        var _ = CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new))
                 .thenRun(() -> {
                     scheduler.scheduleNextProcess(() -> {
                         runnable.accept(instance);
@@ -712,7 +712,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
         if (dimensionChange) sendDimension(instance.getDimensionType(), instance.getDimensionName());
 
-        super.setInstance(instance, spawnPosition);
+        var _ = super.setInstance(instance, spawnPosition);
 
         if (updateChunks) {
             final int chunkX = spawnPosition.chunkX();
@@ -1288,7 +1288,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         }
 
         getInventory().update();
-        teleport(getPosition());
+        teleport(getPosition()).join();
     }
 
     public void setDeathLocation(Pos position) {

@@ -108,7 +108,7 @@ public class PlayerInit {
                 Pos playerPos = player.getPosition();
                 ItemEntity itemEntity = new ItemEntity(droppedItem);
                 itemEntity.setPickupDelay(Duration.of(500, TimeUnit.MILLISECOND));
-                itemEntity.setInstance(player.getInstance(), playerPos.withY(y -> y + 1.5));
+                itemEntity.setInstance(player.getInstance(), playerPos.withY(y -> y + 1.5)).join();
                 Vec velocity = playerPos.direction().mul(6);
                 itemEntity.setVelocity(velocity);
             })
@@ -185,13 +185,13 @@ public class PlayerInit {
                     var happyGhast = new LivingEntity(EntityType.HAPPY_GHAST);
                     happyGhast.setNoGravity(true);
                     happyGhast.setBodyEquipment(ItemStack.of(Material.GREEN_HARNESS));
-                    happyGhast.setInstance(player.getInstance(), new Pos(10, 43, 5, 45, 0));
+                    var _ = happyGhast.setInstance(player.getInstance(), new Pos(10, 43, 5, 45, 0));
 
                     var copperGolem = new LivingEntity(EntityType.COPPER_GOLEM);
                     copperGolem.setNoGravity(true);
                     copperGolem.setItemInMainHand(ItemStack.of(Material.STICK));
                     ((CopperGolemMeta) copperGolem.getEntityMeta()).setState(CopperGolemMeta.State.GETTING_ITEM);
-                    copperGolem.setInstance(player.getInstance(), new Pos(-10, 40, 5, -133, 0));
+                    var _ = copperGolem.setInstance(player.getInstance(), new Pos(-10, 40, 5, -133, 0));
 
                     player.getInstance().setBlock(new Vec(-12, 40, 5), Block.WEATHERED_COPPER_GOLEM_STATUE.withProperty("copper_golem_pose", "star"));
 
@@ -202,7 +202,7 @@ public class PlayerInit {
                     )));
 
                     var playerEntity = new PlayerEntity();
-                    playerEntity.setInstance(player.getInstance(), new Pos(-2.5, 40, 6.7, -163, 0));
+                    var _ = playerEntity.setInstance(player.getInstance(), new Pos(-2.5, 40, 6.7, -163, 0));
                     player.sendPacket(new TrackedWaypointPacket(TrackedWaypointPacket.Operation.TRACK, new TrackedWaypointPacket.Waypoint(
                             Either.left(playerEntity.getUuid()),
                             TrackedWaypointPacket.Icon.DEFAULT,
@@ -217,7 +217,7 @@ public class PlayerInit {
                     mannequinMeta.setProfile(new ResolvableProfile(new ResolvableProfile.Partial("Minestom", null, List.of())));
                     mannequinMeta.setImmovable(true);
                     mannequinMeta.setDescription(Component.text("npc"));
-                    mannequinEntity.setInstance(player.getInstance(), new Pos(-4, 40, 6, -131, 0));
+                    var _ = mannequinEntity.setInstance(player.getInstance(), new Pos(-4, 40, 6, -131, 0));
                     mannequinEntity.setItemInMainHand(ItemStack.of(Material.PLAYER_HEAD).with(DataComponents.PROFILE,
                             new ResolvableProfile(new ResolvableProfile.Partial("Minestom", null, List.of()))));
                     player.sendPacket(new TrackedWaypointPacket(TrackedWaypointPacket.Operation.TRACK, new TrackedWaypointPacket.Waypoint(

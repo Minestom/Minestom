@@ -23,7 +23,8 @@ public class DimensionCommand extends Command {
                 return;
             }
             final var newInstance = instances.get(ThreadLocalRandom.current().nextInt(instances.size()));
-            player.setInstance(newInstance).thenRun(() -> player.sendMessage("Teleported"));
+            player.setInstance(newInstance).join();
+            player.sendMessage("Teleported");
         });
     }
 }

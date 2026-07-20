@@ -51,7 +51,7 @@ public class TestBiomeAmbientParticleCommand extends Command {
         EventListener<AsyncPlayerConfigurationEvent> handler = EventListener.builder(AsyncPlayerConfigurationEvent.class).handler(event -> {
             event.setSendRegistryData(true);
             player.eventNode().removeListener(handlerRef.get());
-            player.scheduler().scheduleNextTick(() -> player.setInstance(instance));
+            player.scheduler().scheduleNextTick(() -> player.setInstance(instance).join());
         }).build();
         handlerRef.set(handler);
         player.eventNode().addListener(handler);

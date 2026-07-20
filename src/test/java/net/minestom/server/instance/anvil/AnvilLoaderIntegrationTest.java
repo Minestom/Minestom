@@ -196,7 +196,7 @@ public class AnvilLoaderIntegrationTest {
         });
         Chunk originalChunk = instance.loadChunk(0, 0).join();
 
-        instance.saveChunkToStorage(originalChunk);
+        instance.saveChunkToStorage(originalChunk).join();
         instance.unloadChunk(originalChunk);
         assertNull(instance.getChunk(0, 0));
 

@@ -76,7 +76,7 @@ public class RangedAttackGoal extends GoalSelector {
     public void setProjectileGenerator(Function<Entity, EntityProjectile> projectileGenerator) {
         this.projectileGenerator = (shooter, target, pow, spr) -> {
             EntityProjectile projectile = projectileGenerator.apply(shooter);
-            projectile.setInstance(shooter.getInstance(), shooter.getPosition().add(0D, shooter.getEyeHeight(), 0D));
+            projectile.setInstance(shooter.getInstance(), shooter.getPosition().add(0D, shooter.getEyeHeight(), 0D)).join();
             projectile.shoot(target, pow, spr);
         };
     }

@@ -49,11 +49,10 @@ import space.vectrix.flare.fastutil.Long2ObjectSyncMap;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static net.minestom.server.utils.chunk.ChunkUtils.isLoaded;
@@ -80,21 +79,21 @@ public class InstanceContainer extends Instance {
     private final Long2ObjectSyncMap<Chunk> chunks = Long2ObjectSyncMap.hashmap();
     private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new ConcurrentHashMap<>();
 
-    private final Lock changingBlockLock = new ReentrantLock();
+    // guarded by the instance monitor, same as UNSAFE_setBlock
     private final Map<BlockVec, Block> currentlyChangingBlocks = new HashMap<>();
 
     // the chunk loader, used when trying to load/save a chunk from another source
-    private ChunkLoader chunkLoader;
+    private volatile ChunkLoader chunkLoader;
 
     // used to automatically enable the chunk loading or not
-    private boolean autoChunkLoad = true;
+    private volatile boolean autoChunkLoad = true;
 
     // used to supply a new chunk object at a position when requested
-    private ChunkSupplier chunkSupplier;
+    private volatile ChunkSupplier chunkSupplier;
 
     // Fields for instance copy
     protected InstanceContainer srcInstance; // only present if this instance has been created using a copy
-    private long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
+    private volatile long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
 
     public InstanceContainer(UUID uuid, RegistryKey<DimensionType> dimensionType) {
         this(uuid, dimensionType, null, dimensionType.key());
@@ -263,12 +262,22 @@ public class InstanceContainer extends Instance {
 
     @Override
     public CompletableFuture<Chunk> loadChunk(int chunkX, int chunkZ) {
-        return loadOrRetrieve(chunkX, chunkZ, () -> retrieveChunk(chunkX, chunkZ));
+        final Chunk chunk = getChunk(chunkX, chunkZ);
+        if (chunk != null) {
+            // Chunk already loaded
+            return CompletableFuture.completedFuture(chunk);
+        }
+        return retrieveChunk(chunkX, chunkZ);
     }
 
     @Override
-    public CompletableFuture<Chunk> loadOptionalChunk(int chunkX, int chunkZ) {
-        return loadOrRetrieve(chunkX, chunkZ, () -> hasEnabledAutoChunkLoad() ? retrieveChunk(chunkX, chunkZ) : AsyncUtils.empty());
+    public CompletableFuture<@Nullable Chunk> loadOptionalChunk(int chunkX, int chunkZ) {
+        final Chunk chunk = getChunk(chunkX, chunkZ);
+        if (chunk != null) {
+            // Chunk already loaded
+            return CompletableFuture.completedFuture(chunk);
+        }
+        return hasEnabledAutoChunkLoad() ? retrieveChunk(chunkX, chunkZ) : AsyncUtils.empty();
     }
 
     @Override
@@ -314,86 +323,65 @@ public class InstanceContainer extends Instance {
     private CompletableFuture<Void> optionalAsync(boolean async, Runnable runnable) {
         if (!async) {
             runnable.run();
-            return CompletableFuture.completedFuture(null);
+            return AsyncUtils.empty();
         }
-        final CompletableFuture<Void> future = new CompletableFuture<>();
-        Thread.startVirtualThread(() -> {
-            try {
-                runnable.run();
-                future.complete(null);
-            } catch (Throwable e) {
-                future.completeExceptionally(e);
-                MinecraftServer.getExceptionManager().handleException(e);
-            }
+        return CompletableFuture.runAsync(runnable, Thread::startVirtualThread).whenComplete((_, e) -> {
+            if (e != null) MinecraftServer.getExceptionManager().handleException(e);
         });
-        return future;
     }
 
+    // Loaders must not force other chunks to load from within loadChunk: loaders
+    // without parallel support run inside the loadingChunks computation, where a
+    // reentrant load on this instance would violate the map's recursive update rules
     protected CompletableFuture<Chunk> retrieveChunk(int chunkX, int chunkZ) {
-        CompletableFuture<Chunk> completableFuture = new CompletableFuture<>();
         final long index = CoordConversion.chunkIndex(chunkX, chunkZ);
-        final CompletableFuture<Chunk> prev = loadingChunks.putIfAbsent(index, completableFuture);
-        if (prev != null) return prev;
-        final ChunkLoader loader = chunkLoader;
-        final Consumer<Chunk> generate = chunk -> {
-            if (chunk == null) {
-                // Loader couldn't load the chunk, generate it
-                var chunkGeneration = EventsJFR.newChunkGeneration(getUuid(), chunkX, chunkZ);
-                chunkGeneration.begin();
-                chunk = createChunk(chunkX, chunkZ);
-                chunk.onGenerate();
-                chunkGeneration.commit();
-            }
-
-            // TODO run in the instance thread?
-            cacheChunk(chunk);
-            chunk.onLoad();
-
-            final CompletableFuture<Chunk> future = this.loadingChunks.remove(index);
-            assert future == completableFuture : "Invalid future: " + future;
-            completableFuture.complete(chunk);
-            EventDispatcher.call(new InstanceChunkLoadEvent(this, chunk));
-        };
-        Supplier<Chunk> loaderSupplier = () -> {
-            var chunkLoading = EventsJFR.newChunkLoading(getUuid(), loader.getClass(), chunkX, chunkZ);
-            chunkLoading.begin();
-            final Chunk chunk = loader.loadChunk(this, chunkX, chunkZ);
-            chunkLoading.end();
-            if (chunk != null) chunkLoading.commit();
-            return chunk;
-        };
-        if (loader.supportsParallelLoading()) {
-            Thread.startVirtualThread(() -> {
-                try {
-                    final Chunk chunk = loaderSupplier.get();
-                    generate.accept(chunk);
-                } catch (Throwable e) {
-                    this.loadingChunks.remove(index, completableFuture);
-                    completableFuture.completeExceptionally(e);
-                    MinecraftServer.getExceptionManager().handleException(e);
+        final CompletableFuture<Chunk> future = loadingChunks.computeIfAbsent(index, _ -> {
+            // A completed load may have cached the chunk and cleared its entry between the
+            // caller's cache miss and this computation, re-check to avoid loading twice
+            final Chunk cached = getChunk(chunkX, chunkZ);
+            if (cached != null) return CompletableFuture.completedFuture(cached);
+            final ChunkLoader loader = chunkLoader;
+            final Supplier<@Nullable Chunk> loaderSupplier = () -> {
+                var chunkLoading = EventsJFR.newChunkLoading(getUuid(), loader.getClass(), chunkX, chunkZ);
+                chunkLoading.begin();
+                final Chunk chunk = loader.loadChunk(this, chunkX, chunkZ);
+                chunkLoading.end();
+                if (chunk != null) chunkLoading.commit();
+                return chunk;
+            };
+            final Function<@Nullable Chunk, Chunk> processChunk = loaded -> {
+                Chunk chunk = loaded;
+                if (chunk == null) {
+                    // Loader couldn't load the chunk, generate it
+                    var chunkGeneration = EventsJFR.newChunkGeneration(getUuid(), chunkX, chunkZ);
+                    chunkGeneration.begin();
+                    chunk = createChunk(chunkX, chunkZ);
+                    chunk.onGenerate();
+                    chunkGeneration.commit();
+                }
+                // TODO run in the instance thread?
+                cacheChunk(chunk);
+                chunk.onLoad();
+                return chunk;
+            };
+            final CompletableFuture<Chunk> chain = loader.supportsParallelLoading()
+                    // Load and process on a single virtual thread
+                    ? CompletableFuture.supplyAsync(() -> processChunk.apply(loaderSupplier.get()), Thread::startVirtualThread)
+                    // Loaders without parallel support load on the requesting thread, processing
+                    // still hops off it to keep the chain from completing inside the mapping
+                    : AsyncUtils.empty().thenApply(_ -> loaderSupplier.get())
+                            .thenApplyAsync(processChunk, Thread::startVirtualThread);
+            // The chain never completes inside the mapping, this callback is always async
+            var _ = chain.whenComplete((chunk, e) -> {
+                if (e != null) {
+                    MinecraftServer.getExceptionManager().handleException(e instanceof CompletionException ce ? ce.getCause() : e);
+                } else {
+                    EventDispatcher.call(new InstanceChunkLoadEvent(this, chunk));
                 }
             });
-        } else {
-            final Chunk chunk;
-            try {
-                chunk = loaderSupplier.get();
-            } catch (Throwable e) {
-                this.loadingChunks.remove(index, completableFuture);
-                completableFuture.completeExceptionally(e);
-                MinecraftServer.getExceptionManager().handleException(e);
-                return completableFuture;
-            }
-            Thread.startVirtualThread(() -> {
-                try {
-                    generate.accept(chunk);
-                } catch (Throwable e) {
-                    this.loadingChunks.remove(index, completableFuture);
-                    completableFuture.completeExceptionally(e);
-                    MinecraftServer.getExceptionManager().handleException(e);
-                }
-            });
-        }
-        return completableFuture;
+            return chain;
+        });
+        return future.whenComplete((_, _) -> loadingChunks.remove(index, future));
     }
 
     Map<Long, List<GeneratorImpl.SectionModifierImpl>> generationForks = new ConcurrentHashMap<>();
@@ -673,25 +661,18 @@ public class InstanceContainer extends Instance {
     @ApiStatus.Experimental
     @Override
     public CompletableFuture<Void> generateChunk(int chunkX, int chunkZ, Generator generator) {
-        CompletableFuture<Void> future = new CompletableFuture<>();
-        Thread.startVirtualThread(() -> {
+        return loadChunk(chunkX, chunkZ).thenAcceptAsync(chunk -> {
+            chunk.lockWriteLock();
             try {
-                Chunk chunk = loadChunk(chunkX, chunkZ).join();
-                chunk.lockWriteLock();
-                try {
-                    generateChunk(chunk, generator);
-                    chunk.invalidate();
-                } finally {
-                    chunk.unlockWriteLock();
-                }
-                chunk.sendChunk();
-                future.complete(null);
-            } catch (Throwable e) {
-                future.completeExceptionally(e);
-                MinecraftServer.getExceptionManager().handleException(e);
+                generateChunk(chunk, generator);
+                chunk.invalidate();
+            } finally {
+                chunk.unlockWriteLock();
             }
+            chunk.sendChunk();
+        }, Thread::startVirtualThread).whenComplete((_, e) -> {
+            if (e != null) MinecraftServer.getExceptionManager().handleException(e);
         });
-        return future;
     }
 
     /**
@@ -729,10 +710,9 @@ public class InstanceContainer extends Instance {
         // Time/world border
         super.tick(time);
         // Clear block change map
-        Lock wrlock = this.changingBlockLock;
-        wrlock.lock();
-        this.currentlyChangingBlocks.clear();
-        wrlock.unlock();
+        synchronized (this) {
+            this.currentlyChangingBlocks.clear();
+        }
     }
 
     /**
@@ -785,15 +765,6 @@ public class InstanceContainer extends Instance {
                         null, null, true, updateDistance + 1);
             }
         }
-    }
-
-    private CompletableFuture<Chunk> loadOrRetrieve(int chunkX, int chunkZ, Supplier<CompletableFuture<Chunk>> supplier) {
-        final Chunk chunk = getChunk(chunkX, chunkZ);
-        if (chunk != null) {
-            // Chunk already loaded
-            return CompletableFuture.completedFuture(chunk);
-        }
-        return supplier.get();
     }
 
     private void cacheChunk(Chunk chunk) {

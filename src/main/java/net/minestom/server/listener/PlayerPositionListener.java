@@ -73,7 +73,7 @@ public class PlayerPositionListener {
         }
         // Try to move in an unloaded chunk, prevent it
         if (!currentPosition.sameChunk(packetPosition) && !ChunkUtils.isLoaded(instance, packetPosition)) {
-            player.teleport(currentPosition);
+            var _ = player.teleport(currentPosition);
             return;
         }
 
@@ -101,7 +101,7 @@ public class PlayerPositionListener {
                 player.refreshOnGround(onGround);
                 player.setView(eventPosition.yaw(), eventPosition.pitch());
             } else {
-                player.teleport(eventPosition);
+                var _ = player.teleport(eventPosition);
             }
         }
     }

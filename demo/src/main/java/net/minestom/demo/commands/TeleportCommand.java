@@ -28,7 +28,7 @@ public class TeleportCommand extends Command {
         final String playerName = context.get("player");
         Player pl = MinecraftServer.getConnectionManager().getOnlinePlayerByUsername(playerName);
         if (sender instanceof Player player) {
-            player.teleport(pl.getPosition());
+            player.teleport(pl.getPosition()).join();
         }
         sender.sendMessage(Component.text("Teleported to player " + playerName));
     }
@@ -38,7 +38,7 @@ public class TeleportCommand extends Command {
 
         final RelativeVec relativeVec = context.get("pos");
         final Pos position = player.getPosition().withCoord(relativeVec.from(player));
-        player.teleport(position);
+        player.teleport(position).join();
         player.sendMessage(Component.text("You have been teleported to " + position));
     }
 }

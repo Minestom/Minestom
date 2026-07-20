@@ -20,7 +20,7 @@ public class PrimedTNTCommand extends Command {
                 meta.setBlockState(Block.STONE);
             });
 
-            entity.setInstance(player.getInstance(), player.getPosition());
+            entity.setInstance(player.getInstance(), player.getPosition()).join();
         });
 
     }
