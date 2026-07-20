@@ -63,6 +63,7 @@ tasks.withType<JavaCompile>().configureEach {
         )
 
         disable(
+                "AvoidCommonTypeNames",
                 "InlineMeSuggester",
                 "EnumOrdinal",
                 "ImmutableEnumChecker",
