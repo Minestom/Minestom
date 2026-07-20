@@ -62,7 +62,7 @@ public class DataComponentPredicateTest {
         assertFail(predicate, holderOf(component, value));
     }
 
-    private <T> void assertFail(DataComponentPredicate predicate, DataComponent.Holder holder) {
+    private void assertFail(DataComponentPredicate predicate, DataComponent.Holder holder) {
         assertFalse(predicate.test(holder));
     }
 

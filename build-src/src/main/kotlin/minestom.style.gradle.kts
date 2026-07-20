@@ -50,6 +50,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "RedundantControlFlow",
                 "SameNameButDifferent",
                 "UnnamedVariable",
+                "UnusedTypeParameter",
                 "VariableNameSameAsType",
                 "UnusedMethod",
                 "UnusedVariable",
