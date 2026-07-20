@@ -37,6 +37,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "MutablePublicArray",
                 "NarrowingCompoundAssignment",
                 "NonApiType",
+                "NonOverridingEquals",
                 "NonCanonicalType",
                 "StatementSwitchToExpressionSwitch",
                 "StringCaseLocaleUsage",
