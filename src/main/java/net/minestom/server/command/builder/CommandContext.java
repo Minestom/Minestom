@@ -44,6 +44,7 @@ public class CommandContext {
         return get(argument.getId());
     }
 
+    @SuppressWarnings("TypeParameterUnusedInFormals")
     public <T> T get(String identifier) {
         return (T) args.get(identifier);
     }

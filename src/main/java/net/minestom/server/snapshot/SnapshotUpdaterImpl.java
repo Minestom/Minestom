@@ -13,6 +13,7 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
     private IdentityHashMap<Snapshotable, AtomicReference<Snapshot>> readOnlyReferenceMap;
     private List<Entry> queue = new ArrayList<>();
 
+    @SuppressWarnings("TypeParameterUnusedInFormals")
     static <T extends Snapshot> T update(Snapshotable snapshotable) {
         var updater = new SnapshotUpdaterImpl();
         var ref = updater.reference(snapshotable);

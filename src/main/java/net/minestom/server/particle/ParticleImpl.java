@@ -21,10 +21,7 @@ final class ParticleImpl {
         return (P) REGISTRY.get(key.key());
     }
 
-    static <P extends Particle> @UnknownNullability P get(String key) {
-        return get(Key.key(key));
-    }
-
+    @SuppressWarnings("TypeParameterUnusedInFormals")
     static <P extends Particle> @UnknownNullability P get(Key key) {
         //noinspection unchecked
         return (P) REGISTRY.get(key);

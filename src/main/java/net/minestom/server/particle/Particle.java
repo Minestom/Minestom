@@ -50,7 +50,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
                 return mapResult.cast();
 
             Result<Particle> particleResult = map.getValue("type")
-                    .map(coder::getString).mapResult(ParticleImpl::get);
+                    .map(coder::getString).mapResult(Key::key).mapResult(ParticleImpl::get);
             if (!(particleResult instanceof Result.Ok(Particle particle)))
                 return particleResult.cast();
 

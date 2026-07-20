@@ -888,6 +888,7 @@ public final class RegistryData {
             return map;
         }
 
+        @SuppressWarnings("TypeParameterUnusedInFormals")
         private <T> T element(String name) {
             //noinspection unchecked
             return (T) map.get(name);

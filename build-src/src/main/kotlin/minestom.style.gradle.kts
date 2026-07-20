@@ -42,6 +42,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "StatementSwitchToExpressionSwitch",
                 "StringCaseLocaleUsage",
                 "StringSplitter",
+                "TypeParameterUnusedInFormals",
                 "MissingOverride",
                 "ObjectToString",
                 "OperatorPrecedence",
