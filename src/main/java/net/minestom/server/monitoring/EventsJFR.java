@@ -22,6 +22,7 @@ public final class EventsJFR {
             Class<?> vmClass = Class.forName("org.graalvm.nativeimage.VMRuntime");
             return false;
         } catch (ClassNotFoundException e) {
+            // Class absent means we are not running on a native image, JFR may be available
         }
         try {
             Class.forName("jdk.jfr.Event");

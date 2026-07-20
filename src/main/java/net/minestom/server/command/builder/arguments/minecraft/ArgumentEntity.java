@@ -106,6 +106,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                         .setTargetSelector(EntityFinder.TargetSelector.MINESTOM_UUID)
                         .setConstantUuid(uuid);
             } catch (IllegalArgumentException _) {
+                // Not a UUID, fall through to the other input formats
             }
 
             // Check if the input is a valid player name

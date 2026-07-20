@@ -25,6 +25,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "EffectivelyPrivate",
                 "EqualsGetClass",
                 "EmptyBlockTag",
+                "EmptyCatch",
                 "FutureReturnValueIgnored",
                 "JdkObsolete",
                 "LongDoubleConversion",

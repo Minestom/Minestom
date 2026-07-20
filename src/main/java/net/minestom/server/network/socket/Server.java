@@ -94,7 +94,9 @@ public final class Server {
                 } catch (IOException _) {
                     try {
                         client.close();
-                    } catch (IOException _) {}
+                    } catch (IOException _) {
+                        // Nothing more we can do, drop the connection
+                    }
                 }
             }
         });
