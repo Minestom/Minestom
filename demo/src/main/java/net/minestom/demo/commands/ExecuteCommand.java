@@ -9,6 +9,6 @@ public class ExecuteCommand extends Command {
         super("execute");
         ArgumentCommand run = new ArgumentCommand("run");
 
-        addSyntax(((sender, context) -> {}), run);
+        addSyntax((sender, context) -> {}, run);
     }
 }

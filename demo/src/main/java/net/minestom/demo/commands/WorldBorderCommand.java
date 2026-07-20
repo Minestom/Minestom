@@ -35,7 +35,7 @@ public class WorldBorderCommand extends Command {
         int size = context.get("sizeInBlocks");
         double timeInSeconds = context.get("timeInSeconds");
         double diameter = size;
-        if ((context.get("diameterOptions")).equals("add")) {
+        if (context.get("diameterOptions").equals("add")) {
             diameter += player.getInstance().getWorldBorder().diameter();
         }
 

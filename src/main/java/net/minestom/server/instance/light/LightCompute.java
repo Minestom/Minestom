@@ -68,7 +68,7 @@ public final class LightCompute {
                     };
 
                     if (content != null) {
-                        final int internalEmission = (byte) (Math.max(getLight(content, posTo) - 1, 0));
+                        final int internalEmission = (byte) Math.max(getLight(content, posTo) - 1, 0);
                         if (lightEmission <= internalEmission) continue;
                     }
 

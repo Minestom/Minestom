@@ -142,7 +142,7 @@ public record RelativeVec(Vec vec, CoordinateType coordinateType, boolean relati
         /**
          * Absolute just returns the original vector.
          */
-        ABSOLUTE(((vec, origin, relativeX1, relativeY1, relativeZ1) -> vec));
+        ABSOLUTE((vec, origin, relativeX1, relativeY1, relativeZ1) -> vec);
 
         private final CoordinateConverter converter;
 

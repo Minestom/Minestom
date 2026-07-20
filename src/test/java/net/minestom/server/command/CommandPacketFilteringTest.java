@@ -17,14 +17,14 @@ public class CommandPacketFilteringTest {
     @Test
     public void singleCommandFilteredFalse() {
         final Command foo = new Command("foo");
-        foo.setCondition(((sender, commandString) -> false));
+        foo.setCondition((sender, commandString) -> false);
         assertFiltering(foo, "");
     }
 
     @Test
     public void singleCommandFilteredTrue() {
         final Command foo = new Command("foo");
-        foo.setCondition(((sender, commandString) -> true));
+        foo.setCondition((sender, commandString) -> true);
         assertFiltering(foo, """
                 foo=%
                 0->foo

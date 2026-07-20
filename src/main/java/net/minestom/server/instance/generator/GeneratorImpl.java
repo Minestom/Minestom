@@ -453,8 +453,8 @@ public final class GeneratorImpl {
                 }
             }
             // Middle sections (to fill)
-            final int startSection = (minMultiple) / SECTION_SIZE + (startOffset ? 1 : 0);
-            final int endSection = (maxMultiple) / SECTION_SIZE + (endOffset ? -1 : 0);
+            final int startSection = minMultiple / SECTION_SIZE + (startOffset ? 1 : 0);
+            final int endSection = maxMultiple / SECTION_SIZE + (endOffset ? -1 : 0);
             for (int i = startSection; i < endSection; i++) {
                 for (int x = 0; x < width; x++) {
                     for (int z = 0; z < depth; z++) {

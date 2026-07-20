@@ -319,7 +319,7 @@ final class TagHandlerImpl implements TagHandler {
                 entries.put(tag.index(), valueToEntry(result, (Tag<Object>) tag, value));
             });
             var compound = tmp.build();
-            if ((!ServerFlag.SERIALIZE_EMPTY_COMPOUND) && compound.isEmpty() && parent != null)
+            if (!ServerFlag.SERIALIZE_EMPTY_COMPOUND && compound.isEmpty() && parent != null)
                 return null; // Empty child node
             result.compound = compound;
             return result;

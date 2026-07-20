@@ -42,7 +42,7 @@ public class CommandTestUtils {
                     final String[] strings = splitDeclaration(s);
                     final ArrayList<String> result = new ArrayList<>();
                     for (String s1 : strings[0].split(" ", 0)) {
-                        result.add(s1 + "=" + (strings[1].replaceAll("!", s1)));
+                        result.add(s1 + "=" + strings[1].replaceAll("!", s1));
                     }
                     return result;
                 },
@@ -50,7 +50,7 @@ public class CommandTestUtils {
                     final String[] strings = splitDeclaration(s);
                     final ArrayList<String> result = new ArrayList<>();
                     for (String s1 : strings[0].split(" ", 0)) {
-                        result.add(s1 + "=" + (strings[1].replaceAll("%", "'" + s1 + "'")));
+                        result.add(s1 + "=" + strings[1].replaceAll("%", "'" + s1 + "'"));
                     }
                     return result;
                 },
@@ -58,7 +58,7 @@ public class CommandTestUtils {
                     final String[] strings = splitDeclaration(s);
                     final ArrayList<String> result = new ArrayList<>();
                     for (String s1 : strings[0].split(" ", 0)) {
-                        result.add(s1 + "=" + (strings[1].replaceAll("§", "'" + (s1.toUpperCase(Locale.ROOT)) + "'")));
+                        result.add(s1 + "=" + strings[1].replaceAll("§", "'" + s1.toUpperCase(Locale.ROOT) + "'"));
                     }
                     return result;
                 }

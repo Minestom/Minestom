@@ -308,7 +308,7 @@ public class LightingChunk extends DynamicChunk {
                 final int sectionMinY = index * 16 + chunkMin;
                 index++;
 
-                if ((wasUpdatedSky) && this.instance.getCachedDimensionType().hasSkylight() && sectionMinY <= (highestNeighborBlock + 16)) {
+                if (wasUpdatedSky && this.instance.getCachedDimensionType().hasSkylight() && sectionMinY <= highestNeighborBlock + 16) {
                     final byte[] skyLight = section.skyLight().array();
 
                     if (skyLight.length != 0 && skyLight != EMPTY_CONTENT) {

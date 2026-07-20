@@ -23,6 +23,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "UnusedMethod",
                 "UnusedVariable",
                 "UnnecessaryLambda",
+                "UnnecessaryParentheses",
                 "UnnecessarilyFullyQualified",
                 "NullArgumentForNonNullParameter",
                 "NullableConstructor",
@@ -37,7 +38,9 @@ tasks.withType<JavaCompile>().configureEach {
 
         disable(
                 "InlineMeSuggester",
-                "EnumOrdinal"
+                "EnumOrdinal",
+                "ImmutableEnumChecker",
+                "ReferenceEquality",
         )
     }
 }
