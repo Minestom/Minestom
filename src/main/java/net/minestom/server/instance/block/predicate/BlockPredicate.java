@@ -20,6 +20,7 @@ import net.minestom.server.utils.block.BlockUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 /**
@@ -107,7 +108,7 @@ public record BlockPredicate(
     }
 
     public BlockPredicate {
-        java.util.Objects.requireNonNull(components, "Component predicates cannot be null");
+        Objects.requireNonNull(components, "Component predicates cannot be null");
     }
 
     @Override

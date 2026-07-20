@@ -2,6 +2,7 @@ package net.minestom.server.monitoring;
 
 import jdk.jfr.Category;
 import jdk.jfr.Description;
+import jdk.jfr.Event;
 import jdk.jfr.Label;
 import jdk.jfr.Name;
 import org.jetbrains.annotations.ApiStatus;
@@ -246,7 +247,7 @@ public final class EventsJFR {
         }
     }
 
-    private static class JFREventWrapper extends jdk.jfr.Event implements EventMarker {
+    private static class JFREventWrapper extends Event implements EventMarker {
     }
 
     private static final EventMarker NO_OP = new NoOpEvent();

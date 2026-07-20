@@ -131,7 +131,7 @@ final class TranscoderJavaImpl implements Transcoder<Object> {
 
     @Override
     public ListBuilder<Object> createList(int expectedSize) {
-        final List<Object> list = new java.util.ArrayList<>(expectedSize);
+        final List<Object> list = new ArrayList<>(expectedSize);
         return new ListBuilder<>() {
             @Override
             public ListBuilder<Object> add(Object value) {

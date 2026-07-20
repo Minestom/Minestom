@@ -180,7 +180,7 @@ public final class LoginListener {
                     MinecraftServer.getExceptionManager().handleException(e);
                     return;
                 }
-                final int port = ((java.net.InetSocketAddress) socketConnection.getRemoteAddress()).getPort();
+                final int port = ((InetSocketAddress) socketConnection.getRemoteAddress()).getPort();
                 socketAddress = new InetSocketAddress(address, port);
                 gameProfile = GameProfile.SERIALIZER.read(buffer);
             }
