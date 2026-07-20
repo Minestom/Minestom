@@ -106,21 +106,43 @@ public record ShapeImpl(ShapeData shapeData, OcclusionData occlusionData) implem
     @Override
     public boolean intersectBoxSwept(Point rayStart, Point rayDirection,
                                      Point shapePos, BoundingBox moving, SweepResult finalResult) {
-        boolean hitBlock = false;
-        for (BoundingBox blockSection : shapeData.boundingBoxes) {
-            // Update final result if the temp result collision is sooner than the current final result
-            if (RayUtils.BoundingBoxIntersectionCheck(moving, rayStart, rayDirection, blockSection, shapePos, finalResult)) {
-                finalResult.collidedPositionX = rayStart.x() + rayDirection.x() * finalResult.res;
-                finalResult.collidedPositionY = rayStart.y() + rayDirection.y() * finalResult.res;
-                finalResult.collidedPositionZ = rayStart.z() + rayDirection.z() * finalResult.res;
-                finalResult.collidedShapeX = shapePos.x();
-                finalResult.collidedShapeY = shapePos.y();
-                finalResult.collidedShapeZ = shapePos.z();
-                finalResult.collidedShape = this;
-                hitBlock = true;
-            }
+        final double sx = rayStart.x(), sy = rayStart.y(), sz = rayStart.z();
+        final double dirX = rayDirection.x(), dirY = rayDirection.y(), dirZ = rayDirection.z();
+        final boolean hit = sweep(sx + moving.minX(), sy + moving.minY(), sz + moving.minZ(),
+                sx + moving.maxX(), sy + moving.maxY(), sz + moving.maxZ(),
+                dirX, dirY, dirZ, shapePos.x(), shapePos.y(), shapePos.z(), finalResult);
+        if (hit) {
+            finalResult.collidedPositionX = sx + dirX * finalResult.res;
+            finalResult.collidedPositionY = sy + dirY * finalResult.res;
+            finalResult.collidedPositionZ = sz + dirZ * finalResult.res;
         }
-        return hitBlock;
+        return hit;
+    }
+
+    /**
+     * Primitive-argument sweep against every box of this shape: moving box world bounds, movement
+     * vector, shape world position. Updates {@code finalResult} res/normal/shape fields on hit but
+     * leaves the collided position for the caller.
+     */
+    boolean sweep(double moMinX, double moMinY, double moMinZ,
+                  double moMaxX, double moMaxY, double moMaxZ,
+                  double dirX, double dirY, double dirZ,
+                  double posX, double posY, double posZ, SweepResult finalResult) {
+        boolean hit = false;
+        final List<BoundingBox> boxes = shapeData.boundingBoxes;
+        for (final BoundingBox b : boxes) {
+            // Update final result if this box is hit sooner than the current final result
+            hit |= RayUtils.sweep(moMinX, moMinY, moMinZ, moMaxX, moMaxY, moMaxZ, dirX, dirY, dirZ,
+                    b.minX() + posX, b.minY() + posY, b.minZ() + posZ,
+                    b.maxX() + posX, b.maxY() + posY, b.maxZ() + posZ, finalResult);
+        }
+        if (hit) {
+            finalResult.collidedShape = this;
+            finalResult.collidedShapeX = posX;
+            finalResult.collidedShapeY = posY;
+            finalResult.collidedShapeZ = posZ;
+        }
+        return hit;
     }
 
     /**
