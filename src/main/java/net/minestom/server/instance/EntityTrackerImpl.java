@@ -181,8 +181,10 @@ final class EntityTrackerImpl implements EntityTracker {
             final var chunkEntities = (List<T>) entities.get(CoordConversion.chunkIndex(point));
             if (chunkEntities != null && !chunkEntities.isEmpty()) {
                 chunkEntities.forEach(entity -> {
-                    final Point position = entriesByEntityId.get(entity.getEntityId()).getLastPosition();
-                    if (point.distanceSquared(position) <= squaredRange) query.accept(entity);
+                    if (entriesByEntityId.containsKey(entity.getEntityId())) {
+                        final Point position = entriesByEntityId.get(entity.getEntityId()).getLastPosition();
+                        if (point.distanceSquared(position) <= squaredRange) query.accept(entity);
+                    }
                 });
             }
         } else {
@@ -193,9 +195,9 @@ final class EntityTrackerImpl implements EntityTracker {
                 final var chunkEntities = (List<T>) entities.get(CoordConversion.chunkIndex(chunkX, chunkZ));
                 if (chunkEntities == null || chunkEntities.isEmpty()) return;
                 chunkEntities.forEach(entity -> {
-                    final Point position = entriesByEntityId.get(entity.getEntityId()).getLastPosition();
-                    if (point.distanceSquared(position) <= squaredRange) {
-                        query.accept(entity);
+                    if (entriesByEntityId.containsKey(entity.getEntityId())) {
+                        final Point position = entriesByEntityId.get(entity.getEntityId()).getLastPosition();
+                        if (point.distanceSquared(position) <= squaredRange) query.accept(entity);
                     }
                 });
             });
