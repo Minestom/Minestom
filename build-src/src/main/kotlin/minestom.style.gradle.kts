@@ -18,6 +18,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "ObjectToString",
                 "UnusedMethod",
                 "UnusedVariable",
+                "UnnecessaryLambda",
                 "UnnecessarilyFullyQualified",
                 "NullArgumentForNonNullParameter",
                 "NullableConstructor",
