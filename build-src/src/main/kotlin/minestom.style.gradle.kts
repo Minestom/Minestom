@@ -21,6 +21,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "BadInstanceof",
                 "BooleanLiteral",
                 "BoxingComparator",
+                "ByteBufferBackingArray",
                 "ClassInitializationDeadlock",
                 "DefaultCharset",
                 "EffectivelyPrivate",
@@ -58,6 +59,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "UnnecessaryLambda",
                 "UnnecessaryParentheses",
                 "UnnecessarilyFullyQualified",
+                "UnnecessaryMethodReference",
                 "NullArgumentForNonNullParameter",
                 "NullableConstructor",
                 "NullableOnContainingClass",
@@ -74,9 +76,9 @@ tasks.withType<JavaCompile>().configureEach {
                 "InlineMeSuggester",
                 "EnumOrdinal",
                 "ImmutableEnumChecker",
-                "ReferenceEquality",
+                "ReferenceEquality", //TODO, likely needs to be fixed
                 "ExposedPrivateType",
-                "ArrayRecordComponent",
+                "ArrayRecordComponent", //TODO, likely needs to be fixed
         )
     }
 }

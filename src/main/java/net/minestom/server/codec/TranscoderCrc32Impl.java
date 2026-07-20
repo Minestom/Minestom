@@ -256,6 +256,7 @@ final class TranscoderCrc32Impl implements Transcoder<Integer> {
             this(new CRC32C(), ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN));
         }
 
+        @SuppressWarnings("ByteBufferBackingArray")
         private Hasher update(int bytes) {
             crc32.update(buffer.array(), 0, bytes);
             buffer.position(0);

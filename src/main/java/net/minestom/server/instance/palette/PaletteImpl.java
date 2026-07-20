@@ -617,6 +617,7 @@ final class PaletteImpl implements Palette {
     }
 
     /// Assumes {@link PaletteImpl#bitsPerEntry} != 0
+    @SuppressWarnings("UnnecessaryMethodReference")
     private void downsizeWithPalette(IntArrayList palette) {
         final byte bpe = this.bitsPerEntry;
         final byte newBpe = (byte) Math.max(MathUtils.bitsToRepresent(palette.size() - 1), minBitsPerEntry);
