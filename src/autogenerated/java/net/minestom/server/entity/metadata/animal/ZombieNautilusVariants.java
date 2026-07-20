@@ -9,7 +9,7 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface ZombieNautilusVariants permits ZombieNautilusVariant {
-    RegistryKey<ZombieNautilusVariant> WARM = RegistryKey.unsafeOf("warm");
-
     RegistryKey<ZombieNautilusVariant> TEMPERATE = RegistryKey.unsafeOf("temperate");
+
+    RegistryKey<ZombieNautilusVariant> WARM = RegistryKey.unsafeOf("warm");
 }

@@ -67,9 +67,9 @@ public interface EntityTypeKeys {
 
     RegistryKey<EntityType> COD = RegistryKey.unsafeOf("cod");
 
-    RegistryKey<EntityType> COPPER_GOLEM = RegistryKey.unsafeOf("copper_golem");
-
     RegistryKey<EntityType> COMMAND_BLOCK_MINECART = RegistryKey.unsafeOf("command_block_minecart");
+
+    RegistryKey<EntityType> COPPER_GOLEM = RegistryKey.unsafeOf("copper_golem");
 
     RegistryKey<EntityType> COW = RegistryKey.unsafeOf("cow");
 
@@ -93,15 +93,15 @@ public interface EntityTypeKeys {
 
     RegistryKey<EntityType> ELDER_GUARDIAN = RegistryKey.unsafeOf("elder_guardian");
 
-    RegistryKey<EntityType> ENDERMAN = RegistryKey.unsafeOf("enderman");
-
-    RegistryKey<EntityType> ENDERMITE = RegistryKey.unsafeOf("endermite");
+    RegistryKey<EntityType> END_CRYSTAL = RegistryKey.unsafeOf("end_crystal");
 
     RegistryKey<EntityType> ENDER_DRAGON = RegistryKey.unsafeOf("ender_dragon");
 
     RegistryKey<EntityType> ENDER_PEARL = RegistryKey.unsafeOf("ender_pearl");
 
-    RegistryKey<EntityType> END_CRYSTAL = RegistryKey.unsafeOf("end_crystal");
+    RegistryKey<EntityType> ENDERMAN = RegistryKey.unsafeOf("enderman");
+
+    RegistryKey<EntityType> ENDERMITE = RegistryKey.unsafeOf("endermite");
 
     RegistryKey<EntityType> EVOKER = RegistryKey.unsafeOf("evoker");
 
@@ -119,6 +119,8 @@ public interface EntityTypeKeys {
 
     RegistryKey<EntityType> FIREWORK_ROCKET = RegistryKey.unsafeOf("firework_rocket");
 
+    RegistryKey<EntityType> FISHING_BOBBER = RegistryKey.unsafeOf("fishing_bobber");
+
     RegistryKey<EntityType> FOX = RegistryKey.unsafeOf("fox");
 
     RegistryKey<EntityType> FROG = RegistryKey.unsafeOf("frog");
@@ -126,8 +128,6 @@ public interface EntityTypeKeys {
     RegistryKey<EntityType> FURNACE_MINECART = RegistryKey.unsafeOf("furnace_minecart");
 
     RegistryKey<EntityType> GHAST = RegistryKey.unsafeOf("ghast");
-
-    RegistryKey<EntityType> HAPPY_GHAST = RegistryKey.unsafeOf("happy_ghast");
 
     RegistryKey<EntityType> GIANT = RegistryKey.unsafeOf("giant");
 
@@ -138,6 +138,8 @@ public interface EntityTypeKeys {
     RegistryKey<EntityType> GOAT = RegistryKey.unsafeOf("goat");
 
     RegistryKey<EntityType> GUARDIAN = RegistryKey.unsafeOf("guardian");
+
+    RegistryKey<EntityType> HAPPY_GHAST = RegistryKey.unsafeOf("happy_ghast");
 
     RegistryKey<EntityType> HOGLIN = RegistryKey.unsafeOf("hoglin");
 
@@ -166,6 +168,8 @@ public interface EntityTypeKeys {
     RegistryKey<EntityType> LEASH_KNOT = RegistryKey.unsafeOf("leash_knot");
 
     RegistryKey<EntityType> LIGHTNING_BOLT = RegistryKey.unsafeOf("lightning_bolt");
+
+    RegistryKey<EntityType> LINGERING_POTION = RegistryKey.unsafeOf("lingering_potion");
 
     RegistryKey<EntityType> LLAMA = RegistryKey.unsafeOf("llama");
 
@@ -219,11 +223,9 @@ public interface EntityTypeKeys {
 
     RegistryKey<EntityType> PILLAGER = RegistryKey.unsafeOf("pillager");
 
+    RegistryKey<EntityType> PLAYER = RegistryKey.unsafeOf("player");
+
     RegistryKey<EntityType> POLAR_BEAR = RegistryKey.unsafeOf("polar_bear");
-
-    RegistryKey<EntityType> SPLASH_POTION = RegistryKey.unsafeOf("splash_potion");
-
-    RegistryKey<EntityType> LINGERING_POTION = RegistryKey.unsafeOf("lingering_potion");
 
     RegistryKey<EntityType> PUFFERFISH = RegistryKey.unsafeOf("pufferfish");
 
@@ -251,15 +253,17 @@ public interface EntityTypeKeys {
 
     RegistryKey<EntityType> SNIFFER = RegistryKey.unsafeOf("sniffer");
 
-    RegistryKey<EntityType> SNOWBALL = RegistryKey.unsafeOf("snowball");
-
     RegistryKey<EntityType> SNOW_GOLEM = RegistryKey.unsafeOf("snow_golem");
+
+    RegistryKey<EntityType> SNOWBALL = RegistryKey.unsafeOf("snowball");
 
     RegistryKey<EntityType> SPAWNER_MINECART = RegistryKey.unsafeOf("spawner_minecart");
 
     RegistryKey<EntityType> SPECTRAL_ARROW = RegistryKey.unsafeOf("spectral_arrow");
 
     RegistryKey<EntityType> SPIDER = RegistryKey.unsafeOf("spider");
+
+    RegistryKey<EntityType> SPLASH_POTION = RegistryKey.unsafeOf("splash_potion");
 
     RegistryKey<EntityType> SPRUCE_BOAT = RegistryKey.unsafeOf("spruce_boat");
 
@@ -322,8 +326,4 @@ public interface EntityTypeKeys {
     RegistryKey<EntityType> ZOMBIE_VILLAGER = RegistryKey.unsafeOf("zombie_villager");
 
     RegistryKey<EntityType> ZOMBIFIED_PIGLIN = RegistryKey.unsafeOf("zombified_piglin");
-
-    RegistryKey<EntityType> PLAYER = RegistryKey.unsafeOf("player");
-
-    RegistryKey<EntityType> FISHING_BOBBER = RegistryKey.unsafeOf("fishing_bobber");
 }

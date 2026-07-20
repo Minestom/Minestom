@@ -9,7 +9,7 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface WorldClocks permits WorldClock {
-    RegistryKey<WorldClock> THE_END = RegistryKey.unsafeOf("the_end");
-
     RegistryKey<WorldClock> OVERWORLD = RegistryKey.unsafeOf("overworld");
+
+    RegistryKey<WorldClock> THE_END = RegistryKey.unsafeOf("the_end");
 }

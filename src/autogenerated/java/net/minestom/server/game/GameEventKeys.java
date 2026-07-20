@@ -41,6 +41,8 @@ public interface GameEventKeys {
 
     RegistryKey<GameEvent> ELYTRA_GLIDE = RegistryKey.unsafeOf("elytra_glide");
 
+    RegistryKey<GameEvent> ENTITY_ACTION = RegistryKey.unsafeOf("entity_action");
+
     RegistryKey<GameEvent> ENTITY_DAMAGE = RegistryKey.unsafeOf("entity_damage");
 
     RegistryKey<GameEvent> ENTITY_DIE = RegistryKey.unsafeOf("entity_die");
@@ -52,8 +54,6 @@ public interface GameEventKeys {
     RegistryKey<GameEvent> ENTITY_MOUNT = RegistryKey.unsafeOf("entity_mount");
 
     RegistryKey<GameEvent> ENTITY_PLACE = RegistryKey.unsafeOf("entity_place");
-
-    RegistryKey<GameEvent> ENTITY_ACTION = RegistryKey.unsafeOf("entity_action");
 
     RegistryKey<GameEvent> EQUIP = RegistryKey.unsafeOf("equip");
 
@@ -87,23 +87,19 @@ public interface GameEventKeys {
 
     RegistryKey<GameEvent> PROJECTILE_SHOOT = RegistryKey.unsafeOf("projectile_shoot");
 
-    RegistryKey<GameEvent> SCULK_SENSOR_TENDRILS_CLICKING = RegistryKey.unsafeOf("sculk_sensor_tendrils_clicking");
-
-    RegistryKey<GameEvent> SHEAR = RegistryKey.unsafeOf("shear");
-
-    RegistryKey<GameEvent> SHRIEK = RegistryKey.unsafeOf("shriek");
-
-    RegistryKey<GameEvent> SPLASH = RegistryKey.unsafeOf("splash");
-
-    RegistryKey<GameEvent> STEP = RegistryKey.unsafeOf("step");
-
-    RegistryKey<GameEvent> SWIM = RegistryKey.unsafeOf("swim");
-
-    RegistryKey<GameEvent> TELEPORT = RegistryKey.unsafeOf("teleport");
-
-    RegistryKey<GameEvent> UNEQUIP = RegistryKey.unsafeOf("unequip");
-
     RegistryKey<GameEvent> RESONATE_1 = RegistryKey.unsafeOf("resonate_1");
+
+    RegistryKey<GameEvent> RESONATE_10 = RegistryKey.unsafeOf("resonate_10");
+
+    RegistryKey<GameEvent> RESONATE_11 = RegistryKey.unsafeOf("resonate_11");
+
+    RegistryKey<GameEvent> RESONATE_12 = RegistryKey.unsafeOf("resonate_12");
+
+    RegistryKey<GameEvent> RESONATE_13 = RegistryKey.unsafeOf("resonate_13");
+
+    RegistryKey<GameEvent> RESONATE_14 = RegistryKey.unsafeOf("resonate_14");
+
+    RegistryKey<GameEvent> RESONATE_15 = RegistryKey.unsafeOf("resonate_15");
 
     RegistryKey<GameEvent> RESONATE_2 = RegistryKey.unsafeOf("resonate_2");
 
@@ -121,15 +117,19 @@ public interface GameEventKeys {
 
     RegistryKey<GameEvent> RESONATE_9 = RegistryKey.unsafeOf("resonate_9");
 
-    RegistryKey<GameEvent> RESONATE_10 = RegistryKey.unsafeOf("resonate_10");
+    RegistryKey<GameEvent> SCULK_SENSOR_TENDRILS_CLICKING = RegistryKey.unsafeOf("sculk_sensor_tendrils_clicking");
 
-    RegistryKey<GameEvent> RESONATE_11 = RegistryKey.unsafeOf("resonate_11");
+    RegistryKey<GameEvent> SHEAR = RegistryKey.unsafeOf("shear");
 
-    RegistryKey<GameEvent> RESONATE_12 = RegistryKey.unsafeOf("resonate_12");
+    RegistryKey<GameEvent> SHRIEK = RegistryKey.unsafeOf("shriek");
 
-    RegistryKey<GameEvent> RESONATE_13 = RegistryKey.unsafeOf("resonate_13");
+    RegistryKey<GameEvent> SPLASH = RegistryKey.unsafeOf("splash");
 
-    RegistryKey<GameEvent> RESONATE_14 = RegistryKey.unsafeOf("resonate_14");
+    RegistryKey<GameEvent> STEP = RegistryKey.unsafeOf("step");
 
-    RegistryKey<GameEvent> RESONATE_15 = RegistryKey.unsafeOf("resonate_15");
+    RegistryKey<GameEvent> SWIM = RegistryKey.unsafeOf("swim");
+
+    RegistryKey<GameEvent> TELEPORT = RegistryKey.unsafeOf("teleport");
+
+    RegistryKey<GameEvent> UNEQUIP = RegistryKey.unsafeOf("unequip");
 }

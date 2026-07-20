@@ -13,11 +13,11 @@ import org.jetbrains.annotations.ApiStatus;
 public interface FluidKeys {
     RegistryKey<Fluid> EMPTY = RegistryKey.unsafeOf("empty");
 
-    RegistryKey<Fluid> FLOWING_WATER = RegistryKey.unsafeOf("flowing_water");
-
-    RegistryKey<Fluid> WATER = RegistryKey.unsafeOf("water");
-
     RegistryKey<Fluid> FLOWING_LAVA = RegistryKey.unsafeOf("flowing_lava");
 
+    RegistryKey<Fluid> FLOWING_WATER = RegistryKey.unsafeOf("flowing_water");
+
     RegistryKey<Fluid> LAVA = RegistryKey.unsafeOf("lava");
+
+    RegistryKey<Fluid> WATER = RegistryKey.unsafeOf("water");
 }

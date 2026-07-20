@@ -35,9 +35,9 @@ public interface AttributeKeys {
 
     RegistryKey<Attribute> CAMERA_DISTANCE = RegistryKey.unsafeOf("camera_distance");
 
-    RegistryKey<Attribute> EXPLOSION_KNOCKBACK_RESISTANCE = RegistryKey.unsafeOf("explosion_knockback_resistance");
-
     RegistryKey<Attribute> ENTITY_INTERACTION_RANGE = RegistryKey.unsafeOf("entity_interaction_range");
+
+    RegistryKey<Attribute> EXPLOSION_KNOCKBACK_RESISTANCE = RegistryKey.unsafeOf("explosion_knockback_resistance");
 
     RegistryKey<Attribute> FALL_DAMAGE_MULTIPLIER = RegistryKey.unsafeOf("fall_damage_multiplier");
 
@@ -87,7 +87,7 @@ public interface AttributeKeys {
 
     RegistryKey<Attribute> WATER_MOVEMENT_EFFICIENCY = RegistryKey.unsafeOf("water_movement_efficiency");
 
-    RegistryKey<Attribute> WAYPOINT_TRANSMIT_RANGE = RegistryKey.unsafeOf("waypoint_transmit_range");
-
     RegistryKey<Attribute> WAYPOINT_RECEIVE_RANGE = RegistryKey.unsafeOf("waypoint_receive_range");
+
+    RegistryKey<Attribute> WAYPOINT_TRANSMIT_RANGE = RegistryKey.unsafeOf("waypoint_transmit_range");
 }

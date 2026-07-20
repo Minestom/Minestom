@@ -1,11 +1,15 @@
 package net.minestom.codegen;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.palantir.javapoet.*;
 import org.jetbrains.annotations.ApiStatus;
 
 import javax.lang.model.element.Modifier;
+import java.util.Comparator;
+import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 record RegistryGenerator(Codegen codegen) {
 
@@ -19,7 +23,8 @@ record RegistryGenerator(Codegen codegen) {
                 typeClass,
                 ClassName.get(spec.packageName(), spec.generatedName()),
                 typeClass,
-                namespace -> CodeBlock.of("$T.get($T.$L)", loaderClass, keysClass, codegen.constantName(namespace))
+                namespace -> CodeBlock.of("$T.get($T.$L)", loaderClass, keysClass, codegen.constantName(namespace)),
+                FieldOrder.ID
         );
         generateTags(spec.key(), typeClass);
     }
@@ -32,7 +37,8 @@ record RegistryGenerator(Codegen codegen) {
                 typeClass,
                 ClassName.get(spec.packageName(), spec.generatedName()),
                 ParameterizedTypeName.get(registryKeyClass, typeClass),
-                namespace -> CodeBlock.of("$T.unsafeOf($S)", registryKeyClass, codegen.namespaceShort(namespace))
+                namespace -> CodeBlock.of("$T.unsafeOf($S)", registryKeyClass, codegen.namespaceShort(namespace)),
+                FieldOrder.NATURAL
         );
         generateTags(spec.key(), typeClass);
     }
@@ -42,7 +48,8 @@ record RegistryGenerator(Codegen codegen) {
         final TypeSpec.Builder constants = constantsBuilder(typeClass, generatedClass, publicKeys);
         addFields(codegen.objectResource(key), constants,
                 ParameterizedTypeName.get(registryKeyClass, typeClass),
-                namespace -> CodeBlock.of("$T.unsafeOf($S)", registryKeyClass, codegen.namespaceShort(namespace)));
+                namespace -> CodeBlock.of("$T.unsafeOf($S)", registryKeyClass, codegen.namespaceShort(namespace)),
+                FieldOrder.NATURAL);
         codegen.write(codegen.javaFile(generatedClass.packageName(), constants.build()));
     }
 
@@ -53,16 +60,18 @@ record RegistryGenerator(Codegen codegen) {
         final ClassName tagKeyClass = ClassName.get("net.minestom.server.registry", "TagKey");
         final ClassName generatedClass = ClassName.get(typeClass.packageName(), typeClass.simpleName() + "Tags");
         final TypeSpec.Builder constants = constantsBuilder(typeClass, generatedClass, true);
-        addFields(tags, constants, ParameterizedTypeName.get(tagKeyClass, typeClass),
-                namespace -> CodeBlock.of("$T.unsafeOf($S)", tagKeyClass, codegen.namespaceShort(namespace)));
+        final ParameterizedTypeName fieldType = ParameterizedTypeName.get(tagKeyClass, typeClass);
+        addFields(tags, constants, fieldType,
+                namespace -> CodeBlock.of("$T.unsafeOf($S)", tagKeyClass, codegen.namespaceShort(namespace)),
+                FieldOrder.NATURAL);
         codegen.write(codegen.javaFile(generatedClass.packageName(), constants.build()));
     }
 
     private void generateConstants(String key, ClassName permittedType, ClassName generatedClass,
-                                   TypeName fieldType, Function<String, CodeBlock> initializer) {
+                                   TypeName fieldType, Function<String, CodeBlock> initializer, FieldOrder fieldOrder) {
         JsonObject json = codegen.objectResource(key);
         TypeSpec.Builder constants = constantsBuilder(permittedType, generatedClass, false);
-        addFields(json, constants, fieldType, initializer);
+        addFields(json, constants, fieldType, initializer, fieldOrder);
         codegen.write(codegen.javaFile(generatedClass.packageName(), constants.build()));
     }
 
@@ -79,12 +88,28 @@ record RegistryGenerator(Codegen codegen) {
     }
 
     private void addFields(JsonObject json, TypeSpec.Builder constants, TypeName fieldType,
-                           Function<String, CodeBlock> initializer) {
-        json.keySet().forEach(namespace -> constants.addField(
+                           Function<String, CodeBlock> initializer, FieldOrder fieldOrder) {
+        Stream<String> namespaces = switch (fieldOrder) {
+            case NATURAL -> json.keySet().stream().sorted(Comparator.naturalOrder());
+            case ID -> json.entrySet().stream()
+                    .sorted(Comparator.<Map.Entry<String, JsonElement>>comparingInt(entry -> {
+                                final JsonElement id = entry.getValue().getAsJsonObject().get("id");
+                                // Block sound types are data and do not have protocol IDs.
+                                return id != null ? id.getAsInt() : Integer.MAX_VALUE;
+                            })
+                            .thenComparing(Map.Entry::getKey))
+                    .map(Map.Entry::getKey);
+        };
+        namespaces.forEach(namespace -> constants.addField(
                 FieldSpec.builder(fieldType, codegen.constantName(namespace))
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                         .initializer(initializer.apply(namespace))
                         .build()
         ));
+    }
+
+    private enum FieldOrder {
+        NATURAL,
+        ID
     }
 }

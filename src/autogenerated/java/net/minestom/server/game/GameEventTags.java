@@ -11,13 +11,13 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("unused")
 @ApiStatus.NonExtendable
 public interface GameEventTags {
-    TagKey<GameEvent> SHRIEKER_CAN_LISTEN = TagKey.unsafeOf("shrieker_can_listen");
+    TagKey<GameEvent> ALLAY_CAN_LISTEN = TagKey.unsafeOf("allay_can_listen");
 
     TagKey<GameEvent> IGNORE_VIBRATIONS_SNEAKING = TagKey.unsafeOf("ignore_vibrations_sneaking");
 
-    TagKey<GameEvent> VIBRATIONS = TagKey.unsafeOf("vibrations");
+    TagKey<GameEvent> SHRIEKER_CAN_LISTEN = TagKey.unsafeOf("shrieker_can_listen");
 
-    TagKey<GameEvent> ALLAY_CAN_LISTEN = TagKey.unsafeOf("allay_can_listen");
+    TagKey<GameEvent> VIBRATIONS = TagKey.unsafeOf("vibrations");
 
     TagKey<GameEvent> WARDEN_CAN_LISTEN = TagKey.unsafeOf("warden_can_listen");
 }
