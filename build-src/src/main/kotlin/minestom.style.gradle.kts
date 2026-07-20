@@ -14,6 +14,7 @@ tasks.withType<JavaCompile>().configureEach {
 
         error(
                 "BadImport",
+                "BooleanLiteral",
                 "BoxingComparator",
                 "ClassInitializationDeadlock",
                 "DefaultCharset",
