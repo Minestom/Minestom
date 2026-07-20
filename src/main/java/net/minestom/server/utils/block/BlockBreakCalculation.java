@@ -145,7 +145,7 @@ public class BlockBreakCalculation {
         int level;
         try {
             level = Integer.parseInt(levelString);
-        } catch (Throwable ignored) {
+        } catch (Throwable _) {
             return 1;
         }
         if (level >= 8) {

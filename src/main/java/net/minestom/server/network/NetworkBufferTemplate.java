@@ -1,7 +1,6 @@
 package net.minestom.server.network;
 
 import net.minestom.server.ServerFlag;
-import net.minestom.server.network.NetworkBuffer.Type;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Objects;
@@ -146,7 +145,7 @@ public final class NetworkBufferTemplate {
      * @param <R>   the type of the value
      * @return the new template
      */
-    public static <R extends @UnknownNullability Object> Type<R> template(R value) {
+    public static <R extends @UnknownNullability Object> NetworkBuffer.Type<R> template(R value) {
         return new NetworkBufferTypeImpl<>() {
             @Override
             public void write(NetworkBuffer buffer, R value) {
@@ -166,7 +165,7 @@ public final class NetworkBufferTemplate {
      * @param <R>      the type of the value
      * @return the new template
      */
-    public static <R extends @UnknownNullability Object> Type<R> template(Supplier<? extends R> supplier) {
+    public static <R extends @UnknownNullability Object> NetworkBuffer.Type<R> template(Supplier<? extends R> supplier) {
         Objects.requireNonNull(supplier, "supplier");
         return new NetworkBufferTypeImpl<>() {
             @Override
@@ -183,14 +182,14 @@ public final class NetworkBufferTemplate {
     /**
      * Creates a template with one parameter
      *
-     * @param p1   the first parameter {@link Type}
+     * @param p1   the first parameter {@link NetworkBuffer.Type}
      * @param g1   the first parameter getter
      * @param ctor the constructor for {@link R}
      * @param <P1> the type of the first parameter
      * @param <R>  the type of the value
      * @return the new template
      */
-    public static <P1 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(Type<P1> p1, Function<? super R, ? extends P1> g1, F1<? super P1, ? extends R> ctor) {
+    public static <P1 extends @UnknownNullability Object, R extends @UnknownNullability Object> NetworkBuffer.Type<R> template(NetworkBuffer.Type<P1> p1, Function<? super R, ? extends P1> g1, F1<? super P1, ? extends R> ctor) {
         if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, ctor);
         Objects.requireNonNull(p1, "p1");
         Objects.requireNonNull(g1, "g1");
@@ -211,9 +210,9 @@ public final class NetworkBufferTemplate {
     /**
      * Creates a template with two parameters
      *
-     * @param p1   the first parameter {@link Type}
+     * @param p1   the first parameter {@link NetworkBuffer.Type}
      * @param g1   the first parameter getter
-     * @param p2   the second parameter {@link Type}
+     * @param p2   the second parameter {@link NetworkBuffer.Type}
      * @param g2   the second parameter getter
      * @param ctor the constructor for {@link R}
      * @param <P1> the type of the first parameter
@@ -221,8 +220,8 @@ public final class NetworkBufferTemplate {
      * @param <R>  the type of the value
      * @return the new template
      */
-    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, R extends @UnknownNullability Object> NetworkBuffer.Type<R> template(
+            NetworkBuffer.Type<P1> p1, Function<? super R, ? extends P1> g1, NetworkBuffer.Type<P2> p2, Function<? super R, ? extends P2> g2,
             F2<? super P1, ? super P2, ? extends R> ctor
     ) {
         if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, ctor);
@@ -248,11 +247,11 @@ public final class NetworkBufferTemplate {
     /**
      * Creates a template with three parameters
      *
-     * @param p1   the first parameter {@link Type}
+     * @param p1   the first parameter {@link NetworkBuffer.Type}
      * @param g1   the first parameter getter
-     * @param p2   the second parameter {@link Type}
+     * @param p2   the second parameter {@link NetworkBuffer.Type}
      * @param g2   the second parameter getter
-     * @param p3   the third parameter {@link Type}
+     * @param p3   the third parameter {@link NetworkBuffer.Type}
      * @param g3   the third parameter getter
      * @param ctor the constructor for {@link R}
      * @param <P1> the type of the first parameter
@@ -261,9 +260,9 @@ public final class NetworkBufferTemplate {
      * @param <R>  the type of the value
      * @return the new template
      */
-    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, F3<? super P1, ? super P2, ? super P3, ? extends R> ctor
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, R extends @UnknownNullability Object> NetworkBuffer.Type<R> template(
+            NetworkBuffer.Type<P1> p1, Function<? super R, ? extends P1> g1, NetworkBuffer.Type<P2> p2, Function<? super R, ? extends P2> g2,
+            NetworkBuffer.Type<P3> p3, Function<? super R, ? extends P3> g3, F3<? super P1, ? super P2, ? super P3, ? extends R> ctor
     ) {
         if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, ctor);
         Objects.requireNonNull(p1, "p1");
@@ -291,13 +290,13 @@ public final class NetworkBufferTemplate {
     /**
      * Creates a template with four parameters
      *
-     * @param p1   the first parameter {@link Type}
+     * @param p1   the first parameter {@link NetworkBuffer.Type}
      * @param g1   the first parameter getter
-     * @param p2   the second parameter {@link Type}
+     * @param p2   the second parameter {@link NetworkBuffer.Type}
      * @param g2   the second parameter getter
-     * @param p3   the third parameter {@link Type}
+     * @param p3   the third parameter {@link NetworkBuffer.Type}
      * @param g3   the third parameter getter
-     * @param p4   the fourth parameter {@link Type}
+     * @param p4   the fourth parameter {@link NetworkBuffer.Type}
      * @param g4   the fourth parameter getter
      * @param ctor the constructor for {@link R}
      * @param <P1> the type of the first parameter
@@ -307,9 +306,9 @@ public final class NetworkBufferTemplate {
      * @param <R>  the type of the value
      * @return the new template
      */
-    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, R extends @UnknownNullability Object> NetworkBuffer.Type<R> template(
+            NetworkBuffer.Type<P1> p1, Function<? super R, ? extends P1> g1, NetworkBuffer.Type<P2> p2, Function<? super R, ? extends P2> g2,
+            NetworkBuffer.Type<P3> p3, Function<? super R, ? extends P3> g3, NetworkBuffer.Type<P4> p4, Function<? super R, ? extends P4> g4,
             F4<? super P1, ? super P2, ? super P3, ? super P4, ? extends R> ctor
     ) {
         if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, ctor);
@@ -344,15 +343,15 @@ public final class NetworkBufferTemplate {
     /**
      * Creates a template with five parameters
      *
-     * @param p1   the first parameter {@link Type}
+     * @param p1   the first parameter {@link NetworkBuffer.Type}
      * @param g1   the first parameter getter
-     * @param p2   the second parameter {@link Type}
+     * @param p2   the second parameter {@link NetworkBuffer.Type}
      * @param g2   the second parameter getter
-     * @param p3   the third parameter {@link Type}
+     * @param p3   the third parameter {@link NetworkBuffer.Type}
      * @param g3   the third parameter getter
-     * @param p4   the fourth parameter {@link Type}
+     * @param p4   the fourth parameter {@link NetworkBuffer.Type}
      * @param g4   the fourth parameter getter
-     * @param p5   the fifth parameter {@link Type}
+     * @param p5   the fifth parameter {@link NetworkBuffer.Type}
      * @param g5   the fifth parameter getter
      * @param ctor the constructor for {@link R}
      * @param <P1> the type of the first parameter
@@ -363,10 +362,10 @@ public final class NetworkBufferTemplate {
      * @param <R>  the type of the value
      * @return the new template
      */
-    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, F5<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? extends R> ctor
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, R extends @UnknownNullability Object> NetworkBuffer.Type<R> template(
+            NetworkBuffer.Type<P1> p1, Function<? super R, ? extends P1> g1, NetworkBuffer.Type<P2> p2, Function<? super R, ? extends P2> g2,
+            NetworkBuffer.Type<P3> p3, Function<? super R, ? extends P3> g3, NetworkBuffer.Type<P4> p4, Function<? super R, ? extends P4> g4,
+            NetworkBuffer.Type<P5> p5, Function<? super R, ? extends P5> g5, F5<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? extends R> ctor
     ) {
         if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, ctor);
         Objects.requireNonNull(p1, "p1");
@@ -404,17 +403,17 @@ public final class NetworkBufferTemplate {
     /**
      * Creates a template with six parameters
      *
-     * @param p1   the first parameter {@link Type}
+     * @param p1   the first parameter {@link NetworkBuffer.Type}
      * @param g1   the first parameter getter
-     * @param p2   the second parameter {@link Type}
+     * @param p2   the second parameter {@link NetworkBuffer.Type}
      * @param g2   the second parameter getter
-     * @param p3   the third parameter {@link Type}
+     * @param p3   the third parameter {@link NetworkBuffer.Type}
      * @param g3   the third parameter getter
-     * @param p4   the fourth parameter {@link Type}
+     * @param p4   the fourth parameter {@link NetworkBuffer.Type}
      * @param g4   the fourth parameter getter
-     * @param p5   the fifth parameter {@link Type}
+     * @param p5   the fifth parameter {@link NetworkBuffer.Type}
      * @param g5   the fifth parameter getter
-     * @param p6   the sixth parameter {@link Type}
+     * @param p6   the sixth parameter {@link NetworkBuffer.Type}
      * @param g6   the sixth parameter getter
      * @param ctor the constructor for {@link R}
      * @param <P1> the type of the first parameter
@@ -426,10 +425,10 @@ public final class NetworkBufferTemplate {
      * @param <R>  the type of the value
      * @return the new template
      */
-    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, R extends @UnknownNullability Object> NetworkBuffer.Type<R> template(
+            NetworkBuffer.Type<P1> p1, Function<? super R, ? extends P1> g1, NetworkBuffer.Type<P2> p2, Function<? super R, ? extends P2> g2,
+            NetworkBuffer.Type<P3> p3, Function<? super R, ? extends P3> g3, NetworkBuffer.Type<P4> p4, Function<? super R, ? extends P4> g4,
+            NetworkBuffer.Type<P5> p5, Function<? super R, ? extends P5> g5, NetworkBuffer.Type<P6> p6, Function<? super R, ? extends P6> g6,
             F6<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? extends R> ctor
     ) {
         if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, ctor);
@@ -471,19 +470,19 @@ public final class NetworkBufferTemplate {
     /**
      * Creates a template with seven parameters
      *
-     * @param p1   the first parameter {@link Type}
+     * @param p1   the first parameter {@link NetworkBuffer.Type}
      * @param g1   the first parameter getter
-     * @param p2   the second parameter {@link Type}
+     * @param p2   the second parameter {@link NetworkBuffer.Type}
      * @param g2   the second parameter getter
-     * @param p3   the third parameter {@link Type}
+     * @param p3   the third parameter {@link NetworkBuffer.Type}
      * @param g3   the third parameter getter
-     * @param p4   the fourth parameter {@link Type}
+     * @param p4   the fourth parameter {@link NetworkBuffer.Type}
      * @param g4   the fourth parameter getter
-     * @param p5   the fifth parameter {@link Type}
+     * @param p5   the fifth parameter {@link NetworkBuffer.Type}
      * @param g5   the fifth parameter getter
-     * @param p6   the sixth parameter {@link Type}
+     * @param p6   the sixth parameter {@link NetworkBuffer.Type}
      * @param g6   the sixth parameter getter
-     * @param p7   the seventh parameter {@link Type}
+     * @param p7   the seventh parameter {@link NetworkBuffer.Type}
      * @param g7   the seventh parameter getter
      * @param ctor the constructor for {@link R}
      * @param <P1> the type of the first parameter
@@ -496,11 +495,11 @@ public final class NetworkBufferTemplate {
      * @param <R>  the type of the value
      * @return the new template
      */
-    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, F7<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? extends R> ctor
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, R extends @UnknownNullability Object> NetworkBuffer.Type<R> template(
+            NetworkBuffer.Type<P1> p1, Function<? super R, ? extends P1> g1, NetworkBuffer.Type<P2> p2, Function<? super R, ? extends P2> g2,
+            NetworkBuffer.Type<P3> p3, Function<? super R, ? extends P3> g3, NetworkBuffer.Type<P4> p4, Function<? super R, ? extends P4> g4,
+            NetworkBuffer.Type<P5> p5, Function<? super R, ? extends P5> g5, NetworkBuffer.Type<P6> p6, Function<? super R, ? extends P6> g6,
+            NetworkBuffer.Type<P7> p7, Function<? super R, ? extends P7> g7, F7<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? extends R> ctor
     ) {
         if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, ctor);
         Objects.requireNonNull(p1, "p1");
@@ -545,21 +544,21 @@ public final class NetworkBufferTemplate {
     /**
      * Creates a template with eight parameters
      *
-     * @param p1   the first parameter {@link Type}
+     * @param p1   the first parameter {@link NetworkBuffer.Type}
      * @param g1   the first parameter getter
-     * @param p2   the second parameter {@link Type}
+     * @param p2   the second parameter {@link NetworkBuffer.Type}
      * @param g2   the second parameter getter
-     * @param p3   the third parameter {@link Type}
+     * @param p3   the third parameter {@link NetworkBuffer.Type}
      * @param g3   the third parameter getter
-     * @param p4   the fourth parameter {@link Type}
+     * @param p4   the fourth parameter {@link NetworkBuffer.Type}
      * @param g4   the fourth parameter getter
-     * @param p5   the fifth parameter {@link Type}
+     * @param p5   the fifth parameter {@link NetworkBuffer.Type}
      * @param g5   the fifth parameter getter
-     * @param p6   the sixth parameter {@link Type}
+     * @param p6   the sixth parameter {@link NetworkBuffer.Type}
      * @param g6   the sixth parameter getter
-     * @param p7   the seventh parameter {@link Type}
+     * @param p7   the seventh parameter {@link NetworkBuffer.Type}
      * @param g7   the seventh parameter getter
-     * @param p8   the eighth parameter {@link Type}
+     * @param p8   the eighth parameter {@link NetworkBuffer.Type}
      * @param g8   the eighth parameter getter
      * @param ctor the constructor for {@link R}
      * @param <P1> the type of the first parameter
@@ -573,11 +572,11 @@ public final class NetworkBufferTemplate {
      * @param <R>  the type of the value
      * @return the new template
      */
-    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, R extends @UnknownNullability Object> NetworkBuffer.Type<R> template(
+            NetworkBuffer.Type<P1> p1, Function<? super R, ? extends P1> g1, NetworkBuffer.Type<P2> p2, Function<? super R, ? extends P2> g2,
+            NetworkBuffer.Type<P3> p3, Function<? super R, ? extends P3> g3, NetworkBuffer.Type<P4> p4, Function<? super R, ? extends P4> g4,
+            NetworkBuffer.Type<P5> p5, Function<? super R, ? extends P5> g5, NetworkBuffer.Type<P6> p6, Function<? super R, ? extends P6> g6,
+            NetworkBuffer.Type<P7> p7, Function<? super R, ? extends P7> g7, NetworkBuffer.Type<P8> p8, Function<? super R, ? extends P8> g8,
             F8<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? extends R> ctor
     ) {
         if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, ctor);
@@ -626,23 +625,23 @@ public final class NetworkBufferTemplate {
     /**
      * Creates a template with nine parameters
      *
-     * @param p1   the first parameter {@link Type}
+     * @param p1   the first parameter {@link NetworkBuffer.Type}
      * @param g1   the first parameter getter
-     * @param p2   the second parameter {@link Type}
+     * @param p2   the second parameter {@link NetworkBuffer.Type}
      * @param g2   the second parameter getter
-     * @param p3   the third parameter {@link Type}
+     * @param p3   the third parameter {@link NetworkBuffer.Type}
      * @param g3   the third parameter getter
-     * @param p4   the fourth parameter {@link Type}
+     * @param p4   the fourth parameter {@link NetworkBuffer.Type}
      * @param g4   the fourth parameter getter
-     * @param p5   the fifth parameter {@link Type}
+     * @param p5   the fifth parameter {@link NetworkBuffer.Type}
      * @param g5   the fifth parameter getter
-     * @param p6   the sixth parameter {@link Type}
+     * @param p6   the sixth parameter {@link NetworkBuffer.Type}
      * @param g6   the sixth parameter getter
-     * @param p7   the seventh parameter {@link Type}
+     * @param p7   the seventh parameter {@link NetworkBuffer.Type}
      * @param g7   the seventh parameter getter
-     * @param p8   the eighth parameter {@link Type}
+     * @param p8   the eighth parameter {@link NetworkBuffer.Type}
      * @param g8   the eighth parameter getter
-     * @param p9   the ninth parameter {@link Type}
+     * @param p9   the ninth parameter {@link NetworkBuffer.Type}
      * @param g9   the ninth parameter getter
      * @param ctor the constructor for {@link R}
      * @param <P1> the type of the first parameter
@@ -657,12 +656,12 @@ public final class NetworkBufferTemplate {
      * @param <R>  the type of the value
      * @return the new template
      */
-    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
-            Type<P9> p9, Function<? super R, ? extends P9> g9, F9<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? extends R> ctor
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, R extends @UnknownNullability Object> NetworkBuffer.Type<R> template(
+            NetworkBuffer.Type<P1> p1, Function<? super R, ? extends P1> g1, NetworkBuffer.Type<P2> p2, Function<? super R, ? extends P2> g2,
+            NetworkBuffer.Type<P3> p3, Function<? super R, ? extends P3> g3, NetworkBuffer.Type<P4> p4, Function<? super R, ? extends P4> g4,
+            NetworkBuffer.Type<P5> p5, Function<? super R, ? extends P5> g5, NetworkBuffer.Type<P6> p6, Function<? super R, ? extends P6> g6,
+            NetworkBuffer.Type<P7> p7, Function<? super R, ? extends P7> g7, NetworkBuffer.Type<P8> p8, Function<? super R, ? extends P8> g8,
+            NetworkBuffer.Type<P9> p9, Function<? super R, ? extends P9> g9, F9<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? extends R> ctor
     ) {
         if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, ctor);
         Objects.requireNonNull(p1, "p1");
@@ -714,25 +713,25 @@ public final class NetworkBufferTemplate {
     /**
      * Creates a template with ten parameters
      *
-     * @param p1    the first parameter {@link Type}
+     * @param p1    the first parameter {@link NetworkBuffer.Type}
      * @param g1    the first parameter getter
-     * @param p2    the second parameter {@link Type}
+     * @param p2    the second parameter {@link NetworkBuffer.Type}
      * @param g2    the second parameter getter
-     * @param p3    the third parameter {@link Type}
+     * @param p3    the third parameter {@link NetworkBuffer.Type}
      * @param g3    the third parameter getter
-     * @param p4    the fourth parameter {@link Type}
+     * @param p4    the fourth parameter {@link NetworkBuffer.Type}
      * @param g4    the fourth parameter getter
-     * @param p5    the fifth parameter {@link Type}
+     * @param p5    the fifth parameter {@link NetworkBuffer.Type}
      * @param g5    the fifth parameter getter
-     * @param p6    the sixth parameter {@link Type}
+     * @param p6    the sixth parameter {@link NetworkBuffer.Type}
      * @param g6    the sixth parameter getter
-     * @param p7    the seventh parameter {@link Type}
+     * @param p7    the seventh parameter {@link NetworkBuffer.Type}
      * @param g7    the seventh parameter getter
-     * @param p8    the eighth parameter {@link Type}
+     * @param p8    the eighth parameter {@link NetworkBuffer.Type}
      * @param g8    the eighth parameter getter
-     * @param p9    the ninth parameter {@link Type}
+     * @param p9    the ninth parameter {@link NetworkBuffer.Type}
      * @param g9    the ninth parameter getter
-     * @param p10   the tenth parameter {@link Type}
+     * @param p10   the tenth parameter {@link NetworkBuffer.Type}
      * @param g10   the tenth parameter getter
      * @param ctor  the constructor for {@link R}
      * @param <P1>  the type of the first parameter
@@ -748,12 +747,12 @@ public final class NetworkBufferTemplate {
      * @param <R>   the type of the value
      * @return the new template
      */
-    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
-            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, R extends @UnknownNullability Object> NetworkBuffer.Type<R> template(
+            NetworkBuffer.Type<P1> p1, Function<? super R, ? extends P1> g1, NetworkBuffer.Type<P2> p2, Function<? super R, ? extends P2> g2,
+            NetworkBuffer.Type<P3> p3, Function<? super R, ? extends P3> g3, NetworkBuffer.Type<P4> p4, Function<? super R, ? extends P4> g4,
+            NetworkBuffer.Type<P5> p5, Function<? super R, ? extends P5> g5, NetworkBuffer.Type<P6> p6, Function<? super R, ? extends P6> g6,
+            NetworkBuffer.Type<P7> p7, Function<? super R, ? extends P7> g7, NetworkBuffer.Type<P8> p8, Function<? super R, ? extends P8> g8,
+            NetworkBuffer.Type<P9> p9, Function<? super R, ? extends P9> g9, NetworkBuffer.Type<P10> p10, Function<? super R, ? extends P10> g10,
             F10<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? extends R> ctor
     ) {
         if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, ctor);
@@ -809,27 +808,27 @@ public final class NetworkBufferTemplate {
     /**
      * Creates a template with eleven parameters
      *
-     * @param p1    the first parameter {@link Type}
+     * @param p1    the first parameter {@link NetworkBuffer.Type}
      * @param g1    the first parameter getter
-     * @param p2    the second parameter {@link Type}
+     * @param p2    the second parameter {@link NetworkBuffer.Type}
      * @param g2    the second parameter getter
-     * @param p3    the third parameter {@link Type}
+     * @param p3    the third parameter {@link NetworkBuffer.Type}
      * @param g3    the third parameter getter
-     * @param p4    the fourth parameter {@link Type}
+     * @param p4    the fourth parameter {@link NetworkBuffer.Type}
      * @param g4    the fourth parameter getter
-     * @param p5    the fifth parameter {@link Type}
+     * @param p5    the fifth parameter {@link NetworkBuffer.Type}
      * @param g5    the fifth parameter getter
-     * @param p6    the sixth parameter {@link Type}
+     * @param p6    the sixth parameter {@link NetworkBuffer.Type}
      * @param g6    the sixth parameter getter
-     * @param p7    the seventh parameter {@link Type}
+     * @param p7    the seventh parameter {@link NetworkBuffer.Type}
      * @param g7    the seventh parameter getter
-     * @param p8    the eighth parameter {@link Type}
+     * @param p8    the eighth parameter {@link NetworkBuffer.Type}
      * @param g8    the eighth parameter getter
-     * @param p9    the ninth parameter {@link Type}
+     * @param p9    the ninth parameter {@link NetworkBuffer.Type}
      * @param g9    the ninth parameter getter
-     * @param p10   the tenth parameter {@link Type}
+     * @param p10   the tenth parameter {@link NetworkBuffer.Type}
      * @param g10   the tenth parameter getter
-     * @param p11   the eleventh parameter {@link Type}
+     * @param p11   the eleventh parameter {@link NetworkBuffer.Type}
      * @param g11   the eleventh parameter getter
      * @param ctor  the constructor for {@link R}
      * @param <P1>  the type of the first parameter
@@ -846,13 +845,13 @@ public final class NetworkBufferTemplate {
      * @param <R>   the type of the value
      * @return the new template
      */
-    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
-            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
-            Type<P11> p11, Function<? super R, ? extends P11> g11, F11<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? extends R> ctor
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, R extends @UnknownNullability Object> NetworkBuffer.Type<R> template(
+            NetworkBuffer.Type<P1> p1, Function<? super R, ? extends P1> g1, NetworkBuffer.Type<P2> p2, Function<? super R, ? extends P2> g2,
+            NetworkBuffer.Type<P3> p3, Function<? super R, ? extends P3> g3, NetworkBuffer.Type<P4> p4, Function<? super R, ? extends P4> g4,
+            NetworkBuffer.Type<P5> p5, Function<? super R, ? extends P5> g5, NetworkBuffer.Type<P6> p6, Function<? super R, ? extends P6> g6,
+            NetworkBuffer.Type<P7> p7, Function<? super R, ? extends P7> g7, NetworkBuffer.Type<P8> p8, Function<? super R, ? extends P8> g8,
+            NetworkBuffer.Type<P9> p9, Function<? super R, ? extends P9> g9, NetworkBuffer.Type<P10> p10, Function<? super R, ? extends P10> g10,
+            NetworkBuffer.Type<P11> p11, Function<? super R, ? extends P11> g11, F11<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? extends R> ctor
     ) {
         if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, ctor);
         Objects.requireNonNull(p1, "p1");
@@ -911,29 +910,29 @@ public final class NetworkBufferTemplate {
     /**
      * Creates a template with twelve parameters
      *
-     * @param p1    the first parameter {@link Type}
+     * @param p1    the first parameter {@link NetworkBuffer.Type}
      * @param g1    the first parameter getter
-     * @param p2    the second parameter {@link Type}
+     * @param p2    the second parameter {@link NetworkBuffer.Type}
      * @param g2    the second parameter getter
-     * @param p3    the third parameter {@link Type}
+     * @param p3    the third parameter {@link NetworkBuffer.Type}
      * @param g3    the third parameter getter
-     * @param p4    the fourth parameter {@link Type}
+     * @param p4    the fourth parameter {@link NetworkBuffer.Type}
      * @param g4    the fourth parameter getter
-     * @param p5    the fifth parameter {@link Type}
+     * @param p5    the fifth parameter {@link NetworkBuffer.Type}
      * @param g5    the fifth parameter getter
-     * @param p6    the sixth parameter {@link Type}
+     * @param p6    the sixth parameter {@link NetworkBuffer.Type}
      * @param g6    the sixth parameter getter
-     * @param p7    the seventh parameter {@link Type}
+     * @param p7    the seventh parameter {@link NetworkBuffer.Type}
      * @param g7    the seventh parameter getter
-     * @param p8    the eighth parameter {@link Type}
+     * @param p8    the eighth parameter {@link NetworkBuffer.Type}
      * @param g8    the eighth parameter getter
-     * @param p9    the ninth parameter {@link Type}
+     * @param p9    the ninth parameter {@link NetworkBuffer.Type}
      * @param g9    the ninth parameter getter
-     * @param p10   the tenth parameter {@link Type}
+     * @param p10   the tenth parameter {@link NetworkBuffer.Type}
      * @param g10   the tenth parameter getter
-     * @param p11   the eleventh parameter {@link Type}
+     * @param p11   the eleventh parameter {@link NetworkBuffer.Type}
      * @param g11   the eleventh parameter getter
-     * @param p12   the twelfth parameter {@link Type}
+     * @param p12   the twelfth parameter {@link NetworkBuffer.Type}
      * @param g12   the twelfth parameter getter
      * @param ctor  the constructor for {@link R}
      * @param <P1>  the type of the first parameter
@@ -951,13 +950,13 @@ public final class NetworkBufferTemplate {
      * @param <R>   the type of the value
      * @return the new template
      */
-    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
-            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
-            Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12, F12<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? extends R> ctor
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, R extends @UnknownNullability Object> NetworkBuffer.Type<R> template(
+            NetworkBuffer.Type<P1> p1, Function<? super R, ? extends P1> g1, NetworkBuffer.Type<P2> p2, Function<? super R, ? extends P2> g2,
+            NetworkBuffer.Type<P3> p3, Function<? super R, ? extends P3> g3, NetworkBuffer.Type<P4> p4, Function<? super R, ? extends P4> g4,
+            NetworkBuffer.Type<P5> p5, Function<? super R, ? extends P5> g5, NetworkBuffer.Type<P6> p6, Function<? super R, ? extends P6> g6,
+            NetworkBuffer.Type<P7> p7, Function<? super R, ? extends P7> g7, NetworkBuffer.Type<P8> p8, Function<? super R, ? extends P8> g8,
+            NetworkBuffer.Type<P9> p9, Function<? super R, ? extends P9> g9, NetworkBuffer.Type<P10> p10, Function<? super R, ? extends P10> g10,
+            NetworkBuffer.Type<P11> p11, Function<? super R, ? extends P11> g11, NetworkBuffer.Type<P12> p12, Function<? super R, ? extends P12> g12, F12<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? extends R> ctor
     ) {
         if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, p12, g12, ctor);
         Objects.requireNonNull(p1, "p1");
@@ -1019,31 +1018,31 @@ public final class NetworkBufferTemplate {
     /**
      * Creates a template with thirteen parameters
      *
-     * @param p1    the first parameter {@link Type}
+     * @param p1    the first parameter {@link NetworkBuffer.Type}
      * @param g1    the first parameter getter
-     * @param p2    the second parameter {@link Type}
+     * @param p2    the second parameter {@link NetworkBuffer.Type}
      * @param g2    the second parameter getter
-     * @param p3    the third parameter {@link Type}
+     * @param p3    the third parameter {@link NetworkBuffer.Type}
      * @param g3    the third parameter getter
-     * @param p4    the fourth parameter {@link Type}
+     * @param p4    the fourth parameter {@link NetworkBuffer.Type}
      * @param g4    the fourth parameter getter
-     * @param p5    the fifth parameter {@link Type}
+     * @param p5    the fifth parameter {@link NetworkBuffer.Type}
      * @param g5    the fifth parameter getter
-     * @param p6    the sixth parameter {@link Type}
+     * @param p6    the sixth parameter {@link NetworkBuffer.Type}
      * @param g6    the sixth parameter getter
-     * @param p7    the seventh parameter {@link Type}
+     * @param p7    the seventh parameter {@link NetworkBuffer.Type}
      * @param g7    the seventh parameter getter
-     * @param p8    the eighth parameter {@link Type}
+     * @param p8    the eighth parameter {@link NetworkBuffer.Type}
      * @param g8    the eighth parameter getter
-     * @param p9    the ninth parameter {@link Type}
+     * @param p9    the ninth parameter {@link NetworkBuffer.Type}
      * @param g9    the ninth parameter getter
-     * @param p10   the tenth parameter {@link Type}
+     * @param p10   the tenth parameter {@link NetworkBuffer.Type}
      * @param g10   the tenth parameter getter
-     * @param p11   the eleventh parameter {@link Type}
+     * @param p11   the eleventh parameter {@link NetworkBuffer.Type}
      * @param g11   the eleventh parameter getter
-     * @param p12   the twelfth parameter {@link Type}
+     * @param p12   the twelfth parameter {@link NetworkBuffer.Type}
      * @param g12   the twelfth parameter getter
-     * @param p13   the thirteenth parameter {@link Type}
+     * @param p13   the thirteenth parameter {@link NetworkBuffer.Type}
      * @param g13   the thirteenth parameter getter
      * @param ctor  the constructor for {@link R}
      * @param <P1>  the type of the first parameter
@@ -1062,14 +1061,14 @@ public final class NetworkBufferTemplate {
      * @param <R>   the type of the value
      * @return the new template
      */
-    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
-            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
-            Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12,
-            Type<P13> p13, Function<? super R, ? extends P13> g13,
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, R extends @UnknownNullability Object> NetworkBuffer.Type<R> template(
+            NetworkBuffer.Type<P1> p1, Function<? super R, ? extends P1> g1, NetworkBuffer.Type<P2> p2, Function<? super R, ? extends P2> g2,
+            NetworkBuffer.Type<P3> p3, Function<? super R, ? extends P3> g3, NetworkBuffer.Type<P4> p4, Function<? super R, ? extends P4> g4,
+            NetworkBuffer.Type<P5> p5, Function<? super R, ? extends P5> g5, NetworkBuffer.Type<P6> p6, Function<? super R, ? extends P6> g6,
+            NetworkBuffer.Type<P7> p7, Function<? super R, ? extends P7> g7, NetworkBuffer.Type<P8> p8, Function<? super R, ? extends P8> g8,
+            NetworkBuffer.Type<P9> p9, Function<? super R, ? extends P9> g9, NetworkBuffer.Type<P10> p10, Function<? super R, ? extends P10> g10,
+            NetworkBuffer.Type<P11> p11, Function<? super R, ? extends P11> g11, NetworkBuffer.Type<P12> p12, Function<? super R, ? extends P12> g12,
+            NetworkBuffer.Type<P13> p13, Function<? super R, ? extends P13> g13,
             F13<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? extends R> ctor
     ) {
         if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, p12, g12, p13, g13, ctor);
@@ -1136,33 +1135,33 @@ public final class NetworkBufferTemplate {
     /**
      * Creates a template with fourteen parameters
      *
-     * @param p1    the first parameter {@link Type}
+     * @param p1    the first parameter {@link NetworkBuffer.Type}
      * @param g1    the first parameter getter
-     * @param p2    the second parameter {@link Type}
+     * @param p2    the second parameter {@link NetworkBuffer.Type}
      * @param g2    the second parameter getter
-     * @param p3    the third parameter {@link Type}
+     * @param p3    the third parameter {@link NetworkBuffer.Type}
      * @param g3    the third parameter getter
-     * @param p4    the fourth parameter {@link Type}
+     * @param p4    the fourth parameter {@link NetworkBuffer.Type}
      * @param g4    the fourth parameter getter
-     * @param p5    the fifth parameter {@link Type}
+     * @param p5    the fifth parameter {@link NetworkBuffer.Type}
      * @param g5    the fifth parameter getter
-     * @param p6    the sixth parameter {@link Type}
+     * @param p6    the sixth parameter {@link NetworkBuffer.Type}
      * @param g6    the sixth parameter getter
-     * @param p7    the seventh parameter {@link Type}
+     * @param p7    the seventh parameter {@link NetworkBuffer.Type}
      * @param g7    the seventh parameter getter
-     * @param p8    the eighth parameter {@link Type}
+     * @param p8    the eighth parameter {@link NetworkBuffer.Type}
      * @param g8    the eighth parameter getter
-     * @param p9    the ninth parameter {@link Type}
+     * @param p9    the ninth parameter {@link NetworkBuffer.Type}
      * @param g9    the ninth parameter getter
-     * @param p10   the tenth parameter {@link Type}
+     * @param p10   the tenth parameter {@link NetworkBuffer.Type}
      * @param g10   the tenth parameter getter
-     * @param p11   the eleventh parameter {@link Type}
+     * @param p11   the eleventh parameter {@link NetworkBuffer.Type}
      * @param g11   the eleventh parameter getter
-     * @param p12   the twelfth parameter {@link Type}
+     * @param p12   the twelfth parameter {@link NetworkBuffer.Type}
      * @param g12   the twelfth parameter getter
-     * @param p13   the thirteenth parameter {@link Type}
+     * @param p13   the thirteenth parameter {@link NetworkBuffer.Type}
      * @param g13   the thirteenth parameter getter
-     * @param p14   the fourteenth parameter {@link Type}
+     * @param p14   the fourteenth parameter {@link NetworkBuffer.Type}
      * @param g14   the fourteenth parameter getter
      * @param ctor  the constructor for {@link R}
      * @param <P1>  the type of the first parameter
@@ -1182,14 +1181,14 @@ public final class NetworkBufferTemplate {
      * @param <R>   the type of the value
      * @return the new template
      */
-    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
-            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
-            Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12,
-            Type<P13> p13, Function<? super R, ? extends P13> g13, Type<P14> p14, Function<? super R, ? extends P14> g14,
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, R extends @UnknownNullability Object> NetworkBuffer.Type<R> template(
+            NetworkBuffer.Type<P1> p1, Function<? super R, ? extends P1> g1, NetworkBuffer.Type<P2> p2, Function<? super R, ? extends P2> g2,
+            NetworkBuffer.Type<P3> p3, Function<? super R, ? extends P3> g3, NetworkBuffer.Type<P4> p4, Function<? super R, ? extends P4> g4,
+            NetworkBuffer.Type<P5> p5, Function<? super R, ? extends P5> g5, NetworkBuffer.Type<P6> p6, Function<? super R, ? extends P6> g6,
+            NetworkBuffer.Type<P7> p7, Function<? super R, ? extends P7> g7, NetworkBuffer.Type<P8> p8, Function<? super R, ? extends P8> g8,
+            NetworkBuffer.Type<P9> p9, Function<? super R, ? extends P9> g9, NetworkBuffer.Type<P10> p10, Function<? super R, ? extends P10> g10,
+            NetworkBuffer.Type<P11> p11, Function<? super R, ? extends P11> g11, NetworkBuffer.Type<P12> p12, Function<? super R, ? extends P12> g12,
+            NetworkBuffer.Type<P13> p13, Function<? super R, ? extends P13> g13, NetworkBuffer.Type<P14> p14, Function<? super R, ? extends P14> g14,
             F14<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? extends R> ctor
     ) {
         if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, p12, g12, p13, g13, p14, g14, ctor);
@@ -1259,35 +1258,35 @@ public final class NetworkBufferTemplate {
     /**
      * Creates a template with fifteen parameters
      *
-     * @param p1    the first parameter {@link Type}
+     * @param p1    the first parameter {@link NetworkBuffer.Type}
      * @param g1    the first parameter getter
-     * @param p2    the second parameter {@link Type}
+     * @param p2    the second parameter {@link NetworkBuffer.Type}
      * @param g2    the second parameter getter
-     * @param p3    the third parameter {@link Type}
+     * @param p3    the third parameter {@link NetworkBuffer.Type}
      * @param g3    the third parameter getter
-     * @param p4    the fourth parameter {@link Type}
+     * @param p4    the fourth parameter {@link NetworkBuffer.Type}
      * @param g4    the fourth parameter getter
-     * @param p5    the fifth parameter {@link Type}
+     * @param p5    the fifth parameter {@link NetworkBuffer.Type}
      * @param g5    the fifth parameter getter
-     * @param p6    the sixth parameter {@link Type}
+     * @param p6    the sixth parameter {@link NetworkBuffer.Type}
      * @param g6    the sixth parameter getter
-     * @param p7    the seventh parameter {@link Type}
+     * @param p7    the seventh parameter {@link NetworkBuffer.Type}
      * @param g7    the seventh parameter getter
-     * @param p8    the eighth parameter {@link Type}
+     * @param p8    the eighth parameter {@link NetworkBuffer.Type}
      * @param g8    the eighth parameter getter
-     * @param p9    the ninth parameter {@link Type}
+     * @param p9    the ninth parameter {@link NetworkBuffer.Type}
      * @param g9    the ninth parameter getter
-     * @param p10   the tenth parameter {@link Type}
+     * @param p10   the tenth parameter {@link NetworkBuffer.Type}
      * @param g10   the tenth parameter getter
-     * @param p11   the eleventh parameter {@link Type}
+     * @param p11   the eleventh parameter {@link NetworkBuffer.Type}
      * @param g11   the eleventh parameter getter
-     * @param p12   the twelfth parameter {@link Type}
+     * @param p12   the twelfth parameter {@link NetworkBuffer.Type}
      * @param g12   the twelfth parameter getter
-     * @param p13   the thirteenth parameter {@link Type}
+     * @param p13   the thirteenth parameter {@link NetworkBuffer.Type}
      * @param g13   the thirteenth parameter getter
-     * @param p14   the fourteenth parameter {@link Type}
+     * @param p14   the fourteenth parameter {@link NetworkBuffer.Type}
      * @param g14   the fourteenth parameter getter
-     * @param p15   the fifteenth parameter {@link Type}
+     * @param p15   the fifteenth parameter {@link NetworkBuffer.Type}
      * @param g15   the fifteenth parameter getter
      * @param ctor  the constructor for {@link R}
      * @param <P1>  the type of the first parameter
@@ -1308,15 +1307,15 @@ public final class NetworkBufferTemplate {
      * @param <R>   the type of the value
      * @return the new template
      */
-    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
-            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
-            Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12,
-            Type<P13> p13, Function<? super R, ? extends P13> g13, Type<P14> p14, Function<? super R, ? extends P14> g14,
-            Type<P15> p15, Function<? super R, ? extends P15> g15,
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, R extends @UnknownNullability Object> NetworkBuffer.Type<R> template(
+            NetworkBuffer.Type<P1> p1, Function<? super R, ? extends P1> g1, NetworkBuffer.Type<P2> p2, Function<? super R, ? extends P2> g2,
+            NetworkBuffer.Type<P3> p3, Function<? super R, ? extends P3> g3, NetworkBuffer.Type<P4> p4, Function<? super R, ? extends P4> g4,
+            NetworkBuffer.Type<P5> p5, Function<? super R, ? extends P5> g5, NetworkBuffer.Type<P6> p6, Function<? super R, ? extends P6> g6,
+            NetworkBuffer.Type<P7> p7, Function<? super R, ? extends P7> g7, NetworkBuffer.Type<P8> p8, Function<? super R, ? extends P8> g8,
+            NetworkBuffer.Type<P9> p9, Function<? super R, ? extends P9> g9, NetworkBuffer.Type<P10> p10, Function<? super R, ? extends P10> g10,
+            NetworkBuffer.Type<P11> p11, Function<? super R, ? extends P11> g11, NetworkBuffer.Type<P12> p12, Function<? super R, ? extends P12> g12,
+            NetworkBuffer.Type<P13> p13, Function<? super R, ? extends P13> g13, NetworkBuffer.Type<P14> p14, Function<? super R, ? extends P14> g14,
+            NetworkBuffer.Type<P15> p15, Function<? super R, ? extends P15> g15,
             F15<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? extends R> ctor
     ) {
         if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, p12, g12, p13, g13, p14, g14, p15, g15, ctor);
@@ -1390,37 +1389,37 @@ public final class NetworkBufferTemplate {
     /**
      * Creates a template with sixteen parameters
      *
-     * @param p1    the first parameter {@link Type}
+     * @param p1    the first parameter {@link NetworkBuffer.Type}
      * @param g1    the first parameter getter
-     * @param p2    the second parameter {@link Type}
+     * @param p2    the second parameter {@link NetworkBuffer.Type}
      * @param g2    the second parameter getter
-     * @param p3    the third parameter {@link Type}
+     * @param p3    the third parameter {@link NetworkBuffer.Type}
      * @param g3    the third parameter getter
-     * @param p4    the fourth parameter {@link Type}
+     * @param p4    the fourth parameter {@link NetworkBuffer.Type}
      * @param g4    the fourth parameter getter
-     * @param p5    the fifth parameter {@link Type}
+     * @param p5    the fifth parameter {@link NetworkBuffer.Type}
      * @param g5    the fifth parameter getter
-     * @param p6    the sixth parameter {@link Type}
+     * @param p6    the sixth parameter {@link NetworkBuffer.Type}
      * @param g6    the sixth parameter getter
-     * @param p7    the seventh parameter {@link Type}
+     * @param p7    the seventh parameter {@link NetworkBuffer.Type}
      * @param g7    the seventh parameter getter
-     * @param p8    the eighth parameter {@link Type}
+     * @param p8    the eighth parameter {@link NetworkBuffer.Type}
      * @param g8    the eighth parameter getter
-     * @param p9    the ninth parameter {@link Type}
+     * @param p9    the ninth parameter {@link NetworkBuffer.Type}
      * @param g9    the ninth parameter getter
-     * @param p10   the tenth parameter {@link Type}
+     * @param p10   the tenth parameter {@link NetworkBuffer.Type}
      * @param g10   the tenth parameter getter
-     * @param p11   the eleventh parameter {@link Type}
+     * @param p11   the eleventh parameter {@link NetworkBuffer.Type}
      * @param g11   the eleventh parameter getter
-     * @param p12   the twelfth parameter {@link Type}
+     * @param p12   the twelfth parameter {@link NetworkBuffer.Type}
      * @param g12   the twelfth parameter getter
-     * @param p13   the thirteenth parameter {@link Type}
+     * @param p13   the thirteenth parameter {@link NetworkBuffer.Type}
      * @param g13   the thirteenth parameter getter
-     * @param p14   the fourteenth parameter {@link Type}
+     * @param p14   the fourteenth parameter {@link NetworkBuffer.Type}
      * @param g14   the fourteenth parameter getter
-     * @param p15   the fifteenth parameter {@link Type}
+     * @param p15   the fifteenth parameter {@link NetworkBuffer.Type}
      * @param g15   the fifteenth parameter getter
-     * @param p16   the sixteenth parameter {@link Type}
+     * @param p16   the sixteenth parameter {@link NetworkBuffer.Type}
      * @param g16   the sixteenth parameter getter
      * @param ctor  the constructor for {@link R}
      * @param <P1>  the type of the first parameter
@@ -1442,15 +1441,15 @@ public final class NetworkBufferTemplate {
      * @param <R>   the type of the value
      * @return the new template
      */
-    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
-            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
-            Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12,
-            Type<P13> p13, Function<? super R, ? extends P13> g13, Type<P14> p14, Function<? super R, ? extends P14> g14,
-            Type<P15> p15, Function<? super R, ? extends P15> g15, Type<P16> p16, Function<? super R, ? extends P16> g16,
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, R extends @UnknownNullability Object> NetworkBuffer.Type<R> template(
+            NetworkBuffer.Type<P1> p1, Function<? super R, ? extends P1> g1, NetworkBuffer.Type<P2> p2, Function<? super R, ? extends P2> g2,
+            NetworkBuffer.Type<P3> p3, Function<? super R, ? extends P3> g3, NetworkBuffer.Type<P4> p4, Function<? super R, ? extends P4> g4,
+            NetworkBuffer.Type<P5> p5, Function<? super R, ? extends P5> g5, NetworkBuffer.Type<P6> p6, Function<? super R, ? extends P6> g6,
+            NetworkBuffer.Type<P7> p7, Function<? super R, ? extends P7> g7, NetworkBuffer.Type<P8> p8, Function<? super R, ? extends P8> g8,
+            NetworkBuffer.Type<P9> p9, Function<? super R, ? extends P9> g9, NetworkBuffer.Type<P10> p10, Function<? super R, ? extends P10> g10,
+            NetworkBuffer.Type<P11> p11, Function<? super R, ? extends P11> g11, NetworkBuffer.Type<P12> p12, Function<? super R, ? extends P12> g12,
+            NetworkBuffer.Type<P13> p13, Function<? super R, ? extends P13> g13, NetworkBuffer.Type<P14> p14, Function<? super R, ? extends P14> g14,
+            NetworkBuffer.Type<P15> p15, Function<? super R, ? extends P15> g15, NetworkBuffer.Type<P16> p16, Function<? super R, ? extends P16> g16,
             F16<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? extends R> ctor
     ) {
         if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, p12, g12, p13, g13, p14, g14, p15, g15, p16, g16, ctor);
@@ -1527,39 +1526,39 @@ public final class NetworkBufferTemplate {
     /**
      * Creates a template with seventeen parameters
      *
-     * @param p1    the first parameter {@link Type}
+     * @param p1    the first parameter {@link NetworkBuffer.Type}
      * @param g1    the first parameter getter
-     * @param p2    the second parameter {@link Type}
+     * @param p2    the second parameter {@link NetworkBuffer.Type}
      * @param g2    the second parameter getter
-     * @param p3    the third parameter {@link Type}
+     * @param p3    the third parameter {@link NetworkBuffer.Type}
      * @param g3    the third parameter getter
-     * @param p4    the fourth parameter {@link Type}
+     * @param p4    the fourth parameter {@link NetworkBuffer.Type}
      * @param g4    the fourth parameter getter
-     * @param p5    the fifth parameter {@link Type}
+     * @param p5    the fifth parameter {@link NetworkBuffer.Type}
      * @param g5    the fifth parameter getter
-     * @param p6    the sixth parameter {@link Type}
+     * @param p6    the sixth parameter {@link NetworkBuffer.Type}
      * @param g6    the sixth parameter getter
-     * @param p7    the seventh parameter {@link Type}
+     * @param p7    the seventh parameter {@link NetworkBuffer.Type}
      * @param g7    the seventh parameter getter
-     * @param p8    the eighth parameter {@link Type}
+     * @param p8    the eighth parameter {@link NetworkBuffer.Type}
      * @param g8    the eighth parameter getter
-     * @param p9    the ninth parameter {@link Type}
+     * @param p9    the ninth parameter {@link NetworkBuffer.Type}
      * @param g9    the ninth parameter getter
-     * @param p10   the tenth parameter {@link Type}
+     * @param p10   the tenth parameter {@link NetworkBuffer.Type}
      * @param g10   the tenth parameter getter
-     * @param p11   the eleventh parameter {@link Type}
+     * @param p11   the eleventh parameter {@link NetworkBuffer.Type}
      * @param g11   the eleventh parameter getter
-     * @param p12   the twelfth parameter {@link Type}
+     * @param p12   the twelfth parameter {@link NetworkBuffer.Type}
      * @param g12   the twelfth parameter getter
-     * @param p13   the thirteenth parameter {@link Type}
+     * @param p13   the thirteenth parameter {@link NetworkBuffer.Type}
      * @param g13   the thirteenth parameter getter
-     * @param p14   the fourteenth parameter {@link Type}
+     * @param p14   the fourteenth parameter {@link NetworkBuffer.Type}
      * @param g14   the fourteenth parameter getter
-     * @param p15   the fifteenth parameter {@link Type}
+     * @param p15   the fifteenth parameter {@link NetworkBuffer.Type}
      * @param g15   the fifteenth parameter getter
-     * @param p16   the sixteenth parameter {@link Type}
+     * @param p16   the sixteenth parameter {@link NetworkBuffer.Type}
      * @param g16   the sixteenth parameter getter
-     * @param p17   the seventeenth parameter {@link Type}
+     * @param p17   the seventeenth parameter {@link NetworkBuffer.Type}
      * @param g17   the seventeenth parameter getter
      * @param ctor  the constructor for {@link R}
      * @param <P1>  the type of the first parameter
@@ -1582,16 +1581,16 @@ public final class NetworkBufferTemplate {
      * @param <R>   the type of the value
      * @return the new template
      */
-    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
-            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
-            Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12,
-            Type<P13> p13, Function<? super R, ? extends P13> g13, Type<P14> p14, Function<? super R, ? extends P14> g14,
-            Type<P15> p15, Function<? super R, ? extends P15> g15, Type<P16> p16, Function<? super R, ? extends P16> g16,
-            Type<P17> p17, Function<? super R, ? extends P17> g17,
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, R extends @UnknownNullability Object> NetworkBuffer.Type<R> template(
+            NetworkBuffer.Type<P1> p1, Function<? super R, ? extends P1> g1, NetworkBuffer.Type<P2> p2, Function<? super R, ? extends P2> g2,
+            NetworkBuffer.Type<P3> p3, Function<? super R, ? extends P3> g3, NetworkBuffer.Type<P4> p4, Function<? super R, ? extends P4> g4,
+            NetworkBuffer.Type<P5> p5, Function<? super R, ? extends P5> g5, NetworkBuffer.Type<P6> p6, Function<? super R, ? extends P6> g6,
+            NetworkBuffer.Type<P7> p7, Function<? super R, ? extends P7> g7, NetworkBuffer.Type<P8> p8, Function<? super R, ? extends P8> g8,
+            NetworkBuffer.Type<P9> p9, Function<? super R, ? extends P9> g9, NetworkBuffer.Type<P10> p10, Function<? super R, ? extends P10> g10,
+            NetworkBuffer.Type<P11> p11, Function<? super R, ? extends P11> g11, NetworkBuffer.Type<P12> p12, Function<? super R, ? extends P12> g12,
+            NetworkBuffer.Type<P13> p13, Function<? super R, ? extends P13> g13, NetworkBuffer.Type<P14> p14, Function<? super R, ? extends P14> g14,
+            NetworkBuffer.Type<P15> p15, Function<? super R, ? extends P15> g15, NetworkBuffer.Type<P16> p16, Function<? super R, ? extends P16> g16,
+            NetworkBuffer.Type<P17> p17, Function<? super R, ? extends P17> g17,
             F17<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? super P17, ? extends R> ctor
     ) {
         if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, p12, g12, p13, g13, p14, g14, p15, g15, p16, g16, p17, g17, ctor);
@@ -1672,41 +1671,41 @@ public final class NetworkBufferTemplate {
     /**
      * Creates a template with eighteen parameters
      *
-     * @param p1    the first parameter {@link Type}
+     * @param p1    the first parameter {@link NetworkBuffer.Type}
      * @param g1    the first parameter getter
-     * @param p2    the second parameter {@link Type}
+     * @param p2    the second parameter {@link NetworkBuffer.Type}
      * @param g2    the second parameter getter
-     * @param p3    the third parameter {@link Type}
+     * @param p3    the third parameter {@link NetworkBuffer.Type}
      * @param g3    the third parameter getter
-     * @param p4    the fourth parameter {@link Type}
+     * @param p4    the fourth parameter {@link NetworkBuffer.Type}
      * @param g4    the fourth parameter getter
-     * @param p5    the fifth parameter {@link Type}
+     * @param p5    the fifth parameter {@link NetworkBuffer.Type}
      * @param g5    the fifth parameter getter
-     * @param p6    the sixth parameter {@link Type}
+     * @param p6    the sixth parameter {@link NetworkBuffer.Type}
      * @param g6    the sixth parameter getter
-     * @param p7    the seventh parameter {@link Type}
+     * @param p7    the seventh parameter {@link NetworkBuffer.Type}
      * @param g7    the seventh parameter getter
-     * @param p8    the eighth parameter {@link Type}
+     * @param p8    the eighth parameter {@link NetworkBuffer.Type}
      * @param g8    the eighth parameter getter
-     * @param p9    the ninth parameter {@link Type}
+     * @param p9    the ninth parameter {@link NetworkBuffer.Type}
      * @param g9    the ninth parameter getter
-     * @param p10   the tenth parameter {@link Type}
+     * @param p10   the tenth parameter {@link NetworkBuffer.Type}
      * @param g10   the tenth parameter getter
-     * @param p11   the eleventh parameter {@link Type}
+     * @param p11   the eleventh parameter {@link NetworkBuffer.Type}
      * @param g11   the eleventh parameter getter
-     * @param p12   the twelfth parameter {@link Type}
+     * @param p12   the twelfth parameter {@link NetworkBuffer.Type}
      * @param g12   the twelfth parameter getter
-     * @param p13   the thirteenth parameter {@link Type}
+     * @param p13   the thirteenth parameter {@link NetworkBuffer.Type}
      * @param g13   the thirteenth parameter getter
-     * @param p14   the fourteenth parameter {@link Type}
+     * @param p14   the fourteenth parameter {@link NetworkBuffer.Type}
      * @param g14   the fourteenth parameter getter
-     * @param p15   the fifteenth parameter {@link Type}
+     * @param p15   the fifteenth parameter {@link NetworkBuffer.Type}
      * @param g15   the fifteenth parameter getter
-     * @param p16   the sixteenth parameter {@link Type}
+     * @param p16   the sixteenth parameter {@link NetworkBuffer.Type}
      * @param g16   the sixteenth parameter getter
-     * @param p17   the seventeenth parameter {@link Type}
+     * @param p17   the seventeenth parameter {@link NetworkBuffer.Type}
      * @param g17   the seventeenth parameter getter
-     * @param p18   the eighteenth parameter {@link Type}
+     * @param p18   the eighteenth parameter {@link NetworkBuffer.Type}
      * @param g18   the eighteenth parameter getter
      * @param ctor  the constructor for {@link R}
      * @param <P1>  the type of the first parameter
@@ -1730,16 +1729,16 @@ public final class NetworkBufferTemplate {
      * @param <R>   the type of the value
      * @return the new template
      */
-    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, P18 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
-            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
-            Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12,
-            Type<P13> p13, Function<? super R, ? extends P13> g13, Type<P14> p14, Function<? super R, ? extends P14> g14,
-            Type<P15> p15, Function<? super R, ? extends P15> g15, Type<P16> p16, Function<? super R, ? extends P16> g16,
-            Type<P17> p17, Function<? super R, ? extends P17> g17, Type<P18> p18, Function<? super R, ? extends P18> g18,
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, P18 extends @UnknownNullability Object, R extends @UnknownNullability Object> NetworkBuffer.Type<R> template(
+            NetworkBuffer.Type<P1> p1, Function<? super R, ? extends P1> g1, NetworkBuffer.Type<P2> p2, Function<? super R, ? extends P2> g2,
+            NetworkBuffer.Type<P3> p3, Function<? super R, ? extends P3> g3, NetworkBuffer.Type<P4> p4, Function<? super R, ? extends P4> g4,
+            NetworkBuffer.Type<P5> p5, Function<? super R, ? extends P5> g5, NetworkBuffer.Type<P6> p6, Function<? super R, ? extends P6> g6,
+            NetworkBuffer.Type<P7> p7, Function<? super R, ? extends P7> g7, NetworkBuffer.Type<P8> p8, Function<? super R, ? extends P8> g8,
+            NetworkBuffer.Type<P9> p9, Function<? super R, ? extends P9> g9, NetworkBuffer.Type<P10> p10, Function<? super R, ? extends P10> g10,
+            NetworkBuffer.Type<P11> p11, Function<? super R, ? extends P11> g11, NetworkBuffer.Type<P12> p12, Function<? super R, ? extends P12> g12,
+            NetworkBuffer.Type<P13> p13, Function<? super R, ? extends P13> g13, NetworkBuffer.Type<P14> p14, Function<? super R, ? extends P14> g14,
+            NetworkBuffer.Type<P15> p15, Function<? super R, ? extends P15> g15, NetworkBuffer.Type<P16> p16, Function<? super R, ? extends P16> g16,
+            NetworkBuffer.Type<P17> p17, Function<? super R, ? extends P17> g17, NetworkBuffer.Type<P18> p18, Function<? super R, ? extends P18> g18,
             F18<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? super P17, ? super P18, ? extends R> ctor
     ) {
         if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, p12, g12, p13, g13, p14, g14, p15, g15, p16, g16, p17, g17, p18, g18, ctor);
@@ -1823,43 +1822,43 @@ public final class NetworkBufferTemplate {
     /**
      * Creates a template with nineteen parameters
      *
-     * @param p1    the first parameter {@link Type}
+     * @param p1    the first parameter {@link NetworkBuffer.Type}
      * @param g1    the first parameter getter
-     * @param p2    the second parameter {@link Type}
+     * @param p2    the second parameter {@link NetworkBuffer.Type}
      * @param g2    the second parameter getter
-     * @param p3    the third parameter {@link Type}
+     * @param p3    the third parameter {@link NetworkBuffer.Type}
      * @param g3    the third parameter getter
-     * @param p4    the fourth parameter {@link Type}
+     * @param p4    the fourth parameter {@link NetworkBuffer.Type}
      * @param g4    the fourth parameter getter
-     * @param p5    the fifth parameter {@link Type}
+     * @param p5    the fifth parameter {@link NetworkBuffer.Type}
      * @param g5    the fifth parameter getter
-     * @param p6    the sixth parameter {@link Type}
+     * @param p6    the sixth parameter {@link NetworkBuffer.Type}
      * @param g6    the sixth parameter getter
-     * @param p7    the seventh parameter {@link Type}
+     * @param p7    the seventh parameter {@link NetworkBuffer.Type}
      * @param g7    the seventh parameter getter
-     * @param p8    the eighth parameter {@link Type}
+     * @param p8    the eighth parameter {@link NetworkBuffer.Type}
      * @param g8    the eighth parameter getter
-     * @param p9    the ninth parameter {@link Type}
+     * @param p9    the ninth parameter {@link NetworkBuffer.Type}
      * @param g9    the ninth parameter getter
-     * @param p10   the tenth parameter {@link Type}
+     * @param p10   the tenth parameter {@link NetworkBuffer.Type}
      * @param g10   the tenth parameter getter
-     * @param p11   the eleventh parameter {@link Type}
+     * @param p11   the eleventh parameter {@link NetworkBuffer.Type}
      * @param g11   the eleventh parameter getter
-     * @param p12   the twelfth parameter {@link Type}
+     * @param p12   the twelfth parameter {@link NetworkBuffer.Type}
      * @param g12   the twelfth parameter getter
-     * @param p13   the thirteenth parameter {@link Type}
+     * @param p13   the thirteenth parameter {@link NetworkBuffer.Type}
      * @param g13   the thirteenth parameter getter
-     * @param p14   the fourteenth parameter {@link Type}
+     * @param p14   the fourteenth parameter {@link NetworkBuffer.Type}
      * @param g14   the fourteenth parameter getter
-     * @param p15   the fifteenth parameter {@link Type}
+     * @param p15   the fifteenth parameter {@link NetworkBuffer.Type}
      * @param g15   the fifteenth parameter getter
-     * @param p16   the sixteenth parameter {@link Type}
+     * @param p16   the sixteenth parameter {@link NetworkBuffer.Type}
      * @param g16   the sixteenth parameter getter
-     * @param p17   the seventeenth parameter {@link Type}
+     * @param p17   the seventeenth parameter {@link NetworkBuffer.Type}
      * @param g17   the seventeenth parameter getter
-     * @param p18   the eighteenth parameter {@link Type}
+     * @param p18   the eighteenth parameter {@link NetworkBuffer.Type}
      * @param g18   the eighteenth parameter getter
-     * @param p19   the nineteenth parameter {@link Type}
+     * @param p19   the nineteenth parameter {@link NetworkBuffer.Type}
      * @param g19   the nineteenth parameter getter
      * @param ctor  the constructor for {@link R}
      * @param <P1>  the type of the first parameter
@@ -1883,17 +1882,17 @@ public final class NetworkBufferTemplate {
      * @param <R>   the type of the value
      * @return the new template
      */
-    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, P18 extends @UnknownNullability Object, P19 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
-            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
-            Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12,
-            Type<P13> p13, Function<? super R, ? extends P13> g13, Type<P14> p14, Function<? super R, ? extends P14> g14,
-            Type<P15> p15, Function<? super R, ? extends P15> g15, Type<P16> p16, Function<? super R, ? extends P16> g16,
-            Type<P17> p17, Function<? super R, ? extends P17> g17, Type<P18> p18, Function<? super R, ? extends P18> g18,
-            Type<P19> p19, Function<? super R, ? extends P19> g19, F19<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? super P17, ? super P18, ? super P19, ? extends R> ctor
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, P18 extends @UnknownNullability Object, P19 extends @UnknownNullability Object, R extends @UnknownNullability Object> NetworkBuffer.Type<R> template(
+            NetworkBuffer.Type<P1> p1, Function<? super R, ? extends P1> g1, NetworkBuffer.Type<P2> p2, Function<? super R, ? extends P2> g2,
+            NetworkBuffer.Type<P3> p3, Function<? super R, ? extends P3> g3, NetworkBuffer.Type<P4> p4, Function<? super R, ? extends P4> g4,
+            NetworkBuffer.Type<P5> p5, Function<? super R, ? extends P5> g5, NetworkBuffer.Type<P6> p6, Function<? super R, ? extends P6> g6,
+            NetworkBuffer.Type<P7> p7, Function<? super R, ? extends P7> g7, NetworkBuffer.Type<P8> p8, Function<? super R, ? extends P8> g8,
+            NetworkBuffer.Type<P9> p9, Function<? super R, ? extends P9> g9, NetworkBuffer.Type<P10> p10, Function<? super R, ? extends P10> g10,
+            NetworkBuffer.Type<P11> p11, Function<? super R, ? extends P11> g11, NetworkBuffer.Type<P12> p12, Function<? super R, ? extends P12> g12,
+            NetworkBuffer.Type<P13> p13, Function<? super R, ? extends P13> g13, NetworkBuffer.Type<P14> p14, Function<? super R, ? extends P14> g14,
+            NetworkBuffer.Type<P15> p15, Function<? super R, ? extends P15> g15, NetworkBuffer.Type<P16> p16, Function<? super R, ? extends P16> g16,
+            NetworkBuffer.Type<P17> p17, Function<? super R, ? extends P17> g17, NetworkBuffer.Type<P18> p18, Function<? super R, ? extends P18> g18,
+            NetworkBuffer.Type<P19> p19, Function<? super R, ? extends P19> g19, F19<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? super P17, ? super P18, ? super P19, ? extends R> ctor
     ) {
         if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, p12, g12, p13, g13, p14, g14, p15, g15, p16, g16, p17, g17, p18, g18, p19, g19, ctor);
         Objects.requireNonNull(p1, "p1");
@@ -1980,45 +1979,45 @@ public final class NetworkBufferTemplate {
     /**
      * Creates a template with twenty parameters
      *
-     * @param p1    the first parameter {@link Type}
+     * @param p1    the first parameter {@link NetworkBuffer.Type}
      * @param g1    the first parameter getter
-     * @param p2    the second parameter {@link Type}
+     * @param p2    the second parameter {@link NetworkBuffer.Type}
      * @param g2    the second parameter getter
-     * @param p3    the third parameter {@link Type}
+     * @param p3    the third parameter {@link NetworkBuffer.Type}
      * @param g3    the third parameter getter
-     * @param p4    the fourth parameter {@link Type}
+     * @param p4    the fourth parameter {@link NetworkBuffer.Type}
      * @param g4    the fourth parameter getter
-     * @param p5    the fifth parameter {@link Type}
+     * @param p5    the fifth parameter {@link NetworkBuffer.Type}
      * @param g5    the fifth parameter getter
-     * @param p6    the sixth parameter {@link Type}
+     * @param p6    the sixth parameter {@link NetworkBuffer.Type}
      * @param g6    the sixth parameter getter
-     * @param p7    the seventh parameter {@link Type}
+     * @param p7    the seventh parameter {@link NetworkBuffer.Type}
      * @param g7    the seventh parameter getter
-     * @param p8    the eighth parameter {@link Type}
+     * @param p8    the eighth parameter {@link NetworkBuffer.Type}
      * @param g8    the eighth parameter getter
-     * @param p9    the ninth parameter {@link Type}
+     * @param p9    the ninth parameter {@link NetworkBuffer.Type}
      * @param g9    the ninth parameter getter
-     * @param p10   the tenth parameter {@link Type}
+     * @param p10   the tenth parameter {@link NetworkBuffer.Type}
      * @param g10   the tenth parameter getter
-     * @param p11   the eleventh parameter {@link Type}
+     * @param p11   the eleventh parameter {@link NetworkBuffer.Type}
      * @param g11   the eleventh parameter getter
-     * @param p12   the twelfth parameter {@link Type}
+     * @param p12   the twelfth parameter {@link NetworkBuffer.Type}
      * @param g12   the twelfth parameter getter
-     * @param p13   the thirteenth parameter {@link Type}
+     * @param p13   the thirteenth parameter {@link NetworkBuffer.Type}
      * @param g13   the thirteenth parameter getter
-     * @param p14   the fourteenth parameter {@link Type}
+     * @param p14   the fourteenth parameter {@link NetworkBuffer.Type}
      * @param g14   the fourteenth parameter getter
-     * @param p15   the fifteenth parameter {@link Type}
+     * @param p15   the fifteenth parameter {@link NetworkBuffer.Type}
      * @param g15   the fifteenth parameter getter
-     * @param p16   the sixteenth parameter {@link Type}
+     * @param p16   the sixteenth parameter {@link NetworkBuffer.Type}
      * @param g16   the sixteenth parameter getter
-     * @param p17   the seventeenth parameter {@link Type}
+     * @param p17   the seventeenth parameter {@link NetworkBuffer.Type}
      * @param g17   the seventeenth parameter getter
-     * @param p18   the eighteenth parameter {@link Type}
+     * @param p18   the eighteenth parameter {@link NetworkBuffer.Type}
      * @param g18   the eighteenth parameter getter
-     * @param p19   the nineteenth parameter {@link Type}
+     * @param p19   the nineteenth parameter {@link NetworkBuffer.Type}
      * @param g19   the nineteenth parameter getter
-     * @param p20   the twentieth parameter {@link Type}
+     * @param p20   the twentieth parameter {@link NetworkBuffer.Type}
      * @param g20   the twentieth parameter getter
      * @param ctor  the constructor for {@link R}
      * @param <P1>  the type of the first parameter
@@ -2044,17 +2043,17 @@ public final class NetworkBufferTemplate {
      * @param <R>   the type of the value
      * @return the new template
      */
-    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, P18 extends @UnknownNullability Object, P19 extends @UnknownNullability Object, P20 extends @UnknownNullability Object, R extends @UnknownNullability Object> Type<R> template(
-            Type<P1> p1, Function<? super R, ? extends P1> g1, Type<P2> p2, Function<? super R, ? extends P2> g2,
-            Type<P3> p3, Function<? super R, ? extends P3> g3, Type<P4> p4, Function<? super R, ? extends P4> g4,
-            Type<P5> p5, Function<? super R, ? extends P5> g5, Type<P6> p6, Function<? super R, ? extends P6> g6,
-            Type<P7> p7, Function<? super R, ? extends P7> g7, Type<P8> p8, Function<? super R, ? extends P8> g8,
-            Type<P9> p9, Function<? super R, ? extends P9> g9, Type<P10> p10, Function<? super R, ? extends P10> g10,
-            Type<P11> p11, Function<? super R, ? extends P11> g11, Type<P12> p12, Function<? super R, ? extends P12> g12,
-            Type<P13> p13, Function<? super R, ? extends P13> g13, Type<P14> p14, Function<? super R, ? extends P14> g14,
-            Type<P15> p15, Function<? super R, ? extends P15> g15, Type<P16> p16, Function<? super R, ? extends P16> g16,
-            Type<P17> p17, Function<? super R, ? extends P17> g17, Type<P18> p18, Function<? super R, ? extends P18> g18,
-            Type<P19> p19, Function<? super R, ? extends P19> g19, Type<P20> p20, Function<? super R, ? extends P20> g20,
+    public static <P1 extends @UnknownNullability Object, P2 extends @UnknownNullability Object, P3 extends @UnknownNullability Object, P4 extends @UnknownNullability Object, P5 extends @UnknownNullability Object, P6 extends @UnknownNullability Object, P7 extends @UnknownNullability Object, P8 extends @UnknownNullability Object, P9 extends @UnknownNullability Object, P10 extends @UnknownNullability Object, P11 extends @UnknownNullability Object, P12 extends @UnknownNullability Object, P13 extends @UnknownNullability Object, P14 extends @UnknownNullability Object, P15 extends @UnknownNullability Object, P16 extends @UnknownNullability Object, P17 extends @UnknownNullability Object, P18 extends @UnknownNullability Object, P19 extends @UnknownNullability Object, P20 extends @UnknownNullability Object, R extends @UnknownNullability Object> NetworkBuffer.Type<R> template(
+            NetworkBuffer.Type<P1> p1, Function<? super R, ? extends P1> g1, NetworkBuffer.Type<P2> p2, Function<? super R, ? extends P2> g2,
+            NetworkBuffer.Type<P3> p3, Function<? super R, ? extends P3> g3, NetworkBuffer.Type<P4> p4, Function<? super R, ? extends P4> g4,
+            NetworkBuffer.Type<P5> p5, Function<? super R, ? extends P5> g5, NetworkBuffer.Type<P6> p6, Function<? super R, ? extends P6> g6,
+            NetworkBuffer.Type<P7> p7, Function<? super R, ? extends P7> g7, NetworkBuffer.Type<P8> p8, Function<? super R, ? extends P8> g8,
+            NetworkBuffer.Type<P9> p9, Function<? super R, ? extends P9> g9, NetworkBuffer.Type<P10> p10, Function<? super R, ? extends P10> g10,
+            NetworkBuffer.Type<P11> p11, Function<? super R, ? extends P11> g11, NetworkBuffer.Type<P12> p12, Function<? super R, ? extends P12> g12,
+            NetworkBuffer.Type<P13> p13, Function<? super R, ? extends P13> g13, NetworkBuffer.Type<P14> p14, Function<? super R, ? extends P14> g14,
+            NetworkBuffer.Type<P15> p15, Function<? super R, ? extends P15> g15, NetworkBuffer.Type<P16> p16, Function<? super R, ? extends P16> g16,
+            NetworkBuffer.Type<P17> p17, Function<? super R, ? extends P17> g17, NetworkBuffer.Type<P18> p18, Function<? super R, ? extends P18> g18,
+            NetworkBuffer.Type<P19> p19, Function<? super R, ? extends P19> g19, NetworkBuffer.Type<P20> p20, Function<? super R, ? extends P20> g20,
             F20<? super P1, ? super P2, ? super P3, ? super P4, ? super P5, ? super P6, ? super P7, ? super P8, ? super P9, ? super P10, ? super P11, ? super P12, ? super P13, ? super P14, ? super P15, ? super P16, ? super P17, ? super P18, ? super P19, ? super P20, ? extends R> ctor
     ) {
         if (ServerFlag.TEMPLATE_COMPILER) return NetworkBufferTemplateImpl.template(p1, g1, p2, g2, p3, g3, p4, g4, p5, g5, p6, g6, p7, g7, p8, g8, p9, g9, p10, g10, p11, g11, p12, g12, p13, g13, p14, g14, p15, g15, p16, g16, p17, g17, p18, g18, p19, g19, p20, g20, ctor);

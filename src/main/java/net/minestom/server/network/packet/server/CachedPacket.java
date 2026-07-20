@@ -50,6 +50,7 @@ public final class CachedPacket implements SendablePacket {
     private final Supplier<ServerPacket> packetSupplier;
 
     // Accessed through PACKET using acquire/release semantics.
+    @SuppressWarnings("unused")
     private @Nullable SoftReference<FramedPacket> packet;
 
     /**

@@ -1,5 +1,6 @@
 package net.minestom.server.thread;
 
+import java.util.Locale;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.ServerProcess;
@@ -10,7 +11,7 @@ public final class TickSchedulerThread extends MinestomThread {
     private static final long TICK_TIME_NANOS = 1_000_000_000L / ServerFlag.SERVER_TICKS_PER_SECOND;
     // Windows has an issue with periodically being unable to sleep for < ~16ms at a time
     private static final long SLEEP_THRESHOLD = System.getProperty("os.name", "")
-            .toLowerCase().startsWith("windows") ? 17 : 2;
+            .toLowerCase(Locale.ROOT).startsWith("windows") ? 17 : 2;
 
     private final ServerProcess serverProcess;
 

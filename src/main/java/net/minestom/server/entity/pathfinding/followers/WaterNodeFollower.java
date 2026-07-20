@@ -26,6 +26,7 @@ public class WaterNodeFollower implements NodeFollower {
      * @param direction the targeted position
      * @param speed     define how far the entity will move
      */
+    @Override
     public void moveTowards(Point direction, double speed, Point lookAt) {
         final Pos position = entity.getPosition();
         final double dx = direction.x() - position.x();
@@ -60,7 +61,7 @@ public class WaterNodeFollower implements NodeFollower {
         }
 
         final var physicsResult = CollisionUtils.handlePhysics(entity, new Vec(speedX, speedY, speedZ));
-        this.entity.refreshPosition(physicsResult.newPosition().asPos().withView(yaw, pitch));
+        this.entity.refreshPosition(physicsResult.newPosition().withView(yaw, pitch));
     }
 
     @Override

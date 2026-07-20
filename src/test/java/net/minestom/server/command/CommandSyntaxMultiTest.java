@@ -2,6 +2,7 @@ package net.minestom.server.command;
 
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.Argument;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
 import java.lang.String;
@@ -46,7 +47,7 @@ public class CommandSyntaxMultiTest {
         assertSyntax(args, "bar baz", ExpectedExecution.SECOND_SYNTAX);
     }
 
-    private static void assertSyntax(List<List<Argument<?>>> args, String input, ExpectedExecution expectedExecution, Map<String, Object> expectedValues) {
+    private static void assertSyntax(List<List<Argument<?>>> args, String input, ExpectedExecution expectedExecution, @Nullable Map<String, Object> expectedValues) {
         final String commandName = "name";
 
         var manager = new CommandManager();
@@ -56,7 +57,7 @@ public class CommandSyntaxMultiTest {
         AtomicReference<ExpectedExecution> result = new AtomicReference<>();
         AtomicReference<Map<String, Object>> values = new AtomicReference<>();
 
-        command.setDefaultExecutor((sender, context) -> {
+        command.setDefaultExecutor((_, _) -> {
             if (!result.compareAndSet(null, ExpectedExecution.DEFAULT)) {
                 fail("Multiple execution: " + result.get());
             }
@@ -65,7 +66,7 @@ public class CommandSyntaxMultiTest {
         int i = ExpectedExecution.FIRST_SYNTAX.ordinal();
         for (List<Argument<?>> t : args) {
             ExpectedExecution id = ExpectedExecution.values()[i++];
-            command.addSyntax((sender, context) -> {
+            command.addSyntax((_, context) -> {
                 if (!result.compareAndSet(null, id)) {
                     fail("Multiple execution: " + result.get());
                 }

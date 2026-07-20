@@ -183,10 +183,8 @@ public class EntityVelocityIntegrationTest {
         AtomicInteger i = new AtomicInteger();
         BooleanSupplier tickLoopCondition = () -> i.getAndIncrement() < Math.max(entity.getSynchronizationTicks() - 1, 19);
 
-        var tracker = viewerConnection.trackIncoming(EntityVelocityPacket.class);
-
         entity.setVelocity(new Vec(0, 5, 0));
-        tracker = viewerConnection.trackIncoming(EntityVelocityPacket.class);
+        var tracker = viewerConnection.trackIncoming(EntityVelocityPacket.class);
         i.set(0);
         env.tickWhile(tickLoopCondition, null);
         tracker.assertCount(1); // Verify the update is only sent once
@@ -225,7 +223,7 @@ public class EntityVelocityIntegrationTest {
         assertNotEquals(initialVelocity.x() * expectedOldDrag, entity.getVelocity().x(), Vec.EPSILON);
     }
 
-    private void testMovement(Env env, Entity entity, Vec... sample) {
+    private static void testMovement(Env env, Entity entity, Vec... sample) {
         final double epsilon = 0.003;
         for (Vec vec : sample) {
             assertEquals(vec.x(), entity.getPosition().x(), epsilon);
@@ -235,7 +233,7 @@ public class EntityVelocityIntegrationTest {
         }
     }
 
-    private void loadChunks(Instance instance) {
+    private static void loadChunks(Instance instance) {
         ChunkUtils.optionalLoadAll(instance, new long[]{
                 CoordConversion.chunkIndex(-1, -1),
                 CoordConversion.chunkIndex(-1, 0),

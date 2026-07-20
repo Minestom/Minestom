@@ -25,6 +25,8 @@ public sealed interface PotionEffect extends StaticProtocolObject<PotionEffect>,
      * @deprecated use the direct accessors on {@link PotionEffect}
      */
     @Deprecated(forRemoval = true)
+    @SuppressWarnings("removal")
+    @Override
     @Contract(pure = true)
     RegistryData.PotionEffectEntry registry();
 

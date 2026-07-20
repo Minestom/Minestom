@@ -237,6 +237,8 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      * @deprecated use the direct accessors on {@link Block}
      */
     @Deprecated(forRemoval = true)
+    @SuppressWarnings("removal")
+    @Override
     @Contract(pure = true)
     RegistryData.BlockEntry registry();
 

@@ -34,15 +34,16 @@ record TagImpl<T>(int index, String key,
                 null, null, null, 0);
     }
 
+    @SuppressWarnings("unchecked")
     static <T> TagImpl<T> fromSerializer(String key, TagSerializer<T> serializer) {
         if (serializer instanceof TagRecord.Serializer<?> recordSerializer) {
             // Allow fast retrieval
-            //noinspection unchecked
             return (TagImpl<T>) tag(key, recordSerializer.serializerEntry);
         }
         return tag(key, Serializers.fromTagSerializer(serializer));
     }
 
+    @Deprecated
     @Override
     public String getKey() {
         return key;
@@ -88,6 +89,7 @@ record TagImpl<T>(int index, String key,
 
     @Contract(value = "-> new", pure = true)
     @Override
+    @SuppressWarnings("unchecked")
     public Tag<List<T>> list() {
         var entry = this.entry;
         var readFunction = entry.reader();
@@ -107,6 +109,7 @@ record TagImpl<T>(int index, String key,
                 });
         UnaryOperator<List<T>> co = this.copy != null ? ts -> {
             final int size = ts.size();
+            @SuppressWarnings("unchecked")
             T[] array = (T[]) new Object[size];
             boolean shallowCopy = true;
             for (int i = 0; i < size; i++) {
@@ -164,8 +167,8 @@ record TagImpl<T>(int index, String key,
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void writeUnsafe(CompoundBinaryTag.Builder nbtCompound, @Nullable Object value) {
-        //noinspection unchecked
         write(nbtCompound, (T) value);
     }
 

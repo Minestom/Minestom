@@ -31,6 +31,8 @@ public sealed interface EntityType extends StaticProtocolObject<EntityType>, Ent
      * @deprecated use the direct accessors on {@link EntityType}
      */
     @Deprecated(forRemoval = true)
+    @SuppressWarnings("removal")
+    @Override
     @Contract(pure = true)
     RegistryData.EntityEntry registry();
 
@@ -150,6 +152,7 @@ public sealed interface EntityType extends StaticProtocolObject<EntityType>, Ent
      * @param attachmentName the attachment name
      * @return the immutable offsets, or {@code null} when absent
     */
+    @SuppressWarnings("removal")
     @Contract(pure = true)
     default @Unmodifiable @Nullable List<Vec> entityAttachments(String attachmentName) {
         final List<List<Double>> attachments = registry().entityAttachments(attachmentName);

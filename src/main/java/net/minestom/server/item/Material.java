@@ -29,6 +29,8 @@ public sealed interface Material extends StaticProtocolObject<Material>, Materia
      * @deprecated use the direct accessors on {@link Material}
      */
     @Deprecated(forRemoval = true)
+    @SuppressWarnings("removal")
+    @Override
     @Contract(pure = true)
     RegistryData.MaterialEntry registry();
 

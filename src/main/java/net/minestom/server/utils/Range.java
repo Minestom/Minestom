@@ -38,7 +38,7 @@ public sealed interface Range<T extends Number> {
         }
     }
 
-    record Int(@Nullable java.lang.Integer min, @Nullable java.lang.Integer max) implements Range<java.lang.Integer> {
+    record Int(@Nullable Integer min, @Nullable Integer max) implements Range<Integer> {
         private static final Codec<Range.Int> STRUCT_CODEC = StructCodec.struct(
                 "min", Codec.INT.optional(), Range.Int::min,
                 "max", Codec.INT.optional(), Range.Int::max,
@@ -52,7 +52,7 @@ public sealed interface Range<T extends Number> {
             if (min != null && max != null && min > max) throw new IllegalArgumentException("min must not exceed max");
         }
 
-        public Int(@Nullable java.lang.Integer value) {
+        public Int(@Nullable Integer value) {
             this(value, value);
         }
 

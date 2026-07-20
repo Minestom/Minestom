@@ -21,7 +21,7 @@ public class EntityLineOfSightIntegrationTest {
         var entity2 = new Entity(EntityTypes.ZOMBIE);
         entity2.setInstance(instance, new Pos(10, 42, 0)).join();
 
-        assertEquals(entity2, entity.getLineOfSightEntity(20, (e) -> true));
+        assertEquals(entity2, entity.getLineOfSightEntity(20, (_) -> true));
         assertTrue(entity.hasLineOfSight(entity2, true));
 
         for (int z = -1; z <= 1; ++z) {
@@ -30,7 +30,7 @@ public class EntityLineOfSightIntegrationTest {
             }
         }
 
-        assertNull(entity.getLineOfSightEntity(20, (e) -> true));
+        assertNull(entity.getLineOfSightEntity(20, (_) -> true));
         assertFalse(entity.hasLineOfSight(entity2, true));
     }
 
@@ -45,7 +45,7 @@ public class EntityLineOfSightIntegrationTest {
         var entity2 = new Entity(EntityTypes.ZOMBIE);
         entity2.setInstance(instance, new Pos(-10, 42, 0)).join();
 
-        assertNull(entity.getLineOfSightEntity(20, (e) -> true));
+        assertNull(entity.getLineOfSightEntity(20, (_) -> true));
         assertFalse(entity.hasLineOfSight(entity2, true));
         assertTrue(entity.hasLineOfSight(entity2, false));
 
@@ -69,7 +69,7 @@ public class EntityLineOfSightIntegrationTest {
         var entity2 = new Entity(EntityTypes.ZOMBIE);
         entity2.setInstance(instance, new Pos(10, 42, 0.31)).join();
 
-        assertNull(entity.getLineOfSightEntity(20, (e) -> true));
+        assertNull(entity.getLineOfSightEntity(20, (_) -> true));
         assertFalse(entity.hasLineOfSight(entity2, true));
         assertTrue(entity.hasLineOfSight(entity2, false));
 
@@ -93,7 +93,7 @@ public class EntityLineOfSightIntegrationTest {
         var entity2 = new Entity(EntityTypes.ZOMBIE);
         entity2.setInstance(instance, new Pos(10, 42, 0.3)).join();
 
-        assertEquals(entity2, entity.getLineOfSightEntity(20, (e) -> true));
+        assertEquals(entity2, entity.getLineOfSightEntity(20, (_) -> true));
         assertTrue(entity.hasLineOfSight(entity2, true));
         assertTrue(entity.hasLineOfSight(entity2, false));
 
@@ -103,7 +103,7 @@ public class EntityLineOfSightIntegrationTest {
             }
         }
 
-        assertNull(entity.getLineOfSightEntity(20, (e) -> true));
+        assertNull(entity.getLineOfSightEntity(20, (_) -> true));
         assertFalse(entity.hasLineOfSight(entity2, true));
         assertFalse(entity.hasLineOfSight(entity2, false));
     }
@@ -122,7 +122,7 @@ public class EntityLineOfSightIntegrationTest {
         var entity3 = new Entity(EntityTypes.ZOMBIE);
         entity3.setInstance(instance, new Pos(5, 42, 0)).join();
 
-        assertEquals(entity3, entity.getLineOfSightEntity(20, (e) -> true));
+        assertEquals(entity3, entity.getLineOfSightEntity(20, (_) -> true));
         assertTrue(entity.hasLineOfSight(entity2, true));
         assertTrue(entity.hasLineOfSight(entity2, false));
         assertTrue(entity.hasLineOfSight(entity3, true));
@@ -140,7 +140,7 @@ public class EntityLineOfSightIntegrationTest {
         var entity2 = new Entity(EntityTypes.ZOMBIE);
         entity2.setInstance(instance, new Pos(10, 42, 10)).join();
 
-        assertNull(entity.getLineOfSightEntity(20, (e) -> true));
+        assertNull(entity.getLineOfSightEntity(20, (_) -> true));
         assertFalse(entity.hasLineOfSight(entity2, true));
         assertTrue(entity.hasLineOfSight(entity2, false));
     }
@@ -163,7 +163,7 @@ public class EntityLineOfSightIntegrationTest {
             }
         }
 
-        assertEquals(entity2, entity.getLineOfSightEntity(20, (e) -> true));
+        assertEquals(entity2, entity.getLineOfSightEntity(20, (_) -> true));
         assertTrue(entity.hasLineOfSight(entity2, true));
         assertTrue(entity.hasLineOfSight(entity2, false));
     }
@@ -179,14 +179,14 @@ public class EntityLineOfSightIntegrationTest {
         var entity2 = new Entity(EntityTypes.ZOMBIE);
         entity2.setInstance(instance, new Pos(10, 42, 0)).join();
 
-        assertEquals(entity2, entity.getLineOfSightEntity(20, (e) -> true));
+        assertEquals(entity2, entity.getLineOfSightEntity(20, (_) -> true));
         assertTrue(entity.hasLineOfSight(entity2, true));
 
         entity.teleport(new Pos(10, 42, 0)).join();
         entity2.teleport(new Pos(0, 42, 0)).join();
         entity2.setView(-90, 0);
 
-        assertNull(entity2.getLineOfSightEntity(20, (e) -> true));
+        assertNull(entity2.getLineOfSightEntity(20, (_) -> true));
         assertFalse(entity2.hasLineOfSight(entity, true));
         assertTrue(entity2.hasLineOfSight(entity, false));
     }

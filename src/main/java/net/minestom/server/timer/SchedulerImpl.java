@@ -108,7 +108,7 @@ final class SchedulerImpl implements Scheduler {
         switch (schedule) {
             case TaskScheduleImpl.DurationSchedule durationSchedule -> {
                 final Duration duration = durationSchedule.duration();
-                SCHEDULER.schedule(() -> safeExecute(task), duration.toMillis(), TimeUnit.MILLISECONDS);
+                var _ = SCHEDULER.schedule(() -> safeExecute(task), duration.toMillis(), TimeUnit.MILLISECONDS);
             }
             case TaskScheduleImpl.TickSchedule tickSchedule -> {
                 synchronized (this) {
@@ -117,18 +117,30 @@ final class SchedulerImpl implements Scheduler {
                         case TICK_START -> tickStartTaskQueue;
                         case TICK_END -> tickEndTaskQueue;
                     };
-                    targetTaskQueue.computeIfAbsent(target, i -> new ArrayList<>()).add(task);
+                    targetTaskQueue.computeIfAbsent(target, _ -> new ArrayList<>()).add(task);
                 }
             }
-            case TaskScheduleImpl.FutureSchedule futureSchedule ->
-                    futureSchedule.future().thenRun(() -> safeExecute(task));
-            case TaskScheduleImpl.Park ignored -> task.parked = true;
-            case TaskScheduleImpl.Stop ignored -> task.cancel();
-            case TaskScheduleImpl.Immediate ignored -> {
+            case TaskScheduleImpl.FutureSchedule futureSchedule -> {
+                var _ = futureSchedule.future().thenRun(() -> safeExecute(task));
+            }
+            case TaskScheduleImpl.Park _ -> task.parked = true;
+            case TaskScheduleImpl.Stop _ -> task.cancel();
+            case TaskScheduleImpl.Immediate _ -> {
                 if (task.executionType() == ExecutionType.TICK_END) {
                     tickEndTasksToExecute.relaxedOffer(task);
                 } else tasksToExecute.relaxedOffer(task);
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return "SchedulerImpl{" +
+                "tasksToExecute=" + tasksToExecute +
+                ", tickEndTasksToExecute=" + tickEndTasksToExecute +
+                ", tickStartTaskQueue=" + tickStartTaskQueue +
+                ", tickEndTaskQueue=" + tickEndTaskQueue +
+                ", tickState=" + tickState +
+                '}';
     }
 }

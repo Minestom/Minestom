@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 
 public final class URLUtils {
 
@@ -28,7 +29,7 @@ public final class URLUtils {
 
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(
-                        inputStream));
+                        inputStream, StandardCharsets.UTF_8));
 
         StringBuilder response = new StringBuilder();
         String currentLine;

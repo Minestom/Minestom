@@ -3,6 +3,7 @@ package net.minestom.server.utils;
 // https://github.com/ai/easings.net/blob/master/src/easings/easingsFunctions.ts
 public final class Ease {
     private static final float c1 = 1.70158f;
+    @SuppressWarnings("unused")
     private static final float c2 = c1 * 1.525f;
     private static final float c3 = c1 + 1;
     private static final float c4 = (float) (2 * Math.PI) / 3;

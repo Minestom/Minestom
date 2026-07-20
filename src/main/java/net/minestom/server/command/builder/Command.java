@@ -144,6 +144,7 @@ public class Command {
      * @return the created {@link CommandSyntax syntaxes},
      * there can be multiple of them when optional arguments are used
      */
+    @SuppressWarnings("unchecked")
     public Collection<CommandSyntax> addConditionalSyntax(@Nullable CommandCondition commandCondition,
                                                           CommandExecutor executor,
                                                           Argument<?>... args) {
@@ -183,13 +184,13 @@ public class Command {
                     if (!optionalBranch && !requiredArguments.isEmpty()) {
                         // First optional argument, create a syntax with current cached arguments
                         final CommandSyntax syntax = new CommandSyntax(commandCondition, executor, defaultValuesMap,
-                                requiredArguments.toArray(new Argument[0]));
+                                requiredArguments.toArray(new Argument<?>[0]));
                         optionalSyntaxes.add(syntax);
                         optionalBranch = true;
                     } else {
                         // New optional argument, save syntax with current cached arguments and save default value
                         final CommandSyntax syntax = new CommandSyntax(commandCondition, executor, defaultValuesMap,
-                                requiredArguments.toArray(new Argument[0]));
+                                requiredArguments.toArray(new Argument<?>[0]));
                         optionalSyntaxes.add(syntax);
                     }
                 }
@@ -197,7 +198,7 @@ public class Command {
                 if (isLast) {
                     // Create the last syntax
                     final CommandSyntax syntax = new CommandSyntax(commandCondition, executor, defaultValuesMap,
-                            requiredArguments.toArray(new Argument[0]));
+                            requiredArguments.toArray(new Argument<?>[0]));
                     optionalSyntaxes.add(syntax);
                 }
             }
@@ -410,7 +411,7 @@ public class Command {
         return false;
     }
 
-    private void processNode(Node node, JsonObject jsonObject) {
+    private static void processNode(Node node, JsonObject jsonObject) {
         BiConsumer<String, Consumer<JsonArray>> processor = (s, consumer) -> {
             JsonArray array = new JsonArray();
             consumer.accept(array);

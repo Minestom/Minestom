@@ -26,17 +26,17 @@ final class TagNbtSeparator {
             entry(BinaryTagTypes.DOUBLE, Tag::Double),
             entry(BinaryTagTypes.STRING, Tag::String));
 
-    static void separate(CompoundBinaryTag nbtCompound, Consumer<Entry> consumer) {
+    static void separate(CompoundBinaryTag nbtCompound, Consumer<Entry<?>> consumer) {
         for (var ent : nbtCompound) {
             convert(new ArrayList<>(), ent.getKey(), ent.getValue(), consumer);
         }
     }
 
-    static void separate(String key, BinaryTag nbt, Consumer<Entry> consumer) {
+    static void separate(String key, BinaryTag nbt, Consumer<Entry<?>> consumer) {
         convert(new ArrayList<>(), key, nbt, consumer);
     }
 
-    static Entry separateSingle(String key, BinaryTag nbt) {
+    static Entry<?> separateSingle(String key, BinaryTag nbt) {
         assert !(nbt instanceof CompoundBinaryTag);
         AtomicReference<Entry<?>> entryRef = new AtomicReference<>();
         convert(new ArrayList<>(), key, nbt, entry -> {
@@ -48,7 +48,8 @@ final class TagNbtSeparator {
         return entry;
     }
 
-    private static void convert(List<String> path, String key, BinaryTag nbt, Consumer<Entry> consumer) {
+    @SuppressWarnings("unchecked")
+    private static void convert(List<String> path, String key, BinaryTag nbt, Consumer<Entry<?>> consumer) {
         var tagFunction = SUPPORTED_TYPES.get(nbt.type());
         if (tagFunction != null) {
             Tag<?> tag = tagFunction.apply(key);
@@ -96,6 +97,10 @@ final class TagNbtSeparator {
     record Entry<T>(TagImpl<T> tag, T value) {
         public Entry(Tag<T> tag, T value) {
             this((TagImpl<T>) tag, value);
+        }
+
+        void write(TagWritable writer) {
+            writer.setTag(tag, value);
         }
     }
 }

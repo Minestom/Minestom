@@ -6,15 +6,13 @@ import java.util.Objects;
 import java.util.function.UnaryOperator;
 
 public final class Generators {
-    private static final UnaryOperator<String> IDENTITY = UnaryOperator.identity();
-    private static final UnaryOperator<String> STRIP_CRAFTING = name -> name.replace("CRAFTING_", "");
 
     private static final List<EnumSpec> ENUMS = List.of(
-            new EnumSpec("recipe_types", "net.minestom.server.recipe", "RecipeType", true, STRIP_CRAFTING, "RecipeTypeGenerator"),
+            new EnumSpec("recipe_types", "net.minestom.server.recipe", "RecipeType", true, name -> name.replace("CRAFTING_", ""), "RecipeTypeGenerator"),
             new EnumSpec("recipe_display_types", "net.minestom.server.recipe.display", "RecipeDisplayType"),
             new EnumSpec("slot_display_types", "net.minestom.server.recipe.display", "SlotDisplayType"),
             new EnumSpec("recipe_book_categories", "net.minestom.server.recipe", "RecipeBookCategory"),
-            new EnumSpec("consume_effects", "net.minestom.server.item.component", "ConsumeEffectType", false, IDENTITY, "GenericEnumGenerator"),
+            new EnumSpec("consume_effects", "net.minestom.server.item.component", "ConsumeEffectType", false, UnaryOperator.identity(), "GenericEnumGenerator"),
             new EnumSpec("command_arguments", "net.minestom.server.command", "ArgumentParserType"),
             new EnumSpec("villager_types", "net.minestom.server.entity", "VillagerType")
     );
@@ -98,7 +96,7 @@ public final class Generators {
     record EnumSpec(String resource, String packageName, String className, boolean isPublic,
                     UnaryOperator<String> constantNameTransform, String generatorName) {
         EnumSpec(String resource, String packageName, String className) {
-            this(resource, packageName, className, true, IDENTITY, "GenericEnumGenerator");
+            this(resource, packageName, className, true, UnaryOperator.identity(), "GenericEnumGenerator");
         }
 
         EnumSpec {

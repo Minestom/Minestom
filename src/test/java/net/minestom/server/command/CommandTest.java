@@ -42,7 +42,7 @@ public class CommandTest {
         manager.register(command);
 
         AtomicBoolean checkSet = new AtomicBoolean(false);
-        command.setDefaultExecutor((sender, context) -> checkSet.set("value".equals(context.get("key"))));
+        command.setDefaultExecutor((_, context) -> checkSet.set("value".equals(context.get("key"))));
 
         manager.executeServerCommand("command");
 

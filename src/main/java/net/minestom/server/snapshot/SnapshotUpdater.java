@@ -31,6 +31,7 @@ public sealed interface SnapshotUpdater permits SnapshotUpdaterImpl {
      * @param <T>          the snapshot type
      * @return the new updated snapshot
      */
+    @SuppressWarnings("TypeParameterUnusedInFormals")
     static <T extends Snapshot> T update(Snapshotable snapshotable) {
         return SnapshotUpdaterImpl.update(snapshotable);
     }

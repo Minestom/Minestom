@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
+import java.nio.charset.StandardCharsets;
 import net.kyori.adventure.key.Key;
 import net.minestom.data.MinestomData;
 import net.minestom.server.MinecraftServer;
@@ -60,7 +61,7 @@ public final class RegistryData {
     }
 
     @ApiStatus.Internal
-    public static BlockEntry block(String namespace, Properties main, HashMap<Object, Object> internCache, @Nullable BlockEntry parent, @Nullable Properties parentProperties) {
+    public static BlockEntry block(String namespace, Properties main, Map<Object, Object> internCache, @Nullable BlockEntry parent, @Nullable Properties parentProperties) {
         return new BlockEntry(namespace, main, internCache, parent, parentProperties);
     }
 
@@ -108,6 +109,8 @@ public final class RegistryData {
     }
 
     /**
+     * Loads a registry file from the data resources, falling back to the working directory.
+     *
      * @param path The path without a leading slash, e.g. "blocks.json"
      */
     public static @Nullable InputStream loadRegistryFile(String path) throws IOException {
@@ -129,7 +132,7 @@ public final class RegistryData {
         try (InputStream resourceStream = loadRegistryFile(resourcePath)) {
             if (resourceStream != null) {
                 final Map<String, Object> map = new HashMap<>();
-                try (JsonReader reader = new JsonReader(new InputStreamReader(resourceStream))) {
+                try (JsonReader reader = new JsonReader(new InputStreamReader(resourceStream, StandardCharsets.UTF_8))) {
                     reader.beginObject();
                     while (reader.hasNext()) map.put(reader.nextName(), readObject(reader));
                     reader.endObject();
@@ -511,7 +514,7 @@ public final class RegistryData {
             final Transcoder<Object> coder = new RegistryTranscoder<>(Transcoder.JAVA, registries);
             DataComponentMap.Builder builder = DataComponentMap.builder();
             for (Map.Entry<String, Object> entry : components) {
-                //noinspection unchecked
+                @SuppressWarnings("unchecked")
                 DataComponent<Object> component = (DataComponent<Object>) DataComponent.fromKey(entry.getKey());
                 Check.notNull(component, "Unknown component {0} in {1}", entry.getKey(), key);
 
@@ -708,7 +711,7 @@ public final class RegistryData {
     public static final class VillagerProfessionEntry implements Entry {
         private final Key key;
         private final int id;
-        private final SoundEvent workSound;
+        private final @Nullable SoundEvent workSound;
 
         public VillagerProfessionEntry(String namespace, Properties main) {
             this.key = Key.key(namespace);
@@ -815,7 +818,7 @@ public final class RegistryData {
         }
 
         @Override
-        public String getString(String name, String defaultValue) {
+        public String getString(String name, @Nullable String defaultValue) {
             var element = element(name);
             return element != null ? (String) element : defaultValue;
         }
@@ -892,8 +895,8 @@ public final class RegistryData {
             return map;
         }
 
+        @SuppressWarnings({"unchecked", "TypeParameterUnusedInFormals"})
         private <T> T element(String name) {
-            //noinspection unchecked
             return (T) map.get(name);
         }
 
@@ -911,7 +914,7 @@ public final class RegistryData {
             return new PropertiesMap(map);
         }
 
-        String getString(String name, String defaultValue);
+        String getString(String name, @Nullable String defaultValue);
 
         String getString(String name);
 

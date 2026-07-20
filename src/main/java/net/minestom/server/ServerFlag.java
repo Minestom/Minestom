@@ -78,6 +78,7 @@ public final class ServerFlag {
     public static final boolean PROXY_PROTOCOL = booleanProperty("minestom.proxy-protocol", false);
     public static final boolean PROXY_PROTOCOL_REQUIRED = booleanProperty("minestom.proxy-protocol.required", false);
 
+    @SuppressWarnings("ConstantField") // kept not final for binary compatibility until the next breaking release
     public static boolean INSIDE_TEST = booleanProperty("minestom.inside-test", false);
 
     private ServerFlag() {}
@@ -91,7 +92,8 @@ public final class ServerFlag {
         try {
             final String value = System.getProperty(name);
             if (value != null) result = Boolean.parseBoolean(value);
-        } catch (IllegalArgumentException | NullPointerException ignored) {
+        } catch (IllegalArgumentException | NullPointerException _) {
+            // Invalid or inaccessible property, keep the default
         }
         return result;
     }
@@ -101,6 +103,7 @@ public final class ServerFlag {
         return System.getProperty(name, defaultValue);
     }
 
+    @SuppressWarnings("unused")
     private static String stringProperty(String name) {
         return System.getProperty(name);
     }
@@ -129,7 +132,8 @@ public final class ServerFlag {
         try {
             final String value = System.getProperty(name);
             if (value != null) result = Float.parseFloat(value);
-        } catch (IllegalArgumentException | NullPointerException ignored) {
+        } catch (IllegalArgumentException | NullPointerException _) {
+            // Invalid or inaccessible property, keep the default
         }
         return result;
     }

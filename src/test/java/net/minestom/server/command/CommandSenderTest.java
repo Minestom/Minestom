@@ -32,7 +32,7 @@ public class CommandSenderTest {
 
         private final TagHandler handler = TagHandler.newHandler();
 
-        private Component mostRecentMessage = null;
+        private @Nullable Component mostRecentMessage = null;
 
         @Override
         public TagHandler tagHandler() {
@@ -44,7 +44,7 @@ public class CommandSenderTest {
             mostRecentMessage = message;
         }
 
-        public @Nullable Component getMostRecentMessage() {
+        @Nullable Component getMostRecentMessage() {
             return mostRecentMessage;
         }
 

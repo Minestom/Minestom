@@ -6,7 +6,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
 public final class BinaryTagUtil {
-    private static final BinaryTagType<?>[] TYPES = new BinaryTagType[]{
+    private static final BinaryTagType<?>[] TYPES = new BinaryTagType<?>[]{
             BinaryTagTypes.END,
             BinaryTagTypes.BYTE,
             BinaryTagTypes.SHORT,

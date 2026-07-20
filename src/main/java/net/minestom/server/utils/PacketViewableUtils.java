@@ -39,7 +39,7 @@ public final class PacketViewableUtils {
             PacketSendingUtils.sendGroupedPacket(viewable.getViewers(), serverPacket, value -> !Objects.equals(value, entity));
             return;
         }
-        final Player exception = entity instanceof Player ? (Player) entity : null;
+        final Player exception = entity instanceof Player player ? player : null;
         ViewableStorage storage = retrieveStorage(viewable);
         storage.append(serverPacket, exception);
     }
@@ -87,8 +87,8 @@ public final class PacketViewableUtils {
             PacketWriting.writeFramedPacket(buffer, ConnectionState.PLAY, serverPacket, MinecraftServer.getCompressionThreshold());
             final long end = buffer.writeIndex();
             if (exception != null) {
-                final long offsets = start << 32 | end & 0xFFFFFFFFL;
-                LongList list = entityIdMap.computeIfAbsent(exception.getEntityId(), id -> new LongArrayList());
+                final long offsets = (start << 32) | (end & 0xFFFFFFFFL);
+                LongList list = entityIdMap.computeIfAbsent(exception.getEntityId(), _ -> new LongArrayList());
                 list.add(offsets);
             }
         }

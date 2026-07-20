@@ -24,6 +24,8 @@ public sealed interface BlockSoundType extends StaticProtocolObject<BlockSoundTy
      * @deprecated use the direct accessors on {@link BlockSoundType}
      */
     @Deprecated(forRemoval = true)
+    @SuppressWarnings("removal")
+    @Override
     @Contract(pure = true)
     RegistryData.BlockSoundTypeEntry registry();
 
@@ -68,6 +70,7 @@ public sealed interface BlockSoundType extends StaticProtocolObject<BlockSoundTy
         return registry().stepSound();
     }
 
+    @Override
     @Contract(pure = true)
     default int id() {
         return 0; // Not sent through packets in the protocol, also must be between 0 and [size of block sound type list] because id mappings are stored in an array

@@ -67,6 +67,7 @@ final class TestConnectionImpl implements TestConnection {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends ServerPacket> Collector<T> trackIncoming(Class<T> type) {
         var tracker = new IncomingCollector<>(type);
         this.incomingTrackers.add(IncomingCollector.class.cast(tracker));

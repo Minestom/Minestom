@@ -79,7 +79,7 @@ public class BlockPlacementListener {
         }
 
         final Material useMaterial = usedItem.material();
-        if (!useMaterial.isBlock()) {
+        if (useMaterial.block() == null) {
             // Player didn't try to place a block but interacted with one
             PlayerUseItemOnBlockEvent event = new PlayerUseItemOnBlockEvent(player, hand, usedItem, blockPosition, cursorPosition, blockFace);
             EventDispatcher.call(event);

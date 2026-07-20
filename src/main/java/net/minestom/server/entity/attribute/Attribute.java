@@ -24,6 +24,8 @@ public sealed interface Attribute extends StaticProtocolObject<Attribute>, Attri
      * @deprecated use the direct accessors on {@link Attribute}
      */
     @Deprecated(forRemoval = true)
+    @SuppressWarnings("removal")
+    @Override
     @Contract(pure = true)
     RegistryData.AttributeEntry registry();
 

@@ -119,8 +119,6 @@ public class ArgumentParser {
                 } else {
                     builder.append(c);
                 }
-
-                continue;
             }
 
         }

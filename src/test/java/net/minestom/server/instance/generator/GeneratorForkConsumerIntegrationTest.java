@@ -22,7 +22,7 @@ public class GeneratorForkConsumerIntegrationTest {
         AtomicReference<Exception> failed = new AtomicReference<>();
         instance.setGenerator(unit -> {
             try {
-                unit.fork(setter -> {
+                unit.fork(_ -> {
                 });
             } catch (Exception e) {
                 failed.set(e);

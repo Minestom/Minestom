@@ -41,7 +41,7 @@ public class MinecartCommand extends Command {
         meta.setCustomBlockState(context.get(block));
         meta.setCustomBlockYPosition(context.get(offset));
 
-        minecart.setInstance(player.getInstance(), player.getPosition().withView(0f, 0f));
+        minecart.setInstance(player.getInstance(), player.getPosition().withView(0f, 0f)).join();
     }
 
     private enum Type {

@@ -236,13 +236,13 @@ public class PaletteCloneTest {
             Palette cloned = original.clone();
 
             // Apply replace operation to original
-            original.replaceAll((x, y, z, value) -> value * 2);
+            original.replaceAll((_, _, _, value) -> value * 2);
 
             // Verify clone is unaffected
             cloned.getAll((x, y, z, value) -> assertEquals(x + y + z, value));
 
             // Apply different replace to clone
-            cloned.replaceAll((x, y, z, value) -> value + 1000);
+            cloned.replaceAll((_, _, _, value) -> value + 1000);
 
             // Verify both have correct values
             original.getAll((x, y, z, value) -> assertEquals((x + y + z) * 2, value));
@@ -282,11 +282,11 @@ public class PaletteCloneTest {
 
             // Verify each has correct values
             assertEquals(original.maxSize(), original.count());
-            original.getAll((x, y, z, value) -> assertEquals(1, value));
+            original.getAll((_, _, _, value) -> assertEquals(1, value));
 
-            clone1.getAll((x, y, z, value) -> assertEquals(2, value));
-            clone2.getAll((x, y, z, value) -> assertEquals(3, value));
-            clone3.getAll((x, y, z, value) -> assertEquals(4, value));
+            clone1.getAll((_, _, _, value) -> assertEquals(2, value));
+            clone2.getAll((_, _, _, value) -> assertEquals(3, value));
+            clone3.getAll((_, _, _, value) -> assertEquals(4, value));
         }
     }
 

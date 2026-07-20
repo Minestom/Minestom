@@ -16,7 +16,7 @@ public record DebugSubscriptionImpl<T>(
     static final ObjectArray<DebugSubscription<?>> IDS = ObjectArray.singleThread(32);
 
     static {
-        var ignoredForInit = DebugSubscriptions.BEES;
+        var _ = DebugSubscriptions.BEES;
     }
 
     @Override

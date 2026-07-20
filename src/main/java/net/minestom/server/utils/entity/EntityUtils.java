@@ -13,6 +13,8 @@ import java.util.Set;
 public final class EntityUtils {
 
     /**
+     * Gets the position offset at which a passenger rides the given vehicle.
+     *
      * @param vehicle the target vehicle
      * @param passenger the target passenger
      * @param passengerIndex the index of the passenger in the vehicle's passenger list

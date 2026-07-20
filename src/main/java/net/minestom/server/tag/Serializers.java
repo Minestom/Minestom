@@ -41,7 +41,7 @@ final class Serializers {
     static <T> Entry<T, CompoundBinaryTag> fromTagSerializer(TagSerializer<T> serializer) {
         return new Serializers.Entry<>(BinaryTagTypes.COMPOUND,
                 (CompoundBinaryTag compound) -> {
-                    if ((!ServerFlag.SERIALIZE_EMPTY_COMPOUND) && compound.isEmpty()) return null;
+                    if (!ServerFlag.SERIALIZE_EMPTY_COMPOUND && compound.isEmpty()) return null;
                     return serializer.read(TagHandler.fromCompound(compound));
                 },
                 (value) -> {

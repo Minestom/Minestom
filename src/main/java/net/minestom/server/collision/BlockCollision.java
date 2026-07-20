@@ -237,10 +237,11 @@ final class BlockCollision {
             // don't fall out of if statement, we could end up redundantly grabbing a block, and we only need to
             // collision check against the current shape since the below shape isn't tall
             if (belowShape.relativeEnd().y() > 1) {
-                // we should always check both shapes, so no short-circuit here, to handle properties where the bounding box
+                // we should always check both shapes, to handle properties where the bounding box
                 // hits the current solid but misses the tall solid
-                return belowShape.intersectBoxSwept(entityPosition, entityVelocity, belowPos, boundingBox, finalResult) |
-                        (currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity, currentPos, boundingBox, finalResult));
+                final boolean belowHit = belowShape.intersectBoxSwept(entityPosition, entityVelocity, belowPos, boundingBox, finalResult);
+                final boolean currentHit = currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity, currentPos, boundingBox, finalResult);
+                return belowHit || currentHit;
             } else {
                 return currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity, currentPos, boundingBox, finalResult);
             }

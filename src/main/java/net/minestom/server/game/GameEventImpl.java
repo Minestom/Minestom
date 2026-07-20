@@ -12,6 +12,7 @@ import org.jetbrains.annotations.UnknownNullability;
  * Represents a game event implementation.
  * Used for a wide variety of events, from weather to bed use to game mode to demo messages.
  */
+@SuppressWarnings("removal")
 record GameEventImpl(RegistryData.GameEventEntry registry, Key key, int id) implements GameEvent {
     static final Registry<GameEvent> REGISTRY = RegistryData.createStaticRegistry(
             BuiltinRegistries.GAME_EVENT, GameEventImpl::createImpl);

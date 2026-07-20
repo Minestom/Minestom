@@ -20,6 +20,7 @@ public sealed interface Fluid extends StaticProtocolObject<Fluid>, Fluids permit
     */
     @Override
     @Deprecated(forRemoval = true)
+    @SuppressWarnings("removal")
     @Contract(pure = true)
     RegistryData.FluidEntry registry();
 

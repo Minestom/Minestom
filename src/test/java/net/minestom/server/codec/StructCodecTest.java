@@ -3,6 +3,7 @@ package net.minestom.server.codec;
 import com.google.gson.JsonParser;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.minestom.server.adventure.MinestomAdventure;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
 import static net.minestom.server.codec.CodecAssertions.assertError;
@@ -48,7 +49,7 @@ public class StructCodecTest {
 
     @Test
     void singleFieldOptionalMissing() {
-        record TheObject(String name) {
+        record TheObject(@Nullable String name) {
         }
 
         var codec = StructCodec.struct(
@@ -85,7 +86,7 @@ public class StructCodecTest {
 
     @Test
     void singleFieldOptionalExplicitJsonNull() {
-        record TheObject(String name) {
+        record TheObject(@Nullable String name) {
         }
 
         var codec = StructCodec.struct(
@@ -149,7 +150,7 @@ public class StructCodecTest {
         assertEquals(snbt("{name: \"test\", value: \"innerValue\"}"), assertOk(encodeResult));
     }
 
-    private BinaryTag snbt(String snbt) {
+    private static BinaryTag snbt(String snbt) {
         return assertDoesNotThrow(() -> MinestomAdventure.tagStringIO().asTag(snbt));
     }
 

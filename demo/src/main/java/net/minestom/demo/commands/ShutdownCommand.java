@@ -12,10 +12,10 @@ public class ShutdownCommand extends Command {
 
     public ShutdownCommand() {
         super("shutdown");
-        addSyntax(this::execute);
+        addSyntax(ShutdownCommand::execute);
     }
 
-    private void execute(CommandSender commandSender, CommandContext commandContext) {
+    private static void execute(CommandSender commandSender, CommandContext commandContext) {
         MinecraftServer.stopCleanly();
     }
 }

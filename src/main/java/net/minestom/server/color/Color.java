@@ -179,6 +179,8 @@ public class Color implements RGBLike {
         return blue;
     }
 
+    // getClass is required for symmetry: AlphaColor adds state and its equals rejects plain Colors
+    @SuppressWarnings("EqualsGetClass")
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;

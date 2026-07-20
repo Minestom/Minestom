@@ -24,7 +24,7 @@ public class EntityViewerRuleIntegrationTest {
         assertEquals(1, p1.getViewers().size());
         assertEquals(1, p2.getViewers().size());
 
-        p1.updateViewableRule(player -> false);
+        p1.updateViewableRule(_ -> false);
 
         assertEquals(0, p1.getViewers().size());
         assertEquals(1, p2.getViewers().size());
@@ -36,7 +36,7 @@ public class EntityViewerRuleIntegrationTest {
         var p1 = env.createPlayer(instance, new Pos(0, 42, 0));
 
         AtomicBoolean enabled = new AtomicBoolean(false);
-        p1.updateViewableRule(p -> enabled.get());
+        p1.updateViewableRule(_ -> enabled.get());
 
         var p2 = env.createPlayer(instance, new Pos(0, 42, 0));
         assertEquals(0, p1.getViewers().size());
@@ -59,8 +59,8 @@ public class EntityViewerRuleIntegrationTest {
         AtomicBoolean enabled1 = new AtomicBoolean(false);
         AtomicBoolean enabled2 = new AtomicBoolean(false);
 
-        p1.updateViewableRule(p -> enabled1.get());
-        p2.updateViewableRule(p -> enabled2.get());
+        p1.updateViewableRule(_ -> enabled1.get());
+        p2.updateViewableRule(_ -> enabled2.get());
         assertEquals(0, p1.getViewers().size());
         assertEquals(0, p2.getViewers().size());
 
@@ -91,7 +91,7 @@ public class EntityViewerRuleIntegrationTest {
         assertEquals(1, p1.getViewers().size());
         assertEquals(1, p2.getViewers().size());
 
-        p1.updateViewerRule(player -> false);
+        p1.updateViewerRule(_ -> false);
 
         assertEquals(1, p1.getViewers().size());
         assertEquals(0, p2.getViewers().size());
@@ -102,7 +102,7 @@ public class EntityViewerRuleIntegrationTest {
         var instance = env.createFlatInstance();
         var p1 = env.createPlayer(instance, new Pos(0, 42, 0));
         AtomicBoolean enabled = new AtomicBoolean(false);
-        p1.updateViewerRule(e -> enabled.get());
+        p1.updateViewerRule(_ -> enabled.get());
 
         var p2 = env.createPlayer(instance, new Pos(0, 42, 0));
         assertEquals(1, p1.getViewers().size());
@@ -125,8 +125,8 @@ public class EntityViewerRuleIntegrationTest {
         AtomicBoolean enabled1 = new AtomicBoolean(false);
         AtomicBoolean enabled2 = new AtomicBoolean(false);
 
-        p1.updateViewerRule(e -> enabled1.get());
-        p2.updateViewerRule(e -> enabled2.get());
+        p1.updateViewerRule(_ -> enabled1.get());
+        p2.updateViewerRule(_ -> enabled2.get());
         assertEquals(0, p1.getViewers().size());
         assertEquals(0, p2.getViewers().size());
 
@@ -155,7 +155,7 @@ public class EntityViewerRuleIntegrationTest {
         var vehicle = new Entity(EntityType.ZOMBIE);
         vehicle.setInstance(instance, new Pos(0, 40, 0)).join();
         var passenger = new Entity(EntityType.PIG);
-        passenger.updateViewableRule(p -> false);
+        passenger.updateViewableRule(_ -> false);
         vehicle.addPassenger(passenger);
 
         var testPlayer = connection.connect(instance, new Pos(0, 40, 0));
@@ -185,7 +185,7 @@ public class EntityViewerRuleIntegrationTest {
                 .toList();
         assertEquals(2, spawns.size());
 
-        passenger.updateViewableRule(p -> false);
+        passenger.updateViewableRule(_ -> false);
 
         assertTrue(vehicle.getViewers().contains(testPlayer));
         assertFalse(passenger.getViewers().contains(testPlayer));
@@ -210,7 +210,7 @@ public class EntityViewerRuleIntegrationTest {
                 .toList();
         assertEquals(2, spawns.size());
 
-        vehicle.updateViewableRule(p -> false);
+        vehicle.updateViewableRule(_ -> false);
 
         assertFalse(vehicle.getViewers().contains(testPlayer));
         assertFalse(passenger.getViewers().contains(testPlayer));
@@ -253,7 +253,7 @@ public class EntityViewerRuleIntegrationTest {
         vehicle.setInstance(instance, new Pos(0, 40, 0)).join();
 
         vehicle.setAutoViewable(false);
-        passenger.updateViewableRule(p -> false);
+        passenger.updateViewableRule(_ -> false);
         vehicle.addPassenger(passenger);
 
         var testPlayer = connection.connect(instance, new Pos(0, 40, 5000));
