@@ -1831,6 +1831,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
+     * Checks whether this entity has an unobstructed line of sight to the given one.
+     *
      * @param entity the entity to be checked.
      * @return if the current entity has line of sight to the given one.
      * @see Entity#hasLineOfSight(Entity, boolean)

@@ -15,6 +15,7 @@ tasks.withType<JavaCompile>().configureEach {
         error(
                 "DefaultCharset",
                 "FutureReturnValueIgnored",
+                "MissingSummary",
                 "StringCaseLocaleUsage",
                 "StringSplitter",
                 "MissingOverride",

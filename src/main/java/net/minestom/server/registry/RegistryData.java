@@ -106,6 +106,8 @@ public final class RegistryData {
     }
 
     /**
+     * Loads a registry file from the data resources, falling back to the working directory.
+     *
      * @param path The path without a leading slash, e.g. "blocks.json"
      */
     public static @Nullable InputStream loadRegistryFile(String path) throws IOException {

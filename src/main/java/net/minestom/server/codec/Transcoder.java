@@ -359,7 +359,7 @@ public interface Transcoder<D> {
         Result<D> getValue(String key);
 
         /**
-         * @return the size of the map
+         * {@return the size of the map}
          */
         @Contract(pure = true)
         default int size() {
@@ -367,7 +367,7 @@ public interface Transcoder<D> {
         }
 
         /**
-         * @return true if the size is zero
+         * {@return true if the size is zero}
          */
         @Contract(pure = true)
         default boolean isEmpty() {

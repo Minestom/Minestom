@@ -40,7 +40,7 @@ public record Weather(float rainLevel, float thunderLevel) {
     }
 
     /**
-     * @return true if {@code rainLevel} is > 0
+     * {@return true if {@code rainLevel} is > 0}
      */
     public boolean isRaining() {
         return rainLevel > 0;

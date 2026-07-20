@@ -102,6 +102,9 @@ public class AcquirableCollection<E> implements Collection<Acquirable<E>> {
     }
 
     /**
+     * Separates a collection of acquirable elements into a map of thread to elements,
+     * consuming immediately the elements already owned by the current thread.
+     *
      * @param collection the acquirable collection
      * @param consumer   the consumer to execute when an element is already in the current thread
      * @return a new Thread to acquirable elements map

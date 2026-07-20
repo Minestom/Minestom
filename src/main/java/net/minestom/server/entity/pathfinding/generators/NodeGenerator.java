@@ -26,7 +26,7 @@ public interface NodeGenerator {
                                                      PNode current, Point goal, BoundingBox boundingBox);
 
     /**
-     * @return snap start and end points to the ground
+     * {@return whether the start and end points should be snapped to the ground}
      */
     boolean hasGravitySnap();
 

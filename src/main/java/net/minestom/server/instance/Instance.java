@@ -338,6 +338,8 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
     public abstract @Nullable Chunk getChunk(int chunkX, int chunkZ);
 
     /**
+     * Checks whether the chunk at the given chunk coordinates is loaded.
+     *
      * @param chunkX the chunk X
      * @param chunkZ this chunk Z
      * @return true if the chunk is loaded
@@ -347,6 +349,8 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
     }
 
     /**
+     * Checks whether the chunk containing the given point is loaded.
+     *
      * @param point coordinate of a block or other
      * @return true if the chunk is loaded
      */
@@ -518,6 +522,8 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
         if (clock != null) clock.time(time);
     }
 
+    /// Sets the current time (in ticks) of the given clock.
+    ///
     /// @throws IllegalArgumentException if the clock was not registered when the instance was created.
     public void setTime(RegistryKey<WorldClock> clock, long time) {
         clock(clock).time(time);

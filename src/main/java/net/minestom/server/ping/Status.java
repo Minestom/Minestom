@@ -90,6 +90,8 @@ public record Status(
         }
 
         /**
+         * Creates a {@link PlayerInfo} with the online count and a sample of online players.
+         *
          * @param maxSamples The maximum number of player entries to include in the sample
          * @return A {@link PlayerInfo} containing the online count, and a sample of online players.
          */

@@ -33,7 +33,7 @@ public final class Cooldown {
     }
 
     /**
-     * @return the unit of measurement
+     * {@return the unit of measurement}
      */
     public TemporalUnit getTemporalUnit() {
         return temporalUnit;
@@ -44,6 +44,8 @@ public final class Cooldown {
     }
 
     /**
+     * Refreshes the time of the last update.
+     *
      * @param lastUpdate the time of the last update, in nanos
      */
     public void refreshLastUpdate(long lastUpdate) {
