@@ -91,7 +91,7 @@ public final class ServerFlag {
         try {
             final String value = System.getProperty(name);
             if (value != null) result = Boolean.parseBoolean(value);
-        } catch (IllegalArgumentException | NullPointerException ignored) {
+        } catch (IllegalArgumentException | NullPointerException _) {
         }
         return result;
     }
@@ -130,7 +130,7 @@ public final class ServerFlag {
         try {
             final String value = System.getProperty(name);
             if (value != null) result = Float.parseFloat(value);
-        } catch (IllegalArgumentException | NullPointerException ignored) {
+        } catch (IllegalArgumentException | NullPointerException _) {
         }
         return result;
     }

@@ -287,10 +287,10 @@ public class PlayerInit {
                 }
                 System.out.println(event.getKey() + " -> " + payload);
             })
-            .addListener(PlayerPacketOutEvent.class, event -> {
+            .addListener(PlayerPacketOutEvent.class, _ -> {
                 //System.out.println("out " + event.getPacket().getClass().getSimpleName());
             })
-            .addListener(PlayerPacketEvent.class, event -> {
+            .addListener(PlayerPacketEvent.class, _ -> {
 
                 //System.out.println("in " + event.getPacket().getClass().getSimpleName());
             })

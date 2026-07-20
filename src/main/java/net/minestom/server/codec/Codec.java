@@ -257,7 +257,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
             Function<T, StructCodec<? extends T>> serializerGetter
     ) {
         Objects.requireNonNull(registry, "registry");
-        return Codec.RegistryTaggedUnion(key, (ignored) -> registry, serializerGetter); // Stable Value/Lazy Constant
+        return Codec.RegistryTaggedUnion(key, (_) -> registry, serializerGetter); // Stable Value/Lazy Constant
     }
 
     /**

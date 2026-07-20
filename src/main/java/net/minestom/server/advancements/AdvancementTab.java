@@ -141,7 +141,7 @@ public class AdvancementTab implements Viewable {
      * @param player the player
      */
     private void addPlayer(Player player) {
-        Set<AdvancementTab> tabs = PLAYER_TAB_MAP.computeIfAbsent(player.getUuid(), p -> new CopyOnWriteArraySet<>());
+        Set<AdvancementTab> tabs = PLAYER_TAB_MAP.computeIfAbsent(player.getUuid(), _ -> new CopyOnWriteArraySet<>());
         tabs.add(this);
     }
 

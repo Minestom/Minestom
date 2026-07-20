@@ -15,7 +15,7 @@ public class TeleportCommand extends Command {
     public TeleportCommand() {
         super("tp");
 
-        setDefaultExecutor((source, context) -> source.sendMessage(Component.text("Usage: /tp x y z")));
+        setDefaultExecutor((source, _) -> source.sendMessage(Component.text("Usage: /tp x y z")));
 
         var posArg = ArgumentType.RelativeVec3("pos");
         var playerArg = ArgumentType.Word("player");

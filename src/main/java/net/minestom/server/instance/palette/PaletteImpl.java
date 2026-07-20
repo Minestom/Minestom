@@ -183,7 +183,7 @@ final class PaletteImpl implements Palette {
         if (bitsPerEntry == 0) {
             this.count += offset;
         } else {
-            replaceAll((x, y, z, value) -> value + offset);
+            replaceAll((_, _, _, value) -> value + offset);
         }
     }
 
@@ -217,7 +217,7 @@ final class PaletteImpl implements Palette {
                     this.count += count; // Replacing air with a block
                 }
             } else {
-                replaceAll((x, y, z, value) -> value == oldValue ? newValue : value);
+                replaceAll((_, _, _, value) -> value == oldValue ? newValue : value);
             }
         }
     }
@@ -505,7 +505,7 @@ final class PaletteImpl implements Palette {
 
         // Count unique values
         IntSet uniqueValues = new IntOpenHashSet();
-        getAll((x, y, z, value) -> uniqueValues.add(value));
+        getAll((_, _, _, value) -> uniqueValues.add(value));
         final int uniqueCount = uniqueValues.size();
 
         // If only one unique value, use fill for maximum optimization

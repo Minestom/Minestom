@@ -182,7 +182,7 @@ public final class CollisionUtils {
         if (cachedShape != null) return cachedShape;
         final Shape parsedShape = ShapeImpl.parseShapeFromRegistry(shape, (byte) 0);
         internCache.put(shape, parsedShape);
-        return (Shape) internCache.computeIfAbsent(parsedShape, k -> parsedShape);
+        return (Shape) internCache.computeIfAbsent(parsedShape, _ -> parsedShape);
     }
 
     @ApiStatus.Internal
@@ -193,7 +193,7 @@ public final class CollisionUtils {
         if (cachedShape != null) return cachedShape;
         final Shape parsedShape = occludes ? ShapeImpl.parseShapeFromRegistry(shape, lightEmission) : ShapeImpl.emptyShape(lightEmission);
         internCache.put(entry, parsedShape);
-        return (Shape) internCache.computeIfAbsent(parsedShape, k -> parsedShape);
+        return (Shape) internCache.computeIfAbsent(parsedShape, _ -> parsedShape);
     }
 
     /**

@@ -104,7 +104,7 @@ public class TagUpdateTest {
         var tag2 = Tag.Integer("coin").map(i -> i + 1, i -> i - 1);
         var handler = TagHandler.newHandler();
         handler.setTag(tag1, 5);
-        assertDoesNotThrow(() -> handler.updateTag(tag2, value -> 5));
+        assertDoesNotThrow(() -> handler.updateTag(tag2, _ -> 5));
         assertEquals(4, handler.getTag(tag1));
         assertEquals(5, handler.getTag(tag2));
     }
@@ -125,7 +125,7 @@ public class TagUpdateTest {
         assertEquals(6, handler.getTag(tag1));
         assertEquals(new Test(6), handler.getTag(tag2));
 
-        handler.updateTag(tag2, value -> null);
+        handler.updateTag(tag2, _ -> null);
         assertNull(handler.getTag(tag1));
         assertNull(handler.getTag(tag2));
     }
@@ -146,7 +146,7 @@ public class TagUpdateTest {
         assertEquals(6, handler.getTag(tag1));
         assertEquals(new Test(6), handler.getTag(tag2));
 
-        handler.updateTag(tag2, value -> null);
+        handler.updateTag(tag2, _ -> null);
         assertNull(handler.getTag(tag1));
         assertNull(handler.getTag(tag2));
     }
@@ -170,7 +170,7 @@ public class TagUpdateTest {
         assertEquals(6, handler.getTag(tag1));
         assertEquals(new Structure(new Test(6)), handler.getTag(tag2));
 
-        handler.updateTag(tag2, value -> null);
+        handler.updateTag(tag2, _ -> null);
         assertNull(handler.getTag(tag1));
         assertNull(handler.getTag(tag2));
     }
@@ -188,7 +188,7 @@ public class TagUpdateTest {
         assertEquals(6, handler.getTag(tag1));
         assertEquals(new Test(6), handler.getTag(tag2));
 
-        handler.updateTag(tag2, value -> null);
+        handler.updateTag(tag2, _ -> null);
         assertNull(handler.getTag(tag1));
         assertNull(handler.getTag(tag2));
     }
@@ -199,7 +199,7 @@ public class TagUpdateTest {
         var tagD = Tag.Double("coin");
         var handler = TagHandler.newHandler();
         handler.setTag(tagI, 5);
-        assertThrows(ClassCastException.class, () -> handler.updateTag(tagD, value -> 5d));
+        assertThrows(ClassCastException.class, () -> handler.updateTag(tagD, _ -> 5d));
     }
 
     @Test

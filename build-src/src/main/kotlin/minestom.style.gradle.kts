@@ -26,6 +26,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "ObjectToString",
                 "OperatorPrecedence",
                 "PatternMatchingInstanceof",
+                "UnnamedVariable",
                 "UnusedMethod",
                 "UnusedVariable",
                 "UnnecessaryLambda",

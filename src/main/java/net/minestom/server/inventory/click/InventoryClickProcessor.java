@@ -117,7 +117,7 @@ public final class InventoryClickProcessor {
         }
 
         clickResult.setCancel(true);
-        final var pair = TransactionType.ADD.process(targetInventory, clicked, (index, itemStack) -> {
+        final var pair = TransactionType.ADD.process(targetInventory, clicked, (index, _) -> {
             if (inventory == targetInventory && index == slot) {
                 return false; // Prevent item lose/duplication
             }
@@ -226,7 +226,7 @@ public final class InventoryClickProcessor {
             return clickResult;
         }
         final BiFunction<AbstractInventory, ItemStack, ItemStack> func = (inv, rest) -> {
-            var pair = TransactionType.TAKE.process(inv, rest, (index, itemStack) -> {
+            var pair = TransactionType.TAKE.process(inv, rest, (index, _) -> {
                 // Prevent item loss/duplication
                 return index != slot || clickedInventory != inv;
             });

@@ -521,7 +521,7 @@ final class CommandParserImpl implements CommandParser {
                 final String remaining = reader.readRemaining();
                 return new ArgumentResult.Success<>(argument.parse(sender, remaining), remaining);
             }
-        } catch (ArgumentSyntaxException ignored) {
+        } catch (ArgumentSyntaxException _) {
             return new ArgumentResult.IncompatibleType<>();
         }
         // Bruteforce
@@ -531,7 +531,7 @@ final class CommandParserImpl implements CommandParser {
             try {
                 final String input = current.toString();
                 return new ArgumentResult.Success<>(argument.parse(sender, input), input);
-            } catch (ArgumentSyntaxException ignored) {
+            } catch (ArgumentSyntaxException _) {
                 if (!reader.hasRemaining()) break;
                 current.append(" ");
                 current.append(reader.readWord());

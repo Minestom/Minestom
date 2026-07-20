@@ -260,7 +260,7 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     @Override
     public <O> Result<O> convertTo(Transcoder<O> coder, BinaryTag value) {
         return switch (value) {
-            case EndBinaryTag ignored -> new Result.Ok<>(coder.createNull());
+            case EndBinaryTag _ -> new Result.Ok<>(coder.createNull());
             case ByteBinaryTag byteTag -> new Result.Ok<>(coder.createByte(byteTag.byteValue()));
             case ShortBinaryTag shortTag -> new Result.Ok<>(coder.createShort(shortTag.shortValue()));
             case IntBinaryTag intTag -> new Result.Ok<>(coder.createInt(intTag.intValue()));

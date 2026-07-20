@@ -32,7 +32,7 @@ public class SummonCommand extends Command {
                 .setFormat(ArgumentEnum.Format.LOWER_CASED)
                 .setDefaultValue(EntityClass.CREATURE);
         addSyntax(this::execute, entity, pos, entityClass);
-        setDefaultExecutor((sender, context) -> sender.sendMessage("Usage: /summon <type> <x> <y> <z> <class>"));
+        setDefaultExecutor((sender, _) -> sender.sendMessage("Usage: /summon <type> <x> <y> <z> <class>"));
     }
 
     private void execute(CommandSender commandSender, CommandContext commandContext) {

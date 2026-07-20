@@ -45,7 +45,7 @@ public class BossBarManager {
         BossBarHolder holder = this.getOrCreateHandler(bar);
         if (holder.addViewer(player)) {
             player.sendPacket(holder.createAddPacket());
-            this.playerBars.computeIfAbsent(player.getUuid(), uuid -> new HashSet<>()).add(holder);
+            this.playerBars.computeIfAbsent(player.getUuid(), _ -> new HashSet<>()).add(holder);
         }
     }
 

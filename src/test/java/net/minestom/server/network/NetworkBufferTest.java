@@ -216,7 +216,7 @@ public class NetworkBufferTest {
 
     @Test
     public void makeArray() {
-        assertArrayEquals(new byte[0], NetworkBuffer.makeArray(buffer -> {
+        assertArrayEquals(new byte[0], NetworkBuffer.makeArray(_ -> {
         }));
 
         assertArrayEquals(new byte[]{1}, NetworkBuffer.makeArray(BYTE, (byte) 1));

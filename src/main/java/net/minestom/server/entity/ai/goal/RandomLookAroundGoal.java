@@ -23,7 +23,7 @@ public class RandomLookAroundGoal extends GoalSelector {
                 // Look in one direction for at most 40 ticks and at minimum 20 ticks.
                 () -> 20 + RANDOM.nextInt(20),
                 // Look at a random block
-                (creature) -> {
+                _ -> {
                     final double n = Math.PI * 2 * RANDOM.nextDouble();
                     return new Vec(
                             (float) Math.cos(n),

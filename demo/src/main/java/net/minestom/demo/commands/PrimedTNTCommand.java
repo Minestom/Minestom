@@ -11,7 +11,7 @@ public class PrimedTNTCommand extends Command {
     public PrimedTNTCommand() {
         super("primedtnt");
 
-        setDefaultExecutor((sender, context) -> {
+        setDefaultExecutor((sender, _) -> {
             if (!(sender instanceof Player player)) return;
 
             Entity entity = new Entity(EntityType.TNT);

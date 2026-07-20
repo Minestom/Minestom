@@ -197,11 +197,11 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
 
     private static RecipeDisplayType recipeDisplayToType(RecipeDisplay recipeDisplay) {
         return switch (recipeDisplay) {
-            case CraftingShapeless ignored -> RecipeDisplayType.CRAFTING_SHAPELESS;
-            case CraftingShaped ignored -> RecipeDisplayType.CRAFTING_SHAPED;
-            case Furnace ignored -> RecipeDisplayType.FURNACE;
-            case Stonecutter ignored -> RecipeDisplayType.STONECUTTER;
-            case Smithing ignored -> RecipeDisplayType.SMITHING;
+            case CraftingShapeless _ -> RecipeDisplayType.CRAFTING_SHAPELESS;
+            case CraftingShaped _ -> RecipeDisplayType.CRAFTING_SHAPED;
+            case Furnace _ -> RecipeDisplayType.FURNACE;
+            case Stonecutter _ -> RecipeDisplayType.STONECUTTER;
+            case Smithing _ -> RecipeDisplayType.SMITHING;
         };
     }
 }

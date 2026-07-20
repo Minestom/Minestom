@@ -206,7 +206,7 @@ final class ServerProcessImpl implements ServerProcess, Registries.Delegating {
         final String brand = MinecraftServer.getBrandName();
         LOGGER.info("Starting {} ({}) server.", brand, Git.version());
         switch (auth) {
-            case Auth.Offline ignored ->
+            case Auth.Offline _ ->
                     LOGGER.info("Running in offline mode. Beware that this is not secure and players can impersonate each other.");
             case Auth.Online ignored -> LOGGER.info("Running in online mode with Mojang's authentication.");
             case Auth.Velocity ignored -> LOGGER.info("Running in Velocity mode with modern IP forwarding.");

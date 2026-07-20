@@ -155,13 +155,13 @@ public class CommandSyntaxSingleTest {
         AtomicReference<ExpectedExecution> result = new AtomicReference<>();
         AtomicReference<Map<String, Object>> values = new AtomicReference<>();
 
-        command.setDefaultExecutor((sender, context) -> {
+        command.setDefaultExecutor((_, _) -> {
             if (!result.compareAndSet(null, ExpectedExecution.DEFAULT)) {
                 fail("Multiple execution: " + result.get());
             }
         });
 
-        command.addSyntax((sender, context) -> {
+        command.addSyntax((_, context) -> {
             if (!result.compareAndSet(null, ExpectedExecution.SYNTAX)) {
                 fail("Multiple execution: " + result.get());
             }

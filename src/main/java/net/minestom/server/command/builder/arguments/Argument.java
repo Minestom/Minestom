@@ -187,7 +187,7 @@ public abstract class Argument<T> {
      * @return 'this' for chaining
      */
     public Argument<T> setDefaultValue(@Nullable Supplier<T> defaultValue) {
-        this.defaultValue = defaultValue == null ? null : unused -> defaultValue.get();
+        this.defaultValue = defaultValue == null ? null : _ -> defaultValue.get();
         return this;
     }
 
@@ -203,7 +203,7 @@ public abstract class Argument<T> {
      * @return 'this' for chaining
      */
     public Argument<T> setDefaultValue(T defaultValue) {
-        this.defaultValue = unused -> defaultValue;
+        this.defaultValue = _ -> defaultValue;
         return this;
     }
 
@@ -249,7 +249,7 @@ public abstract class Argument<T> {
      * @return A new ArgumentMap that can get this complex object type.
      */
     public <O> Argument<O> map(Function<T, O> mapper) {
-        return new ArgumentMap<>(this, (p, i) -> mapper.apply(i));
+        return new ArgumentMap<>(this, (_, i) -> mapper.apply(i));
     }
 
     public <O> Argument<O> map(BiFunction<CommandSender, T, O> mapper) {

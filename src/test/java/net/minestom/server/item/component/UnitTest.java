@@ -46,7 +46,7 @@ public class UnitTest extends AbstractItemComponentTest<Unit> {
             try {
                 //noinspection unchecked
                 ((DataComponent<Unit>) component).write(NetworkBuffer.resizableBuffer(env.process()), Unit.INSTANCE);
-            } catch (ClassCastException | IllegalArgumentException ignored) {
+            } catch (ClassCastException | IllegalArgumentException _) {
                 continue;
             }
 

@@ -38,7 +38,7 @@ public class ArgumentLoop<T> extends Argument<List<T>> {
                     success = true;
                     result.add(value);
                     break;
-                } catch (ArgumentSyntaxException ignored) {
+                } catch (ArgumentSyntaxException _) {
                     success = false;
                 }
             }

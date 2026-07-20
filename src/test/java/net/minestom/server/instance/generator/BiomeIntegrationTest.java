@@ -30,7 +30,7 @@ public class BiomeIntegrationTest {
         final int chunkZ = -2;
         final int sectionCount = maxSection - minSection;
         GenSection[] sections = new GenSection[sectionCount];
-        Arrays.setAll(sections, i -> new GenSection());
+        Arrays.setAll(sections, _ -> new GenSection());
         var chunkUnits = GeneratorImpl.chunk(env.process().biome(), sections, chunkX, minSection, chunkZ);
         Generator generator = unit -> {
             var modifier = unit.modifier();
@@ -53,7 +53,7 @@ public class BiomeIntegrationTest {
         final int chunkZ = -2;
         final int sectionCount = maxSection - minSection;
         GenSection[] sections = new GenSection[sectionCount];
-        Arrays.setAll(sections, i -> new GenSection());
+        Arrays.setAll(sections, _ -> new GenSection());
         var chunkUnits = GeneratorImpl.chunk(env.process().biome(), sections, chunkX, minSection, chunkZ);
         Generator generator = chunk -> {
             var modifier = chunk.modifier();
@@ -61,7 +61,7 @@ public class BiomeIntegrationTest {
         };
         generator.generate(chunkUnits);
         for (var section : sections) {
-            section.biomes().getAll((x, y, z, value) ->
+            section.biomes().getAll((_, _, _, value) ->
                     assertEquals(PLAINS_ID, value));
         }
     }

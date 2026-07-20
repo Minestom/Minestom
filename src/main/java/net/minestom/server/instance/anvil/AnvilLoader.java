@@ -156,7 +156,7 @@ public class AnvilLoader implements ChunkLoader {
         try {
             final int regionX = chunkToRegion(chunkX), regionZ = chunkToRegion(chunkZ);
             final long regionIndex = regionIndex(regionX, regionZ);
-            var chunks = perRegionLoadedChunks.computeIfAbsent(regionIndex, r -> new LongOpenHashSet()); // region cache may have been removed on another thread due to unloadChunk
+            var chunks = perRegionLoadedChunks.computeIfAbsent(regionIndex, _ -> new LongOpenHashSet()); // region cache may have been removed on another thread due to unloadChunk
             final long chunkIndex = chunkIndex(chunkX, chunkZ);
             chunks.add(chunkIndex);
         } finally {
@@ -375,7 +375,7 @@ public class AnvilLoader implements ChunkLoader {
 
             this.perRegionLoadedChunksLock.lock();
             try {
-                this.perRegionLoadedChunks.computeIfAbsent(regionIndex, k -> new LongOpenHashSet())
+                this.perRegionLoadedChunks.computeIfAbsent(regionIndex, _ -> new LongOpenHashSet())
                         .add(chunkIndex);
             } finally {
                 this.perRegionLoadedChunksLock.unlock();

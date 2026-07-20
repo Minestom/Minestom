@@ -78,7 +78,7 @@ public sealed interface EventNode<T extends Event> permits EventNodeImpl {
     static <E extends Event, V> EventNode<E> event(String name,
                                                             EventFilter<E, V> filter,
                                                             Predicate<E> predicate) {
-        return create(name, filter, (e, h) -> predicate.test(e));
+        return create(name, filter, (e, _) -> predicate.test(e));
     }
 
     /**
@@ -131,7 +131,7 @@ public sealed interface EventNode<T extends Event> permits EventNodeImpl {
     static <E extends Event, V> EventNode<E> value(String name,
                                                             EventFilter<E, V> filter,
                                                             Predicate<V> predicate) {
-        return create(name, filter, (e, h) -> predicate.test(h));
+        return create(name, filter, (_, h) -> predicate.test(h));
     }
 
     /**
@@ -150,7 +150,7 @@ public sealed interface EventNode<T extends Event> permits EventNodeImpl {
     static <E extends Event> EventNode<E> tag(String name,
                                                        EventFilter<E, ? extends TagReadable> filter,
                                                        Tag<?> tag) {
-        return create(name, filter, (e, h) -> h.hasTag(tag));
+        return create(name, filter, (_, h) -> h.hasTag(tag));
     }
 
     /**
@@ -169,7 +169,7 @@ public sealed interface EventNode<T extends Event> permits EventNodeImpl {
                                                           EventFilter<E, ? extends TagReadable> filter,
                                                           Tag<V> tag,
                                                           Predicate<@Nullable V> consumer) {
-        return create(name, filter, (e, h) -> consumer.test(h.getTag(tag)));
+        return create(name, filter, (_, h) -> consumer.test(h.getTag(tag)));
     }
 
     private static <E extends Event, V> EventNode<E> create(String name,

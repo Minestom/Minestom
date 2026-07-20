@@ -273,7 +273,7 @@ final class EntityTrackerImpl implements EntityTracker {
         }
 
         List<T> chunkEntities(long index) {
-            return chunkEntities.computeIfAbsent(index, i -> (List<T>) new CopyOnWriteArrayList());
+            return chunkEntities.computeIfAbsent(index, _ -> (List<T>) new CopyOnWriteArrayList());
         }
 
         void addToChunk(long index, T entity) {

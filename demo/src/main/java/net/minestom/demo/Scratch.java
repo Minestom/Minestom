@@ -115,7 +115,7 @@ public final class Scratch {
                                 connection.serverState = clientState;
                             }
                             switch (parsed.packet()) {
-                                case StatusRequestPacket ignored -> connection.send(new ResponsePacket(STATUS_JSON));
+                                case StatusRequestPacket _ -> connection.send(new ResponsePacket(STATUS_JSON));
                                 case ClientPingRequestPacket ping ->
                                         connection.send(new PingResponsePacket(ping.number()));
                                 case ClientLoginStartPacket login -> connection.send(new LoginSuccessPacket(

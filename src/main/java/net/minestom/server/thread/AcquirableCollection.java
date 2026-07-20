@@ -122,7 +122,7 @@ public class AcquirableCollection<E> implements Collection<Acquirable<E>> {
                 consumer.accept(value);
             } else {
                 // The element is manager in a different thread, cache it
-                List<T> threadCacheList = threadCacheMap.computeIfAbsent(elementThread, tickThread -> new ArrayList<>());
+                List<T> threadCacheList = threadCacheMap.computeIfAbsent(elementThread, _ -> new ArrayList<>());
                 threadCacheList.add(value);
             }
         }

@@ -12,7 +12,7 @@ import net.minestom.server.entity.Player;
 public class TitleCommand extends Command {
     public TitleCommand() {
         super("title");
-        setDefaultExecutor((source, args) -> source.sendMessage(Component.text("Unknown syntax (note: title must be quoted)")));
+        setDefaultExecutor((source, _) -> source.sendMessage(Component.text("Unknown syntax (note: title must be quoted)")));
         setCondition(Conditions::playerOnly);
 
         var content = ArgumentType.String("content");

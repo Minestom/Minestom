@@ -881,7 +881,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             Block block;
             try {
                 block = instance.getBlock(pos.blockX(), pos.blockY(), pos.blockZ(), Block.Getter.Condition.TYPE);
-            } catch (NullPointerException ignored) {
+            } catch (NullPointerException _) {
                 block = null;
             }
 

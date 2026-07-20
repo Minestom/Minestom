@@ -66,7 +66,7 @@ final class GraphConverter {
                 node.name = argument.getId();
                 if (redirect != null) {
                     node.flags |= 0x8;
-                    redirects.add((graph, root) -> node.redirectedNode = redirect.get());
+                    redirects.add((_, _) -> node.redirectedNode = redirect.get());
                 }
             }
             to.add(node);
@@ -77,9 +77,9 @@ final class GraphConverter {
                 node.name = argument.getId();
                 final String shortcut = argCmd.getShortcut();
                 if (shortcut.isEmpty()) {
-                    redirects.add((graph, root) -> node.redirectedNode = root);
+                    redirects.add((_, root) -> node.redirectedNode = root);
                 } else {
-                    redirects.add((graph, root) -> {
+                    redirects.add((graph, _) -> {
                         var sender = player == null ? manager.getConsoleSender() : player;
                         final List<Argument<?>> args = CommandParser.parser().parse(sender, graph, shortcut).args();
                         final Argument<?> last = args.getLast();
@@ -106,7 +106,7 @@ final class GraphConverter {
                     subNode.name = entry;
                     if (redirect != null) {
                         subNode.flags |= 0x8;
-                        redirects.add((graph, root) -> subNode.redirectedNode = redirect.get());
+                        redirects.add((_, _) -> subNode.redirectedNode = redirect.get());
                     }
                     to.add(subNode);
                     res[i] = id.getAndIncrement();
@@ -170,7 +170,7 @@ final class GraphConverter {
                 node.properties = argument.nodeProperties();
                 if (redirect != null) {
                     node.flags |= 0x8;
-                    redirects.add((graph, root) -> node.redirectedNode = redirect.get());
+                    redirects.add((_, _) -> node.redirectedNode = redirect.get());
                 }
                 if (hasSuggestion) {
                     node.suggestionsType = argument.suggestionType().getIdentifier();

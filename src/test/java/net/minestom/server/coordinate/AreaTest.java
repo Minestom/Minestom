@@ -693,7 +693,7 @@ public class AreaTest {
     public void blockCountMatchesIteratorAllAreas() {
         for (Area area : areas()) {
             long iterated = 0;
-            for (BlockVec ignored : area) iterated++;
+            for (BlockVec _ : area) iterated++;
             assertEquals(iterated, area.blockCount(),
                     "blockCount mismatch for " + area);
         }

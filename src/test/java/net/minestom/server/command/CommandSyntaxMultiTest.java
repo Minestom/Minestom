@@ -56,7 +56,7 @@ public class CommandSyntaxMultiTest {
         AtomicReference<ExpectedExecution> result = new AtomicReference<>();
         AtomicReference<Map<String, Object>> values = new AtomicReference<>();
 
-        command.setDefaultExecutor((sender, context) -> {
+        command.setDefaultExecutor((_, _) -> {
             if (!result.compareAndSet(null, ExpectedExecution.DEFAULT)) {
                 fail("Multiple execution: " + result.get());
             }
@@ -65,7 +65,7 @@ public class CommandSyntaxMultiTest {
         int i = ExpectedExecution.FIRST_SYNTAX.ordinal();
         for (List<Argument<?>> t : args) {
             ExpectedExecution id = ExpectedExecution.values()[i++];
-            command.addSyntax((sender, context) -> {
+            command.addSyntax((_, context) -> {
                 if (!result.compareAndSet(null, id)) {
                     fail("Multiple execution: " + result.get());
                 }

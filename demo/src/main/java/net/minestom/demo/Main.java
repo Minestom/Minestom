@@ -97,7 +97,7 @@ public class Main {
         commandManager.register(new BelowNameCommand());
         commandManager.register(new TestBiomeAmbientParticleCommand());
 
-        commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
+        commandManager.setUnknownCommandCallback((sender, _) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> System.out.println("Good night"));
 

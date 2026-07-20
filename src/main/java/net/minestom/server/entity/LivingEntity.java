@@ -449,7 +449,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public AttributeInstance getAttribute(Attribute attribute) {
         return attributeModifiers.computeIfAbsent(attribute.name(),
-                s -> {
+                _ -> {
                     double defaultValue = entityType.registry().defaultAttributes().getOrDefault(attribute, attribute.defaultValue());
                     return new AttributeInstance(attribute, defaultValue, new ArrayList<>(), this::onAttributeChanged);
                 });

@@ -53,7 +53,7 @@ public final class PacketListenerManager {
         setConfigurationListener(ClientSettingsPacket.class, SettingsListener::listener);
         setConfigurationListener(ClientPluginMessagePacket.class, PluginMessageListener::listener);
         setConfigurationListener(ClientKeepAlivePacket.class, KeepAliveListener::listener);
-        setConfigurationListener(ClientPongPacket.class, (packet, player) -> {/* empty */});
+        setConfigurationListener(ClientPongPacket.class, (_, _) -> {/* empty */});
         setConfigurationListener(ClientResourcePackStatusPacket.class, ResourcePackListener::listener);
         setConfigurationListener(ClientSelectKnownPacksPacket.class, LoginListener::selectKnownPacks);
         setConfigurationListener(ClientFinishConfigurationPacket.class, LoginListener::finishConfigListener);
@@ -90,7 +90,7 @@ public final class PacketListenerManager {
         setPlayListener(ClientStatusPacket.class, PlayStatusListener::listener);
         setPlayListener(ClientSettingsPacket.class, SettingsListener::listener);
         setPlayListener(ClientCreativeInventoryActionPacket.class, CreativeInventoryActionListener::listener);
-        setPlayListener(ClientSetRecipeBookStatePacket.class, (packet, player) -> {/* empty */});
+        setPlayListener(ClientSetRecipeBookStatePacket.class, (_, _) -> {/* empty */});
         setPlayListener(ClientPlaceRecipePacket.class, RecipeListener::listener);
         setPlayListener(ClientTabCompletePacket.class, TabCompleteListener::listener);
         setPlayListener(ClientPluginMessagePacket.class, PluginMessageListener::listener);
@@ -100,7 +100,7 @@ public final class PacketListenerManager {
         setPlayListener(ClientSpectatorActionPacket.class, PlayerSpectatorListener::listener);
         setPlayListener(ClientTeleportToEntityPacket.class, PlayerSpectatorListener::listener);
         setPlayListener(ClientEditBookPacket.class, BookListener::listener);
-        setPlayListener(ClientChatSessionUpdatePacket.class, (packet, player) -> {/* empty */});
+        setPlayListener(ClientChatSessionUpdatePacket.class, (_, _) -> {/* empty */});
         setPlayListener(ClientChunkBatchReceivedPacket.class, ChunkBatchListener::batchReceivedListener);
         setPlayListener(ClientPingRequestPacket.class, PlayPingListener::requestListener);
         setListener(ConnectionState.PLAY, ClientCookieResponsePacket.class, CookieListener::handleCookieResponse);

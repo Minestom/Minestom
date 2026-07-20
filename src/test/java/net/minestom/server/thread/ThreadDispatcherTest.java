@@ -82,7 +82,7 @@ public class ThreadDispatcherTest {
         assertThrows(Exception.class, () -> dispatcher.threads().add(new TickThread(1)));
 
         var partition = new World();
-        Tickable element = (time) -> counter.incrementAndGet();
+        Tickable element = (_) -> counter.incrementAndGet();
         dispatcher.createPartition(partition);
         dispatcher.updateElement(element, partition);
         assertEquals(0, counter.get());
@@ -109,7 +109,7 @@ public class ThreadDispatcherTest {
         dispatcher.start();
 
         var partition = new World();
-        Tickable element = (time) -> counter.incrementAndGet();
+        Tickable element = (_) -> counter.incrementAndGet();
         dispatcher.createPartition(partition);
         dispatcher.updateElement(element, partition);
         assertEquals(0, counter.get());
@@ -129,7 +129,7 @@ public class ThreadDispatcherTest {
         dispatcher.start();
 
         var partition = new World();
-        Tickable element = (time) -> counter.incrementAndGet();
+        Tickable element = (_) -> counter.incrementAndGet();
         dispatcher.createPartition(partition);
         dispatcher.updateElement(element, partition);
         assertEquals(0, counter.get());
@@ -162,8 +162,8 @@ public class ThreadDispatcherTest {
         dispatcher.start();
         assertEquals(1, dispatcher.threads().size());
 
-        Tickable partition = (time) -> counter1.incrementAndGet();
-        Tickable element = (time) -> counter2.incrementAndGet();
+        Tickable partition = (_) -> counter1.incrementAndGet();
+        Tickable element = (_) -> counter2.incrementAndGet();
         dispatcher.createPartition(partition);
         dispatcher.updateElement(element, partition);
         assertEquals(0, counter1.get());
@@ -194,7 +194,7 @@ public class ThreadDispatcherTest {
         final AtomicInteger counter = new AtomicInteger();
         Set<Thread> threads = new CopyOnWriteArraySet<>();
         Set<Tickable> partitions = IntStream.range(0, threadCount)
-                .mapToObj(value -> (Tickable) (time) -> {
+                .mapToObj(_ -> (Tickable) (_) -> {
                     final Thread thread = Thread.currentThread();
                     assertInstanceOf(TickThread.class, thread);
                     assertEquals(1, ((TickThread) thread).entries.size());

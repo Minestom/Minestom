@@ -123,9 +123,9 @@ final class SchedulerImpl implements Scheduler {
             case TaskScheduleImpl.FutureSchedule futureSchedule -> {
                 var _ = futureSchedule.future().thenRun(() -> safeExecute(task));
             }
-            case TaskScheduleImpl.Park ignored -> task.parked = true;
-            case TaskScheduleImpl.Stop ignored -> task.cancel();
-            case TaskScheduleImpl.Immediate ignored -> {
+            case TaskScheduleImpl.Park _ -> task.parked = true;
+            case TaskScheduleImpl.Stop _ -> task.cancel();
+            case TaskScheduleImpl.Immediate _ -> {
                 if (task.executionType() == ExecutionType.TICK_END) {
                     tickEndTasksToExecute.relaxedOffer(task);
                 } else tasksToExecute.relaxedOffer(task);

@@ -309,7 +309,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     private ListenerEntry<T> getEntry(Class<? extends T> type) {
-        return listenerMap.computeIfAbsent(type, aClass -> new ListenerEntry<>());
+        return listenerMap.computeIfAbsent(type, _ -> new ListenerEntry<>());
     }
 
     private static boolean equals(EventNode<?> node, String name, Class<?> eventType) {

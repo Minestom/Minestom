@@ -20,7 +20,7 @@ final class EnvTestExt implements
                                    ExtensionContext extensionContext) {
         return extensionContext.getStore(ExtensionContext.Namespace.create(getClass()))
                 .getOrComputeIfAbsent(ENV_KEY,
-                        key -> new EnvImpl(MinecraftServer.updateProcess()),
+                        _ -> new EnvImpl(MinecraftServer.updateProcess()),
                         EnvImpl.class);
     }
 

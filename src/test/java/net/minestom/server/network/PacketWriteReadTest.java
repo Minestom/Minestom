@@ -105,7 +105,7 @@ public class PacketWriteReadTest {
     private static <T extends ServerPacket> void addServerPackets(T... packets) {
         assertNotEquals(0, packets.length);
         var packetClass = packets[0].getClass();
-        var set = SERVER_PACKETS.computeIfAbsent(packetClass, c -> new HashSet<>(packets.length));
+        var set = SERVER_PACKETS.computeIfAbsent(packetClass, _ -> new HashSet<>(packets.length));
         for (var packet : packets)
             assertTrue(set.add(packet), "Found duplicate server packet in %s with `%s`".formatted(packet.getClass().getSimpleName(), packet));
     }
@@ -114,7 +114,7 @@ public class PacketWriteReadTest {
     private static <T extends ClientPacket> void addClientPackets(T... packets) {
         assertNotEquals(0, packets.length);
         var packetClass = packets[0].getClass();
-        var set = CLIENT_PACKETS.computeIfAbsent(packetClass, c -> new HashSet<>(packets.length));
+        var set = CLIENT_PACKETS.computeIfAbsent(packetClass, _ -> new HashSet<>(packets.length));
         for (var packet : packets)
             assertTrue(set.add(packet), "Found duplicate client packet in %s with `%s`".formatted(packet.getClass().getSimpleName(), packet));
     }
