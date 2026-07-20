@@ -24,6 +24,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "DefaultCharset",
                 "EffectivelyPrivate",
                 "EqualsGetClass",
+                "FallThrough",
                 "EmptyBlockTag",
                 "EmptyCatch",
                 "FutureReturnValueIgnored",

@@ -60,6 +60,7 @@ public final class HandshakeListener {
                     connection.kick(TRANSFERS_DISABLED_TEXT);
                     return;
                 }
+                // fall through, transfers continue with the regular login flow
             case LOGIN:
                 if (packet.protocolVersion() != MinecraftServer.PROTOCOL_VERSION) {
                     // Incorrect client version
@@ -73,6 +74,7 @@ public final class HandshakeListener {
                 if (auth instanceof Auth.Bungee bungee && connection instanceof PlayerSocketConnection socketConnection) {
                     address = handleBungeeForwarding(address, socketConnection, bungee);
                 }
+                // fall through
             default:
                 break;
         }
