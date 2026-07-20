@@ -23,6 +23,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "MissingOverride",
                 "ObjectToString",
                 "OperatorPrecedence",
+                "PatternMatchingInstanceof",
                 "UnusedMethod",
                 "UnusedVariable",
                 "UnnecessaryLambda",

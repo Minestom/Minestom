@@ -120,7 +120,7 @@ public final class Navigator {
     @ApiStatus.Internal
     public synchronized void tick() {
         if (goalPosition == null) return; // No path
-        if (entity instanceof LivingEntity && ((LivingEntity) entity).isDead())
+        if (entity instanceof LivingEntity livingEntity && livingEntity.isDead())
             return; // No pathfinding tick for dead entities
         if (computingPath != null && (computingPath.getState() == PPath.State.COMPUTED || computingPath.getState() == PPath.State.BEST_EFFORT)) {
             path = computingPath;

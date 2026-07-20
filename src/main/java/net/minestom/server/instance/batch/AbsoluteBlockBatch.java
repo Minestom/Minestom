@@ -141,9 +141,9 @@ public class AbsoluteBlockBatch implements Batch<Consumer<AbsoluteBlockBatch>> {
                     // Execute the callback if this was the last chunk to process
                     if (isLast) {
                         if (inverse != null) inverse.readyLatch.countDown();
-                        if (instance instanceof InstanceContainer) {
+                        if (instance instanceof InstanceContainer container) {
                             // FIXME: put method in Instance instead
-                            ((InstanceContainer) instance).refreshLastBlockChangeTime();
+                            container.refreshLastBlockChangeTime();
                         }
                         if (callback != null) {
                             if (safeCallback) {

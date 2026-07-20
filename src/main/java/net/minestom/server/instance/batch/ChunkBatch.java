@@ -240,9 +240,9 @@ public class ChunkBatch implements Batch<ChunkCallback> {
             }
         }
 
-        if (instance instanceof InstanceContainer) {
+        if (instance instanceof InstanceContainer container) {
             // FIXME: put method in Instance instead
-            ((InstanceContainer) instance).refreshLastBlockChangeTime();
+            container.refreshLastBlockChangeTime();
         }
 
         if (callback != null) {

@@ -39,7 +39,7 @@ public final class PacketViewableUtils {
             PacketSendingUtils.sendGroupedPacket(viewable.getViewers(), serverPacket, value -> !Objects.equals(value, entity));
             return;
         }
-        final Player exception = entity instanceof Player ? (Player) entity : null;
+        final Player exception = entity instanceof Player player ? player : null;
         ViewableStorage storage = retrieveStorage(viewable);
         storage.append(serverPacket, exception);
     }

@@ -89,17 +89,17 @@ public class PlayerInit {
                     target.damage(Damage.fromEntity(source, 5));
                 }
 
-                if (source instanceof Player) {
-                    ((Player) source).sendMessage("You attacked something!");
+                if (source instanceof Player player) {
+                    player.sendMessage("You attacked something!");
                 }
             })
             .addListener(PlayerDeathEvent.class, event -> event.setChatMessage(Component.text("custom death message")))
             .addListener(PickupItemEvent.class, event -> {
                 final Entity entity = event.getLivingEntity();
-                if (entity instanceof Player) {
+                if (entity instanceof Player player) {
                     // Cancel event if player does not have enough inventory space
                     final ItemStack itemStack = event.getItemEntity().getItemStack();
-                    event.setCancelled(!((Player) entity).getInventory().addItemStack(itemStack));
+                    event.setCancelled(!player.getInventory().addItemStack(itemStack));
                 }
             })
             .addListener(ItemDropEvent.class, event -> {

@@ -59,7 +59,7 @@ public record RelativeVec(Vec vec, CoordinateType coordinateType, boolean relati
      * @return the position with any relativity
      */
     public Vec fromSender(@Nullable CommandSender sender) {
-        final var entityPosition = sender instanceof Player ? ((Player) sender).getPosition() : Pos.ZERO;
+        final var entityPosition = sender instanceof Player player ? player.getPosition() : Pos.ZERO;
         return from(entityPosition);
     }
 
