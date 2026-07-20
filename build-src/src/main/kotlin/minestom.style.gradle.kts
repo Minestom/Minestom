@@ -46,6 +46,7 @@ tasks.withType<JavaCompile>().configureEach {
                 "PatternMatchingInstanceof",
                 "RedundantControlFlow",
                 "UnnamedVariable",
+                "VariableNameSameAsType",
                 "UnusedMethod",
                 "UnusedVariable",
                 "UnnecessaryLambda",
