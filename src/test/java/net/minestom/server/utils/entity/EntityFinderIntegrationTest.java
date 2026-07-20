@@ -83,7 +83,7 @@ public class EntityFinderIntegrationTest {
     @Test
     public void openEndedDistanceRange(Env env) {
         var instance = env.createFlatInstance();
-        var near = spawnZombie(instance, 1);
+        var _ = spawnZombie(instance, 1);
         var far = spawnZombie(instance, 50);
 
         var finder = createFinder(EntityFinder.TargetSelector.ALL_ENTITIES)
@@ -96,7 +96,7 @@ public class EntityFinderIntegrationTest {
     public void openLowerBoundDistanceRange(Env env) {
         var instance = env.createFlatInstance();
         var near = spawnZombie(instance, 1);
-        var far = spawnZombie(instance, 50);
+        var _ = spawnZombie(instance, 50);
 
         var finder = new ArgumentEntity("selector").parse(new ServerSender(), "@e[distance=..1.5]");
         finder.setStartPosition(ORIGIN);
@@ -108,7 +108,7 @@ public class EntityFinderIntegrationTest {
     public void negativeMinDistanceClamped(Env env) {
         var instance = env.createFlatInstance();
         var near = spawnZombie(instance, 1);
-        var far = spawnZombie(instance, 50);
+        var _ = spawnZombie(instance, 50);
 
         var finder = createFinder(EntityFinder.TargetSelector.ALL_ENTITIES)
                 .setDistance(new Range.Double(-10.0, 5.0));
@@ -151,7 +151,7 @@ public class EntityFinderIntegrationTest {
     @Test
     public void nearestPlayerSortOverride(Env env) {
         var instance = env.createFlatInstance();
-        var near = env.createPlayer(instance, ORIGIN.add(1, 0, 0));
+        var _ = env.createPlayer(instance, ORIGIN.add(1, 0, 0));
         var far = env.createPlayer(instance, ORIGIN.add(10, 0, 0));
 
         var finder = createFinder(EntityFinder.TargetSelector.NEAREST_PLAYER)
@@ -163,8 +163,8 @@ public class EntityFinderIntegrationTest {
     @Test
     public void nearestEntityReturnsSingleNearest(Env env) {
         var instance = env.createFlatInstance();
-        var middle = spawnZombie(instance, 5);
-        var far = spawnZombie(instance, 10);
+        var _ = spawnZombie(instance, 5);
+        var _ = spawnZombie(instance, 10);
         var near = spawnZombie(instance, 1);
 
         var finder = createFinder(EntityFinder.TargetSelector.NEAREST_ENTITY);
@@ -174,7 +174,7 @@ public class EntityFinderIntegrationTest {
     @Test
     public void nearestEntityAppliesFiltersBeforeSelection(Env env) {
         var instance = env.createFlatInstance();
-        var nearSheep = spawn(instance, EntityType.SHEEP, 1);
+        var _ = spawn(instance, EntityType.SHEEP, 1);
         var farPig = spawn(instance, EntityType.PIG, 10);
 
         var finder = createFinder(EntityFinder.TargetSelector.NEAREST_ENTITY)
@@ -186,7 +186,7 @@ public class EntityFinderIntegrationTest {
     @Test
     public void nearestEntitySortOverride(Env env) {
         var instance = env.createFlatInstance();
-        var near = spawnZombie(instance, 1);
+        var _ = spawnZombie(instance, 1);
         var far = spawnZombie(instance, 10);
 
         var finder = createFinder(EntityFinder.TargetSelector.NEAREST_ENTITY)
@@ -198,9 +198,9 @@ public class EntityFinderIntegrationTest {
     @Test
     public void sortNearestWithLimit(Env env) {
         var instance = env.createFlatInstance();
-        var third = spawnZombie(instance, 3);
+        var _ = spawnZombie(instance, 3);
         var first = spawnZombie(instance, 1);
-        var fourth = spawnZombie(instance, 4);
+        var _ = spawnZombie(instance, 4);
         var second = spawnZombie(instance, 2);
 
         var finder = createFinder(EntityFinder.TargetSelector.ALL_ENTITIES)
@@ -214,9 +214,9 @@ public class EntityFinderIntegrationTest {
     public void sortFurthestWithLimit(Env env) {
         var instance = env.createFlatInstance();
         var third = spawnZombie(instance, 3);
-        var first = spawnZombie(instance, 1);
+        var _ = spawnZombie(instance, 1);
         var fourth = spawnZombie(instance, 4);
-        var second = spawnZombie(instance, 2);
+        var _ = spawnZombie(instance, 2);
 
         var finder = createFinder(EntityFinder.TargetSelector.ALL_ENTITIES)
                 .setEntitySort(EntityFinder.EntitySort.FURTHEST)

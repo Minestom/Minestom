@@ -34,10 +34,10 @@ final class CodecImpl {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public <D1> Result<D1> convertTo(Transcoder<D1> coder) {
             // If the two transcoders are the same instance, we can immediately return the value.
             if (TranscoderProxy.extractDelegate(this.coder) == TranscoderProxy.extractDelegate(coder))
-                //noinspection unchecked
                 return new Result.Ok<>((D1) value);
             return this.coder.convertTo(coder, value);
         }
@@ -430,7 +430,6 @@ final class CodecImpl {
                 return new Result.Error<>("Missing registries in transcoder");
             final var registry = registrySelector.select(context.registries());
 
-            //noinspection unchecked
             final StructCodec<T> innerCodec = (StructCodec<T>) valueToCodec.apply(value);
             final RegistryKey<StructCodec<? extends T>> type = registry.getKey(innerCodec);
             if (type == null) return new Result.Error<>("Unregistered serializer for: " + value);

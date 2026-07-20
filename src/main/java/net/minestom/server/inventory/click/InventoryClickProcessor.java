@@ -85,7 +85,7 @@ public final class InventoryClickProcessor {
     }
 
     public InventoryClickResult changeHeld(ItemStack clicked, ItemStack cursor) {
-        return new InventoryClickResult(cursor, clicked); // Swap items
+        return new InventoryClickResult(/* clicked= */ cursor, /* cursor= */ clicked); // Swap items
     }
 
     public InventoryClickResult shiftClick(AbstractInventory inventory, AbstractInventory targetInventory,
@@ -117,7 +117,7 @@ public final class InventoryClickProcessor {
         }
 
         clickResult.setCancel(true);
-        final var pair = TransactionType.ADD.process(targetInventory, clicked, (index, itemStack) -> {
+        final var pair = TransactionType.ADD.process(targetInventory, clicked, (index, _) -> {
             if (inventory == targetInventory && index == slot) {
                 return false; // Prevent item lose/duplication
             }
@@ -226,7 +226,7 @@ public final class InventoryClickProcessor {
             return clickResult;
         }
         final BiFunction<AbstractInventory, ItemStack, ItemStack> func = (inv, rest) -> {
-            var pair = TransactionType.TAKE.process(inv, rest, (index, itemStack) -> {
+            var pair = TransactionType.TAKE.process(inv, rest, (index, _) -> {
                 // Prevent item loss/duplication
                 return index != slot || clickedInventory != inv;
             });
@@ -326,7 +326,7 @@ public final class InventoryClickProcessor {
         return clickResult;
     }
 
-    private void callClickEvent(Player player, AbstractInventory inventory, int slot,
+    private static void callClickEvent(Player player, AbstractInventory inventory, int slot,
                                 ClickType clickType, ItemStack clicked, ItemStack cursor) {
         EventDispatcher.call(new InventoryClickEvent(inventory, player, slot, clickType, clicked, cursor));
     }

@@ -156,7 +156,7 @@ public class AnvilLoader implements ChunkLoader {
         try {
             final int regionX = chunkToRegion(chunkX), regionZ = chunkToRegion(chunkZ);
             final long regionIndex = regionIndex(regionX, regionZ);
-            var chunks = perRegionLoadedChunks.computeIfAbsent(regionIndex, r -> new LongOpenHashSet()); // region cache may have been removed on another thread due to unloadChunk
+            var chunks = perRegionLoadedChunks.computeIfAbsent(regionIndex, _ -> new LongOpenHashSet()); // region cache may have been removed on another thread due to unloadChunk
             final long chunkIndex = chunkIndex(chunkX, chunkZ);
             chunks.add(chunkIndex);
         } finally {
@@ -195,7 +195,7 @@ public class AnvilLoader implements ChunkLoader {
         }
     }
 
-    private void loadSections(Chunk chunk, CompoundBinaryTag chunkData) {
+    private static void loadSections(Chunk chunk, CompoundBinaryTag chunkData) {
         for (BinaryTag sectionTag : chunkData.getList("sections", BinaryTagTypes.COMPOUND)) {
             if (!(sectionTag instanceof CompoundBinaryTag sectionData)) {
                 LOGGER.warn("Invalid section tag in chunk data: {}", sectionTag);
@@ -249,7 +249,7 @@ public class AnvilLoader implements ChunkLoader {
         }
     }
 
-    private int[] loadBlockPalette(ListBinaryTag paletteTag) {
+    private static int[] loadBlockPalette(ListBinaryTag paletteTag) {
         final int length = paletteTag.size();
         int[] convertedPalette = new int[length];
         for (int i = 0; i < length; i++) {
@@ -284,7 +284,7 @@ public class AnvilLoader implements ChunkLoader {
         return convertedPalette;
     }
 
-    private int[] loadBiomePalette(DynamicRegistry<Biome> biomeRegistry, ListBinaryTag paletteTag) {
+    private static int[] loadBiomePalette(DynamicRegistry<Biome> biomeRegistry, ListBinaryTag paletteTag) {
         final int length = paletteTag.size();
         int[] convertedPalette = new int[length];
         for (int i = 0; i < length; i++) {
@@ -296,7 +296,7 @@ public class AnvilLoader implements ChunkLoader {
         return convertedPalette;
     }
 
-    private void loadBlockEntities(Chunk loadedChunk, CompoundBinaryTag chunkData) {
+    private static void loadBlockEntities(Chunk loadedChunk, CompoundBinaryTag chunkData) {
         for (BinaryTag blockEntityTag : chunkData.getList("block_entities", BinaryTagTypes.COMPOUND)) {
             if (!(blockEntityTag instanceof CompoundBinaryTag blockEntity)) {
                 LOGGER.warn("Invalid block entity tag in chunk data: {}", blockEntityTag);
@@ -375,7 +375,7 @@ public class AnvilLoader implements ChunkLoader {
 
             this.perRegionLoadedChunksLock.lock();
             try {
-                this.perRegionLoadedChunks.computeIfAbsent(regionIndex, k -> new LongOpenHashSet())
+                this.perRegionLoadedChunks.computeIfAbsent(regionIndex, _ -> new LongOpenHashSet())
                         .add(chunkIndex);
             } finally {
                 this.perRegionLoadedChunksLock.unlock();
@@ -403,7 +403,7 @@ public class AnvilLoader implements ChunkLoader {
         }
     }
 
-    private void saveSectionData(Chunk chunk, CompoundBinaryTag.Builder chunkData) {
+    private static void saveSectionData(Chunk chunk, CompoundBinaryTag.Builder chunkData) {
         final DynamicRegistry<Biome> biomeRegistry = chunk.getInstance().registries().biome();
         final ListBinaryTag.Builder<CompoundBinaryTag> sections = ListBinaryTag.builder(BinaryTagTypes.COMPOUND);
         final ListBinaryTag.Builder<CompoundBinaryTag> blockEntities = ListBinaryTag.builder(BinaryTagTypes.COMPOUND);

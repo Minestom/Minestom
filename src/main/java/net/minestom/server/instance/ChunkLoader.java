@@ -34,6 +34,14 @@ public interface ChunkLoader {
 
     /**
      * Loads a {@link Chunk}, all blocks should be set since the {@link net.minestom.server.instance.generator.Generator} is not applied.
+     * <p>
+     * Implementations must not initiate another chunk load on the same {@link Instance} from this method. Doing so
+     * re-enters the instance's loading registry and may fail with an {@link IllegalStateException}. If loading a
+     * chunk requires data associated with neighboring chunks, read that data directly from the backing storage
+     * instead of calling {@link Instance#loadChunk(int, int)} or {@link Instance#loadOptionalChunk(int, int)}.
+     * <p>
+     * A loader must never wait for the same chunk it is currently loading. Requests for an in-progress chunk share
+     * the existing future, so waiting for that future from this method would wait for the current invocation.
      *
      * @param instance the {@link Instance} where the {@link Chunk} belong
      * @param chunkX   the chunk X
@@ -92,6 +100,11 @@ public interface ChunkLoader {
 
     /**
      * Supports for instance/chunk loading in virtual threads.
+     * <p>
+     * When true, chunks may load in parallel on virtual threads. When false,
+     * {@link #loadChunk(Instance, int, int)} runs synchronously on the thread
+     * requesting the load. The re-entrant loading restrictions documented on
+     * {@link #loadChunk(Instance, int, int)} apply in either case.
      *
      * @return true if the chunk loader supports parallel loading
      */

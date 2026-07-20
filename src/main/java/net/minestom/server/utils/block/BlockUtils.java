@@ -53,6 +53,8 @@ public class BlockUtils {
         return instance.getBlock(position);
     }
 
+    @SuppressWarnings("NonOverridingEquals")
+    @Deprecated(forRemoval = true)
     public boolean equals(Block block) {
         return getBlock().compare(block);
     }

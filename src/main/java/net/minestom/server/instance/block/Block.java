@@ -233,6 +233,7 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      *
      * @return the block registry
      */
+    @Override
     @Contract(pure = true)
     RegistryData.BlockEntry registry();
 

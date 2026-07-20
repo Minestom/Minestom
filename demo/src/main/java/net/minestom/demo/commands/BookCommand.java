@@ -15,10 +15,10 @@ public class BookCommand extends Command {
 
         setCondition(Conditions::playerOnly);
 
-        setDefaultExecutor(this::execute);
+        setDefaultExecutor(BookCommand::execute);
     }
 
-    private void execute(CommandSender sender, CommandContext context) {
+    private static void execute(CommandSender sender, CommandContext context) {
         Player player = (Player) sender;
 
         player.openBook(Book.builder()

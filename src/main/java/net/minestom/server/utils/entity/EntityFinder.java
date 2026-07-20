@@ -326,6 +326,7 @@ public class EntityFinder {
         }
     }
 
+    @SuppressWarnings("serial") // never serialized
     private static class ToggleableMap<T> extends Object2BooleanOpenHashMap<T> {
     }
 

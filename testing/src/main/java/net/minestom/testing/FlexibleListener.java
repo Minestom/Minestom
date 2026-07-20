@@ -11,7 +11,7 @@ public interface FlexibleListener<E extends Event> {
     void followup(Consumer<E> handler);
 
     default void followup() {
-        followup(event -> {
+        followup(_ -> {
             // Empty
         });
     }

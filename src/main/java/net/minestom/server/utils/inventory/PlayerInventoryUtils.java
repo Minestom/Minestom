@@ -122,16 +122,13 @@ public final class PlayerInventoryUtils {
      */
     public static int convertMinestomSlotToWindowSlot(int slot) {
         if (slot > -1 && slot < 9) { // Held bar 0-8
-            slot = slot + 36;
-        } else if (slot > 8 && slot < 36) { // Inventory 9-35
-            slot = slot;
+            return slot + 36;
         } else if (slot >= CRAFT_RESULT && slot <= CRAFT_SLOT_4) { // Crafting 36-40
-            slot = slot - 36;
+            return slot - 36;
         } else if (slot >= HELMET_SLOT && slot <= BOOTS_SLOT) { // Armor 41-44
-            slot = slot - 36;
-        } else if (slot == OFFHAND_SLOT) { // Off hand
-            slot = 45;
+            return slot - 36;
         }
+        // Equal like inventory 9-35, and Off hand
         return slot;
     }
 

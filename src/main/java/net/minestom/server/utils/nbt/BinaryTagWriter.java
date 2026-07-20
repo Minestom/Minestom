@@ -22,14 +22,14 @@ public class BinaryTagWriter {
     }
 
     public void writeNameless(BinaryTag tag) throws IOException {
-        //noinspection unchecked
+        @SuppressWarnings("unchecked")
         BinaryTagType<BinaryTag> type = (BinaryTagType<BinaryTag>) tag.type();
         output.writeByte(type.id());
         type.write(tag, output);
     }
 
     public void writeNamed(String name, BinaryTag tag) throws IOException {
-        //noinspection unchecked
+        @SuppressWarnings("unchecked")
         BinaryTagType<BinaryTag> type = (BinaryTagType<BinaryTag>) tag.type();
         output.writeByte(type.id());
         output.writeUTF(name);

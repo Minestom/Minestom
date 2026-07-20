@@ -12,15 +12,15 @@ import net.minestom.server.entity.Player;
 public class TitleCommand extends Command {
     public TitleCommand() {
         super("title");
-        setDefaultExecutor((source, args) -> source.sendMessage(Component.text("Unknown syntax (note: title must be quoted)")));
+        setDefaultExecutor((source, _) -> source.sendMessage(Component.text("Unknown syntax (note: title must be quoted)")));
         setCondition(Conditions::playerOnly);
 
         var content = ArgumentType.String("content");
 
-        addSyntax(this::handleTitle, content);
+        addSyntax(TitleCommand::handleTitle, content);
     }
 
-    private void handleTitle(CommandSender source, CommandContext context) {
+    private static void handleTitle(CommandSender source, CommandContext context) {
         Player player = (Player) source;
         String titleContent = context.get("content");
 

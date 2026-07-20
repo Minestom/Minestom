@@ -26,6 +26,7 @@ public class RemoveEntityFromInstanceEvent implements EntityInstanceEvent {
      *
      * @return entity being removed
      */
+    @Override
     public Entity getEntity() {
         return entity;
     }

@@ -30,14 +30,14 @@ public class AcquirableBasicIntegrationTest {
         var acquirable = zombie.acquirable();
         // Check local state before initialization
         assertTrue(acquirable.isOwned());
-        acquirable.sync(entity -> assertTrue(acquirable.isLocal()));
+        acquirable.sync(_ -> assertTrue(acquirable.isLocal()));
         Thread.startVirtualThread(() -> assertFalse(acquirable.isLocal()));
 
         env.tick(); // Ensure the entity can access itself
 
         // Check local state after initialization
         assertFalse(acquirable.isOwned());
-        acquirable.sync(entity -> assertFalse(acquirable.isLocal()));
+        acquirable.sync(_ -> assertFalse(acquirable.isLocal()));
         Thread.startVirtualThread(() -> assertFalse(acquirable.isLocal()));
     }
 
@@ -56,14 +56,14 @@ public class AcquirableBasicIntegrationTest {
         var acquirable = zombie.acquirable();
         // Check ownership before initialization
         assertTrue(acquirable.isOwned());
-        acquirable.sync(entity -> assertTrue(acquirable.isOwned()));
+        acquirable.sync(_ -> assertTrue(acquirable.isOwned()));
         Thread.startVirtualThread(() -> assertFalse(acquirable.isOwned()));
 
         env.tick(); // Ensure the entity can access itself
 
         // Check ownership after initialization
         assertFalse(acquirable.isOwned());
-        acquirable.sync(entity -> assertTrue(acquirable.isOwned()));
+        acquirable.sync(_ -> assertTrue(acquirable.isOwned()));
         Thread.startVirtualThread(() -> assertFalse(acquirable.isOwned()));
     }
 
@@ -80,10 +80,10 @@ public class AcquirableBasicIntegrationTest {
 
         AtomicInteger counter = new AtomicInteger(0);
 
-        acquirable.sync(entity -> counter.incrementAndGet());
+        acquirable.sync(_ -> counter.incrementAndGet());
         assertEquals(1, counter.get());
 
-        acquirable.sync(entity -> counter.incrementAndGet());
+        acquirable.sync(_ -> counter.incrementAndGet());
         assertEquals(2, counter.get());
     }
 
@@ -95,7 +95,7 @@ public class AcquirableBasicIntegrationTest {
         CountDownLatch latch = new CountDownLatch(1);
         Thread.startVirtualThread(() -> assertThrows(IllegalStateException.class, () -> {
             latch.countDown();
-            acquirable.sync(entity -> {
+            acquirable.sync(_ -> {
             });
         }));
         latch.await();

@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
@@ -22,6 +23,7 @@ public record SetSlotPacket(int windowId, int stateId, short slot,
             SetSlotPacket::new);
 
     @Override
+    @SuppressWarnings("PreferredInterfaceType") // wider type kept for binary compatibility until the next breaking release
     public Collection<Component> components() {
         return ItemStack.textComponents(itemStack);
     }

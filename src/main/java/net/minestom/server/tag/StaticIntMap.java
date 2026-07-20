@@ -32,8 +32,8 @@ sealed interface StaticIntMap<T extends @UnknownNullability Object> permits Stat
             this.array = array;
         }
 
+        @SuppressWarnings("unchecked")
         public Array() {
-            //noinspection unchecked
             this.array = (T[]) EMPTY_ARRAY;
         }
 

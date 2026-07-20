@@ -430,7 +430,7 @@ public class ArgumentTypeTest {
 
     @Test
     public void testArgumentLoop() {
-        var arg = ArgumentType.Loop("loop", ArgumentType.String("string"), ArgumentType.String("string2").map(s -> {
+        var arg = ArgumentType.Loop("loop", ArgumentType.String("string"), ArgumentType.String("string2").map(_ -> {
             throw new IllegalArgumentException("This argument should never be triggered");
         }));
 

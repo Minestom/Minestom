@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 
 public final class MojangCrypt {
@@ -27,12 +27,7 @@ public final class MojangCrypt {
     }
 
     public static byte @Nullable [] digestData(String data, PublicKey publicKey, SecretKey secretKey) {
-        try {
-            return digestData("SHA-1", data.getBytes("ISO_8859_1"), secretKey.getEncoded(), publicKey.getEncoded());
-        } catch (UnsupportedEncodingException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
-            return null;
-        }
+        return digestData("SHA-1", data.getBytes(StandardCharsets.ISO_8859_1), secretKey.getEncoded(), publicKey.getEncoded());
     }
 
     private static byte @Nullable [] digestData(String algorithm, byte[]... data) {

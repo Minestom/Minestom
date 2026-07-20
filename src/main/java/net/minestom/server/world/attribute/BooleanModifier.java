@@ -9,7 +9,7 @@ non-sealed interface BooleanModifier extends EnvironmentAttribute.Modifier<Boole
     BooleanModifier OR = (a, b) -> a || b;
     BooleanModifier NOR = (a, b) -> !a && !b;
     BooleanModifier XOR = (a, b) -> a ^ b;
-    BooleanModifier XNOR = (a, b) -> a == b;
+    BooleanModifier XNOR = java.lang.Boolean::equals;
 
     @java.lang.Override
     default Codec<java.lang.Boolean> argumentCodec() {

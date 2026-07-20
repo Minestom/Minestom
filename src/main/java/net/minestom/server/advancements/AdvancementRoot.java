@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
  * The difference between this and an {@link Advancement} is that the root is responsible for the tab background.
  */
 public class AdvancementRoot extends Advancement {
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     public AdvancementRoot(Component title, Component description,
                            ItemStack icon, FrameType frameType,
                            float x, float y,
@@ -20,6 +21,7 @@ public class AdvancementRoot extends Advancement {
         setBackground(background);
     }
 
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     public AdvancementRoot(Component title, Component description,
                            Material icon, FrameType frameType,
                            float x, float y,

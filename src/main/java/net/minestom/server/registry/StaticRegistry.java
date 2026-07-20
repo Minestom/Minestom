@@ -93,7 +93,7 @@ final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registr
     }
 
     @Override
-    public Collection<T> values() {
+    public Set<T> values() {
         return this.valueToKey.keySet();
     }
 

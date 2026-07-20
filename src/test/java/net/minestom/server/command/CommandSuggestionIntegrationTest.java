@@ -24,7 +24,7 @@ public class CommandSuggestionIntegrationTest {
         var player = connection.connect(instance, new Pos(0, 42, 0));
 
         var command = new Command("test");
-        command.addSyntax((sender, context) -> {
+        command.addSyntax((_, _) -> {
 
         }, Literal("arg").setSuggestionCallback((sender, context, suggestion) -> {
             assertEquals(player, sender);
@@ -54,13 +54,13 @@ public class CommandSuggestionIntegrationTest {
         var player = connection.connect(instance, new Pos(0, 42, 0));
 
         var suggestArg = Word("suggestArg").setSuggestionCallback(
-                (sender, context, suggestion) -> suggestion.addEntry(new SuggestionEntry("suggestion"))
+                (_, _, suggestion) -> suggestion.addEntry(new SuggestionEntry("suggestion"))
         );
         var defaultArg = Integer("defaultArg").setDefaultValue(123);
 
         var command = new Command("foo");
 
-        command.addSyntax((sender,context)->{}, suggestArg, defaultArg);
+        command.addSyntax((_,_)->{}, suggestArg, defaultArg);
         env.process().command().register(command);
 
         var listener = connection.trackIncoming(TabCompletePacket.class);
@@ -80,12 +80,12 @@ public class CommandSuggestionIntegrationTest {
 
         var subCommand = new Command("bar");
 
-        var wordArg1 = Word("wordArg1").setSuggestionCallback((sender, context, suggestion) -> suggestion.addEntry(new SuggestionEntry("suggestionA")));
-        var wordArg2 = Word("wordArg2").setSuggestionCallback((sender, context, suggestion) -> suggestion.addEntry(new SuggestionEntry("suggestionB")));
+        var wordArg1 = Word("wordArg1").setSuggestionCallback((_, _, suggestion) -> suggestion.addEntry(new SuggestionEntry("suggestionA")));
+        var wordArg2 = Word("wordArg2").setSuggestionCallback((_, _, suggestion) -> suggestion.addEntry(new SuggestionEntry("suggestionB")));
 
-        subCommand.addSyntax((sender, context) -> {}, wordArg1, wordArg2);
+        subCommand.addSyntax((_, _) -> {}, wordArg1, wordArg2);
 
-        command.addSyntax((sender,context)->{}, Literal("literal"), wordArg2);
+        command.addSyntax((_,_)->{}, Literal("literal"), wordArg2);
 
         command.addSubcommand(subCommand);
 
@@ -106,12 +106,12 @@ public class CommandSuggestionIntegrationTest {
 
         var command = new Command("foo");
 
-        var wordArg1 = Word("wordArg1").setSuggestionCallback((sender, context, suggestion) -> suggestion.addEntry(new SuggestionEntry("suggestionA")));
-        var wordArg2 = Word("wordArg2").setSuggestionCallback((sender, context, suggestion) -> suggestion.addEntry(new SuggestionEntry("suggestionB")));
+        var wordArg1 = Word("wordArg1").setSuggestionCallback((_, _, suggestion) -> suggestion.addEntry(new SuggestionEntry("suggestionA")));
+        var wordArg2 = Word("wordArg2").setSuggestionCallback((_, _, suggestion) -> suggestion.addEntry(new SuggestionEntry("suggestionB")));
 
-        command.addSyntax((sender,context)->{}, Literal("literal1"), wordArg1);
+        command.addSyntax((_,_)->{}, Literal("literal1"), wordArg1);
 
-        command.addSyntax((sender,context)->{}, Literal("literal2"), wordArg2);
+        command.addSyntax((_,_)->{}, Literal("literal2"), wordArg2);
 
         env.process().command().register(command);
 

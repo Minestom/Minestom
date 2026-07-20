@@ -35,7 +35,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     // Also, what use case requires you to mutate registries faster than one monitor?
     private static final Object REGISTRY_LOCK = new Object();
 
-    private volatile Registries registries = null;
+    private volatile @Nullable Registries registries = null;
     private final CachedPacket vanillaRegistryDataPacket = new CachedPacket(() -> createRegistryDataPacket(registries, true));
 
     private final List<T> idToValue;

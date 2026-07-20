@@ -701,6 +701,9 @@
       ]
     },
     {
+      "type": "net.minestom.server.tag.TagRecordTest$1ArrayRecord"
+    },
+    {
       "type": "net.minestom.server.tag.TagRecordTest$1CompoundRecord",
       "methods": [
         {
@@ -716,10 +719,22 @@
       ]
     },
     {
-      "type": "net.minestom.server.tag.TagRecordTest$1Test"
+      "type": "net.minestom.server.tag.TagRecordTest$1ListRecord"
     },
     {
-      "type": "net.minestom.server.tag.TagRecordTest$2Test"
+      "type": "net.minestom.server.tag.TagUpdateTest$1Coin",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "int"
+          ]
+        },
+        {
+          "name": "coin",
+          "parameterTypes": []
+        }
+      ]
     },
     {
       "type": "net.minestom.server.tag.TagUpdateTest$1Structure",
@@ -727,7 +742,7 @@
         {
           "name": "<init>",
           "parameterTypes": [
-            "net.minestom.server.tag.TagUpdateTest$3Test"
+            "net.minestom.server.tag.TagUpdateTest$3Coin"
           ]
         },
         {
@@ -737,7 +752,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.tag.TagUpdateTest$1Test",
+      "type": "net.minestom.server.tag.TagUpdateTest$2Coin",
       "methods": [
         {
           "name": "<init>",
@@ -752,7 +767,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.tag.TagUpdateTest$2Test",
+      "type": "net.minestom.server.tag.TagUpdateTest$3Coin",
       "methods": [
         {
           "name": "<init>",
@@ -767,22 +782,7 @@
       ]
     },
     {
-      "type": "net.minestom.server.tag.TagUpdateTest$3Test",
-      "methods": [
-        {
-          "name": "<init>",
-          "parameterTypes": [
-            "int"
-          ]
-        },
-        {
-          "name": "coin",
-          "parameterTypes": []
-        }
-      ]
-    },
-    {
-      "type": "net.minestom.server.tag.TagUpdateTest$4Test",
+      "type": "net.minestom.server.tag.TagUpdateTest$4Coin",
       "methods": [
         {
           "name": "<init>",
@@ -894,6 +894,9 @@
     }
   ],
   "resources": [
+    {
+      "glob": "META-INF/services/java.net.spi.InetAddressResolverProvider"
+    },
     {
       "glob": "META-INF/services/java.nio.channels.spi.SelectorProvider"
     },

@@ -83,6 +83,7 @@ public final class ConnectionManager {
     /**
      * Returns an unmodifiable set containing the players currently in the play state.
      */
+    @SuppressWarnings("PreferredInterfaceType") // wider type kept for binary compatibility until the next breaking release
     public Collection<Player> getOnlinePlayers() {
         return unmodifiablePlayPlayers;
     }
@@ -90,6 +91,7 @@ public final class ConnectionManager {
     /**
      * Returns an unmodifiable set containing the players currently in the configuration state.
      */
+    @SuppressWarnings("PreferredInterfaceType") // wider type kept for binary compatibility until the next breaking release
     public Collection<Player> getConfigPlayers() {
         return unmodifiableConfigurationPlayers;
     }
@@ -208,6 +210,10 @@ public final class ConnectionManager {
         } catch (Throwable t) {
             connection.kick(LoginListener.INVALID_PROXY_RESPONSE);
             throw new RuntimeException("Error getting replies for login plugin messages", t);
+        }
+        // Publish the final profile before the client could possibly respond
+        if (connection instanceof PlayerSocketConnection socketConnection) {
+            socketConnection.UNSAFE_setProfile(gameProfile);
         }
         // Send login success packet (and switch to configuration phase)
         connection.sendPacket(new LoginSuccessPacket(gameProfile, new UUID(0L, 0L)));
@@ -360,7 +366,7 @@ public final class ConnectionManager {
      *
      * @param tickStart the time of the update in nanoseconds, forwarded to the packet
      */
-    private void handleKeepAlive(Collection<Player> playerGroup, long tickStart) {
+    private static void handleKeepAlive(Collection<Player> playerGroup, long tickStart) {
         final KeepAlivePacket keepAlivePacket = new KeepAlivePacket(tickStart);
         for (Player player : playerGroup) {
             final long lastKeepAlive = tickStart - player.getLastKeepAlive();

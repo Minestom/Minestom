@@ -1,6 +1,7 @@
 package net.minestom.server.snapshot;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import java.util.List;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityType;
@@ -61,7 +62,7 @@ public final class SnapshotImpl {
         }
 
         @Override
-        public Collection<EntitySnapshot> entities() {
+        public List<EntitySnapshot> entities() {
             return new IntMappedArray<>(entitiesIds, id -> server().entity(id));
         }
 
@@ -121,7 +122,7 @@ public final class SnapshotImpl {
         }
 
         @Override
-        public Collection<EntitySnapshot> entities() {
+        public List<EntitySnapshot> entities() {
             return new IntMappedArray<>(entitiesIds, id -> instance().server().entity(id));
         }
     }
@@ -146,12 +147,12 @@ public final class SnapshotImpl {
         }
 
         @Override
-        public Collection<PlayerSnapshot> viewers() {
+        public List<PlayerSnapshot> viewers() {
             return new IntMappedArray<>(viewersId, id -> (PlayerSnapshot) instance().server().entity(id));
         }
 
         @Override
-        public Collection<EntitySnapshot> passengers() {
+        public List<EntitySnapshot> passengers() {
             return new IntMappedArray<>(passengersId, id -> instance().server().entity(id));
         }
 

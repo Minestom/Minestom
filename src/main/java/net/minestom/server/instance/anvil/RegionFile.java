@@ -139,7 +139,7 @@ final class RegionFile implements AutoCloseable {
         file.close();
     }
 
-    private int getChunkIndex(int chunkX, int chunkZ) {
+    private static int getChunkIndex(int chunkX, int chunkZ) {
         return (CoordConversion.chunkToRegionLocal(chunkZ) << 5) | CoordConversion.chunkToRegionLocal(chunkX);
     }
 
@@ -165,7 +165,8 @@ final class RegionFile implements AutoCloseable {
 
         // Parse locations from buffer
         for (int i = 0; i < MAX_ENTRY_COUNT; i++) {
-            int location = locations[i] = headerBuffer.getInt();
+            final int location = headerBuffer.getInt();
+            locations[i] = location;
             if (location != 0) {
                 markLocationInBitSet(location, false);
             }
@@ -214,7 +215,7 @@ final class RegionFile implements AutoCloseable {
     }
 
     private int allocSectors(int count) throws IOException {
-        var eof = file.length();
+        final long eof = file.length();
         file.seek(eof);
 
         byte[] emptySector = new byte[SECTOR_SIZE];

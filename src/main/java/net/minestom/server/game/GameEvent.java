@@ -25,6 +25,7 @@ public sealed interface GameEvent extends StaticProtocolObject<GameEvent>, GameE
      *
      * @return the game event registry or null if not found
      */
+    @Override
     @Contract(pure = true)
     @Nullable
     RegistryData.GameEventEntry registry();

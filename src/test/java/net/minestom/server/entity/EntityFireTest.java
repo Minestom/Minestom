@@ -21,7 +21,7 @@ public class EntityFireTest
 
         final int fireTicks = 10;
         LivingEntity entity = new LivingEntity(EntityType.ZOMBIE);
-        entity.setInstance(instance, new Vec(0, 0, 0));
+        entity.setInstance(instance, new Vec(0, 0, 0)).join();
 
         entity.setFireTicks(fireTicks);
         assertTrue(entity.getEntityMeta().isOnFire());
@@ -42,7 +42,7 @@ public class EntityFireTest
         instance.loadChunk(0, 0).join();
 
         LivingEntity entity = new LivingEntity(EntityType.ZOMBIE);
-        entity.setInstance(instance, new Vec(0, 0, 0));
+        entity.setInstance(instance, new Vec(0, 0, 0)).join();
 
         // Natural fire decay
         entity.setFireTicks(5);
@@ -67,7 +67,7 @@ public class EntityFireTest
         instance.loadChunk(0, 0).join();
 
         LivingEntity entity = new LivingEntity(EntityType.ZOMBIE);
-        entity.setInstance(instance, new Vec(0, 0, 0));
+        entity.setInstance(instance, new Vec(0, 0, 0)).join();
 
         // Do not extinguish an entity when they're set on fire explicitly
         entity.getEntityMeta().setOnFire(true);
@@ -88,7 +88,7 @@ public class EntityFireTest
         instance.loadChunk(0, 0).join();
 
         LivingEntity entity = new LivingEntity(EntityType.ZOMBIE);
-        entity.setInstance(instance, new Vec(0, 0, 0));
+        entity.setInstance(instance, new Vec(0, 0, 0)).join();
 
         AtomicInteger callCount = new AtomicInteger();
         env.listen(EntityFireExtinguishEvent.class).followup(e -> {

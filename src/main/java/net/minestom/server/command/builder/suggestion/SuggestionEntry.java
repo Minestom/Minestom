@@ -28,14 +28,12 @@ public class SuggestionEntry {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SuggestionEntry that = (SuggestionEntry) o;
-        return Objects.equals(entry, that.entry) && Objects.equals(tooltip, that.tooltip);
+        if (!(o instanceof SuggestionEntry that)) return false;
+        return getEntry().equals(that.getEntry()) && Objects.equals(getTooltip(), that.getTooltip());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(entry, tooltip);
+        return Objects.hash(getEntry(), getTooltip());
     }
 }

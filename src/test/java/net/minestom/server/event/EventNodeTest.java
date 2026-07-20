@@ -59,7 +59,7 @@ public class EventNodeTest {
     public void testCall() {
         var node = EventNode.all("main");
         AtomicBoolean result = new AtomicBoolean(false);
-        var listener = EventListener.of(EventTest.class, eventTest -> result.set(true));
+        var listener = EventListener.of(EventTest.class, _ -> result.set(true));
         node.addListener(listener);
         assertFalse(result.get(), "The event should not be called before the call");
         node.call(new EventTest());
@@ -97,7 +97,7 @@ public class EventNodeTest {
         assertTrue(result.get(), "The event should be called after the call");
 
         // Test cancelling
-        node.addListener(CancellableTest.class, event -> fail("The event must have been cancelled"));
+        node.addListener(CancellableTest.class, _ -> fail("The event must have been cancelled"));
         node.call(new CancellableTest());
     }
 
@@ -106,8 +106,8 @@ public class EventNodeTest {
         var node = EventNode.all("main");
         AtomicBoolean result1 = new AtomicBoolean(false);
         AtomicBoolean result2 = new AtomicBoolean(false);
-        var listener1 = EventListener.of(Recursive1.class, event -> result1.set(true));
-        var listener2 = EventListener.of(Recursive2.class, event -> result2.set(true));
+        var listener1 = EventListener.of(Recursive1.class, _ -> result1.set(true));
+        var listener2 = EventListener.of(Recursive2.class, _ -> result2.set(true));
         node.addListener(listener1);
         node.addListener(listener2);
         node.call(new Recursive2());
@@ -129,8 +129,8 @@ public class EventNodeTest {
         var called2 = new AtomicBoolean(false);
         var child1 = EventNode.all("child1");
         var child2 = EventNode.all("child2");
-        child1.addListener(Recursive1.class, event -> called1.set(true));
-        child2.addListener(Recursive1.class, event -> called2.set(true));
+        child1.addListener(Recursive1.class, _ -> called1.set(true));
+        child2.addListener(Recursive1.class, _ -> called2.set(true));
 
         var node = EventNode.all("main");
         node.addChild(child1);
@@ -154,13 +154,13 @@ public class EventNodeTest {
     public void recursiveSuper() {
         var node = EventNode.all("main");
         AtomicBoolean result2 = new AtomicBoolean(false);
-        var listener2 = EventListener.of(Recursive2.class, event -> result2.set(true));
+        var listener2 = EventListener.of(Recursive2.class, _ -> result2.set(true));
         node.addListener(listener2);
         node.call(new Recursive2());
         assertTrue(result2.get(), "The event should be called after the call");
 
         AtomicBoolean result1 = new AtomicBoolean(false);
-        var listener1 = EventListener.of(Recursive1.class, event -> result1.set(true));
+        var listener1 = EventListener.of(Recursive1.class, _ -> result1.set(true));
         node.addListener(listener1);
         result2.set(false);
         node.call(new Recursive2());
@@ -173,12 +173,12 @@ public class EventNodeTest {
         var node = EventNode.all("main");
         AtomicInteger result = new AtomicInteger(0);
         var child1 = EventNode.all("child1").setPriority(1)
-                .addListener(EventTest.class, eventTest -> {
+                .addListener(EventTest.class, _ -> {
                     assertEquals(0, result.get(), "child1 should be called before child2");
                     result.set(1);
                 });
         var child2 = EventNode.all("child2").setPriority(2)
-                .addListener(EventTest.class, eventTest -> {
+                .addListener(EventTest.class, _ -> {
                     assertEquals(1, result.get(), "child2 should be called after child1");
                     result.set(2);
                 });
@@ -208,18 +208,18 @@ public class EventNodeTest {
         AtomicBoolean childResult = new AtomicBoolean(false);
 
         var node = EventNode.type("item_node", EventFilter.ITEM,
-                (event, item) -> item.material() == Material.DIAMOND);
+                (_, item) -> item.material() == Material.DIAMOND);
         var child = EventNode.type("item_node2", EventFilter.ITEM)
-                .addListener(ItemTestEvent.class, event -> childResult.set(true));
+                .addListener(ItemTestEvent.class, _ -> childResult.set(true));
         node.addChild(child);
 
-        var listener = EventListener.of(ItemTestEvent.class, event -> fail("The event should not be called"));
+        var listener = EventListener.of(ItemTestEvent.class, _ -> fail("The event should not be called"));
         node.addListener(listener);
         node.call(new ItemTestEvent(ItemStack.of(Material.GOLD_BLOCK)));
         assertFalse(childResult.get());
 
         node.removeListener(listener);
-        listener = EventListener.of(ItemTestEvent.class, event -> result.set(true));
+        listener = EventListener.of(ItemTestEvent.class, _ -> result.set(true));
         node.addListener(listener);
         node.call(new ItemTestEvent(ItemStack.of(Material.DIAMOND)));
         assertTrue(result.get(), "The event should be called");
@@ -232,7 +232,7 @@ public class EventNodeTest {
 
         AtomicBoolean result = new AtomicBoolean(false);
         var binding = EventBinding.filtered(EventFilter.ITEM, itemStack -> itemStack.material() == Material.DIAMOND)
-                .map(ItemTestEvent.class, (itemStack, itemTestEvent) -> result.set(true))
+                .map(ItemTestEvent.class, (_, _) -> result.set(true))
                 .build();
         node.register(binding);
         node.call(new ItemTestEvent(ItemStack.of(Material.GOLD_BLOCK)));
@@ -262,7 +262,7 @@ public class EventNodeTest {
     public void nodeGC() {
         var node = EventNode.all("main");
         var ref = new WeakReference<>(node);
-        node.addListener(EventTest.class, event -> {
+        node.addListener(EventTest.class, _ -> {
         });
 
         //noinspection UnusedAssignment
@@ -292,7 +292,7 @@ public class EventNodeTest {
         var handler = ItemStack.AIR;
         var mapped = node.map(handler, EventFilter.ITEM);
         var ref = new WeakReference<>(mapped);
-        mapped.addListener(ItemTestEvent.class, event -> {
+        mapped.addListener(ItemTestEvent.class, _ -> {
         });
 
         //noinspection UnusedAssignment

@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.number;
 
+import java.util.Locale;
 import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
@@ -156,7 +157,7 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
             value = value.replaceFirst(Pattern.quote("0b"), "");
         } else if (value.startsWith("0x")) {
             value = value.replaceFirst(Pattern.quote("0x"), "");
-        } else if (value.toLowerCase().contains("e")) {
+        } else if (value.toLowerCase(Locale.ROOT).contains("e")) {
             value = removeScientificNotation(value);
         }
         // TODO number suffix support (k,m,b,t)

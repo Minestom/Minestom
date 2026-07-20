@@ -10,14 +10,15 @@ import org.jetbrains.annotations.ApiStatus;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import org.jetbrains.annotations.Nullable;
 
 import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
 import static net.minestom.server.instance.light.LightCompute.*;
 
 final class SkyLight implements Light {
     private byte[] content;
-    private byte[] contentPropagation;
-    private byte[] contentPropagationSwap;
+    private byte @Nullable [] contentPropagation;
+    private byte @Nullable [] contentPropagationSwap;
 
     private volatile boolean isValidBorders = true;
     private final AtomicBoolean needsSend = new AtomicBoolean(false);
