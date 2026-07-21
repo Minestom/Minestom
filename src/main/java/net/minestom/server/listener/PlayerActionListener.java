@@ -57,7 +57,7 @@ public final class PlayerActionListener {
             player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
             if (!diggingResult.success()) {
                 // Refresh block on player screen in case it had special data (like a sign)
-                var blockEntityType = diggingResult.block().registry().blockEntityType();
+                var blockEntityType = diggingResult.block().blockEntityType();
                 if (blockEntityType != null) {
                     final CompoundBinaryTag data = BlockUtils.extractClientNbt(diggingResult.block());
                     player.sendPacketToViewersAndSelf(new BlockEntityDataPacket(blockPosition, blockEntityType, data));
@@ -186,7 +186,7 @@ public final class PlayerActionListener {
         final boolean success = instance.breakBlock(player, blockPosition, blockFace);
         final Block updatedBlock = instance.getBlock(blockPosition);
         if (!success) {
-            if (previousBlock.isSolid()) {
+            if (previousBlock.solid()) {
                 final Pos playerPosition = player.getPosition();
                 // Teleport the player back if he broke a solid block just below him
                 if (playerPosition.sub(0, 1, 0).samePoint(blockPosition)) {

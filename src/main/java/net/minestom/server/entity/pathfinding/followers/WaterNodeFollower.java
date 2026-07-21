@@ -45,7 +45,7 @@ public class WaterNodeFollower implements NodeFollower {
 
         var instance = entity.getInstance();
         if (instance != null)
-            if (instance.getBlock(position).isLiquid()) {
+            if (instance.getBlock(position).liquid()) {
                 speed *= WATER_SPEED_MULTIPLIER;
             }
 

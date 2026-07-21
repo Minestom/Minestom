@@ -450,7 +450,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     public AttributeInstance getAttribute(Attribute attribute) {
         return attributeModifiers.computeIfAbsent(attribute.name(),
                 _ -> {
-                    double defaultValue = entityType.registry().defaultAttributes().getOrDefault(attribute, attribute.defaultValue());
+                    double defaultValue = entityType.defaultAttributes()
+                            .getOrDefault(attribute, attribute.defaultValue());
                     return new AttributeInstance(attribute, defaultValue, new ArrayList<>(), this::onAttributeChanged);
                 });
     }
@@ -500,7 +501,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     public double getAttributeValue(Attribute attribute) {
         AttributeInstance instance = attributeModifiers.get(attribute.name());
         if (instance != null) return instance.getValue();
-        return entityType.registry().defaultAttributes().getOrDefault(attribute, attribute.defaultValue());
+        return entityType.defaultAttributes().getOrDefault(attribute, attribute.defaultValue());
     }
 
     /**
@@ -537,7 +538,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @return true if this entity needs to send attributes, false otherwise
      */
     protected boolean shouldSendAttributes() {
-        return this.entityType.registry().shouldSendAttributes();
+        return this.entityType.shouldSendAttributes();
     }
 
     @Override
@@ -705,7 +706,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         Iterator<Point> it = new BlockIterator(this, maxDistance);
         while (it.hasNext()) {
             final Point position = it.next();
-            if (!getInstance().getBlock(position).isAir()) return position;
+            if (!getInstance().getBlock(position).air()) return position;
         }
         return null;
     }

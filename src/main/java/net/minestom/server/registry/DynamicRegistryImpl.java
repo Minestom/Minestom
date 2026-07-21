@@ -328,6 +328,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         return !ServerFlag.REGISTRY_UNSAFE_OPS && !ServerFlag.INSIDE_TEST;
     }
 
+    @SuppressWarnings("removal")
     void loadStaticJsonRegistry(@Nullable Registries registries, @Nullable Comparator<String> idComparator, Codec<T> codec) {
         // Tags must exist before entries are decoded because registry codecs can resolve tags while loading values.
         tags.putAll(RegistryData.loadTags(key()));

@@ -894,7 +894,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             // incorrectly in MinestomDataGenerator.
             if (block.id() == Block.SCAFFOLDING.id()) continue;
 
-            boolean hit = block.registry().collisionShape()
+            boolean hit = block.collisionShape()
                     .intersectBox(position.sub(pos.blockX(), pos.blockY(), pos.blockZ()), bb);
             if (hit) return false;
         }

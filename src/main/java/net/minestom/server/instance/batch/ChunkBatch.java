@@ -270,7 +270,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
                 bySection.computeIfAbsent(CoordConversion.globalToChunk(y), _ -> new LongArrayList()).add(packed);
 
                 final Block block = entry.getValue();
-                final BlockEntityType blockEntityType = block.registry().blockEntityType();
+                final BlockEntityType blockEntityType = block.blockEntityType();
                 if (blockEntityType != null) {
                     final Point blockPosition = new BlockVec(x + chunkX * 16, y, z + chunkZ * 16);
                     final CompoundBinaryTag data = BlockUtils.extractClientNbt(block);

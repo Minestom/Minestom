@@ -6,6 +6,7 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
+import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,9 +27,27 @@ public sealed interface VillagerProfession extends StaticProtocolObject<Villager
         return registry().id();
     }
 
+    /**
+     * Returns the legacy registry data backing this profession.
+     *
+     * @return the legacy registry data
+     * @deprecated use the direct accessors on {@link VillagerProfession}
+     */
+    @Deprecated(forRemoval = true)
+    @SuppressWarnings("removal")
     @Override
     @Contract(pure = true)
     RegistryData.VillagerProfessionEntry registry();
+
+    /**
+     * Returns the sound played while a villager works in this profession.
+     *
+     * @return the work sound, or {@code null} when absent
+     */
+    @Contract(pure = true)
+    default @Nullable SoundEvent workSound() {
+        return registry().workSound();
+    }
 
     static Collection<VillagerProfession> values() {
         return VillagerProfessionImpl.REGISTRY.values();

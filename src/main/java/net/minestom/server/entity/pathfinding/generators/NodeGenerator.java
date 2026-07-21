@@ -74,7 +74,7 @@ public interface NodeGenerator {
         var iterator = boundingBox.getBlocks(point);
         while (iterator.hasNext()) {
             var block = iterator.next();
-            if (getter.getBlock(block.blockX(), block.blockY(), block.blockZ(), Block.Getter.Condition.TYPE).isSolid()) {
+            if (getter.getBlock(block.blockX(), block.blockY(), block.blockZ(), Block.Getter.Condition.TYPE).solid()) {
                 return true;
             }
         }

@@ -91,7 +91,7 @@ public class BlockUtils {
     }
 
     public static @Nullable CompoundBinaryTag extractClientNbt(Block block) {
-        if (!block.registry().isBlockEntity()) return null;
+        if (block.blockEntityType() == null) return null;
         // Append handler tags
         final BlockHandler handler = block.handler();
         final CompoundBinaryTag blockNbt = Objects.requireNonNullElseGet(block.nbt(), CompoundBinaryTag::empty);

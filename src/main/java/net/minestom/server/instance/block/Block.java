@@ -4,16 +4,18 @@ import net.kyori.adventure.key.InvalidKeyException;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.translation.Translatable;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Result;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.codec.Transcoder;
-import net.kyori.adventure.translation.Translatable;
+import net.minestom.server.collision.Shape;
 import net.minestom.server.coordinate.Area;
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.batch.Batch;
+import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
@@ -232,7 +234,10 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      * Registry data is directly linked to {@link #stateId()}.
      *
      * @return the block registry
+     * @deprecated use the direct accessors on {@link Block}
      */
+    @Deprecated(forRemoval = true)
+    @SuppressWarnings("removal")
     @Override
     @Contract(pure = true)
     RegistryData.BlockEntry registry();
@@ -247,29 +252,289 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
         return registry().id();
     }
 
+    @Contract(pure = true)
     default int stateId() {
         return registry().stateId();
     }
 
-    default boolean isAir() {
+    /**
+     * Returns whether this block is air.
+     *
+     * @return {@code true} if this block is air
+     */
+    @Contract(pure = true)
+    default boolean air() {
         return registry().isAir();
     }
 
-    default boolean isSolid() {
+    /**
+     * @deprecated use {@link #air()}
+     */
+    @Deprecated(forRemoval = true)
+    @Contract(pure = true)
+    default boolean isAir() {
+        return air();
+    }
+
+    /**
+     * Returns the vanilla solid-state classification for this block state.
+     * <p>
+     * This is not a collision or motion-blocking check. For example, cobweb and bamboo sapling are classified as
+     * solid while {@link #blocksMotion()} is {@code false}. Use {@link #collisionShape()} for physical collisions
+     * and {@link #blocksMotion()} for the vanilla motion-blocking classification.
+     *
+     * @return {@code true} if vanilla classifies this block state as solid
+     */
+    @Contract(pure = true)
+    default boolean solid() {
         return registry().isSolid();
     }
 
-    /** Whether this block stops entity movement (motion-blocking collision); unlike {@link #isSolid()}, e.g. cobweb is solid but does not block motion. */
+    /**
+     * @deprecated use {@link #solid()}
+     */
+    @Deprecated(forRemoval = true)
+    @Contract(pure = true)
+    default boolean isSolid() {
+        return solid();
+    }
+
+    /**
+     * Returns whether vanilla classifies this block state as blocking motion.
+     * <p>
+     * This flag is independent of {@link #solid()} and does not replace an exact {@link #collisionShape()} check.
+     * For example, cobweb is solid but does not block motion.
+     *
+     * @return {@code true} if this block state is classified as blocking motion
+     */
+    @Contract(pure = true)
     default boolean blocksMotion() {
         return registry().blocksMotion();
     }
 
-    default boolean isLiquid() {
+    /**
+     * Returns whether this block state is itself a liquid block, such as water or lava.
+     * <p>
+     * Waterlogged blocks are not liquid blocks. Use {@link #fluid()} to include any block state containing a
+     * non-empty fluid.
+     *
+     * @return {@code true} if this state is a liquid block
+     */
+    @Contract(pure = true)
+    default boolean liquid() {
         return registry().isLiquid();
     }
 
-    default boolean isFluid() {
+    /**
+     * @deprecated use {@link #liquid()}
+     */
+    @Deprecated(forRemoval = true)
+    @Contract(pure = true)
+    default boolean isLiquid() {
+        return liquid();
+    }
+
+    /**
+     * Returns whether this block state contains a non-empty fluid.
+     * <p>
+     * This includes liquid blocks such as water and lava as well as waterlogged block states. Therefore every
+     * {@link #liquid()} state is fluid, but not every fluid state is a liquid block.
+     *
+     * @return {@code true} if this state contains a non-empty fluid
+     */
+    @Contract(pure = true)
+    default boolean fluid() {
         return registry().isFluid();
+    }
+
+    /**
+     * @deprecated use {@link #fluid()}
+     */
+    @Deprecated(forRemoval = true)
+    @Contract(pure = true)
+    default boolean isFluid() {
+        return fluid();
+    }
+
+    /**
+     * Returns this block state's destroy-time hardness.
+     *
+     * @return the hardness
+     */
+    @Contract(pure = true)
+    default float hardness() {
+        return registry().hardness();
+    }
+
+    /**
+     * Returns this block state's resistance to explosions.
+     *
+     * @return the explosion resistance
+     */
+    @Contract(pure = true)
+    default float explosionResistance() {
+        return registry().explosionResistance();
+    }
+
+    /**
+     * Returns the friction applied while entities move over this block state.
+     *
+     * @return the friction coefficient
+     */
+    @Contract(pure = true)
+    default float friction() {
+        return registry().friction();
+    }
+
+    /**
+     * Returns the movement-speed multiplier applied by this block state.
+     *
+     * @return the movement-speed multiplier
+     */
+    @Contract(pure = true)
+    default float speedFactor() {
+        return registry().speedFactor();
+    }
+
+    /**
+     * Returns the jump-height multiplier applied by this block state.
+     *
+     * @return the jump-height multiplier
+     */
+    @Contract(pure = true)
+    default float jumpFactor() {
+        return registry().jumpFactor();
+    }
+
+    /**
+     * Returns the numeric map color used for this block state.
+     *
+     * @return the map color id
+     */
+    @Contract(pure = true)
+    default int mapColorId() {
+        return registry().mapColorId();
+    }
+
+    /**
+     * Returns whether this block state participates in occlusion.
+     * Use {@link #occlusionShape()} for the actual shape.
+     *
+     * @return {@code true} if this block state occludes
+     */
+    @Contract(pure = true)
+    default boolean occludes() {
+        return registry().occludes();
+    }
+
+    /**
+     * Returns whether the correct tool is required for this block state to drop items when broken.
+     *
+     * @return {@code true} if the correct tool is required
+     */
+    @Contract(pure = true)
+    default boolean requiresTool() {
+        return registry().requiresTool();
+    }
+
+    /**
+     * Returns the light level emitted by this block state.
+     *
+     * @return the emitted light level
+     */
+    @Contract(pure = true)
+    default int lightEmission() {
+        return registry().lightEmission();
+    }
+
+    /**
+     * Returns the amount of light blocked by this block state.
+     *
+     * @return the blocked light level
+     */
+    @Contract(pure = true)
+    default int lightBlocked() {
+        return registry().lightBlocked();
+    }
+
+    /**
+     * Returns whether this block state may be replaced directly during block placement.
+     *
+     * @return {@code true} if this block state is replaceable
+     */
+    @Contract(pure = true)
+    default boolean replaceable() {
+        return registry().isReplaceable();
+    }
+
+    /**
+     * Returns the block entity type associated with this block state.
+     *
+     * @return the block entity type, or {@code null} when absent
+     */
+    @Contract(pure = true)
+    default @Nullable BlockEntityType blockEntityType() {
+        return registry().blockEntityType();
+    }
+
+    /**
+     * Returns the item material corresponding to this block state.
+     *
+     * @return the corresponding material, or {@code null} when absent
+     */
+    @Contract(pure = true)
+    default @Nullable Material material() {
+        return registry().material();
+    }
+
+    /**
+     * Returns whether this block state conducts redstone signals.
+     *
+     * @return {@code true} if this block state conducts redstone signals
+     */
+    @Contract(pure = true)
+    default boolean redstoneConductor() {
+        return registry().isRedstoneConductor();
+    }
+
+    /**
+     * Returns whether this block state is a redstone signal source.
+     *
+     * @return {@code true} if this block state is a signal source
+     */
+    @Contract(pure = true)
+    default boolean signalSource() {
+        return registry().isSignalSource();
+    }
+
+    /**
+     * Returns the shape used for physical collision checks.
+     *
+     * @return the collision shape
+     */
+    @Contract(pure = true)
+    default Shape collisionShape() {
+        return registry().collisionShape();
+    }
+
+    /**
+     * Returns the shape used for face and light occlusion.
+     *
+     * @return the occlusion shape
+     */
+    @Contract(pure = true)
+    default Shape occlusionShape() {
+        return registry().occlusionShape();
+    }
+
+    /**
+     * Returns the sound type used by this block state.
+     *
+     * @return the block sound type, or {@code null} when absent
+     */
+    @Contract(pure = true)
+    default @Nullable BlockSoundType blockSoundType() {
+        return registry().getBlockSoundType();
     }
 
     @Override

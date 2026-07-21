@@ -103,7 +103,7 @@ public class DynamicChunk extends Chunk {
         // Handler
         final BlockHandler handler = block.handler();
         final Block lastCachedBlock;
-        if (handler != null || block.hasNbt() || block.registry().isBlockEntity()) {
+        if (handler != null || block.hasNbt() || block.blockEntityType() != null) {
             lastCachedBlock = this.entries.put(index, block);
         } else {
             lastCachedBlock = this.entries.remove(index);
@@ -300,7 +300,7 @@ public class DynamicChunk extends Chunk {
 
     private static boolean isFluid(int blockStateId) {
         final Block block = Block.fromStateId(blockStateId);
-        return block != null && block.isFluid();
+        return block != null && block.fluid();
     }
 
     UpdateLightPacket createLightPacket() {

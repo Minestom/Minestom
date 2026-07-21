@@ -48,7 +48,10 @@ import java.util.function.Supplier;
 /**
  * Handles registry data, used by {@link StaticProtocolObject} implementations and is strictly internal.
  * Use at your own risk.
+ *
+ * @deprecated registry values are exposed directly by their owning protocol objects
  */
+@Deprecated(forRemoval = true)
 public final class RegistryData {
     static final Gson GSON = new GsonBuilder().disableHtmlEscaping().disableJdkUnsafe().create();
 
@@ -671,7 +674,9 @@ public final class RegistryData {
          *
          * @param attachmentName The attachment to retrieve
          * @return A list of 3 doubles if the attachment is defined for this entity, or null if it is not defined
+         * @deprecated use {@link EntityType#entityAttachments(String)} and select the first attachment
          */
+        @Deprecated(forRemoval = true)
         public @Nullable List<Double> entityAttachment(String attachmentName) {
             var attachments = entityOffsets.get(attachmentName);
             if (attachments == null) {
@@ -687,7 +692,9 @@ public final class RegistryData {
          *
          * @param attachmentName The attachment to retrieve
          * @return A list of a list of 3 doubles if the attachment is defined for this entity, or null if it is not defined
+         * @deprecated use {@link EntityType#entityAttachments(String)}
          */
+        @Deprecated(forRemoval = true)
         public @Nullable List<List<Double>> entityAttachments(String attachmentName) {
             return entityOffsets.get(attachmentName);
         }

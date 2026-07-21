@@ -209,8 +209,8 @@ public class EntityVelocityIntegrationTest {
         env.tick();
 
         double horizontalAirResistance = entity.getAerodynamics().horizontalAirResistance();
-        double oldFriction = Block.ICE.registry().friction();
-        double newFriction = Block.SOUL_SAND.registry().friction();
+        double oldFriction = Block.ICE.friction();
+        double newFriction = Block.SOUL_SAND.friction();
         assertNotEquals(oldFriction, newFriction, Vec.EPSILON);
 
         double expectedDrag = newFriction * horizontalAirResistance;

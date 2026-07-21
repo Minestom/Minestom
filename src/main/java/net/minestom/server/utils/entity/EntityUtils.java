@@ -6,7 +6,6 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityPose;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.metadata.animal.CamelMeta;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Set;
@@ -25,8 +24,7 @@ public final class EntityUtils {
         // Special cases: Boats, Rafts, Camel, Happy Ghast
         EntityType vehicleType = vehicle.getEntityType();
         if (vehicleType == EntityType.CAMEL || vehicleType == EntityType.CAMEL_HUSK) {
-            List<Double> passengerVehiclePos = passenger.getEntityType().registry().entityAttachment("VEHICLE");
-            Vec vehicleOffset = attachmentListToVec(passengerVehiclePos, Vec.ZERO);
+            Vec vehicleOffset = firstAttachmentOrDefault(passenger.getEntityType(), "VEHICLE", Vec.ZERO);
             // Check pose
             boolean isSitting = vehicle.getPose() == EntityPose.SITTING;
             boolean isBaby = vehicle.getEntityMeta() instanceof CamelMeta camelMeta && camelMeta.isBaby();
@@ -49,10 +47,10 @@ public final class EntityUtils {
                 return new Vec(0, height, -0.7 + animalOffset).sub(vehicleOffset).rotateAroundY(Math.toRadians(vehicle.getPosition().yaw() * -1));
             }
         } else if (vehicleType == EntityType.HAPPY_GHAST) {
-            List<List<Double>> positions = vehicleType.registry().entityAttachments("PASSENGER");
-            Vec passengerOffset = positions != null ? attachmentListToVec(positions.get(Math.min(passengerIndex, positions.size())), new Vec(0, vehicleType.height(), 0)) : Vec.ZERO;
-            List<Double> passengerVehiclePos = passenger.getEntityType().registry().entityAttachment("VEHICLE");
-            Vec vehicleOffset = attachmentListToVec(passengerVehiclePos, Vec.ZERO);
+            List<Vec> positions = vehicleType.entityAttachments("PASSENGER");
+            Vec passengerOffset = positions != null && !positions.isEmpty()
+                    ? positions.get(Math.min(passengerIndex, positions.size() - 1)) : Vec.ZERO;
+            Vec vehicleOffset = firstAttachmentOrDefault(passenger.getEntityType(), "VEHICLE", Vec.ZERO);
             return passengerOffset.sub(vehicleOffset).rotateAroundY(Math.toRadians(-vehicle.getPosition().yaw()));
         } else if (vehicleType.key().value().contains("boat")) {
             double animalOffset = ANIMALS.contains(passenger.getEntityType()) ? 0.2 : 0;
@@ -88,22 +86,16 @@ public final class EntityUtils {
             }
         } else {
             // Passenger position offset is a combination of vehicle passenger position and passenger vehicle position (if it exists)
-            List<Double> vehiclePassengerPos = vehicleType.registry().entityAttachment("PASSENGER");
-            Vec passengerOffset = attachmentListToVec(vehiclePassengerPos, new Vec(0, vehicleType.height(), 0));
-            List<Double> passengerVehiclePos = passenger.getEntityType().registry().entityAttachment("VEHICLE");
-            Vec vehicleOffset = attachmentListToVec(passengerVehiclePos, Vec.ZERO);
+            Vec passengerOffset = firstAttachmentOrDefault(
+                    vehicleType, "PASSENGER", new Vec(0, vehicleType.height(), 0));
+            Vec vehicleOffset = firstAttachmentOrDefault(passenger.getEntityType(), "VEHICLE", Vec.ZERO);
             return passengerOffset.sub(vehicleOffset).rotateAroundY(Math.toRadians(-vehicle.getPosition().yaw()));
         }
     }
 
-    private static Vec attachmentListToVec(@Nullable List<Double> attachmentList, Vec fallback) {
-        if (attachmentList == null) {
-            return fallback;
-        }
-        if (attachmentList.size() < 3) {
-            return fallback;
-        }
-        return new Vec(attachmentList.get(0), attachmentList.get(1), attachmentList.get(2));
+    private static Vec firstAttachmentOrDefault(EntityType entityType, String attachmentName, Vec defaultValue) {
+        final List<Vec> attachments = entityType.entityAttachments(attachmentName);
+        return attachments == null ? defaultValue : attachments.getFirst();
     }
 
     private static final Set<EntityType> CHEST_BOATS = Set.of(

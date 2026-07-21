@@ -21,9 +21,9 @@ public class EntityBoundingBoxIntegrationTest {
         var player = connection.connect(instance, new Pos(0, 42, 0));
 
         // Bounding box should be from the registry
-        assertEquals(player.getEntityType().registry().boundingBox(), player.getBoundingBox());
+        assertEquals(player.getEntityType().boundingBox(), player.getBoundingBox());
         player.setPose(EntityPose.STANDING);
-        assertEquals(player.getEntityType().registry().boundingBox(), player.getBoundingBox());
+        assertEquals(player.getEntityType().boundingBox(), player.getBoundingBox());
 
         player.setPose(EntityPose.SLEEPING);
         assertEquals(new BoundingBox(0.2, 0.2, 0.2), player.getBoundingBox());
