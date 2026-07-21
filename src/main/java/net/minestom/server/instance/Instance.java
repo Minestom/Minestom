@@ -61,10 +61,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -503,26 +499,10 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
     /// Sets the seed the client blends biome colors with, applied to players joining afterwards.
     ///
     /// Clients resolve the biome of each block through a seeded zoom, so grass, foliage and water
-    /// colors near a biome border depend on this value. Vanilla sends [#obfuscateSeed(long)] of the
+    /// colors near a biome border depend on this value. Vanilla sends a SHA-256 hash of the
     /// world seed.
     public void setHashedSeed(long hashedSeed) {
         this.hashedSeed = hashedSeed;
-    }
-
-    /// Hashes a world seed the way vanilla does before sending it to a client.
-    ///
-    /// @see #setHashedSeed(long)
-    public static long obfuscateSeed(long seed) {
-        final byte[] hash;
-
-        try {
-            hash = MessageDigest.getInstance("SHA-256").digest(
-                    ByteBuffer.allocate(Long.BYTES).order(ByteOrder.LITTLE_ENDIAN).putLong(seed).array());
-        } catch (NoSuchAlgorithmException exception) {
-            throw new IllegalStateException("SHA-256 is not available", exception);
-        }
-
-        return ByteBuffer.wrap(hash).order(ByteOrder.LITTLE_ENDIAN).getLong();
     }
 
     /// Returns the current world age (aka game time) of this Instance.
