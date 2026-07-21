@@ -375,7 +375,7 @@ public final class MinecraftServer implements MinecraftConstants {
     }
 
     public static DynamicRegistry<Codec<? extends DataComponentPredicate>> componentPredicateTypes() {
-        return getRegistries().componentPredicateTypes();
+        return serverProcess.componentPredicateTypes();
     }
 
     public static Server getServer() {
