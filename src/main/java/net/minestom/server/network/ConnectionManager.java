@@ -46,7 +46,8 @@ public final class ConnectionManager {
     private static final Component TIMEOUT_TEXT = Component.text("Timeout", NamedTextColor.RED);
     private static final Component SHUTDOWN_TEXT = Component.text("Server shutting down");
 
-    private final CachedPacket cachedTagsPacket = new CachedPacket(() -> Registries.tagsPacket(MinecraftServer.process()));
+    private final CachedPacket cachedTagsPacket =
+            new CachedPacket(() -> Registries.tagsPacket(MinecraftServer.getRegistries()));
 
     // All players once their Player object has been instantiated.
     private final Map<PlayerConnection, Player> connectionPlayerMap = new ConcurrentHashMap<>();
@@ -265,7 +266,7 @@ public final class ConnectionManager {
             }
             boolean excludeVanilla = knownPacks.contains(SelectKnownPacksPacket.MINECRAFT_CORE);
 
-            Registries registries = MinecraftServer.process();
+            Registries registries = MinecraftServer.getRegistries();
             player.sendPackets(Registries.registryDataPackets(registries, excludeVanilla));
             // TODO: TEST_ENVIRONMENT, TEST_INSTANCE
 

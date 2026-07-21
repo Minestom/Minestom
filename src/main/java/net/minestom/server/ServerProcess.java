@@ -28,6 +28,13 @@ import java.net.SocketAddress;
 
 @ApiStatus.NonExtendable
 public interface ServerProcess extends Registries, Snapshotable {
+    /**
+     * Gets the registries owned by this process.
+     *
+     * @return the process registries
+     */
+    Registries registries();
+
     Auth auth();
 
     /**

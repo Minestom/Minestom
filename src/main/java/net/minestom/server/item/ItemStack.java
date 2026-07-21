@@ -120,7 +120,7 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
      */
     @Deprecated
     static ItemStack fromItemNBT(CompoundBinaryTag nbtCompound) {
-        return fromItemNBT(nbtCompound, MinecraftServer.process());
+        return fromItemNBT(nbtCompound, MinecraftServer.getRegistries());
     }
 
     /**
@@ -314,7 +314,7 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
      */
     @Deprecated
     default CompoundBinaryTag toItemNBT() {
-        return toItemNBT(MinecraftServer.process());
+        return toItemNBT(MinecraftServer.getRegistries());
     }
 
     /**
@@ -372,7 +372,7 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
          */
         @Deprecated
         static Hash of(ItemStack itemStack) {
-            return of(itemStack, MinecraftServer.process());
+            return of(itemStack, MinecraftServer.getRegistries());
         }
 
         /**

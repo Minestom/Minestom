@@ -6,10 +6,17 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class ServerProcessTest {
+
+    @Test
+    public void registries() {
+        var process = MinecraftServer.updateProcess();
+        assertSame(process.registries(), MinecraftServer.getRegistries());
+    }
 
     @Test
     public void init() {

@@ -84,7 +84,8 @@ public class PlayerSocketConnection extends PlayerConnection {
     private int serverPort;
     private int protocolVersion;
 
-    private final NetworkBuffer readBuffer = NetworkBuffer.resizableBuffer(ServerFlag.POOLED_BUFFER_SIZE, MinecraftServer.process());
+    private final NetworkBuffer readBuffer = NetworkBuffer.resizableBuffer(
+            ServerFlag.POOLED_BUFFER_SIZE, MinecraftServer.getRegistries());
     private final MessagePassingQueue<SendablePacket> packetQueue = ConcurrentMessageQueues.mpscUnboundedArrayQueue(1024);
     private final Thread readThread, writeThread;
 

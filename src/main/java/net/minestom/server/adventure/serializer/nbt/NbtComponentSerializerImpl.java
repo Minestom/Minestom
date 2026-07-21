@@ -12,13 +12,13 @@ final class NbtComponentSerializerImpl implements NbtComponentSerializer {
 
     @Override
     public Component deserialize(BinaryTag input) {
-        final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
+        final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.getRegistries());
         return Codec.COMPONENT.decode(coder, input).orElseThrow();
     }
 
     @Override
     public BinaryTag serialize(Component component) {
-        final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
+        final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.getRegistries());
         return Codec.COMPONENT.encode(coder, component).orElseThrow();
     }
 

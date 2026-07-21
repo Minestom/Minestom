@@ -109,7 +109,7 @@ public class InstanceContainer extends Instance {
 
     @SuppressWarnings("this-escape") // deliberate self registration during construction
     public InstanceContainer(UUID uuid, RegistryKey<DimensionType> dimensionType, @Nullable ChunkLoader loader, Key dimensionName) {
-        this(MinecraftServer.process(), uuid, dimensionType, loader, dimensionName);
+        this(MinecraftServer.getRegistries(), uuid, dimensionType, loader, dimensionName);
     }
 
     @SuppressWarnings("this-escape") // deliberate self registration during construction
