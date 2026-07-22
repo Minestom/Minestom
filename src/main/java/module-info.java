@@ -71,6 +71,7 @@ module net.minestom.server {
     exports net.minestom.server.entity.metadata.animal;
     exports net.minestom.server.entity.metadata.animal.tameable;
     exports net.minestom.server.entity.metadata.avatar;
+    exports net.minestom.server.entity.metadata.cube;
     exports net.minestom.server.entity.metadata.display;
     exports net.minestom.server.entity.metadata.flying;
     exports net.minestom.server.entity.metadata.golem;
@@ -194,7 +195,6 @@ module net.minestom.server {
     exports net.minestom.server.world.biome;
     exports net.minestom.server.world.timeline;
     exports net.minestom.server.world.clock;
-    exports net.minestom.server.entity.metadata.cube;
 
     provides ComponentLoggerProvider with MinestomComponentLoggerProvider;
     provides ANSIComponentSerializer.Provider with MinestomAnsiComponentSerializerProvider;
