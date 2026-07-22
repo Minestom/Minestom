@@ -1737,18 +1737,6 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * Mostly unsafe since it requires sending chunks after.
      *
      * @param dimensionType the new player dimension
-     * @deprecated use {@link #sendDimension(RegistryKey, String, long)}
-     */
-    @Deprecated(forRemoval = true)
-    protected void sendDimension(RegistryKey<DimensionType> dimensionType, String dimensionName) {
-        sendDimension(dimensionType, dimensionName, 0);
-    }
-
-    /**
-     * Changes the dimension of the player.
-     * Mostly unsafe since it requires sending chunks after.
-     *
-     * @param dimensionType the new player dimension
      * @param hashedSeed    the {@link Instance#getHashedSeed()} of the dimension being entered
      */
     protected void sendDimension(RegistryKey<DimensionType> dimensionType, String dimensionName, long hashedSeed) {
