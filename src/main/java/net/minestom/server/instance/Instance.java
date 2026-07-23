@@ -93,6 +93,9 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
     private final DimensionType cachedDimensionType; // Cached to prevent self-destruction if the registry is changed, and to avoid the lookups.
     private final String dimensionName;
 
+    // Biome blending seed sent to clients
+    private long hashedSeed;
+
     // World border of the instance
     private WorldBorder worldBorder;
     private double targetBorderDiameter;
@@ -492,6 +495,20 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
      */
     public String getDimensionName() {
         return dimensionName;
+    }
+
+    /// Returns the seed the client blends biome colors with, `0` by default.
+    public long getHashedSeed() {
+        return hashedSeed;
+    }
+
+    /// Sets the seed the client blends biome colors with, applied to players joining afterwards.
+    ///
+    /// Clients resolve the biome of each block through a seeded zoom, so grass, foliage and water
+    /// colors near a biome border depend on this value. Vanilla sends a SHA-256 hash of the
+    /// world seed.
+    public void setHashedSeed(long hashedSeed) {
+        this.hashedSeed = hashedSeed;
     }
 
     /// Returns the current world age (aka game time) of this Instance.

@@ -292,8 +292,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                 getEntityId(), this.hardcore, List.of(), 0,
                 ServerFlag.CHUNK_VIEW_DISTANCE, ServerFlag.CHUNK_VIEW_DISTANCE,
                 false, true, false,
-                new PlayerSpawnInfo(dimensionTypeId, spawnInstance.getDimensionName(), 0,
-                        gameMode, null, false, levelFlat,
+                new PlayerSpawnInfo(dimensionTypeId, spawnInstance.getDimensionName(),
+                        spawnInstance.getHashedSeed(), gameMode, null, false, levelFlat,
                         deathLocation, portalCooldown, DEFAULT_SEA_LEVEL),
                 // Always leave online mode & chat secure chat enabled
                 // so the client makes a chat session and shows tablist heads.
@@ -498,7 +498,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         refreshHealth();
 
         sendPacket(new RespawnPacket(new PlayerSpawnInfo(dimensionTypeId, instance.getDimensionName(),
-                0, gameMode, gameMode, false, levelFlat,
+                instance.getHashedSeed(), gameMode, gameMode, false, levelFlat,
                 deathLocation, portalCooldown, DEFAULT_SEA_LEVEL), (byte) RespawnPacket.COPY_ALL));
         refreshClientStateAfterRespawn();
 
@@ -712,7 +712,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                 ChunkRange.chunksInRange(spawnPosition, this.effectiveViewDistance(), chunkRemover);
         }
 
-        if (dimensionChange) sendDimension(instance.getDimensionType(), instance.getDimensionName());
+        if (dimensionChange) {
+            sendDimension(instance.getDimensionType(), instance.getDimensionName(), instance.getHashedSeed());
+        }
 
         var _ = super.setInstance(instance, spawnPosition);
 
@@ -1269,7 +1271,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         final PlayerInfoUpdatePacket addPlayerPacket = getAddPlayerToList();
 
         final RespawnPacket respawnPacket = new RespawnPacket(new PlayerSpawnInfo(dimensionTypeId,
-                instance.getDimensionName(), 0, gameMode, gameMode,
+                instance.getDimensionName(), instance.getHashedSeed(), gameMode, gameMode,
                 false, levelFlat, deathLocation, portalCooldown,
                 DEFAULT_SEA_LEVEL), (byte) RespawnPacket.COPY_ALL);
 
@@ -1737,13 +1739,14 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * Mostly unsafe since it requires sending chunks after.
      *
      * @param dimensionType the new player dimension
+     * @param hashedSeed    the {@link Instance#getHashedSeed()} of the dimension being entered
      */
-    protected void sendDimension(RegistryKey<DimensionType> dimensionType, String dimensionName) {
+    protected void sendDimension(RegistryKey<DimensionType> dimensionType, String dimensionName, long hashedSeed) {
         Check.argCondition(instance.getDimensionName().equals(dimensionName),
                 "The dimension needs to be different than the current one!");
         this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(dimensionType);
         sendPacket(new RespawnPacket(new PlayerSpawnInfo(dimensionTypeId, dimensionName,
-                0, gameMode, gameMode, false, levelFlat,
+                hashedSeed, gameMode, gameMode, false, levelFlat,
                 deathLocation, portalCooldown, DEFAULT_SEA_LEVEL), (byte) RespawnPacket.COPY_ALL));
         refreshClientStateAfterRespawn();
     }
