@@ -5,6 +5,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.WorldBorder;
@@ -153,7 +154,15 @@ public final class CollisionUtils {
     }
 
     public static Entity canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
-        return BlockCollision.canPlaceBlockAt(instance, blockPos, b);
+        return BlockCollision.canPlaceBlockAt(instance, blockPos, b, null);
+    }
+
+    /**
+     * {@link #canPlaceBlockAt(Instance, Point, Block)} consulting each entity's
+     * {@link Entity#preventBlockPlacement(Player) placement rule} with {@code placer}.
+     */
+    public static Entity canPlaceBlockAt(Instance instance, Point blockPos, Block b, Player placer) {
+        return BlockCollision.canPlaceBlockAt(instance, blockPos, b, placer);
     }
 
     /**
