@@ -1,8 +1,11 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.LongArrayBinaryTag;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
@@ -27,11 +30,16 @@ import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
+import java.util.stream.Collectors;
 
 import static net.minestom.server.coordinate.CoordConversion.globalToSectionRelative;
 
@@ -367,5 +375,55 @@ public class DynamicChunk extends Chunk {
         return new SnapshotImpl.Chunk(minSection, chunkX, chunkZ,
                 clonedSections, entries.clone(), entityIds, updater.reference(instance),
                 instance.registries().biome(), tagHandler().readableCopy());
+    }
+
+    /**
+     * @return a copy of the block entities currently in this chunk
+     */
+    @Override
+    public @Unmodifiable Map<Point, Block> getBlockEntities() {
+        assertReadLock();
+        final Map<Point, Block> result = new HashMap<>();
+        for (final Int2ObjectMap.Entry<Block> entry : this.entries.int2ObjectEntrySet()) {
+            final int index = entry.getIntKey();
+            final int x = CoordConversion.chunkBlockIndexGetX(index);
+            final int y = CoordConversion.chunkBlockIndexGetY(index);
+            final int z = CoordConversion.chunkBlockIndexGetZ(index);
+            final BlockVec pos = new BlockVec(x, y, z);
+            final Block block = entry.getValue();
+            result.put(pos, block);
+        }
+        return result;
+    }
+
+    @Override
+    public void forEachBlockEntity(BiConsumer<Point, Block> consumer) {
+        assertReadLock();
+        this.entries.int2ObjectEntrySet().forEach(e -> {
+            final int index = e.getIntKey();
+            final int x = CoordConversion.chunkBlockIndexGetX(index);
+            final int y = CoordConversion.chunkBlockIndexGetY(index);
+            final int z = CoordConversion.chunkBlockIndexGetZ(index);
+            final BlockVec pos = new BlockVec(x, y, z);
+            consumer.accept(pos, e.getValue());
+        });
+    }
+
+    @Override
+    public Map<Point, Block> filterBlockEntities(BiPredicate<Point, Block> filter) {
+        assertReadLock();
+        final Map<Point, Block> accepted = new HashMap<>();
+        for (final Int2ObjectMap.Entry<Block> entry : this.entries.int2ObjectEntrySet()) {
+            final int index = entry.getIntKey();
+            final int x = CoordConversion.chunkBlockIndexGetX(index);
+            final int y = CoordConversion.chunkBlockIndexGetY(index);
+            final int z = CoordConversion.chunkBlockIndexGetZ(index);
+            final BlockVec pos = new BlockVec(x, y, z);
+            final Block block = entry.getValue();
+            if (filter.test(pos, block)) {
+                accepted.put(pos, block);
+            }
+        }
+        return accepted;
     }
 }
