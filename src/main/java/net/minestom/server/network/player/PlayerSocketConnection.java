@@ -7,6 +7,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.ListenerHandle;
 import net.minestom.server.event.player.PlayerPacketOutEvent;
+import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
@@ -88,6 +89,7 @@ public class PlayerSocketConnection extends PlayerConnection {
             ServerFlag.POOLED_BUFFER_SIZE, MinecraftServer.getRegistries());
     private final MessagePassingQueue<SendablePacket> packetQueue = ConcurrentMessageQueues.mpscUnboundedArrayQueue(1024);
     private final Thread readThread, writeThread;
+    private final ExceptionManager exceptionManager;
 
     private final AtomicLong sentPacketCounter = new AtomicLong();
     // Index where compression starts, linked to `sentPacketCounter`
@@ -100,12 +102,13 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     private final ListenerHandle<PlayerPacketOutEvent> outgoing = EventDispatcher.getHandle(PlayerPacketOutEvent.class);
 
-    public PlayerSocketConnection(SocketChannel channel, SocketAddress remoteAddress, Thread readThread, Thread writeThread) {
+    public PlayerSocketConnection(SocketChannel channel, SocketAddress remoteAddress, Thread readThread, Thread writeThread, ExceptionManager exceptionManager) {
         super();
         this.channel = channel;
         this.remoteAddress = remoteAddress;
         this.writeThread = writeThread;
         this.readThread = readThread;
+        this.exceptionManager = exceptionManager;
     }
 
     public void read(PacketParser<ClientPacket> packetParser) throws IOException {
@@ -148,7 +151,7 @@ public class PlayerSocketConnection extends PlayerConnection {
                     compression()
             );
         } catch (DataFormatException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
+            exceptionManager.handleException(e);
             disconnect();
             return;
         }
@@ -169,7 +172,7 @@ public class PlayerSocketConnection extends PlayerConnection {
                             player.addPacketToQueue(packet);
                         }
                     } catch (Exception e) {
-                        MinecraftServer.getExceptionManager().handleException(e);
+                        exceptionManager.handleException(e);
                     }
                 }
                 // Compact in case of incomplete read
