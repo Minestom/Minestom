@@ -35,9 +35,6 @@ public non-sealed class PlayerInventory extends AbstractInventory {
     public synchronized void clear() {
         cursorItem = ItemStack.AIR;
         super.clear();
-
-        // Update equipments
-        viewers.forEach(viewer -> viewer.sendPacketToViewersAndSelf(viewer.getEquipmentsPacket()));
     }
 
     @Override

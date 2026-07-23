@@ -544,7 +544,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     @Override
     public void updateNewViewer(Player player) {
         super.updateNewViewer(player);
-        player.sendPacket(this.getEquipmentsPacket());
+        final var equipmentsPacket = this.getEquipmentsPacket();
+        if (equipmentsPacket != null) player.sendPacket(equipmentsPacket);
 
         if (shouldSendAttributes())
             player.sendPacket(this.getPropertiesPacket());
