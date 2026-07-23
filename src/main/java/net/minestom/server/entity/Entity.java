@@ -52,6 +52,8 @@ import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
 import net.minestom.server.thread.Acquirable;
 import net.minestom.server.thread.AcquirableSource;
+import net.minestom.server.thread.TickOwner;
+import net.minestom.server.thread.TickThread;
 import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.timer.TaskSchedule;
@@ -175,6 +177,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private final UUID uuid;
     private boolean isActive; // False if entity has only been instanced without being added somewhere
     protected boolean removed;
+    private volatile boolean externallyTicked;
+    private volatile @Nullable TickOwner tickOwner;
 
     private final List<Entity> passengers = new CopyOnWriteArrayList<>();
 
@@ -630,6 +634,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     public void tick(long time) {
         if (instance == null || isRemoved() || !ChunkUtils.isLoaded(currentChunk))
             return;
+        // Dispatcher eviction is a queued signal: a tick thread may still call in until it drains.
+        // With a registered owner, only the owner's thread may tick.
+        if (externallyTicked) {
+            final TickOwner owner = this.tickOwner;
+            if (owner != null ? !owner.isCurrentThread() : Thread.currentThread() instanceof TickThread) return;
+        }
 
         // scheduled tasks
         this.scheduler.processTick();
@@ -854,7 +864,65 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     @ApiStatus.Internal
     protected void refreshCurrentChunk(Chunk currentChunk) {
         this.currentChunk = currentChunk;
-        MinecraftServer.process().dispatcher().updateElement(this, currentChunk);
+        if (!externallyTicked) MinecraftServer.process().dispatcher().updateElement(this, currentChunk);
+    }
+
+    /**
+     * Gets whether this entity is ticked by an external system instead of the server.
+     *
+     * @see #setExternallyTicked(boolean)
+     */
+    public boolean isExternallyTicked() {
+        return externallyTicked;
+    }
+
+    /**
+     * Changes whether this entity is ticked by the server.
+     * <p>
+     * An externally ticked entity is not registered with the tick dispatcher (chunk crossings included), and
+     * {@link #tick(long)} calls from server tick threads are ignored; the external system is expected to call
+     * {@link #tick(long)} itself. Viewers and tracking are unaffected. {@link Acquirable} APIs assume
+     * dispatcher ownership and are not valid on externally ticked entities, unless an owner is registered
+     * with {@link #setExternallyTicked(TickOwner)}.
+     *
+     * @param externallyTicked true to let an external system tick this entity, false to hand it back to the server
+     */
+    public void setExternallyTicked(boolean externallyTicked) {
+        if (this.externallyTicked == externallyTicked) return;
+        this.externallyTicked = externallyTicked;
+        final Chunk chunk = currentChunk;
+        if (externallyTicked) {
+            MinecraftServer.process().dispatcher().removeElement(this);
+        } else {
+            this.tickOwner = null;
+            acquirable().assignOwner(null);
+            if (chunk != null && !isRemoved()) {
+                MinecraftServer.process().dispatcher().updateElement(this, chunk);
+            }
+        }
+    }
+
+    /**
+     * Changes this entity to be ticked by {@code owner} instead of the server.
+     * <p>
+     * Same as {@link #setExternallyTicked(boolean)}, except that only the owner's thread may call
+     * {@link #tick(long)} and {@link Acquirable} APIs stay valid by locking {@link TickOwner#lock()}.
+     *
+     * @param owner the external system ticking this entity
+     */
+    public void setExternallyTicked(TickOwner owner) {
+        this.tickOwner = owner;
+        acquirable().assignOwner(owner);
+        setExternallyTicked(true);
+    }
+
+    /**
+     * Gets the registered external tick owner, or null.
+     *
+     * @see #setExternallyTicked(TickOwner)
+     */
+    public @Nullable TickOwner getTickOwner() {
+        return tickOwner;
     }
 
     /**
