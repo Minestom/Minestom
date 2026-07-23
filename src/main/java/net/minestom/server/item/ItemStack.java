@@ -339,8 +339,7 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
     // These functions are mirrors of ComponentHolder, but we can't actually implement that interface
     // because it conflicts with DataComponent.Holder.
 
-    @SuppressWarnings("PreferredInterfaceType") // wider type kept for binary compatibility until the next breaking release
-    static Collection<Component> textComponents(ItemStack itemStack) {
+    static List<Component> textComponents(ItemStack itemStack) {
         final var components = new ArrayList<>(itemStack.get(DataComponents.LORE, List.of()));
         final var displayName = itemStack.get(DataComponents.CUSTOM_NAME);
         if (displayName != null) components.add(displayName);

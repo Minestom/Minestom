@@ -97,8 +97,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @param damage     Damage value ({@link DataComponents#DAMAGE})
      */
     record Damage(@Nullable Range.Int durability, @Nullable Range.Int damage) implements Registered {
-        @SuppressWarnings("ConstantField") // kept not final for binary compatibility until the next breaking release
-        public static Codec<Damage> CODEC = StructCodec.struct(
+        public static final Codec<Damage> CODEC = StructCodec.struct(
                 "durability", Range.Int.CODEC.optional(), Damage::durability,
                 "damage", Range.Int.CODEC.optional(), Damage::damage,
                 Damage::new

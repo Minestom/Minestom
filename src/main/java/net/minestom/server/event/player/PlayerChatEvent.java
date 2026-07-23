@@ -35,8 +35,7 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
      *
      * @return a modifiable list of the message's targets
      */
-    @SuppressWarnings("PreferredInterfaceType") // wider type kept for binary compatibility until the next breaking release
-    public Collection<Player> getRecipients() {
+    public List<Player> getRecipients() {
         return recipients;
     }
 
