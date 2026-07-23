@@ -48,6 +48,30 @@ public class CommandSuggestionIntegrationTest {
     }
 
     @Test
+    public void suggestionCommandName(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+
+        env.process().command().register(new Command("foobar"));
+        env.process().command().register(new Command("foobaz"));
+        env.process().command().register(new Command("other"));
+
+        var listener = connection.trackIncoming(TabCompletePacket.class);
+        player.addPacketToQueue(new ClientTabCompletePacket(7, "fooba"));
+        player.interpretPacketQueue();
+
+        listener.assertSingle(tabCompletePacket -> {
+            assertEquals(7, tabCompletePacket.transactionId());
+            assertEquals(1, tabCompletePacket.start());
+            assertEquals(5, tabCompletePacket.length());
+            assertEquals(List.of(
+                    new TabCompletePacket.Match("foobar", null),
+                    new TabCompletePacket.Match("foobaz", null)), tabCompletePacket.matches());
+        });
+    }
+
+    @Test
     public void suggestionWithDefaults(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
