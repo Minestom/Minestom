@@ -8,9 +8,11 @@ import net.kyori.adventure.nbt.StringBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.color.Color;
 import net.minestom.server.color.TeamColor;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentEnum;
@@ -74,6 +76,30 @@ public class ArgumentTypeTest {
         var arg = ArgumentType.TeamColor("color");
         assertInvalidArg(arg, "invalid_color");
         assertArg(arg, TeamColor.DARK_PURPLE, "dark_purple");
+    }
+
+    @Test
+    public void testArgumentHexColor() {
+        var arg = ArgumentType.HexColor("hex_color");
+        assertInvalidArg(arg, "invalid_hex");
+        assertInvalidArg(arg, "12345");
+        assertInvalidArg(arg, "#GGGGGG");
+        assertInvalidArg(arg, "#123");
+
+        var parsed1 = arg.parse(new ServerSender(), "#FF5555");
+        assertEquals(0xFF, parsed1.red());
+        assertEquals(0x55, parsed1.green());
+        assertEquals(0x55, parsed1.blue());
+
+        var parsed2 = arg.parse(new ServerSender(), "00FF00");
+        assertEquals(0x00, parsed2.red());
+        assertEquals(0xFF, parsed2.green());
+        assertEquals(0x00, parsed2.blue());
+
+        var parsed3 = arg.parse(new ServerSender(), "#112233");
+        assertEquals(0x11, parsed3.red());
+        assertEquals(0x22, parsed3.green());
+        assertEquals(0x33, parsed3.blue());
     }
 
     @Test

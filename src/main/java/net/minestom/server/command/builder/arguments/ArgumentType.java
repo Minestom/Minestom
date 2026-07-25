@@ -12,6 +12,7 @@ import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVe
 import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec3;
 import net.minestom.server.command.builder.parser.ArgumentParser;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Convenient class listing all the basics {@link Argument}.
@@ -140,6 +141,15 @@ public class ArgumentType {
      */
     public static ArgumentTeamColor TeamColor(String id) {
         return new ArgumentTeamColor(id);
+    }
+
+    /**
+     * Creates a new {@link ArgumentHexColor}.
+     *
+     * @see ArgumentHexColor
+     */
+    public static @NotNull ArgumentHexColor HexColor(@NotNull String id) {
+        return new ArgumentHexColor(id);
     }
 
     /**
