@@ -22,9 +22,11 @@ public class ArgumentHexColor extends Argument<RGBLike> {
 
     @Override
     public @NotNull RGBLike parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
-        TextColor color = TextColor.fromHexString(input);
-        if (color != null) {
-            return new Color(color);
+        if (input.startsWith("#")) {
+            TextColor color = TextColor.fromHexString(input);
+            if (color != null) {
+                return new Color(color);
+            }
         }
         throw new ArgumentSyntaxException("Invalid hex color format", input, INVALID_HEX_COLOR);
     }

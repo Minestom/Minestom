@@ -82,7 +82,7 @@ public class ArgumentTypeTest {
     public void testArgumentHexColor() {
         var arg = ArgumentType.HexColor("hex_color");
         assertInvalidArg(arg, "invalid_hex");
-        assertInvalidArg(arg, "12345");
+        assertInvalidArg(arg, "123456");
         assertInvalidArg(arg, "#GGGGGG");
         assertInvalidArg(arg, "#123");
 
@@ -91,7 +91,7 @@ public class ArgumentTypeTest {
         assertEquals(0x55, parsed1.green());
         assertEquals(0x55, parsed1.blue());
 
-        var parsed2 = arg.parse(new ServerSender(), "00FF00");
+        var parsed2 = arg.parse(new ServerSender(), "#00FF00");
         assertEquals(0x00, parsed2.red());
         assertEquals(0xFF, parsed2.green());
         assertEquals(0x00, parsed2.blue());
