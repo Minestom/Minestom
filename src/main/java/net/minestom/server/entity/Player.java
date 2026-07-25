@@ -708,8 +708,25 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                              boolean firstSpawn, boolean dimensionChange, boolean updateChunks) {
         if (!firstSpawn && !dimensionChange) {
             // Player instance changed, clear current viewable collections
-            if (updateChunks)
-                ChunkRange.chunksInRange(spawnPosition, this.effectiveViewDistance(), chunkRemover);
+            if (updateChunks) {
+                final int viewDist = this.effectiveViewDistance();
+                ChunkRange.chunksInRange(
+                        (int) this.chunksLoadedByClient.x(), (int) this.chunksLoadedByClient.z(), viewDist,
+                        (x, z) -> {
+                            boolean inNewView = Math.abs(x - spawnPosition.chunkX()) <= viewDist
+                                    && Math.abs(z - spawnPosition.chunkZ()) <= viewDist;
+                            if (!inNewView) {
+                                // Only send UnloadChunkPacket for chunks no longer in the new view.
+                                // This alleviates a 26.2 client bug where, if it processes an UnloadChunkPacket
+                                // and a ChunkDataPacket for the same chunk in the same frame, the chunk disappears.
+                                // https://bugs.mojang.com/browse/MC/issues/MC-310041
+                                // TODO(26.3): Revert this change; the client bug is fixed in 26.3-snapshot5
+                                sendPacket(new UnloadChunkPacket(x, z));
+                            }
+                            EventDispatcher.call(new PlayerChunkUnloadEvent(this, x, z));
+                        }
+                );
+            }
         }
 
         if (dimensionChange) sendDimension(instance.getDimensionType(), instance.getDimensionName());
