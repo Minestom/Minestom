@@ -9,7 +9,7 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface ChickenSoundVariants permits ChickenSoundVariant {
-    RegistryKey<ChickenSoundVariant> PICKY = RegistryKey.unsafeOf("picky");
-
     RegistryKey<ChickenSoundVariant> CLASSIC = RegistryKey.unsafeOf("classic");
+
+    RegistryKey<ChickenSoundVariant> PICKY = RegistryKey.unsafeOf("picky");
 }

@@ -38,6 +38,7 @@ public class LightingChunk extends DynamicChunk {
     private static final ExecutorService pool = Executors.newWorkStealingPool();
 
     private volatile @Nullable OcclusionData occlusionData;
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     final CachedPacket partialLightCache = new CachedPacket(this::createLightPacket);
     private @Nullable LightData partialLightData;
     private @Nullable LightData fullLightData;
@@ -46,7 +47,7 @@ public class LightingChunk extends DynamicChunk {
 
     private final ReentrantLock packetGenerationLock = new ReentrantLock();
     private final AtomicInteger resendTimer = new AtomicInteger(-1);
-    private final int resendDelay = ServerFlag.SEND_LIGHT_AFTER_BLOCK_PLACEMENT_DELAY;
+    private static final int resendDelay = ServerFlag.SEND_LIGHT_AFTER_BLOCK_PLACEMENT_DELAY;
 
     private boolean doneInit = false;
 
@@ -86,6 +87,7 @@ public class LightingChunk extends DynamicChunk {
             Block.LAVA.key()
     );
 
+    @Override
     public void invalidate() {
         this.partialLightCache.invalidate();
         this.chunkCache.invalidate();
@@ -101,13 +103,13 @@ public class LightingChunk extends DynamicChunk {
         super(instance, chunkX, chunkZ, sections);
     }
 
-    private boolean checkSkyOcclusion(Block block) {
+    private static boolean checkSkyOcclusion(Block block) {
         if (block == Block.AIR) return false;
         if (DIFFUSE_SKY_LIGHT.contains(block.key())) return true;
 
-        Shape shape = block.registry().occlusionShape();
-        boolean occludesTop = Block.AIR.registry().occlusionShape().isOccluded(shape, BlockFace.TOP);
-        boolean occludesBottom = Block.AIR.registry().occlusionShape().isOccluded(shape, BlockFace.BOTTOM);
+        Shape shape = block.occlusionShape();
+        boolean occludesTop = Block.AIR.occlusionShape().isOccluded(shape, BlockFace.TOP);
+        boolean occludesBottom = Block.AIR.occlusionShape().isOccluded(shape, BlockFace.BOTTOM);
 
         return occludesBottom || occludesTop;
     }
@@ -307,7 +309,7 @@ public class LightingChunk extends DynamicChunk {
                 final int sectionMinY = index * 16 + chunkMin;
                 index++;
 
-                if ((wasUpdatedSky) && this.instance.getCachedDimensionType().hasSkylight() && sectionMinY <= (highestNeighborBlock + 16)) {
+                if (wasUpdatedSky && this.instance.getCachedDimensionType().hasSkylight() && sectionMinY <= highestNeighborBlock + 16) {
                     final byte[] skyLight = section.skyLight().array();
 
                     if (skyLight.length != 0 && skyLight != EMPTY_CONTENT) {

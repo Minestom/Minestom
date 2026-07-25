@@ -36,7 +36,7 @@ public class ClosestEntityTargetTest {
         assertEquals(5, instance.getEntities().size(), "Not all entities are in the instance");
 
         assertNull(
-                new ClosestEntityTarget(self, 1, e -> true).findTarget(),
+                new ClosestEntityTarget(self, 1, _ -> true).findTarget(),
                 "Entity targets it self"
         );
 

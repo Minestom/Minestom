@@ -97,7 +97,7 @@ public class Main {
         commandManager.register(new BelowNameCommand());
         commandManager.register(new TestBiomeAmbientParticleCommand());
 
-        commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
+        commandManager.setUnknownCommandCallback((sender, _) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> System.out.println("Good night"));
 
@@ -116,7 +116,6 @@ public class Main {
         }
 
         MinecraftServer.getGlobalEventHandler().addListener(ServerListPingEvent.class, event -> {
-            int onlinePlayers = MinecraftServer.getConnectionManager().getOnlinePlayers().size();
             Status.PlayerInfo.Builder builder = Status.PlayerInfo.builder(Status.PlayerInfo.online(20))
                     .sample("The first line is separated from the others")
                     .sample("Could be a name, or a message");

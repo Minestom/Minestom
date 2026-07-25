@@ -11,8 +11,8 @@ final class ObjectArrayImpl {
         private T[] array;
         private int max = -1;
 
+        @SuppressWarnings("unchecked")
         SingleThread(int size) {
-            //noinspection unchecked
             this.array = (T[]) new Object[size];
         }
 
@@ -60,8 +60,8 @@ final class ObjectArrayImpl {
         }
 
         @Override
+        @SuppressWarnings({"unchecked", "rawtypes"})
         public @UnknownNullability T [] arrayCopy(Class<T> type) {
-            //noinspection unchecked,rawtypes
             return (T[]) Arrays.<T, T>copyOf(array, max + 1, (Class) type.arrayType());
         }
 
@@ -77,8 +77,8 @@ final class ObjectArrayImpl {
         private volatile T[] array;
         private volatile int max = -1;
 
+        @SuppressWarnings("unchecked")
         Concurrent(int size) {
-            //noinspection unchecked
             this.array = (T[]) new Object[size];
         }
 
@@ -126,8 +126,8 @@ final class ObjectArrayImpl {
         }
 
         @Override
+        @SuppressWarnings({"unchecked", "rawtypes"})
         public @UnknownNullability T [] arrayCopy(Class<T> type) {
-            //noinspection unchecked,rawtypes
             return (T[]) Arrays.<T, T>copyOf(array, max + 1, (Class) type.arrayType());
         }
 

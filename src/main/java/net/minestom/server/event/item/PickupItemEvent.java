@@ -28,6 +28,7 @@ public class PickupItemEvent implements EntityInstanceEvent, ItemEvent, Cancella
         return itemEntity;
     }
 
+    @Override
     public ItemStack getItemStack() {
         return getItemEntity().getItemStack();
     }

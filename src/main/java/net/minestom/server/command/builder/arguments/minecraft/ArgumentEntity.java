@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import java.util.Locale;
 import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
@@ -104,7 +105,8 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                 return new EntityFinder()
                         .setTargetSelector(EntityFinder.TargetSelector.MINESTOM_UUID)
                         .setConstantUuid(uuid);
-            } catch (IllegalArgumentException ignored) {
+            } catch (IllegalArgumentException _) {
+                // Not a UUID, fall through to the other input formats
             }
 
             // Check if the input is a valid player name
@@ -221,27 +223,25 @@ public class ArgumentEntity extends Argument<EntityFinder> {
 
         //System.out.println("value: " + value);
         switch (argumentName) {
-            case "type": {
+            case "type" -> {
                 final boolean include = !value.startsWith("!");
                 final String entityName = include ? value : value.substring(1);
                 final EntityType entityType = EntityType.fromKey(entityName);
                 if (entityType == null)
                     throw new ArgumentSyntaxException("Invalid entity name", input, INVALID_ARGUMENT_VALUE);
                 entityFinder.setEntity(entityType, include ? EntityFinder.ToggleableType.INCLUDE : EntityFinder.ToggleableType.EXCLUDE);
-                break;
             }
-            case "gamemode": {
+            case "gamemode" -> {
                 final boolean include = !value.startsWith("!");
                 final String gameModeName = include ? value : value.substring(1);
                 try {
-                    final GameMode gameMode = GameMode.valueOf(gameModeName.toUpperCase());
+                    final GameMode gameMode = GameMode.valueOf(gameModeName.toUpperCase(Locale.ROOT));
                     entityFinder.setGameMode(gameMode, include ? EntityFinder.ToggleableType.INCLUDE : EntityFinder.ToggleableType.EXCLUDE);
                 } catch (IllegalArgumentException e) {
                     throw new ArgumentSyntaxException("Invalid entity game mode", input, INVALID_ARGUMENT_VALUE);
                 }
-                break;
             }
-            case "limit":
+            case "limit" -> {
                 int limit;
                 try {
                     limit = Integer.parseInt(value);
@@ -252,24 +252,24 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                 if (limit <= 0) {
                     throw new ArgumentSyntaxException("Limit must be positive", input, INVALID_ARGUMENT_VALUE);
                 }
-                break;
-            case "sort":
+            }
+            case "sort" -> {
                 try {
-                    EntityFinder.EntitySort entitySort = EntityFinder.EntitySort.valueOf(value.toUpperCase());
+                    EntityFinder.EntitySort entitySort = EntityFinder.EntitySort.valueOf(value.toUpperCase(Locale.ROOT));
                     entityFinder.setEntitySort(entitySort);
                 } catch (IllegalArgumentException e) {
                     throw new ArgumentSyntaxException("Invalid entity sort", input, INVALID_ARGUMENT_VALUE);
                 }
-                break;
-            case "level":
+            }
+            case "level" -> {
                 try {
                     final Range.Int level = Argument.parse(sender, new ArgumentIntRange(value));
                     entityFinder.setLevel(level);
                 } catch (ArgumentSyntaxException e) {
                     throw new ArgumentSyntaxException("Invalid level number", input, INVALID_ARGUMENT_VALUE);
                 }
-                break;
-            case "distance": {
+            }
+            case "distance" -> {
                 final Range.Float distanceRange;
                 try {
                     distanceRange = Argument.parse(sender, new ArgumentFloatRange(value));
@@ -286,7 +286,8 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                 }
 
                 entityFinder.setDistance(new Range.Double(minDistance, maxDistance));
-                break;
+            }
+            default -> {
             }
         }
 

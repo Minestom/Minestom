@@ -143,7 +143,7 @@ public class EntityTrackerTest {
         tracker.register(ent2, new Vec(5, 0, 0), EntityTracker.Target.ENTITIES, updater);
         tracker.register(ent3, new Vec(50, 0, 0), EntityTracker.Target.ENTITIES, updater);
 
-        tracker.nearbyEntities(Vec.ZERO, 4, EntityTracker.Target.ENTITIES, entity -> fail("No entity should be nearby"));
+        tracker.nearbyEntities(Vec.ZERO, 4, EntityTracker.Target.ENTITIES, _ -> fail("No entity should be nearby"));
 
         tracker.register(ent1, Vec.ZERO, EntityTracker.Target.ENTITIES, updater);
 

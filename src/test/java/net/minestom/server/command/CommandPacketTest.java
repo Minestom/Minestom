@@ -65,7 +65,7 @@ public class CommandPacketTest {
     @Test
     public void singleCommandTwoEnum() {
         var graph = Graph.builder(ArgumentType.Literal("foo"))
-                .append(ArgumentType.Enum("bar", A.class), b -> b.append(ArgumentType.Enum("baz", B.class)))
+                .append(ArgumentType.Enum("bar", Letter.class), b -> b.append(ArgumentType.Enum("baz", B.class)))
                 .build();
         assertPacketGraph("""
                 foo=%
@@ -105,7 +105,7 @@ public class CommandPacketTest {
     @Test
     public void singleCommandCommandAfterEnum() {
         var graph = Graph.builder(ArgumentType.Literal("foo"))
-                .append(ArgumentType.Enum("bar", A.class), b -> b.append(ArgumentType.Command("baz")))
+                .append(ArgumentType.Enum("bar", Letter.class), b -> b.append(ArgumentType.Command("baz")))
                 .build();
         assertPacketGraph("""
                 foo baz=%
@@ -120,7 +120,7 @@ public class CommandPacketTest {
     @Test
     public void twoCommandIntEnumInt() {
         var graph = Graph.builder(ArgumentType.Literal("foo"))
-                .append(ArgumentType.Integer("int1"), b -> b.append(ArgumentType.Enum("test", A.class), c -> c.append(ArgumentType.Integer("int2"))))
+                .append(ArgumentType.Integer("int1"), b -> b.append(ArgumentType.Enum("test", Letter.class), c -> c.append(ArgumentType.Integer("int2"))))
                 .build();
         var graph2 = Graph.builder(ArgumentType.Literal("bar"))
                 .append(ArgumentType.Integer("int3"), b -> b.append(ArgumentType.Enum("test", B.class), c -> c.append(ArgumentType.Integer("int4"))))
@@ -158,7 +158,7 @@ public class CommandPacketTest {
     @Test
     public void twoEnumAndOneLiteralChild() {
         var graph = Graph.builder(ArgumentType.Literal("foo"))
-                .append(ArgumentType.Enum("a", A.class))
+                .append(ArgumentType.Enum("a", Letter.class))
                 .append(ArgumentType.Literal("l"))
                 .append(ArgumentType.Enum("b", B.class))
                 .build();
@@ -233,7 +233,7 @@ public class CommandPacketTest {
         CommandTestUtils.assertPacket(packet, expected);
     }
 
-    enum A {A, B, C}
+    enum Letter {A, B, C}
 
     enum B {D, E, F}
 

@@ -128,7 +128,7 @@ public final class CoordConversion {
         return (z << 28)                          // Z component (shifted to the upper 4 bits)
                 | (y & 0x80000000) >>> 4          // Y sign bit if y was negative
                 | (Math.abs(y) & 0x007FFFFF) << 4 // Y component (23 bits for Y, sign encoded in the 24th)
-                | (x);                            // X component (4 bits for X)
+                | x;                              // X component (4 bits for X)
     }
 
     public static int chunkBlockIndexGetX(int index) {

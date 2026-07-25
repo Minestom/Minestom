@@ -36,7 +36,7 @@ public class EventNodeMapTest {
         var node = (EventNodeImpl<Event>) EventNode.all("main");
         var itemNode = node.map(item, EventFilter.ITEM);
         assertFalse(node.registeredMappedNode.containsKey(item));
-        itemNode.addListener(EventNodeTest.ItemTestEvent.class, event -> {
+        itemNode.addListener(EventNodeTest.ItemTestEvent.class, _ -> {
         });
         assertTrue(node.registeredMappedNode.containsKey(item));
     }
@@ -59,7 +59,7 @@ public class EventNodeMapTest {
         var itemNode = node.map(item, EventFilter.ITEM);
 
         assertFalse(node.hasListener(EventNodeTest.ItemTestEvent.class));
-        itemNode.addListener(EventNodeTest.ItemTestEvent.class, event -> result.set(true));
+        itemNode.addListener(EventNodeTest.ItemTestEvent.class, _ -> result.set(true));
         assertTrue(node.hasListener(EventNodeTest.ItemTestEvent.class));
 
         node.call(new EventNodeTest.ItemTestEvent(item));
@@ -82,7 +82,7 @@ public class EventNodeMapTest {
         var entity = new Entity(EntityType.ZOMBIE);
 
         AtomicBoolean result = new AtomicBoolean(false);
-        var listener = EventListener.of(EventNodeTest.EntityTestEvent.class, event -> result.set(true));
+        var listener = EventListener.of(EventNodeTest.EntityTestEvent.class, _ -> result.set(true));
 
         var handle = node.getHandle(EventNodeTest.EntityTestEvent.class);
         assertFalse(handle.hasListener());
@@ -107,7 +107,7 @@ public class EventNodeMapTest {
         var item = ItemStack.of(Material.DIAMOND);
         var node = EventNode.all("main");
         var itemNode = node.map(item, EventFilter.ITEM);
-        itemNode.addListener(EventNodeTest.ItemTestEvent.class, event -> {
+        itemNode.addListener(EventNodeTest.ItemTestEvent.class, _ -> {
         });
         node.call(new EventNodeTest.ItemTestEvent(item));
 

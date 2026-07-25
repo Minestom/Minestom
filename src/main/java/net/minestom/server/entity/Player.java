@@ -105,6 +105,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
@@ -148,7 +149,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     private int listOrder;
     private PlayerSkin skin;
 
-    private Instance pendingInstance = null;
+    private @Nullable Instance pendingInstance = null;
     private int dimensionTypeId;
     private GameMode gameMode;
     private WorldPos deathLocation;
@@ -168,7 +169,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     final ChunkRange.ChunkConsumer chunkAdder = (chunkX, chunkZ) -> {
         // Load new chunks
-        this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(this::sendChunk);
+        var _ = this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(this::sendChunk);
     };
     final ChunkRange.ChunkConsumer chunkRemover = (chunkX, chunkZ) -> {
         // Unload old chunks
@@ -188,7 +189,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     protected ClickPreprocessor clickPreprocessor = new ClickPreprocessor();
     protected PlayerInventory inventory;
-    private AbstractInventory openInventory;
+    private @Nullable AbstractInventory openInventory;
     // Used internally to allow the closing of inventory within the inventory listener
     private boolean didCloseInventory;
 
@@ -224,7 +225,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     private float flyingSpeed = 0.05f;
     private float fieldViewModifier = 0.1f;
 
-    private final Map<PlayerStatistic, Integer> statisticValueMap = new Hashtable<>();
+    private final Map<PlayerStatistic, Integer> statisticValueMap = new ConcurrentHashMap<>();
 
     private final PlayerInputs inputs = new PlayerInputs();
 
@@ -234,8 +235,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     private final Map<UUID, PendingResourcePack> pendingResourcePacks = new HashMap<>();
     // The future is non-null when a resource pack is in-flight, and completed when all statuses have been received.
-    private CompletableFuture<Void> resourcePackFuture = null;
+    private @Nullable CompletableFuture<Void> resourcePackFuture = null;
 
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     public Player(PlayerConnection playerConnection, GameProfile gameProfile) {
         super(EntityType.PLAYER, gameProfile.uuid());
         this.gameProfile = gameProfile;
@@ -397,7 +399,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                         if (!expandedBoundingBox.intersectEntity(position, experienceOrb)) return;
                         final PickupExperienceEvent pickupExperienceEvent = new PickupExperienceEvent(this, experienceOrb);
                         EventDispatcher.callCancellable(pickupExperienceEvent, () -> {
-                            short experienceCount = pickupExperienceEvent.getExperienceCount(); // TODO give to player
+//                            short experienceCount = pickupExperienceEvent.getExperienceCount(); // TODO give to player
                             experienceOrb.remove();
                         });
                     });
@@ -518,7 +520,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                         entity.updateNewViewer(this);
                     }
                 });
-        teleport(respawnPosition).thenRun(this::refreshAfterTeleport);
+        teleport(respawnPosition).thenRun(this::refreshAfterTeleport).join();
     }
 
     /**
@@ -665,7 +667,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             }
         };
 
-        CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new))
+        var _ = CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new))
                 .thenRun(() -> {
                     scheduler.scheduleNextProcess(() -> {
                         runnable.accept(instance);
@@ -706,13 +708,30 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                              boolean firstSpawn, boolean dimensionChange, boolean updateChunks) {
         if (!firstSpawn && !dimensionChange) {
             // Player instance changed, clear current viewable collections
-            if (updateChunks)
-                ChunkRange.chunksInRange(spawnPosition, this.effectiveViewDistance(), chunkRemover);
+            if (updateChunks) {
+                final int viewDist = this.effectiveViewDistance();
+                ChunkRange.chunksInRange(
+                        (int) this.chunksLoadedByClient.x(), (int) this.chunksLoadedByClient.z(), viewDist,
+                        (x, z) -> {
+                            boolean inNewView = Math.abs(x - spawnPosition.chunkX()) <= viewDist
+                                    && Math.abs(z - spawnPosition.chunkZ()) <= viewDist;
+                            if (!inNewView) {
+                                // Only send UnloadChunkPacket for chunks no longer in the new view.
+                                // This alleviates a 26.2 client bug where, if it processes an UnloadChunkPacket
+                                // and a ChunkDataPacket for the same chunk in the same frame, the chunk disappears.
+                                // https://bugs.mojang.com/browse/MC/issues/MC-310041
+                                // TODO(26.3): Revert this change; the client bug is fixed in 26.3-snapshot5
+                                sendPacket(new UnloadChunkPacket(x, z));
+                            }
+                            EventDispatcher.call(new PlayerChunkUnloadEvent(this, x, z));
+                        }
+                );
+            }
         }
 
         if (dimensionChange) sendDimension(instance.getDimensionType(), instance.getDimensionName());
 
-        super.setInstance(instance, spawnPosition);
+        var _ = super.setInstance(instance, spawnPosition);
 
         if (updateChunks) {
             final int chunkX = spawnPosition.chunkX();
@@ -881,7 +900,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             Block block;
             try {
                 block = instance.getBlock(pos.blockX(), pos.blockY(), pos.blockZ(), Block.Getter.Condition.TYPE);
-            } catch (NullPointerException ignored) {
+            } catch (NullPointerException _) {
                 block = null;
             }
 
@@ -892,7 +911,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             // incorrectly in MinestomDataGenerator.
             if (block.id() == Block.SCAFFOLDING.id()) continue;
 
-            var hit = block.registry().collisionShape()
+            boolean hit = block.collisionShape()
                     .intersectBox(position.sub(pos.blockX(), pos.blockY(), pos.blockZ()), bb);
             if (hit) return false;
         }
@@ -1033,7 +1052,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         sendPacket(new ShowDialogPacket(Dialog.unwrap(dialog)));
     }
 
-    // TODO(1.21.6): Implementation for pending adventure method in 4.24.0.
+    @Override
     public void closeDialog() {
         sendPacket(new ClearDialogPacket());
     }
@@ -1288,7 +1307,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         }
 
         getInventory().update();
-        teleport(getPosition());
+        teleport(getPosition()).join();
     }
 
     public void setDeathLocation(Pos position) {
@@ -2021,6 +2040,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      *
      * @param invulnerable should the player be invulnerable
      */
+    @Override
     public void setInvulnerable(boolean invulnerable) {
         super.setInvulnerable(invulnerable);
         refreshAbilities();

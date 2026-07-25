@@ -84,7 +84,7 @@ final class EnvImpl implements Env {
 
     static final class FlexibleListenerImpl<E extends Event> implements FlexibleListener<E> {
         private final Class<E> eventType;
-        private Consumer<E> handler = e -> {
+        private Consumer<E> handler = _ -> {
         };
         private boolean initialized;
         private boolean called;

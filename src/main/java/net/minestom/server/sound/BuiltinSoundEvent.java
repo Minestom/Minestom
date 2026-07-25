@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.*;
 import org.jetbrains.annotations.UnknownNullability;
 
+@SuppressWarnings("removal")
 public record BuiltinSoundEvent(Key key, int id) implements StaticProtocolObject<BuiltinSoundEvent>, SoundEvent {
     static final Registry<BuiltinSoundEvent> REGISTRY = RegistryData.createStaticRegistry(BuiltinRegistries.SOUND_EVENT,
             (namespace, properties) -> new BuiltinSoundEvent(Key.key(namespace), properties.getInt("id")));

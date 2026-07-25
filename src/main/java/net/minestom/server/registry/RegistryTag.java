@@ -27,12 +27,13 @@ public sealed interface RegistryTag<T> extends HolderSet<T>, Iterable<RegistryKe
         return new RegistryCodecs.RegistryTagImpl<>(selector);
     }
 
+    @SuppressWarnings("unchecked")
     static <T> RegistryTag<T> empty() {
-        //noinspection unchecked
         return (RegistryTag<T>) RegistryTagImpl.Empty.INSTANCE;
     }
 
     @SafeVarargs
+    @SuppressWarnings("varargs")
     static <T> RegistryTag<T> direct(RegistryKey<T>... keys) {
         if (keys.length == 0) return empty();
         return new RegistryTagImpl.Direct<>(List.of(keys));

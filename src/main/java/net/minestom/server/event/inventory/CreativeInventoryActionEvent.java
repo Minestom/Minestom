@@ -28,6 +28,7 @@ public class CreativeInventoryActionEvent implements PlayerInstanceEvent, Cancel
      *
      * @return the player who clicked
      */
+    @Override
     public Player getPlayer() {
         return player;
     }

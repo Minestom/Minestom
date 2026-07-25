@@ -197,6 +197,7 @@ final class CommandParserImpl implements CommandParser {
         if (reader.hasRemaining()) {
             SuggestionCallback suggestionCallback = argument.getSuggestionCallback();
             ArgumentResult<?> result = parseArgument(sender, argument, reader);
+            @SuppressWarnings("unchecked")
             NodeResult nodeResult = new NodeResult(node, chain, (ArgumentResult<Object>) result, suggestionCallback);
             chain.append(nodeResult);
             if (suggestionCallback != null) chain.suggestionCallback = suggestionCallback;
@@ -296,7 +297,7 @@ final class CommandParserImpl implements CommandParser {
     }
 
     record UnknownCommandResult() implements Result.UnknownCommand {
-        private static final Result INSTANCE = new UnknownCommandResult();
+        private static final CommandParser.Result INSTANCE = new UnknownCommandResult();
 
         @Override
         public ExecutableCommand executable() {
@@ -337,7 +338,7 @@ final class CommandParserImpl implements CommandParser {
         }
     }
 
-    record InvalidCommand(String input, CommandCondition condition, ArgumentCallback callback,
+    record InvalidCommand(String input, CommandCondition condition, @Nullable ArgumentCallback callback,
                           ArgumentResult.SyntaxError<?> error,
                           Map<String, ArgumentResult<Object>> arguments, CommandExecutor globalListener,
                           @Nullable SuggestionCallback suggestionCallback, List<Argument<?>> args)
@@ -391,7 +392,7 @@ final class CommandParserImpl implements CommandParser {
         static final ExecutableCommand INSTANCE = new UnknownExecutableCmd();
 
         @Override
-        public Result execute(CommandSender sender) {
+        public ExecutableCommand.Result execute(CommandSender sender) {
             return ExecutionResultImpl.UNKNOWN;
         }
     }
@@ -400,7 +401,7 @@ final class CommandParserImpl implements CommandParser {
                               String input,
                               Map<String, ArgumentResult<Object>> arguments) implements ExecutableCommand {
         @Override
-        public Result execute(CommandSender sender) {
+        public ExecutableCommand.Result execute(CommandSender sender) {
             final CommandContext context = createCommandContext(input, arguments);
 
             globalListener().apply(sender, context);
@@ -422,7 +423,7 @@ final class CommandParserImpl implements CommandParser {
                                 ArgumentResult.SyntaxError<?> error, String input,
                                 Map<String, ArgumentResult<Object>> arguments) implements ExecutableCommand {
         @Override
-        public Result execute(CommandSender sender) {
+        public ExecutableCommand.Result execute(CommandSender sender) {
             globalListener().apply(sender, createCommandContext(input, arguments));
 
             if (condition != null && !condition.canUse(sender, input())) {
@@ -448,7 +449,7 @@ final class CommandParserImpl implements CommandParser {
         return context;
     }
 
-    record ExecutionResultImpl(Type type, CommandData commandData) implements ExecutableCommand.Result {
+    record ExecutionResultImpl(Type type, @Nullable CommandData commandData) implements ExecutableCommand.Result {
         static final ExecutableCommand.Result CANCELLED = new ExecutionResultImpl(Type.CANCELLED, null);
         static final ExecutableCommand.Result UNKNOWN = new ExecutionResultImpl(Type.UNKNOWN, null);
         static final ExecutableCommand.Result EXECUTOR_EXCEPTION = new ExecutionResultImpl(Type.EXECUTOR_EXCEPTION, null);
@@ -458,7 +459,7 @@ final class CommandParserImpl implements CommandParser {
 
     private record NodeResult(Node node, Chain chain, ArgumentResult<Object> argumentResult,
                               SuggestionCallback callback) {
-        public String name() {
+        String name() {
             return node.argument().getId();
         }
     }
@@ -521,7 +522,7 @@ final class CommandParserImpl implements CommandParser {
                 final String remaining = reader.readRemaining();
                 return new ArgumentResult.Success<>(argument.parse(sender, remaining), remaining);
             }
-        } catch (ArgumentSyntaxException ignored) {
+        } catch (ArgumentSyntaxException _) {
             return new ArgumentResult.IncompatibleType<>();
         }
         // Bruteforce
@@ -531,7 +532,7 @@ final class CommandParserImpl implements CommandParser {
             try {
                 final String input = current.toString();
                 return new ArgumentResult.Success<>(argument.parse(sender, input), input);
-            } catch (ArgumentSyntaxException ignored) {
+            } catch (ArgumentSyntaxException _) {
                 if (!reader.hasRemaining()) break;
                 current.append(" ");
                 current.append(reader.readWord());
@@ -549,7 +550,7 @@ final class CommandParserImpl implements CommandParser {
                 implements ArgumentResult<T> {
         }
 
-        record SyntaxError<T>(String message, String input, int code)
+        record SyntaxError<T>(String message, @Nullable String input, int code)
                 implements ArgumentResult<T> {
         }
     }

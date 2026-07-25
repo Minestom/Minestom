@@ -187,6 +187,7 @@ public interface Registries {
             return registries().entityType();
         }
 
+        @Override
         default Registry<PotionType> potionType() {
             return registries().potionType();
         }

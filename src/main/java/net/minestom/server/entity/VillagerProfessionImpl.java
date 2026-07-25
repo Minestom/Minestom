@@ -6,6 +6,7 @@ import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.UnknownNullability;
 
+@SuppressWarnings("removal")
 public record VillagerProfessionImpl(RegistryData.VillagerProfessionEntry registry) implements VillagerProfession {
     static final Registry<VillagerProfession> REGISTRY = RegistryData.createStaticRegistry(BuiltinRegistries.VILLAGER_PROFESSION,
             (namespace, properties) -> new VillagerProfessionImpl(RegistryData.villagerProfession(namespace, properties)));

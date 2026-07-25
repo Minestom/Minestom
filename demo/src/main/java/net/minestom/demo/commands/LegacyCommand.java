@@ -1,10 +1,11 @@
 package net.minestom.demo.commands;
 
 import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.builder.SimpleCommand;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
-public class LegacyCommand extends net.minestom.server.command.builder.SimpleCommand {
+public class LegacyCommand extends SimpleCommand {
     public LegacyCommand() {
         super("test", "alias");
     }

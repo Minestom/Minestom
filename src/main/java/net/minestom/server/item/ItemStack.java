@@ -41,6 +41,9 @@ import java.util.function.UnaryOperator;
  * <p>
  * An item stack cannot be null, {@link ItemStack#AIR} should be used instead.
  */
+// Static fields intentionally construct the implementation subclass; the cycle cannot
+// race because the implementation types are only ever reached through this interface
+@SuppressWarnings("ClassInitializationDeadlock")
 public sealed interface ItemStack extends TagReadable, DataComponent.Holder, HoverEventSource<HoverEvent.ShowItem>
         permits ItemStackImpl {
 
@@ -117,7 +120,7 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
      */
     @Deprecated
     static ItemStack fromItemNBT(CompoundBinaryTag nbtCompound) {
-        return fromItemNBT(nbtCompound, MinecraftServer.process());
+        return fromItemNBT(nbtCompound, MinecraftServer.getRegistries());
     }
 
     /**
@@ -311,7 +314,7 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
      */
     @Deprecated
     default CompoundBinaryTag toItemNBT() {
-        return toItemNBT(MinecraftServer.process());
+        return toItemNBT(MinecraftServer.getRegistries());
     }
 
     /**
@@ -336,6 +339,7 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
     // These functions are mirrors of ComponentHolder, but we can't actually implement that interface
     // because it conflicts with DataComponent.Holder.
 
+    @SuppressWarnings("PreferredInterfaceType") // wider type kept for binary compatibility until the next breaking release
     static Collection<Component> textComponents(ItemStack itemStack) {
         final var components = new ArrayList<>(itemStack.get(DataComponents.LORE, List.of()));
         final var displayName = itemStack.get(DataComponents.CUSTOM_NAME);
@@ -368,7 +372,7 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
          */
         @Deprecated
         static Hash of(ItemStack itemStack) {
-            return of(itemStack, MinecraftServer.process());
+            return of(itemStack, MinecraftServer.getRegistries());
         }
 
         /**

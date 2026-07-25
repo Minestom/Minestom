@@ -22,7 +22,7 @@ public final class PathGenerator {
                 ? orgStart.withY(generator.gravitySnap(getter, orgStart.x(), orgStart.y(), orgStart.z(), boundingBox, 100).orElse(orgStart.y()))
                 : orgStart;
 
-        final Point target = (generator.hasGravitySnap())
+        final Point target = generator.hasGravitySnap()
                 ? orgTarget.withY(generator.gravitySnap(getter, orgTarget.x(), orgTarget.y(), orgTarget.z(), boundingBox, 100).orElse(orgTarget.y()))
                 : orgTarget.asPos();
 

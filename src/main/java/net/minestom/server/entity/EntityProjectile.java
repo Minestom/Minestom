@@ -1,5 +1,6 @@
 package net.minestom.server.entity;
 
+import java.util.Set;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
@@ -32,12 +33,14 @@ public class EntityProjectile extends Entity {
     private final Entity shooter;
     private boolean wasStuck;
 
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     public EntityProjectile(@Nullable Entity shooter, EntityType entityType) {
         super(entityType);
         this.shooter = shooter;
         setup();
     }
 
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     private void setup() {
         super.hasPhysics = false;
         if (getEntityMeta() instanceof ProjectileMeta) {
@@ -126,11 +129,11 @@ public class EntityProjectile extends Entity {
     private boolean isStuck(Pos pos, Pos posNow) {
         final Instance instance = getInstance();
         if (pos.samePoint(posNow)) {
-            return instance.getBlock(pos).isSolid();
+            return instance.getBlock(pos).solid();
         }
 
         Chunk chunk = null;
-        Collection<LivingEntity> entities = null;
+        Set<LivingEntity> entities = null;
         final BoundingBox bb = getBoundingBox();
 
         /*
@@ -151,12 +154,12 @@ public class EntityProjectile extends Entity {
                 block = instance.getBlock(pos);
                 blockPos = pos;
             }
-            if (block.isSolid()) {
+            if (block.solid()) {
                 final ProjectileCollideWithBlockEvent event = new ProjectileCollideWithBlockEvent(this, pos, block);
                 EventDispatcher.call(event);
                 if (isRemoved()) return true;
                 if (!event.isCancelled()) {
-                    teleport(pos);
+                    teleport(pos).join();
                     return true;
                 }
             }

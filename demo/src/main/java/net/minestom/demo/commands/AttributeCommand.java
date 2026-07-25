@@ -9,6 +9,7 @@ import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentResource;
 import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.attribute.Attribute;
@@ -31,12 +32,12 @@ public class AttributeCommand extends Command {
         ArgumentLiteral set = ArgumentType.Literal("set");
         ArgumentDouble value = ArgumentType.Double("value");
 
-        addSyntax(this::get, target, attribute, get);
-        addSyntax(this::setBase, target, attribute, base, set, value);
-        addSyntax(this::getBase, target, attribute, base, get);
+        addSyntax(AttributeCommand::get, target, attribute, get);
+        addSyntax(AttributeCommand::setBase, target, attribute, base, set, value);
+        addSyntax(AttributeCommand::getBase, target, attribute, base, get);
     }
 
-    private void setBase(CommandSender sender, CommandContext ctx) {
+    private static void setBase(CommandSender sender, CommandContext ctx) {
         LivingEntity target = target(sender, ctx);
         if (check(target, ctx, sender)) return;
         Attribute attribute = attribute(ctx);
@@ -46,7 +47,7 @@ public class AttributeCommand extends Command {
         sender.sendMessage(translatable("commands.attribute.base_value.set.success").arguments(description(attribute), name(target), text(value)));
     }
 
-    private void getBase(CommandSender sender, CommandContext ctx) {
+    private static void getBase(CommandSender sender, CommandContext ctx) {
         LivingEntity target = target(sender, ctx);
         if (check(target, ctx, sender)) return;
         Attribute attribute = attribute(ctx);
@@ -55,7 +56,7 @@ public class AttributeCommand extends Command {
         sender.sendMessage(translatable("commands.attribute.base_value.get.success").arguments(description(attribute), name(target), text(value)));
     }
 
-    private void get(CommandSender sender, CommandContext ctx) {
+    private static void get(CommandSender sender, CommandContext ctx) {
         LivingEntity target = target(sender, ctx);
         if (check(target, ctx, sender)) return;
         Attribute attribute = attribute(ctx);
@@ -64,15 +65,15 @@ public class AttributeCommand extends Command {
         sender.sendMessage(translatable("commands.attribute.value.get.success").arguments(description(attribute), name(target), text(value)));
     }
 
-    private Component description(Attribute attribute) {
+    private static Component description(Attribute attribute) {
         return translatable(attribute);
     }
 
-    private double value(CommandContext ctx) {
+    private static double value(CommandContext ctx) {
         return ctx.get("value");
     }
 
-    private LivingEntity target(CommandSender sender, CommandContext ctx) {
+    private static LivingEntity target(CommandSender sender, CommandContext ctx) {
         EntityFinder finder = ctx.get("target");
         Entity entity = finder.findFirstEntity(sender);
         if (!(entity instanceof LivingEntity livingEntity)) {
@@ -82,20 +83,21 @@ public class AttributeCommand extends Command {
     }
 
     @Nullable
-    private Attribute attribute(CommandContext ctx) {
+    private static Attribute attribute(CommandContext ctx) {
         String namespaceId = ctx.get("attribute");
         return Attribute.fromKey(namespaceId);
     }
 
-    private Component name(Entity entity) {
+    private static Component name(Entity entity) {
         if (entity instanceof NamedAndIdentified named) {
             return named.getName();
         }
-        return entity.getCustomName() == null ? entity.getCustomName() : text(entity.getEntityType().name());
+        final Component customName = entity.get(DataComponents.CUSTOM_NAME);
+        return customName == null ? null : text(entity.getEntityType().name());
     }
 
     @Contract("!null, _, _ -> false; null, _, _ -> true")
-    private boolean check(@Nullable LivingEntity livingEntity, CommandContext ctx, CommandSender sender) {
+    private static boolean check(@Nullable LivingEntity livingEntity, CommandContext ctx, CommandSender sender) {
         if (livingEntity == null) {
             Entity entity = ctx.get("target");
             sender.sendMessage(translatable("commands.attribute.failed.entity").arguments(name(entity)));
@@ -105,7 +107,7 @@ public class AttributeCommand extends Command {
     }
 
     @Contract("!null, _, _ -> false; null, _, _ -> true")
-    private boolean check(@Nullable Attribute attribute, CommandContext ctx, CommandSender sender) {
+    private static boolean check(@Nullable Attribute attribute, CommandContext ctx, CommandSender sender) {
         if (attribute == null) {
             sender.sendMessage(translatable("argument.resource.invalid_type").arguments(text(ctx.<String>get("attribute")), text("minecraft:attribute"), text("minecraft:attribute")));
             return true;

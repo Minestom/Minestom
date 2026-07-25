@@ -17,7 +17,7 @@ public final class CodecTest {
 
     private static List<Arguments> optionalResults() {
         return nonDestructiveTranscoders().stream().flatMap(transcoder -> Stream.of(
-                Arguments.of(transcoder, Codec.BOOLEAN, Boolean.FALSE),
+                Arguments.of(transcoder, Codec.BOOLEAN, false),
                 Arguments.of(transcoder, Codec.INT, 5125),
                 Arguments.of(transcoder, Codec.LONG, 5125123L),
                 Arguments.of(transcoder, Codec.FLOAT, 0.62143f),

@@ -180,7 +180,7 @@ public class PlayerInventoryIntegrationTest {
         var listener = env.listen(InventoryCloseEvent.class);
 
         AtomicBoolean received = new AtomicBoolean(false);
-        listener.followup(event -> received.set(true));
+        listener.followup(_ -> received.set(true));
 
         player.addPacketToQueue(new ClientCloseWindowPacket(0));
         player.interpretPacketQueue();

@@ -11,6 +11,7 @@ import net.minestom.server.utils.time.TimeUnit;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Attacks the entity's target ({@link EntityCreature#getTarget()}) OR the closest entity
@@ -25,7 +26,7 @@ public class MeleeAttackGoal extends GoalSelector {
     private final Duration delay;
 
     private boolean stop;
-    private Entity cachedTarget;
+    private @Nullable Entity cachedTarget;
 
     /**
      * @param entityCreature the entity to add the goal to

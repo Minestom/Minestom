@@ -203,7 +203,7 @@ public record ShapeImpl(ShapeData shapeData, OcclusionData occlusionData) implem
         byte fullCollisionFaces = 0;
         for (BlockFace f : BlockFace.values()) {
             final byte res = isFaceCovered(computeOcclusionSet(f, collisionBoundingBoxes));
-            fullCollisionFaces |= ((res == 2) ? 0b1 : 0b0) << (byte) f.ordinal();
+            fullCollisionFaces = (byte) (fullCollisionFaces | ((res == 2) ? 0b1 : 0b0) << f.ordinal());
         }
 
         return new ShapeData(collisionBoundingBoxes, relativeStart, relativeEnd, fullCollisionFaces);
@@ -214,8 +214,8 @@ public record ShapeImpl(ShapeData shapeData, OcclusionData occlusionData) implem
         byte airFaces = 0;
         for (BlockFace f : BlockFace.values()) {
             final byte res = isFaceCovered(computeOcclusionSet(f, shapeData.boundingBoxes));
-            fullFaces |= ((res == 2) ? 0b1 : 0b0) << (byte) f.ordinal();
-            airFaces |= ((res == 0) ? 0b1 : 0b0) << (byte) f.ordinal();
+            fullFaces = (byte) (fullFaces | ((res == 2) ? 0b1 : 0b0) << f.ordinal());
+            airFaces = (byte) (airFaces | ((res == 0) ? 0b1 : 0b0) << f.ordinal());
         }
         return new OcclusionData(fullFaces, airFaces, lightEmission);
     }

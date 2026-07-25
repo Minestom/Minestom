@@ -67,11 +67,11 @@ public class CommandDispatcher {
      * @return the parsing result
      */
     public CommandResult parse(CommandSender sender, String commandString) {
-        final net.minestom.server.command.CommandParser.Result test = manager.parseCommand(sender, commandString);
+        final CommandParser.Result test = manager.parseCommand(sender, commandString);
         return resultConverter(test, commandString);
     }
 
-    private static CommandResult resultConverter(net.minestom.server.command.CommandParser.Result parseResult, String input) {
+    private static CommandResult resultConverter(CommandParser.Result parseResult, String input) {
         CommandResult.Type type = switch (parseResult) {
             case CommandParser.Result.UnknownCommand unknownCommand -> CommandResult.Type.UNKNOWN;
             case CommandParser.Result.KnownCommand.Valid valid -> CommandResult.Type.SUCCESS;

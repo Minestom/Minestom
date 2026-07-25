@@ -9,11 +9,11 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface DimensionTypes permits DimensionType {
-    RegistryKey<DimensionType> THE_END = RegistryKey.unsafeOf("the_end");
+    RegistryKey<DimensionType> OVERWORLD = RegistryKey.unsafeOf("overworld");
 
     RegistryKey<DimensionType> OVERWORLD_CAVES = RegistryKey.unsafeOf("overworld_caves");
 
-    RegistryKey<DimensionType> THE_NETHER = RegistryKey.unsafeOf("the_nether");
+    RegistryKey<DimensionType> THE_END = RegistryKey.unsafeOf("the_end");
 
-    RegistryKey<DimensionType> OVERWORLD = RegistryKey.unsafeOf("overworld");
+    RegistryKey<DimensionType> THE_NETHER = RegistryKey.unsafeOf("the_nether");
 }

@@ -115,7 +115,7 @@ public class EntityViewIntegrationTest {
         }
         // CHANGE RULE
         {
-            p.updateViewableRule(player -> false);
+            p.updateViewableRule(_ -> false);
             assertFalse(p.hasPredictableViewers());
             p.updateViewableRule(null);
             assertTrue(p.hasPredictableViewers());

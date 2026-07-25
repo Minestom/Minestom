@@ -69,7 +69,7 @@ public final class Palettes {
         final long block = values[index];
         final long clear = (1L << bitsPerEntry) - 1L;
         final long oldBlock = block >> bitIndex & clear;
-        values[index] = block & ~(clear << bitIndex) | ((long) value << bitIndex);
+        values[index] = (block & ~(clear << bitIndex)) | ((long) value << bitIndex);
         return (int) oldBlock;
     }
 
@@ -82,7 +82,7 @@ public final class Palettes {
         int count = 0;
         for (long block : values) {
             for (int i = 0; i < valuesPerLong; i++) {
-                count += (int) ((block >>> i * bitsPerEntry) & ((1 << bitsPerEntry) - 1));
+                count += (int) ((block >>> (i * bitsPerEntry)) & ((1 << bitsPerEntry) - 1));
             }
         }
         return count;
@@ -188,6 +188,7 @@ public final class Palettes {
                     consumer.accept(x, y, z, value);
     }
 
+    @SuppressWarnings("LabelledBreakTarget")
     public static long[] remap(int dimension, int oldBitsPerEntry, int newBitsPerEntry,
                                long[] values, Int2IntFunction function) {
         final long[] result = new long[arrayLength(dimension, newBitsPerEntry)];

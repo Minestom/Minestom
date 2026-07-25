@@ -53,7 +53,7 @@ public class InstanceBlockPacketIntegrationTest {
 
         BlockHandler signHandler = new BlockHandler() {
             @Override
-            public Collection<Tag<?>> getBlockEntityTags() {
+            public List<Tag<?>> getBlockEntityTags() {
                 return List.of(Tag.Byte("is_waxed"));
             }
 
@@ -83,7 +83,7 @@ public class InstanceBlockPacketIntegrationTest {
         });
         blockEntityTracker.assertSingle(packet -> {
             assertPoint(blockPoint, packet.blockPosition());
-            assertEquals(block.registry().blockEntityType(), packet.type());
+            assertEquals(block.blockEntityType(), packet.type());
             assertEquals(data, packet.data());
         });
 

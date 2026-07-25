@@ -62,6 +62,7 @@ public sealed interface SlotDisplay extends ComponentHolder<SlotDisplay> {
                 ItemStack::new);
 
         @Override
+        @SuppressWarnings("PreferredInterfaceType") // wider type kept for binary compatibility until the next breaking release
         public Collection<Component> components() {
             return net.minestom.server.item.ItemStack.textComponents(itemStack);
         }
@@ -97,7 +98,7 @@ public sealed interface SlotDisplay extends ComponentHolder<SlotDisplay> {
                 SmithingTrim::new);
 
         @Override
-        public Collection<Component> components() {
+        public List<Component> components() {
             final var components = new ArrayList<>(base.components());
             components.addAll(trimMaterial.components());
             components.addAll(trimPattern.components());
@@ -119,7 +120,7 @@ public sealed interface SlotDisplay extends ComponentHolder<SlotDisplay> {
                 WithRemainder::new);
 
         @Override
-        public Collection<Component> components() {
+        public List<Component> components() {
             final var components = new ArrayList<>(input.components());
             components.addAll(remainder.components());
             return List.copyOf(components);
@@ -141,7 +142,7 @@ public sealed interface SlotDisplay extends ComponentHolder<SlotDisplay> {
         }
 
         @Override
-        public Collection<Component> components() {
+        public List<Component> components() {
             final var components = new ArrayList<Component>();
             for (var display : contents)
                 components.addAll(display.components());

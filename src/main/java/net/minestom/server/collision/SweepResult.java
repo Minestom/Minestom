@@ -1,5 +1,7 @@
 package net.minestom.server.collision;
 
+import org.jetbrains.annotations.Nullable;
+
 public final class SweepResult {
     public static final SweepResult NO_COLLISION  = new SweepResult(Double.MAX_VALUE, 0, 0, 0, null, 0, 0, 0, 0, 0, 0);
 
@@ -17,7 +19,7 @@ public final class SweepResult {
      * @param normalY -1 if intersected on bottom, 1 if intersected on top
      * @param normalZ -1 if intersected on front, 1 if intersected on back
      */
-    public SweepResult(double res, double normalX, double normalY, double normalZ, Shape collidedShape, double collidedPosX, double collidedPosY, double collidedPosZ, double collidedShapeX, double collidedShapeY, double collidedShapeZ) {
+    public SweepResult(double res, double normalX, double normalY, double normalZ, @Nullable Shape collidedShape, double collidedPosX, double collidedPosY, double collidedPosZ, double collidedShapeX, double collidedShapeY, double collidedShapeZ) {
         this.res = res;
         this.normalX = normalX;
         this.normalY = normalY;

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class ExceptionManager {
 
-    private ExceptionHandler exceptionHandler;
+    private @Nullable ExceptionHandler exceptionHandler;
 
     /**
      * Handles an exception, if no {@link ExceptionHandler} is set, it just prints the stack trace.
@@ -40,6 +40,7 @@ public final class ExceptionManager {
      * @return the current {@link ExceptionHandler}
      */
     public ExceptionHandler getExceptionHandler() {
-        return this.exceptionHandler == null ? exceptionHandler = Throwable::printStackTrace : this.exceptionHandler;
+        if (this.exceptionHandler == null) this.exceptionHandler = Throwable::printStackTrace;
+        return this.exceptionHandler;
     }
 }

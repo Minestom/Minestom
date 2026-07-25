@@ -44,7 +44,6 @@ import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
-import net.minestom.server.registry.RegistryData;
 import net.minestom.server.snapshot.EntitySnapshot;
 import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
@@ -115,9 +114,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             EntityType.LINGERING_POTION, EntityType.AREA_EFFECT_CLOUD);
     private static final Set<EntityType> NO_ENTITY_COLLISION_ENTITIES = Set.of(EntityType.TEXT_DISPLAY, EntityType.ITEM_DISPLAY,
             EntityType.BLOCK_DISPLAY);
+    @SuppressWarnings("this-escape") // deliberate self registration, entities are not usable until spawned
     private final CachedPacket destroyPacketCache = new CachedPacket(() -> new DestroyEntitiesPacket(getEntityId()));
 
-    protected Instance instance;
+    protected @Nullable Instance instance;
     protected Chunk currentChunk;
     protected Pos position; // Should be updated by setPositionInternal only.
     protected float headRotation;
@@ -142,6 +142,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private final int id;
     // Players must be aware of all surrounding entities
     // General entities should only be aware of surrounding players to update their viewing list
+    @SuppressWarnings("unchecked")
     private final EntityTracker.Target<Entity> trackingTarget = this instanceof Player ?
             EntityTracker.Target.ENTITIES : EntityTracker.Target.class.cast(EntityTracker.Target.PLAYERS);
     protected final EntityTracker.Update<Entity> trackingUpdate = new EntityTracker.Update<>() {
@@ -164,11 +165,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
     };
 
+    @SuppressWarnings("this-escape") // deliberate self registration, entities are not usable until spawned
     protected final EntityView viewEngine = new EntityView(this);
     protected final Set<Player> viewers = viewEngine.set;
     private final TagHandler tagHandler = TagHandler.newHandler();
     private final Scheduler scheduler = Scheduler.newScheduler();
-    private final EventNode<EntityEvent> eventNode;
+    private final @Nullable EventNode<EntityEvent> eventNode;
 
     private final UUID uuid;
     private boolean isActive; // False if entity has only been instanced without being added somewhere
@@ -185,6 +187,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private long synchronizationTicks = ServerFlag.ENTITY_SYNCHRONIZATION_TICKS;
     private long nextSynchronizationTick = synchronizationTicks;
 
+    @SuppressWarnings("this-escape") // deliberate self registration, entities are not usable until spawned
     protected MetadataHolder metadata = new MetadataHolder(this::notifyMetadataChanges);
     protected EntityMeta entityMeta;
 
@@ -193,8 +196,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     // Tick related
     private long ticks;
 
+    @SuppressWarnings("this-escape") // deliberate self registration, entities are not usable until spawned
     private final Acquirable<Entity> acquirable = Acquirable.unassigned(this);
 
+    @SuppressWarnings("this-escape") // deliberate self registration, entities are not usable until spawned
     public Entity(EntityType entityType, UUID uuid) {
         this.id = generateId();
         this.entityType = entityType;
@@ -206,13 +211,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         this.entityMeta = MetadataHolder.createMeta(entityType, this, this.metadata);
 
-        final RegistryData.EntityEntry registry = entityType.registry();
-        setBoundingBox(entityType.registry().boundingBox());
+        setBoundingBox(entityType.boundingBox());
 
         this.aerodynamics = new Aerodynamics(
-                registry.acceleration(),
-                registry.horizontalAirResistance(),
-                registry.verticalAirResistance());
+                entityType.acceleration(),
+                entityType.horizontalAirResistance(),
+                entityType.verticalAirResistance());
 
         final ServerProcess process = MinecraftServer.process();
         if (process != null) {
@@ -605,10 +609,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.metadata = new MetadataHolder(this::notifyMetadataChanges);
         this.entityMeta = MetadataHolder.createMeta(entityType, this, this.metadata);
 
-        final RegistryData.EntityEntry registry = entityType.registry();
         this.aerodynamics = aerodynamics.withAirResistance(
-                registry.horizontalAirResistance(),
-                registry.verticalAirResistance());
+                entityType.horizontalAirResistance(),
+                entityType.verticalAirResistance());
 
         updateCollisions();
         Set<Player> viewers = new HashSet<>(getViewers());
@@ -709,8 +712,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                     if (handler != null) {
                         // Move a small amount towards the entity. If the entity is within 0.01 blocks of the block, touch will trigger
                         Vec blockPos = new Vec(x, y, z);
-                        Point blockEntityVector = (blockPos.sub(position)).normalize().mul(0.01);
-                        if (block.registry().collisionShape().intersectBox(position.sub(blockPos).add(blockEntityVector), boundingBox)) {
+                        Point blockEntityVector = blockPos.sub(position).normalize().mul(0.01);
+                        if (block.collisionShape()
+                                .intersectBox(position.sub(blockPos).add(blockEntityVector), boundingBox)) {
                             handler.onTouch(new BlockHandler.Touch(block, instance, new Vec(x, y, z), this));
                         }
                     }
@@ -1486,7 +1490,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @return the entity eye height
      */
     public double getEyeHeight() {
-        return getPose() == EntityPose.SLEEPING ? 0.2 : entityType.registry().eyeHeight();
+        return getPose() == EntityPose.SLEEPING ? 0.2 : entityType.eyeHeight();
     }
 
     /**
@@ -1587,7 +1591,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
 
         // Remove passengers if any (also done with LivingEntity#kill)
-        Collection<Entity> passengers = getPassengers();
+        final List<Entity> passengers = getPassengers();
         if (!passengers.isEmpty()) passengers.forEach(this::removePassenger);
         final Entity vehicle = this.vehicle;
         if (vehicle != null) vehicle.removePassenger(this);
@@ -1802,7 +1806,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         var it = new BlockIterator(this, maxDistance);
         while (it.hasNext()) {
             final Point position = it.next();
-            if (!instance.getBlock(position).isAir()) blocks.add(position);
+            if (!instance.getBlock(position).air()) blocks.add(position);
         }
         return blocks;
     }
@@ -1831,6 +1835,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
+     * Checks whether this entity has an unobstructed line of sight to the given one.
+     *
      * @param entity the entity to be checked.
      * @return if the current entity has line of sight to the given one.
      * @see Entity#hasLineOfSight(Entity, boolean)
@@ -1918,6 +1924,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     @Deprecated
     @ApiStatus.Experimental
+    @SuppressWarnings("unchecked")
     public <T extends Entity> Acquirable<T> getAcquirable() {
         return (Acquirable<T>) acquirable;
     }

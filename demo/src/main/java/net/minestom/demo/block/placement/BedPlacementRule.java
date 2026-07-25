@@ -1,5 +1,6 @@
 package net.minestom.demo.block.placement;
 
+import java.util.Locale;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
@@ -31,11 +32,11 @@ public class BedPlacementRule extends BlockPlacementRule {
         if (!(placementState.instance() instanceof Instance instance)) return null;
 
         var headPosition = placementState.placePosition().relative(facing);
-        if (!instance.getBlock(headPosition, Block.Getter.Condition.TYPE).isAir())
+        if (!instance.getBlock(headPosition, Block.Getter.Condition.TYPE).air())
             return null;
 
         var headBlock = this.block.withProperty(PROP_PART, "head")
-                .withProperty(PROP_FACING, facing.name().toLowerCase());
+                .withProperty(PROP_FACING, facing.name().toLowerCase(Locale.ROOT));
         instance.setBlock(headPosition, headBlock);
 
         return headBlock.withProperty(PROP_PART, "foot");

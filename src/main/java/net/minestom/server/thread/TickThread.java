@@ -89,8 +89,8 @@ public class TickThread extends MinestomThread {
 
     private boolean assertElement(Tickable element) {
         return !(element instanceof AcquirableSource<?> source)
-                || source.acquirable().assignedThread() == this &&
-                source.acquirable().assignedThread().lock().isHeldByCurrentThread();
+                || (source.acquirable().assignedThread() == this &&
+                source.acquirable().assignedThread().lock().isHeldByCurrentThread());
     }
 
     void startTick(CountDownLatch latch, long tickTimeNanos) {

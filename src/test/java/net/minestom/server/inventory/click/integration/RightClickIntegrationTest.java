@@ -170,15 +170,15 @@ public class RightClickIntegrationTest {
         }
     }
 
-    private void rightClickOpenInventory(Player player, int slot) {
+    private static void rightClickOpenInventory(Player player, int slot) {
         _rightClick(player.getOpenInventory(), true, player, slot);
     }
 
-    private void rightClick(Player player, int slot) {
+    private static void rightClick(Player player, int slot) {
         _rightClick(player.getOpenInventory(), false, player, slot);
     }
 
-    private void _rightClick(AbstractInventory openInventory, boolean clickOpenInventory, Player player, int slot) {
+    private static void _rightClick(AbstractInventory openInventory, boolean clickOpenInventory, Player player, int slot) {
         final byte windowId = openInventory != null ? openInventory.getWindowId() : 0;
         if (clickOpenInventory) {
             assertNotNull(openInventory);

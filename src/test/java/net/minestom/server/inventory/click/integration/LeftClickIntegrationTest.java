@@ -321,23 +321,23 @@ public class LeftClickIntegrationTest {
         assertEquals(ItemStack.AIR, inventory.getItemStack(36));
     }
 
-    private void shiftClickOpenInventory(Player player, int slot) {
+    private static void shiftClickOpenInventory(Player player, int slot) {
         _leftClick(player.getOpenInventory(), true, player, slot, true);
     }
 
-    private void shiftClick(Player player, int slot) {
+    private static void shiftClick(Player player, int slot) {
         _leftClick(player.getOpenInventory(), false, player, slot, true);
     }
 
-    private void leftClickOpenInventory(Player player, int slot) {
+    private static void leftClickOpenInventory(Player player, int slot) {
         _leftClick(player.getOpenInventory(), true, player, slot, false);
     }
 
-    private void leftClick(Player player, int slot) {
+    private static void leftClick(Player player, int slot) {
         _leftClick(player.getOpenInventory(), false, player, slot, false);
     }
 
-    private void _leftClick(AbstractInventory openInventory, boolean clickOpenInventory, Player player, int slot, boolean shift) {
+    private static void _leftClick(AbstractInventory openInventory, boolean clickOpenInventory, Player player, int slot, boolean shift) {
         final byte windowId = openInventory != null ? openInventory.getWindowId() : 0;
         if (clickOpenInventory) {
             assertNotNull(openInventory);

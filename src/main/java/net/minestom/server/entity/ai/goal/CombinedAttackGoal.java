@@ -13,6 +13,7 @@ import net.minestom.server.utils.validate.Check;
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.function.Function;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Allows entity to perform both melee and ranged attacks.
@@ -34,7 +35,7 @@ public class CombinedAttackGoal extends GoalSelector {
 
     private long lastAttack;
     private boolean stop;
-    private Entity cachedTarget;
+    private @Nullable Entity cachedTarget;
 
     /**
      * @param entityCreature the entity to add the goal to.
@@ -180,7 +181,7 @@ public class CombinedAttackGoal extends GoalSelector {
                         projectileGenerator = shooter -> new EntityProjectile(shooter, EntityType.ARROW);
                     }
                     EntityProjectile projectile = projectileGenerator.apply(this.entityCreature);
-                    projectile.setInstance(this.entityCreature.getInstance(), this.entityCreature.getPosition());
+                    projectile.setInstance(this.entityCreature.getInstance(), this.entityCreature.getPosition()).join();
 
                     projectile.shoot(to, this.rangedPower, this.rangedSpread);
                     this.lastAttack = time;

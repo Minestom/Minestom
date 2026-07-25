@@ -20,7 +20,7 @@ final class EntityCollision {
 
         List<EntityCollisionResult> result = new ArrayList<>();
 
-        var maxDistance = Math.pow(boundingBox.height() * boundingBox.height() + boundingBox.depth() / 2 * boundingBox.depth() / 2 + boundingBox.width() / 2 * boundingBox.width() / 2, 1 / 3.0);
+        double maxDistance = Math.pow(boundingBox.height() * boundingBox.height() + boundingBox.depth() / 2 * boundingBox.depth() / 2 + boundingBox.width() / 2 * boundingBox.width() / 2, 1 / 3.0);
         double projectileDistance = entityVelocity.length();
 
         entityTracker.nearbyEntities(point, extendRadius + maxDistance + projectileDistance, EntityTracker.Target.ENTITIES, e -> {

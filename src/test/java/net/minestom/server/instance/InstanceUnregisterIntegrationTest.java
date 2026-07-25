@@ -7,6 +7,7 @@ import net.minestom.server.event.player.PlayerTickEvent;
 import net.minestom.server.world.DimensionType;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.lang.ref.WeakReference;
@@ -59,7 +60,7 @@ public class InstanceUnregisterIntegrationTest {
 
             Game(Env env) {
                 instance = env.process().instance().createInstanceContainer();
-                instance.eventNode().addListener(PlayerMoveEvent.class, e -> System.out.println(instance));
+                instance.eventNode().addListener(PlayerMoveEvent.class, _ -> System.out.println(instance));
             }
         }
         var game = new Game(env);
@@ -99,9 +100,9 @@ public class InstanceUnregisterIntegrationTest {
         waitUntilCleared(ref);
     }
 
-    private void tmp(InstanceContainer instanceContainer) {
-        instanceContainer.eventNode().addListener(InstanceTickEvent.class, (e) -> {
-            var uuid = instanceContainer.getUuid();
+    private static void tmp(InstanceContainer instanceContainer) {
+        instanceContainer.eventNode().addListener(InstanceTickEvent.class, _ -> {
+            Assertions.assertNotNull(instanceContainer.getUuid());
         });
     }
 }

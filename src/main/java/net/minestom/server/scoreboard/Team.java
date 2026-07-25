@@ -325,7 +325,7 @@ public class Team implements PacketGroupingAudience {
         if (value) {
             this.friendlyFlags |= index;
         } else {
-            this.friendlyFlags &= ~index;
+            this.friendlyFlags = (byte) (this.friendlyFlags & ~index);
         }
     }
 

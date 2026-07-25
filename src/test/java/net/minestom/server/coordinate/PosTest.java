@@ -326,7 +326,7 @@ public class PosTest {
     @Test
     public void testAsPosWithView() {
         Pos pos = new Pos(1, 2, 3, 45f, 30f);
-        Pos result = pos.asPos(90f, 60f);
+        Pos result = pos.withView(90f, 60f);
         assertEquals(1, result.x());
         assertEquals(2, result.y());
         assertEquals(3, result.z());

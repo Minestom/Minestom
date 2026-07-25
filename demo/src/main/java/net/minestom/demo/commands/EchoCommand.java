@@ -12,7 +12,7 @@ public class EchoCommand extends Command {
     public EchoCommand() {
         super("echo");
 
-        this.setDefaultExecutor((sender, context) -> sender.sendMessage(
+        this.setDefaultExecutor((sender, _) -> sender.sendMessage(
                 Component.text("Usage: /echo <json> [uuid]")
                         .hoverEvent(Component.text("Click to get this command.")
                         .clickEvent(ClickEvent.suggestCommand("/echo ")))));

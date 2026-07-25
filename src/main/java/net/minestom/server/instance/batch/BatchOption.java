@@ -67,6 +67,8 @@ public class BatchOption {
     }
 
     /**
+     * Sets whether the batch composes the whole chunk.
+     *
      * @param fullChunk true to make this batch composes the whole chunk
      * @return 'this' for chaining
      * @see #isFullChunk()
@@ -78,6 +80,8 @@ public class BatchOption {
     }
 
     /**
+     * Sets whether the batch calculates its inverse on application.
+     *
      * @param calculateInverse true to make this batch calculate the inverse on application
      * @return 'this' for chaining
      * @see #shouldCalculateInverse()
@@ -89,6 +93,8 @@ public class BatchOption {
     }
 
     /**
+     * Sets whether the batch applies without checking if it is ready to apply.
+     *
      * @param unsafeApply true to make this batch apply without checking if it is ready to apply.
      * @return 'this' for chaining
      * @see #isUnsafeApply()

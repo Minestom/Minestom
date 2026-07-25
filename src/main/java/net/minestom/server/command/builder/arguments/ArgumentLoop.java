@@ -16,6 +16,7 @@ public class ArgumentLoop<T> extends Argument<List<T>> {
     private final List<Argument<T>> arguments = new ArrayList<>();
 
     @SafeVarargs
+    @SuppressWarnings("varargs")
     public ArgumentLoop(String id, Argument<T>... arguments) {
         super(id, true, true);
         this.arguments.addAll(Arrays.asList(arguments));
@@ -24,7 +25,7 @@ public class ArgumentLoop<T> extends Argument<List<T>> {
     @Override
     public List<T> parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         List<T> result = new ArrayList<>();
-        final String[] split = input.split(StringUtils.SPACE);
+        final String[] split = input.split(StringUtils.SPACE, 0);
 
         final StringBuilder builder = new StringBuilder();
         boolean success = false;
@@ -38,7 +39,7 @@ public class ArgumentLoop<T> extends Argument<List<T>> {
                     success = true;
                     result.add(value);
                     break;
-                } catch (ArgumentSyntaxException ignored) {
+                } catch (ArgumentSyntaxException _) {
                     success = false;
                 }
             }

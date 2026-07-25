@@ -7,7 +7,7 @@ public class KillCommand extends Command {
     public KillCommand() {
         super("kill");
 
-        setDefaultExecutor((sender, context) -> {
+        setDefaultExecutor((sender, _) -> {
             if (sender instanceof Player player) {
                 player.kill();
             }

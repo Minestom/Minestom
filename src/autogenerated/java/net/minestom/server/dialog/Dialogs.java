@@ -9,9 +9,9 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface Dialogs permits Dialog {
-    RegistryKey<Dialog> QUICK_ACTIONS = RegistryKey.unsafeOf("quick_actions");
-
     RegistryKey<Dialog> CUSTOM_OPTIONS = RegistryKey.unsafeOf("custom_options");
+
+    RegistryKey<Dialog> QUICK_ACTIONS = RegistryKey.unsafeOf("quick_actions");
 
     RegistryKey<Dialog> SERVER_LINKS = RegistryKey.unsafeOf("server_links");
 }

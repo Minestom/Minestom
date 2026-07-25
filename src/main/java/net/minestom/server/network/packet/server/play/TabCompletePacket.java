@@ -30,7 +30,7 @@ public record TabCompletePacket(int transactionId, int start, int length,
     }
 
     @Override
-    public Collection<Component> components() {
+    public List<Component> components() {
         if (matches.isEmpty()) return List.of();
         List<Component> components = new ArrayList<>(matches.size());
         for (Match match : matches) {

@@ -23,8 +23,8 @@ public class SubcommandTest {
         AtomicBoolean parentExecuted = new AtomicBoolean(false);
         AtomicBoolean childExecuted = new AtomicBoolean(false);
 
-        parent.setDefaultExecutor((sender, context) -> parentExecuted.set(true));
-        child.setDefaultExecutor((sender, context) -> childExecuted.set(true));
+        parent.setDefaultExecutor((_, _) -> parentExecuted.set(true));
+        child.setDefaultExecutor((_, _) -> childExecuted.set(true));
 
         manager.executeServerCommand("parent child");
 
@@ -47,16 +47,16 @@ public class SubcommandTest {
         AtomicBoolean parentExecuted = new AtomicBoolean(false);
         AtomicBoolean childExecuted = new AtomicBoolean(false);
 
-        parent.setCondition((sender, commandString) -> {
+        parent.setCondition((_, _) -> {
             parentConditionTriggered.set(true);
             return true; // Return true so the child's condition has a chance to get tested
         });
-        child.setCondition((sender, commandString) -> {
+        child.setCondition((_, _) -> {
             childConditionTriggered.set(true);
             return false;
         });
-        parent.setDefaultExecutor((sender, context) -> parentExecuted.set(true));
-        child.setDefaultExecutor((sender, context) -> childExecuted.set(true));
+        parent.setDefaultExecutor((_, _) -> parentExecuted.set(true));
+        child.setDefaultExecutor((_, _) -> childExecuted.set(true));
 
         manager.executeServerCommand("parent child");
 

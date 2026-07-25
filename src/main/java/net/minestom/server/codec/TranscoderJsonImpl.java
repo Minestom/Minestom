@@ -1,6 +1,7 @@
 package net.minestom.server.codec;
 
 import com.google.gson.*;
+import java.util.Set;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.AbstractList;
@@ -170,7 +171,7 @@ final class TranscoderJsonImpl implements Transcoder<JsonElement> {
             return new Result.Error<>("Not an object: " + value);
         return new Result.Ok<>(new MapLike<>() {
             @Override
-            public Collection<String> keys() {
+            public Set<String> keys() {
                 return object.keySet();
             }
 

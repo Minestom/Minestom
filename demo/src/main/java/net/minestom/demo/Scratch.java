@@ -61,6 +61,8 @@ import static net.minestom.server.MinecraftServer.PROTOCOL_VERSION;
  * Everything below is plain sockets plus virtual threads, backed by a tiny Registries implementation for packet codecs.
  */
 public final class Scratch {
+    private static final System.Logger LOGGER = System.getLogger("Scratch");
+
     private static final SocketAddress ADDRESS = new InetSocketAddress("0.0.0.0", 25565);
     private static final int VIEW_DISTANCE = 3;
     private static final String WORLD = "minecraft:overworld";
@@ -115,7 +117,7 @@ public final class Scratch {
                                 connection.serverState = clientState;
                             }
                             switch (parsed.packet()) {
-                                case StatusRequestPacket ignored -> connection.send(new ResponsePacket(STATUS_JSON));
+                                case StatusRequestPacket _ -> connection.send(new ResponsePacket(STATUS_JSON));
                                 case ClientPingRequestPacket ping ->
                                         connection.send(new PingResponsePacket(ping.number()));
                                 case ClientLoginStartPacket login -> connection.send(new LoginSuccessPacket(
@@ -140,7 +142,7 @@ public final class Scratch {
         } catch (EOFException _) {
             // Normal client disconnect.
         } catch (Throwable throwable) {
-            throwable.printStackTrace();
+            LOGGER.log(System.Logger.Level.ERROR, "Connection failure", throwable);
         }
     }
 

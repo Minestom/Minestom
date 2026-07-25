@@ -50,19 +50,19 @@ public class DataComponentPredicateTest {
         }
     };
 
-    private <T> void assertPass(DataComponentPredicate predicate, DataComponent<T> component, T value) {
+    private static <T> void assertPass(DataComponentPredicate predicate, DataComponent<T> component, T value) {
         assertPass(predicate, holderOf(component, value));
     }
 
-    private void assertPass(DataComponentPredicate predicate, DataComponent.Holder holder) {
+    private static void assertPass(DataComponentPredicate predicate, DataComponent.Holder holder) {
         assertTrue(predicate.test(holder));
     }
 
-    private <T> void assertFail(DataComponentPredicate predicate, DataComponent<T> component, T value) {
+    private static <T> void assertFail(DataComponentPredicate predicate, DataComponent<T> component, T value) {
         assertFail(predicate, holderOf(component, value));
     }
 
-    private <T> void assertFail(DataComponentPredicate predicate, DataComponent.Holder holder) {
+    private static void assertFail(DataComponentPredicate predicate, DataComponent.Holder holder) {
         assertFalse(predicate.test(holder));
     }
 
@@ -146,7 +146,10 @@ public class DataComponentPredicateTest {
 
     @Test
     void testPotionContents() {
-        var potions = new DataComponentPredicate.Potions(RegistryTag.direct(PotionType.FIRE_RESISTANCE, PotionType.HEALING, PotionType.HARMING));
+        var potions = new DataComponentPredicate.Potions(RegistryTag.direct(
+                PotionType.FIRE_RESISTANCE.registryKey(),
+                PotionType.HEALING.registryKey(),
+                PotionType.HARMING.registryKey()));
         assertPass(potions, DataComponents.POTION_CONTENTS, new PotionContents(PotionType.HEALING));
         assertFail(potions, DataComponents.POTION_CONTENTS, new PotionContents(PotionType.STRENGTH)); // Potion type isn't contained in the predicate's list
         assertFail(potions, DataComponents.POTION_CONTENTS, new PotionContents(null, null, List.of(), null));

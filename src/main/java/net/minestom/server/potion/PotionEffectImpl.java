@@ -6,6 +6,7 @@ import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.UnknownNullability;
 
+@SuppressWarnings("removal")
 record PotionEffectImpl(RegistryData.PotionEffectEntry registry) implements PotionEffect {
     static final Registry<PotionEffect> REGISTRY = RegistryData.createStaticRegistry(BuiltinRegistries.MOB_EFFECT,
             (namespace, properties) -> new PotionEffectImpl(RegistryData.potionEffect(namespace, properties)));

@@ -42,7 +42,7 @@ public record AdvancementsPacket(
 
     // TODO is the display-item needed to be updated?
     @Override
-    public Collection<Component> components() {
+    public List<Component> components() {
         final var displayData = this.advancementMappings.stream().map(AdvancementMapping::value).map(Advancement::displayData).filter(Objects::nonNull).toList();
         final var titles = displayData.stream().map(DisplayData::title).toList();
         final var descriptions = displayData.stream().map(DisplayData::description).toList();
@@ -164,7 +164,7 @@ public record AdvancementsPacket(
         };
 
         @Override
-        public Collection<Component> components() {
+        public List<Component> components() {
             return List.of(this.title, this.description);
         }
 

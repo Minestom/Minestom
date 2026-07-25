@@ -25,6 +25,7 @@ import java.lang.invoke.VarHandle;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.UnaryOperator;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents an inventory where items can be modified/retrieved.
@@ -47,7 +48,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     protected final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
 
     // the local event node filtered to this inventory
-    private final EventNode<InventoryEvent> eventNode;
+    private final @Nullable EventNode<InventoryEvent> eventNode;
 
     protected AbstractInventory(int size) {
         this.size = size;

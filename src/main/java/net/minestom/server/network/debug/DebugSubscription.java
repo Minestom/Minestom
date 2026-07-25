@@ -12,10 +12,6 @@ public sealed interface DebugSubscription<T> extends StaticProtocolObject<DebugS
     NetworkBuffer.Type<DebugSubscription<?>> NETWORK_TYPE = NetworkBuffer.VAR_INT
             .transform(DebugSubscription::fromId, DebugSubscription::id);
 
-    int id();
-
-    Key key();
-
     static @Nullable DebugSubscription<?> fromKey(String key) {
         return DebugSubscriptionImpl.NAMESPACES.get(key);
     }

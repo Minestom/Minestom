@@ -9,9 +9,9 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface CowVariants permits CowVariant {
-    RegistryKey<CowVariant> WARM = RegistryKey.unsafeOf("warm");
+    RegistryKey<CowVariant> COLD = RegistryKey.unsafeOf("cold");
 
     RegistryKey<CowVariant> TEMPERATE = RegistryKey.unsafeOf("temperate");
 
-    RegistryKey<CowVariant> COLD = RegistryKey.unsafeOf("cold");
+    RegistryKey<CowVariant> WARM = RegistryKey.unsafeOf("warm");
 }

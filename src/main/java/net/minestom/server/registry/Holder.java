@@ -41,26 +41,26 @@ public sealed interface Holder<T> permits RegistryKey, Holder.Direct {
         return this instanceof RegistryKey<T> ? (RegistryKey<T>) this : null;
     }
 
+    @SuppressWarnings("unchecked")
     default @Nullable T asValue() {
-        //noinspection unchecked
         return this instanceof RegistryKey<T> ? null : (T) this;
     }
 
+    @SuppressWarnings("unchecked")
     default Either<RegistryKey<T>, T> unwrap() {
         if (this instanceof RegistryKey<T> key) {
             return Either.left(key);
         } else {
-            //noinspection unchecked
             return Either.right((T) this);
         }
     }
 
+    @SuppressWarnings("unchecked")
     default @Nullable T resolve(DynamicRegistry<T> registry) {
         final var key = asKey();
         if (key != null) {
             return registry.get(key);
         } else {
-            //noinspection unchecked
             return (T) this;
         }
     }

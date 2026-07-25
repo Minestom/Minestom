@@ -30,7 +30,7 @@ public class BlockClientNbtTest {
     public void handler() {
         var handler = new BlockHandler() {
             @Override
-            public Collection<Tag<?>> getBlockEntityTags() {
+            public List<Tag<?>> getBlockEntityTags() {
                 return List.of(Tag.String("test"));
             }
 

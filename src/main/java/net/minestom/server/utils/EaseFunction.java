@@ -120,15 +120,15 @@ public interface EaseFunction {
         }
 
         private record Curve(float a, float b, float c) {
-            public Curve(float cp1, float cp2) {
+            Curve(float cp1, float cp2) {
                 this(3.0F * cp1 - 3.0F * cp2 + 1.0F, -6.0F * cp1 + 3.0F * cp2, 3.0F * cp1);
             }
 
-            public float sample(float t) {
+            float sample(float t) {
                 return ((a * t + b) * t + c) * t;
             }
 
-            public float sampleGradient(float t) {
+            float sampleGradient(float t) {
                 return 3 * a * t * t + 2 * b * t + c;
             }
         }

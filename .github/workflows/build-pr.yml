@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   build:
-    name: JVM Test
+    name: JVM Check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -29,8 +29,8 @@ jobs:
         uses: gradle/actions/setup-gradle@v6
         with:
           cache-read-only: ${{ github.event_name != 'pull_request' || github.repository_owner != github.event.pull_request.head.repo.owner.login }}
-      - name: Run JVM Tests
-        run: ./gradlew test
+      - name: Run JVM Checks
+        run: ./gradlew check
 
   javadoc:
     name: Javadoc Compilation

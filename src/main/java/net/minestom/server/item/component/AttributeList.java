@@ -123,9 +123,9 @@ public record AttributeList(List<Modifier> modifiers) {
 
         private static Type targetToType(Display display) {
             return switch (display) {
-                case Default ignored -> Type.DEFAULT;
-                case Hidden ignored -> Type.HIDDEN;
-                case Override ignored -> Type.OVERRIDE;
+                case Default _ -> Type.DEFAULT;
+                case Hidden _ -> Type.HIDDEN;
+                case Override _ -> Type.OVERRIDE;
             };
         }
     }

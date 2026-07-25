@@ -27,7 +27,7 @@ class PlayerResourcePackIntegrationTest {
         var player = env.createPlayer(instance, new Pos(0, 40, 0));
 
         AtomicBoolean called = new AtomicBoolean();
-        ResourcePackCallback callback = (uuid, resourcePackStatus, audience) -> called.set(true);
+        ResourcePackCallback callback = (_, _, _) -> called.set(true);
 
         player.sendResourcePacks(resourcePackRequest().callback(callback).packs(INFO).build());
         player.addPacketToQueue(new ClientResourcePackStatusPacket(INFO.id(), ResourcePackStatus.SUCCESSFULLY_LOADED));

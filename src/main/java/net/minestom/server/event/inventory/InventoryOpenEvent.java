@@ -29,6 +29,7 @@ public class InventoryOpenEvent implements InventoryEvent, PlayerInstanceEvent, 
      *
      * @return the player who opens the inventory
      */
+    @Override
     public Player getPlayer() {
         return player;
     }

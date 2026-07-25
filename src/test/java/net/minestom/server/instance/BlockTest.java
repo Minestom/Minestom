@@ -93,8 +93,8 @@ public class BlockTest {
 
     @Test
     public void testShape() {
-        Point start = Block.LANTERN.registry().collisionShape().relativeStart();
-        Point end = Block.LANTERN.registry().collisionShape().relativeEnd();
+        Point start = Block.LANTERN.collisionShape().relativeStart();
+        Point end = Block.LANTERN.collisionShape().relativeEnd();
 
         assertEquals(new Vec(0.3125, 0, 0.3125), start);
         assertEquals(new Vec(0.6875, 0.5625, 0.6875), end);
@@ -127,6 +127,6 @@ public class BlockTest {
     @Test
     void testBlockEntityRegistryLoading() {
         // Sanity to ensure we correctly load block entity types
-        assertEquals(BlockEntityType.SIGN, Block.OAK_SIGN.registry().blockEntityType());
+        assertEquals(BlockEntityType.SIGN, Block.OAK_SIGN.blockEntityType());
     }
 }

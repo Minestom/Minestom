@@ -32,6 +32,7 @@ public class AddEntityToInstanceEvent implements InstanceEvent, EntityEvent, Can
      *
      * @return the entity being added
      */
+    @Override
     public Entity getEntity() {
         return entity;
     }

@@ -27,7 +27,12 @@ public final class PacketReading {
     private final static Logger LOGGER = LoggerFactory.getLogger(PacketReading.class);
 
     private static final int MAX_VAR_INT_SIZE = 5;
-    private static final Result.Empty EMPTY_CLIENT_PACKET = new Result.Empty<>();
+    private static final Result.Empty<?> EMPTY_CLIENT_PACKET = new Result.Empty<>();
+
+    @SuppressWarnings("unchecked")
+    private static <T> Result<T> emptyResult() {
+        return (Result<T>) EMPTY_CLIENT_PACKET;
+    }
 
     public sealed interface Result<T> {
 
@@ -105,7 +110,7 @@ public final class PacketReading {
                     packets.add(parsedPacket);
                     state = parsedPacket.nextState();
                 }
-                case Result.Empty<T> ignored -> {
+                case Result.Empty<T> _ -> {
                     break readLoop;
                 }
                 case Result.Failure<T> failure -> {
@@ -113,7 +118,7 @@ public final class PacketReading {
                 }
             }
         }
-        return !packets.isEmpty() ? new Result.Success<>(packets) : EMPTY_CLIENT_PACKET;
+        return !packets.isEmpty() ? new Result.Success<>(packets) : emptyResult();
     }
 
     public static Result<ClientPacket> readClient(
@@ -152,7 +157,7 @@ public final class PacketReading {
         if (readerStart > buffer.writeIndex()) {
             // Can't read the packet length, buffer has enough capacity
             buffer.readIndex(beginMark);
-            return EMPTY_CLIENT_PACKET;
+            return emptyResult();
         }
         final int maxPacketSize = maxPacketSize(state);
         if (packetLength < 0) throw new DataFormatException("Packet length negative: " + packetLength);
@@ -166,7 +171,7 @@ public final class PacketReading {
             // Must return a failure if the buffer is too small
             // Otherwise do nothing, and hope to read the packet remains next time
             if (requiredCapacity > buffer.capacity()) return new Result.Failure<>(requiredCapacity);
-            else return EMPTY_CLIENT_PACKET;
+            else return emptyResult();
         }
         final PacketRegistry<? extends T> registry = parser.stateRegistry(state);
         final long offset = buffer.advanceRead(packetLength); // ensureReadable checked above

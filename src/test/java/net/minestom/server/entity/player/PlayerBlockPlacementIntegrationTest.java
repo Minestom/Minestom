@@ -53,7 +53,9 @@ public class PlayerBlockPlacementIntegrationTest {
     private static Stream<Arguments> placeBlockFromAdventureModeParams() {
         return Stream.of(
                 Arguments.of(Block.ACACIA_STAIRS.withProperty("facing", "south"), new BlockPredicates(new BlockPredicate(Block.ACACIA_STAIRS))),
-                Arguments.of(Block.ACACIA_STAIRS.withProperty("facing", "south"), new BlockPredicates(new BlockPredicate(RegistryTag.direct(Block.ACACIA_STAIRS), PropertiesPredicate.exact("facing", "south"), null))),
+                Arguments.of(Block.ACACIA_STAIRS.withProperty("facing", "south"),
+                        new BlockPredicates(new BlockPredicate(RegistryTag.direct(Block.ACACIA_STAIRS.registryKey()),
+                                PropertiesPredicate.exact("facing", "south"), null))),
                 Arguments.of(Block.AMETHYST_BLOCK, new BlockPredicates(new BlockPredicate(Block.AMETHYST_BLOCK)))
         );
     }

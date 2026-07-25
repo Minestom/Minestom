@@ -22,6 +22,8 @@ import java.util.concurrent.CompletableFuture;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
+// The lighting fixture world uses the deprecated legacy layout
+@SuppressWarnings("removal")
 public class LightParityIntegrationTest {
     private static final int REGION_SIZE = 3;
 

@@ -9,6 +9,7 @@ import net.minestom.server.registry.RegistryKey;
 
 import java.util.Objects;
 
+@SuppressWarnings("removal")
 record GameRuleImpl<T>(Key key, int id, T defaultValue) implements GameRule<T> {
     static final Registry<GameRule<?>> REGISTRY = RegistryData.createStaticRegistry(BuiltinRegistries.GAME_RULE, GameRuleImpl::parse);
 

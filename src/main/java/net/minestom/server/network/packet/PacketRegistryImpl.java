@@ -18,7 +18,7 @@ final class PacketRegistryImpl<T> implements PacketRegistry<T> {
     private final Map<Class<?>, PacketInfo<? extends T>> packetIds;
 
     @SafeVarargs
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     PacketRegistryImpl(ConnectionState state, ConnectionSide side,
                        Map.Entry<? extends Class<? extends T>, ? extends NetworkBuffer.Type<? extends T>>... entries) {
         this.state = state;

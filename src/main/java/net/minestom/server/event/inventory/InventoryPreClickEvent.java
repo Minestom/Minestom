@@ -32,6 +32,7 @@ public class InventoryPreClickEvent implements InventoryEvent, PlayerInstanceEve
      *
      * @return the player who clicked
      */
+    @Override
     public Player getPlayer() {
         return player;
     }

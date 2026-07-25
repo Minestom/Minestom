@@ -77,6 +77,7 @@ public class CatMeta extends TameableAnimalMeta {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected <T> void set(DataComponent<T> component, T value) {
         if (component == DataComponents.CAT_VARIANT)
             setVariant((RegistryKey<CatVariant>) value);
