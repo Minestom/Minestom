@@ -17,6 +17,24 @@ import static org.junit.jupiter.api.Assertions.*;
 public class BlockTest {
 
     @Test
+    public void testOutlineShapeDiffersFromCollisionShape() {
+        // Torches have no collision but the client still outlines and targets them.
+        assertEquals(Vec.ZERO, Block.TORCH.collisionShape().relativeEnd());
+        assertEquals(new Vec(0.375, 0, 0.375), Block.TORCH.outlineShape().relativeStart());
+        assertEquals(new Vec(0.625, 0.625, 0.625), Block.TORCH.outlineShape().relativeEnd());
+
+        // Fences collide 1.5 blocks tall but the client sees a 1 block tall outline.
+        assertEquals(1.5, Block.OAK_FENCE.collisionShape().relativeEnd().y());
+        assertEquals(1.0, Block.OAK_FENCE.outlineShape().relativeEnd().y());
+    }
+
+    @Test
+    public void testOutlineShapeMatchesCollisionShapeForFullBlocks() {
+        assertEquals(Block.STONE.collisionShape().relativeStart(), Block.STONE.outlineShape().relativeStart());
+        assertEquals(Block.STONE.collisionShape().relativeEnd(), Block.STONE.outlineShape().relativeEnd());
+    }
+
+    @Test
     public void testNBT() {
         Block block = Block.CHEST;
         assertFalse(block.hasNbt());

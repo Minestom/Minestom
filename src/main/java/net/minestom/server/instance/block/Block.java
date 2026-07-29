@@ -508,6 +508,16 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
     }
 
     /**
+     * Returns the shape used for block ray tracing and outlining.
+     *
+     * @return the outline shape
+     */
+    @Contract(pure = true)
+    default Shape outlineShape() {
+        return registry().outlineShape();
+    }
+
+    /**
      * Returns the shape used for physical collision checks.
      *
      * @return the collision shape
