@@ -236,6 +236,8 @@ public final class RegistryData {
         private final @Nullable Material material;
         private final @Nullable BlockSoundType blockSoundType;
         private final Shape outlineShape;
+        private final Shape interactionShape;
+        private final Shape visualShape;
         private final Shape collisionShape;
         private final Shape occlusionShape;
 
@@ -280,6 +282,14 @@ public final class RegistryData {
             }
             { // Unique special case where the shape strings can mutate but arent saved after the parse.
                 this.outlineShape = fromParent(parent, BlockEntry::outlineShape, main, "shape", (properties, string) -> {
+                    String shape = properties.getString(string);
+                    return CollisionUtils.parseCollisionShape(internCache, shape);
+                }, null);
+                this.interactionShape = fromParent(parent, BlockEntry::interactionShape, main, "interactionShape", (properties, string) -> {
+                    String shape = properties.getString(string);
+                    return CollisionUtils.parseCollisionShape(internCache, shape);
+                }, null);
+                this.visualShape = fromParent(parent, BlockEntry::visualShape, main, "visualShape", (properties, string) -> {
                     String shape = properties.getString(string);
                     return CollisionUtils.parseCollisionShape(internCache, shape);
                 }, null);
@@ -455,6 +465,14 @@ public final class RegistryData {
 
         public Shape outlineShape() {
             return outlineShape;
+        }
+
+        public Shape interactionShape() {
+            return interactionShape;
+        }
+
+        public Shape visualShape() {
+            return visualShape;
         }
 
         public Shape collisionShape() {

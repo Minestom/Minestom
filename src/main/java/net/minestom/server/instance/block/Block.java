@@ -518,6 +518,26 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
     }
 
     /**
+     * Returns the extra shape ray traced alongside the outline, empty for most blocks.
+     *
+     * @return the interaction shape
+     */
+    @Contract(pure = true)
+    default Shape interactionShape() {
+        return registry().interactionShape();
+    }
+
+    /**
+     * Returns the shape used for visual effects such as camera occlusion.
+     *
+     * @return the visual shape
+     */
+    @Contract(pure = true)
+    default Shape visualShape() {
+        return registry().visualShape();
+    }
+
+    /**
      * Returns the shape used for physical collision checks.
      *
      * @return the collision shape

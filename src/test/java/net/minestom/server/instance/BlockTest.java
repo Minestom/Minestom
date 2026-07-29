@@ -29,6 +29,18 @@ public class BlockTest {
     }
 
     @Test
+    public void testInteractionAndVisualShapes() {
+        // The cauldron basin is ray traced in addition to its outline.
+        assertEquals(new Vec(0.125, 0.25, 0.125), Block.CAULDRON.interactionShape().relativeStart());
+        assertEquals(new Vec(0.875, 1.0, 0.875), Block.CAULDRON.interactionShape().relativeEnd());
+        assertEquals(Vec.ZERO, Block.STONE.interactionShape().relativeEnd());
+
+        // Soul sand sinks the player but is drawn as a full cube.
+        assertEquals(0.875, Block.SOUL_SAND.collisionShape().relativeEnd().y());
+        assertEquals(1.0, Block.SOUL_SAND.visualShape().relativeEnd().y());
+    }
+
+    @Test
     public void testOutlineShapeMatchesCollisionShapeForFullBlocks() {
         assertEquals(Block.STONE.collisionShape().relativeStart(), Block.STONE.outlineShape().relativeStart());
         assertEquals(Block.STONE.collisionShape().relativeEnd(), Block.STONE.outlineShape().relativeEnd());
