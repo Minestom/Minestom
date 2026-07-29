@@ -14,7 +14,7 @@ public class DimensionCommand extends Command {
         super("dimensiontest");
         setCondition(Conditions::playerOnly);
 
-        addSyntax((sender, context) -> {
+        addSyntax((sender, _) -> {
             final Player player = (Player) sender;
             final Instance instance = player.getInstance();
             final var instances = MinecraftServer.getInstanceManager().getInstances().stream().filter(instance1 -> !instance1.equals(instance)).toList();
@@ -23,7 +23,8 @@ public class DimensionCommand extends Command {
                 return;
             }
             final var newInstance = instances.get(ThreadLocalRandom.current().nextInt(instances.size()));
-            player.setInstance(newInstance).thenRun(() -> player.sendMessage("Teleported"));
+            player.setInstance(newInstance).join();
+            player.sendMessage("Teleported");
         });
     }
 }

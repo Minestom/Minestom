@@ -160,6 +160,7 @@ public sealed interface IntProvider {
                 Trapezoid::new);
 
         @Override
+        @SuppressWarnings("IdentityBinaryExpression") // two independent random draws, not a duplicated value
         public int sample(Random random) {
             if (plateau == 0 && maxInclusive == -minInclusive) {
                 return random.nextInt(maxInclusive + 1) - random.nextInt(maxInclusive + 1);

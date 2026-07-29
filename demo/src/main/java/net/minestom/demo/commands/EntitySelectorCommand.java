@@ -15,17 +15,17 @@ public class EntitySelectorCommand extends Command {
     public EntitySelectorCommand() {
         super("ent");
 
-        setDefaultExecutor((sender, context) -> System.out.println("DEFAULT"));
+        setDefaultExecutor((_, _) -> System.out.println("DEFAULT"));
 
         ArgumentEntity argumentEntity = ArgumentType.Entity("entities").onlyPlayers(true);
 
-        setArgumentCallback((sender, exception) -> exception.printStackTrace(), argumentEntity);
+        setArgumentCallback((_, exception) -> exception.printStackTrace(), argumentEntity);
 
-        addSyntax(this::executor, argumentEntity);
+        addSyntax(EntitySelectorCommand::executor, argumentEntity);
 
     }
 
-    private void executor(CommandSender commandSender, CommandContext context) {
+    private static void executor(CommandSender commandSender, CommandContext context) {
         EntityFinder entityFinder = context.get("entities");
         List<Entity> entities = entityFinder.find(commandSender);
         System.out.println("found " + entities.size() + " entities");

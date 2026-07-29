@@ -18,7 +18,6 @@ public class ComponentNetworkBufferTypeTest {
     // it is merged into adventure (see https://github.com/KyoriPowered/adventure/pull/1084). This can be considered
     // a known-good implementation.
 
-    private static final ComponentNetworkBufferTypeImpl WRITER = new ComponentNetworkBufferTypeImpl();
     private static final NbtComponentSerializer NBT_READER = NbtComponentSerializer.nbt();
 
     @Test

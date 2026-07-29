@@ -11,6 +11,7 @@ import net.minestom.server.world.clock.WorldClock;
 import net.minestom.server.world.timeline.Timeline;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * <a href="https://minecraft.wiki/w/Dimension_type">Dimension type</a>
@@ -146,7 +147,7 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
         private CardinalLight cardinalLight = CardinalLight.DEFAULT;
         private final EnvironmentAttributeMap.Builder attributes;
         private RegistryTag<Timeline> timelines = RegistryTag.empty();
-        private RegistryKey<WorldClock> defaultClock = null;
+        private @Nullable RegistryKey<WorldClock> defaultClock = null;
 
         private Builder() {
             attributes = EnvironmentAttributeMap.builder();

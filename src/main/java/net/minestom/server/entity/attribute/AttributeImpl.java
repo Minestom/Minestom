@@ -6,6 +6,7 @@ import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.UnknownNullability;
 
+@SuppressWarnings("removal")
 record AttributeImpl(RegistryData.AttributeEntry registry) implements Attribute {
     static final Registry<Attribute> REGISTRY = RegistryData.createStaticRegistry(BuiltinRegistries.ATTRIBUTE,
             (namespace, properties) -> new AttributeImpl(RegistryData.attribute(namespace, properties)));

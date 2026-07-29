@@ -22,13 +22,13 @@ final class PaletteImpl implements Palette {
     byte bitsPerEntry = 0;
     int count = 0; // Serve as the single value if bitsPerEntry == 0
 
-    long @UnknownNullability [] values; // null when bitsPerEntry == 0
+    long @Nullable [] values; // null when bitsPerEntry == 0
     // palette index = value
     @UnknownNullability
-    IntArrayList paletteToValueList; // null when using direct mode (bitsPerEntry > maxBitsPerEntry)
+    @Nullable IntArrayList paletteToValueList; // null when using direct mode (bitsPerEntry > maxBitsPerEntry)
     // value = palette index
     @UnknownNullability
-    Int2IntOpenHashMap valueToPaletteMap; // null when using direct mode (bitsPerEntry > maxBitsPerEntry)
+    @Nullable Int2IntOpenHashMap valueToPaletteMap; // null when using direct mode (bitsPerEntry > maxBitsPerEntry)
 
     PaletteImpl(byte dimension, byte minBitsPerEntry, byte maxBitsPerEntry, byte directBits) {
         validateDimension(dimension);
@@ -183,7 +183,7 @@ final class PaletteImpl implements Palette {
         if (bitsPerEntry == 0) {
             this.count += offset;
         } else {
-            replaceAll((x, y, z, value) -> value + offset);
+            replaceAll((_, _, _, value) -> value + offset);
         }
     }
 
@@ -217,7 +217,7 @@ final class PaletteImpl implements Palette {
                     this.count += count; // Replacing air with a block
                 }
             } else {
-                replaceAll((x, y, z, value) -> value == oldValue ? newValue : value);
+                replaceAll((_, _, _, value) -> value == oldValue ? newValue : value);
             }
         }
     }
@@ -505,7 +505,7 @@ final class PaletteImpl implements Palette {
 
         // Count unique values
         IntSet uniqueValues = new IntOpenHashSet();
-        getAll((x, y, z, value) -> uniqueValues.add(value));
+        getAll((_, _, _, value) -> uniqueValues.add(value));
         final int uniqueCount = uniqueValues.size();
 
         // If only one unique value, use fill for maximum optimization
@@ -610,13 +610,14 @@ final class PaletteImpl implements Palette {
             final int endIndex = Math.min(startIndex + valuesPerLong, size);
             for (int index = startIndex; index < endIndex; index++) {
                 final int bitIndex = (index - startIndex) * bitsPerEntry;
-                block = block & ~(clear << bitIndex) | ((long) paletteValues[index] << bitIndex);
+                block = (block & ~(clear << bitIndex)) | ((long) paletteValues[index] << bitIndex);
             }
             values[i] = block;
         }
     }
 
     /// Assumes {@link PaletteImpl#bitsPerEntry} != 0
+    @SuppressWarnings("UnnecessaryMethodReference")
     private void downsizeWithPalette(IntArrayList palette) {
         final byte bpe = this.bitsPerEntry;
         final byte newBpe = (byte) Math.max(MathUtils.bitsToRepresent(palette.size() - 1), minBitsPerEntry);

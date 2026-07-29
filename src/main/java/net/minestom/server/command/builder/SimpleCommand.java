@@ -5,6 +5,7 @@ import net.minestom.server.command.builder.arguments.ArgumentType;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class SimpleCommand extends Command {
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     public SimpleCommand(String name, @Nullable String... aliases) {
         super(name, aliases);
 

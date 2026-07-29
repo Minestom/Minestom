@@ -23,10 +23,10 @@ public class TestBiomeAmbientParticleCommand extends Command {
 
     public TestBiomeAmbientParticleCommand() {
         super("testbiomeambientparticle");
-        setDefaultExecutor(this::usage);
+        setDefaultExecutor(TestBiomeAmbientParticleCommand::usage);
     }
 
-    private void usage(CommandSender sender, CommandContext context) {
+    private static void usage(CommandSender sender, CommandContext context) {
         if (!(sender instanceof Player player)) {
             sender.sendMessage(Component.text("This command is only available for players"));
             return;
@@ -51,7 +51,7 @@ public class TestBiomeAmbientParticleCommand extends Command {
         EventListener<AsyncPlayerConfigurationEvent> handler = EventListener.builder(AsyncPlayerConfigurationEvent.class).handler(event -> {
             event.setSendRegistryData(true);
             player.eventNode().removeListener(handlerRef.get());
-            player.scheduler().scheduleNextTick(() -> player.setInstance(instance));
+            player.scheduler().scheduleNextTick(() -> player.setInstance(instance).join());
         }).build();
         handlerRef.set(handler);
         player.eventNode().addListener(handler);

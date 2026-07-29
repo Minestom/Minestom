@@ -204,7 +204,7 @@ public sealed interface Area extends Iterable<BlockVec> {
      */
     sealed interface Single extends Area permits AreaImpl.Single {
         /**
-         * @return the contained block
+         * {@return the contained block}
          */
         BlockVec point();
     }
@@ -214,12 +214,12 @@ public sealed interface Area extends Iterable<BlockVec> {
      */
     sealed interface Line extends Area permits AreaImpl.Line {
         /**
-         * @return the start block
+         * {@return the start block}
          */
         BlockVec start();
 
         /**
-         * @return the end block
+         * {@return the end block}
          */
         BlockVec end();
     }
@@ -229,12 +229,12 @@ public sealed interface Area extends Iterable<BlockVec> {
      */
     sealed interface Cuboid extends Area permits AreaImpl.Cuboid {
         /**
-         * @return the minimum corner
+         * {@return the minimum corner}
          */
         BlockVec min();
 
         /**
-         * @return the maximum corner
+         * {@return the maximum corner}
          */
         BlockVec max();
     }
@@ -244,12 +244,12 @@ public sealed interface Area extends Iterable<BlockVec> {
      */
     sealed interface Sphere extends Area permits AreaImpl.Sphere {
         /**
-         * @return the center block
+         * {@return the center block}
          */
         BlockVec center();
 
         /**
-         * @return the non-negative radius
+         * {@return the non-negative radius}
          */
         int radius();
     }

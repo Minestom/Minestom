@@ -9,89 +9,89 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface BannerPatterns permits BannerPattern {
+    RegistryKey<BannerPattern> BASE = RegistryKey.unsafeOf("base");
+
     RegistryKey<BannerPattern> BORDER = RegistryKey.unsafeOf("border");
-
-    RegistryKey<BannerPattern> SQUARE_BOTTOM_RIGHT = RegistryKey.unsafeOf("square_bottom_right");
-
-    RegistryKey<BannerPattern> STRIPE_RIGHT = RegistryKey.unsafeOf("stripe_right");
-
-    RegistryKey<BannerPattern> RHOMBUS = RegistryKey.unsafeOf("rhombus");
-
-    RegistryKey<BannerPattern> FLOW = RegistryKey.unsafeOf("flow");
-
-    RegistryKey<BannerPattern> TRIANGLES_TOP = RegistryKey.unsafeOf("triangles_top");
-
-    RegistryKey<BannerPattern> GRADIENT = RegistryKey.unsafeOf("gradient");
-
-    RegistryKey<BannerPattern> GLOBE = RegistryKey.unsafeOf("globe");
-
-    RegistryKey<BannerPattern> MOJANG = RegistryKey.unsafeOf("mojang");
-
-    RegistryKey<BannerPattern> STRIPE_BOTTOM = RegistryKey.unsafeOf("stripe_bottom");
-
-    RegistryKey<BannerPattern> STRIPE_MIDDLE = RegistryKey.unsafeOf("stripe_middle");
-
-    RegistryKey<BannerPattern> FLOWER = RegistryKey.unsafeOf("flower");
-
-    RegistryKey<BannerPattern> DIAGONAL_UP_RIGHT = RegistryKey.unsafeOf("diagonal_up_right");
-
-    RegistryKey<BannerPattern> CIRCLE = RegistryKey.unsafeOf("circle");
-
-    RegistryKey<BannerPattern> HALF_HORIZONTAL = RegistryKey.unsafeOf("half_horizontal");
 
     RegistryKey<BannerPattern> BRICKS = RegistryKey.unsafeOf("bricks");
 
-    RegistryKey<BannerPattern> TRIANGLE_BOTTOM = RegistryKey.unsafeOf("triangle_bottom");
-
-    RegistryKey<BannerPattern> CURLY_BORDER = RegistryKey.unsafeOf("curly_border");
-
-    RegistryKey<BannerPattern> BASE = RegistryKey.unsafeOf("base");
-
-    RegistryKey<BannerPattern> PIGLIN = RegistryKey.unsafeOf("piglin");
-
-    RegistryKey<BannerPattern> STRIPE_CENTER = RegistryKey.unsafeOf("stripe_center");
-
-    RegistryKey<BannerPattern> SQUARE_BOTTOM_LEFT = RegistryKey.unsafeOf("square_bottom_left");
-
-    RegistryKey<BannerPattern> SQUARE_TOP_RIGHT = RegistryKey.unsafeOf("square_top_right");
-
-    RegistryKey<BannerPattern> STRIPE_DOWNRIGHT = RegistryKey.unsafeOf("stripe_downright");
-
-    RegistryKey<BannerPattern> GUSTER = RegistryKey.unsafeOf("guster");
-
-    RegistryKey<BannerPattern> GRADIENT_UP = RegistryKey.unsafeOf("gradient_up");
-
-    RegistryKey<BannerPattern> DIAGONAL_RIGHT = RegistryKey.unsafeOf("diagonal_right");
-
-    RegistryKey<BannerPattern> HALF_VERTICAL_RIGHT = RegistryKey.unsafeOf("half_vertical_right");
-
-    RegistryKey<BannerPattern> SMALL_STRIPES = RegistryKey.unsafeOf("small_stripes");
-
-    RegistryKey<BannerPattern> CROSS = RegistryKey.unsafeOf("cross");
-
-    RegistryKey<BannerPattern> DIAGONAL_LEFT = RegistryKey.unsafeOf("diagonal_left");
-
-    RegistryKey<BannerPattern> STRIPE_DOWNLEFT = RegistryKey.unsafeOf("stripe_downleft");
-
-    RegistryKey<BannerPattern> SKULL = RegistryKey.unsafeOf("skull");
-
-    RegistryKey<BannerPattern> HALF_VERTICAL = RegistryKey.unsafeOf("half_vertical");
-
-    RegistryKey<BannerPattern> DIAGONAL_UP_LEFT = RegistryKey.unsafeOf("diagonal_up_left");
-
-    RegistryKey<BannerPattern> TRIANGLE_TOP = RegistryKey.unsafeOf("triangle_top");
-
-    RegistryKey<BannerPattern> HALF_HORIZONTAL_BOTTOM = RegistryKey.unsafeOf("half_horizontal_bottom");
-
-    RegistryKey<BannerPattern> STRIPE_TOP = RegistryKey.unsafeOf("stripe_top");
-
-    RegistryKey<BannerPattern> SQUARE_TOP_LEFT = RegistryKey.unsafeOf("square_top_left");
+    RegistryKey<BannerPattern> CIRCLE = RegistryKey.unsafeOf("circle");
 
     RegistryKey<BannerPattern> CREEPER = RegistryKey.unsafeOf("creeper");
 
+    RegistryKey<BannerPattern> CROSS = RegistryKey.unsafeOf("cross");
+
+    RegistryKey<BannerPattern> CURLY_BORDER = RegistryKey.unsafeOf("curly_border");
+
+    RegistryKey<BannerPattern> DIAGONAL_LEFT = RegistryKey.unsafeOf("diagonal_left");
+
+    RegistryKey<BannerPattern> DIAGONAL_RIGHT = RegistryKey.unsafeOf("diagonal_right");
+
+    RegistryKey<BannerPattern> DIAGONAL_UP_LEFT = RegistryKey.unsafeOf("diagonal_up_left");
+
+    RegistryKey<BannerPattern> DIAGONAL_UP_RIGHT = RegistryKey.unsafeOf("diagonal_up_right");
+
+    RegistryKey<BannerPattern> FLOW = RegistryKey.unsafeOf("flow");
+
+    RegistryKey<BannerPattern> FLOWER = RegistryKey.unsafeOf("flower");
+
+    RegistryKey<BannerPattern> GLOBE = RegistryKey.unsafeOf("globe");
+
+    RegistryKey<BannerPattern> GRADIENT = RegistryKey.unsafeOf("gradient");
+
+    RegistryKey<BannerPattern> GRADIENT_UP = RegistryKey.unsafeOf("gradient_up");
+
+    RegistryKey<BannerPattern> GUSTER = RegistryKey.unsafeOf("guster");
+
+    RegistryKey<BannerPattern> HALF_HORIZONTAL = RegistryKey.unsafeOf("half_horizontal");
+
+    RegistryKey<BannerPattern> HALF_HORIZONTAL_BOTTOM = RegistryKey.unsafeOf("half_horizontal_bottom");
+
+    RegistryKey<BannerPattern> HALF_VERTICAL = RegistryKey.unsafeOf("half_vertical");
+
+    RegistryKey<BannerPattern> HALF_VERTICAL_RIGHT = RegistryKey.unsafeOf("half_vertical_right");
+
+    RegistryKey<BannerPattern> MOJANG = RegistryKey.unsafeOf("mojang");
+
+    RegistryKey<BannerPattern> PIGLIN = RegistryKey.unsafeOf("piglin");
+
+    RegistryKey<BannerPattern> RHOMBUS = RegistryKey.unsafeOf("rhombus");
+
+    RegistryKey<BannerPattern> SKULL = RegistryKey.unsafeOf("skull");
+
+    RegistryKey<BannerPattern> SMALL_STRIPES = RegistryKey.unsafeOf("small_stripes");
+
+    RegistryKey<BannerPattern> SQUARE_BOTTOM_LEFT = RegistryKey.unsafeOf("square_bottom_left");
+
+    RegistryKey<BannerPattern> SQUARE_BOTTOM_RIGHT = RegistryKey.unsafeOf("square_bottom_right");
+
+    RegistryKey<BannerPattern> SQUARE_TOP_LEFT = RegistryKey.unsafeOf("square_top_left");
+
+    RegistryKey<BannerPattern> SQUARE_TOP_RIGHT = RegistryKey.unsafeOf("square_top_right");
+
+    RegistryKey<BannerPattern> STRAIGHT_CROSS = RegistryKey.unsafeOf("straight_cross");
+
+    RegistryKey<BannerPattern> STRIPE_BOTTOM = RegistryKey.unsafeOf("stripe_bottom");
+
+    RegistryKey<BannerPattern> STRIPE_CENTER = RegistryKey.unsafeOf("stripe_center");
+
+    RegistryKey<BannerPattern> STRIPE_DOWNLEFT = RegistryKey.unsafeOf("stripe_downleft");
+
+    RegistryKey<BannerPattern> STRIPE_DOWNRIGHT = RegistryKey.unsafeOf("stripe_downright");
+
     RegistryKey<BannerPattern> STRIPE_LEFT = RegistryKey.unsafeOf("stripe_left");
+
+    RegistryKey<BannerPattern> STRIPE_MIDDLE = RegistryKey.unsafeOf("stripe_middle");
+
+    RegistryKey<BannerPattern> STRIPE_RIGHT = RegistryKey.unsafeOf("stripe_right");
+
+    RegistryKey<BannerPattern> STRIPE_TOP = RegistryKey.unsafeOf("stripe_top");
+
+    RegistryKey<BannerPattern> TRIANGLE_BOTTOM = RegistryKey.unsafeOf("triangle_bottom");
+
+    RegistryKey<BannerPattern> TRIANGLE_TOP = RegistryKey.unsafeOf("triangle_top");
 
     RegistryKey<BannerPattern> TRIANGLES_BOTTOM = RegistryKey.unsafeOf("triangles_bottom");
 
-    RegistryKey<BannerPattern> STRAIGHT_CROSS = RegistryKey.unsafeOf("straight_cross");
+    RegistryKey<BannerPattern> TRIANGLES_TOP = RegistryKey.unsafeOf("triangles_top");
 }

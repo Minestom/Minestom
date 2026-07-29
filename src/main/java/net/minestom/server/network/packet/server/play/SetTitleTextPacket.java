@@ -17,7 +17,7 @@ public record SetTitleTextPacket(Component title) implements ServerPacket.Play, 
             SetTitleTextPacket::new);
 
     @Override
-    public Collection<Component> components() {
+    public List<Component> components() {
         return List.of(this.title);
     }
 

@@ -67,8 +67,8 @@ public interface EventFilter<E extends Event, H> {
     @Nullable H getHandler(E event);
 
     @ApiStatus.Internal
+    @SuppressWarnings("unchecked")
     default @Nullable H castHandler(Object event) {
-        //noinspection unchecked
         return getHandler((E) event);
     }
 

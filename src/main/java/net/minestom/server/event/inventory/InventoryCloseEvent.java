@@ -28,6 +28,7 @@ public class InventoryCloseEvent implements InventoryEvent, PlayerInstanceEvent 
      *
      * @return the player who closed the inventory
      */
+    @Override
     public Player getPlayer() {
         return player;
     }

@@ -3,6 +3,7 @@ package net.minestom.server.network.player;
 import net.minestom.server.network.NetworkBuffer;
 import org.junit.jupiter.api.Test;
 
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 
@@ -10,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ProxyProtocolDecoderTest {
-    private static final InetSocketAddress ORIGINAL = new InetSocketAddress("127.0.0.1", 25565);
+    private static final InetSocketAddress ORIGINAL = new InetSocketAddress(InetAddress.getLoopbackAddress(), 25565);
 
     @Test
     void waitsForFragmentedV1Header() throws Exception {

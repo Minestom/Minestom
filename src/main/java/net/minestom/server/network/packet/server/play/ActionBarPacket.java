@@ -17,7 +17,7 @@ public record ActionBarPacket(Component text) implements ServerPacket.Play, Serv
             ActionBarPacket::new);
 
     @Override
-    public Collection<Component> components() {
+    public List<Component> components() {
         return List.of(this.text);
     }
 

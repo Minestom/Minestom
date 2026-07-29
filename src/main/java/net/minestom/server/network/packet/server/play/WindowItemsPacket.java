@@ -30,7 +30,7 @@ public record WindowItemsPacket(int windowId, int stateId, List<ItemStack> items
     }
 
     @Override
-    public Collection<Component> components() {
+    public List<Component> components() {
         final var list = new ArrayList<>(this.items);
         list.add(this.carriedItem);
 

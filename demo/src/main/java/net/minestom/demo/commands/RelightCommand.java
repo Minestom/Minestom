@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 public class RelightCommand extends Command {
     public RelightCommand() {
         super("relight");
-        setDefaultExecutor((source, args) -> {
+        setDefaultExecutor((source, _) -> {
             if (source instanceof Player player) {
                 long start = System.nanoTime();
                 source.sendMessage("Relighting...");

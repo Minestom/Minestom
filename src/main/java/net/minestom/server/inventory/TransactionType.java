@@ -124,7 +124,7 @@ public interface TransactionType {
 
     default Pair<ItemStack, Map<Integer, ItemStack>> process(AbstractInventory inventory,
                                                                       ItemStack itemStack) {
-        return process(inventory, itemStack, (slot, itemStack1) -> true);
+        return process(inventory, itemStack, (_, _) -> true);
     }
 
     @FunctionalInterface

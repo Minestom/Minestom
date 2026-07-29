@@ -17,7 +17,7 @@ final class TagHandlerImpl implements TagHandler {
     static final Serializers.Entry<Node, CompoundBinaryTag> NODE_SERIALIZER = new Serializers.Entry<>(BinaryTagTypes.COMPOUND, entries -> fromCompound(entries).root, Node::compound, true);
 
     private final Node root;
-    private volatile Node copy;
+    private volatile @Nullable Node copy;
 
     TagHandlerImpl(Node root) {
         this.root = root;
@@ -27,9 +27,13 @@ final class TagHandlerImpl implements TagHandler {
         this.root = new Node();
     }
 
+    private static <T> Entry<T> makeNbtEntry(TagNbtSeparator.Entry<T> nbtEntry) {
+        return new Entry<>(nbtEntry.tag(), nbtEntry.value());
+    }
+
     static TagHandlerImpl fromCompound(CompoundBinaryTag compound) {
         TagHandlerImpl handler = new TagHandlerImpl();
-        TagNbtSeparator.separate(compound, entry -> handler.setTag(entry.tag(), entry.value()));
+        TagNbtSeparator.separate(compound, entry -> entry.write(handler));
         handler.root.compound = compound;
         return handler;
     }
@@ -62,9 +66,11 @@ final class TagHandlerImpl implements TagHandler {
             return; // Tried to remove an absent tag. Do nothing
         StaticIntMap<Entry<?>> entries = node.entries;
         if (value != null) {
-            Entry previous = entries.get(tagIndex);
+            Entry<?> previous = entries.get(tagIndex);
             if (previous != null && previous.tag.shareValue(tag)) {
-                previous.updateValue(tag.copyValue(value));
+                @SuppressWarnings("unchecked")
+                final Entry<T> previousTyped = (Entry<T>) previous;
+                previousTyped.updateValue(tag.copyValue(value));
             } else {
                 synchronized (this) {
                     node = traversePathWrite(root, tag, true);
@@ -101,6 +107,7 @@ final class TagHandlerImpl implements TagHandler {
         return updateTag0(tag, value, true);
     }
 
+    @SuppressWarnings("unchecked")
     private synchronized <T> @UnknownNullability T updateTag0(Tag<T> tag, UnaryOperator<T> value, boolean returnPrevious) {
         TagImpl<T> tagImpl = (TagImpl<T>) tag;
         final Node node = traversePathWrite(root, tag, true);
@@ -115,7 +122,7 @@ final class TagHandlerImpl implements TagHandler {
         final int tagIndex = tagImpl.index();
         StaticIntMap<Entry<?>> entries = node.entries;
 
-        final Entry previousEntry = entries.get(tagIndex);
+        final Entry<?> previousEntry = entries.get(tagIndex);
         final T previousValue;
         if (previousEntry != null) {
             final Object previousTmp = previousEntry.value;
@@ -221,8 +228,7 @@ final class TagHandlerImpl implements TagHandler {
                 final TagHandlerImpl handler = fromCompound(compound);
                 return Entry.makePathEntry(tag, new Node(parent, handler.root.entries));
             } else {
-                final var nbtEntry = TagNbtSeparator.separateSingle(tag.key(), nbt);
-                return new Entry<>(nbtEntry.tag(), nbtEntry.value());
+                return makeNbtEntry(TagNbtSeparator.separateSingle(tag.key(), nbt));
             }
         } else {
             return new Entry<>((TagImpl<? super T>) tag, tag.copyValue(value));
@@ -248,6 +254,7 @@ final class TagHandlerImpl implements TagHandler {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public <T> @UnknownNullability T getTag(Tag<T> tag) {
             final Node node = traversePathRead(this, tag);
             if (node == null)
@@ -262,7 +269,6 @@ final class TagHandlerImpl implements TagHandler {
             if (entry.tag.shareValue(tag)) {
                 // The tag used to write the entry is compatible with the one used to get
                 // return the value directly
-                //noinspection unchecked
                 return (T) entry.value;
             }
             // Value must be parsed from nbt if the tag is different
@@ -286,7 +292,7 @@ final class TagHandlerImpl implements TagHandler {
                     final TagImpl<?> tag = entry.tag;
                     final BinaryTag nbt = entry.updatedNbt();
                     if (nbt != null && (!tag.entry().isPath() || ServerFlag.SERIALIZE_EMPTY_COMPOUND || !((CompoundBinaryTag) nbt).isEmpty())) {
-                        tmp.put(tag.getKey(), nbt);
+                        tmp.put(tag.key(), nbt);
                     }
                 });
                 this.compound = compound = tmp.build();
@@ -295,6 +301,7 @@ final class TagHandlerImpl implements TagHandler {
         }
 
         @Contract("null -> !null")
+        @SuppressWarnings("unchecked")
         @Nullable Node copy(@Nullable Node parent) {
             CompoundBinaryTag.Builder tmp = CompoundBinaryTag.builder();
             Node result = new Node(parent, new StaticIntMap.Array<>());
@@ -315,11 +322,11 @@ final class TagHandlerImpl implements TagHandler {
                 }
 
                 if (nbt != null)
-                    tmp.put(tag.getKey(), nbt);
+                    tmp.put(tag.key(), nbt);
                 entries.put(tag.index(), valueToEntry(result, (Tag<Object>) tag, value));
             });
             var compound = tmp.build();
-            if ((!ServerFlag.SERIALIZE_EMPTY_COMPOUND) && compound.isEmpty() && parent != null)
+            if (!ServerFlag.SERIALIZE_EMPTY_COMPOUND && compound.isEmpty() && parent != null)
                 return null; // Empty child node
             result.compound = compound;
             return result;
@@ -330,6 +337,15 @@ final class TagHandlerImpl implements TagHandler {
             do tmp.compound = null;
             while ((tmp = tmp.parent) != null);
             TagHandlerImpl.this.copy = null;
+        }
+
+        @Override
+        public String toString() {
+            return "Node{" +
+                    "parent=" + parent +
+                    ", entries=" + entries +
+                    ", compound=" + compound +
+                    '}';
         }
     }
 
@@ -348,7 +364,7 @@ final class TagHandlerImpl implements TagHandler {
         }
 
         static Entry<?> makePathEntry(Tag<?> tag, Node node) {
-            return makePathEntry(tag.getKey(), node);
+            return makePathEntry(tag.key(), node);
         }
 
         @Nullable BinaryTag updatedNbt() {

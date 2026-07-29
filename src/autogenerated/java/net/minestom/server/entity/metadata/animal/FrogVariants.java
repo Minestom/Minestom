@@ -9,9 +9,9 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface FrogVariants permits FrogVariant {
-    RegistryKey<FrogVariant> WARM = RegistryKey.unsafeOf("warm");
-
     RegistryKey<FrogVariant> COLD = RegistryKey.unsafeOf("cold");
 
     RegistryKey<FrogVariant> TEMPERATE = RegistryKey.unsafeOf("temperate");
+
+    RegistryKey<FrogVariant> WARM = RegistryKey.unsafeOf("warm");
 }

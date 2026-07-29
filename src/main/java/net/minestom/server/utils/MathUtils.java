@@ -43,7 +43,7 @@ public final class MathUtils {
         // +45f gives a 90° angle for the direction (-1° and 1° are towards the same direction)
         int directionIndex = (int) Math.floor(((yawInDegrees + 45f) / 90f));
         if (directionIndex < 0) {
-            directionIndex = (-directionIndex) % Direction.HORIZONTAL.length;
+            directionIndex = -directionIndex % Direction.HORIZONTAL.length;
             directionIndex = Direction.HORIZONTAL.length - directionIndex;
         }
         directionIndex %= Direction.HORIZONTAL.length;

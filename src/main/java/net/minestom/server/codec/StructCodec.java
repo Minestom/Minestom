@@ -3406,7 +3406,7 @@ public interface StructCodec<R> extends Codec<R> {
                 case Result.Ok(D innerValue) -> Objects.equals(innerValue, coder.createNull())
                         ? new Result.Ok<>(defaultValue)
                         : inner.decode(coder, innerValue).mapError(e -> key + ": " + e);
-                case Result.Error(String ignored) -> new Result.Ok<>(defaultValue);
+                case Result.Error(String _) -> new Result.Ok<>(defaultValue);
             };
         }
         return map.getValue(key)

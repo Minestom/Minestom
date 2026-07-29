@@ -5,13 +5,15 @@ import net.minestom.server.thread.Acquirable;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Comparator;
+import org.jetbrains.annotations.Nullable;
 
 public class ExperienceOrb extends Entity {
 
     private short experienceCount;
-    private Player target;
+    private @Nullable Player target;
     private long lastTargetUpdateTick;
 
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     public ExperienceOrb(short experienceCount) {
         super(EntityType.EXPERIENCE_ORB);
         setBoundingBox(0.5f, 0.5f, 0.5f);
@@ -31,7 +33,6 @@ public class ExperienceOrb extends Entity {
 
         //todo lava
 
-        double d = 8.0;
         if (lastTargetUpdateTick < time - 20 + getEntityId() % 100) {
             if (target == null || target.getPosition().distanceSquared(getPosition()) > 64) {
                 this.target = getClosestPlayer(this, 8);
@@ -97,7 +98,7 @@ public class ExperienceOrb extends Entity {
         getViewers().forEach(this::addViewer);
     }
 
-    private Player getClosestPlayer(Entity entity, float maxDistance) {
+    private static Player getClosestPlayer(Entity entity, float maxDistance) {
         Player closest = entity.getInstance()
                 .getPlayers()
                 .stream()

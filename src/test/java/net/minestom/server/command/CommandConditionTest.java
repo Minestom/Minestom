@@ -25,8 +25,8 @@ public class CommandConditionTest {
         AtomicBoolean called = new AtomicBoolean(false);
 
         var command1 = new Command("name");
-        command1.setDefaultExecutor((sender1, context) -> called.set(true));
-        command1.setCondition((s, commandString) -> s == sender);
+        command1.setDefaultExecutor((_, _) -> called.set(true));
+        command1.setCondition((s, _) -> s == sender);
 
         dispatcher.register(command1);
 
@@ -48,12 +48,12 @@ public class CommandConditionTest {
         AtomicBoolean called = new AtomicBoolean(false);
 
         var command1 = new Command("name");
-        command1.setDefaultExecutor((sender1, context) -> called.set(true));
+        command1.setDefaultExecutor((_, _) -> called.set(true));
 
         {
             var sub = new Command("sub");
-            sub.setDefaultExecutor((sender1, context) -> called.set(true));
-            sub.setCondition((s, commandString) -> s == sender);
+            sub.setDefaultExecutor((_, _) -> called.set(true));
+            sub.setCondition((s, _) -> s == sender);
 
             command1.addSubcommand(sub);
         }
@@ -92,12 +92,12 @@ public class CommandConditionTest {
         AtomicBoolean called = new AtomicBoolean(false);
 
         var command1 = new Command("name");
-        command1.setDefaultExecutor((sender1, context) -> called.set(true));
-        command1.setCondition((s, commandString) -> s == sender);
+        command1.setDefaultExecutor((_, _) -> called.set(true));
+        command1.setCondition((s, _) -> s == sender);
 
         {
             var sub = new Command("sub");
-            sub.setDefaultExecutor((sender1, context) -> called.set(true));
+            sub.setDefaultExecutor((_, _) -> called.set(true));
             command1.addSubcommand(sub);
         }
 
@@ -134,8 +134,8 @@ public class CommandConditionTest {
         AtomicBoolean called = new AtomicBoolean(false);
 
         var command = new Command("admin");
-        command.setCondition((sender, commandString) -> sender == adminSender);
-        command.addSyntax((sender, context) -> called.set(true));
+        command.setCondition((sender, _) -> sender == adminSender);
+        command.addSyntax((_, _) -> called.set(true));
 
         dispatcher.register(command);
 
@@ -157,9 +157,9 @@ public class CommandConditionTest {
         AtomicBoolean called = new AtomicBoolean(false);
 
         var command = new Command("test");
-        command.setCondition((sender, commandString) -> sender == sender1 || sender == sender2);
-        command.addConditionalSyntax((sender, commandString) -> sender == sender1 || sender == sender3,
-                (sender, context) -> called.set(true));
+        command.setCondition((sender, _) -> sender == sender1 || sender == sender2);
+        command.addConditionalSyntax((sender, _) -> sender == sender1 || sender == sender3,
+                (_, _) -> called.set(true));
 
         dispatcher.register(command);
 
@@ -185,11 +185,11 @@ public class CommandConditionTest {
         AtomicInteger executionCount = new AtomicInteger(0);
 
         var command = new Command("multi");
-        command.setCondition((sender, commandString) -> sender == sender1 || sender == sender2);
+        command.setCondition((sender, _) -> sender == sender1 || sender == sender2);
 
         // First zero-arg syntax with additional condition
-        command.addConditionalSyntax((sender, commandString) -> sender == sender1,
-                (sender, context) -> executionCount.incrementAndGet());
+        command.addConditionalSyntax((sender, _) -> sender == sender1,
+                (_, _) -> executionCount.incrementAndGet());
 
         dispatcher.register(command);
 
@@ -217,9 +217,9 @@ public class CommandConditionTest {
         AtomicBoolean syntaxCalled = new AtomicBoolean(false);
 
         var command = new Command("cmd");
-        command.setCondition((sender, commandString) -> sender == adminSender);
-        command.setDefaultExecutor((sender, context) -> defaultCalled.set(true));
-        command.addSyntax((sender, context) -> syntaxCalled.set(true), Integer("value"));
+        command.setCondition((sender, _) -> sender == adminSender);
+        command.setDefaultExecutor((_, _) -> defaultCalled.set(true));
+        command.addSyntax((_, _) -> syntaxCalled.set(true), Integer("value"));
 
         dispatcher.register(command);
 
@@ -253,12 +253,12 @@ public class CommandConditionTest {
         AtomicBoolean called = new AtomicBoolean(false);
 
         var rootCmd = new Command("root");
-        rootCmd.setCondition((sender, commandString) -> sender == adminSender);
+        rootCmd.setCondition((sender, _) -> sender == adminSender);
 
         var level1 = new Command("level1");
         var level2 = new Command("level2");
         var level3 = new Command("level3");
-        level3.setDefaultExecutor((sender, context) -> called.set(true));
+        level3.setDefaultExecutor((_, _) -> called.set(true));
 
         level2.addSubcommand(level3);
         level1.addSubcommand(level2);
@@ -286,8 +286,8 @@ public class CommandConditionTest {
 
         var command = new Command("test");
         // No command condition set
-        command.addConditionalSyntax((sender, commandString) -> sender == sender1,
-                (sender, context) -> called.set(true));
+        command.addConditionalSyntax((sender, _) -> sender == sender1,
+                (_, _) -> called.set(true));
 
         dispatcher.register(command);
 
@@ -311,14 +311,14 @@ public class CommandConditionTest {
         AtomicInteger whichSyntax = new AtomicInteger(0);
 
         var command = new Command("mixed");
-        command.setCondition((sender, commandString) -> sender == sender1 || sender == sender2);
+        command.setCondition((sender, _) -> sender == sender1 || sender == sender2);
 
         // Syntax 1: zero-arg, no additional condition (should use command condition only)
-        command.addSyntax((sender, context) -> whichSyntax.set(1));
+        command.addSyntax((_, _) -> whichSyntax.set(1));
 
         // Syntax 2: with arg and additional condition
-        command.addConditionalSyntax((sender, commandString) -> sender == sender1,
-                (sender, context) -> whichSyntax.set(2), Literal("special"));
+        command.addConditionalSyntax((sender, _) -> sender == sender1,
+                (_, _) -> whichSyntax.set(2), Literal("special"));
 
         dispatcher.register(command);
 
@@ -357,11 +357,11 @@ public class CommandConditionTest {
         AtomicBoolean called = new AtomicBoolean(false);
 
         var parent = new Command("parent");
-        parent.setCondition((sender, commandString) -> sender == sender1 || sender == sender2);
+        parent.setCondition((sender, _) -> sender == sender1 || sender == sender2);
 
         var child = new Command("child");
-        child.setCondition((sender, commandString) -> sender == sender1 || sender == sender3);
-        child.setDefaultExecutor((sender, context) -> called.set(true));
+        child.setCondition((sender, _) -> sender == sender1 || sender == sender3);
+        child.setDefaultExecutor((_, _) -> called.set(true));
 
         parent.addSubcommand(child);
         dispatcher.register(parent);
@@ -390,9 +390,9 @@ public class CommandConditionTest {
         AtomicBoolean syntaxCalled = new AtomicBoolean(false);
 
         var command = new Command("cmd");
-        command.setCondition((sender, commandString) -> sender == adminSender);
-        command.setDefaultExecutor((sender, context) -> defaultCalled.set(true));
-        command.addSyntax((sender, context) -> syntaxCalled.set(true)); // zero-arg syntax
+        command.setCondition((sender, _) -> sender == adminSender);
+        command.setDefaultExecutor((_, _) -> defaultCalled.set(true));
+        command.addSyntax((_, _) -> syntaxCalled.set(true)); // zero-arg syntax
 
         dispatcher.register(command);
 
@@ -414,8 +414,8 @@ public class CommandConditionTest {
         var normalSender = new Sender();
 
         var command = new Command("admin");
-        command.setCondition((sender, commandString) -> sender == adminSender);
-        command.addSyntax((sender, context) -> {});
+        command.setCondition((sender, _) -> sender == adminSender);
+        command.addSyntax((_, _) -> {});
 
         Graph graph = Graph.fromCommand(command);
         Graph.Node root = graph.root();
@@ -431,8 +431,8 @@ public class CommandConditionTest {
         var adminSender = new Sender();
 
         var command = new Command("admin");
-        command.setCondition((sender, commandString) -> sender == adminSender);
-        command.addSyntax((sender, context) -> {}, Integer("value"));
+        command.setCondition((sender, _) -> sender == adminSender);
+        command.addSyntax((_, _) -> {}, Integer("value"));
 
         Graph graph = Graph.fromCommand(command);
         Graph.Node root = graph.root();
@@ -451,12 +451,12 @@ public class CommandConditionTest {
         var adminSender = new Sender();
 
         var command1 = new Command("test");
-        command1.setCondition((sender, commandString) -> sender == adminSender);
-        command1.addSyntax((sender, context) -> {});
+        command1.setCondition((sender, _) -> sender == adminSender);
+        command1.addSyntax((_, _) -> {});
 
         var command2 = new Command("test");
         // No condition
-        command2.addSyntax((sender, context) -> {});
+        command2.addSyntax((_, _) -> {});
 
         Graph graph1 = Graph.fromCommand(command1);
         Graph graph2 = Graph.fromCommand(command2);

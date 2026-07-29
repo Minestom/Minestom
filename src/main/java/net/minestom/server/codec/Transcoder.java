@@ -16,6 +16,9 @@ import java.util.List;
  * Commonly used transcoders are accessible through static fields like {@link Transcoder#JSON}
  * @param <D> the intermediary type used by the transcoder
  */
+// Static fields intentionally construct the implementation subclass; the cycle cannot
+// race because the implementation types are only ever reached through this interface
+@SuppressWarnings("ClassInitializationDeadlock")
 public interface Transcoder<D> {
 
     Transcoder<BinaryTag> NBT = TranscoderNbtImpl.INSTANCE;
@@ -359,7 +362,7 @@ public interface Transcoder<D> {
         Result<D> getValue(String key);
 
         /**
-         * @return the size of the map
+         * {@return the size of the map}
          */
         @Contract(pure = true)
         default int size() {
@@ -367,7 +370,7 @@ public interface Transcoder<D> {
         }
 
         /**
-         * @return true if the size is zero
+         * {@return true if the size is zero}
          */
         @Contract(pure = true)
         default boolean isEmpty() {

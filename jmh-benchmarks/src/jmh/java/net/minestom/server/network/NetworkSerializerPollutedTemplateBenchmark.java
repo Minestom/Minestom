@@ -26,7 +26,7 @@ public class NetworkSerializerPollutedTemplateBenchmark {
 
     @Setup(Level.Trial)
     public void setupTrial() {
-        polluters = new Polluter[]{
+        polluters = new Polluter<?>[]{
                 polluter(NetworkBufferTemplate.template(BOOLEAN, BooleanPacket::value, BooleanPacket::new), new BooleanPacket(true)),
                 polluter(NetworkBufferTemplate.template(BYTE, BytePacket::value, BytePacket::new), new BytePacket((byte) 1)),
                 polluter(NetworkBufferTemplate.template(SHORT, ShortPacket::value, ShortPacket::new), new ShortPacket((short) 2)),

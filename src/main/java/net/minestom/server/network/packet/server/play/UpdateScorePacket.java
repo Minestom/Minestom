@@ -31,7 +31,7 @@ public record UpdateScorePacket(
     );
 
     @Override
-    public Collection<Component> components() {
+    public List<Component> components() {
         List<Component> list = new ArrayList<>();
 
         if (displayName != null) {

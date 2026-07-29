@@ -79,7 +79,7 @@ public class GeneratorTest {
         final int chunkZ = -2;
         final int sectionCount = maxSection - minSection;
         GenSection[] sections = new GenSection[sectionCount];
-        Arrays.setAll(sections, i -> new GenSection());
+        Arrays.setAll(sections, _ -> new GenSection());
         GenerationUnit chunk = GeneratorImpl.chunk(null, sections, chunkX, minSection, chunkZ);
         assertEquals(new BlockVec(16, sectionCount * 16, 16), chunk.size());
         assertEquals(new BlockVec(chunkX * 16, minSection * 16, chunkZ * 16), chunk.absoluteStart());
@@ -94,7 +94,7 @@ public class GeneratorTest {
         final int chunkZ = -2;
         final int sectionCount = maxSection - minSection;
         GenSection[] sections = new GenSection[sectionCount];
-        Arrays.setAll(sections, i -> new GenSection());
+        Arrays.setAll(sections, _ -> new GenSection());
         GenerationUnit chunk = GeneratorImpl.chunk(null, sections, chunkX, minSection, chunkZ);
         assertEquals(new BlockVec(16, sectionCount * 16, 16), chunk.size());
         assertEquals(new BlockVec(chunkX * 16, minSection * 16, chunkZ * 16), chunk.absoluteStart());
@@ -120,7 +120,7 @@ public class GeneratorTest {
         final int chunkZ = -2;
         final int sectionCount = maxSection - minSection;
         GenSection[] sections = new GenSection[sectionCount];
-        Arrays.setAll(sections, i -> new GenSection());
+        Arrays.setAll(sections, _ -> new GenSection());
         GenerationUnit chunk = GeneratorImpl.chunk(null, sections, chunkX, minSection, chunkZ);
         var subUnits = chunk.subdivide();
         assertEquals(sectionCount, subUnits.size());
@@ -140,7 +140,7 @@ public class GeneratorTest {
         final int chunkZ = -2;
         final int sectionCount = maxSection - minSection;
         GenSection[] sections = new GenSection[sectionCount];
-        Arrays.setAll(sections, i -> new GenSection());
+        Arrays.setAll(sections, _ -> new GenSection());
         var chunkUnits = GeneratorImpl.chunk(null, sections, chunkX, minSection, chunkZ);
         Generator generator = chunk -> {
             var modifier = chunk.modifier();
@@ -161,7 +161,7 @@ public class GeneratorTest {
         final int chunkZ = -2;
         final int sectionCount = maxSection - minSection;
         GenSection[] sections = new GenSection[sectionCount];
-        Arrays.setAll(sections, i -> new GenSection());
+        Arrays.setAll(sections, _ -> new GenSection());
         var chunkUnits = GeneratorImpl.chunk(null, sections, chunkX, minSection, chunkZ);
         Generator generator = chunk -> {
             var modifier = chunk.modifier();
@@ -176,7 +176,7 @@ public class GeneratorTest {
         };
         generator.generate(chunkUnits);
         for (var section : sections) {
-            section.blocks().getAll((x, y, z, value) ->
+            section.blocks().getAll((_, _, _, value) ->
                     assertEquals(Block.STONE.stateId(), value));
         }
     }
@@ -189,7 +189,7 @@ public class GeneratorTest {
         final int chunkZ = -2;
         final int sectionCount = maxSection - minSection;
         GenSection[] sections = new GenSection[sectionCount];
-        Arrays.setAll(sections, i -> new GenSection());
+        Arrays.setAll(sections, _ -> new GenSection());
         var chunkUnits = GeneratorImpl.chunk(null, sections, chunkX, minSection, chunkZ);
         Generator generator = chunk -> {
             var modifier = chunk.modifier();
@@ -216,7 +216,7 @@ public class GeneratorTest {
         final int chunkZ = -2;
         final int sectionCount = maxSection - minSection;
         GenSection[] sections = new GenSection[sectionCount];
-        Arrays.setAll(sections, i -> new GenSection());
+        Arrays.setAll(sections, _ -> new GenSection());
         var chunkUnits = GeneratorImpl.chunk(null, sections, chunkX, minSection, chunkZ);
         Generator generator = chunk -> {
             var modifier = chunk.modifier();
@@ -232,7 +232,7 @@ public class GeneratorTest {
         };
         generator.generate(chunkUnits);
         for (var section : sections) {
-            section.blocks().getAll((x, y, z, value) ->
+            section.blocks().getAll((_, _, _, value) ->
                     assertEquals(Block.STONE.stateId(), value));
         }
     }
@@ -243,14 +243,14 @@ public class GeneratorTest {
         final int maxSection = 5;
         final int sectionCount = maxSection - minSection;
         GenSection[] sections = new GenSection[sectionCount];
-        Arrays.setAll(sections, i -> new GenSection());
+        Arrays.setAll(sections, _ -> new GenSection());
         var chunkUnits = GeneratorImpl.chunk(null, sections, 3, minSection, -2);
         Generator generator = chunk -> chunk.modifier().fillHeight(0, 32, Block.STONE);
         generator.generate(chunkUnits);
 
         AtomicInteger index = new AtomicInteger(minSection);
         for (var section : sections) {
-            section.blocks().getAll((x, y, z, value) -> {
+            section.blocks().getAll((_, _, _, value) -> {
                 if (index.get() == 0 || index.get() == 1) {
                     assertEquals(Block.STONE.stateId(), value, "filling failed for section " + index.get());
                 } else {
@@ -267,7 +267,7 @@ public class GeneratorTest {
         final int maxSection = 5;
         final int sectionCount = maxSection - minSection;
         GenSection[] sections = new GenSection[sectionCount];
-        Arrays.setAll(sections, i -> new GenSection());
+        Arrays.setAll(sections, _ -> new GenSection());
         var chunkUnits = GeneratorImpl.chunk(null, sections, 3, minSection, -2);
         Generator generator = chunk -> chunk.modifier().fillHeight(1, 33, Block.STONE);
         generator.generate(chunkUnits);
@@ -305,7 +305,7 @@ public class GeneratorTest {
         var chunkUnit = GeneratorImpl.section(null, section, -1, -1, 0);
         Generator generator = chunk -> chunk.modifier().fill(Block.STONE);
         generator.generate(chunkUnit);
-        section.blocks().getAll((x, y, z, value) ->
+        section.blocks().getAll((_, _, _, value) ->
                 assertEquals(Block.STONE.stateId(), value));
     }
 
@@ -344,7 +344,7 @@ public class GeneratorTest {
 
         final int sectionCount = maxSection - minSection;
         GenSection[] sections = new GenSection[sectionCount];
-        Arrays.setAll(sections, i -> new GenSection());
+        Arrays.setAll(sections, _ -> new GenSection());
         var chunkUnits = GeneratorImpl.chunk(null, sections, 0, minSection, 0);
         Generator generator = unit -> {
             if (unit.absoluteStart().x() == 0 && unit.absoluteStart().z() == 0) {
@@ -366,7 +366,7 @@ public class GeneratorTest {
                 GeneratorImpl.UnitImpl unit = (GeneratorImpl.UnitImpl) section;
                 GeneratorImpl.SectionModifierImpl modifier = (GeneratorImpl.SectionModifierImpl) unit.modifier();
 
-                modifier.genSection().blocks().getAllPresent((x, y, z, state) -> {
+                modifier.genSection().blocks().getAllPresent((x, y, z, _) -> {
                     final Point blockPos = modifier.start().add(x, y, z);
                     stones.add(blockPos);
                 });
@@ -492,7 +492,7 @@ public class GeneratorTest {
         final int chunkZ = -2;
         final int sectionCount = maxSection - minSection;
         GenSection[] sections = new GenSection[sectionCount];
-        Arrays.setAll(sections, i -> new GenSection());
+        Arrays.setAll(sections, _ -> new GenSection());
         var chunkUnit = GeneratorImpl.chunk(null, sections, chunkX, minSection, chunkZ);
 
         var unitSections = chunkUnit.sections();

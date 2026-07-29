@@ -32,6 +32,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 @EnvTest
+// Deliberately keeps coverage of the deprecated legacy world layout until its removal
+@SuppressWarnings("removal")
 public class AnvilLoaderIntegrationTest {
     private static final Path WORLD_RESOURCES = Path.of("src", "test", "resources", "net", "minestom", "server", "instance");
 
@@ -196,7 +198,7 @@ public class AnvilLoaderIntegrationTest {
         });
         Chunk originalChunk = instance.loadChunk(0, 0).join();
 
-        instance.saveChunkToStorage(originalChunk);
+        instance.saveChunkToStorage(originalChunk).join();
         instance.unloadChunk(originalChunk);
         assertNull(instance.getChunk(0, 0));
 
@@ -235,7 +237,7 @@ public class AnvilLoaderIntegrationTest {
         assertEquals(block, instance.getBlock(BlockVec.ZERO));
     }
 
-    private static Collection<BlockVec> provideLocationsForLoadAndSaveBlockHandler() {
+    private static List<BlockVec> provideLocationsForLoadAndSaveBlockHandler() {
         return List.of(BlockVec.ZERO,
                 new BlockVec(0, 15, 0),
                 new BlockVec(0, 16, 0),
@@ -352,14 +354,21 @@ public class AnvilLoaderIntegrationTest {
             for (int chunkZ = 0; chunkZ < 16; chunkZ++) {
                 final Chunk originalChunk = instance.loadChunk(chunkX, chunkZ).join();
                 final Chunk chunk = secondInstance.loadChunk(chunkX, chunkZ).join();
-                for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
-                    for (int y = secondInstance.getCachedDimensionType().minY(); y < secondInstance.getCachedDimensionType().maxY(); y++) {
-                        for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
-                            final Block originalBlock = instance.getBlock(x, y, z);
-                            final Block block = secondInstance.getBlock(x, y, z);
-                            assertEquals(originalBlock, block);
+                originalChunk.lockReadLock();
+                chunk.lockReadLock();
+                try {
+                    for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
+                        for (int y = secondInstance.getCachedDimensionType().minY(); y < secondInstance.getCachedDimensionType().maxY(); y++) {
+                            for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
+                                final Block originalBlock = originalChunk.getBlock(x, y, z);
+                                final Block block = chunk.getBlock(x, y, z);
+                                assertEquals(originalBlock, block);
+                            }
                         }
                     }
+                } finally {
+                    chunk.unlockReadLock();
+                    originalChunk.unlockReadLock();
                 }
             }
         }

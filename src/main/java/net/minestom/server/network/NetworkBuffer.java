@@ -297,7 +297,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     static NetworkBuffer staticBuffer(long size) {
-        return staticBuffer(size, null);
+        return builder(size).build();
     }
 
     static NetworkBuffer resizableBuffer(long initialSize, Registries registries) {
@@ -308,7 +308,9 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     static NetworkBuffer resizableBuffer(int initialSize) {
-        return resizableBuffer(initialSize, null);
+        return builder(initialSize)
+                .autoResize(AutoResize.DOUBLE)
+                .build();
     }
 
     static NetworkBuffer resizableBuffer(Registries registries) {
@@ -316,7 +318,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     static NetworkBuffer resizableBuffer() {
-        return resizableBuffer(null);
+        return resizableBuffer(256);
     }
 
     static NetworkBuffer wrap(MemorySegment segment, long readIndex, long writeIndex, @Nullable Registries registries) {

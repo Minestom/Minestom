@@ -1,7 +1,11 @@
 package net.minestom.testing;
 
 import net.minestom.server.MinecraftServer;
-import org.junit.jupiter.api.extension.*;
+import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.ParameterContext;
+import org.junit.jupiter.api.extension.ParameterResolver;
 
 final class EnvTestExt implements
         BeforeEachCallback,
@@ -16,11 +20,11 @@ final class EnvTestExt implements
     }
 
     @Override
-    public Object resolveParameter(ParameterContext parameterContext,
-                                   ExtensionContext extensionContext) {
+    public Env resolveParameter(ParameterContext parameterContext,
+                                ExtensionContext extensionContext) {
         return extensionContext.getStore(ExtensionContext.Namespace.create(getClass()))
-                .getOrComputeIfAbsent(ENV_KEY,
-                        key -> new EnvImpl(MinecraftServer.updateProcess()),
+                .computeIfAbsent(ENV_KEY,
+                        _ -> new EnvImpl(MinecraftServer.updateProcess()),
                         EnvImpl.class);
     }
 

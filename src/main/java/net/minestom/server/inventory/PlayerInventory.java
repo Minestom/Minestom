@@ -50,7 +50,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
         return 0;
     }
 
-    private int getSlotId(EquipmentSlot slot, byte heldSlot) {
+    private static int getSlotId(EquipmentSlot slot, byte heldSlot) {
         return switch (slot) {
             case MAIN_HAND -> heldSlot;
             case OFF_HAND -> OFFHAND_SLOT;
@@ -58,7 +58,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
         };
     }
 
-    private @Nullable EquipmentSlot getEquipmentSlot(int slot, byte heldSlot) {
+    private static @Nullable EquipmentSlot getEquipmentSlot(int slot, byte heldSlot) {
         return switch (slot) {
             case OFFHAND_SLOT -> EquipmentSlot.OFF_HAND;
             case HELMET_SLOT -> EquipmentSlot.HELMET;

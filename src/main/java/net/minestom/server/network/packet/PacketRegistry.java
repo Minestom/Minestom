@@ -31,6 +31,7 @@ public interface PacketRegistry<T> extends Iterable<PacketRegistry.PacketInfo<? 
     }
 
     @SafeVarargs
+    @SuppressWarnings("varargs")
     static <T> PacketRegistry<T> registry(ConnectionState state, ConnectionSide side,
                                           Map.Entry<? extends Class<? extends T>, ? extends NetworkBuffer.Type<? extends T>>... entries) {
         return new PacketRegistryImpl<>(state, side, entries);

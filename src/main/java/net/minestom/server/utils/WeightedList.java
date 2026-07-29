@@ -24,6 +24,7 @@ public final class WeightedList<T> implements Iterable<T> {
     }
 
     @SafeVarargs
+    @SuppressWarnings("varargs")
     public static <T> WeightedList<T> of(Entry<T>... entries) {
         return new WeightedList<>(List.of(entries));
     }

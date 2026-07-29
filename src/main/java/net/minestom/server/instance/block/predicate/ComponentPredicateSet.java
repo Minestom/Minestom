@@ -47,7 +47,7 @@ public record ComponentPredicateSet(List<DataComponentPredicate> predicates) imp
                     final var key = Objects.requireNonNull(registry.getKey(predicateCodec),
                             "Unknown DataComponentPredicate type");
                     buffer.write(PREDICATE_TYPE_NETWORK_TYPE, Either.left(key));
-                    //noinspection unchecked
+                    @SuppressWarnings("unchecked")
                     final Codec<DataComponentPredicate> codec = (Codec<DataComponentPredicate>) (Codec<?>) predicateCodec;
                     buffer.write(NetworkBuffer.TypedNBT(codec), predicate);
                 }
@@ -60,7 +60,7 @@ public record ComponentPredicateSet(List<DataComponentPredicate> predicates) imp
                 case Either.Left(var key) -> {
                     final var registries = Objects.requireNonNull(buffer.registries(), "Missing registries in buffer");
                     final var registry = registries.componentPredicateTypes();
-                    //noinspection unchecked
+                    @SuppressWarnings("unchecked")
                     final Codec<DataComponentPredicate> codec = (Codec<DataComponentPredicate>) Objects.requireNonNull(
                             registry.get(key), "Unknown DataComponentPredicate type");
                     yield buffer.read(NetworkBuffer.TypedNBT(codec));
@@ -134,7 +134,7 @@ public record ComponentPredicateSet(List<DataComponentPredicate> predicates) imp
                         final RegistryKey<Codec<? extends DataComponentPredicate>> key = registry.getKey(predicateCodec);
                         if (key == null) return new Result.Error<>("Unregistered component predicate type: " + predicate);
                         type = Either.left(key);
-                        //noinspection unchecked
+                        @SuppressWarnings("unchecked")
                         final Codec<DataComponentPredicate> codec = (Codec<DataComponentPredicate>) (Codec<?>) predicateCodec;
                         predicateResult = codec.encode(coder, predicate);
                     }
@@ -184,8 +184,8 @@ public record ComponentPredicateSet(List<DataComponentPredicate> predicates) imp
 
     @Override
     public boolean equals(Object obj) {
-        return this == obj || obj instanceof ComponentPredicateSet(var otherPredicates) &&
-                predicates.size() == otherPredicates.size() && predicates.containsAll(otherPredicates);
+        return this == obj || (obj instanceof ComponentPredicateSet(var otherPredicates) &&
+                predicates.size() == otherPredicates.size() && predicates.containsAll(otherPredicates));
     }
 
     @Override

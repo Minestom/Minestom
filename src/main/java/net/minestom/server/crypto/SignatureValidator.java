@@ -41,7 +41,7 @@ public interface SignatureValidator {
     }
 
     static SignatureValidator from(PublicKey publicKey, KeyUtils.SignatureAlgorithm algorithm) {
-        return ((payload, signature) -> {
+        return (payload, signature) -> {
             try {
                 final Signature sig = Signature.getInstance(algorithm.name());
                 sig.initVerify(publicKey);
@@ -50,7 +50,7 @@ public interface SignatureValidator {
             } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException e) {
                 return false;
             }
-        });
+        };
     }
 
     /**

@@ -11,6 +11,7 @@ public sealed interface GameRule<T> extends GameRules, StaticProtocolObject<Game
     }
 
     @Deprecated(forRemoval = true)
+    @SuppressWarnings("removal")
     @Override
     @Nullable
     default Object registry() {

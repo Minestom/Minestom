@@ -41,24 +41,24 @@ public class CommandTestUtils {
                 '!', s -> {
                     final String[] strings = splitDeclaration(s);
                     final ArrayList<String> result = new ArrayList<>();
-                    for (String s1 : strings[0].split(" ")) {
-                        result.add(s1 + "=" + (strings[1].replaceAll("!", s1)));
+                    for (String s1 : strings[0].split(" ", 0)) {
+                        result.add(s1 + "=" + strings[1].replaceAll("!", s1));
                     }
                     return result;
                 },
                 '%', s -> {
                     final String[] strings = splitDeclaration(s);
                     final ArrayList<String> result = new ArrayList<>();
-                    for (String s1 : strings[0].split(" ")) {
-                        result.add(s1 + "=" + (strings[1].replaceAll("%", "'" + s1 + "'")));
+                    for (String s1 : strings[0].split(" ", 0)) {
+                        result.add(s1 + "=" + strings[1].replaceAll("%", "'" + s1 + "'"));
                     }
                     return result;
                 },
                 '§', s -> {
                     final String[] strings = splitDeclaration(s);
                     final ArrayList<String> result = new ArrayList<>();
-                    for (String s1 : strings[0].split(" ")) {
-                        result.add(s1 + "=" + (strings[1].replaceAll("§", "'" + (s1.toUpperCase(Locale.ROOT)) + "'")));
+                    for (String s1 : strings[0].split(" ", 0)) {
+                        result.add(s1 + "=" + strings[1].replaceAll("§", "'" + s1.toUpperCase(Locale.ROOT) + "'"));
                     }
                     return result;
                 }
@@ -139,7 +139,7 @@ public class CommandTestUtils {
                         final int spaceIndex = s.indexOf(" ");
                         if (spaceIndex > -1 && spaceIndex < s.indexOf('=')) {
                             final String[] split = s.split("=", 2);
-                            for (String s1 : split[0].split(" ")) {
+                            for (String s1 : split[0].split(" ", 0)) {
                                 result.add(s1 + "=" + split[1]);
                             }
                         } else {
@@ -150,12 +150,12 @@ public class CommandTestUtils {
                     final int spaceIndex = s.indexOf(" ");
                     if (spaceIndex > -1 && spaceIndex < s.indexOf('-')) {
                         final String[] split = s.split("-", 2);
-                        for (String s1 : split[0].split(" ")) {
+                        for (String s1 : split[0].split(" ", 0)) {
                             result.add(s1 + "-" + split[1]);
                         }
                     } else if (spaceIndex > -1 && spaceIndex < s.indexOf('+')) {
                         final String[] split = s.split("\\+", 2);
-                        for (String s1 : split[0].split(" ")) {
+                        for (String s1 : split[0].split(" ", 0)) {
                             result.add(s1 + "+" + split[1]);
                         }
                     } else {
@@ -197,7 +197,7 @@ public class CommandTestUtils {
         }
 
         private static String resolveNode(String id, Map<String, String[]> references,
-                                          Map<String, TestNode> nodes, ArrayList<TestNode> result,
+                                          Map<String, TestNode> nodes, List<TestNode> result,
                                           Map<String, String> nameToMetaPath,
                                           List<Runnable> redirectSetters, String metaPath) {
             final TestNode node = nodes.get(id);

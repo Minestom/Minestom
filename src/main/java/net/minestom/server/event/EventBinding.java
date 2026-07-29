@@ -1,5 +1,6 @@
 package net.minestom.server.event;
 
+import java.util.Set;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Collection;
@@ -30,9 +31,9 @@ public interface EventBinding<E extends Event> {
             this.predicate = predicate;
         }
 
+        @SuppressWarnings("unchecked")
         public <M extends E> FilteredBuilder<E, T> map(Class<M> eventType,
                                                        BiConsumer<T, M> consumer) {
-            //noinspection unchecked
             this.mapped.put(eventType, (BiConsumer<Object, E>) consumer);
             return this;
         }
@@ -52,7 +53,7 @@ public interface EventBinding<E extends Event> {
             }
             return new EventBinding<>() {
                 @Override
-                public Collection<Class<? extends Event>> eventTypes() {
+                public Set<Class<? extends Event>> eventTypes() {
                     return eventTypes;
                 }
 

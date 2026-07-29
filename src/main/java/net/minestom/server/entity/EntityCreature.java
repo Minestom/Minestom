@@ -26,6 +26,7 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
 
     private final Set<EntityAIGroup> aiGroups = new CopyOnWriteArraySet<>();
 
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     private final Navigator navigator = new Navigator(this);
 
     private Entity target;
@@ -33,6 +34,7 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
     /**
      * Constructor which allows to specify an UUID. Only use if you know what you are doing!
      */
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     public EntityCreature(EntityType entityType, UUID uuid) {
         super(entityType, uuid);
         heal();

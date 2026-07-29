@@ -23,6 +23,7 @@ public sealed interface HolderSet<T> permits HolderSet.Direct, RegistryTag {
         }
 
         @SafeVarargs
+        @SuppressWarnings("varargs")
         public Direct(T... values) {
             this(List.of(values));
         }

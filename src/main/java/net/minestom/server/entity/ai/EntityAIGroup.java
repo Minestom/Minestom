@@ -98,6 +98,7 @@ public class EntityAIGroup {
      * methods like `addGoalSelector` or `removeGoalSelector`: instead we provide them with direct
      * access to list of goal selectors, so that they could use operations such as `clear`, `set`, `removeIf`, etc.
      */
+    @SuppressWarnings("serial") // never serialized
     private class GoalSelectorsArrayList extends ArrayList<GoalSelector> {
 
         private GoalSelectorsArrayList() {

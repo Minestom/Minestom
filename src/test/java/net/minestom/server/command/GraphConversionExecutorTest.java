@@ -14,7 +14,7 @@ public class GraphConversionExecutorTest {
         final Command foo = new Command("foo");
         // Constant true
         {
-            foo.setCondition((sender, commandString) -> true);
+            foo.setCondition((_, _) -> true);
             var graph = Graph.fromCommand(foo);
             var execution = graph.root().execution();
             assertNotNull(execution);
@@ -22,7 +22,7 @@ public class GraphConversionExecutorTest {
         }
         // Constant false
         {
-            foo.setCondition((sender, commandString) -> false);
+            foo.setCondition((_, _) -> false);
             var graph = Graph.fromCommand(foo);
             var execution = graph.root().execution();
             assertNotNull(execution);
@@ -46,7 +46,7 @@ public class GraphConversionExecutorTest {
     @Test
     public void syntaxConditionTrue() {
         final Command foo = new Command("foo");
-        foo.addConditionalSyntax((sender, context) -> true,
+        foo.addConditionalSyntax((_, _) -> true,
                 GraphConversionExecutorTest::dummyExecutor, Literal("first"));
 
         var graph = Graph.fromCommand(foo);
@@ -59,7 +59,7 @@ public class GraphConversionExecutorTest {
     @Test
     public void syntaxConditionFalse() {
         final Command foo = new Command("foo");
-        foo.addConditionalSyntax((sender, context) -> false,
+        foo.addConditionalSyntax((_, _) -> false,
                 GraphConversionExecutorTest::dummyExecutor, Literal("first"));
 
         var graph = Graph.fromCommand(foo);
@@ -72,7 +72,7 @@ public class GraphConversionExecutorTest {
     @Test
     public void commandConditionFalse() {
         final Command foo = new Command("foo");
-        foo.setCondition((sender, commandString) -> false);
+        foo.setCondition((_, _) -> false);
         final Graph graph = Graph.fromCommand(foo);
         final Graph.Execution execution = graph.root().execution();
         assertNotNull(execution);

@@ -52,7 +52,7 @@ public class EntityViewDirectionIntegrationTest {
         env.tick();
 
         var connection = env.createConnection();
-        var player = connection.connect(instance, spawnPos);
+        var _ = connection.connect(instance, spawnPos);
         var player2 = env.createPlayer(instance, spawnPos);
 
         env.tick();

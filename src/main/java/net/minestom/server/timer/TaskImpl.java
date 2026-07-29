@@ -60,6 +60,7 @@ final class TaskImpl implements Task {
         return alive;
     }
 
+    @Override
     public int id() {
         return id;
     }
@@ -68,10 +69,12 @@ final class TaskImpl implements Task {
         return task;
     }
 
+    @Override
     public ExecutionType executionType() {
         return executionType;
     }
 
+    @Override
     public SchedulerImpl owner() {
         return owner;
     }

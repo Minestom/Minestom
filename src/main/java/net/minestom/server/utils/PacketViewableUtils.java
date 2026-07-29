@@ -39,7 +39,7 @@ public final class PacketViewableUtils {
             PacketSendingUtils.sendGroupedPacket(viewable.getViewers(), serverPacket, value -> !Objects.equals(value, entity));
             return;
         }
-        final Player exception = entity instanceof Player ? (Player) entity : null;
+        final Player exception = entity instanceof Player player ? player : null;
         ViewableStorage storage = retrieveStorage(viewable);
         storage.append(serverPacket, exception);
     }
@@ -75,7 +75,8 @@ public final class PacketViewableUtils {
 
     private static final class ViewableStorage {
         private static final ObjectPool<NetworkBuffer> POOL = ObjectPool.pool(
-                () -> NetworkBuffer.resizableBuffer(ServerFlag.POOLED_BUFFER_SIZE, MinecraftServer.process()),
+                () -> NetworkBuffer.resizableBuffer(
+                        ServerFlag.POOLED_BUFFER_SIZE, MinecraftServer.getRegistries()),
                 NetworkBuffer::clear);
         // Player id -> list of offsets to ignore (32:32 bits)
         private final Int2ObjectMap<LongArrayList> entityIdMap = new Int2ObjectOpenHashMap<>();
@@ -87,8 +88,8 @@ public final class PacketViewableUtils {
             PacketWriting.writeFramedPacket(buffer, ConnectionState.PLAY, serverPacket, MinecraftServer.getCompressionThreshold());
             final long end = buffer.writeIndex();
             if (exception != null) {
-                final long offsets = start << 32 | end & 0xFFFFFFFFL;
-                LongList list = entityIdMap.computeIfAbsent(exception.getEntityId(), id -> new LongArrayList());
+                final long offsets = (start << 32) | (end & 0xFFFFFFFFL);
+                LongList list = entityIdMap.computeIfAbsent(exception.getEntityId(), _ -> new LongArrayList());
                 list.add(offsets);
             }
         }

@@ -37,7 +37,7 @@ public final class RecipeManager {
             Int2ObjectMaps.synchronize(new Int2ObjectArrayMap<>());
 
     public void addRecipe(Recipe recipe) {
-        addRecipe(recipe, player -> true);
+        addRecipe(recipe, _ -> true);
     }
 
     public void addRecipe(Recipe recipe, Predicate<Player> predicate) {
@@ -113,7 +113,7 @@ public final class RecipeManager {
         final Map<RecipeProperty, Set<Material>> itemProperties = new HashMap<>();
         for (var recipe : recipes.keySet()) {
             for (var entry : recipe.itemProperties().entrySet()) {
-                itemProperties.computeIfAbsent(entry.getKey(), k -> new HashSet<>()).addAll(entry.getValue());
+                itemProperties.computeIfAbsent(entry.getKey(), _ -> new HashSet<>()).addAll(entry.getValue());
             }
         }
         final Map<RecipeProperty, List<Material>> itemPropertiesLists = new HashMap<>();

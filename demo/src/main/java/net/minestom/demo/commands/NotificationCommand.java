@@ -11,7 +11,7 @@ public class NotificationCommand extends Command {
     public NotificationCommand() {
         super("notification");
 
-        setDefaultExecutor((sender, context) -> {
+        setDefaultExecutor((sender, _) -> {
             var player = (Player) sender;
             player.sendNotification(new Notification(
                     Component.text("Hello World!"),

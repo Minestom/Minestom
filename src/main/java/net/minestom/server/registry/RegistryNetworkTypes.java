@@ -1,6 +1,9 @@
 package net.minestom.server.registry;
 
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.RegistryTagImpl.Backed;
+import net.minestom.server.registry.RegistryTagImpl.Direct;
+import net.minestom.server.registry.RegistryTagImpl.Empty;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.validate.Check;
 
@@ -69,12 +72,12 @@ final class RegistryNetworkTypes {
         @Override
         public void write(NetworkBuffer buffer, RegistryTag<T> value) {
             switch (value) {
-                case net.minestom.server.registry.RegistryTagImpl.Backed<T> backed -> {
+                case Backed<T> backed -> {
                     buffer.write(NetworkBuffer.VAR_INT, 0);
                     buffer.write(NetworkBuffer.KEY, backed.key().key());
                 }
-                case net.minestom.server.registry.RegistryTagImpl.Empty() -> buffer.write(NetworkBuffer.VAR_INT, 1);
-                case net.minestom.server.registry.RegistryTagImpl.Direct(var entries) -> {
+                case Empty() -> buffer.write(NetworkBuffer.VAR_INT, 1);
+                case Direct(var entries) -> {
                     final var registries = Objects.requireNonNull(buffer.registries(), "Buffer is missing registries");
                     final var registry = selector.select(registries);
                     buffer.write(NetworkBuffer.VAR_INT, entries.size() + 1);
@@ -107,7 +110,7 @@ final class RegistryNetworkTypes {
                     Check.stateCondition(key == null, "Unknown id {0} for registry {1}", id, registry.key());
                     keys.add(key);
                 }
-                return new net.minestom.server.registry.RegistryTagImpl.Direct<>(keys);
+                return new Direct<>(keys);
             }
         }
     }

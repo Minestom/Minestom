@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Exception thrown when an acquirable element is accessed without proper ownership.
  */
+@SuppressWarnings("serial") // never serialized
 public final class AcquirableOwnershipException extends RuntimeException {
     private final Thread initThread;
     private final @Nullable Thread assignedThread;

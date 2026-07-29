@@ -13,7 +13,7 @@ public class CoordinateTest {
 
     @Test
     public void chunkIndex() {
-        var index = CoordConversion.chunkIndex(2, 5);
+        long index = CoordConversion.chunkIndex(2, 5);
         assertEquals(2, CoordConversion.chunkIndexGetX(index));
         assertEquals(5, CoordConversion.chunkIndexGetZ(index));
 
@@ -95,8 +95,8 @@ public class CoordinateTest {
     public void vecNegCompare() {
         assertFalse(Vec.ZERO.samePoint(Vec.ONE.neg()));
         assertTrue(Vec.ZERO.samePoint(Vec.ZERO.neg()));
-        assertTrue(Vec.ZERO.samePoint(new Vec(-0, 0, 0)));
-        assertTrue(Vec.ZERO.samePoint(new Vec(-0, -0, -0)));
+        assertTrue(Vec.ZERO.samePoint(new Vec(-0.0, 0, 0)));
+        assertTrue(Vec.ZERO.samePoint(new Vec(-0.0, -0.0, -0.0)));
     }
 
     @Test
@@ -213,7 +213,7 @@ public class CoordinateTest {
             for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
                 for (int y = -64; y < 364; y++) {
                     var vec = new Vec(x, y, z);
-                    var index = CoordConversion.chunkBlockIndex(vec.blockX(), vec.blockY(), vec.blockZ());
+                    int index = CoordConversion.chunkBlockIndex(vec.blockX(), vec.blockY(), vec.blockZ());
                     assertTrue(temp.add(index), "Duplicate block index found: " + index + " " + vec);
                     assertEquals(CoordConversion.chunkBlockIndexGetGlobal(index, vec.chunkX(), vec.chunkZ()), vec);
 

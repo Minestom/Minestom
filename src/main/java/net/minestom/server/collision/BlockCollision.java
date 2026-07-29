@@ -49,9 +49,10 @@ final class BlockCollision {
                 // If player is at block 40 we cannot place a block at block 39 with side length 1 because the block will be in [39, 40]
                 // For this reason we subtract a small amount from the player position
                 Point playerPos = entity.getPosition().add(entity.getPosition().sub(blockPos).mul(0.0000001));
-                intersects = b.registry().collisionShape().intersectBox(playerPos.sub(blockPos), entity.getBoundingBox());
+                intersects = b.collisionShape().intersectBox(playerPos.sub(blockPos), entity.getBoundingBox());
             } else {
-                intersects = b.registry().collisionShape().intersectBox(entity.getPosition().sub(blockPos), entity.getBoundingBox());
+                intersects = b.collisionShape()
+                        .intersectBox(entity.getPosition().sub(blockPos), entity.getBoundingBox());
             }
             if (intersects) return entity;
         }
@@ -63,7 +64,7 @@ final class BlockCollision {
         if (lastPhysicsResult != null && lastPhysicsResult.collisionShapes()[1] instanceof ShapeImpl shape) {
             var currentBlock = getter.getBlock(lastPhysicsResult.collisionShapePositions()[1], Block.Getter.Condition.TYPE);
             var lastBlockBoxes = shape.boundingBoxes();
-            var currentBlockBoxes = ((ShapeImpl) currentBlock.registry().collisionShape()).boundingBoxes();
+            var currentBlockBoxes = ((ShapeImpl) currentBlock.collisionShape()).boundingBoxes();
 
             // Fast exit if entity hasn't moved
             if (lastPhysicsResult.collisionY()
@@ -220,7 +221,7 @@ final class BlockCollision {
                                     Block.Getter getter, SweepResult finalResult) {
         // Don't step if chunk isn't loaded yet
         final Block currentBlock = getter.getBlock(blockX, blockY, blockZ, Block.Getter.Condition.TYPE);
-        final Shape currentShape = currentBlock.registry().collisionShape();
+        final Shape currentShape = currentBlock.collisionShape();
 
         final boolean currentCollidable = !currentShape.relativeEnd().isZero();
         final boolean currentShort = currentShape.relativeEnd().y() < 0.5;
@@ -230,16 +231,17 @@ final class BlockCollision {
             // we need to check below for a tall block (fence, wall, ...)
             final Vec belowPos = new Vec(blockX, blockY - 1, blockZ);
             final Block belowBlock = getter.getBlock(belowPos, Block.Getter.Condition.TYPE);
-            final Shape belowShape = belowBlock.registry().collisionShape();
+            final Shape belowShape = belowBlock.collisionShape();
 
             final Vec currentPos = new Vec(blockX, blockY, blockZ);
             // don't fall out of if statement, we could end up redundantly grabbing a block, and we only need to
             // collision check against the current shape since the below shape isn't tall
             if (belowShape.relativeEnd().y() > 1) {
-                // we should always check both shapes, so no short-circuit here, to handle properties where the bounding box
+                // we should always check both shapes, to handle properties where the bounding box
                 // hits the current solid but misses the tall solid
-                return belowShape.intersectBoxSwept(entityPosition, entityVelocity, belowPos, boundingBox, finalResult) |
-                        (currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity, currentPos, boundingBox, finalResult));
+                final boolean belowHit = belowShape.intersectBoxSwept(entityPosition, entityVelocity, belowPos, boundingBox, finalResult);
+                final boolean currentHit = currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity, currentPos, boundingBox, finalResult);
+                return belowHit || currentHit;
             } else {
                 return currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity, currentPos, boundingBox, finalResult);
             }
@@ -251,7 +253,7 @@ final class BlockCollision {
             if (currentShort) {
                 final Vec belowPos = new Vec(blockX, blockY - 1, blockZ);
                 final Block belowBlock = getter.getBlock(belowPos, Block.Getter.Condition.TYPE);
-                final Shape belowShape = belowBlock.registry().collisionShape();
+                final Shape belowShape = belowBlock.collisionShape();
                 // only do sweep if the below block is big enough to possibly hit
                 if (belowShape.relativeEnd().y() > 1)
                     belowShape.intersectBoxSwept(entityPosition, entityVelocity, belowPos, boundingBox, finalResult);

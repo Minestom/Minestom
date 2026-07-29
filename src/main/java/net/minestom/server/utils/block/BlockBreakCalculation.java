@@ -12,7 +12,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.Tool;
 import net.minestom.server.potion.PotionEffect;
-import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.registry.TagKey;
 import org.jetbrains.annotations.Nullable;
@@ -39,8 +38,7 @@ public class BlockBreakCalculation {
         // Taken from minecraft wiki Breaking#Calculation
         // https://minecraft.wiki/w/Breaking#Calculation
         // More information to mimic calculations taken from minecraft's source
-        RegistryData.BlockEntry registry = block.registry();
-        float blockHardness = registry.hardness();
+        float blockHardness = block.hardness();
         if (blockHardness == -1) {
             // Bedrock, barrier, and unbreakable blocks
             return UNBREAKABLE;
@@ -48,7 +46,7 @@ public class BlockBreakCalculation {
         ItemStack item = player.getItemInMainHand();
         // Bamboo is hard-coded in client
         if (block.id() == Block.BAMBOO.id() || block.id() == Block.BAMBOO_SAPLING.id()) {
-            if (SWORD_TAG.contains(item.material())) {
+            if (SWORD_TAG.contains(item.material().registryKey())) {
                 return 0;
             }
         }
@@ -124,7 +122,7 @@ public class BlockBreakCalculation {
         Block block = instance.getBlock(eye);
 
         final Fluid fluid = Fluid.fromKey(block.key());
-        if (fluid == null || !WATER_TAG.contains(fluid)) {
+        if (fluid == null || !WATER_TAG.contains(fluid.registryKey())) {
             return false;
         }
         float fluidHeight = getFluidHeight(player.getInstance(), x, y, z, block);
@@ -147,7 +145,7 @@ public class BlockBreakCalculation {
         int level;
         try {
             level = Integer.parseInt(levelString);
-        } catch (Throwable ignored) {
+        } catch (Throwable _) {
             return 1;
         }
         if (level >= 8) {
@@ -179,14 +177,14 @@ public class BlockBreakCalculation {
         if (tool == null) {
             return 1;
         }
-        return tool.getSpeed(block);
+        return tool.getSpeed(block.registryKey());
     }
 
     private static boolean canBreakBlock(@Nullable Tool tool, Block block) {
-        return !block.registry().requiresTool() || isEffective(tool, block);
+        return !block.requiresTool() || isEffective(tool, block);
     }
 
     private static boolean isEffective(@Nullable Tool tool, Block block) {
-        return tool != null && tool.isCorrectForDrops(block);
+        return tool != null && tool.isCorrectForDrops(block.registryKey());
     }
 }

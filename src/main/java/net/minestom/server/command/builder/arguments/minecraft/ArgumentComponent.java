@@ -24,7 +24,8 @@ public class ArgumentComponent extends Argument<Component> {
     @Override
     public Component parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         try {
-            final Transcoder<JsonElement> coder = new RegistryTranscoder<>(Transcoder.JSON, MinecraftServer.process());
+            final Transcoder<JsonElement> coder = new RegistryTranscoder<>(
+                    Transcoder.JSON, MinecraftServer.getRegistries());
             final Result<Component> result = Codec.COMPONENT.decode(coder, JsonUtil.fromJson(input));
             return switch (result) {
                 case Result.Ok(var component) -> component;

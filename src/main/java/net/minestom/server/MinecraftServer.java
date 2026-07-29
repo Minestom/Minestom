@@ -35,6 +35,7 @@ import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.thread.TickSchedulerThread;
 import net.minestom.server.timer.SchedulerManager;
@@ -50,6 +51,7 @@ import org.jetbrains.annotations.UnknownNullability;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.util.Objects;
 
 /**
  * The main server class used to start the server and retrieve all the managers.
@@ -142,6 +144,16 @@ public final class MinecraftServer implements MinecraftConstants {
 
     public static @UnknownNullability ServerProcess process() {
         return serverProcess;
+    }
+
+    /**
+     * Gets the registries owned by the current server process.
+     *
+     * @return the current server registries
+     * @throws NullPointerException if the server has not been initialized
+     */
+    public static Registries getRegistries() {
+        return Objects.requireNonNull(serverProcess, "serverProcess").registries();
     }
 
     public static GlobalEventHandler getGlobalEventHandler() {
@@ -363,7 +375,7 @@ public final class MinecraftServer implements MinecraftConstants {
     }
 
     public static DynamicRegistry<Codec<? extends DataComponentPredicate>> componentPredicateTypes() {
-        return process().componentPredicateTypes();
+        return serverProcess.componentPredicateTypes();
     }
 
     public static Server getServer() {

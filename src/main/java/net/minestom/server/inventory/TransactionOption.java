@@ -38,7 +38,7 @@ public interface TransactionOption<T> {
      * <p>
      * Returns true if the item can be fully added, false otherwise.
      */
-    TransactionOption<Boolean> DRY_RUN = (inventory, result, itemChangesMap) -> result.isAir();
+    TransactionOption<Boolean> DRY_RUN = (_, result, _) -> result.isAir();
 
     T fill(AbstractInventory inventory,
                     ItemStack result,

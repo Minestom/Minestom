@@ -19,42 +19,39 @@ public class ShootCommand extends Command {
     public ShootCommand() {
         super("shoot");
         setCondition(Conditions::playerOnly);
-        setDefaultExecutor(this::defaultExecutor);
+        setDefaultExecutor(ShootCommand::defaultExecutor);
         var typeArg = ArgumentType.Word("type").from("default", "spectral", "colored");
-        setArgumentCallback(this::onTypeError, typeArg);
-        addSyntax(this::onShootCommand, typeArg);
+        setArgumentCallback(ShootCommand::onTypeError, typeArg);
+        addSyntax(ShootCommand::onShootCommand, typeArg);
     }
 
-    private void defaultExecutor(CommandSender sender, CommandContext context) {
+    private static void defaultExecutor(CommandSender sender, CommandContext context) {
         sender.sendMessage(Component.text("Correct usage: shoot [default/spectral/colored]"));
     }
 
-    private void onTypeError(CommandSender sender, ArgumentSyntaxException exception) {
+    private static void onTypeError(CommandSender sender, ArgumentSyntaxException exception) {
         sender.sendMessage(Component.text("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by 'default', 'spectral' or 'colored'"));
     }
 
-    private void onShootCommand(CommandSender sender, CommandContext context) {
+    private static void onShootCommand(CommandSender sender, CommandContext context) {
         Player player = (Player) sender;
         String mode = context.get("type");
         EntityProjectile projectile;
         switch (mode) {
-            case "default":
-                projectile = new EntityProjectile(player, EntityType.ARROW);
-                break;
-            case "spectral":
-                projectile = new EntityProjectile(player, EntityType.SPECTRAL_ARROW);
-                break;
-            case "colored":
+            case "default" -> projectile = new EntityProjectile(player, EntityType.ARROW);
+            case "spectral" -> projectile = new EntityProjectile(player, EntityType.SPECTRAL_ARROW);
+            case "colored" -> {
                 projectile = new EntityProjectile(player, EntityType.ARROW);
                 var meta = (ArrowMeta) projectile.getEntityMeta();
                 meta.setColor(ThreadLocalRandom.current().nextInt());
-                break;
-            default:
+            }
+            default -> {
                 return;
+            }
         }
         var pos = player.getPosition().add(0D, player.getEyeHeight(), 0D);
         //noinspection ConstantConditions - It should be impossible to execute a command without being in an instance
-        projectile.setInstance(player.getInstance(), pos);
+        projectile.setInstance(player.getInstance(), pos).join();
         var dir = pos.direction().mul(30D);
         pos = pos.add(dir);
         projectile.shoot(pos, 1D, 0D);

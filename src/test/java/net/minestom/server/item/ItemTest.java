@@ -29,7 +29,7 @@ public class ItemTest {
         assertEquals(1, item.amount(), "Default item amount must be 1");
 
         // Should have the exact same components as the material prototype
-        var prototype = Material.DIAMOND_SWORD.registry().prototype();
+        var prototype = Material.DIAMOND_SWORD.prototype();
         for (DataComponent<?> component : DataComponent.values()) {
             var proto = prototype.get(component);
             if (proto == null) {
@@ -54,7 +54,7 @@ public class ItemTest {
         assertEquals(1, item.amount(), "Default item amount must be 1");
 
         // Should have the exact same components as the material prototype
-        var prototype = Material.DIAMOND_SWORD.registry().prototype();
+        var prototype = Material.DIAMOND_SWORD.prototype();
         for (DataComponent<?> component : DataComponent.values()) {
             var proto = prototype.get(component);
             if (proto == null) {
@@ -92,6 +92,7 @@ public class ItemTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation") // deliberately keeps coverage of the deprecated API until its removal
     public void testFromNbtLoreSpace(Env env) throws IOException {
         var itemStack = ItemStack.of(Material.LAPIS_BLOCK)
                 .withLore(Component.text("Hey!", NamedTextColor.RED), Component.empty(), Component.text("hello"))
@@ -124,6 +125,7 @@ public class ItemTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation") // deliberately keeps coverage of the deprecated API until its removal
     public void testFromNbt(Env env) {
         var itemNbt = createItem().toItemNBT();
         var item = ItemStack.fromItemNBT(itemNbt);
@@ -142,6 +144,7 @@ public class ItemTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation") // deliberately keeps coverage of the deprecated API until its removal
     public void materialUpdate(Env env) {
         var item1 = ItemStack.builder(Material.DIAMOND)
                 .amount(5).set(DataComponents.CUSTOM_NAME, Component.text("Name"))
@@ -167,12 +170,15 @@ public class ItemTest {
     }
 
     @Test
+    // Deliberately keeps coverage of the deprecated accessor until its removal
+    @SuppressWarnings("removal")
     public void testEntityType() {
         var item1 = ItemStack.of(Material.DIAMOND, 1);
-        assertNull(item1.material().registry().spawnEntityType());
+        assertNull(item1.material().prototype().get(DataComponents.ENTITY_DATA));
         var item2 = ItemStack.of(Material.CAMEL_SPAWN_EGG, 1);
-        assertNotNull(item2.material().registry().spawnEntityType());
-        assertEquals(EntityType.CAMEL, item2.material().registry().spawnEntityType());
+        var entityData = item2.material().prototype().get(DataComponents.ENTITY_DATA);
+        assertNotNull(entityData);
+        assertEquals(EntityType.CAMEL, entityData.type());
     }
 
     @Test

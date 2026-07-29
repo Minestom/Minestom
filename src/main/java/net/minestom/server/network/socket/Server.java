@@ -94,13 +94,15 @@ public final class Server {
                 } catch (IOException _) {
                     try {
                         client.close();
-                    } catch (IOException _) {}
+                    } catch (IOException _) {
+                        // Nothing more we can do, drop the connection
+                    }
                 }
             }
         });
     }
 
-    private void configureSocket(SocketChannel channel) throws IOException {
+    private static void configureSocket(SocketChannel channel) throws IOException {
         if (channel.getLocalAddress() instanceof InetSocketAddress) {
             Socket socket = channel.socket();
             socket.setSendBufferSize(ServerFlag.SOCKET_SEND_BUFFER_SIZE);

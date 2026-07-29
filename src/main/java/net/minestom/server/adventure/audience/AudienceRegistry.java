@@ -25,7 +25,7 @@ public class AudienceRegistry {
      */
     public AudienceRegistry(Map<Key, Collection<Audience>> backingMap, Supplier<Collection<Audience>> backingCollection) {
         this.registry = backingMap;
-        this.provider = key -> backingCollection.get();
+        this.provider = _ -> backingCollection.get();
     }
 
     /**

@@ -21,7 +21,7 @@ public record TestInstanceBlockStatus(
             TestInstanceBlockStatus::new);
 
     @Override
-    public Collection<Component> components() {
+    public List<Component> components() {
         return List.of(status);
     }
 

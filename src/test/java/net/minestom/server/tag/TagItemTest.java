@@ -73,6 +73,7 @@ public class TagItemTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation") // deliberately keeps coverage of the deprecated API until its removal
     public void differentTagInvalidation() {
         var item = ItemStack.of(Material.DIAMOND);
         var item2 = ItemStack.of(Material.DIAMOND, 2);

@@ -345,10 +345,10 @@ public class BlockLightMergeIntegrationTest {
 
         LightingChunk.relight(instance, instance.getChunks());
 
-        var val = instance.getChunk(5, 8).getSection(-2).blockLight().getLevel(14, 0, 0);
+        int val = instance.getChunk(5, 8).getSection(-2).blockLight().getLevel(14, 0, 0);
         assertEquals(4, val);
 
-        var val2 = instance.getChunk(5, 8).getSection(-3).blockLight().getLevel(14, 15, 0);
+        int val2 = instance.getChunk(5, 8).getSection(-3).blockLight().getLevel(14, 15, 0);
         assertEquals(5, val2);
     }
 
@@ -364,16 +364,16 @@ public class BlockLightMergeIntegrationTest {
 
         instance.setBlock(94, -35, 128, Block.GLOW_LICHEN.withProperties(Map.of("west", "true")));
 
-        var val = instance.getBlockLight(94, -35, 128);
+        int val = instance.getBlockLight(94, -35, 128);
         assertEquals(7, val);
 
-        var val2 = instance.getBlockLight(94, -36, 128);
+        int val2 = instance.getBlockLight(94, -36, 128);
         assertEquals(6, val2);
 
-        var val3 = instance.getSkyLight(94, -34, 128);
+        int val3 = instance.getSkyLight(94, -34, 128);
         assertEquals(0, val3);
 
-        var val4 = instance.getSkyLight(94, 41, 128);
+        int val4 = instance.getSkyLight(94, 41, 128);
         assertEquals(15, val4);
     }
 
@@ -389,10 +389,10 @@ public class BlockLightMergeIntegrationTest {
 
         instance.setBlock(94, -35, 128, Block.GLOWSTONE);
 
-        var val = instance.getBlockLight(94, -35, 128);
+        int val = instance.getBlockLight(94, -35, 128);
         assertEquals(15, val);
 
-        var val2 = instance.getBlockLight(97, -36, 135);
+        int val2 = instance.getBlockLight(97, -36, 135);
         assertEquals(4, val2);
     }
 
@@ -410,7 +410,7 @@ public class BlockLightMergeIntegrationTest {
 
         LightingChunk.relight(instance, instance.getChunks());
 
-        var val = lightValSky(instance, new Vec(94, 41, 128));
+        byte val = lightValSky(instance, new Vec(94, 41, 128));
         assertEquals(14, val);
     }
 
@@ -429,7 +429,7 @@ public class BlockLightMergeIntegrationTest {
 
         LightingChunk.relight(instance, instance.getChunks());
 
-        var val = lightValSky(instance, new Vec(94, 50, 128));
+        byte val = lightValSky(instance, new Vec(94, 50, 128));
         assertEquals(15, val);
     }
 
@@ -453,8 +453,8 @@ public class BlockLightMergeIntegrationTest {
 
         LightingChunk.relight(instance, instance.getChunks());
 
-        var val = lightValSky(instance, new Vec(94, 51, 128));
-        var val2 = lightValSky(instance, new Vec(94, 52, 128));
+        byte val = lightValSky(instance, new Vec(94, 51, 128));
+        byte val2 = lightValSky(instance, new Vec(94, 52, 128));
         assertEquals(0, val2);
         assertEquals(0, val);
     }

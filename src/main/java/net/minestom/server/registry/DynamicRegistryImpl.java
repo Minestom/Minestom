@@ -35,7 +35,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     // Also, what use case requires you to mutate registries faster than one monitor?
     private static final Object REGISTRY_LOCK = new Object();
 
-    private volatile Registries registries = null;
+    private volatile @Nullable Registries registries = null;
     private final CachedPacket vanillaRegistryDataPacket = new CachedPacket(() -> createRegistryDataPacket(registries, true));
 
     private final List<T> idToValue;
@@ -328,6 +328,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         return !ServerFlag.REGISTRY_UNSAFE_OPS && !ServerFlag.INSIDE_TEST;
     }
 
+    @SuppressWarnings("removal")
     void loadStaticJsonRegistry(@Nullable Registries registries, @Nullable Comparator<String> idComparator, Codec<T> codec) {
         // Tags must exist before entries are decoded because registry codecs can resolve tags while loading values.
         tags.putAll(RegistryData.loadTags(key()));

@@ -11,8 +11,6 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("unused")
 @ApiStatus.NonExtendable
 public interface VillagerProfessionKeys {
-    RegistryKey<VillagerProfession> NONE = RegistryKey.unsafeOf("none");
-
     RegistryKey<VillagerProfession> ARMORER = RegistryKey.unsafeOf("armorer");
 
     RegistryKey<VillagerProfession> BUTCHER = RegistryKey.unsafeOf("butcher");
@@ -34,6 +32,8 @@ public interface VillagerProfessionKeys {
     RegistryKey<VillagerProfession> MASON = RegistryKey.unsafeOf("mason");
 
     RegistryKey<VillagerProfession> NITWIT = RegistryKey.unsafeOf("nitwit");
+
+    RegistryKey<VillagerProfession> NONE = RegistryKey.unsafeOf("none");
 
     RegistryKey<VillagerProfession> SHEPHERD = RegistryKey.unsafeOf("shepherd");
 

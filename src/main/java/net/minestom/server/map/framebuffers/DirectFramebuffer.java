@@ -10,9 +10,7 @@ public class DirectFramebuffer implements Framebuffer {
     private final byte[] colors = new byte[WIDTH * HEIGHT];
 
     /**
-     * Mutable colors array
-     *
-     * @return
+     * {@return the mutable colors array backing this framebuffer}
      */
     public byte[] getColors() {
         return colors;

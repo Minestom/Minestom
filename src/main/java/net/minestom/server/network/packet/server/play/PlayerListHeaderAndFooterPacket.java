@@ -19,7 +19,7 @@ public record PlayerListHeaderAndFooterPacket(Component header,
             PlayerListHeaderAndFooterPacket::new);
 
     @Override
-    public Collection<Component> components() {
+    public List<Component> components() {
         return List.of(header, footer);
     }
 

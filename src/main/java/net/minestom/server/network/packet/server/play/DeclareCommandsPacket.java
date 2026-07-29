@@ -6,6 +6,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -68,6 +69,7 @@ public record DeclareCommandsPacket(List<Node> nodes,
                 }
             }
 
+            @Override
             public Node read(NetworkBuffer reader) {
                 Node node = new Node();
                 node.flags = reader.read(BYTE);
@@ -82,7 +84,7 @@ public record DeclareCommandsPacket(List<Node> nodes,
 
                 if (node.isArgument()) {
                     node.parser = reader.read(ArgumentParserType.NETWORK_TYPE);
-                    node.properties = node.getProperties(reader, node.parser);
+                    node.properties = Node.getProperties(reader, node.parser);
                 }
 
                 if ((node.flags & HAS_SUGGESTION_TYPE) != 0) {
@@ -92,14 +94,14 @@ public record DeclareCommandsPacket(List<Node> nodes,
             }
         };
 
-        private byte[] getProperties(NetworkBuffer reader, ArgumentParserType parser) {
-            final Function<Function<NetworkBuffer, ?>, byte[]> minMaxExtractor = (via) -> reader.extractBytes((extractor) -> {
+        private static byte[] getProperties(NetworkBuffer reader, ArgumentParserType parser) {
+            final Function<Consumer<NetworkBuffer>, byte[]> minMaxExtractor = (via) -> reader.extractBytes((extractor) -> {
                 byte flags = extractor.read(BYTE);
                 if ((flags & 0x01) == 0x01) {
-                    via.apply(extractor); // min
+                    via.accept(extractor); // min
                 }
                 if ((flags & 0x02) == 0x02) {
-                    via.apply(extractor); // max
+                    via.accept(extractor); // max
                 }
             });
             return switch (parser) {

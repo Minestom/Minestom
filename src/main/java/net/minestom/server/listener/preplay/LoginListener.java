@@ -60,7 +60,8 @@ public final class LoginListener {
             socketConnection.UNSAFE_setLoginUsername(packet.username());
             // Velocity support
             if (auth instanceof Auth.Velocity) {
-                connection.loginPluginMessageProcessor().request(Auth.Velocity.PLAYER_INFO_CHANNEL, new byte[0])
+                // Dont block the connection so we can still read more packets
+                var _ = connection.loginPluginMessageProcessor().request(Auth.Velocity.PLAYER_INFO_CHANNEL, new byte[0])
                         .thenAccept(response -> handleVelocityProxyResponse(socketConnection, response));
                 return;
             }
@@ -180,7 +181,7 @@ public final class LoginListener {
                     MinecraftServer.getExceptionManager().handleException(e);
                     return;
                 }
-                final int port = ((java.net.InetSocketAddress) socketConnection.getRemoteAddress()).getPort();
+                final int port = ((InetSocketAddress) socketConnection.getRemoteAddress()).getPort();
                 socketAddress = new InetSocketAddress(address, port);
                 gameProfile = GameProfile.SERIALIZER.read(buffer);
             }
@@ -233,10 +234,7 @@ public final class LoginListener {
     private static void enterConfig(PlayerConnection connection, GameProfile gameProfile) {
         Thread.startVirtualThread(() -> {
             try {
-                var newGameProfile = MinecraftServer.getConnectionManager().transitionLoginToConfig(connection, gameProfile);
-                if (connection instanceof PlayerSocketConnection socketConnection) {
-                    socketConnection.UNSAFE_setProfile(newGameProfile);
-                }
+                MinecraftServer.getConnectionManager().transitionLoginToConfig(connection, gameProfile);
             } catch (Throwable t) {
                 MinecraftServer.getExceptionManager().handleException(t);
             }

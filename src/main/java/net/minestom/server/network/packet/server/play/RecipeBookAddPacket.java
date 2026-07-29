@@ -66,7 +66,7 @@ public record RecipeBookAddPacket(List<Entry> entries, boolean replace) implemen
     }
 
     @Override
-    public Collection<Component> components() {
+    public List<Component> components() {
         final var components = new ArrayList<Component>();
         for (Entry entry : entries)
             components.addAll(entry.display.components());

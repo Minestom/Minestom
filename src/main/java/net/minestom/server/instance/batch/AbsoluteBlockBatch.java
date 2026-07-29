@@ -61,7 +61,7 @@ public class AbsoluteBlockBatch implements Batch<Consumer<AbsoluteBlockBatch>> {
 
         final ChunkBatch chunkBatch;
         synchronized (chunkBatchesMap) {
-            chunkBatch = chunkBatchesMap.computeIfAbsent(chunkIndex, i -> new ChunkBatch(this.options));
+            chunkBatch = chunkBatchesMap.computeIfAbsent(chunkIndex, _ -> new ChunkBatch(this.options));
         }
 
         final int relativeX = x - (chunkX * Chunk.CHUNK_SIZE_X);
@@ -136,18 +136,18 @@ public class AbsoluteBlockBatch implements Batch<Consumer<AbsoluteBlockBatch>> {
                 final int chunkX = CoordConversion.chunkIndexGetX(chunkIndex);
                 final int chunkZ = CoordConversion.chunkIndexGetZ(chunkIndex);
                 final ChunkBatch batch = entry.getValue();
-                ChunkBatch chunkInverse = batch.apply(instance, chunkX, chunkZ, c -> {
+                ChunkBatch chunkInverse = batch.apply(instance, chunkX, chunkZ, _ -> {
                     final boolean isLast = counter.incrementAndGet() == chunkBatchesMap.size();
                     // Execute the callback if this was the last chunk to process
                     if (isLast) {
                         if (inverse != null) inverse.readyLatch.countDown();
-                        if (instance instanceof InstanceContainer) {
+                        if (instance instanceof InstanceContainer container) {
                             // FIXME: put method in Instance instead
-                            ((InstanceContainer) instance).refreshLastBlockChangeTime();
+                            container.refreshLastBlockChangeTime();
                         }
                         if (callback != null) {
                             if (safeCallback) {
-                                instance.scheduleNextTick(inst -> callback.accept(inverse));
+                                instance.scheduleNextTick(_ -> callback.accept(inverse));
                             } else {
                                 callback.accept(inverse);
                             }

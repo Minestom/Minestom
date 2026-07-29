@@ -24,7 +24,7 @@ public class SidebarCommand extends Command {
         addLine("FIXED ", Sidebar.NumberFormat.fixed(Component.text("FIXED").color(NamedTextColor.GRAY)));
         addLine("NULL ", null);
 
-        setDefaultExecutor((source, args) -> source.sendMessage(Component.text("Unknown syntax (note: title must be quoted)")));
+        setDefaultExecutor((source, _) -> source.sendMessage(Component.text("Unknown syntax (note: title must be quoted)")));
         setCondition(Conditions::playerOnly);
 
         var option = ArgumentType.Word("option").from("add-line", "remove-line", "set-title", "toggle", "update-content", "update-score");
@@ -44,24 +44,14 @@ public class SidebarCommand extends Command {
         int targetLine = context.get("target line");
         if (targetLine == -1) targetLine = currentLine;
         switch (option) {
-            case "add-line":
-                addLine(content, null);
-                break;
-            case "remove-line":
-                removeLine();
-                break;
-            case "set-title":
-                setTitle(content);
-                break;
-            case "toggle":
-                toggleSidebar(player);
-                break;
-            case "update-content":
-                updateLineContent(content, String.valueOf(targetLine));
-                break;
-            case "update-score":
-                updateLineScore(Integer.parseInt(content), String.valueOf(targetLine));
-                break;
+            case "add-line" -> addLine(content, null);
+            case "remove-line" -> removeLine();
+            case "set-title" -> setTitle(content);
+            case "toggle" -> toggleSidebar(player);
+            case "update-content" -> updateLineContent(content, String.valueOf(targetLine));
+            case "update-score" -> updateLineScore(Integer.parseInt(content), String.valueOf(targetLine));
+            default -> {
+            }
         }
     }
 

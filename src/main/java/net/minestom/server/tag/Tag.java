@@ -118,8 +118,8 @@ public sealed interface Tag<T extends @UnknownNullability Object> permits TagImp
      * @param key The key.
      * @return A transient tag with the key.
      */
+    @SuppressWarnings("unchecked")
     static <T> Tag<T> Transient(String key) {
-        //noinspection unchecked
         return (Tag<T>) TagImpl.tag(key, Serializers.EMPTY);
     }
 
