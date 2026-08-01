@@ -8,23 +8,23 @@ import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.kyori.adventure.key.Key;
 
 /**
- * Represents a resource location (namespaced identifier) value.
+ * Represents a {@link Key} value.
  * <p>
  *     Example: {@code minecraft:air}
  * </p>
  */
-public class ArgumentResourceLocation extends Argument<Key> {
+public class ArgumentKey extends Argument<Key> {
 
     public static final int PARSE_ERROR = 1;
 
-    public ArgumentResourceLocation(String id) {
+    public ArgumentKey(String id) {
         super(id);
     }
 
     @Override
     public Key parse(CommandSender sender, @KeyPattern String input) throws ArgumentSyntaxException {
         if (!Key.parseable(input))
-            throw new ArgumentSyntaxException("Invalid resource location", input, PARSE_ERROR);
+            throw new ArgumentSyntaxException("Invalid key", input, PARSE_ERROR);
 
         return Key.key(input);
     }
@@ -36,6 +36,6 @@ public class ArgumentResourceLocation extends Argument<Key> {
 
     @Override
     public String toString() {
-        return String.format("ResourceLocation<%s>", getId());
+        return String.format("Key<%s>", getId());
     }
 }

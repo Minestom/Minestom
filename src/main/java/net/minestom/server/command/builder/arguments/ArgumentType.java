@@ -170,12 +170,12 @@ public class ArgumentType {
     }
 
     /**
-     * Creates a new {@link ArgumentResourceLocation}.
+     * Creates a new {@link ArgumentKey}.
      *
-     * @see ArgumentResourceLocation
+     * @see ArgumentKey
      */
-    public static ArgumentResourceLocation ResourceLocation(String id) {
-        return new ArgumentResourceLocation(id);
+    public static ArgumentKey Key(String id) {
+        return new ArgumentKey(id);
     }
 
     /**

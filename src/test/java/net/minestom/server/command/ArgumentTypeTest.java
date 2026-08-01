@@ -220,14 +220,14 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentResourceLocation() {
-        var arg = ArgumentType.ResourceLocation("resource_location");
+    public void testArgumentKey() {
+        var arg = ArgumentType.Key("key");
 
         assertArg(arg, Key.key("foo:bar"), "foo:bar");
         assertArg(arg, Key.key("minecraft:air"), "air");
         assertArg(arg, Key.key("minecraft:foo/bar"), "foo/bar");
 
-        assertInvalidArg(arg, "minecraft:invalid resource location");
+        assertInvalidArg(arg, "minecraft:invalid key");
         assertInvalidArg(arg, "!");
         assertInvalidArg(arg, "a/b:empty");
     }

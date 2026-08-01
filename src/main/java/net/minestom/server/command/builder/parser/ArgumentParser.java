@@ -41,7 +41,7 @@ public class ArgumentParser {
         ARGUMENT_FUNCTION_MAP.put("color", ArgumentTeamColor::new);
         ARGUMENT_FUNCTION_MAP.put("time", ArgumentTime::new);
         ARGUMENT_FUNCTION_MAP.put("particle", ArgumentParticle::new);
-        ARGUMENT_FUNCTION_MAP.put("resourcelocation", ArgumentResourceLocation::new);
+        ARGUMENT_FUNCTION_MAP.put("key", ArgumentKey::new);
         ARGUMENT_FUNCTION_MAP.put("entitytype", ArgumentEntityType::new);
         ARGUMENT_FUNCTION_MAP.put("blockstate", ArgumentBlockState::new);
         ARGUMENT_FUNCTION_MAP.put("intrange", ArgumentIntRange::new);
