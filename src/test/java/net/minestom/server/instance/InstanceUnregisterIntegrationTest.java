@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 import java.util.UUID;
 
 import static net.minestom.testing.TestUtils.waitUntilCleared;
@@ -32,14 +33,28 @@ public class InstanceUnregisterIntegrationTest {
         env.tick();
 
         var acquired = player.acquirable().lock();
-        player.setInstance(instanceManager.createSharedInstance(instance)).join();
+        var shared2 = instanceManager.createSharedInstance(instance);
+        player.setInstance(shared2).join();
         acquired.unlock();
         listener.followup();
         env.tick();
 
         instanceManager.unregisterInstance(shared1);
+        Assertions.assertEquals(List.of(shared2), instance.getSharedInstances());
         listener.followup();
         env.tick();
+    }
+
+    @Test
+    public void sharedInstanceGC(Env env) {
+        var instanceManager = env.process().instance();
+        var instance = instanceManager.createInstanceContainer();
+        var shared = instanceManager.createSharedInstance(instance);
+        var ref = new WeakReference<>(shared);
+        instanceManager.unregisterInstance(shared);
+
+        shared = null;
+        waitUntilCleared(ref);
     }
 
     @Test
