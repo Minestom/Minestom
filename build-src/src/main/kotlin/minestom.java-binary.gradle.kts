@@ -4,7 +4,8 @@ plugins {
     id("minestom.style")
 }
 
-val javaVersion = System.getenv("JAVA_VERSION") ?: "25"
+//TODO(valhalla) revert to 25 when the branch no longer requires the valhalla jdk
+val javaVersion = System.getenv("JAVA_VERSION") ?: "28"
 
 group = "net.minestom"
 
@@ -26,4 +27,11 @@ java {
 
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
+    //TODO(valhalla) revert when gradle supports jdk28 (module-info.class main class stamping cannot parse class file 72)
+    options.javaModuleMainClass.unsetConvention()
+}
+
+tasks.withType<JavaExec> {
+    //TODO(valhalla) revert when jep 401 leaves preview
+    jvmArgs("--enable-preview")
 }

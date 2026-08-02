@@ -3,7 +3,8 @@ plugins {
     id("minestom.style")
 }
 
-val javaVersion = System.getenv("JAVA_VERSION") ?: "25"
+//TODO(valhalla) revert to 25 when the branch no longer requires the valhalla jdk
+val javaVersion = System.getenv("JAVA_VERSION") ?: "28"
 
 group = "net.minestom"
 version = System.getenv("MINESTOM_VERSION") ?: "dev"
@@ -51,9 +52,12 @@ tasks.withType<Javadoc> {
 
         // Custom options
         addBooleanOption("html5", true)
+        //TODO(valhalla) revert when jep 401 leaves preview
+        addBooleanOption("-enable-preview", true)
         addStringOption("-release", javaVersion)
         // Links to external javadocs
-        links("https://docs.oracle.com/en/java/javase/$javaVersion/docs/api/")
+        //TODO(valhalla) revert to $javaVersion when jdk28 javadocs are published (the 28 url redirects, which javadoc treats as an error)
+        links("https://docs.oracle.com/en/java/javase/26/docs/api/")
         if (!adventureVersion.endsWith("-SNAPSHOT")) {
             links("https://jd.papermc.io/adventure/${libs.versions.adventure.get()}/")
         }
@@ -67,6 +71,8 @@ tasks.withType<Javadoc> {
 tasks.withType<Test> {
     useJUnitPlatform()
 
+    //TODO(valhalla) revert when jep 401 leaves preview
+    jvmArgs("--enable-preview")
     // Viewable packets make tracking harder. Could be re-enabled later.
     jvmArgs("-Dminestom.viewable-packet=false")
     jvmArgs("-Dminestom.inside-test=true")
