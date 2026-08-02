@@ -253,7 +253,15 @@ final class CommandParserImpl implements CommandParser {
                         final SuggestionCallback deepestSuggestion = childResult.chain().suggestionCallback;
 
                         if (deepestSuggestion != null) {
-                            lastSuccess.chain().suggestionCallback = deepestSuggestion;
+                            final Chain errorChain = lastSuccess.chain().fork();
+                            errorChain.suggestionCallback = deepestSuggestion;
+
+                            lastSuccess = new NodeResult(
+                                    lastSuccess.node(),
+                                    errorChain,
+                                    lastSuccess.argumentResult(),
+                                    lastSuccess.callback()
+                            );
                         }
                         error = lastSuccess;
                     }
