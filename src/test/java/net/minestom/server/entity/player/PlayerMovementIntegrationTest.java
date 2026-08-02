@@ -2,6 +2,7 @@ package net.minestom.server.entity.player;
 
 import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.ChunkRange;
+import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.MainHand;
@@ -28,6 +29,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -337,6 +339,48 @@ public class PlayerMovementIntegrationTest {
     }
 
     @Test
+    public void testInstanceSwitchSameViewDoesNotUnloadOverlappingChunks(Env env) {
+        assertInstanceSwitchChunkUnloads(env, 8, new Pos(0, 42, 0), 8, new Pos(0, 42, 0));
+    }
+
+    @Test
+    public void testInstanceSwitchShrinkingViewUnloadsOldRing(Env env) {
+        assertInstanceSwitchChunkUnloads(env, 8, new Pos(0, 42, 0), 3, new Pos(0, 42, 0));
+    }
+
+    @Test
+    public void testInstanceSwitchExpandingViewDoesNotUnloadDestinationChunks(Env env) {
+        assertInstanceSwitchChunkUnloads(env, 3, new Pos(0, 42, 0), 8, new Pos(80, 42, 0));
+    }
+
+    private static void assertInstanceSwitchChunkUnloads(Env env, int oldInstanceViewDistance, Pos oldPosition, int newInstanceViewDistance, Pos newPosition) {
+        final Instance oldInstance = env.createFlatInstance();
+        oldInstance.viewDistance(oldInstanceViewDistance);
+        final Instance newInstance = env.createFlatInstance();
+        newInstance.viewDistance(newInstanceViewDistance);
+
+        final TestConnection connection = env.createConnection();
+        final Player player = connection.connect(oldInstance, oldPosition);
+        final int oldViewDistance = player.effectiveViewDistance();
+        final int newViewDistance = Math.min(ClientSettings.DEFAULT.viewDistance(), newInstanceViewDistance) + 1;
+
+        final Set<Long> expectedUnloads = new HashSet<>();
+        ChunkRange.chunksInRange(oldPosition.chunkX(), oldPosition.chunkZ(), oldViewDistance, (chunkX, chunkZ) -> {
+            if (!isChunkInView(chunkX, chunkZ, newPosition, newViewDistance)) {
+                expectedUnloads.add(CoordConversion.chunkIndex(chunkX, chunkZ));
+            }
+        });
+
+        final Collector<UnloadChunkPacket> removed = connection.trackIncoming(UnloadChunkPacket.class);
+        player.setInstance(newInstance, newPosition).join();
+
+        assertEquals(newViewDistance, player.effectiveViewDistance());
+        removed.assertCount(expectedUnloads.size());
+        final Set<Long> actualUnloads = removed.collect().stream().map(packet -> CoordConversion.chunkIndex(packet.chunkX(), packet.chunkZ())).collect(Collectors.toSet());
+        assertEquals(expectedUnloads, actualUnloads);
+    }
+
+    @Test
     public void testCancelledMove(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
@@ -356,5 +400,10 @@ public class PlayerMovementIntegrationTest {
             // Must reset velocity or the player will keep moving and create a loop of teleport cancel teleport.
             assertEquals(Vec.ZERO, packet.delta());
         });
+    }
+
+    private static boolean isChunkInView(int chunkX, int chunkZ, Pos viewCenter, int viewDistance) {
+        return Math.abs(chunkX - viewCenter.chunkX()) <= viewDistance
+                && Math.abs(chunkZ - viewCenter.chunkZ()) <= viewDistance;
     }
 }
