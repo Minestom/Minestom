@@ -636,7 +636,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
         // Ensure that surrounding chunks are loaded
         List<CompletableFuture<Chunk>> futures = new ArrayList<>();
-        ChunkRange.chunksInRange(spawnPosition, this.effectiveViewDistance(), (chunkX, chunkZ) -> {
+        ChunkRange.chunksInRange(spawnPosition, effectiveViewDistance(instance), (chunkX, chunkZ) -> {
             final CompletableFuture<Chunk> future = instance.loadOptionalChunk(chunkX, chunkZ);
             if (!future.isDone()) futures.add(future);
         });
@@ -709,12 +709,15 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         if (!firstSpawn && !dimensionChange) {
             // Player instance changed, clear current viewable collections
             if (updateChunks) {
-                final int viewDist = this.effectiveViewDistance();
+                final int oldViewDistance = effectiveViewDistance();
+                final int newViewDistance = effectiveViewDistance(instance);
+                final int newChunkX = spawnPosition.chunkX();
+                final int newChunkZ = spawnPosition.chunkZ();
                 ChunkRange.chunksInRange(
-                        (int) this.chunksLoadedByClient.x(), (int) this.chunksLoadedByClient.z(), viewDist,
+                        (int) this.chunksLoadedByClient.x(), (int) this.chunksLoadedByClient.z(), oldViewDistance,
                         (x, z) -> {
-                            boolean inNewView = Math.abs(x - spawnPosition.chunkX()) <= viewDist
-                                    && Math.abs(z - spawnPosition.chunkZ()) <= viewDist;
+                            boolean inNewView = Math.abs(x - newChunkX) <= newViewDistance
+                                    && Math.abs(z - newChunkZ) <= newViewDistance;
                             if (!inNewView) {
                                 // Only send UnloadChunkPacket for chunks no longer in the new view.
                                 // This alleviates a 26.2 client bug where, if it processes an UnloadChunkPacket
@@ -2473,7 +2476,10 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * @return The effective chunk view distance range of the client
      */
     public int effectiveViewDistance() {
-        Instance instance = this.instance;
+        return effectiveViewDistance(instance);
+    }
+
+    private int effectiveViewDistance(@Nullable Instance instance) {
         int maxViewDistance = instance != null ? instance.viewDistance() : ServerFlag.CHUNK_VIEW_DISTANCE;
         return Math.min(settings.viewDistance(), maxViewDistance) + 1;
     }
