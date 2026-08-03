@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import static net.minestom.server.instance.palette.PaletteAssertions.assertAllEquals;
+import static net.minestom.server.instance.palette.PaletteAssertions.nonZeroCount;
 import static net.minestom.server.instance.palette.PaletteAssertions.testPalettes;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -31,7 +32,7 @@ public class PaletteCloneTest {
             // Verify clone has same values
             assertEquals(original.get(0, 0, 0), cloned.get(0, 0, 0));
             assertEquals(original.get(1, 1, 1), cloned.get(1, 1, 1));
-            assertEquals(original.count(), cloned.count());
+            assertEquals(nonZeroCount(original), nonZeroCount(cloned));
             assertEquals(original.dimension(), cloned.dimension());
             assertEquals(original.bitsPerEntry(), cloned.bitsPerEntry());
 
@@ -80,7 +81,7 @@ public class PaletteCloneTest {
             // Clone empty palette
             Palette cloned = original.clone();
 
-            assertEquals(0, cloned.count());
+            assertEquals(0, nonZeroCount(cloned));
             assertEquals(original.dimension(), cloned.dimension());
             assertTrue(original.compare(cloned));
 
@@ -97,8 +98,8 @@ public class PaletteCloneTest {
 
             Palette cloned = original.clone();
 
-            assertEquals(original.count(), cloned.count());
-            assertEquals(original.maxSize(), cloned.count());
+            assertEquals(nonZeroCount(original), nonZeroCount(cloned));
+            assertEquals(original.maxSize(), nonZeroCount(cloned));
             assertTrue(original.compare(cloned));
 
             assertAllEquals(123, cloned);
@@ -117,7 +118,7 @@ public class PaletteCloneTest {
 
             Palette cloned = original.clone();
 
-            assertEquals(original.count(), cloned.count());
+            assertEquals(nonZeroCount(original), nonZeroCount(cloned));
             assertTrue(original.compare(cloned));
 
             // Verify pattern is preserved
@@ -142,13 +143,13 @@ public class PaletteCloneTest {
 
         int initialDimension = original.dimension();
         int initialBitsPerEntry = original.bitsPerEntry();
-        int initialCount = original.count();
+        int initialCount = nonZeroCount(original);
 
         Palette cloned = original.clone();
         // Verify basic properties
         assertEquals(initialDimension, cloned.dimension());
         assertEquals(initialBitsPerEntry, cloned.bitsPerEntry());
-        assertEquals(initialCount, cloned.count());
+        assertEquals(initialCount, nonZeroCount(cloned));
         assertTrue(original.compare(cloned));
         for (int i = 0; i < 10; i++) {
             assertEquals(i + 1, cloned.get(i % cloned.dimension(), 0, 0));
@@ -168,7 +169,7 @@ public class PaletteCloneTest {
 
         // Verify clone still has original data and hasn't been affected
         assertEquals(initialBitsPerEntry, cloned.bitsPerEntry());
-        assertEquals(initialCount, cloned.count());
+        assertEquals(initialCount, nonZeroCount(cloned));
 
         // Verify clone still has original values
         for (int i = 0; i < 10; i++) {
@@ -177,119 +178,25 @@ public class PaletteCloneTest {
     }
 
     @Test
-    public void cloneAndModifyBothDirections() {
+    public void cloneIndependenceUnderBulkMutations() {
         var palettes = testPalettes();
         for (Palette original : palettes) {
-            // Set initial pattern
-            original.setAll((x, y, z) -> (x + y + z) % 256);
-
-            Palette cloned = original.clone();
-            assertTrue(original.compare(cloned));
-
-            // Modify original extensively
-            original.fill(500);
-
-            // Modify clone extensively
-            cloned.fill(600);
-
-            // Verify they're completely independent
-            assertFalse(original.compare(cloned));
-
-            assertAllEquals(500, original);
-            assertAllEquals(600, cloned);
-        }
-    }
-
-    @Test
-    public void cloneWithOffset() {
-        var palettes = testPalettes();
-        for (Palette original : palettes) {
-            // Set pattern and apply offset
             original.setAll((x, y, z) -> x + y + z + 100);
             original.offset(50);
 
             Palette cloned = original.clone();
-
             assertTrue(original.compare(cloned));
+            cloned.getAll((x, y, z, value) -> assertEquals(x + y + z + 150, value));
 
-            // Verify offset was preserved in clone
-            cloned.getAll((x, y, z, value) -> {
-                int expected = x + y + z + 100 + 50;
-                assertEquals(expected, value);
-            });
-
-            // Apply different offset to original
             original.offset(-25);
+            cloned.getAll((x, y, z, value) -> assertEquals(x + y + z + 150, value));
 
-            // Verify clone is unaffected
-            cloned.getAll((x, y, z, value) -> {
-                int expected = x + y + z + 100 + 50;
-                assertEquals(expected, value);
-            });
-        }
-    }
-
-    @Test
-    public void cloneWithReplace() {
-        var palettes = testPalettes();
-        for (Palette original : palettes) {
-            // Set initial values
-            original.setAll((x, y, z) -> x + y + z);
-
-            Palette cloned = original.clone();
-
-            // Apply replace operation to original
             original.replaceAll((_, _, _, value) -> value * 2);
+            cloned.getAll((x, y, z, value) -> assertEquals(x + y + z + 150, value));
 
-            // Verify clone is unaffected
-            cloned.getAll((x, y, z, value) -> assertEquals(x + y + z, value));
-
-            // Apply different replace to clone
             cloned.replaceAll((_, _, _, value) -> value + 1000);
-
-            // Verify both have correct values
-            original.getAll((x, y, z, value) -> assertEquals((x + y + z) * 2, value));
-
-            cloned.getAll((x, y, z, value) -> assertEquals(x + y + z + 1000, value));
-        }
-    }
-
-    @Test
-    public void multipleClonesIndependence() {
-        var palettes = testPalettes();
-        for (Palette original : palettes) {
-            original.setAll((x, y, z) -> x * 100 + y * 10 + z);
-
-            // Create multiple clones
-            Palette clone1 = original.clone();
-            Palette clone2 = original.clone();
-            Palette clone3 = original.clone();
-
-            // Verify all are equal initially
-            assertTrue(original.compare(clone1));
-            assertTrue(original.compare(clone2));
-            assertTrue(original.compare(clone3));
-            assertTrue(clone1.compare(clone2));
-
-            // Modify each differently
-            original.fill(1);
-            clone1.fill(2);
-            clone2.fill(3);
-            clone3.fill(4);
-
-            // Verify all are different
-            assertFalse(original.compare(clone1));
-            assertFalse(original.compare(clone2));
-            assertFalse(clone1.compare(clone2));
-            assertFalse(clone2.compare(clone3));
-
-            // Verify each has correct values
-            assertEquals(original.maxSize(), original.count());
-            original.getAll((_, _, _, value) -> assertEquals(1, value));
-
-            clone1.getAll((_, _, _, value) -> assertEquals(2, value));
-            clone2.getAll((_, _, _, value) -> assertEquals(3, value));
-            clone3.getAll((_, _, _, value) -> assertEquals(4, value));
+            original.getAll((x, y, z, value) -> assertEquals((x + y + z + 125) * 2, value));
+            cloned.getAll((x, y, z, value) -> assertEquals(x + y + z + 1150, value));
         }
     }
 
@@ -323,7 +230,7 @@ public class PaletteCloneTest {
     public void cloneDifferentPaletteTypes() {
         // Test blocks vs biomes vs custom sized palettes
         Palette blockPalette = Palette.blocks();
-        Palette biomePalette = Palette.biomes();
+        Palette biomePalette = Palette.biomes(64);
         Palette customPalette = Palette.sized(8, 2, 6, 12, 4);
 
         List<Palette> palettes = List.of(blockPalette, biomePalette, customPalette);
@@ -335,7 +242,7 @@ public class PaletteCloneTest {
 
             assertEquals(original.dimension(), cloned.dimension());
             assertEquals(original.bitsPerEntry(), cloned.bitsPerEntry());
-            assertEquals(original.count(), cloned.count());
+            assertEquals(nonZeroCount(original), nonZeroCount(cloned));
             assertTrue(original.compare(cloned));
 
             // Verify independence

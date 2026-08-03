@@ -19,6 +19,7 @@ import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.snapshot.ChunkSnapshot;
 import net.minestom.server.snapshot.SnapshotImpl;
@@ -69,7 +70,15 @@ public class DynamicChunk extends Chunk {
         super(instance, chunkX, chunkZ, true);
         // Required to be here because the super call populates the min and max section.
         var sectionsTemp = new Section[maxSection - minSection];
-        Arrays.setAll(sectionsTemp, _ -> new Section());
+        final Registry<Biome> biomeRegistry = instance.registries().biome();
+        final int biomeId = biomeRegistry.getId(Biome.PLAINS);
+        final int biomeCount = biomeRegistry.size();
+        Arrays.setAll(sectionsTemp, _ -> {
+            Palette blocks = Palette.blocks(); // default AIR
+            Palette biomes = Palette.biomes(biomeCount);
+            biomes.fill(biomeId);
+            return new Section(blocks, biomes);
+        });
         this.sections = List.of(sectionsTemp);
     }
 
@@ -250,7 +259,11 @@ public class DynamicChunk extends Chunk {
     @Override
     public void reset() {
         assertWriteLock();
-        for (Section section : sections) section.clear();
+        final int biomeId = instance.registries().biome().getId(Biome.PLAINS);
+        for (Section section : sections) {
+            section.blockPalette().fill(0); //AIR
+            section.biomePalette().fill(biomeId);
+        }
         this.entries.clear();
     }
 
@@ -277,8 +290,8 @@ public class DynamicChunk extends Chunk {
             final byte[] data = NetworkBuffer.makeArray(networkBuffer -> {
                 for (Section section : sections) {
                     final Palette blockPalette = section.blockPalette();
-                    final short blockCount = (short) blockPalette.count();
-                    final short fluidCount = (short) countFluids(blockPalette);
+                    final short blockCount = (short) blockPalette.count(DynamicChunk::isNonAir);
+                    final short fluidCount = (short) blockPalette.count(DynamicChunk::isFluid);
                     networkBuffer.write(sectionSerializer, new ChunkData.Section(blockCount, fluidCount, blockPalette, section.biomePalette()));
                 }
             });
@@ -292,15 +305,9 @@ public class DynamicChunk extends Chunk {
         }
     }
 
-    // blocks with a non-empty fluid (liquids or waterlogged)
-    private static int countFluids(Palette blockPalette) {
-        final int single = blockPalette.singleValue();
-        if (single != -1) return isFluid(single) ? blockPalette.count() : 0;
-        final int[] count = {0};
-        blockPalette.getAllPresent((_, _, _, stateId) -> {
-            if (isFluid(stateId)) count[0]++;
-        });
-        return count[0];
+    private static boolean isNonAir(int blockStateId) {
+        final Block block = Block.fromStateId(blockStateId);
+        return block != null && !block.air();
     }
 
     private static boolean isFluid(int blockStateId) {
