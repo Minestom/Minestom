@@ -102,7 +102,7 @@ public class DataComponents {
     public static final DataComponent<Holder<TrimMaterial>> PROVIDES_TRIM_MATERIAL = register("provides_trim_material", Holder.networkType(Registries::trimMaterial, TrimMaterial.REGISTRY_NETWORK_TYPE), Holder.codec(Registries::trimMaterial, TrimMaterial.REGISTRY_CODEC));
     public static final DataComponent<Integer> OMINOUS_BOTTLE_AMPLIFIER = register("ominous_bottle_amplifier", NetworkBuffer.VAR_INT, Codec.INT);
     public static final DataComponent<RegistryKey<JukeboxSong>> JUKEBOX_PLAYABLE = register("jukebox_playable", JukeboxSong.JUKEBOX_PLAYABLE_NETWORK_TYPE, JukeboxSong.CODEC);
-    public static final DataComponent<TagKey<BannerPattern>> PROVIDES_BANNER_PATTERNS = register("provides_banner_patterns", TagKey.networkType(Registries::bannerPattern), TagKey.hashCodec(Registries::bannerPattern));
+    public static final DataComponent<RegistryTag<BannerPattern>> PROVIDES_BANNER_PATTERNS = register("provides_banner_patterns", RegistryTag.networkType(Registries::bannerPattern), RegistryTag.codec(Registries::bannerPattern));
     public static final DataComponent<List<String>> RECIPES = register("recipes", NetworkBuffer.STRING.list(Short.MAX_VALUE), Codec.STRING.list(Short.MAX_VALUE), List::copyOf);
     public static final DataComponent<LodestoneTracker> LODESTONE_TRACKER = register("lodestone_tracker", LodestoneTracker.NETWORK_TYPE, LodestoneTracker.CODEC);
     public static final DataComponent<FireworkExplosion> FIREWORK_EXPLOSION = register("firework_explosion", FireworkExplosion.NETWORK_TYPE, FireworkExplosion.CODEC);
