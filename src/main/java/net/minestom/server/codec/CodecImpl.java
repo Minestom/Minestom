@@ -27,7 +27,7 @@ import java.util.function.Supplier;
 @ApiStatus.Internal
 final class CodecImpl {
 
-    record RawValueImpl<D>(Transcoder<D> coder, D value) implements Codec.RawValue {
+    value record RawValueImpl<D>(Transcoder<D> coder, D value) implements Codec.RawValue {
         RawValueImpl {
             Objects.requireNonNull(coder, "coder");
             Objects.requireNonNull(value, "value");
@@ -43,7 +43,7 @@ final class CodecImpl {
         }
     }
 
-    record RawValueCodecImpl() implements Codec<Codec.RawValue> {
+    value record RawValueCodecImpl() implements Codec<Codec.RawValue> {
         @Override
         public <D> Result<RawValue> decode(Transcoder<D> coder, D value) {
             return new Result.Ok<>(new RawValueImpl<>(coder, value));
@@ -61,7 +61,7 @@ final class CodecImpl {
         <D> D encode(Transcoder<D> coder, T value);
     }
 
-    record PrimitiveImpl<T>(PrimitiveEncoder<T> encoder, Decoder<T> decoder) implements Codec<T> {
+    value record PrimitiveImpl<T>(PrimitiveEncoder<T> encoder, Decoder<T> decoder) implements Codec<T> {
         PrimitiveImpl {
             Objects.requireNonNull(encoder, "encoder");
             Objects.requireNonNull(decoder, "decoder");
@@ -79,7 +79,7 @@ final class CodecImpl {
         }
     }
 
-    record TriStateImpl() implements Codec<TriState> {
+    value record TriStateImpl() implements Codec<TriState> {
         @Override
         public <D> Result<TriState> decode(Transcoder<D> coder, D value) {
             final Result<Boolean> boolResult = coder.getBoolean(value);
@@ -104,7 +104,7 @@ final class CodecImpl {
         }
     }
 
-    record OptionalImpl<T>(Codec<T> inner, @Nullable T defaultValue) implements Codec<T> {
+    value record OptionalImpl<T>(Codec<T> inner, @Nullable T defaultValue) implements Codec<T> {
         OptionalImpl {
             Objects.requireNonNull(inner, "inner");
         }
@@ -122,7 +122,7 @@ final class CodecImpl {
         }
     }
 
-    record TransformImpl<T, S>(
+    value record TransformImpl<T, S>(
             Codec<T> inner, ThrowingFunction<T, S> to,
             ThrowingFunction<@Nullable S, T> from
     ) implements Codec<S> {
@@ -155,7 +155,7 @@ final class CodecImpl {
         }
     }
 
-    record ListImpl<T>(Codec<T> inner, int maxSize) implements Codec<@Unmodifiable List<T>> {
+    value record ListImpl<T>(Codec<T> inner, int maxSize) implements Codec<@Unmodifiable List<T>> {
         ListImpl {
             Objects.requireNonNull(inner, "inner");
         }
@@ -195,7 +195,7 @@ final class CodecImpl {
         }
     }
 
-    record SetImpl<T>(Codec<T> inner, int maxSize) implements Codec<@Unmodifiable Set<T>> {
+    value record SetImpl<T>(Codec<T> inner, int maxSize) implements Codec<@Unmodifiable Set<T>> {
         SetImpl {
             Objects.requireNonNull(inner, "inner");
         }
@@ -234,7 +234,7 @@ final class CodecImpl {
         }
     }
 
-    record MapImpl<K, V>(
+    value record MapImpl<K, V>(
             Codec<K> keyCodec, Codec<V> valueCodec,
             int maxSize
     ) implements Codec<@Unmodifiable Map<K, V>> {
@@ -289,7 +289,7 @@ final class CodecImpl {
         }
     }
 
-    record TypedMapImpl<K, V>(
+    value record TypedMapImpl<K, V>(
             Codec<K> keyCodec,
             Function<K, Codec<V>> valueMapper,
             int maxSize,
@@ -356,7 +356,7 @@ final class CodecImpl {
         }
     }
 
-    record UnionImpl<T, R>(
+    value record UnionImpl<T, R>(
             String keyField, Codec<T> keyCodec,
             Function<T, @Nullable StructCodec<? extends R>> serializers,
             Function<R, ? extends T> keyFunc
@@ -398,7 +398,7 @@ final class CodecImpl {
     }
 
     @SuppressWarnings("unchecked")
-    record RegistryTaggedUnionImpl<T>(
+    value record RegistryTaggedUnionImpl<T>(
             String key,
             Registries.Selector<StructCodec<? extends T>> registrySelector,
             Function<T, StructCodec<? extends T>> valueToCodec
@@ -441,7 +441,7 @@ final class CodecImpl {
         }
     }
 
-    static final class RecursiveImpl<T> implements Codec<T> {
+    static final class RecursiveImpl<T> implements Codec<T> { //TODO(valhalla)
         final Codec<T> delegate;
 
         public RecursiveImpl(Function<Codec<T>, Codec<T>> self) {
@@ -460,34 +460,23 @@ final class CodecImpl {
         }
     }
 
-    static final class ForwardRefImpl<T> implements Codec<T> {
-        private final Supplier<Codec<T>> delegateFunc;
-        private @Nullable Codec<T> delegate;
-
-        ForwardRefImpl(Supplier<Codec<T>> delegateFunc) {
-            this.delegateFunc = Objects.requireNonNull(delegateFunc, "delegateFunc");
-        }
-
-        // Racing should produce the same result (bogon data race, excluding identity)
-        private Codec<T> delegate() {
-            Codec<T> delegate = this.delegate;
-            if (delegate == null)
-                delegate = this.delegate = Objects.requireNonNull(delegateFunc.get(), "delegate");
-            return delegate;
+    value record ForwardRefImpl<T>(LazyConstant<Codec<T>> delegate) implements Codec<T> {
+        ForwardRefImpl(Supplier<Codec<T>> delegate) {
+            this(LazyConstant.of(delegate));
         }
 
         @Override
         public <D> Result<T> decode(Transcoder<D> coder, D value) {
-            return delegate().decode(coder, value);
+            return delegate.get().decode(coder, value);
         }
 
         @Override
         public <D> Result<D> encode(Transcoder<D> coder, @Nullable T value) {
-            return delegate().encode(coder, value);
+            return delegate.get().encode(coder, value);
         }
     }
 
-    record OrElseImpl<T>(Codec<T> primary, Codec<T> secondary) implements Codec<T> {
+    value record OrElseImpl<T>(Codec<T> primary, Codec<T> secondary) implements Codec<T> {
         OrElseImpl {
             Objects.requireNonNull(primary, "primary");
             Objects.requireNonNull(secondary, "secondary");
@@ -524,7 +513,7 @@ final class CodecImpl {
         }
     }
 
-    record BlockPositionImpl() implements Codec<Point> {
+    value record BlockPositionImpl() implements Codec<Point> {
         @Override
         public <D> Result<Point> decode(Transcoder<D> coder, D value) {
             final Result<int[]> intArrayResult = coder.getIntArray(value);
@@ -546,7 +535,7 @@ final class CodecImpl {
         }
     }
 
-    record EitherImpl<L, R>(Codec<L> leftCodec, Codec<R> rightCodec) implements Codec<Either<L, R>> {
+    value record EitherImpl<L, R>(Codec<L> leftCodec, Codec<R> rightCodec) implements Codec<Either<L, R>> {
         EitherImpl {
             Objects.requireNonNull(leftCodec, "leftCodec");
             Objects.requireNonNull(rightCodec, "rightCodec");
@@ -573,7 +562,7 @@ final class CodecImpl {
         }
     }
 
-    record EitherStructImpl<L, R>(
+    value record EitherStructImpl<L, R>(
             StructCodec<L> leftCodec,
             StructCodec<R> rightCodec
     ) implements StructCodec<Either<L, R>> {
@@ -602,7 +591,7 @@ final class CodecImpl {
         }
     }
 
-    record Vector3DImpl() implements Codec<Point> {
+    value record Vector3DImpl() implements Codec<Point> {
         @Override
         public <D> Result<Point> decode(Transcoder<D> coder, D value) {
             final Result<List<D>> listResult = coder.getList(value);
@@ -633,7 +622,7 @@ final class CodecImpl {
         }
     }
 
-    record CompoundBinaryTagImpl() implements StructCodec<CompoundBinaryTag> {
+    value record CompoundBinaryTagImpl() implements StructCodec<CompoundBinaryTag> {
         @Override
         public <D> Result<CompoundBinaryTag> decodeFromMap(Transcoder<D> coder, Transcoder.MapLike<D> map) {
             final CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();

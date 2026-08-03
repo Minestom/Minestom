@@ -14,7 +14,7 @@ import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record TabCompletePacket(int transactionId, int start, int length,
+public value record TabCompletePacket(int transactionId, int start, int length,
                                 List<Match> matches) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final int MAX_ENTRIES = Short.MAX_VALUE;
 
@@ -48,7 +48,7 @@ public record TabCompletePacket(int transactionId, int start, int length,
         return new TabCompletePacket(transactionId, start, length, updatedMatches);
     }
 
-    public record Match(String match, @Nullable Component tooltip) implements ComponentHolder<Match> {
+    public value record Match(String match, @Nullable Component tooltip) implements ComponentHolder<Match> {
         public static final NetworkBuffer.Type<Match> SERIALIZER = NetworkBufferTemplate.template(
                 STRING, Match::match,
                 COMPONENT.optional(), Match::tooltip,

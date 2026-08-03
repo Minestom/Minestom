@@ -25,7 +25,7 @@ import java.util.function.IntFunction;
  *
  * @param components The component patch.
  */
-record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implements DataComponentMap {
+value record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implements DataComponentMap {
     private static final char REMOVAL_PREFIX = '!';
 
     static DataComponentMap fromMap(Int2ObjectMap<@Nullable Object> components) {
@@ -108,7 +108,7 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
         return new PatchBuilderImpl(new Int2ObjectArrayMap<>(components));
     }
 
-    record BuilderImpl(Int2ObjectMap<@Nullable Object> components) implements DataComponentMap.Builder {
+    value record BuilderImpl(Int2ObjectMap<@Nullable Object> components) implements DataComponentMap.Builder {
 
         @Override
         public boolean has(DataComponent<?> component) {
@@ -133,7 +133,7 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
         }
     }
 
-    record PatchBuilderImpl(Int2ObjectMap<@Nullable Object> components) implements DataComponentMap.PatchBuilder {
+    value record PatchBuilderImpl(Int2ObjectMap<@Nullable Object> components) implements DataComponentMap.PatchBuilder {
 
         @Override
         public boolean has(DataComponent<?> component) {
@@ -170,7 +170,7 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
         }
     }
 
-    record NetworkTypeImpl(
+    value record NetworkTypeImpl(
             IntFunction<@Nullable DataComponent<?>> idToType,
             boolean isPatch, boolean isTrusted
     ) implements NetworkBuffer.Type<DataComponentMap> {
@@ -237,7 +237,7 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
         }
     }
 
-    record CodecImpl(
+    value record CodecImpl(
             IntFunction<@Nullable DataComponent<?>> idToType,
             Function<String, @Nullable DataComponent<?>> nameToType,
             boolean isPatch

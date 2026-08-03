@@ -8,7 +8,7 @@ import java.util.Map;
 
 import static net.minestom.server.network.NetworkBuffer.BITSET;
 
-public record FilterMask(Type type, BitSet mask) {
+public value record FilterMask(Type type, BitSet mask) {
     public static final NetworkBuffer.Type<FilterMask> SERIALIZER = NetworkBuffer.Tagged(
             NetworkBuffer.Enum(Type.class), FilterMask::type,
             Map.of(

@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.function.Predicate;
 
-public record ItemPredicate(
+public value record ItemPredicate(
         @Nullable RegistryTag<Material> items,
         @Nullable Range.Int count,
         @Nullable DataComponentPredicates predicates

@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  * An utilities class for {@link UUID}.
  */
 @ApiStatus.Internal
-public final class UUIDUtils {
+public value class UUIDUtils {
     public static final Pattern UNIQUE_ID_PATTERN = Pattern.compile("\\b[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}\\b");
 
     /**

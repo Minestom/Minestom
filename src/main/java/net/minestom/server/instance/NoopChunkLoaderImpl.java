@@ -2,7 +2,7 @@ package net.minestom.server.instance;
 
 import org.jetbrains.annotations.Nullable;
 
-record NoopChunkLoaderImpl() implements ChunkLoader {
+value record NoopChunkLoaderImpl() implements ChunkLoader {
     static final NoopChunkLoaderImpl INSTANCE = new NoopChunkLoaderImpl();
 
     @Override

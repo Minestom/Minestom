@@ -7,7 +7,7 @@ import net.minestom.server.event.player.PlayerSetGameRulesEvent;
 import net.minestom.server.network.packet.client.play.ClientSetGameRulesPacket;
 import net.minestom.server.network.packet.client.play.ClientStatusPacket;
 
-public final class PlayerSettingsMenuListener {
+public value class PlayerSettingsMenuListener {
 
     public static void requestGameRules(ClientStatusPacket ignored, Player player) {
         EventDispatcher.call(new PlayerGameRulesRequestEvent(player));

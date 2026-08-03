@@ -1,6 +1,6 @@
 package net.minestom.server.coordinate;
 
-public final class CoordConversion {
+public value class CoordConversion {
     public static final int REGION_SIZE = 512;
     public static final int SECTION_SIZE = 16;
     public static final int SECTION_BOUND = 15;

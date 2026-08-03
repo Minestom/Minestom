@@ -10,7 +10,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 /**
  * Represent an attribute modifier.
  */
-public record AttributeModifier(Key id, double amount, AttributeOperation operation) {
+public value record AttributeModifier(Key id, double amount, AttributeOperation operation) {
     public static final NetworkBuffer.Type<AttributeModifier> NETWORK_TYPE = NetworkBufferTemplate.template(
             NetworkBuffer.KEY, AttributeModifier::id,
             NetworkBuffer.DOUBLE, AttributeModifier::amount,

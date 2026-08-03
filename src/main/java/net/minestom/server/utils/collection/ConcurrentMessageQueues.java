@@ -11,7 +11,7 @@ import org.jctools.queues.atomic.MpscUnboundedAtomicArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
-public final class ConcurrentMessageQueues {
+public value class ConcurrentMessageQueues {
 
     public static <T> MessagePassingQueue<T> mpscArrayQueue(int capacity) {
         return ServerFlag.UNSAFE_COLLECTIONS ? new MpscArrayQueue<>(capacity) : new MpscAtomicArrayQueue<>(capacity);

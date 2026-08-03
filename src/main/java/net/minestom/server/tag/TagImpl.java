@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 @ApiStatus.Internal
-record TagImpl<T>(int index, String key,
+value record TagImpl<T>(int index, String key,
                          Function<?, ?> readComparator,
                          Serializers.Entry<T, BinaryTag> entry,
                          // Optional properties
@@ -216,6 +216,6 @@ record TagImpl<T>(int index, String key,
         return result;
     }
 
-    public record PathEntry(String name, int index) {
+    public value record PathEntry(String name, int index) {
     }
 }

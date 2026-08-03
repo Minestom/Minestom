@@ -13,7 +13,7 @@ import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.UnknownNullability;
 
 @SuppressWarnings("removal")
-final class ParticleImpl {
+value class ParticleImpl {
     static final Registry<Particle> REGISTRY = RegistryData.createStaticRegistry(BuiltinRegistries.PARTICLE_TYPE,
             (namespace, properties) -> defaultParticle(Key.key(namespace), properties.getInt("id")));
 

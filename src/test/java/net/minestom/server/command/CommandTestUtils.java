@@ -219,7 +219,7 @@ public class CommandTestUtils {
             return path;
         }
 
-        record TestNode(List<String> children, String meta, AtomicReference<String> redirect) {
+        value record TestNode(List<String> children, String meta, AtomicReference<String> redirect) {
             @Override
             public boolean equals(Object obj) {
                 if (obj instanceof TestNode(List<String> children1, String meta1, AtomicReference<String> redirect1)) {

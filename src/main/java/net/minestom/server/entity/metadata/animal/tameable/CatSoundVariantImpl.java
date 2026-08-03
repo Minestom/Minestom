@@ -4,7 +4,7 @@ import net.minestom.server.sound.SoundEvent;
 
 import java.util.Objects;
 
-record CatSoundVariantImpl(
+value record CatSoundVariantImpl(
         CatSoundVariant.CatSoundSet adultSounds,
         CatSoundVariant.CatSoundSet babySounds
 ) implements CatSoundVariant {
@@ -14,7 +14,7 @@ record CatSoundVariantImpl(
         Objects.requireNonNull(babySounds, "babySounds");
     }
 
-    record CatSoundSetImpl(
+    value record CatSoundSetImpl(
             SoundEvent ambientSound,
             SoundEvent strayAmbientSound,
             SoundEvent hissSound,

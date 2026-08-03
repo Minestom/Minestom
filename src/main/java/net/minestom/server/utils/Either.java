@@ -19,13 +19,13 @@ public sealed interface Either<L, R> {
         return either.unify(Function.identity(), Function.identity());
     }
 
-    record Left<L, R>(L value) implements Either<L, R> {
+    value record Left<L, R>(L value) implements Either<L, R> {
         public Left {
             Objects.requireNonNull(value, "Left value must not be null");
         }
     }
 
-    record Right<L, R>(R value) implements Either<L, R> {
+    value record Right<L, R>(R value) implements Either<L, R> {
         public Right {
             Objects.requireNonNull(value, "Right value must not be null");
         }

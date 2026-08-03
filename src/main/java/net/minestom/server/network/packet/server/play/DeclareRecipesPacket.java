@@ -11,7 +11,7 @@ import net.minestom.server.recipe.display.SlotDisplay;
 import java.util.List;
 import java.util.Map;
 
-public record DeclareRecipesPacket(
+public value record DeclareRecipesPacket(
         Map<RecipeProperty, List<Material>> itemProperties,
         List<StonecutterRecipe> stonecutterRecipes
 ) implements ServerPacket.Play {
@@ -28,7 +28,7 @@ public record DeclareRecipesPacket(
         stonecutterRecipes = List.copyOf(stonecutterRecipes);
     }
 
-    public record StonecutterRecipe(
+    public value record StonecutterRecipe(
             Ingredient ingredient,
             SlotDisplay optionDisplay
     ) {

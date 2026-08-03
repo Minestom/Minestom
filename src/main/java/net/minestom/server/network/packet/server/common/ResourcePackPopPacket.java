@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public record ResourcePackPopPacket(@Nullable UUID id) implements ServerPacket.Configuration, ServerPacket.Play {
+public value record ResourcePackPopPacket(@Nullable UUID id) implements ServerPacket.Configuration, ServerPacket.Play {
     public static final NetworkBuffer.Type<ResourcePackPopPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.UUID.optional(), ResourcePackPopPacket::id,
             ResourcePackPopPacket::new);

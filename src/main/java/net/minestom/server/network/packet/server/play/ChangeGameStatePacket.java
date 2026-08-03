@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 
 import static net.minestom.server.network.NetworkBuffer.FLOAT;
 
-public record ChangeGameStatePacket(Reason reason, float value) implements ServerPacket.Play {
+public value record ChangeGameStatePacket(Reason reason, float value) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<ChangeGameStatePacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.Enum(Reason.class), ChangeGameStatePacket::reason,
             FLOAT, ChangeGameStatePacket::value,

@@ -7,7 +7,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.Nullable;
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record FacePlayerPacket(FacePosition facePosition,
+public value record FacePlayerPacket(FacePosition facePosition,
                                Point target, int entityId,
                                @Nullable FacePosition entityFacePosition) implements ServerPacket.Play {
 

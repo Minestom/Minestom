@@ -55,10 +55,10 @@ final class ItemStackHashImpl {
         }
     };
 
-    record Air() implements ItemStack.Hash {
+    value record Air() implements ItemStack.Hash {
     }
 
-    record Item(
+    value record Item(
             Material material,
             int amount,
             Map<DataComponent<?>, Integer> addedComponents,

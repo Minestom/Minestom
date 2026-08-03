@@ -7,7 +7,7 @@ import net.minestom.server.registry.DynamicRegistry;
 
 import java.util.Objects;
 
-record EnvironmentAttributeImpl<T>(
+value record EnvironmentAttributeImpl<T>(
         Key key,
         EnvironmentAttribute.Type<T> type,
         T defaultValue

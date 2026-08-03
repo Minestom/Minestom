@@ -3,7 +3,7 @@ package net.minestom.server.event.entity.projectile;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.event.trait.EntityInstanceEvent;
 
-public final class ProjectileUncollideEvent implements EntityInstanceEvent {
+public value class ProjectileUncollideEvent implements EntityInstanceEvent {
 
     private final Entity projectile;
 

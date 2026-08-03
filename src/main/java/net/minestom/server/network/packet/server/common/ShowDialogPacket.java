@@ -8,7 +8,7 @@ import net.minestom.server.registry.Holder;
 
 import java.util.Objects;
 
-public record ShowDialogPacket(
+public value record ShowDialogPacket(
         Holder<Dialog> dialog
 ) implements ServerPacket.Configuration, ServerPacket.Play {
     public static final NetworkBuffer.Type<ShowDialogPacket> SERIALIZER = NetworkBufferTemplate.template(

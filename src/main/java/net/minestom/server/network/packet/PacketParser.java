@@ -39,7 +39,7 @@ public sealed interface PacketParser<T> {
         };
     }
 
-    record Client(
+    value record Client(
             PacketRegistry<ClientPacket.Handshake> handshake,
             PacketRegistry<ClientPacket.Status> status,
             PacketRegistry<ClientPacket.Login> login,
@@ -48,7 +48,7 @@ public sealed interface PacketParser<T> {
     ) implements PacketParser<ClientPacket> {
     }
 
-    record Server(
+    value record Server(
             PacketRegistry<ServerPacket.Handshake> handshake,
             PacketRegistry<ServerPacket.Status> status,
             PacketRegistry<ServerPacket.Login> login,

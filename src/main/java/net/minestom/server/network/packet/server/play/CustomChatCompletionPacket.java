@@ -8,7 +8,7 @@ import java.util.List;
 
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
-public record CustomChatCompletionPacket(Action action,
+public value record CustomChatCompletionPacket(Action action,
                                          List<String> entries) implements ServerPacket.Play {
     public static final int MAX_ENTRIES = Short.MAX_VALUE;
 

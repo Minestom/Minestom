@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 
-final class GraphConverter {
+value class GraphConverter {
     private GraphConverter() {
         //no instance
     }

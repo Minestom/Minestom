@@ -7,7 +7,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record Food(int nutrition, float saturationModifier, boolean canAlwaysEat) {
+public value record Food(int nutrition, float saturationModifier, boolean canAlwaysEat) {
 
     public static final NetworkBuffer.Type<Food> NETWORK_TYPE = NetworkBufferTemplate.template(
             VAR_INT, Food::nutrition,

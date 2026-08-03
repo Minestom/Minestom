@@ -5,7 +5,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 
-public record SwingAnimation(Type type, int duration) {
+public value record SwingAnimation(Type type, int duration) {
     public static final SwingAnimation DEFAULT = new SwingAnimation(Type.WHACK, 6);
 
     public static final NetworkBuffer.Type<SwingAnimation> NETWORK_TYPE = NetworkBufferTemplate.template(

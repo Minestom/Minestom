@@ -6,7 +6,7 @@ import net.minestom.server.network.NetworkBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
-public record DebugStickState(Map<String, String> state) {
+public value record DebugStickState(Map<String, String> state) {
     public static final DebugStickState EMPTY = new DebugStickState(Map.of());
 
     public static final Codec<DebugStickState> CODEC = Codec.STRING.mapValue(Codec.STRING)

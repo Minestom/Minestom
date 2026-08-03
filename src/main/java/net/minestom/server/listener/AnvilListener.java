@@ -7,7 +7,7 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.network.packet.client.play.ClientNameItemPacket;
 
-public final class AnvilListener {
+public value class AnvilListener {
 
     public static void nameItemListener(ClientNameItemPacket packet, Player player) {
         if (!(player.getOpenInventory() instanceof Inventory openInventory))

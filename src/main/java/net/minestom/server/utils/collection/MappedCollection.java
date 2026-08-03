@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
 @ApiStatus.Internal
-public record MappedCollection<O, R>(Collection<O> original,
+public value record MappedCollection<O, R>(Collection<O> original,
                                      Function<O, R> mapper) implements Collection<R> {
     public static <O extends AtomicReference<R>, R> MappedCollection<O, R> plainReferences(Collection<O> original) {
         return new MappedCollection<>(original, AtomicReference::getPlain);

@@ -6,7 +6,7 @@ import net.minestom.server.utils.Either;
 
 import java.util.function.Function;
 
-public record AlphaFloat(float value, float alpha) {
+public value record AlphaFloat(float value, float alpha) {
     private static final StructCodec<AlphaFloat> STRUCT_CODEC = StructCodec.struct(
             "value", Codec.FLOAT, AlphaFloat::value,
             "alpha", Codec.FLOAT.optional(1f), AlphaFloat::alpha,

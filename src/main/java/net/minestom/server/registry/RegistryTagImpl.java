@@ -12,7 +12,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 final class RegistryTagImpl {
 
-    record Empty() implements RegistryTag<Object> {
+    value record Empty() implements RegistryTag<Object> {
         public static final Empty INSTANCE = new Empty();
 
         @Override
@@ -86,7 +86,7 @@ final class RegistryTagImpl {
         }
     }
 
-    record Direct<T>(List<RegistryKey<T>> keys) implements RegistryTag<T> {
+    value record Direct<T>(List<RegistryKey<T>> keys) implements RegistryTag<T> {
         public Direct {
             keys = List.copyOf(keys);
         }

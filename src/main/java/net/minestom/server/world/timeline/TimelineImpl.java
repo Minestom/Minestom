@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.Objects;
 
-public record TimelineImpl(
+public value record TimelineImpl(
         RegistryKey<WorldClock> clock,
         @Nullable Integer periodTicks,
         Map<EnvironmentAttribute<?>, Track<?, ?>> tracks,

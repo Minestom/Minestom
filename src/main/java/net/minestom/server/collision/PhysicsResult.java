@@ -23,7 +23,7 @@ import org.jetbrains.annotations.UnknownNullability;
  * @param cached if the result was due to quickly exiting
  */
 @ApiStatus.Experimental
-public record PhysicsResult(
+public value record PhysicsResult(
         Pos newPosition,
         Vec newVelocity,
         boolean isOnGround,

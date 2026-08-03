@@ -1,6 +1,6 @@
 package net.minestom.server.utils.inventory;
 
-public final class PlayerInventoryUtils {
+public value class PlayerInventoryUtils {
     /*
     There are 3 different slot mappings discussed in this file:
     - Minestom slots

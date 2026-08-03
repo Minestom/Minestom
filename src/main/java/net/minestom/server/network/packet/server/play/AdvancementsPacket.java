@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.UnaryOperator;
 
-public record AdvancementsPacket(
+public value record AdvancementsPacket(
         boolean reset,
         List<AdvancementMapping> advancementMappings,
         List<String> identifiersToRemove,
@@ -69,7 +69,7 @@ public record AdvancementsPacket(
     /**
      * AdvancementMapping maps the namespaced ID to the Advancement.
      */
-    public record AdvancementMapping(String key,
+    public value record AdvancementMapping(String key,
                                      Advancement value) implements ComponentHolder<AdvancementMapping> {
         public static final NetworkBuffer.Type<AdvancementMapping> SERIALIZER = NetworkBufferTemplate.template(
                 NetworkBuffer.STRING, AdvancementMapping::key,
@@ -88,7 +88,7 @@ public record AdvancementsPacket(
         }
     }
 
-    public record Advancement(@Nullable String parentIdentifier, @Nullable DisplayData displayData,
+    public value record Advancement(@Nullable String parentIdentifier, @Nullable DisplayData displayData,
                               List<Requirement> requirements,
                               boolean sendTelemetryData) implements ComponentHolder<Advancement> {
         public Advancement {
@@ -114,7 +114,7 @@ public record AdvancementsPacket(
         }
     }
 
-    public record Requirement(List<String> requirements) {
+    public value record Requirement(List<String> requirements) {
         public static final NetworkBuffer.Type<Requirement> SERIALIZER = NetworkBufferTemplate.template(
                 NetworkBuffer.STRING.list(MAX_ADVANCEMENTS), Requirement::requirements,
                 Requirement::new
@@ -125,7 +125,7 @@ public record AdvancementsPacket(
         }
     }
 
-    public record DisplayData(Component title, Component description,
+    public value record DisplayData(Component title, Component description,
                               ItemStack icon, FrameType frameType,
                               int flags, @Nullable String backgroundTexture,
                               float x, float y) implements ComponentHolder<DisplayData> {
@@ -174,7 +174,7 @@ public record AdvancementsPacket(
         }
     }
 
-    public record ProgressMapping(String key, AdvancementProgress progress) {
+    public value record ProgressMapping(String key, AdvancementProgress progress) {
         public static final NetworkBuffer.Type<ProgressMapping> SERIALIZER = NetworkBufferTemplate.template(
                 NetworkBuffer.STRING, ProgressMapping::key,
                 AdvancementProgress.SERIALIZER, ProgressMapping::progress,
@@ -182,7 +182,7 @@ public record AdvancementsPacket(
         );
     }
 
-    public record AdvancementProgress(List<Criteria> criteria) {
+    public value record AdvancementProgress(List<Criteria> criteria) {
         public static final NetworkBuffer.Type<AdvancementProgress> SERIALIZER = NetworkBufferTemplate.template(
                 Criteria.SERIALIZER.list(MAX_ADVANCEMENTS), AdvancementProgress::criteria,
                 AdvancementProgress::new
@@ -193,7 +193,7 @@ public record AdvancementsPacket(
         }
     }
 
-    public record Criteria(String criterionIdentifier, CriterionProgress criterionProgress) {
+    public value record Criteria(String criterionIdentifier, CriterionProgress criterionProgress) {
         public static final NetworkBuffer.Type<Criteria> SERIALIZER = NetworkBufferTemplate.template(
                 NetworkBuffer.STRING, Criteria::criterionIdentifier,
                 CriterionProgress.SERIALIZER, Criteria::criterionProgress,
@@ -201,7 +201,7 @@ public record AdvancementsPacket(
         );
     }
 
-    public record CriterionProgress(@Nullable Long dateOfAchieving) {
+    public value record CriterionProgress(@Nullable Long dateOfAchieving) {
         public static final NetworkBuffer.Type<CriterionProgress> SERIALIZER = NetworkBufferTemplate.template(
                 NetworkBuffer.LONG.optional(), CriterionProgress::dateOfAchieving,
                 CriterionProgress::new

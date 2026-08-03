@@ -13,7 +13,7 @@ import java.util.function.UnaryOperator;
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record EntityEquipmentPacket(int entityId,
+public value record EntityEquipmentPacket(int entityId,
                                     Map<EquipmentSlot, ItemStack> equipments) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public EntityEquipmentPacket {
         equipments = Map.copyOf(equipments);

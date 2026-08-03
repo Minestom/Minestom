@@ -11,7 +11,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 @ApiStatus.Internal
-public final class ChunkUtils {
+public value class ChunkUtils {
 
     private ChunkUtils() {
     }

@@ -109,7 +109,7 @@ final class EntityView {
         this.trackedLocation = instance != null ? new TrackedLocation(instance, point) : null;
     }
 
-    record TrackedLocation(Instance instance, Point point) {
+    value record TrackedLocation(Instance instance, Point point) {
     }
 
     public boolean manualAdd(Player player) {

@@ -5,7 +5,7 @@ import net.minestom.server.utils.validate.Check;
 
 import java.util.Objects;
 
-record CowVariantImpl(
+value record CowVariantImpl(
         CowVariant.Model model,
         Key assetId,
         Key babyAssetId

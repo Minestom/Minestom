@@ -9,7 +9,7 @@ import net.minestom.server.potion.PotionEffect;
 import java.util.ArrayList;
 import java.util.List;
 
-public record SuspiciousStewEffects(List<Effect> effects) {
+public value record SuspiciousStewEffects(List<Effect> effects) {
     public static final int DEFAULT_DURATION = 160;
     public static final SuspiciousStewEffects EMPTY = new SuspiciousStewEffects(List.of());
 
@@ -30,7 +30,7 @@ public record SuspiciousStewEffects(List<Effect> effects) {
         return new SuspiciousStewEffects(newEffects);
     }
 
-    public record Effect(PotionEffect id, int durationTicks) {
+    public value record Effect(PotionEffect id, int durationTicks) {
 
         public static final NetworkBuffer.Type<Effect> NETWORK_TYPE = NetworkBufferTemplate.template(
                 PotionEffect.NETWORK_TYPE, Effect::id,

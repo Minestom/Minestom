@@ -2,7 +2,7 @@ package net.minestom.server.utils;
 
 import org.jetbrains.annotations.Nullable;
 
-public class StringUtils {
+public value class StringUtils {
 
     public static final String SPACE = " ";
     public static final char SPACE_CHAR = ' ';

@@ -4,7 +4,7 @@ import net.kyori.adventure.key.Key;
 
 import java.util.Objects;
 
-record ZombieNautilusVariantImpl(
+value record ZombieNautilusVariantImpl(
         Model model,
         Key assetId
 ) implements ZombieNautilusVariant {

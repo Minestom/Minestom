@@ -39,7 +39,7 @@ import java.util.function.Predicate;
  * @param nbt                 The block nbt to match.
  * @param components          The block data components to match.
  */
-public record BlockPredicate(
+public value record BlockPredicate(
         @Nullable RegistryTag<Block> blocks,
         @Nullable PropertiesPredicate state,
         @Nullable NbtPredicate nbt,

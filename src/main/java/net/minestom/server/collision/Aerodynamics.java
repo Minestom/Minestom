@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Contract;
  * @param verticalAirResistance   the vertical drag coefficient; the entity's current vertical
  *  *                             velocity is multiplied by this every tick
  */
-public record Aerodynamics(double gravity, double horizontalAirResistance, double verticalAirResistance) {
+public value record Aerodynamics(double gravity, double horizontalAirResistance, double verticalAirResistance) {
     @Contract(pure = true)
     public Aerodynamics withGravity(double gravity) {
         return new Aerodynamics(gravity, horizontalAirResistance, verticalAirResistance);

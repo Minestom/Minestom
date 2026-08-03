@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.banner;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.utils.validate.Check;
 
-record BannerPatternImpl(
+value record BannerPatternImpl(
         Key assetId,
         String translationKey
 ) implements BannerPattern {

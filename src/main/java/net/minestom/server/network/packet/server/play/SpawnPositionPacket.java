@@ -7,7 +7,7 @@ import net.minestom.server.network.packet.server.play.data.WorldPos;
 
 import static net.minestom.server.network.NetworkBuffer.FLOAT;
 
-public record SpawnPositionPacket(WorldPos worldPos, float yaw, float pitch) implements ServerPacket.Play {
+public value record SpawnPositionPacket(WorldPos worldPos, float yaw, float pitch) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<SpawnPositionPacket> SERIALIZER = NetworkBufferTemplate.template(
             WorldPos.NETWORK_TYPE, SpawnPositionPacket::worldPos,
             FLOAT, SpawnPositionPacket::yaw,

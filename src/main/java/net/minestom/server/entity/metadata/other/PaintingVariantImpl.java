@@ -7,7 +7,7 @@ import net.minestom.server.utils.Either;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
 
-record PaintingVariantImpl(
+value record PaintingVariantImpl(
         int width,
         int height,
         Key assetId,

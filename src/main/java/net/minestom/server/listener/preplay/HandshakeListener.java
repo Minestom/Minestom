@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public final class HandshakeListener {
+public value class HandshakeListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HandshakeListener.class);
 

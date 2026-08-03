@@ -12,7 +12,7 @@ import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record SetPlayerInventorySlotPacket(int slot, ItemStack itemStack) implements ServerPacket.Play, ServerPacket.ComponentHolding {
+public value record SetPlayerInventorySlotPacket(int slot, ItemStack itemStack) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final NetworkBuffer.Type<SetPlayerInventorySlotPacket> SERIALIZER = NetworkBufferTemplate.template(
             VAR_INT, SetPlayerInventorySlotPacket::slot,
             ItemStack.NETWORK_TYPE, SetPlayerInventorySlotPacket::itemStack,

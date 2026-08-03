@@ -9,7 +9,7 @@ import java.util.Objects;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record PlayerSpawnInfo(int dimensionType, String world, long hashedSeed, GameMode gameMode,
+public value record PlayerSpawnInfo(int dimensionType, String world, long hashedSeed, GameMode gameMode,
                               @Nullable GameMode previousGameMode, boolean debug, boolean flat,
                               @Nullable WorldPos deathLocation, int portalCooldown, int seaLevel) {
     public static final NetworkBuffer.Type<PlayerSpawnInfo> NETWORK_TYPE = NetworkBufferTemplate.template(

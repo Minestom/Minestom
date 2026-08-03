@@ -9,7 +9,7 @@ import java.util.Objects;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ParticlePacket(Particle particle, boolean overrideLimiter, boolean longDistance, double x, double y, double z,
+public value record ParticlePacket(Particle particle, boolean overrideLimiter, boolean longDistance, double x, double y, double z,
                              float offsetX, float offsetY, float offsetZ, float maxSpeed,
                              int particleCount) implements ServerPacket.Play {
     public ParticlePacket(Particle particle, double x, double y, double z, float offsetX, float offsetY, float offsetZ, float maxSpeed, int particleCount) {

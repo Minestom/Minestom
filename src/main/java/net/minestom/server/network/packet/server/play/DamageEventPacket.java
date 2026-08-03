@@ -18,7 +18,7 @@ import static net.minestom.server.network.NetworkBuffer.VECTOR3D;
  * @param sourceDirectId 0 if there is no direct source. For direct attacks (e.g. melee), this is the same as sourceEntityId. For indirect attacks (e.g. projectiles), this is the projectile entity id + 1
  * @param sourcePos      null if there is no source position, otherwise the position of the source
  */
-public record DamageEventPacket(int targetEntityId, int damageTypeId, int sourceEntityId, int sourceDirectId,
+public value record DamageEventPacket(int targetEntityId, int damageTypeId, int sourceEntityId, int sourceDirectId,
                                 @Nullable Point sourcePos) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<DamageEventPacket> SERIALIZER = NetworkBufferTemplate.template(
             VAR_INT, DamageEventPacket::targetEntityId,

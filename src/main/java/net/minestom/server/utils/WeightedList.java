@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-public final class WeightedList<T> implements Iterable<T> {
+public value class WeightedList<T> implements Iterable<T> {
     public static <T> NetworkBuffer.Type<WeightedList<T>> networkType(NetworkBuffer.Type<T> valueType) {
         return Entry.networkType(valueType).list().transform(WeightedList::new, WeightedList::entries);
     }
@@ -74,7 +74,7 @@ public final class WeightedList<T> implements Iterable<T> {
         };
     }
 
-    public record Entry<T>(T value, int weight) {
+    public value record Entry<T>(T value, int weight) {
         public static <T> NetworkBuffer.Type<Entry<T>> networkType(NetworkBuffer.Type<T> valueType) {
             return NetworkBufferTemplate.template(
                     valueType, Entry::value,

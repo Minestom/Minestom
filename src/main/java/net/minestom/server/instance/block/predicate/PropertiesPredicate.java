@@ -15,7 +15,7 @@ import java.util.function.Predicate;
 
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
-public record PropertiesPredicate(Map<String, ValuePredicate> properties) implements Predicate<Block> {
+public value record PropertiesPredicate(Map<String, ValuePredicate> properties) implements Predicate<Block> {
 
     public static final NetworkBuffer.Type<PropertiesPredicate> NETWORK_TYPE = NetworkBufferTemplate.template(
             NetworkBuffer.STRING.mapValue(ValuePredicate.NETWORK_TYPE), PropertiesPredicate::properties,
@@ -70,7 +70,7 @@ public record PropertiesPredicate(Map<String, ValuePredicate> properties) implem
             }
         };
 
-        record Exact(@Nullable String value) implements ValuePredicate {
+        value record Exact(@Nullable String value) implements ValuePredicate {
 
             public static final NetworkBuffer.Type<Exact> NETWORK_TYPE = NetworkBuffer.STRING.transform(Exact::new, Exact::value);
             public static final Codec<Exact> CODEC = Codec.STRING.transform(Exact::new, Exact::value);
@@ -91,7 +91,7 @@ public record PropertiesPredicate(Map<String, ValuePredicate> properties) implem
          * @param min The min value to match, inclusive
          * @param max The max value to match, exclusive
          */
-        record Range(@Nullable String min, @Nullable String max) implements ValuePredicate {
+        value record Range(@Nullable String min, @Nullable String max) implements ValuePredicate {
             public static final NetworkBuffer.Type<Range> NETWORK_TYPE = NetworkBufferTemplate.template(
                     STRING.optional(), Range::min,
                     STRING.optional(), Range::max,

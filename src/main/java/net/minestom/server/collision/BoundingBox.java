@@ -13,7 +13,7 @@ import java.util.Iterator;
 /**
  * See <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Entity_metadata#Entities">the entity bounding box list</a>.
  */
-public record BoundingBox(Vec relativeStart, Vec relativeEnd) implements Shape {
+public value record BoundingBox(Vec relativeStart, Vec relativeEnd) implements Shape {
     private static final BoundingBox SLEEPING = new BoundingBox(0.2, 0.2, 0.2);
     private static final BoundingBox SNEAKING = new BoundingBox(0.6, 1.5, 0.6);
     private static final BoundingBox SMALL = new BoundingBox(0.6, 0.6, 0.6);

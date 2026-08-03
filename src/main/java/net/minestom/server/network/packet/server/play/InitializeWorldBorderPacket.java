@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record InitializeWorldBorderPacket(double x, double z,
+public value record InitializeWorldBorderPacket(double x, double z,
                                           double oldDiameter, double newDiameter, long speed,
                                           int portalTeleportBoundary, int warningTime,
                                           int warningBlocks) implements ServerPacket.Play {

@@ -9,7 +9,7 @@ import java.util.List;
 
 import static net.minestom.server.network.NetworkBuffer.VECTOR3D;
 
-public record MoveMinecartPacket(int entityId, List<LerpStep> lerpSteps) implements ServerPacket.Play {
+public value record MoveMinecartPacket(int entityId, List<LerpStep> lerpSteps) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<MoveMinecartPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.VAR_INT, MoveMinecartPacket::entityId,
             LerpStep.SERIALIZER.list(Short.MAX_VALUE), MoveMinecartPacket::lerpSteps,
@@ -19,7 +19,7 @@ public record MoveMinecartPacket(int entityId, List<LerpStep> lerpSteps) impleme
         lerpSteps = List.copyOf(lerpSteps);
     }
 
-    public record LerpStep(
+    public value record LerpStep(
             Point position, Point velocity,
             float yaw, float pitch, float weight
     ) {

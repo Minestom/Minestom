@@ -19,7 +19,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 
-public final class PacketSendingUtils {
+public value class PacketSendingUtils {
     /**
      * Sends a packet to an audience. This method performs the following steps in the
      * following order:

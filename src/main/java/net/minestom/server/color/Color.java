@@ -15,7 +15,7 @@ import java.util.Objects;
  * <p>
  * Colors must be in the range of 0-255.
  */
-public class Color implements RGBLike {
+public sealed class Color implements RGBLike permits AlphaColor { //TODO(valhalla)
     private static final int BIT_MASK = 0xff;
 
     public static final NetworkBuffer.Type<RGBLike> NETWORK_TYPE = NetworkBuffer.INT.transform(

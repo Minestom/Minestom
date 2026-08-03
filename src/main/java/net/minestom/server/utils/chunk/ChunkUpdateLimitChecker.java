@@ -13,15 +13,17 @@ import java.util.Arrays;
  * to skip operations with them via {@link ChunkUpdateLimitChecker#addToHistory(Chunk)} returning {@code false}
  */
 @ApiStatus.Internal
-public final class ChunkUpdateLimitChecker {
+public value class ChunkUpdateLimitChecker {
 
     private final int historySize;
     private final long[] chunkHistory;
 
     public ChunkUpdateLimitChecker(int historySize) {
-        this.historySize = Math.max(0, historySize);
-        this.chunkHistory = new long[this.historySize];
-        this.clearHistory();
+        historySize = Math.max(0, historySize);
+        this.historySize = historySize;
+        final long[] chunkHistory = new long[historySize];
+        Arrays.fill(chunkHistory, Long.MAX_VALUE);
+        this.chunkHistory = chunkHistory;
     }
 
     public boolean isEnabled() {

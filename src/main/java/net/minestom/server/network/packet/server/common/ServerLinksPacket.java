@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
-public record ServerLinksPacket(List<Entry> entries) implements ServerPacket.Configuration, ServerPacket.Play {
+public value record ServerLinksPacket(List<Entry> entries) implements ServerPacket.Configuration, ServerPacket.Play {
     private static final int MAX_ENTRIES = 100;
 
     public static final NetworkBuffer.Type<ServerLinksPacket> SERIALIZER = NetworkBufferTemplate.template(
@@ -26,7 +26,7 @@ public record ServerLinksPacket(List<Entry> entries) implements ServerPacket.Con
         this(List.of(entries));
     }
 
-    public record Entry(Either<KnownLinkType, Component> linkType, String link) {
+    public value record Entry(Either<KnownLinkType, Component> linkType, String link) {
         public static final NetworkBuffer.Type<Entry> NETWORK_TYPE = NetworkBufferTemplate.template(
                 NetworkBuffer.Either(KnownLinkType.NETWORK_TYPE, NetworkBuffer.COMPONENT), Entry::linkType,
                 NetworkBuffer.STRING, Entry::link,

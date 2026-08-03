@@ -3,7 +3,7 @@ package net.minestom.server.coordinate;
 /**
  * Helper class to iterate over chunks within a range.
  */
-public final class ChunkRange {
+public value class ChunkRange {
 
     /**
      * Get the amount of chunks in a square range.

@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 
 import static net.minestom.server.network.NetworkBuffer.INT;
 
-public record SetTitleTimePacket(int fadeIn, int stay, int fadeOut) implements ServerPacket.Play {
+public value record SetTitleTimePacket(int fadeIn, int stay, int fadeOut) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<SetTitleTimePacket> SERIALIZER = NetworkBufferTemplate.template(
             INT, SetTitleTimePacket::fadeIn,
             INT, SetTitleTimePacket::stay,

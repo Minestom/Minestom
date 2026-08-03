@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @ApiStatus.Internal
-final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
+value class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     static final TranscoderNbtImpl INSTANCE = new TranscoderNbtImpl();
 
     @Override

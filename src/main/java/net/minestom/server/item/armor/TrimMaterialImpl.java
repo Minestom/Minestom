@@ -5,7 +5,7 @@ import net.minestom.server.utils.validate.Check;
 
 import java.util.Map;
 
-record TrimMaterialImpl(
+value record TrimMaterialImpl(
         String assetName,
         Map<String, String> overrideArmorMaterials,
         Component description

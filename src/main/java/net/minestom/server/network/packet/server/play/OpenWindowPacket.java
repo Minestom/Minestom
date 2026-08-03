@@ -12,7 +12,7 @@ import java.util.function.UnaryOperator;
 import static net.minestom.server.network.NetworkBuffer.COMPONENT;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record OpenWindowPacket(int windowId, int windowType,
+public value record OpenWindowPacket(int windowId, int windowType,
                                Component title) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final NetworkBuffer.Type<OpenWindowPacket> SERIALIZER = NetworkBufferTemplate.template(
             VAR_INT, OpenWindowPacket::windowId,

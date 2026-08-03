@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Convenient class to execute callbacks which can be null.
  */
-public class OptionalCallback {
+public value class OptionalCallback {
 
     /**
      * Executes an optional {@link Runnable}.

@@ -4,7 +4,7 @@ import net.minestom.server.sound.SoundEvent;
 
 import java.util.Objects;
 
-record WolfSoundVariantImpl(
+value record WolfSoundVariantImpl(
         WolfSoundVariant.WolfSoundSet adultSounds,
         WolfSoundVariant.WolfSoundSet babySounds
 ) implements WolfSoundVariant {
@@ -14,7 +14,7 @@ record WolfSoundVariantImpl(
         Objects.requireNonNull(babySounds, "babySounds");
     }
 
-    record WolfSoundSetImpl(
+    value record WolfSoundSetImpl(
             SoundEvent ambientSound,
             SoundEvent deathSound,
             SoundEvent growlSound,

@@ -11,7 +11,7 @@ import java.util.Objects;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record BlockEntityDataPacket(
+public value record BlockEntityDataPacket(
         Point blockPosition,
         BlockEntityType type,
         @Nullable CompoundBinaryTag data

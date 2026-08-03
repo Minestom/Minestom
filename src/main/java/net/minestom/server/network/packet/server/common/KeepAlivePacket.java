@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 
 import static net.minestom.server.network.NetworkBuffer.LONG;
 
-public record KeepAlivePacket(long id) implements ServerPacket.Configuration, ServerPacket.Play {
+public value record KeepAlivePacket(long id) implements ServerPacket.Configuration, ServerPacket.Play {
     public static final NetworkBuffer.Type<KeepAlivePacket> SERIALIZER = NetworkBufferTemplate.template(
             LONG, KeepAlivePacket::id, KeepAlivePacket::new);
 }

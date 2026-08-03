@@ -78,7 +78,7 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike, Dialog
                 });
     }
 
-    record Notice(DialogMetadata metadata, DialogActionButton action) implements Dialog {
+    value record Notice(DialogMetadata metadata, DialogActionButton action) implements Dialog {
         public static final DialogActionButton DEFAULT_ACTION = new DialogActionButton(Component.translatable("gui.ok"), null, 150, null);
         public static final StructCodec<Notice> CODEC = StructCodec.struct(
                 StructCodec.INLINE, DialogMetadata.CODEC, Notice::metadata,
@@ -91,7 +91,7 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike, Dialog
         }
     }
 
-    record ServerLinks(
+    value record ServerLinks(
             DialogMetadata metadata,
             @Nullable DialogActionButton exitAction,
             int columns, int buttonWidth
@@ -109,7 +109,7 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike, Dialog
         }
     }
 
-    record DialogList(
+    value record DialogList(
             DialogMetadata metadata,
             HolderSet<Dialog> dialogs,
             @Nullable DialogActionButton exitAction,
@@ -129,7 +129,7 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike, Dialog
         }
     }
 
-    record MultiAction(
+    value record MultiAction(
             DialogMetadata metadata,
             List<DialogActionButton> actions,
             @Nullable DialogActionButton exitAction,
@@ -148,7 +148,7 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike, Dialog
         }
     }
 
-    record Confirmation(
+    value record Confirmation(
             DialogMetadata metadata,
             DialogActionButton yesButton,
             DialogActionButton noButton

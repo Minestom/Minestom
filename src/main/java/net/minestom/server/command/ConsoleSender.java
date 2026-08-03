@@ -9,7 +9,7 @@ import net.minestom.server.tag.TagHandler;
 /**
  * Represents the console when sending a command to the server.
  */
-public class ConsoleSender implements CommandSender {
+public value class ConsoleSender implements CommandSender {
     private static final ComponentLogger LOGGER = ComponentLogger.logger(ConsoleSender.class);
 
     private final TagHandler tagHandler = TagHandler.newHandler();

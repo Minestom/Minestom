@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 /**
  * Utils class using mojang API.
  */
-public final class MojangUtils {
+public value class MojangUtils {
     private static final String FROM_UUID_URL = "https://sessionserver.mojang.com/session/minecraft/profile/%s?unsigned=false";
     private static final String FROM_USERNAME_URL = "https://api.minecraftservices.com/minecraft/profile/lookup/name/%s";
 

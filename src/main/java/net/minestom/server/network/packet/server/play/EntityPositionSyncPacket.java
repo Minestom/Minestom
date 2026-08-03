@@ -7,7 +7,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record EntityPositionSyncPacket(
+public value record EntityPositionSyncPacket(
         int entityId, Point position, Point delta,
         float yaw, float pitch, boolean onGround
 ) implements ServerPacket.Play {

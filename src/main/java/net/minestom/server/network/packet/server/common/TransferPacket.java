@@ -4,7 +4,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 
-public record TransferPacket(
+public value record TransferPacket(
         String host,
         int port
 ) implements ServerPacket.Configuration, ServerPacket.Play {

@@ -4,7 +4,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
-public final class MathUtils {
+public value class MathUtils {
 
     private MathUtils() {
     }

@@ -33,7 +33,7 @@ import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 
-public class BlockPlacementListener {
+public value class BlockPlacementListener {
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
     public static void listener(ClientPlayerBlockPlacementPacket packet, Player player) {

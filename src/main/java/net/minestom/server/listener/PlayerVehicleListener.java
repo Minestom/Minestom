@@ -6,7 +6,7 @@ import net.minestom.server.entity.metadata.other.BoatMeta;
 import net.minestom.server.network.packet.client.play.ClientSteerBoatPacket;
 import net.minestom.server.network.packet.client.play.ClientVehicleMovePacket;
 
-public class PlayerVehicleListener {
+public value class PlayerVehicleListener {
 
     public static void vehicleMoveListener(ClientVehicleMovePacket packet, Player player) {
         final Entity vehicle = player.getVehicle();

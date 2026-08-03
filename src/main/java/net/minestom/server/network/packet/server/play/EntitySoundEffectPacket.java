@@ -8,7 +8,7 @@ import net.minestom.server.sound.SoundEvent;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record EntitySoundEffectPacket(
+public value record EntitySoundEffectPacket(
         SoundEvent soundEvent,
         Sound.Source source,
         int entityId,

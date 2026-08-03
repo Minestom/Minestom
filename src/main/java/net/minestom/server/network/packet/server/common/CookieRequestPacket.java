@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
-public record CookieRequestPacket(String key) implements
+public value record CookieRequestPacket(String key) implements
         ServerPacket.Login, ServerPacket.Configuration, ServerPacket.Play {
     public static final NetworkBuffer.Type<CookieRequestPacket> SERIALIZER = NetworkBufferTemplate.template(
             STRING, CookieRequestPacket::key,

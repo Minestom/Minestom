@@ -17,7 +17,7 @@ public sealed interface HolderSet<T> permits HolderSet.Direct, RegistryTag {
         return new RegistryCodecs.HolderSetImpl<>(RegistryTag.codec(selector), registryCodec);
     }
 
-    record Direct<T extends Holder.Direct<T>>(List<T> values) implements HolderSet<T>, Iterable<T> {
+    value record Direct<T extends Holder.Direct<T>>(List<T> values) implements HolderSet<T>, Iterable<T> {
         public Direct {
             values = List.copyOf(values);
         }

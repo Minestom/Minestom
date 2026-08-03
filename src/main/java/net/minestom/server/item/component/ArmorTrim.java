@@ -8,7 +8,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.Holder;
 
-public record ArmorTrim(
+public value record ArmorTrim(
         Holder<TrimMaterial> material,
         Holder<TrimPattern> pattern
 ) {

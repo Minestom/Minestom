@@ -6,7 +6,7 @@ import net.minestom.server.codec.StructCodec;
 import java.util.HashMap;
 import java.util.Map;
 
-public record MapDecorations(Map<String, Entry> decorations) {
+public value record MapDecorations(Map<String, Entry> decorations) {
     public static final Codec<MapDecorations> CODEC = Codec.STRING.mapValue(Entry.CODEC)
             .transform(MapDecorations::new, MapDecorations::decorations);
 
@@ -30,7 +30,7 @@ public record MapDecorations(Map<String, Entry> decorations) {
         return new MapDecorations(newDecorations);
     }
 
-    public record Entry(String type, double x, double z, float rotation) {
+    public value record Entry(String type, double x, double z, float rotation) {
         public static final Codec<Entry> CODEC = StructCodec.struct(
                 "type", Codec.STRING, Entry::type,
                 "x", Codec.DOUBLE, Entry::x,

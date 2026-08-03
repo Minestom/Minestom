@@ -8,7 +8,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
-public record BiomeEffects(
+public value record BiomeEffects(
         RGBLike waterColor,
         @Nullable RGBLike foliageColor,
         @Nullable RGBLike dryFoliageColor,

@@ -7,7 +7,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record WorldEventPacket(int effectId, Point position, int data,
+public value record WorldEventPacket(int effectId, Point position, int data,
                                boolean disableRelativeVolume) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<WorldEventPacket> SERIALIZER = NetworkBufferTemplate.template(
             INT, WorldEventPacket::effectId,

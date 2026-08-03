@@ -9,7 +9,7 @@ import net.minestom.server.utils.validate.Check;
 
 import java.util.List;
 
-public record Ingredient(RegistryTag<Material> tag) {
+public value record Ingredient(RegistryTag<Material> tag) {
     public static final NetworkBuffer.Type<Ingredient> NETWORK_TYPE = NetworkBufferTemplate.template(
             RegistryTag.networkType(Registries::material), Ingredient::tag,
             Ingredient::new

@@ -16,7 +16,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * A holder of a boss bar. This class is not intended for public use, instead you should
  * use {@link BossBarManager} to manage boss bars for players.
  */
-final class BossBarHolder implements Viewable {
+value class BossBarHolder implements Viewable {
     final UUID uuid = UUID.randomUUID();
     final Set<Player> players = new CopyOnWriteArraySet<>();
     final BossBar bar;

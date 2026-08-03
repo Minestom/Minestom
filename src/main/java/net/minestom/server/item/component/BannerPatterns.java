@@ -11,13 +11,13 @@ import net.minestom.server.registry.Holder;
 import java.util.ArrayList;
 import java.util.List;
 
-public record BannerPatterns(List<Layer> layers) {
+public value record BannerPatterns(List<Layer> layers) {
     public static final int MAX_LAYERS = 1024;
 
     public static final NetworkBuffer.Type<BannerPatterns> NETWORK_TYPE = Layer.NETWORK_TYPE.list(MAX_LAYERS).transform(BannerPatterns::new, BannerPatterns::layers);
     public static final Codec<BannerPatterns> CODEC = Layer.CODEC.list().transform(BannerPatterns::new, BannerPatterns::layers);
 
-    public record Layer(Holder<BannerPattern> pattern, DyeColor color) {
+    public value record Layer(Holder<BannerPattern> pattern, DyeColor color) {
         public static final NetworkBuffer.Type<Layer> NETWORK_TYPE = NetworkBufferTemplate.template(
                 BannerPattern.HOLDER_NETWORK_TYPE, Layer::pattern,
                 DyeColor.NETWORK_TYPE, Layer::color,

@@ -111,7 +111,7 @@ public class TagUpdateTest {
 
     @Test
     public void updateStructureConversion() {
-        record Coin(int coin) {
+        value record Coin(int coin) {
         }
 
         var tag1 = Tag.Integer("coin").path("path");
@@ -132,7 +132,7 @@ public class TagUpdateTest {
 
     @Test
     public void updateStructureConversionPath() {
-        record Coin(int coin) {
+        value record Coin(int coin) {
         }
 
         var tag1 = Tag.Integer("coin").path("path", "path2");
@@ -153,9 +153,9 @@ public class TagUpdateTest {
 
     @Test
     public void updateStructureConversionPathDouble() {
-        record Coin(int coin) {
+        value record Coin(int coin) {
         }
-        record Structure(Coin test) {
+        value record Structure(Coin test) {
         }
 
         var tag1 = Tag.Integer("coin").path("path", "test");
@@ -177,7 +177,7 @@ public class TagUpdateTest {
 
     @Test
     public void updateViewConversion() {
-        record Coin(int coin) {
+        value record Coin(int coin) {
         }
 
         var tag1 = Tag.Integer("coin");

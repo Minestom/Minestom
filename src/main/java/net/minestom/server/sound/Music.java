@@ -3,7 +3,7 @@ package net.minestom.server.sound;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 
-public record Music(
+public value record Music(
         SoundEvent sound,
         int minDelay,
         int maxDelay,

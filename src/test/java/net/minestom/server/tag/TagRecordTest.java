@@ -77,7 +77,7 @@ public class TagRecordTest {
 
     @Test
     public void nbtSerializer() {
-        record CompoundRecord(CompoundBinaryTag compound) {
+        value record CompoundRecord(CompoundBinaryTag compound) {
         }
         var test = new CompoundRecord(CompoundBinaryTag.from(Map.of("key", StringBinaryTag.stringBinaryTag("value"))));
         var handler = TagHandler.newHandler();
@@ -88,14 +88,14 @@ public class TagRecordTest {
 
     @Test
     public void unsupportedList() {
-        record ListRecord(List<Object> list) {
+        value record ListRecord(List<Object> list) {
         }
         assertThrows(IllegalArgumentException.class, () -> Tag.Structure("test", ListRecord.class));
     }
 
     @Test
     public void unsupportedArray() {
-        record ArrayRecord(Object[] array) {
+        value record ArrayRecord(Object[] array) {
         }
         assertThrows(IllegalArgumentException.class, () -> Tag.Structure("test", ArrayRecord.class));
     }
@@ -109,8 +109,8 @@ public class TagRecordTest {
     @Test
     @SuppressWarnings("unchecked")
     public void invalidItem() {
-        // ItemStack cannot become a record due to `ItemStack#toItemNBT` being serialized differently, and independently of
-        // the item record components
+        // ItemStack cannot become a value record due to `ItemStack#toItemNBT` being serialized differently, and independently of
+        // the item value record components
         assertThrows(Throwable.class, () -> Tag.Structure("item", Class.class.cast(ItemStack.class)));
     }
 }

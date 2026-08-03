@@ -15,7 +15,7 @@ import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record PlayerInfoUpdatePacket(
+public value record PlayerInfoUpdatePacket(
         EnumSet<Action> actions,
         List<Entry> entries
 ) implements ServerPacket.Play, ServerPacket.ComponentHolding {
@@ -80,7 +80,7 @@ public record PlayerInfoUpdatePacket(
         return new PlayerInfoUpdatePacket(actions, newEntries);
     }
 
-    public record Entry(UUID uuid, String username, List<Property> properties,
+    public value record Entry(UUID uuid, String username, List<Property> properties,
                         boolean listed, int latency, GameMode gameMode,
                         @Nullable Component displayName, @Nullable ChatSession chatSession,
                         int listOrder, boolean displayHat) {
@@ -129,7 +129,7 @@ public record PlayerInfoUpdatePacket(
         }
     }
 
-    public record Property(String name, String value, @Nullable String signature) {
+    public value record Property(String name, String value, @Nullable String signature) {
         public Property(String name, String value) {
             this(name, value, null);
         }

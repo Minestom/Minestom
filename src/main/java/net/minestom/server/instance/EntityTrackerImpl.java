@@ -255,7 +255,7 @@ final class EntityTrackerImpl implements EntityTracker {
                 });
     }
 
-    record ChunkViewKey(List<SharedInstance> sharedInstances, int chunkX, int chunkZ) {
+    value record ChunkViewKey(List<SharedInstance> sharedInstances, int chunkX, int chunkZ) {
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;

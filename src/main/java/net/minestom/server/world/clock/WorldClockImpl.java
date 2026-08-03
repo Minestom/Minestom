@@ -1,4 +1,4 @@
 package net.minestom.server.world.clock;
 
-record WorldClockImpl() implements WorldClock {
+value record WorldClockImpl() implements WorldClock {
 }

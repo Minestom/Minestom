@@ -8,7 +8,7 @@ import net.minestom.server.event.player.PlayerStartSprintingEvent;
 import net.minestom.server.event.player.PlayerStopSprintingEvent;
 import net.minestom.server.network.packet.client.play.ClientEntityActionPacket;
 
-public class EntityActionListener {
+public value class EntityActionListener {
 
     public static void listener(ClientEntityActionPacket packet, Player player) {
         switch (packet.action()) {

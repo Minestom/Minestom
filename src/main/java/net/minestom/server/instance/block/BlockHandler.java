@@ -89,7 +89,7 @@ public interface BlockHandler {
     /**
      * Represents an object forwarded to {@link #onPlace(Placement)}.
      */
-    sealed class Placement permits PlayerPlacement {
+    sealed class Placement permits PlayerPlacement { //TODO(valhalla)
         private final Block block;
         private final Block previousBlock;
         private final Instance instance;
@@ -120,7 +120,7 @@ public interface BlockHandler {
         }
     }
 
-    final class PlayerPlacement extends Placement {
+    final class PlayerPlacement extends Placement { //TODO(valhalla)
         private final Player player;
         private final PlayerHand hand;
         private final BlockFace blockFace;
@@ -163,7 +163,7 @@ public interface BlockHandler {
         }
     }
 
-    sealed class Destroy permits PlayerDestroy {
+    sealed class Destroy permits PlayerDestroy { // TODO(valhalla)
         private final Block block;
         private final Block newBlock;
         private final Instance instance;
@@ -194,7 +194,7 @@ public interface BlockHandler {
         }
     }
 
-    final class PlayerDestroy extends Destroy {
+    final class PlayerDestroy extends Destroy { //TODO(valhalla)
         private final Player player;
 
         @ApiStatus.Internal
@@ -208,7 +208,7 @@ public interface BlockHandler {
         }
     }
 
-    final class Interaction {
+    value class Interaction {
         private final Block block;
         private final Instance instance;
         private final BlockFace blockFace;
@@ -257,7 +257,7 @@ public interface BlockHandler {
         }
     }
 
-    final class Touch {
+    value class Touch {
         private final Block block;
         private final Instance instance;
         private final Point blockPosition;
@@ -288,7 +288,7 @@ public interface BlockHandler {
         }
     }
 
-    final class Tick {
+    value class Tick {
         private final Block block;
         private final Instance instance;
         private final Point blockPosition;
@@ -318,7 +318,7 @@ public interface BlockHandler {
      * in order to do not lose the information while saving, and for runtime debugging purpose.
      */
     @ApiStatus.Internal
-    final class Dummy implements BlockHandler {
+    value class Dummy implements BlockHandler {
         private static final Map<String, BlockHandler> DUMMY_CACHE = new ConcurrentHashMap<>();
 
         public static BlockHandler get(String namespace) {

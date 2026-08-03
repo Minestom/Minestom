@@ -11,7 +11,7 @@ import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 
 import java.util.Objects;
 
-public final class CreativeInventoryActionListener {
+public value class CreativeInventoryActionListener {
     public static void listener(ClientCreativeInventoryActionPacket packet, Player player) {
         if (player.getGameMode() != GameMode.CREATIVE) return;
         short slot = packet.slot();

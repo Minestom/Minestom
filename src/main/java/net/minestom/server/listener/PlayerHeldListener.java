@@ -7,7 +7,7 @@ import net.minestom.server.event.player.PlayerChangeHeldSlotEvent;
 import net.minestom.server.network.packet.client.play.ClientHeldItemChangePacket;
 import net.minestom.server.utils.MathUtils;
 
-public class PlayerHeldListener {
+public value class PlayerHeldListener {
 
     public static void heldListener(ClientHeldItemChangePacket packet, Player player) {
         if (!MathUtils.isBetween(packet.slot(), 0, 8)) {

@@ -9,7 +9,7 @@ import java.util.UUID;
 import static net.minestom.server.network.NetworkBuffer.STRING;
 import static net.minestom.server.network.NetworkBuffer.UUID;
 
-public record ClientLoginStartPacket(String username,
+public value record ClientLoginStartPacket(String username,
                                      UUID profileId) implements ClientPacket.Login {
     public static final NetworkBuffer.Type<ClientLoginStartPacket> SERIALIZER = NetworkBufferTemplate.template(
             STRING, ClientLoginStartPacket::username,

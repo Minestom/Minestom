@@ -326,7 +326,7 @@ public final class Metadata {
         return (byte) type.id();
     }
 
-    record Type<T extends @UnknownNullability Object>(
+    value record Type<T extends @UnknownNullability Object>(
             int id,
             NetworkBuffer.Type<T> serializer,
             T defaultValue

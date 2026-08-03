@@ -6,7 +6,7 @@ import net.kyori.adventure.text.flattener.ComponentFlattener;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.adventure.MinestomAdventure;
 
-final class MinestomFlattenerProvider {
+value class MinestomFlattenerProvider {
     static final ComponentFlattener INSTANCE;
     static {
         final ComponentFlattener.Builder builder = ComponentFlattener.basic().toBuilder();

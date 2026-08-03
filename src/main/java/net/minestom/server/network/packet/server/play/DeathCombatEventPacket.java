@@ -12,7 +12,7 @@ import java.util.function.UnaryOperator;
 import static net.minestom.server.network.NetworkBuffer.COMPONENT;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record DeathCombatEventPacket(int playerId,
+public value record DeathCombatEventPacket(int playerId,
                                      Component message) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final NetworkBuffer.Type<DeathCombatEventPacket> SERIALIZER = NetworkBufferTemplate.template(
             VAR_INT, DeathCombatEventPacket::playerId,

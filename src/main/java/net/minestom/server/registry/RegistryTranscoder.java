@@ -5,7 +5,7 @@ import net.minestom.server.codec.TranscoderProxy;
 
 import java.util.Objects;
 
-public record RegistryTranscoder<D>(
+public value record RegistryTranscoder<D>(
         Transcoder<D> transcoder,
         Registries registries,
         boolean forClient

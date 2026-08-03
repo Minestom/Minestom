@@ -7,7 +7,7 @@ import net.minestom.server.network.packet.server.play.data.PlayerSpawnInfo;
 
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 
-public record RespawnPacket(PlayerSpawnInfo playerSpawnInfo, byte copyData) implements ServerPacket.Play {
+public value record RespawnPacket(PlayerSpawnInfo playerSpawnInfo, byte copyData) implements ServerPacket.Play {
     public static final int COPY_NONE = 0x0;
     public static final int COPY_ATTRIBUTES = 0x1;
     public static final int COPY_METADATA = 0x2;

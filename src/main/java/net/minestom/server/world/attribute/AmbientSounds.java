@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public record AmbientSounds(
+public value record AmbientSounds(
         @Nullable SoundEvent loop,
         @Nullable Mood mood,
         List<Additions> additions
@@ -20,7 +20,7 @@ public record AmbientSounds(
             "additions", Additions.CODEC.listOrSingle().optional(List.of()), AmbientSounds::additions,
             AmbientSounds::new);
 
-    public record Mood(
+    public value record Mood(
             SoundEvent sound,
             int tickDelay,
             int blockSearchExtent,
@@ -34,7 +34,7 @@ public record AmbientSounds(
                 Mood::new);
     }
 
-    public record Additions(SoundEvent sound, double tickChance) {
+    public value record Additions(SoundEvent sound, double tickChance) {
         public static final Codec<Additions> CODEC = StructCodec.struct(
                 "sound", SoundEvent.CODEC, Additions::sound,
                 "tick_chance", Codec.DOUBLE, Additions::tickChance,

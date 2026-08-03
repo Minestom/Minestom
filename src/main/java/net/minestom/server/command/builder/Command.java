@@ -434,7 +434,7 @@ public class Command {
                         array.add(String.join(StringUtils.SPACE, arguments))));
     }
 
-    private static final class Node {
+    private static value class Node {
         private final Set<String> names = new HashSet<>();
         private final Set<Node> nodes = new HashSet<>();
         private final List<List<String>> arguments = new ArrayList<>();

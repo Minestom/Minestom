@@ -11,7 +11,7 @@ import java.util.Objects;
 
 import static java.util.Map.entry;
 
-final class PacketRegistryImpl<T> implements PacketRegistry<T> {
+value class PacketRegistryImpl<T> implements PacketRegistry<T> {
     private final ConnectionState state;
     private final ConnectionSide side;
     private final List<PacketInfo<? extends T>> packets;

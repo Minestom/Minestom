@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
  * @param <T> The type numeric of the range object.
  */
 public sealed interface Range<T extends Number> {
-    record Byte(@Nullable java.lang.Byte min, @Nullable java.lang.Byte max) implements Range<java.lang.Byte> {
+    value record Byte(@Nullable java.lang.Byte min, @Nullable java.lang.Byte max) implements Range<java.lang.Byte> {
         public Byte {
             if (min != null && max != null && min > max) throw new IllegalArgumentException("min must not exceed max");
         }
@@ -24,7 +24,7 @@ public sealed interface Range<T extends Number> {
         }
     }
 
-    record Short(@Nullable java.lang.Short min, @Nullable java.lang.Short max) implements Range<java.lang.Short> {
+    value record Short(@Nullable java.lang.Short min, @Nullable java.lang.Short max) implements Range<java.lang.Short> {
         public Short {
             if (min != null && max != null && min > max) throw new IllegalArgumentException("min must not exceed max");
         }
@@ -38,7 +38,7 @@ public sealed interface Range<T extends Number> {
         }
     }
 
-    record Int(@Nullable Integer min, @Nullable Integer max) implements Range<Integer> {
+    value record Int(@Nullable Integer min, @Nullable Integer max) implements Range<Integer> {
         private static final Codec<Range.Int> STRUCT_CODEC = StructCodec.struct(
                 "min", Codec.INT.optional(), Range.Int::min,
                 "max", Codec.INT.optional(), Range.Int::max,
@@ -61,7 +61,7 @@ public sealed interface Range<T extends Number> {
         }
     }
 
-    record Long(@Nullable java.lang.Long min, @Nullable java.lang.Long max) implements Range<java.lang.Long> {
+    value record Long(@Nullable java.lang.Long min, @Nullable java.lang.Long max) implements Range<java.lang.Long> {
         public Long {
             if (min != null && max != null && min > max) throw new IllegalArgumentException("min must not exceed max");
         }
@@ -75,7 +75,7 @@ public sealed interface Range<T extends Number> {
         }
     }
 
-    record Float(@Nullable java.lang.Float min, @Nullable java.lang.Float max) implements Range<java.lang.Float> {
+    value record Float(@Nullable java.lang.Float min, @Nullable java.lang.Float max) implements Range<java.lang.Float> {
         public Float {
             if (min != null && max != null && min > max) throw new IllegalArgumentException("min must not exceed max");
         }
@@ -89,7 +89,7 @@ public sealed interface Range<T extends Number> {
         }
     }
 
-    record Double(@Nullable java.lang.Double min, @Nullable java.lang.Double max) implements Range<java.lang.Double> {
+    value record Double(@Nullable java.lang.Double min, @Nullable java.lang.Double max) implements Range<java.lang.Double> {
         private static final Codec<Range.Double> STRUCT_CODEC = StructCodec.struct(
                 "min", Codec.DOUBLE.optional(), Range.Double::min,
                 "max", Codec.DOUBLE.optional(), Range.Double::max,

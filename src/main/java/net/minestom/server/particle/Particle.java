@@ -88,7 +88,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
 
     StructCodec<? extends Particle> codec();
 
-    record Simple(Key key, int id) implements Particle {
+    value record Simple(Key key, int id) implements Particle {
         public static final StructCodec<Simple> CODEC = StructCodec.struct(
                 "type", Codec.KEY, Simple::key,
                 ParticleImpl::get);
@@ -108,7 +108,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
     }
 
-    record Block(Key key, int id, net.minestom.server.instance.block.Block block) implements Particle {
+    value record Block(Key key, int id, net.minestom.server.instance.block.Block block) implements Particle {
         public static final StructCodec<Block> CODEC = StructCodec.struct(
                 "type", Codec.KEY, Block::key,
                 "block_state", STATE_STRUCT_CODEC, Block::block,
@@ -138,7 +138,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
     }
 
-    record BlockMarker(Key key, int id, net.minestom.server.instance.block.Block block) implements Particle {
+    value record BlockMarker(Key key, int id, net.minestom.server.instance.block.Block block) implements Particle {
         public static final StructCodec<BlockMarker> CODEC = StructCodec.struct(
                 "type", Codec.KEY, BlockMarker::key,
                 "block_state", STATE_STRUCT_CODEC, BlockMarker::block,
@@ -168,7 +168,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
     }
 
-    record Dust(Key key, int id, RGBLike color, float scale) implements Particle {
+    value record Dust(Key key, int id, RGBLike color, float scale) implements Particle {
         public static final StructCodec<Dust> CODEC = StructCodec.struct(
                 "type", Codec.KEY, Dust::key,
                 "color", Color.CODEC, Dust::color,
@@ -207,7 +207,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
     }
 
-    record DustColorTransition(
+    value record DustColorTransition(
             Key key, int id,
             RGBLike color,
             RGBLike transitionColor,
@@ -261,7 +261,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
     }
 
-    record DustPillar(Key key, int id, net.minestom.server.instance.block.Block block) implements Particle {
+    value record DustPillar(Key key, int id, net.minestom.server.instance.block.Block block) implements Particle {
         public static final StructCodec<DustPillar> CODEC = StructCodec.struct(
                 "type", Codec.KEY, DustPillar::key,
                 "block_state", STATE_STRUCT_CODEC, DustPillar::block,
@@ -291,7 +291,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
     }
 
-    record FallingDust(Key key, int id, net.minestom.server.instance.block.Block block) implements Particle {
+    value record FallingDust(Key key, int id, net.minestom.server.instance.block.Block block) implements Particle {
         public static final StructCodec<FallingDust> CODEC = StructCodec.struct(
                 "type", Codec.KEY, FallingDust::key,
                 "block_state", STATE_STRUCT_CODEC, FallingDust::block,
@@ -321,7 +321,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
     }
 
-    record Item(Key key, int id, ItemStack item) implements Particle {
+    value record Item(Key key, int id, ItemStack item) implements Particle {
         public static final StructCodec<Item> CODEC = StructCodec.struct(
                 "type", Codec.KEY, Item::key,
                 "item", ItemStackTemplate.CODEC, Item::item,
@@ -348,7 +348,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
     }
 
-    record EntityEffect(Key key, int id, AlphaColor color) implements Particle {
+    value record EntityEffect(Key key, int id, AlphaColor color) implements Particle {
         public static final StructCodec<EntityEffect> CODEC = StructCodec.struct(
                 "type", Codec.KEY, EntityEffect::key,
                 "color", AlphaColor.CODEC, EntityEffect::color,
@@ -385,7 +385,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
     }
 
-    record SculkCharge(Key key, int id, float roll) implements Particle {
+    value record SculkCharge(Key key, int id, float roll) implements Particle {
         public static final StructCodec<SculkCharge> CODEC = StructCodec.struct(
                 "type", Codec.KEY, SculkCharge::key,
                 "roll", Codec.FLOAT, SculkCharge::roll,
@@ -412,7 +412,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
     }
 
-    record Shriek(Key key, int id, int delay) implements Particle {
+    value record Shriek(Key key, int id, int delay) implements Particle {
         public static final StructCodec<Shriek> CODEC = StructCodec.struct(
                 "type", Codec.KEY, Shriek::key,
                 "delay", Codec.INT, Shriek::delay,
@@ -439,7 +439,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
     }
 
-    record Vibration(
+    value record Vibration(
             Key key, int id,
             SourceType sourceType,
             @Nullable Point sourceBlockPosition,
@@ -498,7 +498,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
     }
 
-    record Trail(
+    value record Trail(
             Key key, int id,
             Point target,
             RGBLike color,
@@ -546,7 +546,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
     }
 
-    record BlockCrumble(Key key, int id, net.minestom.server.instance.block.Block block) implements Particle {
+    value record BlockCrumble(Key key, int id, net.minestom.server.instance.block.Block block) implements Particle {
         public static final StructCodec<BlockCrumble> CODEC = StructCodec.struct(
                 "type", Codec.KEY, BlockCrumble::key,
                 "block_state", STATE_STRUCT_CODEC, BlockCrumble::block,
@@ -576,7 +576,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
     }
 
-    record TintedLeaves(Key key, int id, AlphaColor color) implements Particle {
+    value record TintedLeaves(Key key, int id, AlphaColor color) implements Particle {
         public static final StructCodec<TintedLeaves> CODEC = StructCodec.struct(
                 "type", Codec.KEY, TintedLeaves::key,
                 "color", AlphaColor.CODEC, TintedLeaves::color,
@@ -613,7 +613,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
     }
 
-    record DragonBreath(Key key, int id, float power) implements Particle {
+    value record DragonBreath(Key key, int id, float power) implements Particle {
         public static final StructCodec<DragonBreath> CODEC = StructCodec.struct(
                 "type", Codec.KEY, DragonBreath::key,
                 "power", Codec.FLOAT, DragonBreath::power,
@@ -640,7 +640,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
     }
 
-    record Effect(Key key, int id, RGBLike color, float power) implements Particle {
+    value record Effect(Key key, int id, RGBLike color, float power) implements Particle {
         public static final StructCodec<Effect> CODEC = StructCodec.struct(
                 "type", Codec.KEY, Effect::key,
                 "color", Color.CODEC, Effect::color,
@@ -679,7 +679,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
     }
 
-    record Flash(Key key, int id, AlphaColor color) implements Particle {
+    value record Flash(Key key, int id, AlphaColor color) implements Particle {
         public static final StructCodec<Flash> CODEC = StructCodec.struct(
                 "type", Codec.KEY, Flash::key,
                 "color", Color.CODEC, Flash::color,
@@ -716,7 +716,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
     }
 
-    record InstantEffect(Key key, int id, RGBLike color, float power) implements Particle {
+    value record InstantEffect(Key key, int id, RGBLike color, float power) implements Particle {
         public static final StructCodec<InstantEffect> CODEC = StructCodec.struct(
                 "type", Codec.KEY, InstantEffect::key,
                 "color", Color.CODEC, InstantEffect::color,
@@ -755,7 +755,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
     }
 
-    record Geyser(Key key, int id, int waterBlocks) implements Particle {
+    value record Geyser(Key key, int id, int waterBlocks) implements Particle {
         public static final StructCodec<Geyser> CODEC = StructCodec.struct(
                 "type", Codec.KEY, Geyser::key,
                 "water_blocks", Codec.INT, Geyser::waterBlocks,
@@ -783,7 +783,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
     }
 
-    record GeyserBase(Key key, int id, int waterBlocks, float burstImpulseBase) implements Particle {
+    value record GeyserBase(Key key, int id, int waterBlocks, float burstImpulseBase) implements Particle {
         public static final StructCodec<GeyserBase> CODEC = StructCodec.struct(
                 "type", Codec.KEY, GeyserBase::key,
                 "water_blocks", Codec.INT, GeyserBase::waterBlocks,
@@ -824,7 +824,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
     }
 
-    record GeyserPlume(Key key, int id, int waterBlocks) implements Particle {
+    value record GeyserPlume(Key key, int id, int waterBlocks) implements Particle {
         public static final StructCodec<GeyserPlume> CODEC = StructCodec.struct(
                 "type", Codec.KEY, GeyserPlume::key,
                 "water_blocks", Codec.INT, GeyserPlume::waterBlocks,
@@ -852,7 +852,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         }
     }
 
-    record GeyserPoof(Key key, int id, int waterBlocks, float burstImpulseBase) implements Particle {
+    value record GeyserPoof(Key key, int id, int waterBlocks, float burstImpulseBase) implements Particle {
         public static final StructCodec<GeyserPoof> CODEC = StructCodec.struct(
                 "type", Codec.KEY, GeyserPoof::key,
                 "water_blocks", Codec.INT, GeyserPoof::waterBlocks,

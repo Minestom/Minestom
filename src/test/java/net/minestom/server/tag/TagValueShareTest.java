@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class TagValueShareTest {
 
-    record Entry(int value) {
+    value record Entry(int value) {
     }
 
     @Test

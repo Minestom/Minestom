@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Contract;
  *                                  this world from another dimension (should be at
  *                                  least the diameter of the world border)
  */
-public record WorldBorder(double diameter, double centerX, double centerZ, int warningDistance, int warningTime, int dimensionTeleportBoundary) {
+public value record WorldBorder(double diameter, double centerX, double centerZ, int warningDistance, int warningTime, int dimensionTeleportBoundary) {
     public static final WorldBorder DEFAULT_BORDER = new WorldBorder(ServerFlag.WORLD_BORDER_SIZE * 2, 0, 0, 5, 15, ServerFlag.WORLD_BORDER_SIZE);
 
     /**

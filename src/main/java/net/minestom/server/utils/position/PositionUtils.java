@@ -7,7 +7,7 @@ import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
-public final class PositionUtils {
+public value class PositionUtils {
     public static Pos lookAlong(Pos position, double dx, double dy, double dz) {
         final float yaw = getLookYaw(dx, dz);
         final float pitch = getLookPitch(dx, dy, dz);

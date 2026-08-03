@@ -5,7 +5,7 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerResourcePackStatusEvent;
 import net.minestom.server.network.packet.client.common.ClientResourcePackStatusPacket;
 
-public class ResourcePackListener {
+public value class ResourcePackListener {
 
     public static void listener(ClientResourcePackStatusPacket packet, Player player) {
         EventDispatcher.call(new PlayerResourcePackStatusEvent(player, packet.id(), packet.status()));

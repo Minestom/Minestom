@@ -16,7 +16,7 @@ import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
 
-public record RecipeBookAddPacket(List<Entry> entries, boolean replace) implements ServerPacket.Play, ServerPacket.ComponentHolding {
+public value record RecipeBookAddPacket(List<Entry> entries, boolean replace) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final byte FLAG_NOTIFICATION = 1;
     public static final byte FLAG_HIGHLIGHT = 1 << 1;
 
@@ -29,7 +29,7 @@ public record RecipeBookAddPacket(List<Entry> entries, boolean replace) implemen
             BOOLEAN, RecipeBookAddPacket::replace,
             RecipeBookAddPacket::new);
 
-    public record Entry(
+    public value record Entry(
             int displayId, RecipeDisplay display,
             @Nullable Integer group, RecipeBookCategory category,
             @Nullable List<Ingredient> craftingRequirements,

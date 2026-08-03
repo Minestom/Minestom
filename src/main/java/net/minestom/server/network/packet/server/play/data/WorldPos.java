@@ -6,7 +6,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 
-public record WorldPos(String dimension, Point blockPosition) {
+public value record WorldPos(String dimension, Point blockPosition) {
     public static final NetworkBuffer.Type<WorldPos> NETWORK_TYPE = NetworkBufferTemplate.template(
             NetworkBuffer.STRING, WorldPos::dimension,
             NetworkBuffer.BLOCK_POSITION, WorldPos::blockPosition,

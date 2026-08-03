@@ -13,7 +13,7 @@ import net.minestom.server.network.packet.client.play.ClientTeleportToEntityPack
 
 import java.util.UUID;
 
-public class PlayerSpectatorListener {
+public value class PlayerSpectatorListener {
 
     public static void listener(ClientSpectatorActionPacket packet, Player player) {
         // Ignore if the player is not in spectator mode

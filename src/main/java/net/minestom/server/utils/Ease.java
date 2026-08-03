@@ -1,7 +1,7 @@
 package net.minestom.server.utils;
 
 // https://github.com/ai/easings.net/blob/master/src/easings/easingsFunctions.ts
-public final class Ease {
+public value class Ease {
     private static final float c1 = 1.70158f;
     @SuppressWarnings("unused")
     private static final float c2 = c1 * 1.525f;

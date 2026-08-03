@@ -7,7 +7,7 @@ import net.minestom.server.event.player.PlayerHandAnimationEvent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.client.play.ClientAnimationPacket;
 
-public class AnimationListener {
+public value class AnimationListener {
 
     public static void animationListener(ClientAnimationPacket packet, Player player) {
         final PlayerHand hand = packet.hand();

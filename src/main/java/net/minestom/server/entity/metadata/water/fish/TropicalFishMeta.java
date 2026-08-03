@@ -54,7 +54,7 @@ public class TropicalFishMeta extends AbstractFishMeta {
         else super.set(component, value);
     }
 
-    public record Variant(Pattern pattern, DyeColor baseColor, DyeColor patternColor) {
+    public value record Variant(Pattern pattern, DyeColor baseColor, DyeColor patternColor) {
         public static final Variant DEFAULT = new Variant(Pattern.KOB, DyeColor.WHITE, DyeColor.WHITE);
 
         public static Variant fromPackedId(int packedId) {

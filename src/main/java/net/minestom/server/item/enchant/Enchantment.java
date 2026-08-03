@@ -91,7 +91,7 @@ public sealed interface Enchantment extends Enchantments permits EnchantmentImpl
 
     }
 
-    record Cost(int base, int perLevelAboveFirst) {
+    value record Cost(int base, int perLevelAboveFirst) {
         public static final Cost DEFAULT = new Cost(1, 1);
 
         public static final Codec<Cost> CODEC = StructCodec.struct(

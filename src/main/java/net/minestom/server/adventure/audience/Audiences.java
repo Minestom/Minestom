@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 /**
  * Utility class to access Adventure audiences.
  */
-public class Audiences {
+public value class Audiences {
     private static final SingleAudienceProvider audience = new SingleAudienceProvider();
 
     /**

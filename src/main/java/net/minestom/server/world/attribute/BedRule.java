@@ -5,7 +5,7 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import org.jetbrains.annotations.Nullable;
 
-public record BedRule(
+public value record BedRule(
         Rule canSleep,
         Rule canSetSpawn,
         boolean explodes,

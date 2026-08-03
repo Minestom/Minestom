@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
-final class TagSerializerImpl {
+value class TagSerializerImpl {
     public static final TagSerializer<CompoundBinaryTag> COMPOUND = new TagSerializer<>() {
         @Override
         public CompoundBinaryTag read(TagReadable reader) {

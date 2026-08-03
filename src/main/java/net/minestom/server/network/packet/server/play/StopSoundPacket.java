@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record StopSoundPacket(byte flags, @Nullable Sound.Source source,
+public value record StopSoundPacket(byte flags, @Nullable Sound.Source source,
                               @Nullable String sound) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<StopSoundPacket> SERIALIZER = new Type<>() {
         @Override

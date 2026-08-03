@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
-public record ResetScorePacket(String owner, @Nullable String objective) implements ServerPacket.Play {
+public value record ResetScorePacket(String owner, @Nullable String objective) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<ResetScorePacket> SERIALIZER = NetworkBufferTemplate.template(
             STRING, ResetScorePacket::owner,
             STRING.optional(), ResetScorePacket::objective,

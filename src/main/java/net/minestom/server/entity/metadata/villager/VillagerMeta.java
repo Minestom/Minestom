@@ -43,7 +43,7 @@ public class VillagerMeta extends AbstractVillagerMeta {
         else super.set(component, value);
     }
 
-    public record VillagerData(
+    public value record VillagerData(
             VillagerType type,
             VillagerProfession profession,
             Level level

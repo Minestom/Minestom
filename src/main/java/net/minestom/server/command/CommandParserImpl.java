@@ -310,7 +310,7 @@ final class CommandParserImpl implements CommandParser {
         return chain.nodeResults.peekLast();
     }
 
-    record UnknownCommandResult() implements Result.UnknownCommand {
+    value record UnknownCommandResult() implements Result.UnknownCommand {
         private static final CommandParser.Result INSTANCE = new UnknownCommandResult();
 
         @Override
@@ -352,7 +352,7 @@ final class CommandParserImpl implements CommandParser {
         }
     }
 
-    record InvalidCommand(String input, CommandCondition condition, @Nullable ArgumentCallback callback,
+    value record InvalidCommand(String input, CommandCondition condition, @Nullable ArgumentCallback callback,
                           ArgumentResult.SyntaxError<?> error,
                           Map<String, ArgumentResult<Object>> arguments, CommandExecutor globalListener,
                           @Nullable SuggestionCallback suggestionCallback, List<Argument<?>> args)
@@ -371,7 +371,7 @@ final class CommandParserImpl implements CommandParser {
         }
     }
 
-    record ValidCommand(String input, CommandCondition condition, CommandExecutor executor,
+    value record ValidCommand(String input, CommandCondition condition, CommandExecutor executor,
                         Map<String, ArgumentResult<Object>> arguments,
                         CommandExecutor globalListener, @Nullable SuggestionCallback suggestionCallback,
                         List<Argument<?>> args)
@@ -402,7 +402,7 @@ final class CommandParserImpl implements CommandParser {
         }
     }
 
-    record UnknownExecutableCmd() implements ExecutableCommand {
+    value record UnknownExecutableCmd() implements ExecutableCommand {
         static final ExecutableCommand INSTANCE = new UnknownExecutableCmd();
 
         @Override
@@ -411,7 +411,7 @@ final class CommandParserImpl implements CommandParser {
         }
     }
 
-    record ValidExecutableCmd(CommandCondition condition, CommandExecutor globalListener, CommandExecutor executor,
+    value record ValidExecutableCmd(CommandCondition condition, CommandExecutor globalListener, CommandExecutor executor,
                               String input,
                               Map<String, ArgumentResult<Object>> arguments) implements ExecutableCommand {
         @Override
@@ -433,7 +433,7 @@ final class CommandParserImpl implements CommandParser {
         }
     }
 
-    record InvalidExecutableCmd(CommandCondition condition, CommandExecutor globalListener, ArgumentCallback callback,
+    value record InvalidExecutableCmd(CommandCondition condition, CommandExecutor globalListener, ArgumentCallback callback,
                                 ArgumentResult.SyntaxError<?> error, String input,
                                 Map<String, ArgumentResult<Object>> arguments) implements ExecutableCommand {
         @Override
@@ -463,7 +463,7 @@ final class CommandParserImpl implements CommandParser {
         return context;
     }
 
-    record ExecutionResultImpl(Type type, @Nullable CommandData commandData) implements ExecutableCommand.Result {
+    value record ExecutionResultImpl(Type type, @Nullable CommandData commandData) implements ExecutableCommand.Result {
         static final ExecutableCommand.Result CANCELLED = new ExecutionResultImpl(Type.CANCELLED, null);
         static final ExecutableCommand.Result UNKNOWN = new ExecutionResultImpl(Type.UNKNOWN, null);
         static final ExecutableCommand.Result EXECUTOR_EXCEPTION = new ExecutionResultImpl(Type.EXECUTOR_EXCEPTION, null);
@@ -471,7 +471,7 @@ final class CommandParserImpl implements CommandParser {
         static final ExecutableCommand.Result INVALID_SYNTAX = new ExecutionResultImpl(Type.INVALID_SYNTAX, null);
     }
 
-    private record NodeResult(Node node, Chain chain, ArgumentResult<Object> argumentResult,
+    private value record NodeResult(Node node, Chain chain, ArgumentResult<Object> argumentResult,
                               SuggestionCallback callback) {
         String name() {
             return node.argument().getId();
@@ -556,15 +556,15 @@ final class CommandParserImpl implements CommandParser {
     }
 
     private sealed interface ArgumentResult<R> {
-        record Success<T>(T value, String input)
+        value record Success<T>(T value, String input)
                 implements ArgumentResult<T> {
         }
 
-        record IncompatibleType<T>()
+        value record IncompatibleType<T>()
                 implements ArgumentResult<T> {
         }
 
-        record SyntaxError<T>(String message, @Nullable String input, int code)
+        value record SyntaxError<T>(String message, @Nullable String input, int code)
                 implements ArgumentResult<T> {
         }
     }

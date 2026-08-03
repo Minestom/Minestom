@@ -4,7 +4,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 
-public record DebugHiveInfo(
+public value record DebugHiveInfo(
         Block type,
         int occupantCount,
         int honeyLevel,

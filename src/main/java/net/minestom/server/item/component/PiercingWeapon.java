@@ -7,7 +7,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.Nullable;
 
-public record PiercingWeapon(
+public value record PiercingWeapon(
         boolean dealsKnockback,
         boolean dismounts,
         @Nullable SoundEvent sound,

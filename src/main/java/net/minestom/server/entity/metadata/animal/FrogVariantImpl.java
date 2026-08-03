@@ -4,7 +4,7 @@ import net.kyori.adventure.key.Key;
 
 import java.util.Objects;
 
-public record FrogVariantImpl(
+public value record FrogVariantImpl(
         Key assetId
 ) implements FrogVariant {
 

@@ -16,7 +16,7 @@ public final class CodecDocumentationTest {
     @ParameterizedTest(name = "package-info.java example: null={0}")
     @ValueSource(booleans = {true, false})
     public void testPackageInfoExample(boolean nullName) {
-        record MyType(int id, @Nullable String name) {
+        value record MyType(int id, @Nullable String name) {
             static final StructCodec<MyType> CODEC = StructCodec.struct(
                     "id", Codec.INT, MyType::id,
                     "name", Codec.STRING.optional(), MyType::name,
@@ -37,7 +37,7 @@ public final class CodecDocumentationTest {
     @ParameterizedTest(name = "StructCodec example: null={0}")
     @ValueSource(booleans = {true, false})
     public void testStructCodecExample(boolean nullName) {
-        record MyObject(double coolnessFactor, @Nullable String of) {
+        value record MyObject(double coolnessFactor, @Nullable String of) {
             static final StructCodec<MyObject> CODEC = StructCodec.struct(
                     "id", Codec.DOUBLE, MyObject::coolnessFactor,
                     "name", Codec.STRING.optional(), MyObject::of,
@@ -60,7 +60,7 @@ public final class CodecDocumentationTest {
 
     @Test
     public void testEncoderExample() {
-        record Name(String imTheBoss) { }
+        value record Name(String imTheBoss) { }
         Encoder<Name> encoder = new Encoder<>() {
             @Override
             public <D> Result<D> encode(Transcoder<D> coder, @Nullable Name value) {
@@ -76,7 +76,7 @@ public final class CodecDocumentationTest {
 
     @Test
     public void testDecodingExample() {
-        record Name(String imTheBoss) { }
+        value record Name(String imTheBoss) { }
         Decoder<Name> decoder = new Decoder<>() {
             @Override
             public <D> Result<Name> decode(Transcoder<D> coder, D value) {

@@ -9,7 +9,7 @@ import net.minestom.server.event.player.PlayerCustomClickEvent;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.client.common.ClientCustomClickActionPacket;
 
-public final class CustomClickListener {
+public value class CustomClickListener {
 
     public static void listener(ClientCustomClickActionPacket listener, Player player) {
         MinecraftServer.getClickCallbackManager().consumeCustomClick(player, listener);

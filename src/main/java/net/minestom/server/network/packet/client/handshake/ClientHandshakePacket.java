@@ -7,7 +7,7 @@ import net.minestom.server.utils.validate.Check;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ClientHandshakePacket(int protocolVersion, String serverAddress,
+public value record ClientHandshakePacket(int protocolVersion, String serverAddress,
                                     int serverPort, Intent intent) implements ClientPacket.Handshake {
     public static final NetworkBuffer.Type<ClientHandshakePacket> SERIALIZER = NetworkBufferTemplate.template(
             VAR_INT, ClientHandshakePacket::protocolVersion,

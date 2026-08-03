@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class TagMapTest {
 
-    private record Entry(int value) {
+    private value record Entry(int value) {
     }
 
     @Test

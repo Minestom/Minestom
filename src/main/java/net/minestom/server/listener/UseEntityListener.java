@@ -14,7 +14,7 @@ import net.minestom.server.event.player.PlayerEntityInteractEvent;
 import net.minestom.server.network.packet.client.play.ClientAttackPacket;
 import net.minestom.server.network.packet.client.play.ClientInteractEntityPacket;
 
-public class UseEntityListener {
+public value class UseEntityListener {
 
     public static void useEntityListener(ClientInteractEntityPacket packet, Player player) {
         final Entity entity = player.getInstance().getEntityById(packet.targetId());

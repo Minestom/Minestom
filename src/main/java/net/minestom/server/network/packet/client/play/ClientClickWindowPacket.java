@@ -9,7 +9,7 @@ import java.util.Map;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ClientClickWindowPacket(int windowId, int stateId,
+public value record ClientClickWindowPacket(int windowId, int stateId,
                                       short slot, byte button, ClickType clickType,
                                       Map<Short, ItemStack.Hash> changedSlots,
                                       ItemStack.Hash clickedItem) implements ClientPacket.Play {

@@ -1,6 +1,6 @@
 package net.minestom.server.monitoring;
 
-public class TickMonitor {
+public value class TickMonitor {
 
     private final double tickTime;
     private final double acquisitionTime;

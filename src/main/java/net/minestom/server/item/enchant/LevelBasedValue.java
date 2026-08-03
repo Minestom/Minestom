@@ -51,7 +51,7 @@ public interface LevelBasedValue {
 
     StructCodec<? extends LevelBasedValue> codec();
 
-    record Constant(float value) implements LevelBasedValue {
+    value record Constant(float value) implements LevelBasedValue {
 
         @Override
         public float calc(int level) {
@@ -64,7 +64,7 @@ public interface LevelBasedValue {
         }
     }
 
-    record Linear(float base, float perLevelAboveFirst) implements LevelBasedValue {
+    value record Linear(float base, float perLevelAboveFirst) implements LevelBasedValue {
         public static final StructCodec<Linear> CODEC = StructCodec.struct(
                 "base", Codec.FLOAT, Linear::base,
                 "per_level_above_first", Codec.FLOAT, Linear::perLevelAboveFirst,
@@ -82,7 +82,7 @@ public interface LevelBasedValue {
         }
     }
 
-    record Clamped(LevelBasedValue value, float min, float max) implements LevelBasedValue {
+    value record Clamped(LevelBasedValue value, float min, float max) implements LevelBasedValue {
         public static final StructCodec<Clamped> CODEC = StructCodec.struct(
                 "value", LevelBasedValue.CODEC, Clamped::value,
                 "min", Codec.FLOAT, Clamped::min,
@@ -101,7 +101,7 @@ public interface LevelBasedValue {
         }
     }
 
-    record Fraction(LevelBasedValue numerator,
+    value record Fraction(LevelBasedValue numerator,
                     LevelBasedValue denominator) implements LevelBasedValue {
         public static final StructCodec<Fraction> CODEC = StructCodec.struct(
                 "numerator", LevelBasedValue.CODEC, Fraction::numerator,
@@ -121,7 +121,7 @@ public interface LevelBasedValue {
         }
     }
 
-    record LevelsSquared(float added) implements LevelBasedValue {
+    value record LevelsSquared(float added) implements LevelBasedValue {
         public static final StructCodec<LevelsSquared> CODEC = StructCodec.struct(
                 "added", Codec.FLOAT, LevelsSquared::added,
                 LevelsSquared::new
@@ -138,7 +138,7 @@ public interface LevelBasedValue {
         }
     }
 
-    record Lookup(List<Float> values, LevelBasedValue fallback) implements LevelBasedValue {
+    value record Lookup(List<Float> values, LevelBasedValue fallback) implements LevelBasedValue {
         public static final StructCodec<Lookup> CODEC = StructCodec.struct(
                 "values", Codec.FLOAT.list(), Lookup::values,
                 "fallback", LevelBasedValue.CODEC, Lookup::fallback,

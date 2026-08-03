@@ -10,7 +10,7 @@ import net.minestom.server.sound.SoundEvent;
 
 import java.util.List;
 
-public record Consumable(
+public value record Consumable(
         float consumeSeconds,
         ItemAnimation animation,
         SoundEvent sound,

@@ -5,7 +5,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 
-public record OpenBookPacket(PlayerHand hand) implements ServerPacket.Play {
+public value record OpenBookPacket(PlayerHand hand) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<OpenBookPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.Enum(PlayerHand.class), OpenBookPacket::hand,
             OpenBookPacket::new);

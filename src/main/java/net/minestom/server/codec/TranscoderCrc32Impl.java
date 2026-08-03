@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.zip.CRC32C;
 
 @ApiStatus.Internal
-final class TranscoderCrc32Impl implements Transcoder<Integer> {
+value class TranscoderCrc32Impl implements Transcoder<Integer> {
     static final TranscoderCrc32Impl INSTANCE = new TranscoderCrc32Impl();
 
     private static final Comparator<Map.Entry<Integer, Integer>> KEY_COMPARATOR = Map.Entry.comparingByKey(Comparator.comparingLong(Integer::toUnsignedLong));
@@ -251,7 +251,7 @@ final class TranscoderCrc32Impl implements Transcoder<Integer> {
 
 
     // Loosely based on the Hasher implementation from Guava, licensed under the Apache 2.0 license.
-    private record Hasher(CRC32C crc32, ByteBuffer buffer) {
+    private value record Hasher(CRC32C crc32, ByteBuffer buffer) {
         Hasher() {
             this(new CRC32C(), ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN));
         }

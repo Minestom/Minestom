@@ -11,7 +11,7 @@ import java.util.List;
 
 import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
 
-public record FireworkExplosion(
+public value record FireworkExplosion(
         Shape shape,
         List<RGBLike> colors,
         List<RGBLike> fadeColors,

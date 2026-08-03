@@ -10,7 +10,7 @@ import static net.minestom.server.network.NetworkBuffer.BLOCK_POSITION;
 import static net.minestom.server.network.NetworkBuffer.STRING;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record ClientUpdateJigsawBlockPacket(
+public value record ClientUpdateJigsawBlockPacket(
         Point location,
         String name,
         String target,

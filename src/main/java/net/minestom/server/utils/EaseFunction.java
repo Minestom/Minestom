@@ -80,7 +80,7 @@ public interface EaseFunction {
 
     float sample(float value);
 
-    final class CubicBezier implements EaseFunction {
+    value class CubicBezier implements EaseFunction {
         private static final int NEWTON_RAPHSON_ITERATIONS = 4;
 
         private static final Codec<float[]> CONTROL_POINTS_CODEC = Codec.FLOAT.list(4).transform(
@@ -119,7 +119,7 @@ public interface EaseFunction {
             return this.y.sample(currentT);
         }
 
-        private record Curve(float a, float b, float c) {
+        private value record Curve(float a, float b, float c) {
             Curve(float cp1, float cp2) {
                 this(3.0F * cp1 - 3.0F * cp2 + 1.0F, -6.0F * cp1 + 3.0F * cp2, 3.0F * cp1);
             }

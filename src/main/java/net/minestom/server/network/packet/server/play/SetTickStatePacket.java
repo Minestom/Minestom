@@ -7,7 +7,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
 import static net.minestom.server.network.NetworkBuffer.FLOAT;
 
-public record SetTickStatePacket(float tickRate, boolean isFrozen) implements ServerPacket.Play {
+public value record SetTickStatePacket(float tickRate, boolean isFrozen) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<SetTickStatePacket> SERIALIZER = NetworkBufferTemplate.template(
             FLOAT, SetTickStatePacket::tickRate,
             BOOLEAN, SetTickStatePacket::isFrozen,

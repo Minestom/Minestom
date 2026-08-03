@@ -15,7 +15,7 @@ import java.util.Objects;
  * <p>
  * Useful for parsing Vec2 or Vec3 types
  */
-public record RelativeVec(Vec vec, CoordinateType coordinateType, boolean relativeX, boolean relativeY, boolean relativeZ) {
+public value record RelativeVec(Vec vec, CoordinateType coordinateType, boolean relativeX, boolean relativeY, boolean relativeZ) {
 
     public RelativeVec {
         Check.argCondition(relativeX && coordinateType == CoordinateType.ABSOLUTE, "RelativeVec `x` cannot have relativity while coordinateType is absolute.");

@@ -7,7 +7,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.FLOAT;
 
-public record PlayerAbilitiesPacket(byte flags, float flyingSpeed, float walkingSpeed) implements ServerPacket.Play {
+public value record PlayerAbilitiesPacket(byte flags, float flyingSpeed, float walkingSpeed) implements ServerPacket.Play {
     public static final byte FLAG_INVULNERABLE = 0x01;
     public static final byte FLAG_FLYING = 0x02;
     public static final byte FLAG_ALLOW_FLYING = 0x04;

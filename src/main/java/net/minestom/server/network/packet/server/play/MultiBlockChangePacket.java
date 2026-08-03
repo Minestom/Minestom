@@ -9,7 +9,7 @@ import java.util.Arrays;
 import static net.minestom.server.network.NetworkBuffer.LONG;
 import static net.minestom.server.network.NetworkBuffer.VAR_LONG_ARRAY;
 
-public record MultiBlockChangePacket(long chunkSectionPosition, long[] blocks) implements ServerPacket.Play {
+public value record MultiBlockChangePacket(long chunkSectionPosition, long[] blocks) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<MultiBlockChangePacket> SERIALIZER = NetworkBufferTemplate.template(
             LONG, MultiBlockChangePacket::chunkSectionPosition,
             VAR_LONG_ARRAY, MultiBlockChangePacket::blocks,

@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 import static net.minestom.server.network.NetworkBuffer.BYTE_ARRAY;
 
-public record ClientEncryptionResponsePacket(byte[] sharedSecret,
+public value record ClientEncryptionResponsePacket(byte[] sharedSecret,
                                              byte[] encryptedVerifyToken) implements ClientPacket.Login {
     public static final NetworkBuffer.Type<ClientEncryptionResponsePacket> SERIALIZER = NetworkBufferTemplate.template(
             BYTE_ARRAY, ClientEncryptionResponsePacket::sharedSecret,

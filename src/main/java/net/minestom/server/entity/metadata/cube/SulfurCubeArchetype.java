@@ -80,7 +80,7 @@ public sealed interface SulfurCubeArchetype extends SulfurCubeArchetypes permits
     SoundSettings soundSettings();
 
 
-    record AttributeEntry(Attribute attribute, AttributeModifier modifier) {
+    value record AttributeEntry(Attribute attribute, AttributeModifier modifier) {
         public static final Codec<AttributeEntry> CODEC = StructCodec.struct(
                 "attribute", Attribute.CODEC, AttributeEntry::attribute,
                 StructCodec.INLINE, AttributeModifier.CODEC, AttributeEntry::modifier,
@@ -89,7 +89,7 @@ public sealed interface SulfurCubeArchetype extends SulfurCubeArchetypes permits
 
     }
 
-    record Explosion(int power, boolean causesFire, int fuse) {
+    value record Explosion(int power, boolean causesFire, int fuse) {
         public static final Codec<Explosion> CODEC = StructCodec.struct(
                 "power", Codec.INT, Explosion::power,
                 "causes_fire", Codec.BOOLEAN, Explosion::causesFire,
@@ -99,7 +99,7 @@ public sealed interface SulfurCubeArchetype extends SulfurCubeArchetypes permits
 
     }
 
-    record ContactDamage(
+    value record ContactDamage(
             RegistryKey<DamageType> damageType,
             Codec.RawValue amount, // float provider
             boolean attributeToSource
@@ -113,7 +113,7 @@ public sealed interface SulfurCubeArchetype extends SulfurCubeArchetypes permits
 
     }
 
-    record KnockbackModifiers(float horizontalPower, float verticalPower) {
+    value record KnockbackModifiers(float horizontalPower, float verticalPower) {
         public static final Codec<KnockbackModifiers> CODEC = StructCodec.struct(
                 "horizontal_power", Codec.FLOAT, KnockbackModifiers::horizontalPower,
                 "vertical_power", Codec.FLOAT, KnockbackModifiers::verticalPower,
@@ -124,7 +124,7 @@ public sealed interface SulfurCubeArchetype extends SulfurCubeArchetypes permits
 
     }
 
-    record SoundSettings(
+    value record SoundSettings(
             SoundEvent hitSound,
             SoundEvent pushSound,
             float pushSoundImpulseThreshold,

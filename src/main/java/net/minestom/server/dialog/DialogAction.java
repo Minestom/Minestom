@@ -34,7 +34,7 @@ public sealed interface DialogAction {
             Map.entry(Key.key("dynamic/custom"), DynamicCustom.CODEC));
     StructCodec<DialogAction> CODEC = Codec.RegistryTaggedUnion(REGISTRY, DialogAction::codec);
 
-    record OpenUrl(String url) implements DialogAction {
+    value record OpenUrl(String url) implements DialogAction {
         public static final StructCodec<OpenUrl> CODEC = StructCodec.struct(
                 "url", StructCodec.STRING, OpenUrl::url,
                 OpenUrl::new);
@@ -45,7 +45,7 @@ public sealed interface DialogAction {
         }
     }
 
-    record RunCommand(String command) implements DialogAction {
+    value record RunCommand(String command) implements DialogAction {
         public static final StructCodec<RunCommand> CODEC = StructCodec.struct(
                 "command", StructCodec.STRING, RunCommand::command,
                 RunCommand::new);
@@ -56,7 +56,7 @@ public sealed interface DialogAction {
         }
     }
 
-    record SuggestCommand(String command) implements DialogAction {
+    value record SuggestCommand(String command) implements DialogAction {
         public static final StructCodec<SuggestCommand> CODEC = StructCodec.struct(
                 "command", StructCodec.STRING, SuggestCommand::command,
                 SuggestCommand::new);
@@ -67,7 +67,7 @@ public sealed interface DialogAction {
         }
     }
 
-    record ShowDialog(Holder<Dialog> dialog) implements DialogAction {
+    value record ShowDialog(Holder<Dialog> dialog) implements DialogAction {
         public static final StructCodec<ShowDialog> CODEC = StructCodec.struct(
                 "dialog", Holder.codec(Registries::dialog, Codec.ForwardRef(() -> Dialog.REGISTRY_CODEC)), ShowDialog::dialog,
                 ShowDialog::new);
@@ -78,7 +78,7 @@ public sealed interface DialogAction {
         }
     }
 
-    record ChangePage(int page) implements DialogAction {
+    value record ChangePage(int page) implements DialogAction {
         public static final StructCodec<ChangePage> CODEC = StructCodec.struct(
                 "page", StructCodec.INT, ChangePage::page,
                 ChangePage::new);
@@ -89,7 +89,7 @@ public sealed interface DialogAction {
         }
     }
 
-    record CopyToClipboard(String value) implements DialogAction {
+    value record CopyToClipboard(String value) implements DialogAction {
         public static final StructCodec<CopyToClipboard> CODEC = StructCodec.struct(
                 "value", StructCodec.STRING, CopyToClipboard::value,
                 CopyToClipboard::new);
@@ -100,7 +100,7 @@ public sealed interface DialogAction {
         }
     }
 
-    record Custom(Key key, @Nullable BinaryTag payload) implements DialogAction {
+    value record Custom(Key key, @Nullable BinaryTag payload) implements DialogAction {
         public static final StructCodec<Custom> CODEC = StructCodec.struct(
                 "id", Codec.KEY, Custom::key,
                 "payload", Codec.NBT.optional(), Custom::payload,
@@ -112,7 +112,7 @@ public sealed interface DialogAction {
         }
     }
 
-    record DynamicRunCommand(String template) implements DialogAction {
+    value record DynamicRunCommand(String template) implements DialogAction {
         public static final StructCodec<DynamicRunCommand> CODEC = StructCodec.struct(
                 "template", StructCodec.STRING, DynamicRunCommand::template,
                 DynamicRunCommand::new);
@@ -123,7 +123,7 @@ public sealed interface DialogAction {
         }
     }
 
-    record DynamicCustom(Key key, @Nullable CompoundBinaryTag additions) implements DialogAction {
+    value record DynamicCustom(Key key, @Nullable CompoundBinaryTag additions) implements DialogAction {
         public static final StructCodec<DynamicCustom> CODEC = StructCodec.struct(
                 "id", Codec.KEY, DynamicCustom::key,
                 "additions", Codec.NBT_COMPOUND.optional(), DynamicCustom::additions,

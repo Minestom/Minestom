@@ -40,7 +40,7 @@ import java.util.UUID;
 
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
-public final class LoginListener {
+public value class LoginListener {
     private static final SecureRandom NONCE_RANDOM = new SecureRandom();
 
     private static final Component ALREADY_CONNECTED = Component.text("You are already on this server", NamedTextColor.RED);

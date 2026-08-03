@@ -165,12 +165,12 @@ final class ProxyProtocolDecoder {
         PRESENT
     }
 
-    record Result(Status status, SocketAddress clientAddress) {
+    value record Result(Status status, SocketAddress clientAddress) {
     }
 
-    private record V2Header(byte[] signature, byte versionAndCommand, byte familyAndProtocol, int payloadLength) {
+    private value record V2Header(byte[] signature, byte versionAndCommand, byte familyAndProtocol, int payloadLength) {
     }
 
-    private record V2Address(byte[] source, byte[] destination, int sourcePort, int destinationPort) {
+    private value record V2Address(byte[] source, byte[] destination, int sourcePort, int destinationPort) {
     }
 }

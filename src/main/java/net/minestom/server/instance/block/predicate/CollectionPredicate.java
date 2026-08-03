@@ -22,7 +22,7 @@ import java.util.function.Predicate;
  * @param <T>      Type of item in the collection
  * @param <P>      A Predicate that matches against items of type {@code T}
  */
-public record CollectionPredicate<T, P extends Predicate<T>>(@Nullable Contains<T, P> contains,
+public value record CollectionPredicate<T, P extends Predicate<T>>(@Nullable Contains<T, P> contains,
                                                              @Nullable Count<T, P> counts,
                                                              @Nullable Range.Int size) implements Predicate<Collection<T>> {
 
@@ -45,7 +45,7 @@ public record CollectionPredicate<T, P extends Predicate<T>>(@Nullable Contains<
     /**
      * A predicate that requires that all of its sub-predicates match at least once.
      */
-    public record Contains<T, P extends Predicate<T>>(List<P> predicates) implements Predicate<Collection<T>> {
+    public value record Contains<T, P extends Predicate<T>>(List<P> predicates) implements Predicate<Collection<T>> {
 
         public Contains {
             predicates = List.copyOf(predicates);
@@ -78,13 +78,13 @@ public record CollectionPredicate<T, P extends Predicate<T>>(@Nullable Contains<
      * A predicate that counts the number of matching sub-predicates
      * and tests whether it's in the <code>count</code> range.
      */
-    public record Count<T, P extends Predicate<T>>(List<Entry<T, P>> entries) implements Predicate<Collection<T>> {
+    public value record Count<T, P extends Predicate<T>>(List<Entry<T, P>> entries) implements Predicate<Collection<T>> {
 
         public Count {
             entries = List.copyOf(entries);
         }
 
-        public record Entry<T, P extends Predicate<T>>(P predicate,
+        public value record Entry<T, P extends Predicate<T>>(P predicate,
                                                        Range.Int count) implements Predicate<Collection<T>> {
             public static <T, P extends Predicate<T>> Codec<Entry<T, P>> codec(Codec<P> itemCodec) {
                 return StructCodec.struct(

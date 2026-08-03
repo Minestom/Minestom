@@ -15,7 +15,7 @@ import java.util.*;
 
 final class RegistryCodecs {
 
-    record RegistryKeyImpl<T>(Registries.Selector<T> selector) implements Codec<RegistryKey<T>> {
+    value record RegistryKeyImpl<T>(Registries.Selector<T> selector) implements Codec<RegistryKey<T>> {
         RegistryKeyImpl {
             Objects.requireNonNull(selector, "selector");
         }
@@ -42,7 +42,7 @@ final class RegistryCodecs {
         }
     }
 
-    record HolderCodec<T>(
+    value record HolderCodec<T>(
             Registries.Selector<T> selector,
             Codec<T> registryCodec
     ) implements Codec<Holder<T>> {
@@ -80,7 +80,7 @@ final class RegistryCodecs {
         }
     }
 
-    record TagKeyImpl<T>(Registries.Selector<T> selector, boolean hash) implements Codec<TagKey<T>> {
+    value record TagKeyImpl<T>(Registries.Selector<T> selector, boolean hash) implements Codec<TagKey<T>> {
         TagKeyImpl {
             Objects.requireNonNull(selector, "selector");
         }
@@ -113,7 +113,7 @@ final class RegistryCodecs {
         }
     }
 
-    record RegistryTagImpl<T>(Registries.Selector<T> selector) implements Codec<RegistryTag<T>> {
+    value record RegistryTagImpl<T>(Registries.Selector<T> selector) implements Codec<RegistryTag<T>> {
         // Per vanilla, this codec supports registryless context, in which case it can only decode direct tags.
         RegistryTagImpl {
             Objects.requireNonNull(selector, "selector");
@@ -171,7 +171,7 @@ final class RegistryCodecs {
         }
     }
 
-    record HolderSetImpl<T extends Holder<T>>(
+    value record HolderSetImpl<T extends Holder<T>>(
             Codec<RegistryTag<T>> tagCodec,
             Codec<T> directCodec
     ) implements Codec<HolderSet<T>> {

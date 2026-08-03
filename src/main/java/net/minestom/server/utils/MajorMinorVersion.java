@@ -1,6 +1,6 @@
 package net.minestom.server.utils;
 
-public record MajorMinorVersion(int major, int minor) {
+public value record MajorMinorVersion(int major, int minor) {
 
     @Override
     public String toString() {

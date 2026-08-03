@@ -24,7 +24,7 @@ import static net.minestom.server.coordinate.CoordConversion.*;
 
 @ApiStatus.Internal
 public final class GeneratorImpl {
-public record GenSection(Palette blocks, Palette biomes, Int2ObjectMap<Block> specials) {
+    public value record GenSection(Palette blocks, Palette biomes, Int2ObjectMap<Block> specials) {
         public GenSection(Palette blocks, Palette biomes) {
             this(blocks, biomes, new Int2ObjectOpenHashMap<>(0));
         }
@@ -86,7 +86,7 @@ public record GenSection(Palette blocks, Palette biomes, Int2ObjectMap<Block> sp
         final DynamicRegistry<Biome> biomeRegistry;
         @Nullable Fork fork;
 
-        record Fork(BlockVec minSection, int width, int height, int depth, List<GenerationUnit> sections) {}
+        value record Fork(BlockVec minSection, int width, int height, int depth, List<GenerationUnit> sections) {}
 
         DynamicFork(DynamicRegistry<Biome> biomeRegistry) {
             this.biomeRegistry = biomeRegistry;
@@ -161,7 +161,7 @@ public record GenSection(Palette blocks, Palette biomes, Int2ObjectMap<Block> sp
         }
     }
 
-    public record UnitImpl(DynamicRegistry<Biome> biomeRegistry, UnitModifier modifier,
+    public value record UnitImpl(DynamicRegistry<Biome> biomeRegistry, UnitModifier modifier,
                            BlockVec size, BlockVec absoluteStart, BlockVec absoluteEnd,
                            @Nullable List<GenerationUnit> divided,
                            List<UnitImpl> forks) implements GenerationUnit {
@@ -219,7 +219,7 @@ public record GenSection(Palette blocks, Palette biomes, Int2ObjectMap<Block> sp
         }
     }
 
-    public record SectionModifierImpl(DynamicRegistry<Biome> biomeRegistry, BlockVec start, BlockVec end,
+    public value record SectionModifierImpl(DynamicRegistry<Biome> biomeRegistry, BlockVec start, BlockVec end,
                                       GenSection genSection, boolean fork) implements GenericModifier {
 
         @Override
@@ -355,7 +355,7 @@ public record GenSection(Palette blocks, Palette biomes, Int2ObjectMap<Block> sp
         }
     }
 
-    public record AreaModifierImpl(BlockVec size, BlockVec start, BlockVec end,
+    public value record AreaModifierImpl(BlockVec size, BlockVec start, BlockVec end,
                                    int width, int height, int depth,
                                    List<GenerationUnit> sections) implements GenericModifier {
         @Override

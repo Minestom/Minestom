@@ -7,7 +7,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import static net.minestom.server.network.NetworkBuffer.DOUBLE;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record ProjectilePowerPacket(
+public value record ProjectilePowerPacket(
         int entityId, double accelerationPower
 ) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<ProjectilePowerPacket> SERIALIZER = NetworkBufferTemplate.template(

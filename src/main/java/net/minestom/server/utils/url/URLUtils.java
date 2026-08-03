@@ -8,7 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
-public final class URLUtils {
+public value class URLUtils {
 
     private URLUtils() {
 

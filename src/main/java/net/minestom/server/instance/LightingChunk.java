@@ -594,6 +594,6 @@ public class LightingChunk extends DynamicChunk {
         return super.isLoaded() && doneInit;
     }
 
-    protected record OcclusionData(int highestBlock, int[] occlusionMap) {
+    protected value record OcclusionData(int highestBlock, int[] occlusionMap) {
     }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 import static net.minestom.server.network.NetworkBuffer.BYTE_ARRAY;
 import static net.minestom.server.network.NetworkBuffer.INT;
 
-public record ChunkBiomesPacket(List<ChunkBiomeData> chunks) implements ServerPacket.Play {
+public value record ChunkBiomesPacket(List<ChunkBiomeData> chunks) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<ChunkBiomesPacket> SERIALIZER = NetworkBufferTemplate.template(
             ChunkBiomeData.SERIALIZER.list(), ChunkBiomesPacket::chunks,
             ChunkBiomesPacket::new);
@@ -19,7 +19,7 @@ public record ChunkBiomesPacket(List<ChunkBiomeData> chunks) implements ServerPa
         chunks = List.copyOf(chunks); // TODO deep copy?
     }
 
-    public record ChunkBiomeData(int chunkX, int chunkZ, byte[] data) {
+    public value record ChunkBiomeData(int chunkX, int chunkZ, byte[] data) {
         // x and z are inverted, not a bug
         public static final NetworkBuffer.Type<ChunkBiomeData> SERIALIZER = NetworkBufferTemplate.template(
                 INT, ChunkBiomeData::chunkZ,

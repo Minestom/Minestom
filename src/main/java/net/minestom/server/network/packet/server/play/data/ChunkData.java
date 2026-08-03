@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte[] data,
+public value record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte[] data,
                         Map<Integer, Block> blockEntities) {
     public ChunkData {
         heightmaps = Map.copyOf(heightmaps); // TODO deep copy?
@@ -96,7 +96,7 @@ public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte[] data,
         return result;
     }
 
-    public record Section(short blockCount, short liquidCount, Palette blockStates, Palette biomes) {
+    public value record Section(short blockCount, short liquidCount, Palette blockStates, Palette biomes) {
         public static NetworkBuffer.Type<Section> networkType(int biomeCount) {
             return NetworkBufferTemplate.template(
                     SHORT, Section::blockCount,

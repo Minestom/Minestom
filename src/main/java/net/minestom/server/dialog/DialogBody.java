@@ -19,7 +19,7 @@ public sealed interface DialogBody {
             Map.entry(Key.key("plain_message"), PlainMessage.CODEC));
     StructCodec<DialogBody> CODEC = Codec.RegistryTaggedUnion(REGISTRY, DialogBody::codec);
 
-    record Item(
+    value record Item(
             ItemStack itemStack,
             @Nullable PlainMessage description,
             boolean showDecoration,
@@ -41,7 +41,7 @@ public sealed interface DialogBody {
         }
     }
 
-    record PlainMessage(Component contents, int width) implements DialogBody {
+    value record PlainMessage(Component contents, int width) implements DialogBody {
         public static final int DEFAULT_WIDTH = 200;
 
         private static final StructCodec<PlainMessage> COMPONENT_CODEC = StructCodec.struct(

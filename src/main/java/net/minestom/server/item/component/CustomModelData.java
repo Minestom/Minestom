@@ -9,7 +9,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 
 import java.util.List;
 
-public record CustomModelData(
+public value record CustomModelData(
         List<Float> floats, List<Boolean> flags,
         List<String> strings, List<RGBLike> colors
 ) {

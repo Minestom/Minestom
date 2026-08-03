@@ -38,7 +38,7 @@ public class NetworkBufferTemplateTest {
 
     @Test
     public void singleFieldTemplate() {
-        record TemplateSingle(int value) {
+        value record TemplateSingle(int value) {
         }
         NetworkBuffer.Type<TemplateSingle> singleType = NetworkBufferTemplate.template(
                 VAR_INT, TemplateSingle::value,
@@ -49,7 +49,7 @@ public class NetworkBufferTemplateTest {
 
     @Test
     public void twoFieldTemplate() {
-        record TemplatePair(int first, String second) {
+        value record TemplatePair(int first, String second) {
         }
         NetworkBuffer.Type<TemplatePair> pairType = NetworkBufferTemplate.template(
                 VAR_INT, TemplatePair::first,
@@ -61,7 +61,7 @@ public class NetworkBufferTemplateTest {
 
     @Test
     public void threeFieldTemplate() {
-        record TemplateTriple(int first, String second, long third) {
+        value record TemplateTriple(int first, String second, long third) {
         }
         NetworkBuffer.Type<TemplateTriple> tripleType = NetworkBufferTemplate.template(
                 VAR_INT, TemplateTriple::first, STRING, TemplateTriple::second, LONG, TemplateTriple::third,
@@ -71,7 +71,7 @@ public class NetworkBufferTemplateTest {
 
     @Test
     public void mixedTypeTemplate() {
-        record Mixed(boolean flag, byte b, short s, int var, long l, float f, double d, String text,
+        value record Mixed(boolean flag, byte b, short s, int var, long l, float f, double d, String text,
                      @Nullable String optionalText, List<Integer> ints) {
         }
         NetworkBuffer.Type<Mixed> mixedType = NetworkBufferTemplate.template(
@@ -94,7 +94,7 @@ public class NetworkBufferTemplateTest {
 
     @Test
     public void maxFieldTemplate() {
-        record TwentyFields(int f1, int f2, int f3, int f4, int f5, int f6, int f7, int f8, int f9, int f10, int f11,
+        value record TwentyFields(int f1, int f2, int f3, int f4, int f5, int f6, int f7, int f8, int f9, int f10, int f11,
                             int f12, int f13, int f14, int f15, int f16, int f17, int f18, int f19, int f20) {
         }
         NetworkBuffer.Type<TwentyFields> twentyFieldsType = NetworkBufferTemplate.template(
@@ -138,7 +138,7 @@ public class NetworkBufferTemplateTest {
 
     @Test
     public void templatePreservesFieldOrder() {
-        record Ordered(int first, int second, int third) {
+        value record Ordered(int first, int second, int third) {
         }
         var events = new ArrayList<String>();
         NetworkBuffer.Type<Integer> first = trackingVarInt("first", events);
@@ -158,7 +158,7 @@ public class NetworkBufferTemplateTest {
 
     @Test
     public void templateNullArguments() {
-        record Single(int value) {
+        value record Single(int value) {
         }
         assertThrows(NullPointerException.class, () -> NetworkBufferTemplate.template(null, Single::value, Single::new));
         assertThrows(NullPointerException.class, () -> NetworkBufferTemplate.template(VAR_INT, null, Single::new));

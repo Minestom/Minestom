@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
  * Can be applied to a player with {@link Player#setSkin(PlayerSkin)}
  * or in the linked event {@link net.minestom.server.event.player.PlayerSkinInitEvent}.
  */
-public record PlayerSkin(String textures, String signature) {
+public value record PlayerSkin(String textures, String signature) {
 
     /**
      * Gets a skin from a Mojang UUID.
@@ -65,7 +65,7 @@ public record PlayerSkin(String textures, String signature) {
         }
     }
 
-    public record Patch(
+    public value record Patch(
             @Nullable Key body,
             @Nullable Key cape,
             @Nullable Key elytra,

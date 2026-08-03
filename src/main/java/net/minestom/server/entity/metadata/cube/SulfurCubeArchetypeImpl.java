@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Objects;
 
-record SulfurCubeArchetypeImpl(
+value record SulfurCubeArchetypeImpl(
         RegistryTag<Material> items,
         List<AttributeEntry> attributeModifiers,
         boolean buoyant,

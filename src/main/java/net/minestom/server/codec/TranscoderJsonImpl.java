@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @ApiStatus.Internal
-final class TranscoderJsonImpl implements Transcoder<JsonElement> {
+value class TranscoderJsonImpl implements Transcoder<JsonElement> {
     public static final TranscoderJsonImpl INSTANCE = new TranscoderJsonImpl();
 
     @Override

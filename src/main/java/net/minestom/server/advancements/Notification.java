@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Represents a toast which can be sent to the player using {@link net.minestom.server.entity.Player#sendNotification(Notification)}.
  */
-public record Notification(Component title, FrameType frameType, ItemStack icon) {
+public value record Notification(Component title, FrameType frameType, ItemStack icon) {
     private static final String IDENTIFIER = "minestom:notification";
 
     public Notification(Component title, FrameType frameType, Material icon) {

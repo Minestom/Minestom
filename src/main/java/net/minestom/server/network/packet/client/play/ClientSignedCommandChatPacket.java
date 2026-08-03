@@ -9,7 +9,7 @@ import net.minestom.server.utils.validate.Check;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ClientSignedCommandChatPacket(String message, long timestamp,
+public value record ClientSignedCommandChatPacket(String message, long timestamp,
                                             long salt, ArgumentSignatures signatures,
                                             LastSeenMessages.Update lastSeenMessages,
                                             byte checksum) implements ClientPacket.Play {

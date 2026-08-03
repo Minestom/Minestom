@@ -15,7 +15,7 @@ import java.util.stream.IntStream;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ThreadDispatcherTest {
-    record World() {
+    record World() { // Requires identity
     }
 
     static abstract class Element implements Tickable, AcquirableSource<Element> {

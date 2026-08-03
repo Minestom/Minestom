@@ -10,7 +10,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.client.play.ClientPickItemFromBlockPacket;
 import net.minestom.server.network.packet.client.play.ClientPickItemFromEntityPacket;
 
-public class PlayerPickListener {
+public value class PlayerPickListener {
 
     public static void playerPickBlockListener(ClientPickItemFromBlockPacket packet, Player player) {
         final Instance instance = player.getInstance();

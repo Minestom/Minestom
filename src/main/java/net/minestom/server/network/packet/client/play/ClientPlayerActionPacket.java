@@ -8,7 +8,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ClientPlayerActionPacket(
+public value record ClientPlayerActionPacket(
         Status status, Point blockPosition,
         BlockFace blockFace, int sequence
 ) implements ClientPacket.Play {

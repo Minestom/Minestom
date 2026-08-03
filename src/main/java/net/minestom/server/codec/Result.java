@@ -26,7 +26,7 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      * @param value the value of {@link T}
      * @param <T>   the value type
      */
-    record Ok<T extends @UnknownNullability Object>(T value) implements Result<T> {
+    value record Ok<T extends @UnknownNullability Object>(T value) implements Result<T> {
     }
 
     /**
@@ -35,7 +35,7 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      * @param message the message
      * @param <T>     the type
      */
-    record Error<T>(String message) implements Result<T> {
+    value record Error<T>(String message) implements Result<T> {
         public Error {
             Objects.requireNonNull(message, "Message cannot be null");
         }

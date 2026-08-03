@@ -19,7 +19,7 @@ import java.util.List;
 import static net.kyori.adventure.text.event.DataComponentValueConverterRegistry.Conversion.convert;
 
 @SuppressWarnings("UnstableApiUsage") // we are permitted to provide this
-public final class MinestomDataComponentValueConverterProvider implements DataComponentValueConverterRegistry.Provider {
+public value class MinestomDataComponentValueConverterProvider implements DataComponentValueConverterRegistry.Provider {
 
     @Override
     public Key id() {

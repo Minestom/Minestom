@@ -9,7 +9,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import java.util.HashSet;
 import java.util.Set;
 
-public record TooltipDisplay(boolean hideTooltip, Set<DataComponent<?>> hiddenComponents) {
+public value record TooltipDisplay(boolean hideTooltip, Set<DataComponent<?>> hiddenComponents) {
     public static final TooltipDisplay EMPTY = new TooltipDisplay(false, Set.of());
 
     public static final NetworkBuffer.Type<TooltipDisplay> NETWORK_TYPE = NetworkBufferTemplate.template(

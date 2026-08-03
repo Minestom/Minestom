@@ -8,7 +8,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
 
-public record ClientTestInstanceBlockActionPacket(
+public value record ClientTestInstanceBlockActionPacket(
         Point blockPosition,
         Action action,
         Data data
@@ -20,7 +20,7 @@ public record ClientTestInstanceBlockActionPacket(
             Data.NETWORK_TYPE, ClientTestInstanceBlockActionPacket::data,
             ClientTestInstanceBlockActionPacket::new);
 
-    public record Data(
+    public value record Data(
             @Nullable String test,
             Point size,
             int rotation,

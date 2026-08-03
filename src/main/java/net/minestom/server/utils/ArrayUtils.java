@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.function.ToIntFunction;
 
 @ApiStatus.Internal
-public final class ArrayUtils {
+public value class ArrayUtils {
 
     private ArrayUtils() {
     }

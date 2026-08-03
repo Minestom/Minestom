@@ -18,7 +18,7 @@ import net.minestom.server.network.packet.client.play.ClientUseItemPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
 import net.minestom.server.registry.Holder;
 
-public class UseItemListener {
+public value class UseItemListener {
 
     public static void useItemListener(ClientUseItemPacket packet, Player player) {
         PlayerPositionListener.playerRotation(player, packet.yaw(), packet.pitch());

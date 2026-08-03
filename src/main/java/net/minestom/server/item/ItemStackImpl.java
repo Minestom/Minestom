@@ -19,7 +19,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 
-record ItemStackImpl(Material material, int amount, DataComponentMap componentPatch) implements ItemStack {
+value record ItemStackImpl(Material material, int amount, DataComponentMap componentPatch) implements ItemStack {
 
     static NetworkBuffer.Type<ItemStack> networkType(NetworkBuffer.Type<DataComponentMap> componentPatchType) {
         return new NetworkBuffer.Type<>() {

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.ApiStatus;
  * Can be used if you want to send the exact same buffer to multiple clients without processing it more than once.
  */
 @ApiStatus.Internal
-public record FramedPacket(ServerPacket packet,
+public record FramedPacket(ServerPacket packet, //TODO(valhalla) requires changing from SoftReference
                            NetworkBuffer body) implements SendablePacket {
     public FramedPacket {
         body = body.readOnly().readIndex(0);

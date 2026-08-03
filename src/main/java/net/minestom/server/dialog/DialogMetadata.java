@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public record DialogMetadata(
+public value record DialogMetadata(
         Component title,
         @Nullable Component externalTitle,
         boolean canCloseWithEscape,

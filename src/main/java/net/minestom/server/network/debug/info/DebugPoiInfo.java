@@ -4,7 +4,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 
-public record DebugPoiInfo(
+public value record DebugPoiInfo(
         Point position,
         Type type,
         int freeTicketCount

@@ -28,7 +28,7 @@ public sealed interface DebugSubscription<T> extends StaticProtocolObject<DebugS
         return DebugSubscriptionImpl.NAMESPACES.values();
     }
 
-    record Event<T>(DebugSubscription<T> subscription, T value) {
+    value record Event<T>(DebugSubscription<T> subscription, T value) {
         @SuppressWarnings("unchecked")
         public static final NetworkBuffer.Type<DebugSubscription.Event<?>> NETWORK_TYPE = new NetworkBuffer.Type<>() {
             @Override
@@ -46,7 +46,7 @@ public sealed interface DebugSubscription<T> extends StaticProtocolObject<DebugS
         };
     }
 
-    record Update<T>(DebugSubscription<T> subscription, @Nullable T value) {
+    value record Update<T>(DebugSubscription<T> subscription, @Nullable T value) {
         @SuppressWarnings("unchecked")
         public static final NetworkBuffer.Type<DebugSubscription.Update<?>> NETWORK_TYPE = new NetworkBuffer.Type<>() {
             @Override

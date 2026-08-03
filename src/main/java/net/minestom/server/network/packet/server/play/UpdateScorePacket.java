@@ -14,7 +14,7 @@ import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record UpdateScorePacket(
+public value record UpdateScorePacket(
         String entityName,
         String objectiveName,
         int score,

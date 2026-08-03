@@ -20,7 +20,7 @@ import java.util.List;
  *                     used to change how heavy the thunder is
  *                     higher values further darken the sky
  */
-public record Weather(float rainLevel, float thunderLevel) {
+public value record Weather(float rainLevel, float thunderLevel) {
     public static final Weather CLEAR = new Weather(0, 0);
     public static final Weather RAIN = new Weather(1, 0);
     public static final Weather THUNDER = new Weather(1, 1);

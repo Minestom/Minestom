@@ -8,7 +8,7 @@ import net.minestom.server.utils.validate.Check;
 
 import java.util.List;
 
-public record SelectKnownPacksPacket(
+public value record SelectKnownPacksPacket(
         List<Entry> entries
 ) implements ServerPacket.Configuration {
     private static final int MAX_ENTRIES = 64;
@@ -23,7 +23,7 @@ public record SelectKnownPacksPacket(
         entries = List.copyOf(entries);
     }
 
-    public record Entry(
+    public value record Entry(
             String namespace,
             String id,
             String version

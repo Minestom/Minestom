@@ -10,7 +10,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import java.util.*;
 import java.util.function.Predicate;
 
-public record DataComponentPredicates(DataComponentMap exact,
+public value record DataComponentPredicates(DataComponentMap exact,
                                       ComponentPredicateSet predicates) implements Predicate<DataComponent.Holder> {
 
     public DataComponentPredicates {

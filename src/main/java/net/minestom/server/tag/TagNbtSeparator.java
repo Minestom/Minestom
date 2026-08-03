@@ -16,7 +16,7 @@ import static java.util.Map.entry;
 /**
  * Handles conversion of {@link BinaryTag} subtypes into one or multiple primitive {@link Tag tags}.
  */
-final class TagNbtSeparator {
+value class TagNbtSeparator {
     static final Map<BinaryTagType<?>, Function<String, Tag<?>>> SUPPORTED_TYPES = Map.ofEntries(
             entry(BinaryTagTypes.BYTE, Tag::Byte),
             entry(BinaryTagTypes.SHORT, Tag::Short),
@@ -94,7 +94,7 @@ final class TagNbtSeparator {
         return new Entry<>(tag.path(path.toArray(String[]::new)), value);
     }
 
-    record Entry<T>(TagImpl<T> tag, T value) {
+    value record Entry<T>(TagImpl<T> tag, T value) {
         public Entry(Tag<T> tag, T value) {
             this((TagImpl<T>) tag, value);
         }

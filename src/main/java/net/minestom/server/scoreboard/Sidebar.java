@@ -508,7 +508,7 @@ public class Sidebar implements Scoreboard {
     }
 
 
-    public record NumberFormat(
+    public value record NumberFormat(
             FormatType formatType,
             @Nullable Component content
     ) implements ComponentHolder<NumberFormat> {

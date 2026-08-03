@@ -8,7 +8,7 @@ import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.UnknownNullability;
 
 @SuppressWarnings("removal")
-record FeatureFlagImpl(RegistryData.FeatureFlagEntry registry) implements FeatureFlag {
+value record FeatureFlagImpl(RegistryData.FeatureFlagEntry registry) implements FeatureFlag {
     static final Registry<FeatureFlag> REGISTRY = RegistryData.createStaticRegistry(BuiltinRegistries.FEATURE_FLAG,
             (namespace, properties) -> new FeatureFlagImpl(RegistryData.featureFlag(namespace, properties)));
 

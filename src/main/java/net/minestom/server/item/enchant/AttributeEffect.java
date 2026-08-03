@@ -6,7 +6,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeOperation;
 
-public record AttributeEffect(
+public value record AttributeEffect(
         Key id,
         Attribute attribute,
         LevelBasedValue amount,

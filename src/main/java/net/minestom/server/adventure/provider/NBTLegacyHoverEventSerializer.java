@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
 
-final class NBTLegacyHoverEventSerializer implements LegacyHoverEventSerializer {
+value class NBTLegacyHoverEventSerializer implements LegacyHoverEventSerializer {
     static final NBTLegacyHoverEventSerializer INSTANCE = new NBTLegacyHoverEventSerializer();
 
     private static final String ITEM_TYPE = "id", ITEM_COUNT = "Count", ITEM_TAG = "tag";

@@ -10,7 +10,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import java.util.Collection;
 import java.util.function.UnaryOperator;
 
-public record SetCursorItemPacket(ItemStack itemStack) implements ServerPacket.Play, ServerPacket.ComponentHolding {
+public value record SetCursorItemPacket(ItemStack itemStack) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final NetworkBuffer.Type<SetCursorItemPacket> SERIALIZER = NetworkBufferTemplate.template(
             ItemStack.NETWORK_TYPE, SetCursorItemPacket::itemStack,
             SetCursorItemPacket::new);

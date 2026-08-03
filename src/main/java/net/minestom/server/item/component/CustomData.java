@@ -9,7 +9,7 @@ import net.minestom.server.tag.TagReadable;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
-public record CustomData(CompoundBinaryTag nbt) implements TagReadable {
+public value record CustomData(CompoundBinaryTag nbt) implements TagReadable {
     public static final CustomData EMPTY = new CustomData(CompoundBinaryTag.empty());
 
     public static final NetworkBuffer.Type<CustomData> NETWORK_TYPE = NetworkBuffer.NBT_COMPOUND

@@ -5,7 +5,7 @@ import net.kyori.adventure.text.Component;
 
 import java.util.Objects;
 
-record TrimPatternImpl(
+value record TrimPatternImpl(
         Key assetId,
         Component description,
         boolean isDecal

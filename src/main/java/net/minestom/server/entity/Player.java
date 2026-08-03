@@ -230,7 +230,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     private final PlayerInputs inputs = new PlayerInputs();
 
     // Resource packs
-    record PendingResourcePack(boolean required, ResourcePackCallback callback) {
+    value record PendingResourcePack(boolean required, ResourcePackCallback callback) {
     }
 
     private final Map<UUID, PendingResourcePack> pendingResourcePacks = new HashMap<>();
@@ -268,7 +268,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     @ApiStatus.Internal
     public void setPendingOptions(Instance pendingInstance, boolean hardcore) {
         // I(mattw) am not a big fan of this function, but somehow we need to store
-        // the instance and i didn't like a record in ConnectionManager either.
+        // the instance and i didn't like a value record in ConnectionManager either.
         this.pendingInstance = pendingInstance;
         this.hardcore = hardcore;
     }

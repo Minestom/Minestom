@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public record ClockTimeMarkerImpl(RegistryKey<WorldClock> clock, int ticks, @Nullable Integer periodTicks,
+public value record ClockTimeMarkerImpl(RegistryKey<WorldClock> clock, int ticks, @Nullable Integer periodTicks,
                                   boolean showInCommands) implements ClockTimeMarker {
     public ClockTimeMarkerImpl {
         Objects.requireNonNull(clock, "clock");

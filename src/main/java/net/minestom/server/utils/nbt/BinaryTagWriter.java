@@ -9,7 +9,7 @@ import java.io.IOException;
 
 // Based on net.kyori.adventure.nbt.BinaryTagWriterImpl licensed under the MIT license.
 // https://github.com/KyoriPowered/adventure/blob/main/4/nbt/src/main/java/net/kyori/adventure/nbt/BinaryTagWriterImpl.java
-public class BinaryTagWriter {
+public value class BinaryTagWriter {
 
     static {
         BinaryTagTypes.COMPOUND.id(); // Force initialization

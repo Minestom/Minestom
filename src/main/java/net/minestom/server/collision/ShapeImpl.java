@@ -12,10 +12,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public record ShapeImpl(ShapeData shapeData, OcclusionData occlusionData) implements Shape {
+public value record ShapeImpl(ShapeData shapeData, OcclusionData occlusionData) implements Shape {
     private static final Pattern PATTERN = Pattern.compile("\\d.\\d+", Pattern.MULTILINE);
 
-    record ShapeData(List<BoundingBox> boundingBoxes,
+    value record ShapeData(List<BoundingBox> boundingBoxes,
                      Point relativeStart, Point relativeEnd,
                      byte fullFaces) {
         public ShapeData {
@@ -23,7 +23,7 @@ public record ShapeImpl(ShapeData shapeData, OcclusionData occlusionData) implem
         }
     }
 
-    record OcclusionData(byte blockOcclusion, byte airOcclusion, byte lightEmission) {}
+    value record OcclusionData(byte blockOcclusion, byte airOcclusion, byte lightEmission) {}
 
     public ShapeImpl withLightEmission(byte lightEmission) {
         return new ShapeImpl(this.shapeData, new OcclusionData(this.occlusionData.blockOcclusion(), this.occlusionData.airOcclusion, lightEmission));
@@ -289,6 +289,6 @@ public record ShapeImpl(ShapeData shapeData, OcclusionData occlusionData) implem
         return new Rectangle(x1, y1, x2, y2);
     }
 
-    private record Rectangle(double x1, double y1, double x2, double y2) {
+    private value record Rectangle(double x1, double y1, double x2, double y2) {
     }
 }

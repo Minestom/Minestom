@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public record DebugBeeInfo(
+public value record DebugBeeInfo(
         @Nullable Point hivePosition,
         @Nullable Point flowerPosition,
         int travelTicks,

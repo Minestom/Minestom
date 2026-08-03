@@ -7,7 +7,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import java.util.List;
 import java.util.Set;
 
-public record DebugBrainDump(
+public value record DebugBrainDump(
         String name,
         String profession,
         int xp,

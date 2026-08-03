@@ -7,7 +7,7 @@ import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.UnknownNullability;
 
 @SuppressWarnings("removal")
-record BlockSoundImpl(RegistryData.BlockSoundTypeEntry registry) implements BlockSoundType {
+value record BlockSoundImpl(RegistryData.BlockSoundTypeEntry registry) implements BlockSoundType {
     static final Registry<BlockSoundType> REGISTRY = RegistryData.createStaticRegistry(BuiltinRegistries.BLOCK_SOUND_TYPE,
             (namespace, properties) -> new BlockSoundImpl(RegistryData.blockSoundTypeEntry(namespace, properties)));
 

@@ -24,7 +24,7 @@ public class TagViewTest {
         }
     });
 
-    private record Entry(String value) {
+    private value record Entry(String value) {
     }
 
     @Test

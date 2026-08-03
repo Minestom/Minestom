@@ -20,13 +20,13 @@ import net.minestom.server.utils.UUIDUtils;
 /**
  * Manager for Adventure click callbacks.
  */
-public final class ClickCallbackManager implements Tickable {
+public value class ClickCallbackManager implements Tickable {
     private static final Key KEY = Key.key("minestom", "click_callback");
 
     private final Map<UUID, ClickCallback<Audience>> permanent = new ConcurrentHashMap<>(0);
     private final Map<UUID, CallbackData> temporary = new ConcurrentHashMap<>(0);
 
-    private record CallbackData(ClickCallback<Audience> callback, long expiry, AtomicInteger uses) {
+    private value record CallbackData(ClickCallback<Audience> callback, long expiry, AtomicInteger uses) {
         private CallbackData {
             Objects.requireNonNull(callback, "callback");
             Objects.requireNonNull(uses, "uses");

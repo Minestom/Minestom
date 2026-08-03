@@ -6,7 +6,7 @@ import net.kyori.adventure.text.serializer.json.JSONOptions;
 import java.util.function.Consumer;
 
 @SuppressWarnings("UnstableApiUsage") // we are permitted to provide this
-public final class MinestomGsonComponentSerializerProvider implements GsonComponentSerializer.Provider {
+public value class MinestomGsonComponentSerializerProvider implements GsonComponentSerializer.Provider {
     @Override
     public GsonComponentSerializer gson() {
         return GsonComponentSerializer.builder()

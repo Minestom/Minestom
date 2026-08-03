@@ -277,7 +277,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
         }
     }
 
-    record Graph(String name, String eventType, int priority,
+    value record Graph(String name, String eventType, int priority,
                  List<Graph> children) {
         public Graph {
             children = children.stream().sorted(Comparator.comparingInt(Graph::priority)).toList();

@@ -20,7 +20,7 @@ import net.minestom.server.network.packet.server.play.SetCursorItemPacket;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.Nullable;
 
-public class WindowListener {
+public value class WindowListener {
 
     @SuppressWarnings("LabelledBreakTarget")
     public static void clickWindowListener(ClientClickWindowPacket packet, Player player) {

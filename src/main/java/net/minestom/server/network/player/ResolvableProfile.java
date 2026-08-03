@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-public record ResolvableProfile(
+public value record ResolvableProfile(
         Either<GameProfile, Partial> profile,
         PlayerSkin.Patch patch
 ) implements PlayerHeadObjectContents.SkinSource {
@@ -57,7 +57,7 @@ public record ResolvableProfile(
         )));
     }
 
-    public record Partial(
+    public value record Partial(
             @Nullable String name,
             @Nullable UUID uuid,
             List<GameProfile.Property> properties

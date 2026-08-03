@@ -14,7 +14,7 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
     NetworkBuffer.Type<RecipeDisplay> NETWORK_TYPE = RecipeDisplayType.NETWORK_TYPE
             .unionType(RecipeDisplay::dataSerializer, RecipeDisplay::recipeDisplayToType);
 
-    record CraftingShapeless(
+    value record CraftingShapeless(
             List<SlotDisplay> ingredients,
             SlotDisplay result,
             SlotDisplay craftingStation
@@ -50,7 +50,7 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
         }
     }
 
-    record CraftingShaped(
+    value record CraftingShaped(
             int width, int height,
             List<SlotDisplay> ingredients,
             SlotDisplay result,
@@ -91,7 +91,7 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
         }
     }
 
-    record Furnace(
+    value record Furnace(
             SlotDisplay ingredient,
             SlotDisplay fuel,
             SlotDisplay result,
@@ -125,7 +125,7 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
         }
     }
 
-    record Stonecutter(
+    value record Stonecutter(
             SlotDisplay ingredient,
             SlotDisplay result,
             SlotDisplay craftingStation
@@ -152,7 +152,7 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
         }
     }
 
-    record Smithing(
+    value record Smithing(
             SlotDisplay template,
             SlotDisplay base,
             SlotDisplay addition,

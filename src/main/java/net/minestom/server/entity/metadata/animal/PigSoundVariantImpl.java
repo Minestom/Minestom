@@ -4,7 +4,7 @@ import net.minestom.server.sound.SoundEvent;
 
 import java.util.Objects;
 
-record PigSoundVariantImpl(
+value record PigSoundVariantImpl(
         PigSoundVariant.PigSoundSet adultSounds,
         PigSoundVariant.PigSoundSet babySounds
 ) implements PigSoundVariant {
@@ -14,7 +14,7 @@ record PigSoundVariantImpl(
         Objects.requireNonNull(babySounds, "babySounds");
     }
 
-    record PigSoundSetImpl(
+    value record PigSoundSetImpl(
             SoundEvent ambientSound,
             SoundEvent hurtSound,
             SoundEvent deathSound,

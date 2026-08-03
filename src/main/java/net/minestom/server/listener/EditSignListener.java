@@ -8,7 +8,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.client.play.ClientUpdateSignPacket;
 
-public class EditSignListener {
+public value class EditSignListener {
     public static void listener(ClientUpdateSignPacket packet, Player player) {
         Instance instance = player.getInstance();
         BlockVec position = packet.blockPosition().asBlockVec();

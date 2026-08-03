@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * Convenient class to check for common exceptions.
  */
-public final class Check {
+public value class Check {
 
     private Check() {
 

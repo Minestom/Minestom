@@ -17,7 +17,7 @@ import net.minestom.server.network.packet.client.play.ClientSignedCommandChatPac
 
 import java.util.Collection;
 
-public class ChatMessageListener {
+public value class ChatMessageListener {
     private static final CommandManager COMMAND_MANAGER = MinecraftServer.getCommandManager();
     private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
 

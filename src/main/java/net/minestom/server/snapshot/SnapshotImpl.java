@@ -31,7 +31,7 @@ import static net.minestom.server.coordinate.CoordConversion.*;
 
 @ApiStatus.Internal
 public final class SnapshotImpl {
-    public record Server(Collection<InstanceSnapshot> instances,
+    public value record Server(Collection<InstanceSnapshot> instances,
                          Int2ObjectOpenHashMap<AtomicReference<EntitySnapshot>> entityRefs) implements ServerSnapshot {
         @Override
         public Collection<EntitySnapshot> entities() {
@@ -45,7 +45,7 @@ public final class SnapshotImpl {
         }
     }
 
-    public record Instance(AtomicReference<ServerSnapshot> serverRef,
+    public value record Instance(AtomicReference<ServerSnapshot> serverRef,
                            RegistryKey<DimensionType> dimensionType, long worldAge, long time,
                            Map<Long, AtomicReference<ChunkSnapshot>> chunksMap,
                            int[] entitiesIds,
@@ -77,7 +77,7 @@ public final class SnapshotImpl {
         }
     }
 
-    public record Chunk(int minSection, int chunkX, int chunkZ,
+    public value record Chunk(int minSection, int chunkX, int chunkZ,
                         Section[] sections,
                         Int2ObjectOpenHashMap<Block> blockEntries,
                         int[] entitiesIds,
@@ -127,7 +127,7 @@ public final class SnapshotImpl {
         }
     }
 
-    public record Entity(EntityType type, UUID uuid, int id, Pos position, Vec velocity,
+    public value record Entity(EntityType type, UUID uuid, int id, Pos position, Vec velocity,
                          AtomicReference<InstanceSnapshot> instanceRef, int chunkX, int chunkZ,
                          int[] viewersId, int[] passengersId, int vehicleId,
                          TagReadable tagReadable) implements EntitySnapshot {
@@ -163,7 +163,7 @@ public final class SnapshotImpl {
         }
     }
 
-    public record Player(EntitySnapshot snapshot, String username,
+    public value record Player(EntitySnapshot snapshot, String username,
                          GameMode gameMode) implements PlayerSnapshot {
         @Override
         public EntityType type() {

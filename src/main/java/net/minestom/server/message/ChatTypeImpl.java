@@ -2,7 +2,7 @@ package net.minestom.server.message;
 
 import java.util.Objects;
 
-record ChatTypeImpl(
+value record ChatTypeImpl(
         ChatTypeDecoration chat,
         ChatTypeDecoration narration
 ) implements ChatType {

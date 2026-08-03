@@ -15,7 +15,7 @@ public class StructCodecTest {
 
     @Test
     void emptyObject() {
-        record Empty() {
+        value record Empty() {
         }
 
         var codec = StructCodec.struct(Empty::new);
@@ -25,7 +25,7 @@ public class StructCodecTest {
 
     @Test
     void singleField() {
-        record TheObject(String name) {
+        value record TheObject(String name) {
         }
 
         var codec = StructCodec.struct(
@@ -37,7 +37,7 @@ public class StructCodecTest {
 
     @Test
     void singleFieldMissing() {
-        record TheObject(String name) {
+        value record TheObject(String name) {
         }
 
         var codec = StructCodec.struct(
@@ -49,7 +49,7 @@ public class StructCodecTest {
 
     @Test
     void singleFieldOptionalMissing() {
-        record TheObject(@Nullable String name) {
+        value record TheObject(@Nullable String name) {
         }
 
         var codec = StructCodec.struct(
@@ -61,7 +61,7 @@ public class StructCodecTest {
 
     @Test
     void singleFieldOptionalMissingDefault() {
-        record TheObject(String name) {
+        value record TheObject(String name) {
         }
 
         var codec = StructCodec.struct(
@@ -73,7 +73,7 @@ public class StructCodecTest {
 
     @Test
     void singleFieldOptionalIncorrectTypeButNotMissing() {
-        record TheObject(String name) {
+        value record TheObject(String name) {
         }
 
         var codec = StructCodec.struct(
@@ -86,7 +86,7 @@ public class StructCodecTest {
 
     @Test
     void singleFieldOptionalExplicitJsonNull() {
-        record TheObject(@Nullable String name) {
+        value record TheObject(@Nullable String name) {
         }
 
         var codec = StructCodec.struct(
@@ -98,7 +98,7 @@ public class StructCodecTest {
 
     @Test
     void singleFieldOptionalExplicitJsonNullWithDefault() {
-        record TheObject(String name) {
+        value record TheObject(String name) {
         }
 
         var codec = StructCodec.struct(
@@ -110,9 +110,9 @@ public class StructCodecTest {
 
     @Test
     void inlineField() {
-        record InnerObject(String value) {
+        value record InnerObject(String value) {
         }
-        record TheObject(String name, InnerObject inner) {
+        value record TheObject(String name, InnerObject inner) {
         }
 
         var codec = StructCodec.struct(
@@ -131,9 +131,9 @@ public class StructCodecTest {
 
     @Test
     void inlineFieldEmpty() {
-        record InnerObject(String value) {
+        value record InnerObject(String value) {
         }
-        record TheObject(String name, InnerObject inner) {
+        value record TheObject(String name, InnerObject inner) {
         }
 
         var codec = StructCodec.struct(

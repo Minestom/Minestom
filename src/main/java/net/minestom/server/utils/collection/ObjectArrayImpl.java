@@ -6,7 +6,7 @@ import org.jetbrains.annotations.UnknownNullability;
 import java.util.Arrays;
 import java.util.List;
 
-final class ObjectArrayImpl {
+value class ObjectArrayImpl {
     static final class SingleThread<T> implements ObjectArray<T> {
         private T[] array;
         private int max = -1;

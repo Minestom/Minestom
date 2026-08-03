@@ -123,7 +123,7 @@ public class LightParityIntegrationTest {
         assertEquals(0, differencesZero);
     }
 
-    record SectionEntry(Palette blocks, byte[] sky, byte[] block) {
+    value record SectionEntry(Palette blocks, byte[] sky, byte[] block) {
     }
 
     private static Map<Vec, SectionEntry> retrieveSections() throws IOException, URISyntaxException {

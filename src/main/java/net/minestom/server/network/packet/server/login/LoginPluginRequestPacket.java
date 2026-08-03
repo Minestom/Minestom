@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record LoginPluginRequestPacket(int messageId, String channel,
+public value record LoginPluginRequestPacket(int messageId, String channel,
                                        byte[] data) implements ServerPacket.Login {
     public static final NetworkBuffer.Type<LoginPluginRequestPacket> SERIALIZER = NetworkBufferTemplate.template(
             VAR_INT, LoginPluginRequestPacket::messageId,

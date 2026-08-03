@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 /**
  * Holder of custom audiences.
  */
-public class AudienceRegistry {
+public value class AudienceRegistry {
 
     private final Map<Key, Collection<Audience>> registry;
     private final Function<Key, Collection<Audience>> provider;

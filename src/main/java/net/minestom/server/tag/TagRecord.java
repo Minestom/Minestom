@@ -16,7 +16,7 @@ import java.util.function.Function;
 
 import static java.util.Map.entry;
 
-final class TagRecord {
+value class TagRecord {
     static final Map<Class<?>, Function<String, Tag<?>>> SUPPORTED_TYPES = Map.ofEntries(
             entry(Byte.class, Tag::Byte), entry(byte.class, Tag::Byte),
             entry(Boolean.class, Tag::Boolean), entry(boolean.class, Tag::Boolean),
@@ -110,6 +110,6 @@ final class TagRecord {
         }
     }
 
-    record Entry(RecordComponent component, Tag<Object> tag) {
+    value record Entry(RecordComponent component, Tag<Object> tag) {
     }
 }

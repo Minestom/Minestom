@@ -79,7 +79,7 @@ public sealed interface EnvironmentAttribute<T> extends EnvironmentAttributes pe
             public static final Codec<Operator> CODEC = Codec.Enum(Operator.class);
         }
 
-        record Override<Value>(
+        value record Override<Value>(
                 Codec<Value> argumentCodec
         ) implements Modifier<Value, Value> {
             @java.lang.Override

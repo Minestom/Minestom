@@ -11,7 +11,7 @@ import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.COMPONENT;
 
-public record ActionBarPacket(Component text) implements ServerPacket.Play, ServerPacket.ComponentHolding {
+public value record ActionBarPacket(Component text) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final NetworkBuffer.Type<ActionBarPacket> SERIALIZER = NetworkBufferTemplate.template(
             COMPONENT, ActionBarPacket::text,
             ActionBarPacket::new);

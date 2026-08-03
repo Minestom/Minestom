@@ -78,7 +78,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      *
      * @param component the component which must be present
      */
-    record Exists(DataComponent<?> component) implements DataComponentPredicate {
+    value record Exists(DataComponent<?> component) implements DataComponentPredicate {
 
         public Exists {
             Objects.requireNonNull(component, "component");
@@ -96,7 +96,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @param durability Remaining durability ({@link DataComponents#MAX_DAMAGE} - {@link DataComponents#DAMAGE})
      * @param damage     Damage value ({@link DataComponents#DAMAGE})
      */
-    record Damage(@Nullable Range.Int durability, @Nullable Range.Int damage) implements Registered {
+    value record Damage(@Nullable Range.Int durability, @Nullable Range.Int damage) implements Registered {
         @SuppressWarnings("ConstantField") // kept not final for binary compatibility until the next breaking release
         public static Codec<Damage> CODEC = StructCodec.struct(
                 "durability", Range.Int.CODEC.optional(), Damage::durability,
@@ -134,7 +134,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @param enchantments The enchantments to search for
      * @param levels       The acceptable range of enchantment levels
      */
-    record EnchantmentListPredicate(@Nullable RegistryTag<Enchantment> enchantments,
+    value record EnchantmentListPredicate(@Nullable RegistryTag<Enchantment> enchantments,
                                     @Nullable Range.Int levels) implements Predicate<EnchantmentList> {
 
         public static final Codec<EnchantmentListPredicate> CODEC = StructCodec.struct(
@@ -173,7 +173,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @param children The enchantment predicates to apply to the object. All items must pass for this predicate to pass.
      * @see EnchantmentListPredicate Information about enchantment matching
      */
-    record Enchantments(List<EnchantmentListPredicate> children) implements Registered {
+    value record Enchantments(List<EnchantmentListPredicate> children) implements Registered {
         public static final Codec<Enchantments> CODEC = EnchantmentListPredicate.CODEC.list().transform(Enchantments::new, Enchantments::children);
 
         public Enchantments {
@@ -209,7 +209,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @param children The enchantment predicates to apply to the object. All items must pass for this predicate to pass.
      * @see EnchantmentListPredicate Information about enchantment matching
      */
-    record StoredEnchantments(
+    value record StoredEnchantments(
             List<EnchantmentListPredicate> children) implements Registered {
         public static final Codec<StoredEnchantments> CODEC = EnchantmentListPredicate.CODEC.list().transform(StoredEnchantments::new, StoredEnchantments::children);
 
@@ -245,7 +245,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      *
      * @param potionTypes The types of potions to match. The object's potion type must be contained in {@code potionTypes} for this predicate to return true.
      */
-    record Potions(RegistryTag<PotionType> potionTypes) implements Registered {
+    value record Potions(RegistryTag<PotionType> potionTypes) implements Registered {
         public static final Codec<Potions> CODEC = RegistryTag.codec(Registries::potionType)
                 .transform(Potions::new, Potions::potionTypes);
 
@@ -272,7 +272,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @param nbt An NBT predicate to match against the object's custom data
      * @see NbtPredicate#compareNBT(BinaryTag, BinaryTag) Description of NBT comparison logic
      */
-    record CustomData(NbtPredicate nbt) implements Registered {
+    value record CustomData(NbtPredicate nbt) implements Registered {
         public static final Codec<CustomData> CODEC = NbtPredicate.CODEC.transform(CustomData::new, CustomData::nbt);
 
         public CustomData(@Nullable CompoundBinaryTag nbt) {
@@ -297,7 +297,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @param items Predicates to match against the object's items
      * @see CollectionPredicate
      */
-    record Container(@Nullable CollectionPredicate<ItemStack, ItemPredicate> items) implements Registered {
+    value record Container(@Nullable CollectionPredicate<ItemStack, ItemPredicate> items) implements Registered {
         public static final Codec<Container> CODEC = StructCodec.struct(
                 "items", CollectionPredicate.codec(ItemPredicate.CODEC).optional(), Container::items,
                 Container::new
@@ -324,7 +324,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @param items Predicates to match against the object's items
      * @see CollectionPredicate
      */
-    record BundleContents(
+    value record BundleContents(
             @Nullable CollectionPredicate<ItemStack, ItemPredicate> items) implements Registered {
         public static final Codec<BundleContents> CODEC = StructCodec.struct(
                 "items", CollectionPredicate.codec(ItemPredicate.CODEC).optional(), BundleContents::items,
@@ -343,7 +343,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
     }
 
-    record FireworkExplosionPredicate(@Nullable Shape shape,
+    value record FireworkExplosionPredicate(@Nullable Shape shape,
                                       @Nullable Boolean hasTrail,
                                       @Nullable Boolean hasTwinkle) implements Predicate<net.minestom.server.item.component.FireworkExplosion> {
 
@@ -371,7 +371,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @param explosions     Predicates to match against the object's firework explosions, or null to allow any
      * @param flightDuration The allowed range of flight duration, or null to allow any
      */
-    record Fireworks(
+    value record Fireworks(
             @Nullable CollectionPredicate<net.minestom.server.item.component.FireworkExplosion, FireworkExplosionPredicate> explosions,
             @Nullable Range.Int flightDuration) implements Registered {
 
@@ -401,7 +401,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      *
      * @param delegate A predicate to match against the object's firework explosion
      */
-    record FireworkExplosion(FireworkExplosionPredicate delegate) implements Registered {
+    value record FireworkExplosion(FireworkExplosionPredicate delegate) implements Registered {
         public static final Codec<FireworkExplosion> CODEC = FireworkExplosionPredicate.CODEC.transform(FireworkExplosion::new, FireworkExplosion::delegate);
 
         public FireworkExplosion(@Nullable Shape shape,
@@ -428,7 +428,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @param pages Predicates to match against the book's pages
      * @see CollectionPredicate
      */
-    record WritableBook(
+    value record WritableBook(
             @Nullable CollectionPredicate<FilteredText<String>, WritableBook.PagePredicate> pages) implements Registered {
         public static final Codec<WritableBook> CODEC = StructCodec.struct(
                 "pages", CollectionPredicate.codec(WritableBook.PagePredicate.CODEC).optional(), WritableBook::pages,
@@ -442,7 +442,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             return pages == null || pages.test(content.pages());
         }
 
-        public record PagePredicate(String contents) implements Predicate<FilteredText<String>> {
+        public value record PagePredicate(String contents) implements Predicate<FilteredText<String>> {
 
             public static final Codec<PagePredicate> CODEC = Codec.STRING.transform(PagePredicate::new, PagePredicate::contents);
 
@@ -468,7 +468,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @param resolved   The expected value of {@link WrittenBookContent#resolved()}, or null to ignore
      * @see CollectionPredicate
      */
-    record WrittenBook(@Nullable CollectionPredicate<FilteredText<Component>, WrittenBook.PagePredicate> pages,
+    value record WrittenBook(@Nullable CollectionPredicate<FilteredText<Component>, WrittenBook.PagePredicate> pages,
                        @Nullable String author,
                        @Nullable String title,
                        @Nullable Range.Int generation, @Nullable Boolean resolved) implements Registered {
@@ -499,7 +499,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             return pages == null || pages.test(content.pages());
         }
 
-        public record PagePredicate(Component contents) implements Predicate<FilteredText<Component>> {
+        public value record PagePredicate(Component contents) implements Predicate<FilteredText<Component>> {
             public static final Codec<PagePredicate> CODEC = Codec.COMPONENT.transform(PagePredicate::new, PagePredicate::contents);
 
             @Override
@@ -523,7 +523,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @param operation The attribute's operation to match, or null to ignore
      * @param slot      The attribute's equipment slot to match, or null to ignore
      */
-    record AttributeModifierPredicate(@Nullable Attribute attribute, @Nullable Key id,
+    value record AttributeModifierPredicate(@Nullable Attribute attribute, @Nullable Key id,
                                       @Nullable Range.Double amount,
                                       @Nullable AttributeOperation operation,
                                       @Nullable EquipmentSlotGroup slot) implements Predicate<AttributeList.Modifier> {
@@ -557,7 +557,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @param modifiers Predicates to match against the object's attribute modifiers
      * @see CollectionPredicate
      */
-    record AttributeModifiers(
+    value record AttributeModifiers(
             @Nullable CollectionPredicate<AttributeList.Modifier, AttributeModifierPredicate> modifiers) implements Registered {
 
         public static final Codec<AttributeModifiers> CODEC = StructCodec.struct(
@@ -584,7 +584,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @param material The trim material to match, or null to ignore
      * @param pattern  The trim pattern to match, or null to ignore
      */
-    record ArmorTrim(@Nullable RegistryTag<TrimMaterial> material,
+    value record ArmorTrim(@Nullable RegistryTag<TrimMaterial> material,
                      @Nullable RegistryTag<TrimPattern> pattern) implements Registered {
 
         public static final Codec<ArmorTrim> CODEC = StructCodec.struct(
@@ -613,7 +613,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      *
      * @param songs The songs to accept, or null to ignore.
      */
-    record JukeboxPlayable(@Nullable RegistryTag<JukeboxSong> songs) implements Registered {
+    value record JukeboxPlayable(@Nullable RegistryTag<JukeboxSong> songs) implements Registered {
 
         public static final Codec<JukeboxPlayable> CODEC = StructCodec.struct(
                 "song", RegistryTag.codec(Registries::jukeboxSong).optional(), JukeboxPlayable::songs,
@@ -638,7 +638,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      *
      * @param villagerTypes The types of villagers to match
      */
-    record VillagerVariant(List<VillagerType> villagerTypes) implements Registered {
+    value record VillagerVariant(List<VillagerType> villagerTypes) implements Registered {
         public static final Codec<VillagerVariant> CODEC = VillagerType.CODEC.listOrSingle().transform(VillagerVariant::new, VillagerVariant::villagerTypes);
 
         public VillagerVariant {

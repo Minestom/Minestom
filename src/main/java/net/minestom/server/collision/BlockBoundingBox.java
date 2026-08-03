@@ -10,7 +10,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
  *
  * <p>This is in contrast to BoundingBox which is relative to its owner's position, and precise.</p>
  */
-public record BlockBoundingBox(Point min, Point max) {
+public value record BlockBoundingBox(Point min, Point max) {
     public static final NetworkBuffer.Type<BlockBoundingBox> NETWORK_TYPE = NetworkBufferTemplate.template(
             NetworkBuffer.BLOCK_POSITION, BlockBoundingBox::min,
             NetworkBuffer.BLOCK_POSITION, BlockBoundingBox::max,

@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 
 import java.util.Map;
 
-public record CustomReportDetailsPacket(
+public value record CustomReportDetailsPacket(
         Map<String, String> details
 ) implements ServerPacket.Configuration, ServerPacket.Play {
     private static final int MAX_DETAILS = 32;

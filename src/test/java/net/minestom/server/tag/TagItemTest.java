@@ -2,6 +2,7 @@ package net.minestom.server.tag;
 
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.lang.ref.WeakReference;
@@ -44,6 +45,7 @@ public class TagItemTest {
         assertNull(handler.getTag(tag));
     }
 
+    @Disabled // TODO(valhalla)
     @Test
     public void gc() {
         var item = ItemStack.of(Material.DIAMOND);

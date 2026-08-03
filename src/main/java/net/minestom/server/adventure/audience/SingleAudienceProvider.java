@@ -11,14 +11,11 @@ import java.util.function.Predicate;
  * A provider of audiences. For complex returns, this instance is backed by
  * {@link IterableAudienceProvider}.
  */
-class SingleAudienceProvider implements AudienceProvider<Audience> {
+value class SingleAudienceProvider implements AudienceProvider<Audience> {
 
-    protected final IterableAudienceProvider collection = new IterableAudienceProvider();
-    protected final Audience players = PacketGroupingAudience.of(MinecraftServer.getConnectionManager().getOnlinePlayers());
-    protected final Audience server = Audience.audience(this.players, MinecraftServer.getCommandManager().getConsoleSender());
-
-    protected SingleAudienceProvider() {
-    }
+    final IterableAudienceProvider collection = new IterableAudienceProvider();
+    final Audience players = PacketGroupingAudience.of(MinecraftServer.getConnectionManager().getOnlinePlayers());
+    final Audience server = Audience.audience(this.players, MinecraftServer.getCommandManager().getConsoleSender());
 
     /**
      * Gets the {@link IterableAudienceProvider} instance.

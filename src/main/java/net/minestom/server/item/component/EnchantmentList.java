@@ -9,7 +9,7 @@ import net.minestom.server.registry.RegistryKey;
 import java.util.HashMap;
 import java.util.Map;
 
-public record EnchantmentList(Map<RegistryKey<Enchantment>, Integer> enchantments) {
+public value record EnchantmentList(Map<RegistryKey<Enchantment>, Integer> enchantments) {
     public static final EnchantmentList EMPTY = new EnchantmentList(Map.of());
 
     public static final NetworkBuffer.Type<EnchantmentList> NETWORK_TYPE = NetworkBufferTemplate.template(

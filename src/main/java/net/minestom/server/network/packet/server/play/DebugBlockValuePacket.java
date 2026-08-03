@@ -6,7 +6,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.debug.DebugSubscription;
 import net.minestom.server.network.packet.server.ServerPacket;
 
-public record DebugBlockValuePacket(
+public value record DebugBlockValuePacket(
         Point blockPosition,
         DebugSubscription.Update<?> update
 ) implements ServerPacket.Play {

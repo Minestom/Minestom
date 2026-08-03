@@ -15,7 +15,7 @@ import java.util.function.Function;
 
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
-public record GameProfile(
+public value record GameProfile(
         UUID uuid, String name,
         List<Property> properties
 ) {
@@ -45,7 +45,7 @@ public record GameProfile(
             "properties", Property.LIST_CODEC.optional(List.of()), GameProfile::properties,
             GameProfile::new);
 
-    public record Property(String name, String value, @Nullable String signature) implements PlayerHeadObjectContents.ProfileProperty {
+    public value record Property(String name, String value, @Nullable String signature) implements PlayerHeadObjectContents.ProfileProperty {
         public Property {
             Objects.requireNonNull(name, "name");
             Objects.requireNonNull(value, "value");

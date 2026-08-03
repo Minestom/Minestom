@@ -9,7 +9,7 @@ import net.minestom.server.utils.validate.Check;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ClientUpdateStructureBlockPacket(
+public value record ClientUpdateStructureBlockPacket(
         Point location, Action action,
         Mode mode, String name,
         Point offset, Point size,

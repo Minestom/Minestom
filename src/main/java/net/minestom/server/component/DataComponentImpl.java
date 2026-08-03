@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.UnaryOperator;
 
-record DataComponentImpl<T>(
+value record DataComponentImpl<T>(
         int id,
         Key key,
         @Nullable NetworkBuffer.Type<T> networkType,

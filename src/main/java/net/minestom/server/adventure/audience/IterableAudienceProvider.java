@@ -16,12 +16,9 @@ import java.util.stream.StreamSupport;
 /**
  * A provider of iterable audiences.
  */
-class IterableAudienceProvider implements AudienceProvider<Iterable<? extends Audience>> {
+value class IterableAudienceProvider implements AudienceProvider<Iterable<? extends Audience>> {
     private final List<ConsoleSender> console = List.of(MinecraftServer.getCommandManager().getConsoleSender());
     private final AudienceRegistry registry = new AudienceRegistry(new ConcurrentHashMap<>(), CopyOnWriteArrayList::new);
-
-    protected IterableAudienceProvider() {
-    }
 
     @Override
     public Iterable<? extends Audience> all() {

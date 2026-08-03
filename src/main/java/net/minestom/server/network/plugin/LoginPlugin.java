@@ -6,7 +6,7 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 public final class LoginPlugin {
-    public record Request(String channel, byte [] payload, CompletableFuture<Response> responseFuture) {
+    public value record Request(String channel, byte [] payload, CompletableFuture<Response> responseFuture) {
         public Request {
             Objects.requireNonNull(channel);
             Objects.requireNonNull(payload);
@@ -18,7 +18,7 @@ public final class LoginPlugin {
         }
     }
 
-    public record Response(String channel, byte @Nullable [] payload) {
+    public value record Response(String channel, byte @Nullable [] payload) {
         public Response {
             Objects.requireNonNull(channel);
         }

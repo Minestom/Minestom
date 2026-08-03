@@ -22,7 +22,7 @@ import java.util.*;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Component> {
+value record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Component> {
 
     @Override
     public void write(NetworkBuffer buffer, Component value) {

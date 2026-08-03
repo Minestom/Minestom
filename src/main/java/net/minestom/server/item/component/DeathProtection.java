@@ -7,7 +7,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 
 import java.util.List;
 
-public record DeathProtection(List<ConsumeEffect> deathEffects) {
+public value record DeathProtection(List<ConsumeEffect> deathEffects) {
     public static final NetworkBuffer.Type<DeathProtection> NETWORK_TYPE = NetworkBufferTemplate.template(
             ConsumeEffect.NETWORK_TYPE.list(256), DeathProtection::deathEffects,
             DeathProtection::new);

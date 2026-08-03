@@ -40,7 +40,7 @@ public final class PacketReading {
          * At least one packet was read.
          * The buffer may still contain half-read packets and should therefore be compacted for next read.
          */
-        record Success<T>(List<ParsedPacket<T>> packets) implements Result<T> {
+        value record Success<T>(List<ParsedPacket<T>> packets) implements Result<T> {
             public Success {
                 if (packets.isEmpty()) {
                     throw new IllegalArgumentException("Empty packets");
@@ -58,7 +58,7 @@ public final class PacketReading {
          * <p>
          * Happens when a packet length or payload couldn't be read, but the buffer has enough capacity.
          */
-        record Empty<T>() implements Result<T> {
+        value record Empty<T>() implements Result<T> {
         }
 
         /**
@@ -68,11 +68,11 @@ public final class PacketReading {
          * <p>
          * If the buffer does not allow to read the packet length, max var-int length is returned.
          */
-        record Failure<T>(long requiredCapacity) implements Result<T> {
+        value record Failure<T>(long requiredCapacity) implements Result<T> {
         }
     }
 
-    public record ParsedPacket<T>(ConnectionState nextState, T packet) {
+    public value record ParsedPacket<T>(ConnectionState nextState, T packet) {
     }
 
     public static Result<ClientPacket> readClients(

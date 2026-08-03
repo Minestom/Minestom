@@ -8,7 +8,7 @@ import net.minestom.server.utils.validate.Check;
 
 import java.util.Arrays;
 
-public record CookieStorePacket(
+public value record CookieStorePacket(
         String key, byte[] value
 ) implements ServerPacket.Configuration, ServerPacket.Play {
     public static final int MAX_VALUE_LENGTH = 5120;

@@ -5,7 +5,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 
-public record Weapon(int itemDamagePerAttack, float disableBlockingForSeconds) {
+public value record Weapon(int itemDamagePerAttack, float disableBlockingForSeconds) {
     public static final Weapon DEFAULT = new Weapon(1, 0.0f);
 
     public static final NetworkBuffer.Type<Weapon> NETWORK_TYPE = NetworkBufferTemplate.template(

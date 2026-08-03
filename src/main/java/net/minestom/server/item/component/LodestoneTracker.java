@@ -8,7 +8,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import org.jetbrains.annotations.Nullable;
 
-public record LodestoneTracker(@Nullable WorldPos target, boolean tracked) {
+public value record LodestoneTracker(@Nullable WorldPos target, boolean tracked) {
 
     public static final NetworkBuffer.Type<LodestoneTracker> NETWORK_TYPE = NetworkBufferTemplate.template(
             WorldPos.NETWORK_TYPE.optional(), LodestoneTracker::target,

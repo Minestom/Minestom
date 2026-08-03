@@ -6,7 +6,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 
 import java.util.List;
 
-public record DebugStructureInfo(BlockBoundingBox boundingBox, List<Piece> pieces) {
+public value record DebugStructureInfo(BlockBoundingBox boundingBox, List<Piece> pieces) {
 
     public static final NetworkBuffer.Type<DebugStructureInfo> SERIALIZER = NetworkBufferTemplate.template(
             BlockBoundingBox.NETWORK_TYPE, DebugStructureInfo::boundingBox,
@@ -17,7 +17,7 @@ public record DebugStructureInfo(BlockBoundingBox boundingBox, List<Piece> piece
         pieces = List.copyOf(pieces);
     }
 
-    public record Piece(BlockBoundingBox boundingBox, boolean isStart) {
+    public value record Piece(BlockBoundingBox boundingBox, boolean isStart) {
         public static final NetworkBuffer.Type<Piece> SERIALIZER = NetworkBufferTemplate.template(
                 BlockBoundingBox.NETWORK_TYPE, Piece::boundingBox,
                 NetworkBuffer.BOOLEAN, Piece::isStart,

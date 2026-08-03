@@ -257,7 +257,7 @@ public class TagPathTest {
 
     @Test
     public void structureObstruction() {
-        record Entry(int value) {
+        value record Entry(int value) {
         }
 
         var handler = TagHandler.newHandler();

@@ -8,7 +8,7 @@ import net.minestom.server.utils.validate.Check;
 import static net.minestom.server.network.NetworkBuffer.STRING;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record ClientTabCompletePacket(int transactionId, String text) implements ClientPacket.Play {
+public value record ClientTabCompletePacket(int transactionId, String text) implements ClientPacket.Play {
     public static final int MAX_TEXT_LENGTH = 32500;
 
     public static final NetworkBuffer.Type<ClientTabCompletePacket> SERIALIZER = NetworkBufferTemplate.template(

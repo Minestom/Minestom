@@ -3,7 +3,7 @@ package net.minestom.server.entity.damage;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
 
-record DamageTypeImpl(
+value record DamageTypeImpl(
         String messageId,
         String scaling,
         float exhaustion,

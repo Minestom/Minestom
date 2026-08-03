@@ -8,7 +8,7 @@ import net.minestom.server.network.packet.server.play.data.LightData;
 
 import static net.minestom.server.network.NetworkBuffer.INT;
 
-public record ChunkDataPacket(
+public value record ChunkDataPacket(
         int chunkX, int chunkZ,
         ChunkData chunkData,
         LightData lightData

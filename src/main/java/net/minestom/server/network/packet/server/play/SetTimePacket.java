@@ -10,7 +10,7 @@ import java.util.Map;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record SetTimePacket(long gameTime,
+public value record SetTimePacket(long gameTime,
                             Map<RegistryKey<WorldClock>, ClockState> clocks) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<SetTimePacket> SERIALIZER = NetworkBufferTemplate.template(
             LONG, SetTimePacket::gameTime,
@@ -28,7 +28,7 @@ public record SetTimePacket(long gameTime,
      * @param partialTick the partial tick of the clock (based on rate), wiped on full update
      * @param rate the rate of the clock in ticks, 1 for normal
      */
-    public record ClockState(long totalTicks, float partialTick, float rate) {
+    public value record ClockState(long totalTicks, float partialTick, float rate) {
         public static final NetworkBuffer.Type<ClockState> NETWORK_TYPE = NetworkBufferTemplate.template(
                 VAR_LONG, ClockState::totalTicks,
                 FLOAT, ClockState::partialTick,

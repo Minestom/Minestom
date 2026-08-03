@@ -12,7 +12,7 @@ import java.util.function.UnaryOperator;
 import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
 import static net.minestom.server.network.NetworkBuffer.COMPONENT;
 
-public record SystemChatPacket(Component message,
+public value record SystemChatPacket(Component message,
                                boolean overlay) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final NetworkBuffer.Type<SystemChatPacket> SERIALIZER = NetworkBufferTemplate.template(
             COMPONENT, SystemChatPacket::message,

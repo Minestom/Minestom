@@ -564,8 +564,8 @@ final class NetworkBufferImpl implements NetworkBuffer {
         return (NetworkBufferImpl) buffer;
     }
 
-    // Use a record for final field trusting, hopefully better scalar replacement, to avoid caching IOView
-    record IOView(NetworkBufferImpl buffer) implements NetworkBuffer.IOView {
+    // Use a value record for final field trusting, hopefully better scalar replacement, to avoid caching IOView
+    value record IOView(NetworkBufferImpl buffer) implements NetworkBuffer.IOView {
         @Override
         public void readFully(byte[] bytes) {
             readFully(bytes, 0, bytes.length);

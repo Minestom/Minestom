@@ -11,7 +11,7 @@ import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.COMPONENT;
 
-public record DisconnectPacket(Component message) implements ServerPacket.Configuration, ServerPacket.Play,
+public value record DisconnectPacket(Component message) implements ServerPacket.Configuration, ServerPacket.Play,
         ServerPacket.ComponentHolding {
     public static final NetworkBuffer.Type<DisconnectPacket> SERIALIZER = NetworkBufferTemplate.template(
             COMPONENT, DisconnectPacket::message, DisconnectPacket::new);

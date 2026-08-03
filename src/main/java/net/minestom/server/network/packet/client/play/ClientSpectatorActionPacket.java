@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @param targetId the target entity id clicked, null if not present.
  */
-public record ClientSpectatorActionPacket(@Nullable Integer targetId) implements ClientPacket.Play {
+public value record ClientSpectatorActionPacket(@Nullable Integer targetId) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientSpectatorActionPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.OPTIONAL_VAR_INT, ClientSpectatorActionPacket::targetId,
             ClientSpectatorActionPacket::new

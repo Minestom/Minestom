@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public record Tool(List<Rule> rules, float defaultMiningSpeed, int damagePerBlock,
+public value record Tool(List<Rule> rules, float defaultMiningSpeed, int damagePerBlock,
                    boolean canDestroyBlocksInCreative) {
     public static final float DEFAULT_MINING_SPEED = 1.0f;
     public static final int DEFAULT_DAMAGE_PER_BLOCK = 1;
@@ -34,7 +34,7 @@ public record Tool(List<Rule> rules, float defaultMiningSpeed, int damagePerBloc
         rules = List.copyOf(rules);
     }
 
-    public record Rule(RegistryTag<Block> blocks, @Nullable Float speed, @Nullable Boolean correctForDrops) {
+    public value record Rule(RegistryTag<Block> blocks, @Nullable Float speed, @Nullable Boolean correctForDrops) {
 
         public static final NetworkBuffer.Type<Rule> NETWORK_TYPE = NetworkBufferTemplate.template(
                 RegistryTag.networkType(Registries::blocks), Rule::blocks,

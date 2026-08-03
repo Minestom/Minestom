@@ -7,7 +7,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 
 import java.util.Set;
 
-public record ClientDebugSubscriptionRequestPacket(
+public value record ClientDebugSubscriptionRequestPacket(
         Set<DebugSubscription<?>> subscriptions
 ) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientDebugSubscriptionRequestPacket> SERIALIZER = NetworkBufferTemplate.template(

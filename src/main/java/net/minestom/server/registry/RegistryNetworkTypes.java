@@ -13,7 +13,7 @@ import java.util.Objects;
 
 final class RegistryNetworkTypes {
 
-    record RegistryKeyImpl<T>(Registries.Selector<T> selector) implements NetworkBuffer.Type<RegistryKey<T>> {
+    value record RegistryKeyImpl<T>(Registries.Selector<T> selector) implements NetworkBuffer.Type<RegistryKey<T>> {
         @Override
         public void write(NetworkBuffer buffer, RegistryKey<T> value) {
             final var registries = Objects.requireNonNull(buffer.registries(), "Buffer is missing registries");
@@ -34,7 +34,7 @@ final class RegistryNetworkTypes {
         }
     }
 
-    record HolderNetworkTypeImpl<T extends Holder<T>>(
+    value record HolderNetworkTypeImpl<T extends Holder<T>>(
             Registries.Selector<T> selector,
             NetworkBuffer.Type<T> registryNetworkType
     ) implements NetworkBuffer.Type<Holder<T>> {
@@ -68,7 +68,7 @@ final class RegistryNetworkTypes {
         }
     }
 
-    record RegistryTagImpl<T>(Registries.Selector<T> selector) implements NetworkBuffer.Type<RegistryTag<T>> {
+    value record RegistryTagImpl<T>(Registries.Selector<T> selector) implements NetworkBuffer.Type<RegistryTag<T>> {
         @Override
         public void write(NetworkBuffer buffer, RegistryTag<T> value) {
             switch (value) {

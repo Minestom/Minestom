@@ -40,7 +40,7 @@ final class SnapshotUpdaterImpl implements SnapshotUpdater {
         }
     }
 
-    record Entry(Snapshotable snapshotable, AtomicReference<Snapshot> ref) {
+    value record Entry(Snapshotable snapshotable, AtomicReference<Snapshot> ref) {
     }
 
     @SuppressWarnings("unchecked")

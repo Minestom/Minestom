@@ -8,7 +8,7 @@ import net.minestom.server.codec.StructCodec;
 
 import java.util.List;
 
-public record ChatTypeDecoration(
+public value record ChatTypeDecoration(
         String translationKey,
         List<Parameter> parameters,
         Style style

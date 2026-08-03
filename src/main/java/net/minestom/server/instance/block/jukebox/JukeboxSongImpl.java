@@ -4,7 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.validate.Check;
 
-record JukeboxSongImpl(
+value record JukeboxSongImpl(
         SoundEvent soundEvent,
         Component description,
         float lengthInSeconds,

@@ -43,60 +43,60 @@ public sealed interface Click {
 
     }
 
-    record Left(int slot) implements Click {
+    value record Left(int slot) implements Click {
     }
 
-    record Right(int slot) implements Click {
+    value record Right(int slot) implements Click {
     }
 
-    record Middle(int slot) implements Click {
+    value record Middle(int slot) implements Click {
         // Creative only
     }
 
-    record LeftShift(int slot) implements Click {
+    value record LeftShift(int slot) implements Click {
     }
 
-    record RightShift(int slot) implements Click {
+    value record RightShift(int slot) implements Click {
     }
 
-    record Double(int slot) implements Click {
+    value record Double(int slot) implements Click {
     }
 
-    record LeftDrag(List<Integer> slots) implements Drag {
+    value record LeftDrag(List<Integer> slots) implements Drag {
         public LeftDrag {
             slots = List.copyOf(slots);
         }
     }
 
-    record RightDrag(List<Integer> slots) implements Drag {
+    value record RightDrag(List<Integer> slots) implements Drag {
         public RightDrag {
             slots = List.copyOf(slots);
         }
     }
 
-    record MiddleDrag(List<Integer> slots) implements Drag {
+    value record MiddleDrag(List<Integer> slots) implements Drag {
         // Creative only
         public MiddleDrag {
             slots = List.copyOf(slots);
         }
     }
 
-    record LeftDropCursor() implements DropCursor {
+    value record LeftDropCursor() implements DropCursor {
     }
 
-    record RightDropCursor() implements DropCursor {
+    value record RightDropCursor() implements DropCursor {
     }
 
-    record MiddleDropCursor() implements DropCursor {
+    value record MiddleDropCursor() implements DropCursor {
     }
 
-    record DropSlot(int slot, boolean all) implements Click {
+    value record DropSlot(int slot, boolean all) implements Click {
     }
 
-    record HotbarSwap(int hotbarSlot, int slot) implements Click {
+    value record HotbarSwap(int hotbarSlot, int slot) implements Click {
     }
 
-    record OffhandSwap(int slot) implements Click {
+    value record OffhandSwap(int slot) implements Click {
     }
 
     /**
@@ -221,7 +221,7 @@ public sealed interface Click {
      * @param inOpened whether the window is the player inventory (false) or the opened inventory (true).
      * @param click    the (contextualized) click
      */
-    record Window(boolean inOpened, Click click) {
+    value record Window(boolean inOpened, Click click) {
     }
 
 }

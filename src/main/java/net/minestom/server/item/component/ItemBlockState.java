@@ -7,7 +7,7 @@ import net.minestom.server.network.NetworkBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
-public record ItemBlockState(Map<String, String> properties) {
+public value record ItemBlockState(Map<String, String> properties) {
     public static final ItemBlockState EMPTY = new ItemBlockState(Map.of());
 
     public static final NetworkBuffer.Type<ItemBlockState> NETWORK_TYPE = NetworkBuffer.STRING.mapValue(NetworkBuffer.STRING)

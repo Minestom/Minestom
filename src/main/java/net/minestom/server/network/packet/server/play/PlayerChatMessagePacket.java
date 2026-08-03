@@ -20,7 +20,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
 /**
  * Represents an outgoing chat message packet.
  */
-public record PlayerChatMessagePacket(int globalIndex, UUID sender, int index, @Nullable MessageSignature signature,
+public value record PlayerChatMessagePacket(int globalIndex, UUID sender, int index, @Nullable MessageSignature signature,
                                       SignedMessageBody.Packed messageBody,
                                       @Nullable Component unsignedContent, FilterMask filterMask,
                                       int msgTypeId, Component msgTypeName,

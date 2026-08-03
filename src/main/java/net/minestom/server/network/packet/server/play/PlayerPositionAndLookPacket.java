@@ -9,7 +9,7 @@ import org.intellij.lang.annotations.MagicConstant;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record PlayerPositionAndLookPacket(
+public value record PlayerPositionAndLookPacket(
         int teleportId, Point position, Point delta,
         float yaw, float pitch,
         @MagicConstant(flagsFromClass = RelativeFlags.class) int flags

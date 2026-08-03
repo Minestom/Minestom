@@ -7,7 +7,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record BlockBreakAnimationPacket(int entityId, Point blockPosition,
+public value record BlockBreakAnimationPacket(int entityId, Point blockPosition,
                                         byte destroyStage) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<BlockBreakAnimationPacket> SERIALIZER = NetworkBufferTemplate.template(
             VAR_INT, BlockBreakAnimationPacket::entityId,

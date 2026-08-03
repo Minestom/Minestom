@@ -25,7 +25,7 @@ import java.util.function.Predicate;
  * Note: instances of this class are immutable. Calling {@link #add} or {@link #remove}
  * will return a new instance of this class with the element added or removed.
  */
-public record ComponentPredicateSet(List<DataComponentPredicate> predicates) implements Predicate<DataComponent.Holder> {
+public value record ComponentPredicateSet(List<DataComponentPredicate> predicates) implements Predicate<DataComponent.Holder> {
 
     private static final int MAX_NETWORK_SIZE = 64;
     private static final Codec<Either<RegistryKey<Codec<? extends DataComponentPredicate>>, DataComponent<?>>> PREDICATE_TYPE_CODEC =

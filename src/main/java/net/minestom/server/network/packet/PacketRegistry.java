@@ -23,7 +23,7 @@ public interface PacketRegistry<T> extends Iterable<PacketRegistry.PacketInfo<? 
 
     ConnectionSide side();
 
-    record PacketInfo<T>(Class<? extends T> packetClass, int id, NetworkBuffer.Type<T> serializer) {
+    value record PacketInfo<T>(Class<? extends T> packetClass, int id, NetworkBuffer.Type<T> serializer) {
         public PacketInfo {
             Objects.requireNonNull(packetClass);
             Objects.requireNonNull(serializer);

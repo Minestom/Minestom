@@ -9,7 +9,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ClientPlayerBlockPlacementPacket(
+public value record ClientPlayerBlockPlacementPacket(
         PlayerHand hand, Point blockPosition, BlockFace blockFace,
         float cursorPositionX, float cursorPositionY, float cursorPositionZ,
         boolean insideBlock, boolean hitWorldBorder, int sequence) implements ClientPacket.Play {

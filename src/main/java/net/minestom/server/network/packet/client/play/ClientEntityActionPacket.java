@@ -7,7 +7,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import static net.minestom.server.network.NetworkBuffer.Enum;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record ClientEntityActionPacket(int playerId, Action action,
+public value record ClientEntityActionPacket(int playerId, Action action,
                                        int horseJumpBoost) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientEntityActionPacket> SERIALIZER = NetworkBufferTemplate.template(
             VAR_INT, ClientEntityActionPacket::playerId,

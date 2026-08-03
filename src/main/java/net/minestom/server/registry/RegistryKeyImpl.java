@@ -4,7 +4,7 @@ import net.kyori.adventure.key.Key;
 
 import java.util.Objects;
 
-record RegistryKeyImpl<T>(Key key) implements RegistryKey<T> {
+value record RegistryKeyImpl<T>(Key key) implements RegistryKey<T> {
 
     @Override
     public boolean equals(Object o) {

@@ -11,7 +11,7 @@ import net.minestom.server.utils.validate.Check;
 import java.util.List;
 import java.util.Objects;
 
-public record ClientSetGameRulesPacket(List<Entry> entries) implements ClientPacket.Play {
+public value record ClientSetGameRulesPacket(List<Entry> entries) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientSetGameRulesPacket> SERIALIZER = NetworkBufferTemplate.template(
             Entry.NETWORK_TYPE.list(GameRule.staticRegistry().size()), ClientSetGameRulesPacket::entries,
             ClientSetGameRulesPacket::new
@@ -21,7 +21,7 @@ public record ClientSetGameRulesPacket(List<Entry> entries) implements ClientPac
         entries = List.copyOf(entries);
     }
 
-    public record Entry(RegistryKey<GameRule<?>> key, String value) {
+    public value record Entry(RegistryKey<GameRule<?>> key, String value) {
         public static final NetworkBuffer.Type<Entry> NETWORK_TYPE = NetworkBufferTemplate.template(
                 RegistryKey.networkType(Registries::gameRule), Entry::key,
                 NetworkBuffer.STRING, Entry::value,

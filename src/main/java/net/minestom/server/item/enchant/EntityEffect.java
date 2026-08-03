@@ -47,7 +47,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
 
     StructCodec<? extends EntityEffect> codec();
 
-    record AllOf(List<EntityEffect> effect) implements EntityEffect {
+    value record AllOf(List<EntityEffect> effect) implements EntityEffect {
         public static final StructCodec<AllOf> CODEC = StructCodec.struct(
                 "effects", EntityEffect.CODEC.list(), AllOf::effect,
                 AllOf::new);
@@ -62,7 +62,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         }
     }
 
-    record ApplyPotionEffect(
+    value record ApplyPotionEffect(
             RegistryTag<PotionEffect> toApply,
             LevelBasedValue minDuration,
             LevelBasedValue maxDuration,
@@ -84,7 +84,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         }
     }
 
-    record DamageEntity(
+    value record DamageEntity(
             RegistryKey<DamageType> damageType,
             LevelBasedValue minDamage,
             LevelBasedValue maxDamage
@@ -101,7 +101,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         }
     }
 
-    record ChangeItemDamage(LevelBasedValue amount) implements EntityEffect, LocationEffect {
+    value record ChangeItemDamage(LevelBasedValue amount) implements EntityEffect, LocationEffect {
         public static final StructCodec<ChangeItemDamage> CODEC = StructCodec.struct(
                 "amount", LevelBasedValue.CODEC, ChangeItemDamage::amount,
                 ChangeItemDamage::new
@@ -113,7 +113,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         }
     }
 
-    record Explode(
+    value record Explode(
             boolean attributeToUser,
             @Nullable RegistryKey<DamageType> damageType,
             @Nullable LevelBasedValue knockbackMultiplier,
@@ -146,7 +146,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         }
     }
 
-    record Ignite(LevelBasedValue duration) implements EntityEffect, LocationEffect {
+    value record Ignite(LevelBasedValue duration) implements EntityEffect, LocationEffect {
         public static final StructCodec<Ignite> CODEC = StructCodec.struct(
                 "duration", LevelBasedValue.CODEC, Ignite::duration,
                 Ignite::new
@@ -158,7 +158,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         }
     }
 
-    record ApplyImpulse(
+    value record ApplyImpulse(
             Point direction,
             Point coordinateScale,
             LevelBasedValue magnitude
@@ -175,7 +175,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         }
     }
 
-    record ApplyExhaustion(LevelBasedValue amount) implements EntityEffect, LocationEffect {
+    value record ApplyExhaustion(LevelBasedValue amount) implements EntityEffect, LocationEffect {
         public static final StructCodec<ApplyExhaustion> CODEC = StructCodec.struct(
                 "amount", LevelBasedValue.CODEC, ApplyExhaustion::amount,
                 ApplyExhaustion::new);
@@ -186,7 +186,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         }
     }
 
-    record PlaySound(
+    value record PlaySound(
             List<SoundEvent> soundEvent,
             Codec.RawValue volume,
             Codec.RawValue pitch
@@ -203,7 +203,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         }
     }
 
-    record ReplaceBlock(
+    value record ReplaceBlock(
             Codec.RawValue offset,
             @Nullable Codec.RawValue predicate,
             Codec.RawValue blockState,
@@ -222,7 +222,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         }
     }
 
-    record ReplaceDisc(
+    value record ReplaceDisc(
             LevelBasedValue radius,
             LevelBasedValue height,
             Codec.RawValue offset,
@@ -245,7 +245,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         }
     }
 
-    record RunFunction(
+    value record RunFunction(
             String function
     ) implements EntityEffect, LocationEffect {
         public static final StructCodec<RunFunction> CODEC = StructCodec.struct(
@@ -258,7 +258,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         }
     }
 
-    record SetBlockProperties(
+    value record SetBlockProperties(
             Codec.RawValue properties,
             Codec.RawValue offset,
             @Nullable Codec.RawValue triggerGameEvent
@@ -275,7 +275,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         }
     }
 
-    record SpawnParticles(
+    value record SpawnParticles(
             Codec.RawValue particle,
             Codec.RawValue horizontalPosition,
             Codec.RawValue verticalPosition,
@@ -298,7 +298,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         }
     }
 
-    record SummonEntity(
+    value record SummonEntity(
             Codec.RawValue entityTypes,
             boolean joinTeam
     ) implements EntityEffect, LocationEffect {

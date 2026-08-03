@@ -4,7 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.validate.Check;
 
-public record InstrumentImpl(
+public value record InstrumentImpl(
         SoundEvent soundEvent,
         float useDuration,
         float range,

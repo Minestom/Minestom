@@ -158,7 +158,7 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
          *
          * @param partition the partition to register
          */
-        record PartitionLoad<P, E>(P partition) implements Update<P, E> {
+        value record PartitionLoad<P, E>(P partition) implements Update<P, E> {
         }
 
         /**
@@ -166,7 +166,7 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
          *
          * @param partition the partition to delete
          */
-        record PartitionUnload<P, E>(P partition) implements Update<P, E> {
+        value record PartitionUnload<P, E>(P partition) implements Update<P, E> {
         }
 
         /**
@@ -175,7 +175,7 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
          * @param element   the element to update
          * @param partition the partition the Tickable is part of
          */
-        record ElementUpdate<P, E>(E element, P partition) implements Update<P, E> {
+        value record ElementUpdate<P, E>(E element, P partition) implements Update<P, E> {
         }
 
         /**
@@ -183,7 +183,7 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
          *
          * @param element the element to remove
          */
-        record ElementRemove<P, E>(E element) implements Update<P, E> {
+        value record ElementRemove<P, E>(E element) implements Update<P, E> {
         }
     }
 }

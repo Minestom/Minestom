@@ -10,7 +10,7 @@ import org.jetbrains.annotations.UnknownNullability;
 
 @ApiStatus.Internal
 @SuppressWarnings("removal")
-record BlockEntityTypeImpl(Key key, int id) implements BlockEntityType {
+value record BlockEntityTypeImpl(Key key, int id) implements BlockEntityType {
     static final Registry<BlockEntityType> REGISTRY = RegistryData.createStaticRegistry(
             BuiltinRegistries.BLOCK_ENTITY_TYPE, BlockEntityTypeImpl::new);
 

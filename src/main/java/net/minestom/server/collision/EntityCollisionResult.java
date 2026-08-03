@@ -10,7 +10,7 @@ import net.minestom.server.entity.Entity;
  * @param entity the entity that was collided with
  * @param direction the direction of the collision. ex. Vec(-1, 0, 0) means the entity collided with the west face of the entity
  */
-public record EntityCollisionResult(
+public value record EntityCollisionResult(
         Point collisionPoint,
         Entity entity,
         Vec direction,

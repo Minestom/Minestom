@@ -7,7 +7,7 @@ import java.time.Instant;
 
 public final class SignedMessageBody {
 
-    public record Packed(String content, Instant timeStamp, long salt,
+    public value record Packed(String content, Instant timeStamp, long salt,
                          LastSeenMessages.Packed lastSeen) {
         public Packed {
             if (content.length() > MessageSignature.SIGNATURE_BYTE_LENGTH) {

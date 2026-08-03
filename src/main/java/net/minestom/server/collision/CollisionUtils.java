@@ -188,7 +188,7 @@ public final class CollisionUtils {
 
     @ApiStatus.Internal
     public static Shape parseOcclusionShape(Map<Object, Object> internCache, String shape, boolean occludes, byte lightEmission) {
-        record ShapeEntry(String shape, boolean occludes, byte lightEmission) {} // Easy way to Hashcode
+        value record ShapeEntry(String shape, boolean occludes, byte lightEmission) {} // Easy way to Hashcode
         ShapeEntry entry = new ShapeEntry(shape, occludes, lightEmission);
         final Shape cachedShape = (Shape) internCache.get(entry);
         if (cachedShape != null) return cachedShape;

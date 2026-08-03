@@ -10,7 +10,7 @@ import java.util.Objects;
 import static net.minestom.server.network.NetworkBuffer.RAW_BYTES;
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
-public record PluginMessagePacket(String channel,
+public value record PluginMessagePacket(String channel,
                                   byte[] data) implements ServerPacket.Configuration, ServerPacket.Play {
     public static final NetworkBuffer.Type<PluginMessagePacket> SERIALIZER = NetworkBufferTemplate.template(
             STRING, PluginMessagePacket::channel,

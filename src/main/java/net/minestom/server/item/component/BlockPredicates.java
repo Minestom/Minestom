@@ -8,7 +8,7 @@ import net.minestom.server.network.NetworkBuffer;
 import java.util.List;
 import java.util.function.Predicate;
 
-public record BlockPredicates(List<BlockPredicate> predicates) implements Predicate<Block> {
+public value record BlockPredicates(List<BlockPredicate> predicates) implements Predicate<Block> {
     /**
      * Will never match any block.
      */

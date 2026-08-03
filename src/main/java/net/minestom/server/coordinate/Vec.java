@@ -16,7 +16,7 @@ import java.util.function.DoubleUnaryOperator;
  * @param y the Y coordinate
  * @param z the Z coordinate
  */
-public record Vec(double x, double y, double z) implements Point {
+public value record Vec(double x, double y, double z) implements Point {
     public static final Vec ZERO = new Vec(0);
     public static final Vec ONE = new Vec(1);
     public static final Vec SECTION = new Vec(SECTION_SIZE);

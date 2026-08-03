@@ -13,7 +13,7 @@ import java.util.List;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record TradeListPacket(int windowId, List<Trade> trades,
+public value record TradeListPacket(int windowId, List<Trade> trades,
                               int villagerLevel, int experience,
                               boolean regularVillager, boolean canRestock) implements ServerPacket.Play {
     public static final int MAX_TRADES = Short.MAX_VALUE;
@@ -31,7 +31,7 @@ public record TradeListPacket(int windowId, List<Trade> trades,
         trades = List.copyOf(trades);
     }
 
-    public record Trade(
+    public value record Trade(
             ItemCost inputItem1,
             ItemStack result,
             @Nullable ItemCost inputItem2,
@@ -84,7 +84,7 @@ public record TradeListPacket(int windowId, List<Trade> trades,
         }
     }
 
-    public record ItemCost(Material material, int amount, DataComponentMap components) {
+    public value record ItemCost(Material material, int amount, DataComponentMap components) {
         private static final NetworkBuffer.Type<ItemCost> NETWORK_TYPE = NetworkBufferTemplate.template(
                 Material.NETWORK_TYPE, ItemCost::material,
                 VAR_INT, ItemCost::amount,

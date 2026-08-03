@@ -6,7 +6,7 @@ import net.kyori.adventure.util.Codec;
 
 import java.io.IOException;
 
-public record BinaryTagHolderImpl(BinaryTag nbt) implements BinaryTagHolder {
+public value record BinaryTagHolderImpl(BinaryTag nbt) implements BinaryTagHolder {
 
     @Override
     public String string() {

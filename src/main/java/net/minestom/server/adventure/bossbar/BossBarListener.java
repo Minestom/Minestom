@@ -14,7 +14,7 @@ import java.util.function.Consumer;
  * {@link Audience}, instead you should use {@link BossBarManager} to manage boss bars
  * for players.
  */
-class BossBarListener implements BossBar.Listener {
+value class BossBarListener implements BossBar.Listener {
     private final BossBarManager manager;
 
     /**

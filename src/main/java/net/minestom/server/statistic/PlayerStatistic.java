@@ -7,7 +7,7 @@ import net.minestom.server.entity.Player;
  * <p>
  * You can retrieve the statistics map with {@link Player#getStatisticValueMap()} and modify it with your own values.
  */
-public class PlayerStatistic {
+public value class PlayerStatistic {
     private final StatisticCategory category;
     private final int statisticId;
 

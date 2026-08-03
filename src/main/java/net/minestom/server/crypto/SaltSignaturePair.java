@@ -5,7 +5,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 
 import java.util.Arrays;
 
-public record SaltSignaturePair(long salt, byte[] signature) {
+public value record SaltSignaturePair(long salt, byte[] signature) {
     public static final NetworkBuffer.Type<SaltSignaturePair> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.LONG, SaltSignaturePair::salt,
             NetworkBuffer.BYTE_ARRAY, SaltSignaturePair::signature,

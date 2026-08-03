@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record CollectItemPacket(int collectedEntityId, int collectorEntityId, int pickupItemCount)
+public value record CollectItemPacket(int collectedEntityId, int collectorEntityId, int pickupItemCount)
         implements ServerPacket.Play {
     public static final NetworkBuffer.Type<CollectItemPacket> SERIALIZER = NetworkBufferTemplate.template(
             VAR_INT, CollectItemPacket::collectedEntityId,

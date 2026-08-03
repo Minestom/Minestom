@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public record BlocksAttacks(
+public value record BlocksAttacks(
         float blockDelaySeconds,
         float disableCooldownScale,
         List<DamageReduction> damageReductions,
@@ -44,7 +44,7 @@ public record BlocksAttacks(
         damageReductions = List.copyOf(damageReductions);
     }
 
-    public record ItemDamageFunction(float threshold, float base, float factor) {
+    public value record ItemDamageFunction(float threshold, float base, float factor) {
         public static final ItemDamageFunction DEFAULT = new ItemDamageFunction(1f, 0f, 1f);
 
         public static final NetworkBuffer.Type<ItemDamageFunction> NETWORK_TYPE = NetworkBufferTemplate.template(
@@ -59,7 +59,7 @@ public record BlocksAttacks(
                 ItemDamageFunction::new);
     }
 
-    public record DamageReduction(
+    public value record DamageReduction(
             float horizontalBlockingAngle,
             @Nullable RegistryTag<DamageType> type,
             float base, float factor

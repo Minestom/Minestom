@@ -11,7 +11,7 @@ import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.Nullable;
 
-public record Equippable(
+public value record Equippable(
         EquipmentSlot slot,
         SoundEvent equipSound,
         @Nullable String assetId,

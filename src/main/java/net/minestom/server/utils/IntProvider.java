@@ -28,7 +28,7 @@ public sealed interface IntProvider {
             it -> it instanceof Constant(int value) ? Either.left(value) : Either.right(it)
     );
 
-    record Constant(int value) implements IntProvider {
+    value record Constant(int value) implements IntProvider {
         public static final StructCodec<Constant> CODEC = StructCodec.struct(
                 "value", Codec.INT, Constant::value,
                 Constant::new
@@ -55,7 +55,7 @@ public sealed interface IntProvider {
         }
     }
 
-    record Uniform(int minInclusive, int maxInclusive) implements IntProvider {
+    value record Uniform(int minInclusive, int maxInclusive) implements IntProvider {
         public static final StructCodec<Uniform> CODEC = StructCodec.struct(
                 "min_inclusive", Codec.INT, Uniform::minInclusive,
                 "max_inclusive", Codec.INT, Uniform::maxInclusive,
@@ -72,7 +72,7 @@ public sealed interface IntProvider {
         }
     }
 
-    record BiasedToBottom(int minInclusive, int maxInclusive) implements IntProvider {
+    value record BiasedToBottom(int minInclusive, int maxInclusive) implements IntProvider {
         public static final StructCodec<BiasedToBottom> CODEC = StructCodec.struct(
                 "min_inclusive", Codec.INT, BiasedToBottom::minInclusive,
                 "max_inclusive", Codec.INT, BiasedToBottom::maxInclusive,
@@ -89,7 +89,7 @@ public sealed interface IntProvider {
         }
     }
 
-    record Clamped(IntProvider source, int minInclusive, int maxInclusive) implements IntProvider {
+    value record Clamped(IntProvider source, int minInclusive, int maxInclusive) implements IntProvider {
         public static final StructCodec<Clamped> CODEC = StructCodec.struct(
                 "source", Codec.ForwardRef(() -> IntProvider.CODEC), Clamped::source,
                 "min_inclusive", Codec.INT, Clamped::minInclusive,
@@ -107,7 +107,7 @@ public sealed interface IntProvider {
         }
     }
 
-    record Weighted(WeightedList<IntProvider> distribution) implements IntProvider {
+    value record Weighted(WeightedList<IntProvider> distribution) implements IntProvider {
         public static final StructCodec<Weighted> CODEC = StructCodec.struct(
                 "distribution", WeightedList.codec(Codec.ForwardRef(() -> IntProvider.CODEC)), Weighted::distribution,
                 Weighted::new);
@@ -133,7 +133,7 @@ public sealed interface IntProvider {
         }
     }
 
-    record ClampedNormal(double mean, double deviation, int minInclusive, int maxInclusive) implements IntProvider {
+    value record ClampedNormal(double mean, double deviation, int minInclusive, int maxInclusive) implements IntProvider {
         public static final StructCodec<ClampedNormal> CODEC = StructCodec.struct(
                 "mean", Codec.DOUBLE, ClampedNormal::mean,
                 "deviation", Codec.DOUBLE, ClampedNormal::deviation,
@@ -152,7 +152,7 @@ public sealed interface IntProvider {
         }
     }
 
-    record Trapezoid(int minInclusive, int maxInclusive, int plateau) implements IntProvider {
+    value record Trapezoid(int minInclusive, int maxInclusive, int plateau) implements IntProvider {
         public static final StructCodec<Trapezoid> CODEC = StructCodec.struct(
                 "min", Codec.INT, Trapezoid::minInclusive,
                 "max", Codec.INT, Trapezoid::maxInclusive,

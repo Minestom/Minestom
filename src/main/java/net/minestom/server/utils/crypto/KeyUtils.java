@@ -11,7 +11,7 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
 @ApiStatus.Internal
-public final class KeyUtils {
+public value class KeyUtils {
     private static final Base64.Encoder MIME_ENCODER = Base64.getMimeEncoder(76, "\n".getBytes(StandardCharsets.UTF_8));
     private static final String RSA_HEADER = "-----BEGIN RSA PUBLIC KEY-----\n";
     private static final String RSA_FOOTER = "\n-----END RSA PUBLIC KEY-----\n";

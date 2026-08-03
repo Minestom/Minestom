@@ -8,7 +8,7 @@ import net.minestom.server.network.packet.client.play.ClientTabCompletePacket;
 import net.minestom.server.network.packet.server.play.TabCompletePacket;
 import org.jetbrains.annotations.Nullable;
 
-public class TabCompleteListener {
+public value class TabCompleteListener {
 
     public static void listener(ClientTabCompletePacket packet, Player player) {
         final String text = packet.text();

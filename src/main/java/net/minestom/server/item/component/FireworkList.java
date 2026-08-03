@@ -7,7 +7,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 
 import java.util.List;
 
-public record FireworkList(int flightDuration, List<FireworkExplosion> explosions) {
+public value record FireworkList(int flightDuration, List<FireworkExplosion> explosions) {
     public static final FireworkList EMPTY = new FireworkList(0, List.of());
 
     public static final NetworkBuffer.Type<FireworkList> NETWORK_TYPE = NetworkBufferTemplate.template(

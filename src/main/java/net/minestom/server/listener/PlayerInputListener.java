@@ -3,7 +3,7 @@ package net.minestom.server.listener;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.client.play.ClientInputPacket;
 
-public class PlayerInputListener {
+public value class PlayerInputListener {
 
     public static void listener(ClientInputPacket packet, Player player) {
         player.refreshInput(

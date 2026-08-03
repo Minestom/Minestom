@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record EntityRotationPacket(int entityId, float yaw, float pitch,
+public value record EntityRotationPacket(int entityId, float yaw, float pitch,
                                    boolean onGround) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<EntityRotationPacket> SERIALIZER = NetworkBufferTemplate.template(
             VAR_INT, EntityRotationPacket::entityId,

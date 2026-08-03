@@ -54,7 +54,7 @@ final class Serializers {
                 });
     }
 
-    record Entry<T, N extends BinaryTag>(@Nullable BinaryTagType<N> nbtType,
+    value record Entry<T, N extends BinaryTag>(@Nullable BinaryTagType<N> nbtType,
                                          Function<N, @Nullable T> reader,
                                          Function<T, @Nullable N> writer,
                                          boolean isPath) {

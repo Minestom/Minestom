@@ -39,7 +39,7 @@ public non-sealed interface LocationEffect extends Enchantment.Effect {
 
     StructCodec<? extends LocationEffect> codec();
 
-    record AllOf(List<LocationEffect> effect) implements LocationEffect {
+    value record AllOf(List<LocationEffect> effect) implements LocationEffect {
         public static final StructCodec<AllOf> CODEC = StructCodec.struct(
                 "effects", LocationEffect.CODEC.list(), AllOf::effect,
                 AllOf::new

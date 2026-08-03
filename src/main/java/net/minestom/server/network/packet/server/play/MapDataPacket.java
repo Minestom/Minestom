@@ -11,7 +11,7 @@ import java.util.List;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record MapDataPacket(int mapId, byte scale, boolean locked,
+public value record MapDataPacket(int mapId, byte scale, boolean locked,
                             boolean trackingPosition, List<Icon> icons,
                             @Nullable MapDataPacket.ColorContent colorContent) implements ServerPacket.Play {
     public static final int MAX_ICONS = 1024;
@@ -55,7 +55,7 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
         }
     };
 
-    public record Icon(int type, byte x, byte z, byte direction,
+    public value record Icon(int type, byte x, byte z, byte direction,
                        @Nullable Component displayName) {
         public static final NetworkBuffer.Type<Icon> SERIALIZER = NetworkBufferTemplate.template(
                 VAR_INT, Icon::type,
@@ -66,7 +66,7 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
                 Icon::new);
     }
 
-    public record ColorContent(byte columns, byte rows, byte x, byte z,
+    public value record ColorContent(byte columns, byte rows, byte x, byte z,
                                byte[] data) {
         public static final NetworkBuffer.Type<ColorContent> SERIALIZER = NetworkBufferTemplate.template(
                 BYTE, ColorContent::columns,

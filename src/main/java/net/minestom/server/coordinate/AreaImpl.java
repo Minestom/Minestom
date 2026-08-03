@@ -7,7 +7,7 @@ import java.util.*;
 import static net.minestom.server.coordinate.CoordConversion.SECTION_BOUND;
 import static net.minestom.server.coordinate.CoordConversion.SECTION_SIZE;
 
-final class AreaImpl {
+value class AreaImpl {
 
     static Area.Cuboid section(int sectionX, int sectionY, int sectionZ) {
         final BlockVec min = new BlockVec(sectionX * SECTION_SIZE, sectionY * SECTION_SIZE, sectionZ * SECTION_SIZE);
@@ -28,7 +28,7 @@ final class AreaImpl {
         return new Cuboid(center.sub(half).asBlockVec(), center.add(half).asBlockVec());
     }
 
-    record Single(BlockVec point) implements Area.Single {
+    value record Single(BlockVec point) implements Area.Single {
         public Single {
             Objects.requireNonNull(point, "Point cannot be null");
         }
@@ -54,7 +54,7 @@ final class AreaImpl {
         }
     }
 
-    record Line(BlockVec start, BlockVec end) implements Area.Line {
+    value record Line(BlockVec start, BlockVec end) implements Area.Line {
         public Line {
             Objects.requireNonNull(start, "Start point cannot be null");
             Objects.requireNonNull(end, "End point cannot be null");
@@ -271,7 +271,7 @@ final class AreaImpl {
         }
     }
 
-    record Cuboid(BlockVec min, BlockVec max) implements Area.Cuboid {
+    value record Cuboid(BlockVec min, BlockVec max) implements Area.Cuboid {
         public Cuboid {
             Objects.requireNonNull(min, "min cannot be null");
             Objects.requireNonNull(max, "max cannot be null");
@@ -366,7 +366,7 @@ final class AreaImpl {
         }
     }
 
-    record Sphere(BlockVec center, int radius) implements Area.Sphere {
+    value record Sphere(BlockVec center, int radius) implements Area.Sphere {
         public Sphere {
             Objects.requireNonNull(center, "Center cannot be null");
             Check.argCondition(radius < 0, "Radius must be non-negative: {0}", radius);

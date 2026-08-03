@@ -8,7 +8,7 @@ import net.minestom.server.world.attribute.EnvironmentAttribute.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
-public record EnvironmentAttributeMap(Map<EnvironmentAttribute<?>, Entry<?, ?>> entries) {
+public value record EnvironmentAttributeMap(Map<EnvironmentAttribute<?>, Entry<?, ?>> entries) {
     public static final EnvironmentAttributeMap EMPTY = new EnvironmentAttributeMap(Map.of());
 
     public static final Codec<EnvironmentAttributeMap> CODEC = EnvironmentAttribute.CODEC
@@ -27,7 +27,7 @@ public record EnvironmentAttributeMap(Map<EnvironmentAttribute<?>, Entry<?, ?>> 
         entries = Map.copyOf(entries);
     }
 
-    public record Entry<T, Arg>(Arg argument, Modifier<T, Arg> modifier) {
+    public value record Entry<T, Arg>(Arg argument, Modifier<T, Arg> modifier) {
 
         @SuppressWarnings("unchecked")
         public static <T> Codec<Entry<T, ?>> codec(EnvironmentAttribute<T> attribute) {

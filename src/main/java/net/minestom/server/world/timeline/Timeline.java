@@ -61,7 +61,7 @@ public sealed interface Timeline extends Timelines permits TimelineImpl {
         return DynamicRegistry.create(BuiltinRegistries.TIMELINE, REGISTRY_CODEC, registries);
     }
 
-    record Track<T, Arg>(
+    value record Track<T, Arg>(
             Modifier<T, Arg> modifier,
             List<Keyframe<Arg>> keyframes,
             EaseFunction ease
@@ -81,7 +81,7 @@ public sealed interface Timeline extends Timelines permits TimelineImpl {
         }
     }
 
-    record Keyframe<T>(int ticks, T value) {
+    value record Keyframe<T>(int ticks, T value) {
         public static <T> Codec<Keyframe<T>> codec(Codec<T> valueCodec) {
             return StructCodec.struct(
                     "ticks", Codec.INT, Keyframe::ticks,
@@ -90,7 +90,7 @@ public sealed interface Timeline extends Timelines permits TimelineImpl {
         }
     }
 
-    record TimeMarkerInfo(int ticks, boolean showInCommands) {
+    value record TimeMarkerInfo(int ticks, boolean showInCommands) {
         public static final Codec<TimeMarkerInfo> CODEC = StructCodec.struct(
                 "ticks", Codec.INT, TimeMarkerInfo::ticks,
                 "show_in_commands", Codec.BOOLEAN.optional(false), TimeMarkerInfo::showInCommands,

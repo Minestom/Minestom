@@ -31,7 +31,7 @@ public non-sealed interface ValueEffect extends Enchantment.Effect {
 
     StructCodec<? extends ValueEffect> codec();
 
-    record Add(LevelBasedValue value) implements ValueEffect {
+    value record Add(LevelBasedValue value) implements ValueEffect {
         public static final StructCodec<Add> CODEC = StructCodec.struct(
                 "value", LevelBasedValue.CODEC, Add::value,
                 Add::new);
@@ -47,7 +47,7 @@ public non-sealed interface ValueEffect extends Enchantment.Effect {
         }
     }
 
-    record AllOf(List<ValueEffect> effects) implements ValueEffect {
+    value record AllOf(List<ValueEffect> effects) implements ValueEffect {
         public static final StructCodec<AllOf> CODEC = StructCodec.struct(
                 "effects", ValueEffect.CODEC.list(), AllOf::effects,
                 AllOf::new);
@@ -69,7 +69,7 @@ public non-sealed interface ValueEffect extends Enchantment.Effect {
         }
     }
 
-    record Multiply(LevelBasedValue factor) implements ValueEffect {
+    value record Multiply(LevelBasedValue factor) implements ValueEffect {
         public static final StructCodec<Multiply> CODEC = StructCodec.struct(
                 "factor", LevelBasedValue.CODEC, Multiply::factor,
                 Multiply::new);
@@ -85,7 +85,7 @@ public non-sealed interface ValueEffect extends Enchantment.Effect {
         }
     }
 
-    record RemoveBinomial(LevelBasedValue chance) implements ValueEffect {
+    value record RemoveBinomial(LevelBasedValue chance) implements ValueEffect {
         public static final StructCodec<RemoveBinomial> CODEC = StructCodec.struct(
                 "chance", LevelBasedValue.CODEC, RemoveBinomial::chance,
                 RemoveBinomial::new);
@@ -101,7 +101,7 @@ public non-sealed interface ValueEffect extends Enchantment.Effect {
         }
     }
 
-    record Exponential(LevelBasedValue base, LevelBasedValue exponent) implements ValueEffect {
+    value record Exponential(LevelBasedValue base, LevelBasedValue exponent) implements ValueEffect {
         public static final StructCodec<Exponential> CODEC = StructCodec.struct(
                 "base", LevelBasedValue.CODEC, Exponential::base,
                 "exponent", LevelBasedValue.CODEC, Exponential::exponent,
@@ -118,7 +118,7 @@ public non-sealed interface ValueEffect extends Enchantment.Effect {
         }
     }
 
-    record Set(LevelBasedValue value) implements ValueEffect {
+    value record Set(LevelBasedValue value) implements ValueEffect {
         public static final StructCodec<Set> CODEC = StructCodec.struct(
                 "value", LevelBasedValue.CODEC, Set::value,
                 Set::new);

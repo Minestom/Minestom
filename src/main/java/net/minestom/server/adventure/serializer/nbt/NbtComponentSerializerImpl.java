@@ -7,7 +7,7 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.registry.RegistryTranscoder;
 
-final class NbtComponentSerializerImpl implements NbtComponentSerializer {
+value class NbtComponentSerializerImpl implements NbtComponentSerializer {
     static final NbtComponentSerializer INSTANCE = new NbtComponentSerializerImpl();
 
     @Override

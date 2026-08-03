@@ -11,7 +11,7 @@ import java.util.Objects;
 import static net.minestom.server.network.NetworkBuffer.STRING;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT_ARRAY;
 
-public record TagsPacket(List<Registry> registries) implements ServerPacket.Configuration, ServerPacket.Play {
+public value record TagsPacket(List<Registry> registries) implements ServerPacket.Configuration, ServerPacket.Play {
     public TagsPacket {
         registries = List.copyOf(registries);
     }
@@ -21,7 +21,7 @@ public record TagsPacket(List<Registry> registries) implements ServerPacket.Conf
             TagsPacket::new
     );
 
-    public record Registry(String registry, List<Tag> tags) {
+    public value record Registry(String registry, List<Tag> tags) {
         public static final NetworkBuffer.Type<Registry> SERIALIZER = NetworkBufferTemplate.template(
                 STRING, Registry::registry,
                 Tag.SERIALIZER.list(), Registry::tags,
@@ -33,7 +33,7 @@ public record TagsPacket(List<Registry> registries) implements ServerPacket.Conf
         }
     }
 
-    public record Tag(String identifier, int[] entries) {
+    public value record Tag(String identifier, int[] entries) {
         public static final NetworkBuffer.Type<Tag> SERIALIZER = NetworkBufferTemplate.template(
                 STRING, Tag::identifier,
                 VAR_INT_ARRAY, Tag::entries,

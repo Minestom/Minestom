@@ -6,7 +6,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import org.jetbrains.annotations.Nullable;
 
-public record UseCooldown(float seconds, @Nullable String cooldownGroup) {
+public value record UseCooldown(float seconds, @Nullable String cooldownGroup) {
     public static final NetworkBuffer.Type<UseCooldown> NETWORK_TYPE = NetworkBufferTemplate.template(
             NetworkBuffer.FLOAT, UseCooldown::seconds,
             NetworkBuffer.STRING.optional(), UseCooldown::cooldownGroup,

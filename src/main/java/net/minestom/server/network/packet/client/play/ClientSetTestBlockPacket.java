@@ -6,7 +6,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.utils.validate.Check;
 
-public record ClientSetTestBlockPacket(
+public value record ClientSetTestBlockPacket(
         Point blockPosition,
         TestBlockMode mode,
         String message

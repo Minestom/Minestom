@@ -8,7 +8,7 @@ import net.minestom.server.utils.validate.Check;
 
 import java.util.List;
 
-public record ClientSelectKnownPacksPacket(
+public value record ClientSelectKnownPacksPacket(
         List<SelectKnownPacksPacket.Entry> entries
 ) implements ClientPacket.Configuration {
     private static final int MAX_ENTRIES = 64;

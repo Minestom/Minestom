@@ -25,7 +25,7 @@ import static net.minestom.server.coordinate.CoordConversion.globalToBlock;
  * @param blockY the block Y coordinate
  * @param blockZ the block Z coordinate
  */
-public record BlockVec(int blockX, int blockY, int blockZ) implements Point {
+public value record BlockVec(int blockX, int blockY, int blockZ) implements Point {
     public static final BlockVec ZERO = new BlockVec(0);
     public static final BlockVec ONE = new BlockVec(1);
     public static final BlockVec SECTION = new BlockVec(SECTION_SIZE);

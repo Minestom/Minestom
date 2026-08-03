@@ -5,7 +5,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 
-public record GameTestHighlightPosPacket(
+public value record GameTestHighlightPosPacket(
         Point absoluteBlockPosition,
         Point relativeBlockPosition
 ) implements ServerPacket.Play {

@@ -21,7 +21,7 @@ import static net.minestom.server.network.NetworkBuffer.Tagged;
 /**
  * The packet creates or updates teams
  */
-public record TeamsPacket(String teamName, Action action) implements ServerPacket.Play, ServerPacket.ComponentHolding {
+public value record TeamsPacket(String teamName, Action action) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final int MAX_MEMBERS = 16384;
 
     private static final NetworkBuffer.Type<Action> ACTION_NETWORK_TYPE = Tagged(
@@ -56,7 +56,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         );
     }
 
-    public record Settings(
+    public value record Settings(
             Component displayName,
             Component teamPrefix,
             Component teamSuffix,
@@ -100,7 +100,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         byte id();
     }
 
-    public record CreateTeamAction(
+    public value record CreateTeamAction(
             Settings settings,
             List<String> entities
     ) implements Action, ComponentHolder<CreateTeamAction> {
@@ -130,7 +130,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         }
     }
 
-    public record RemoveTeamAction() implements Action {
+    public value record RemoveTeamAction() implements Action {
         public static final NetworkBuffer.Type<RemoveTeamAction> SERIALIZER = NetworkBufferTemplate.template(
                 new RemoveTeamAction());
 
@@ -140,7 +140,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         }
     }
 
-    public record UpdateTeamAction(Settings settings) implements Action, ComponentHolder<UpdateTeamAction> {
+    public value record UpdateTeamAction(Settings settings) implements Action, ComponentHolder<UpdateTeamAction> {
 
         public static final NetworkBuffer.Type<UpdateTeamAction> SERIALIZER = NetworkBufferTemplate.template(
                 Settings.SERIALIZER, UpdateTeamAction::settings,
@@ -163,7 +163,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         }
     }
 
-    public record AddEntitiesToTeamAction(List<String> entities) implements Action {
+    public value record AddEntitiesToTeamAction(List<String> entities) implements Action {
         public AddEntitiesToTeamAction {
             entities = List.copyOf(entities);
         }
@@ -183,7 +183,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
         }
     }
 
-    public record RemoveEntitiesToTeamAction(List<String> entities) implements Action {
+    public value record RemoveEntitiesToTeamAction(List<String> entities) implements Action {
         public RemoveEntitiesToTeamAction {
             entities = List.copyOf(entities);
         }

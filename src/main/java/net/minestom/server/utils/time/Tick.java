@@ -9,7 +9,7 @@ import java.time.temporal.TemporalUnit;
 /**
  * A TemporalUnit that represents one tick.
  */
-public final class Tick implements TemporalUnit {
+public value class Tick implements TemporalUnit {
     /**
      * A TemporalUnit representing the server tick. This is defined using
      * {@link MinecraftServer#TICK_MS}.

@@ -5,7 +5,7 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import java.util.function.Consumer;
 
 @SuppressWarnings("UnstableApiUsage") // we are permitted to provide this
-public final class MinestomLegacyComponentSerializerProvider implements LegacyComponentSerializer.Provider {
+public value class MinestomLegacyComponentSerializerProvider implements LegacyComponentSerializer.Provider {
     @Override
     public LegacyComponentSerializer legacyAmpersand() {
         return LegacyComponentSerializer.builder()

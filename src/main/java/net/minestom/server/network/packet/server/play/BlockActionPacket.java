@@ -8,7 +8,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record BlockActionPacket(Point blockPosition, byte actionId,
+public value record BlockActionPacket(Point blockPosition, byte actionId,
                                 byte actionParam, int blockId) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<BlockActionPacket> SERIALIZER = NetworkBufferTemplate.template(
             BLOCK_POSITION, BlockActionPacket::blockPosition,

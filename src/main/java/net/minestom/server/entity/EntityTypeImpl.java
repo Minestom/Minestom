@@ -7,7 +7,7 @@ import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.UnknownNullability;
 
 @SuppressWarnings("removal")
-record EntityTypeImpl(RegistryData.EntityEntry registry) implements EntityType {
+value record EntityTypeImpl(RegistryData.EntityEntry registry) implements EntityType {
     static final Registry<EntityType> REGISTRY = RegistryData.createStaticRegistry(BuiltinRegistries.ENTITY_TYPE,
             (namespace, properties) -> new EntityTypeImpl(RegistryData.entity(namespace, properties)));
 

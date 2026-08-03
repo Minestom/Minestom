@@ -7,7 +7,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.Nullable;
 
-public record KineticWeapon(
+public value record KineticWeapon(
         int contactCooldownTicks,
         int delayTicks,
         @Nullable Condition dismountConditions,
@@ -41,7 +41,7 @@ public record KineticWeapon(
             "hit_sound", SoundEvent.CODEC.optional(), KineticWeapon::hitSound,
             KineticWeapon::new);
 
-    public record Condition(int maxDurationTicks, float minSpeed, float minRelativeSpeed) {
+    public value record Condition(int maxDurationTicks, float minSpeed, float minRelativeSpeed) {
         public static final NetworkBuffer.Type<Condition> NETWORK_TYPE = NetworkBufferTemplate.template(
                 NetworkBuffer.VAR_INT, Condition::maxDurationTicks,
                 NetworkBuffer.FLOAT, Condition::minSpeed,

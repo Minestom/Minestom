@@ -5,7 +5,7 @@ import net.minestom.server.utils.validate.Check;
 
 import java.util.Objects;
 
-public record PigVariantImpl(
+public value record PigVariantImpl(
         PigVariant.Model model,
         Key assetId,
         Key babyAssetId

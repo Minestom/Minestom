@@ -8,7 +8,7 @@ import net.minestom.server.world.clock.WorldClock;
 import net.minestom.server.world.timeline.Timeline;
 import org.jetbrains.annotations.Nullable;
 
-record DimensionTypeImpl(
+value record DimensionTypeImpl(
         boolean hasFixedTime,
         boolean hasSkylight,
         boolean hasCeiling,

@@ -11,7 +11,7 @@ import java.util.List;
 import static net.minestom.server.network.NetworkBuffer.NBT;
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
-public record RegistryDataPacket(
+public value record RegistryDataPacket(
         String registryId,
         List<Entry> entries
 ) implements ServerPacket.Configuration {
@@ -24,7 +24,7 @@ public record RegistryDataPacket(
         entries = List.copyOf(entries);
     }
 
-    public record Entry(
+    public value record Entry(
             String id,
             @Nullable BinaryTag data
     ) {

@@ -140,7 +140,7 @@ public final class OpenToLAN {
             return packet;
         }
 
-        private record Snapshot(DatagramPacket packet, long timestampNanos) {
+        private value record Snapshot(DatagramPacket packet, long timestampNanos) {
         }
     }
 }

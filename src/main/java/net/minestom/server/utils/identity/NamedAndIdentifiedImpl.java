@@ -11,7 +11,7 @@ import java.util.UUID;
  * @see #of(String, UUID)
  * @see #of(Component, UUID)
  */
-class NamedAndIdentifiedImpl implements NamedAndIdentified {
+value class NamedAndIdentifiedImpl implements NamedAndIdentified {
     private final Component name;
     private final UUID uuid;
 

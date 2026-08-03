@@ -5,7 +5,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.Nullable;
 
-public record CrossbowChargingSounds(
+public value record CrossbowChargingSounds(
         @Nullable SoundEvent start,
         @Nullable SoundEvent mid,
         @Nullable SoundEvent end

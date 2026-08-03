@@ -8,7 +8,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTag;
 
-public record DamageResistant(RegistryTag<DamageType> types) {
+public value record DamageResistant(RegistryTag<DamageType> types) {
     public static final NetworkBuffer.Type<DamageResistant> NETWORK_TYPE = NetworkBufferTemplate.template(
             RegistryTag.networkType(Registries::damageType), DamageResistant::types,
             DamageResistant::new);

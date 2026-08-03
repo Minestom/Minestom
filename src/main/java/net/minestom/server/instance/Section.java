@@ -3,7 +3,7 @@ package net.minestom.server.instance;
 import net.minestom.server.instance.light.Light;
 import net.minestom.server.instance.palette.Palette;
 
-public record Section(Palette blockPalette, Palette biomePalette, Light skyLight, Light blockLight) {
+public value record Section(Palette blockPalette, Palette biomePalette, Light skyLight, Light blockLight) {
     public Section(Palette blockPalette, Palette biomePalette) {
         this(blockPalette, biomePalette, Light.sky(), Light.block());
     }

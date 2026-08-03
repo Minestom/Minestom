@@ -12,7 +12,7 @@ import java.util.Arrays;
 import static net.minestom.server.network.NetworkBuffer.BYTE_ARRAY;
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
-public record ClientCookieResponsePacket(
+public value record ClientCookieResponsePacket(
         String key,
         byte @Nullable [] value
 ) implements ClientPacket.Login, ClientPacket.Configuration, ClientPacket.Play {

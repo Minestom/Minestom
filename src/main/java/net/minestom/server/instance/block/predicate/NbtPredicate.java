@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.function.Predicate;
 
-public record NbtPredicate(@Nullable CompoundBinaryTag nbt) implements Predicate<@Nullable BinaryTag> {
+public value record NbtPredicate(@Nullable CompoundBinaryTag nbt) implements Predicate<@Nullable BinaryTag> {
     public static final Codec<NbtPredicate> CODEC = Codec.NBT_COMPOUND.orElse(Codec.STRING.transform(
             string -> {
                 try {

@@ -4,7 +4,7 @@ import net.minestom.server.sound.SoundEvent;
 
 import java.util.Objects;
 
-record CowSoundVariantImpl(
+value record CowSoundVariantImpl(
         CowSoundVariant.CowSoundSet adultSounds
 //        CowSoundVariant.CowSoundSet babySounds
 ) implements CowSoundVariant {
@@ -14,7 +14,7 @@ record CowSoundVariantImpl(
 //        Objects.requireNonNull(babySounds, "babySounds");
     }
 
-    record CowSoundSetImpl(
+    value record CowSoundSetImpl(
             SoundEvent ambientSound,
             SoundEvent hurtSound,
             SoundEvent deathSound,

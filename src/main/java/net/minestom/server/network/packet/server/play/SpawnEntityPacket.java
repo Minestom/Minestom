@@ -11,7 +11,7 @@ import java.util.UUID;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record SpawnEntityPacket(
+public value record SpawnEntityPacket(
         int entityId, UUID uuid, EntityType type,
         Pos position, float headRot, int data,
         Vec velocity

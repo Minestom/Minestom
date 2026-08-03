@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 
 import static net.minestom.server.network.NetworkBuffer.INT;
 
-public record PingPacket(int id) implements ServerPacket.Configuration, ServerPacket.Play {
+public value record PingPacket(int id) implements ServerPacket.Configuration, ServerPacket.Play {
     public static final NetworkBuffer.Type<PingPacket> SERIALIZER = NetworkBufferTemplate.template(
             INT, PingPacket::id, PingPacket::new);
 }

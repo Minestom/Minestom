@@ -19,7 +19,7 @@ public sealed interface ConsumeEffect {
     StructCodec<ConsumeEffect> CODEC = ConsumeEffectType.CODEC
             .unionType(ConsumeEffect::codec, ConsumeEffect::consumeEffectToType);
 
-    record ApplyEffects(List<CustomPotionEffect> effects, float probability) implements ConsumeEffect {
+    value record ApplyEffects(List<CustomPotionEffect> effects, float probability) implements ConsumeEffect {
         private static final int MAX_EFFECTS = 256;
 
         public static final NetworkBuffer.Type<ApplyEffects> NETWORK_TYPE = NetworkBufferTemplate.template(
@@ -41,7 +41,7 @@ public sealed interface ConsumeEffect {
         }
     }
 
-    record RemoveEffects(RegistryTag<PotionEffect> effects) implements ConsumeEffect {
+    value record RemoveEffects(RegistryTag<PotionEffect> effects) implements ConsumeEffect {
         public static final NetworkBuffer.Type<RemoveEffects> NETWORK_TYPE = NetworkBufferTemplate.template(
                 RegistryTag.networkType(Registries::potionEffect), RemoveEffects::effects,
                 RemoveEffects::new);
@@ -50,7 +50,7 @@ public sealed interface ConsumeEffect {
                 RemoveEffects::new);
     }
 
-    final class ClearAllEffects implements ConsumeEffect {
+    value class ClearAllEffects implements ConsumeEffect {
         public static final ClearAllEffects INSTANCE = new ClearAllEffects();
 
         public static final NetworkBuffer.Type<ClearAllEffects> NETWORK_TYPE = NetworkBufferTemplate.template(INSTANCE);
@@ -60,7 +60,7 @@ public sealed interface ConsumeEffect {
         }
     }
 
-    record TeleportRandomly(float diameter) implements ConsumeEffect {
+    value record TeleportRandomly(float diameter) implements ConsumeEffect {
         public static final float DEFAULT_DIAMETER = 16.0f;
 
         public static final NetworkBuffer.Type<TeleportRandomly> NETWORK_TYPE = NetworkBufferTemplate.template(
@@ -75,7 +75,7 @@ public sealed interface ConsumeEffect {
         }
     }
 
-    record PlaySound(SoundEvent sound) implements ConsumeEffect {
+    value record PlaySound(SoundEvent sound) implements ConsumeEffect {
         public static final NetworkBuffer.Type<PlaySound> NETWORK_TYPE = NetworkBufferTemplate.template(
                 SoundEvent.NETWORK_TYPE, PlaySound::sound,
                 PlaySound::new);

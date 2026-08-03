@@ -5,7 +5,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
-public final class BinaryTagUtil {
+public value class BinaryTagUtil {
     private static final BinaryTagType<?>[] TYPES = new BinaryTagType<?>[]{
             BinaryTagTypes.END,
             BinaryTagTypes.BYTE,

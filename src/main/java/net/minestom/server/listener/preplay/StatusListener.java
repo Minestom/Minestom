@@ -12,7 +12,7 @@ import net.minestom.server.network.packet.server.status.ResponsePacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.ping.ServerListPingType;
 
-public final class StatusListener {
+public value class StatusListener {
 
     public static void requestListener(StatusRequestPacket packet, PlayerConnection connection) {
         final ServerListPingType pingVersion = ServerListPingType.fromModernProtocolVersion(connection.getProtocolVersion());

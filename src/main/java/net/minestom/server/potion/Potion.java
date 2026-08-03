@@ -17,7 +17,7 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
  * @param duration  the duration (in ticks) that the potion will last
  * @param flags     the flags of the potion, see {@link #flags()}
  */
-public record Potion(PotionEffect effect, int amplifier, int duration, byte flags) {
+public value record Potion(PotionEffect effect, int amplifier, int duration, byte flags) {
     /**
      * A flag indicating that this Potion is ambient (it came from a beacon).
      *

@@ -26,7 +26,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * Utility methods to convert adventure enums to their packet values.
  */
-public final class AdventurePacketConvertor {
+public value class AdventurePacketConvertor {
     private static final Map<NamedTextColor, Integer> NAMED_TEXT_COLOR_ID_MAP;
     private static final List<NamedTextColor> ID_NAMED_TEXT_COLOR_MAP;
 

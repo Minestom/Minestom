@@ -6,7 +6,7 @@ import net.minestom.server.network.NetworkBuffer;
 
 import java.util.List;
 
-public record PotDecorations(
+public value record PotDecorations(
         Material back,
         Material left,
         Material right,

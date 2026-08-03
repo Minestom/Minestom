@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-record EnchantmentImpl(
+value record EnchantmentImpl(
         Component description,
         RegistryTag<Enchantment> exclusiveSet,
         RegistryTag<Material> supportedItems,

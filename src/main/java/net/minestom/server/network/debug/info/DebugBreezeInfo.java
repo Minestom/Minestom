@@ -5,7 +5,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import org.jetbrains.annotations.Nullable;
 
-public record DebugBreezeInfo(
+public value record DebugBreezeInfo(
         @Nullable Integer attackTarget,
         @Nullable Point jumpTarget
 ) {

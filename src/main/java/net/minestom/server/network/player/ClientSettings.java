@@ -13,7 +13,7 @@ import java.util.Objects;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ClientSettings(Locale locale, byte viewDistance,
+public value record ClientSettings(Locale locale, byte viewDistance,
                              ChatMessageType chatMessageType, boolean chatColors,
                              byte displayedSkinParts, MainHand mainHand,
                              boolean enableTextFiltering, boolean allowServerListings,

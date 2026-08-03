@@ -7,7 +7,7 @@ import net.minestom.server.utils.validate.Check;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ClientUpdateCommandBlockMinecartPacket(int entityId, String command,
+public value record ClientUpdateCommandBlockMinecartPacket(int entityId, String command,
                                                      boolean trackOutput) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientUpdateCommandBlockMinecartPacket> SERIALIZER = NetworkBufferTemplate.template(
             VAR_INT, ClientUpdateCommandBlockMinecartPacket::entityId,

@@ -7,7 +7,7 @@ import net.minestom.server.utils.validate.Check;
 
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
-public record ClientNameItemPacket(String itemName) implements ClientPacket.Play {
+public value record ClientNameItemPacket(String itemName) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientNameItemPacket> SERIALIZER = NetworkBufferTemplate.template(
             STRING, ClientNameItemPacket::itemName,
             ClientNameItemPacket::new);

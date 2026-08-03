@@ -12,7 +12,7 @@ import java.util.List;
 import static net.minestom.server.network.NetworkBuffer.DOUBLE;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record EntityAttributesPacket(int entityId, List<Property> properties) implements ServerPacket.Play {
+public value record EntityAttributesPacket(int entityId, List<Property> properties) implements ServerPacket.Play {
     public static final int MAX_ENTRIES = 1024;
 
     public static final NetworkBuffer.Type<EntityAttributesPacket> SERIALIZER = NetworkBufferTemplate.template(
@@ -24,7 +24,7 @@ public record EntityAttributesPacket(int entityId, List<Property> properties) im
         properties = List.copyOf(properties);
     }
 
-    public record Property(Attribute attribute, double value, List<AttributeModifier> modifiers) {
+    public value record Property(Attribute attribute, double value, List<AttributeModifier> modifiers) {
         public static final NetworkBuffer.Type<Property> SERIALIZER = NetworkBufferTemplate.template(
                 Attribute.NETWORK_TYPE, Property::attribute,
                 DOUBLE, Property::value,

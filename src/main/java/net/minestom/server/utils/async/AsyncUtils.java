@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.CompletableFuture;
 
 @ApiStatus.Internal
-public final class AsyncUtils {
+public value class AsyncUtils {
     public static final CompletableFuture<Void> VOID_FUTURE = CompletableFuture.completedFuture(null);
 
     @SuppressWarnings("unchecked")

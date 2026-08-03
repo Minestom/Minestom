@@ -5,7 +5,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.sound.Music;
 import org.jetbrains.annotations.Nullable;
 
-public record BackgroundMusic(
+public value record BackgroundMusic(
         @Nullable Music music,
         @Nullable Music creativeMusic,
         @Nullable Music underwaterMusic

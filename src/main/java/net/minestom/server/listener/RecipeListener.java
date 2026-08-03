@@ -7,7 +7,7 @@ import net.minestom.server.network.packet.server.play.PlaceGhostRecipePacket;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.recipe.display.RecipeDisplay;
 
-public class RecipeListener {
+public value class RecipeListener {
 
     public static void listener(ClientPlaceRecipePacket packet, Player player) {
         final RecipeManager recipeManager = MinecraftServer.getRecipeManager();

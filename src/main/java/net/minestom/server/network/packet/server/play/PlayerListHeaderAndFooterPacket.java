@@ -11,7 +11,7 @@ import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.COMPONENT;
 
-public record PlayerListHeaderAndFooterPacket(Component header,
+public value record PlayerListHeaderAndFooterPacket(Component header,
                                               Component footer) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final NetworkBuffer.Type<PlayerListHeaderAndFooterPacket> SERIALIZER = NetworkBufferTemplate.template(
             COMPONENT, PlayerListHeaderAndFooterPacket::header,

@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 
 import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
 
-public record ClearTitlesPacket(boolean reset) implements ServerPacket.Play {
+public value record ClearTitlesPacket(boolean reset) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<ClearTitlesPacket> SERIALIZER = NetworkBufferTemplate.template(
             BOOLEAN, ClearTitlesPacket::reset,
             ClearTitlesPacket::new);

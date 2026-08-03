@@ -23,7 +23,7 @@ import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.utils.block.BlockBreakCalculation;
 import net.minestom.server.utils.block.BlockUtils;
 
-public final class PlayerActionListener {
+public value class PlayerActionListener {
 
     public static void playerActionListener(ClientPlayerActionPacket packet, Player player) {
         final ClientPlayerActionPacket.Status status = packet.status();
@@ -213,6 +213,6 @@ public final class PlayerActionListener {
         EventDispatcher.call(new PlayerStabEvent(player));
     }
 
-    private record DiggingResult(Block block, boolean success) {
+    private value record DiggingResult(Block block, boolean success) {
     }
 }

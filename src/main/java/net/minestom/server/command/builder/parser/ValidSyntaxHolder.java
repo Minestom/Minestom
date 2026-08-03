@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Holds the data of a validated syntax.
  */
-public record ValidSyntaxHolder(String commandString,
+public value record ValidSyntaxHolder(String commandString,
                                 CommandSyntax syntax,
                                 Map<Argument<?>, ArgumentParser.ArgumentResult> argumentResults) {
 

@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public record TrackedWaypointPacket(
+public value record TrackedWaypointPacket(
         Operation operation,
         Waypoint waypoint
 ) implements ServerPacket.Configuration, ServerPacket.Play {
@@ -29,7 +29,7 @@ public record TrackedWaypointPacket(
         public static final NetworkBuffer.Type<Operation> NETWORK_TYPE = NetworkBuffer.Enum(Operation.class);
     }
 
-    public record Waypoint(
+    public value record Waypoint(
             Either<UUID, String> id,
             Icon icon,
             Target target
@@ -41,7 +41,7 @@ public record TrackedWaypointPacket(
                 Waypoint::new);
     }
 
-    public record Icon(
+    public value record Icon(
             Key style,
             @Nullable RGBLike color
     ) {
@@ -63,24 +63,24 @@ public record TrackedWaypointPacket(
         NetworkBuffer.Type<Target> NETWORK_TYPE = Type.NETWORK_TYPE
                 .unionType(Target::dataSerializer, Target::targetToType);
 
-        record Empty() implements Target {
+        value record Empty() implements Target {
             public static final NetworkBuffer.Type<Empty> NETWORK_TYPE = NetworkBufferTemplate.template(new Empty());
         }
 
-        record Vec3i(Point point) implements Target {
+        value record Vec3i(Point point) implements Target {
             public static final NetworkBuffer.Type<Vec3i> NETWORK_TYPE = NetworkBufferTemplate.template(
                     NetworkBuffer.VECTOR3I, Vec3i::point,
                     Vec3i::new);
         }
 
-        record Chunk(int chunkX, int chunkZ) implements Target {
+        value record Chunk(int chunkX, int chunkZ) implements Target {
             public static final NetworkBuffer.Type<Chunk> NETWORK_TYPE = NetworkBufferTemplate.template(
                     NetworkBuffer.VAR_INT, Chunk::chunkX,
                     NetworkBuffer.VAR_INT, Chunk::chunkZ,
                     Chunk::new);
         }
 
-        record Azimuth(float angle) implements Target {
+        value record Azimuth(float angle) implements Target {
             public static final NetworkBuffer.Type<Azimuth> NETWORK_TYPE = NetworkBufferTemplate.template(
                     NetworkBuffer.FLOAT, Azimuth::angle,
                     Azimuth::new);

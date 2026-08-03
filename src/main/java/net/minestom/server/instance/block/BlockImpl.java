@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.*;
 
 @SuppressWarnings("removal")
-record BlockImpl(RegistryData.BlockEntry registry,
+value record BlockImpl(RegistryData.BlockEntry registry,
                  long propertiesArray,
                  @Nullable CompoundBinaryTag nbt,
                  @Nullable BlockHandler handler) implements Block {
@@ -323,7 +323,7 @@ record BlockImpl(RegistryData.BlockEntry registry,
         return builder.append(']').toString();
     }
 
-    private record BlockSchema(PropertyType[] properties, int firstStateId, int stateCount,
+    private value record BlockSchema(PropertyType[] properties, int firstStateId, int stateCount,
                                short @Nullable [] stateOffsets) {
         // Propertyless blocks need neither a state table nor a distinct schema.
         private static final BlockSchema EMPTY = new BlockSchema(new PropertyType[0], -1, 1, null);
@@ -407,7 +407,7 @@ record BlockImpl(RegistryData.BlockEntry registry,
         }
     }
 
-    private record PropertyType(String key, List<String> values, @Nullable Object2ByteMap<String> valueIndexes) {
+    private value record PropertyType(String key, List<String> values, @Nullable Object2ByteMap<String> valueIndexes) {
         private PropertyType(String key, List<String> values) {
             this(key, values, valueIndexes(values));
         }
@@ -425,7 +425,7 @@ record BlockImpl(RegistryData.BlockEntry registry,
         }
     }
 
-    private record PropertyTypeKey(String key, List<String> values) {
+    private value record PropertyTypeKey(String key, List<String> values) {
     }
 
     static long updateIndex(long value, int index, byte newValue) {

@@ -11,7 +11,7 @@ import java.util.function.Supplier;
  * A utility class to create {@link NetworkBuffer.Type} templates
  * useful for serializing and deserializing objects and ensure the same type written is the same type read.
  * <pre>{@code
- * record MyClass(int id, String name) {
+ * value record MyClass(int id, String name) {
  *         // Using the template utility:
  *         public static final NetworkBuffer.Type<MyClass> SERIALIZER = NetworkBufferTemplate.template(
  *                 NetworkBuffer.INT, MyClass::id,

@@ -8,7 +8,7 @@ import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.UnknownNullability;
 
 @SuppressWarnings("removal")
-record FluidImpl(RegistryData.FluidEntry registry) implements Fluid {
+value record FluidImpl(RegistryData.FluidEntry registry) implements Fluid {
     static final Registry<Fluid> REGISTRY = RegistryData.createStaticRegistry(BuiltinRegistries.FLUID,
             (namespace, properties) -> new FluidImpl(RegistryData.fluid(namespace, properties)));
 

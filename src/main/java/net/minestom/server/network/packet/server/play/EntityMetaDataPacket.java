@@ -14,7 +14,7 @@ import java.util.function.UnaryOperator;
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record EntityMetaDataPacket(int entityId,
+public value record EntityMetaDataPacket(int entityId,
                                    Map<Integer, Metadata.Entry<?>> entries) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public EntityMetaDataPacket {
         entries = Map.copyOf(entries);

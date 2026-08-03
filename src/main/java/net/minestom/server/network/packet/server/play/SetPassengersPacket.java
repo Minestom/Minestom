@@ -8,7 +8,7 @@ import java.util.List;
 
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record SetPassengersPacket(int vehicleEntityId,
+public value record SetPassengersPacket(int vehicleEntityId,
                                   List<Integer> passengersId) implements ServerPacket.Play {
     public static final int MAX_PASSENGERS = 16384;
 

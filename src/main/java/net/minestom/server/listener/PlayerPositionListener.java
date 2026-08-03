@@ -14,7 +14,7 @@ import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacke
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.ApiStatus;
 
-public class PlayerPositionListener {
+public value class PlayerPositionListener {
     static final Component KICK_MESSAGE = Component.text("You moved too far away!");
 
     public static void playerPacketListener(ClientPlayerPositionStatusPacket packet, Player player) {

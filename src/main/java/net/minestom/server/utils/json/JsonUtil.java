@@ -7,7 +7,7 @@ import com.google.gson.Strictness;
 
 import java.io.Reader;
 
-public final class JsonUtil {
+public value class JsonUtil {
     private static final Gson GSON = new GsonBuilder().disableHtmlEscaping().disableJdkUnsafe().setStrictness(Strictness.STRICT).create();
 
     public static JsonElement fromJson(String json) {

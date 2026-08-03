@@ -17,7 +17,7 @@ import java.util.function.BiFunction;
 /**
  * Adventure related constants, etc.
  */
-public final class MinestomAdventure {
+public final class MinestomAdventure { //TODO(valhalla)
     /**
      * See {@link MinestomAdventure#tagStringIO()}
      */

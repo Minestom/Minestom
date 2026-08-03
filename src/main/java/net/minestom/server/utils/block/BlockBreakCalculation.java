@@ -16,7 +16,7 @@ import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.registry.TagKey;
 import org.jetbrains.annotations.Nullable;
 
-public class BlockBreakCalculation {
+public value class BlockBreakCalculation {
 
     public static final int UNBREAKABLE = -1;
     private static final RegistryTag<Fluid> WATER_TAG = Fluid.staticRegistry().getOrCreateTag(TagKey.ofHash("#minecraft:water"));

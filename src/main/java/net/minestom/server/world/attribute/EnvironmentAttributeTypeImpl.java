@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-record EnvironmentAttributeTypeImpl<T>(
+value record EnvironmentAttributeTypeImpl<T>(
         Key key,
         Codec<T> codec,
         Codec<Modifier<T, ?>> modifierCodec

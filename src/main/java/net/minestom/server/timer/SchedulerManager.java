@@ -5,7 +5,7 @@ import org.jctools.queues.MessagePassingQueue;
 
 import java.util.function.Supplier;
 
-public final class SchedulerManager implements Scheduler {
+public value class SchedulerManager implements Scheduler {
     private final Scheduler scheduler = Scheduler.newScheduler();
     private final MessagePassingQueue<Runnable> shutdownTasks = ConcurrentMessageQueues.mpscUnboundedArrayQueue(1024);
     @Override

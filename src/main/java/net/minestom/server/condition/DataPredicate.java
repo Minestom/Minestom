@@ -4,7 +4,7 @@ import net.kyori.adventure.nbt.BinaryTag;
 import net.minestom.server.codec.Codec;
 
 public interface DataPredicate {
-    record Noop(BinaryTag content) implements DataPredicate {
+    value record Noop(BinaryTag content) implements DataPredicate {
 
     }
 

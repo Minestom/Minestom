@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.UnaryOperator;
 
-public class EffectComponent {
+public value class EffectComponent {
     static final Map<String, DataComponent<?>> NAMESPACES = new HashMap<>(32);
     static final ObjectArray<DataComponent<?>> IDS = ObjectArray.singleThread(32);
 

@@ -10,7 +10,7 @@ import net.minestom.server.entity.metadata.animal.CamelMeta;
 import java.util.List;
 import java.util.Set;
 
-public final class EntityUtils {
+public value class EntityUtils {
 
     /**
      * Gets the position offset at which a passenger rides the given vehicle.

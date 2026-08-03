@@ -47,5 +47,5 @@ public class ChunkUtilsTest {
         );
     }
 
-    private record ChunkCoordinate(int x, int z) {}
+    private value record ChunkCoordinate(int x, int z) {}
 }

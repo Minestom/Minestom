@@ -7,7 +7,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import org.jetbrains.annotations.Nullable;
 
-public record FilteredText<T>(T text, @Nullable T filtered) {
+public value record FilteredText<T>(T text, @Nullable T filtered) {
 
     @SuppressWarnings("ConstantField") // kept not final for binary compatibility until the next breaking release
     public static NetworkBuffer.Type<FilteredText<String>> STRING_NETWORK_TYPE = createNetworkType(NetworkBuffer.STRING);

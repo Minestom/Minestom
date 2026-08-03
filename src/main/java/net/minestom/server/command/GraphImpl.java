@@ -17,7 +17,7 @@ import java.util.function.Predicate;
 import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
 import static net.minestom.server.command.builder.arguments.ArgumentType.Word;
 
-record GraphImpl(NodeImpl root) implements Graph {
+value record GraphImpl(NodeImpl root) implements Graph {
     static GraphImpl fromCommand(Command command) {
         return new GraphImpl(NodeImpl.command(command));
     }
@@ -37,7 +37,7 @@ record GraphImpl(NodeImpl root) implements Graph {
         return compare(root, graph.root(), comparator);
     }
 
-    record BuilderImpl(Argument<?> argument, List<BuilderImpl> children, Execution execution) implements Graph.Builder {
+    value record BuilderImpl(Argument<?> argument, List<BuilderImpl> children, Execution execution) implements Graph.Builder {
         public BuilderImpl(Argument<?> argument, Execution execution) {
             this(argument, new ArrayList<>(), execution);
         }
@@ -65,7 +65,7 @@ record GraphImpl(NodeImpl root) implements Graph {
         }
     }
 
-    record NodeImpl(Argument<?> argument, @Nullable ExecutionImpl execution, List<Graph.Node> next) implements Graph.Node {
+    value record NodeImpl(Argument<?> argument, @Nullable ExecutionImpl execution, List<Graph.Node> next) implements Graph.Node {
         NodeImpl(Argument<?> argument, @Nullable ExecutionImpl execution, List<Graph.Node> next) {
             this.argument = argument;
             this.execution = execution;
@@ -100,7 +100,7 @@ record GraphImpl(NodeImpl root) implements Graph {
         }
     }
 
-    record ExecutionImpl(
+    value record ExecutionImpl(
             @UnknownNullability Predicate<CommandSender> predicate,
             @Nullable CommandExecutor defaultExecutor,
             @Nullable CommandExecutor globalListener,

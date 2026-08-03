@@ -489,6 +489,6 @@ public class PlayerSocketConnection extends PlayerConnection {
         }
     }
 
-    record EncryptionContext(Cipher encrypt, Cipher decrypt) {
+    value record EncryptionContext(Cipher encrypt, Cipher decrypt) {
     }
 }

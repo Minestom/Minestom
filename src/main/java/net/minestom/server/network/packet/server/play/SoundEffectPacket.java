@@ -10,7 +10,7 @@ import net.minestom.server.sound.SoundEvent;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record SoundEffectPacket(
+public value record SoundEffectPacket(
         SoundEvent soundEvent,
         Source source,
         Point origin,

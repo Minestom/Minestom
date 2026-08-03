@@ -9,7 +9,7 @@ import org.jetbrains.annotations.UnknownNullability;
  * <br>
  * For example:
  * <pre>{@code
- * record Name(String imTheBoss) { }
+ * value record Name(String imTheBoss) { }
  * Decoder<Name> decoder = new Decoder<>() {
  *     @Override
  *     public <D> Result<Name> decode(Transcoder<D> coder, D value) {

@@ -12,7 +12,7 @@ import java.util.Set;
 /**
  * Preprocesses click packets, turning them into {@link Click} instances for further processing.
  */
-public final class ClickPreprocessor {
+public value class ClickPreprocessor {
     private final Set<Integer> leftDrag = new LinkedHashSet<>();
     private final Set<Integer> rightDrag = new LinkedHashSet<>();
     private final Set<Integer> middleDrag = new LinkedHashSet<>();

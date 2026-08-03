@@ -14,13 +14,13 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class SocketWriteTest {
 
-    record IntPacket(int value) implements ServerPacket.Play {
+    value record IntPacket(int value) implements ServerPacket.Play {
         public static final NetworkBuffer.Type<IntPacket> SERIALIZER = NetworkBufferTemplate.template(
                 INT, IntPacket::value,
                 IntPacket::new);
     }
 
-    record CompressiblePacket(String value) implements ServerPacket.Play {
+    value record CompressiblePacket(String value) implements ServerPacket.Play {
         public static final NetworkBuffer.Type<CompressiblePacket> SERIALIZER = NetworkBufferTemplate.template(
                 STRING, CompressiblePacket::value,
                 CompressiblePacket::new);

@@ -15,7 +15,7 @@ import java.util.function.BiFunction;
 
 /**
  * <p>Holds registry data for any of the registries controlled by the server. Entries in registries should be referenced
- * using a {@link RegistryKey} object as opposed to the record type. For example, a biome should be stored as
+ * using a {@link RegistryKey} object as opposed to the value record type. For example, a biome should be stored as
  * `RegistryKey Biome`, as opposed to `Biome` directly.</p>
  *
  * <p>Builtin registries should be accessed via a {@link Registries} instance (currently implemented by

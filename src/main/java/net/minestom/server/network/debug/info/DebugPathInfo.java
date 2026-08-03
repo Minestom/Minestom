@@ -7,13 +7,13 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import java.util.List;
 import java.util.Set;
 
-public record DebugPathInfo(Path path, float maxNodeDistance) {
+public value record DebugPathInfo(Path path, float maxNodeDistance) {
     public static final NetworkBuffer.Type<DebugPathInfo> SERIALIZER = NetworkBufferTemplate.template(
             Path.SERIALIZER, DebugPathInfo::path,
             NetworkBuffer.FLOAT, DebugPathInfo::maxNodeDistance,
             DebugPathInfo::new);
 
-    public record Path(boolean reached, int nextNodeIndex, Point target, List<Node> nodes, Data data) {
+    public value record Path(boolean reached, int nextNodeIndex, Point target, List<Node> nodes, Data data) {
         public static final NetworkBuffer.Type<Path> SERIALIZER = NetworkBufferTemplate.template(
                 NetworkBuffer.BOOLEAN, Path::reached,
                 NetworkBuffer.INT, Path::nextNodeIndex,
@@ -58,7 +58,7 @@ public record DebugPathInfo(Path path, float maxNodeDistance) {
         public static final NetworkBuffer.Type<NodeType> SERIALIZER = NetworkBuffer.Enum(NodeType.class);
     }
 
-    public record Node(int x, int y, int z, float walkedDistance, float costMalus, boolean closed, NodeType type,
+    public value record Node(int x, int y, int z, float walkedDistance, float costMalus, boolean closed, NodeType type,
                        float f) {
             public static final NetworkBuffer.Type<Node> SERIALIZER = NetworkBufferTemplate.template(
                     NetworkBuffer.INT, Node::x,
@@ -73,7 +73,7 @@ public record DebugPathInfo(Path path, float maxNodeDistance) {
 
     }
 
-    public record Data(Set<Node> targetNodes, List<Node> openSet, List<Node> closedSet) {
+    public value record Data(Set<Node> targetNodes, List<Node> openSet, List<Node> closedSet) {
         public static final NetworkBuffer.Type<Data> SERIALIZER = NetworkBufferTemplate.template(
                 Node.SERIALIZER.set(), Data::targetNodes,
                 Node.SERIALIZER.list(), Data::openSet,

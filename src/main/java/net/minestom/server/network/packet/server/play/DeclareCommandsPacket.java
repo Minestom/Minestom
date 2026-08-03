@@ -11,7 +11,7 @@ import java.util.function.Function;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record DeclareCommandsPacket(List<Node> nodes,
+public value record DeclareCommandsPacket(List<Node> nodes,
                                     int rootIndex) implements ServerPacket.Play {
     public static final int MAX_NODES = Short.MAX_VALUE;
 

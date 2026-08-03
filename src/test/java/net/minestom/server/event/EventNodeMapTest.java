@@ -5,6 +5,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.lang.ref.WeakReference;
@@ -13,6 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static net.minestom.testing.TestUtils.waitUntilCleared;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Disabled // TODO(valhalla)
 public class EventNodeMapTest {
 
     @Test

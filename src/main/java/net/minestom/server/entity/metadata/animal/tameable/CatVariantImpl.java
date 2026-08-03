@@ -4,7 +4,7 @@ import net.kyori.adventure.key.Key;
 
 import java.util.Objects;
 
-record CatVariantImpl(Key assetId, Key babyAssetId) implements CatVariant {
+value record CatVariantImpl(Key assetId, Key babyAssetId) implements CatVariant {
 
     public CatVariantImpl {
         Objects.requireNonNull(assetId, "assetId");

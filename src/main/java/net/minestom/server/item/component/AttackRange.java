@@ -8,7 +8,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 
-public record AttackRange(
+public value record AttackRange(
         float minReach,
         float maxReach,
         float minCreativeReach,

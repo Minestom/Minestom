@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record EntityAnimationPacket(int entityId, Animation animation) implements ServerPacket.Play {
+public value record EntityAnimationPacket(int entityId, Animation animation) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<EntityAnimationPacket> SERIALIZER = NetworkBufferTemplate.template(
             VAR_INT, EntityAnimationPacket::entityId,
             NetworkBuffer.Enum(Animation.class), EntityAnimationPacket::animation,

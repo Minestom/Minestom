@@ -5,7 +5,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 
-public record UseEffects(
+public value record UseEffects(
         boolean canSprint,
         boolean interactVibrations,
         float speedMultiplier

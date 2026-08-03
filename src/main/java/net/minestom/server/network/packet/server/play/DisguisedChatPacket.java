@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import static net.minestom.server.network.NetworkBuffer.COMPONENT;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record DisguisedChatPacket(
+public value record DisguisedChatPacket(
         Component message,
         int type,
         Component senderName,

@@ -5,7 +5,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.condition.DataPredicate;
 import org.jetbrains.annotations.Nullable;
 
-public record TargetedConditionalEffect<E extends Enchantment.Effect>(
+public value record TargetedConditionalEffect<E extends Enchantment.Effect>(
         Enchantment.Target enchanted,
         @Nullable Enchantment.Target affected,
         E effect,

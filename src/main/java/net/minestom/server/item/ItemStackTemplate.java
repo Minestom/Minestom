@@ -9,7 +9,7 @@ public interface ItemStackTemplate {
     NetworkBuffer.Type<ItemStack> NETWORK_TYPE = NetworkBufferTemplate.template(
             Material.NETWORK_TYPE, ItemStack::material,
             NetworkBuffer.VAR_INT, ItemStack::amount,
-            DataComponent.PATCH_NETWORK_TYPE, (i) -> ((ItemStackImpl) i).components(),
+            DataComponent.PATCH_NETWORK_TYPE, ItemStack::components,
             ItemStack::of);
     Codec<ItemStack> CODEC = ItemStack.CODEC
             .orElse(Material.CODEC.transform(ItemStack::of, ItemStack::material));

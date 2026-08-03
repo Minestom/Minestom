@@ -201,13 +201,13 @@ public final class RegistryData {
         T get(String namespace, Properties properties);
     }
 
-    public record GameEventEntry(Key key, Properties main) implements Entry {
+    public value record GameEventEntry(Key key, Properties main) implements Entry {
         public GameEventEntry(String key, Properties main) {
             this(Key.key(key), main);
         }
     }
 
-    public static final class BlockEntry implements Entry {
+    public static value class BlockEntry implements Entry {
         private static final short AIR_OFFSET = 1 << 0;
         private static final short LIQUID_OFFSET = 1 << 1;
         private static final short SOLID_OFFSET = 1 << 2;
@@ -260,7 +260,8 @@ public final class RegistryData {
             boolean fluid = fromParent(parent, BlockEntry::isFluid, main, "fluid", Properties::getBoolean, false);
             boolean occludes = fromParent(parent, BlockEntry::occludes, main, "occludes", Properties::getBoolean, true);
             boolean requiresTool = fromParent(parent, BlockEntry::requiresTool, main, "requiresTool", Properties::getBoolean, true);
-            this.lightEmission = fromParent(parent, BlockEntry::lightEmission, main, "lightEmission", Properties::getInt, 0).byteValue();
+            byte lightEmission = fromParent(parent, BlockEntry::lightEmission, main, "lightEmission", Properties::getInt, 0).byteValue();
+            this.lightEmission = lightEmission;
             this.lightBlocked = fromParent(parent, BlockEntry::lightBlocked, main, "lightBlock", Properties::getInt, 0).byteValue();
             boolean replaceable = fromParent(parent, BlockEntry::isReplaceable, main, "replaceable", Properties::getBoolean, false);
             this.blockSoundType = fromParent(parent, BlockEntry::getBlockSoundType, main, "soundType", (properties, string) -> {
@@ -300,16 +301,16 @@ public final class RegistryData {
                 Shape occludeShape = fromParent(parent, BlockEntry::occlusionShape, main, "occlusionShape", (properties, string) -> {
                     String shape = properties.getString(string);
                     if (parent == null || parentProperties == null) // No parent, so we can just parse the shape
-                        return CollisionUtils.parseOcclusionShape(internCache, shape, occludes, this.lightEmission);
+                        return CollisionUtils.parseOcclusionShape(internCache, shape, occludes, lightEmission);
                     if (shape != null || occludes != parent.occludes()) {
                         if (shape == null) shape = parentProperties.getString(string);
-                        return CollisionUtils.parseOcclusionShape(internCache, shape, occludes, this.lightEmission);
+                        return CollisionUtils.parseOcclusionShape(internCache, shape, occludes, lightEmission);
                     }
                     return parent.occlusionShape();
                 }, null);
                 // Apply possible lightEmission override, since that isn't specified in occlusionShape
-                if (parent != null && this.lightEmission != parent.lightEmission && occludeShape instanceof ShapeImpl shapeImpl) {
-                    occludeShape = shapeImpl.withLightEmission(this.lightEmission);
+                if (parent != null && lightEmission != parent.lightEmission && occludeShape instanceof ShapeImpl shapeImpl) {
+                    occludeShape = shapeImpl.withLightEmission(lightEmission);
                 }
                 this.occlusionShape = occludeShape;
             }
@@ -488,7 +489,7 @@ public final class RegistryData {
         }
     }
 
-    public static final class MaterialEntry implements Entry {
+    public static final class MaterialEntry implements Entry { //TODO(valhalla)
         private final Key key;
         private final int id;
         private final String translationKey;
@@ -580,7 +581,7 @@ public final class RegistryData {
         }
     }
 
-    public static final class EntityEntry implements Entry {
+    public static value class EntityEntry implements Entry {
         private final Key key;
         private final int id;
         private final String translationKey;
@@ -735,7 +736,7 @@ public final class RegistryData {
         }
     }
 
-    public static final class VillagerProfessionEntry implements Entry {
+    public static value class VillagerProfessionEntry implements Entry {
         private final Key key;
         private final int id;
         private final @Nullable SoundEvent workSound;
@@ -763,19 +764,19 @@ public final class RegistryData {
         }
     }
 
-    public record FeatureFlagEntry(Key key, int id) implements Entry {
+    public value record FeatureFlagEntry(Key key, int id) implements Entry {
         public FeatureFlagEntry(String namespace, Properties main) {
             this(Key.key(namespace), main.getInt("id"));
         }
     }
 
-    public record FluidEntry(Key key, int id) implements Entry {
+    public value record FluidEntry(Key key, int id) implements Entry {
         public FluidEntry(String namespace, Properties main) {
             this(Key.key(namespace), main.getInt("id"));
         }
     }
 
-    public record PotionEffectEntry(Key key, int id,
+    public value record PotionEffectEntry(Key key, int id,
                                     String translationKey,
                                     int color,
                                     boolean isInstantaneous) implements Entry {
@@ -788,7 +789,7 @@ public final class RegistryData {
         }
     }
 
-    public record AttributeEntry(Key key, int id,
+    public value record AttributeEntry(Key key, int id,
                                  String translationKey, double defaultValue,
                                  boolean clientSync,
                                  double maxValue, double minValue) implements Entry {
@@ -803,7 +804,7 @@ public final class RegistryData {
         }
     }
 
-    public record BlockSoundTypeEntry(Key key, float volume, float pitch,
+    public value record BlockSoundTypeEntry(Key key, float volume, float pitch,
                                       SoundEvent breakSound, SoundEvent hitSound, SoundEvent fallSound,
                                       SoundEvent placeSound, SoundEvent stepSound) {
         public BlockSoundTypeEntry(String namespace, Properties main) {
@@ -839,7 +840,7 @@ public final class RegistryData {
         };
     }
 
-    record PropertiesMap(Map<String, Object> map) implements Properties {
+    value record PropertiesMap(Map<String, Object> map) implements Properties {
         PropertiesMap {
             map = Map.copyOf(map);
         }

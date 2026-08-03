@@ -33,7 +33,7 @@ public sealed interface DialogInput {
         }
     }
 
-    record Boolean(
+    value record Boolean(
             String key,
             Component label,
             boolean initial,
@@ -59,7 +59,7 @@ public sealed interface DialogInput {
         }
     }
 
-    record NumberRange(
+    value record NumberRange(
             String key, int width,
             Component label,
             String labelFormat,
@@ -89,7 +89,7 @@ public sealed interface DialogInput {
         }
     }
 
-    record SingleOption(
+    value record SingleOption(
             String key, int width,
             List<Option> options,
             Component label,
@@ -118,7 +118,7 @@ public sealed interface DialogInput {
             return CODEC;
         }
 
-        public record Option(String id, @Nullable Component display, boolean initial) {
+        public value record Option(String id, @Nullable Component display, boolean initial) {
             public static final StructCodec<Option> CODEC = StructCodec.struct(
                     "id", Codec.STRING, Option::id,
                     "display", Codec.COMPONENT.optional(), Option::display,
@@ -127,7 +127,7 @@ public sealed interface DialogInput {
         }
     }
 
-    record Text(
+    value record Text(
             String key, int width,
             Component label,
             boolean labelVisible,
@@ -154,7 +154,7 @@ public sealed interface DialogInput {
             return CODEC;
         }
 
-        public record Multiline(@Nullable Integer maxLines, @Nullable Integer height) {
+        public value record Multiline(@Nullable Integer maxLines, @Nullable Integer height) {
             public static final StructCodec<Multiline> CODEC = StructCodec.struct(
                     "max_lines", Codec.INT.optional(), Multiline::maxLines,
                     "height", Codec.INT.optional(), Multiline::height,

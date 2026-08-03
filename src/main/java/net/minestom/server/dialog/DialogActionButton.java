@@ -5,7 +5,7 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import org.jetbrains.annotations.Nullable;
 
-public record DialogActionButton(
+public value record DialogActionButton(
         Component label,
         @Nullable Component tooltip,
         int width,

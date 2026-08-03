@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-public record Status(
+public value record Status(
         Component description,
         byte @Nullable [] favicon,
         VersionInfo versionInfo,
@@ -53,7 +53,7 @@ public record Status(
         return new Builder(status);
     }
 
-    public record VersionInfo(String name, int protocolVersion) {
+    public value record VersionInfo(String name, int protocolVersion) {
         public static final VersionInfo DEFAULT = new VersionInfo(MinecraftServer.VERSION_NAME, MinecraftServer.PROTOCOL_VERSION);
         public static final Codec<VersionInfo> CODEC = StructCodec.struct(
                 "name", Codec.STRING, VersionInfo::name,
@@ -61,7 +61,7 @@ public record Status(
                 VersionInfo::new);
     }
 
-    public record PlayerInfo(int onlinePlayers, int maxPlayers, List<NamedAndIdentified> sample) {
+    public value record PlayerInfo(int onlinePlayers, int maxPlayers, List<NamedAndIdentified> sample) {
         private static final Codec<Component> LEGACY_CODEC = Codec.STRING.transform(
                 string -> LegacyComponentSerializer.legacySection().deserialize(string),
                 component -> LegacyComponentSerializer.legacySection().serialize(component));

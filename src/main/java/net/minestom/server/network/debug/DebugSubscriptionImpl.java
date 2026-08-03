@@ -7,7 +7,7 @@ import net.minestom.server.utils.collection.ObjectArray;
 import java.util.HashMap;
 import java.util.Map;
 
-public record DebugSubscriptionImpl<T>(
+public value record DebugSubscriptionImpl<T>(
         int id,
         Key key,
         NetworkBuffer.Type<T> networkType

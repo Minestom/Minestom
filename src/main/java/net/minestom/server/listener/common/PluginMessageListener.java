@@ -5,7 +5,7 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerPluginMessageEvent;
 import net.minestom.server.network.packet.client.common.ClientPluginMessagePacket;
 
-public class PluginMessageListener {
+public value class PluginMessageListener {
 
     public static void listener(ClientPluginMessagePacket packet, Player player) {
         PlayerPluginMessageEvent pluginMessageEvent = new PlayerPluginMessageEvent(player, packet.channel(), packet.data());

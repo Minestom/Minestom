@@ -7,7 +7,7 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 final class MetadataImpl {
     @SuppressWarnings({"rawtypes", "unchecked"})
-    record EntryImpl<T extends @UnknownNullability Object>(
+    value record EntryImpl<T extends @UnknownNullability Object>(
             Metadata.Type<T> metadataType,
             T value
     ) implements Metadata.Entry<T> {

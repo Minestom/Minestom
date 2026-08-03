@@ -4,7 +4,7 @@ import net.minestom.server.world.attribute.EnvironmentAttributeMap;
 
 import java.util.Objects;
 
-record BiomeImpl(
+value record BiomeImpl(
         boolean hasPrecipitation,
         float temperature,
         TemperatureModifier temperatureModifier,

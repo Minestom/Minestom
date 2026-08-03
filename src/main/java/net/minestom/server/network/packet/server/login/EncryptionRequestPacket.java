@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record EncryptionRequestPacket(
+public value record EncryptionRequestPacket(
         String serverId,
         byte[] publicKey,
         byte[] verifyToken,

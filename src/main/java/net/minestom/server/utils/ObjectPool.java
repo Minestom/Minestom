@@ -15,7 +15,7 @@ import java.util.function.UnaryOperator;
 
 @ApiStatus.Internal
 @ApiStatus.Experimental
-public final class ObjectPool<T> {
+public value class ObjectPool<T> {
     private static final int QUEUE_SIZE = 32_768;
     private static final Cleaner CLEANER = Cleaner.create();
 
@@ -90,21 +90,21 @@ public final class ObjectPool<T> {
         }
     }
 
-    private record BufferRefCleaner<T>(ObjectPool<T> pool, AtomicReference<T> objectRef) implements Runnable {
+    private value record BufferRefCleaner<T>(ObjectPool<T> pool, AtomicReference<T> objectRef) implements Runnable {
         @Override
         public void run() {
             this.pool.add(objectRef.get());
         }
     }
 
-    private record BufferCleaner<T>(ObjectPool<T> pool, T object) implements Runnable {
+    private value record BufferCleaner<T>(ObjectPool<T> pool, T object) implements Runnable {
         @Override
         public void run() {
             this.pool.add(object);
         }
     }
 
-    private record BuffersCleaner<T>(ObjectPool<T> pool, Collection<T> objects) implements Runnable {
+    private value record BuffersCleaner<T>(ObjectPool<T> pool, Collection<T> objects) implements Runnable {
         @Override
         public void run() {
             for (T buffer : objects) {
@@ -113,7 +113,7 @@ public final class ObjectPool<T> {
         }
     }
 
-    public final class Holder implements AutoCloseable {
+    public value class Holder implements AutoCloseable {
         private final T object;
         private final AtomicBoolean closed = new AtomicBoolean(false);
 

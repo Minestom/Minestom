@@ -14,16 +14,16 @@ import java.util.Set;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public sealed interface Auth {
-    record Offline() implements Auth {
+    value record Offline() implements Auth {
     }
 
-    record Online(KeyPair keyPair) implements Auth {
+    value record Online(KeyPair keyPair) implements Auth {
         public Online() {
             this(Objects.requireNonNull(MojangCrypt.generateKeyPair()));
         }
     }
 
-    record Velocity(Key key) implements Auth {
+    value record Velocity(Key key) implements Auth {
         public static final String PLAYER_INFO_CHANNEL = "velocity:player_info";
         private static final String MAC_ALGORITHM = "HmacSHA256";
         private static final int SUPPORTED_FORWARDING_VERSION = 1;
@@ -59,7 +59,7 @@ public sealed interface Auth {
         }
     }
 
-    record Bungee(@Nullable Set<String> bungeeGuardTokens) implements Auth {
+    value record Bungee(@Nullable Set<String> bungeeGuardTokens) implements Auth {
         public Bungee {
             if (bungeeGuardTokens != null && bungeeGuardTokens.isEmpty()) {
                 throw new IllegalArgumentException("BungeeGuard tokens cannot be empty");

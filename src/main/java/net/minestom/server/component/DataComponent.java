@@ -52,7 +52,7 @@ public sealed interface DataComponent<T> extends StaticProtocolObject<DataCompon
         }
     }
 
-    record Value(DataComponent<?> component, @Nullable Object value) {
+    value record Value(DataComponent<?> component, @Nullable Object value) {
     }
 
     boolean isSynced();

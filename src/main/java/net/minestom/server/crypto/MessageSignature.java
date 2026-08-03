@@ -11,7 +11,7 @@ import java.util.Arrays;
 import static net.minestom.server.network.NetworkBuffer.FixedRawBytes;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record MessageSignature(byte[] signature) {
+public value record MessageSignature(byte[] signature) {
     static final int SIGNATURE_BYTE_LENGTH = 256;
 
     public MessageSignature {
@@ -26,7 +26,7 @@ public record MessageSignature(byte[] signature) {
             MessageSignature::new
     );
 
-    public record Packed(int id, @Nullable MessageSignature fullSignature) {
+    public value record Packed(int id, @Nullable MessageSignature fullSignature) {
         private static final int FULL_SIGNATURE = -1;
 
         public Packed(MessageSignature signature) {

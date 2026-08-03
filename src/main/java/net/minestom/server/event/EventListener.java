@@ -57,7 +57,7 @@ public interface EventListener<T extends Event> {
     }
 
     class Builder<T extends Event> {
-        private record ListenerImpl<T extends Event>(
+        private value record ListenerImpl<T extends Event>(
                 Class<T> eventType,
                 Function<T, EventListener.Result> function
         ) implements EventListener<T> {

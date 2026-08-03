@@ -21,7 +21,7 @@ import java.util.function.Supplier;
  * <br>
  * You can use structs to create complex objects
  * <pre>{@code
- * record MyObject(double coolnessFactor, @Nullable String of) {
+ * value record MyObject(double coolnessFactor, @Nullable String of) {
  *     static final StructCodec<MyObject> CODEC = StructCodec.struct(
  *             "id", Codec.DOUBLE, MyObject::coolnessFactor,
  *             "name", Codec.STRING.optional(), MyObject::of,

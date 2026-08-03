@@ -21,7 +21,7 @@ import java.util.function.DoubleUnaryOperator;
  * @param yaw   the yaw (rotation around vertical axis) in degrees (-180, 180]
  * @param pitch the pitch (rotation around lateral axis) in degrees [-90, 90]
  */
-public record Pos(double x, double y, double z, float yaw, float pitch) implements Point {
+public value record Pos(double x, double y, double z, float yaw, float pitch) implements Point {
     public static final Pos ZERO = new Pos(0, 0, 0);
 
     /**

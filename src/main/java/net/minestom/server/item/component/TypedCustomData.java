@@ -10,7 +10,7 @@ import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.TagReadable;
 import org.jetbrains.annotations.UnknownNullability;
 
-public record TypedCustomData<T>(T type, CompoundBinaryTag nbt) implements TagReadable {
+public value record TypedCustomData<T>(T type, CompoundBinaryTag nbt) implements TagReadable {
 
     public static <T> Codec<TypedCustomData<T>> codec(Codec<T> typeCodec) {
         return StructCodec.struct(

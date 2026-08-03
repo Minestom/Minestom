@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static net.minestom.server.network.NetworkBuffer.VECTOR3D;
 
-public record ExplosionPacket(
+public value record ExplosionPacket(
         Point center, float radius, int blockCount,
         @Nullable Point playerKnockback,
         Particle particle, SoundEvent sound,
@@ -27,7 +27,7 @@ public record ExplosionPacket(
             WeightedList.networkType(BlockParticleInfo.SERIALIZER), ExplosionPacket::blockParticles,
             ExplosionPacket::new);
 
-    public record BlockParticleInfo(Particle particle, float scaling, float speed) {
+    public value record BlockParticleInfo(Particle particle, float scaling, float speed) {
         public static final NetworkBuffer.Type<BlockParticleInfo> SERIALIZER = NetworkBufferTemplate.template(
                 Particle.NETWORK_TYPE, BlockParticleInfo::particle,
                 NetworkBuffer.FLOAT, BlockParticleInfo::scaling,

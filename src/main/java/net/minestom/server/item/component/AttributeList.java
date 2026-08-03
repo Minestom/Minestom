@@ -12,7 +12,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-public record AttributeList(List<Modifier> modifiers) {
+public value record AttributeList(List<Modifier> modifiers) {
     public static final AttributeList EMPTY = new AttributeList(List.of());
 
     public static final NetworkBuffer.Type<AttributeList> NETWORK_TYPE = Modifier.NETWORK_TYPE.list(Short.MAX_VALUE)
@@ -20,7 +20,7 @@ public record AttributeList(List<Modifier> modifiers) {
     public static final Codec<AttributeList> CODEC = Modifier.CODEC.list(Short.MAX_VALUE)
             .transform(AttributeList::new, AttributeList::modifiers);
 
-    public record Modifier(
+    public value record Modifier(
             Attribute attribute,
             AttributeModifier modifier,
             EquipmentSlotGroup slot,
@@ -74,21 +74,21 @@ public record AttributeList(List<Modifier> modifiers) {
                 .unionType(Display::dataSerializer, Display::targetToType);
         Codec<Display> CODEC = Type.CODEC.unionType(Display::codec, Display::targetToType);
 
-        record Default() implements Display {
+        value record Default() implements Display {
             public static final Default INSTANCE = new Default();
 
             public static final NetworkBuffer.Type<Default> NETWORK_TYPE = NetworkBufferTemplate.template(INSTANCE);
             public static final StructCodec<Default> CODEC = StructCodec.struct(INSTANCE);
         }
 
-        record Hidden() implements Display {
+        value record Hidden() implements Display {
             public static final Hidden INSTANCE = new Hidden();
 
             public static final NetworkBuffer.Type<Hidden> NETWORK_TYPE = NetworkBufferTemplate.template(INSTANCE);
             public static final StructCodec<Hidden> CODEC = StructCodec.struct(INSTANCE);
         }
 
-        record Override(Component component) implements Display {
+        value record Override(Component component) implements Display {
             public static final NetworkBuffer.Type<Override> NETWORK_TYPE = NetworkBufferTemplate.template(
                     NetworkBuffer.COMPONENT, Override::component,
                     Override::new);
