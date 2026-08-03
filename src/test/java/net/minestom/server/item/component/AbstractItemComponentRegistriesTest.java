@@ -3,9 +3,9 @@ package net.minestom.server.item.component;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTranscoder;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
+import net.minestom.testing.RegistriesTest;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -19,9 +19,9 @@ import static net.minestom.server.codec.CodecAssertions.assertOk;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@EnvTest
+@RegistriesTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public abstract class AbstractItemComponentTest<T> {
+public abstract class AbstractItemComponentRegistriesTest<T> {
 
     protected abstract DataComponent<T> component();
 
@@ -33,8 +33,8 @@ public abstract class AbstractItemComponentTest<T> {
 
     @ParameterizedTest(name = "{0}")
     @MethodSource("directReadWriteMethodSource")
-    public void directReadWriteTest(String testName, T entry, Env env) {
-        var coder = new RegistryTranscoder<>(Transcoder.NBT, env.process());
+    public void directReadWriteTest(String testName, T entry, Registries registries) {
+        var coder = new RegistryTranscoder<>(Transcoder.NBT, registries);
         if (component().isSerialized()) {
             var written1 = assertOk(component().encode(coder, entry));
 
@@ -46,13 +46,13 @@ public abstract class AbstractItemComponentTest<T> {
         }
 
         if (component().isSynced()) {
-            var written1 = NetworkBuffer.makeArray(b -> component().write(b, entry), env.process());
+            var written1 = NetworkBuffer.makeArray(b -> component().write(b, entry), registries);
 
-            var buffer = NetworkBuffer.wrap(written1, 0, written1.length, env.process());
+            var buffer = NetworkBuffer.wrap(written1, 0, written1.length, registries);
             var read = component().read(buffer);
             assertEquals(entry, read);
 
-            var written2 = NetworkBuffer.makeArray(b -> component().write(b, entry), env.process());
+            var written2 = NetworkBuffer.makeArray(b -> component().write(b, entry), registries);
             assertArrayEquals(written1, written2);
         }
     }

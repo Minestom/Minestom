@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @EnvTest
-public class UseEntityListenerTest {
+public class UseEntityListenerIntegrationTest {
 
     private Player player;
     private Entity targetEntity;

@@ -3,8 +3,8 @@ package net.minestom.server.item.component;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.Unit;
-import net.minestom.testing.Env;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import java.util.Map;
 import static java.util.Map.entry;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class UnitTest extends AbstractItemComponentTest<Unit> {
+public class UnitTest extends AbstractItemComponentRegistriesTest<Unit> {
     // This is not a test, but it creates a compile error if the component type is changed away from Unit,
     // as a reminder that tests should be added for that new component type.
     private static final List<DataComponent<Unit>> UNIT_COMPONENTS = List.of(
@@ -38,14 +38,15 @@ public class UnitTest extends AbstractItemComponentTest<Unit> {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void ensureUnitComponentsPresent(Env env) {
+    public void ensureUnitComponentsPresent(Registries registries) {
         var fails = new ArrayList<String>();
         for (var component : DataComponent.values()) {
             if (!component.isSynced()) continue;
 
             // Try to write as a Unit and if it fails we can ignore that type
             try {
-                ((DataComponent<Unit>) component).write(NetworkBuffer.resizableBuffer(env.process()), Unit.INSTANCE);
+                ((DataComponent<Unit>) component).write(
+                        NetworkBuffer.resizableBuffer(registries), Unit.INSTANCE);
             } catch (ClassCastException | IllegalArgumentException _) {
                 continue;
             }

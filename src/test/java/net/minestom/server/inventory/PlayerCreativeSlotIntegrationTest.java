@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
-public class PlayerCreativeSlotTest {
+public class PlayerCreativeSlotIntegrationTest {
 
     @Test
     public void testCreativeSlots(Env env) {

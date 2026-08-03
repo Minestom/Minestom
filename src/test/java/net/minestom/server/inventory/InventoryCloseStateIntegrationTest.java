@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
-public class InventoryCloseStateTest {
+public class InventoryCloseStateIntegrationTest {
 
 
     @Test

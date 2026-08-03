@@ -2,13 +2,14 @@ package net.minestom.server.network;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.registry.Registries;
+import net.minestom.testing.RegistriesTest;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -29,7 +30,14 @@ import static net.minestom.server.network.NetworkBuffer.*;
 import static net.minestom.testing.TestUtils.waitUntilCleared;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class NetworkBufferTest {
+@RegistriesTest
+public class NetworkBufferRegistriesTest {
+    private static Registries registries;
+
+    @BeforeAll
+    static void bindRegistries(Registries registries) {
+        NetworkBufferRegistriesTest.registries = registries;
+    }
 
     @Test
     public void resize() {
@@ -440,8 +448,7 @@ public class NetworkBufferTest {
     }
 
     @Test
-    public void sliceRegistries() {
-        var registries = Registries.vanilla();
+    public void sliceRegistries(Registries registries) {
         var buffer = NetworkBuffer.staticBuffer(16, registries);
 
         var slice = buffer.slice(0, 16, 0, 16);
@@ -833,7 +840,7 @@ public class NetworkBufferTest {
     }
 
     static <T> void assertBufferType(NetworkBuffer.Type<T> type, @UnknownNullability T value, byte[] expected, Action<T> action) {
-        var buffer = NetworkBuffer.resizableBuffer(MinecraftServer.getRegistries());
+        var buffer = NetworkBuffer.resizableBuffer(registries);
         action.write(buffer, type, value);
         assertEquals(0, buffer.readIndex());
         if (expected != null) assertEquals(expected.length, buffer.writeIndex());
@@ -902,7 +909,7 @@ public class NetworkBufferTest {
     }
 
     static <T> void assertBufferTypeCollection(NetworkBuffer.Type<T> type, List<T> values, byte @Nullable [] expected) {
-        var buffer = NetworkBuffer.resizableBuffer(MinecraftServer.getRegistries());
+        var buffer = NetworkBuffer.resizableBuffer(registries);
         buffer.write(type.list(), values);
         assertEquals(0, buffer.readIndex());
         if (expected != null) assertEquals(expected.length, buffer.writeIndex());

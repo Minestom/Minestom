@@ -10,7 +10,7 @@ import net.minestom.server.entity.attribute.AttributeOperation;
 import java.util.List;
 import java.util.Map;
 
-public class ItemAttributeTest extends AbstractItemComponentTest<AttributeList> {
+public class ItemAttributeTest extends AbstractItemComponentRegistriesTest<AttributeList> {
     @Override
     protected DataComponent<AttributeList> component() {
         return DataComponents.ATTRIBUTE_MODIFIERS;

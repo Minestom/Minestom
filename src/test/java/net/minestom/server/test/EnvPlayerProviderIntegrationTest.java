@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 @EnvTest
-public class EnvTestPlayerProviderTest {
+public class EnvPlayerProviderIntegrationTest {
 
     public static class CustomPlayer extends Player {
         public CustomPlayer(PlayerConnection playerConnection, GameProfile gameProfile) {

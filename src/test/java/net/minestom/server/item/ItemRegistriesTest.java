@@ -6,11 +6,11 @@ import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.EntityType;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
 import net.minestom.server.item.component.EnchantmentList;
 import net.minestom.server.item.enchant.Enchantment;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
+import net.minestom.testing.RegistriesTest;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -20,10 +20,10 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@EnvTest
-public class ItemTest {
+@RegistriesTest
+public class ItemRegistriesTest {
     @Test
-    public void testFields(Env env) {
+    public void testFields() {
         var item = ItemStack.of(Material.DIAMOND_SWORD);
         assertEquals(Material.DIAMOND_SWORD, item.material(), "Material must be the same");
         assertEquals(1, item.amount(), "Default item amount must be 1");
@@ -48,7 +48,7 @@ public class ItemTest {
     }
 
     @Test
-    public void defaultBuilder(Env env) {
+    public void defaultBuilder() {
         var item = ItemStack.builder(Material.DIAMOND_SWORD).build();
         assertEquals(Material.DIAMOND_SWORD, item.material(), "Material must be the same");
         assertEquals(1, item.amount(), "Default item amount must be 1");
@@ -73,7 +73,7 @@ public class ItemTest {
     }
 
     @Test
-    public void testEquality(Env env) {
+    public void testEquality() {
         var item1 = ItemStack.of(Material.DIAMOND_SWORD);
         var item2 = ItemStack.of(Material.DIAMOND_SWORD);
         assertEquals(item1, item2);
@@ -85,7 +85,7 @@ public class ItemTest {
     }
 
     @Test
-    public void testEqualityComponents(Env env) {
+    public void testEqualityComponents() {
         var item1 = ItemStack.of(Material.MUSIC_DISC_STAL);
         var item2 = ItemStack.of(Material.MUSIC_DISC_STAL).with(DataComponents.JUKEBOX_PLAYABLE, JukeboxSong.STAL);
         assertTrue(item1.isSimilar(item2));
@@ -93,17 +93,17 @@ public class ItemTest {
 
     @Test
     @SuppressWarnings("deprecation") // deliberately keeps coverage of the deprecated API until its removal
-    public void testFromNbtLoreSpace(Env env) throws IOException {
+    public void testFromNbtLoreSpace(Registries registries) throws IOException {
         var itemStack = ItemStack.of(Material.LAPIS_BLOCK)
                 .withLore(Component.text("Hey!", NamedTextColor.RED), Component.empty(), Component.text("hello"))
                 .with(DataComponents.ITEM_MODEL, "unknown");
-        var tagOut = MinestomAdventure.tagStringIO().asString(itemStack.toItemNBT());
+        var tagOut = MinestomAdventure.tagStringIO().asString(itemStack.toItemNBT(registries));
         var tagIn = MinestomAdventure.tagStringIO().asCompound(tagOut);
-        assertEquals(itemStack, ItemStack.fromItemNBT(tagIn));
+        assertEquals(itemStack, ItemStack.fromItemNBT(tagIn, registries));
     }
 
     @Test
-    public void testImmutableLore(Env env) {
+    public void testImmutableLore() {
         List<Component> lore = new ArrayList<>();
         lore.add(Component.text("Hey!"));
         var itemStack = ItemStack.of(Material.LAPIS_BLOCK).withLore(lore);
@@ -114,7 +114,7 @@ public class ItemTest {
     }
 
     @Test
-    public void testBuilderImmutableLore(Env env) {
+    public void testBuilderImmutableLore() {
         List<Component> lore = new ArrayList<>();
         lore.add(Component.text("Hey!"));
         var itemStack = ItemStack.builder(Material.LAPIS_BLOCK).lore(lore).build();
@@ -126,15 +126,15 @@ public class ItemTest {
 
     @Test
     @SuppressWarnings("deprecation") // deliberately keeps coverage of the deprecated API until its removal
-    public void testFromNbt(Env env) {
-        var itemNbt = createItem().toItemNBT();
-        var item = ItemStack.fromItemNBT(itemNbt);
+    public void testFromNbt(Registries registries) {
+        var itemNbt = createItem().toItemNBT(registries);
+        var item = ItemStack.fromItemNBT(itemNbt, registries);
         assertEquals(createItem(), item, "Items must be equal if created from the same item nbt");
-        assertEquals(itemNbt, item.toItemNBT(), "Item nbt must be equal back");
+        assertEquals(itemNbt, item.toItemNBT(registries), "Item nbt must be equal back");
     }
 
     @Test
-    public void testBuilderReuse(Env env) {
+    public void testBuilderReuse() {
         var builder = ItemStack.builder(Material.DIAMOND);
         var item1 = builder.build();
         var item2 = builder.set(DataComponents.CUSTOM_NAME, Component.text("Name")).build();
@@ -145,7 +145,7 @@ public class ItemTest {
 
     @Test
     @SuppressWarnings("deprecation") // deliberately keeps coverage of the deprecated API until its removal
-    public void materialUpdate(Env env) {
+    public void materialUpdate(Registries registries) {
         var item1 = ItemStack.builder(Material.DIAMOND)
                 .amount(5).set(DataComponents.CUSTOM_NAME, Component.text("Name"))
                 .build();
@@ -154,8 +154,8 @@ public class ItemTest {
         assertEquals(Material.DIAMOND, item1.material());
         assertEquals(Material.GOLD_INGOT, item2.material());
 
-        var nbt1 = item1.toItemNBT().remove("id");
-        var nbt2 = item2.toItemNBT().remove("id");
+        var nbt1 = item1.toItemNBT(registries).remove("id");
+        var nbt2 = item2.toItemNBT(registries).remove("id");
         assertEquals(nbt1, nbt2);
 
         assertEquals(5, item1.amount());
@@ -174,9 +174,9 @@ public class ItemTest {
     @SuppressWarnings("removal")
     public void testEntityType() {
         var item1 = ItemStack.of(Material.DIAMOND, 1);
-        assertNull(item1.material().prototype().get(DataComponents.ENTITY_DATA));
+        assertNull(item1.get(DataComponents.ENTITY_DATA));
         var item2 = ItemStack.of(Material.CAMEL_SPAWN_EGG, 1);
-        var entityData = item2.material().prototype().get(DataComponents.ENTITY_DATA);
+        var entityData = item2.get(DataComponents.ENTITY_DATA);
         assertNotNull(entityData);
         assertEquals(EntityType.CAMEL, entityData.type());
     }

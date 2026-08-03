@@ -66,6 +66,7 @@ import net.minestom.server.recipe.RecipeBookCategory;
 import net.minestom.server.recipe.RecipeProperty;
 import net.minestom.server.recipe.display.RecipeDisplay;
 import net.minestom.server.recipe.display.SlotDisplay;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.scoreboard.Sidebar;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.statistic.StatisticCategory;
@@ -74,8 +75,7 @@ import net.minestom.server.utils.Rotation;
 import net.minestom.server.utils.WeightedList;
 import net.minestom.server.world.Difficulty;
 import net.minestom.server.world.clock.WorldClock;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
+import net.minestom.testing.RegistriesTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -91,8 +91,8 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Ensures that packet can be written and read correctly.
  */
-@EnvTest // Some packets require registries.
-public class PacketWriteReadTest {
+@RegistriesTest
+public class PacketWriteReadRegistriesTest {
     private static final Map<Class<? extends ServerPacket>, Set<ServerPacket>> SERVER_PACKETS = new HashMap<>();
     private static final Map<Class<? extends ClientPacket>, Set<ClientPacket>> CLIENT_PACKETS = new HashMap<>();
 
@@ -120,7 +120,7 @@ public class PacketWriteReadTest {
     }
 
     @BeforeAll
-    public static void setupServer(Env env) {
+    public static void setupServer(Registries registries) {
         // Handshake
         // Status
         addServerPackets(new ResponsePacket(new JsonObject().toString()));
@@ -426,7 +426,8 @@ public class PacketWriteReadTest {
         addServerPackets(new ChunkDataPacket(0, 0, new ChunkData(Map.of(), new byte[0], Map.of()), new LightData(new BitSet(), new BitSet(), new BitSet(), new BitSet(), List.of(), List.of())));
         addServerPackets(new ChunkBiomesPacket(List.of()), new ChunkBiomesPacket(List.of(new ChunkBiomesPacket.ChunkBiomeData(0, 0, new byte[0]))));
         addServerPackets(new CustomChatCompletionPacket(CustomChatCompletionPacket.Action.ADD, List.of("entry1", "entry2")));
-        addServerPackets(new DamageEventPacket(5, env.process().damageType().getId(DamageType.ARROW), 2, 3, VEC), new DamageEventPacket(50, env.process().damageType().getId(DamageType.WITHER), 0, 0, null));
+        addServerPackets(new DamageEventPacket(5, registries.damageType().getId(DamageType.ARROW), 2, 3, VEC),
+                new DamageEventPacket(50, registries.damageType().getId(DamageType.WITHER), 0, 0, null));
         addServerPackets(new DeclareCommandsPacket(List.of(), 0));
         addServerPackets(new BundlePacket());
         addServerPackets(new DebugBlockValuePacket(Vec.ONE, new DebugSubscription.Update<>(DebugSubscription.BEE_HIVES, new DebugHiveInfo(Block.BEEHIVE, 1, 0, true))));
@@ -447,12 +448,14 @@ public class PacketWriteReadTest {
         addServerPackets(new TestInstanceBlockStatus(Component.text("Minestom is cool"), null), new TestInstanceBlockStatus(Component.text("Where is season 5 william?"), BLOCK_VEC));
         addServerPackets(new EntityEffectPacket(0, new Potion(PotionEffect.ABSORPTION, 1, 150)));
         addServerPackets(new TrackedWaypointPacket(TrackedWaypointPacket.Operation.UNTRACK, new TrackedWaypointPacket.Waypoint(Either.right("test"), TrackedWaypointPacket.Icon.DEFAULT, new TrackedWaypointPacket.Target.Empty())));
-        addServerPackets(new GameRuleValuesPacket(Map.of()), new GameRuleValuesPacket(Map.of(Objects.requireNonNull(GameRule.staticRegistry().getKey(GameRule.ADVANCE_TIME)), "false", Objects.requireNonNull(GameRule.staticRegistry().getKey(GameRule.KEEP_INVENTORY)), "false")));
+        addServerPackets(new GameRuleValuesPacket(Map.of()), new GameRuleValuesPacket(Map.of(
+                Objects.requireNonNull(registries.gameRule().getKey(GameRule.ADVANCE_TIME)), "false",
+                Objects.requireNonNull(registries.gameRule().getKey(GameRule.KEEP_INVENTORY)), "false")));
         addServerPackets(new LowDiskSpaceWarningPacket());
     }
 
     @BeforeAll
-    public static void setupClient(Env ignored) {
+    public static void setupClient(Registries registries) {
         // Handshake
         addClientPackets(
                 new ClientHandshakePacket(755, "localhost", 25565, ClientHandshakePacket.Intent.LOGIN),
@@ -635,12 +638,14 @@ public class PacketWriteReadTest {
         addClientPackets(new ClientRecipeBookSeenRecipePacket(0), new ClientRecipeBookSeenRecipePacket(100), new ClientRecipeBookSeenRecipePacket(Integer.MAX_VALUE));
         addClientPackets(new ClientSetTestBlockPacket(Vec.ZERO, ClientSetTestBlockPacket.TestBlockMode.START, "test started"), new ClientSetTestBlockPacket(Vec.ONE, ClientSetTestBlockPacket.TestBlockMode.FAIL, "test failed"), new ClientSetTestBlockPacket(Vec.ZERO, ClientSetTestBlockPacket.TestBlockMode.ACCEPT, ""));
         addClientPackets(new ClientTestInstanceBlockActionPacket(Vec.ZERO, ClientTestInstanceBlockActionPacket.Action.INIT, new ClientTestInstanceBlockActionPacket.Data("mytest", new Vec(10, 10, 10), 0, false, ClientTestInstanceBlockActionPacket.Status.CLEARED, null)), new ClientTestInstanceBlockActionPacket(Vec.ONE, ClientTestInstanceBlockActionPacket.Action.RUN, new ClientTestInstanceBlockActionPacket.Data(null, new Vec(5, 5, 5), 1, true, ClientTestInstanceBlockActionPacket.Status.RUNNING, Component.text("Error!"))));
-        addClientPackets(new ClientSetGameRulesPacket(List.of()), new ClientSetGameRulesPacket(List.of(new ClientSetGameRulesPacket.Entry(Objects.requireNonNull(GameRule.staticRegistry().getKey(GameRule.MOB_DROPS)), "false"))));
+        addClientPackets(new ClientSetGameRulesPacket(List.of()), new ClientSetGameRulesPacket(List.of(
+                new ClientSetGameRulesPacket.Entry(
+                        Objects.requireNonNull(registries.gameRule().getKey(GameRule.MOB_DROPS)), "false"))));
     }
 
-    private static <T> void testPacket(NetworkBuffer.Type<T> networkType, T packet, Env env) {
-        byte[] bytes = NetworkBuffer.makeArray(networkType, packet, env.process());
-        var buffer = NetworkBuffer.wrap(bytes, 0, bytes.length, env.process()); // Requires for serialization of some packets
+    private static <T> void testPacket(NetworkBuffer.Type<T> networkType, T packet, Registries registries) {
+        byte[] bytes = NetworkBuffer.makeArray(networkType, packet, registries);
+        var buffer = NetworkBuffer.wrap(bytes, 0, bytes.length, registries);
         var createdPacket = buffer.read(networkType);
         assertEquals(packet, createdPacket);
     }
@@ -679,13 +684,13 @@ public class PacketWriteReadTest {
 
     @ParameterizedTest(name = "Server Packet Test: {1}")
     @MethodSource("serverPacketArguments")
-    void serverPacket(NetworkBuffer.Type<ServerPacket> serializer, ServerPacket packet, Env env) {
-        testPacket(serializer, packet, env);
+    void serverPacket(NetworkBuffer.Type<ServerPacket> serializer, ServerPacket packet, Registries registries) {
+        testPacket(serializer, packet, registries);
     }
 
     @ParameterizedTest(name = "Client Packet Test: {1}")
     @MethodSource("clientPacketArguments")
-    void clientPacket(NetworkBuffer.Type<ClientPacket> serializer, ClientPacket packet, Env env) {
-        testPacket(serializer, packet, env);
+    void clientPacket(NetworkBuffer.Type<ClientPacket> serializer, ClientPacket packet, Registries registries) {
+        testPacket(serializer, packet, registries);
     }
 }

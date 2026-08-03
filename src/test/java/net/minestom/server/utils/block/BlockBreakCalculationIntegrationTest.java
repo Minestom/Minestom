@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @EnvTest
-public class BlockBreakCalculationTest {
+public class BlockBreakCalculationIntegrationTest {
     private Player player;
     private Runnable assertInstabreak;
     private Runnable assertNotQuiteInstabreak;

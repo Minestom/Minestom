@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 @EnvTest
-public class ClosestEntityTargetTest {
+public class ClosestEntityTargetIntegrationTest {
 
     @Test
     public void validFindTarget(Env env) {

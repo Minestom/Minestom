@@ -2,18 +2,16 @@ package net.minestom.server.entity;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registries;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
+import net.minestom.testing.RegistriesTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@EnvTest
-public class MetadataIntegrationTest {
+@RegistriesTest
+public class MetadataRegistriesTest {
 
     @Test
-    public void registeredTypesRoundTripDefaultEntries(Env env) {
-        final Registries registries = env.process();
+    public void registeredTypesRoundTripDefaultEntries(Registries registries) {
         for (int id = 0; id < Metadata.typeCount(); id++) {
             final Metadata.Type<?> type = Metadata.typeById(id);
             assertNotNull(type, "Missing metadata type definition for id " + id);

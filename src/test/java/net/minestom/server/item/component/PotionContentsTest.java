@@ -16,7 +16,7 @@ import java.util.Map;
 import static net.minestom.server.codec.CodecAssertions.assertOk;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class PotionContentsTest extends AbstractItemComponentTest<PotionContents> {
+public class PotionContentsTest extends AbstractItemComponentRegistriesTest<PotionContents> {
 
     @Override
     protected DataComponent<PotionContents> component() {

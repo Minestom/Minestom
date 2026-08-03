@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @EnvTest
-public class WeatherTest {
+public class WeatherIntegrationTest {
     @Test
     public void weatherTest(Env env) {
         var instance = env.createFlatInstance();

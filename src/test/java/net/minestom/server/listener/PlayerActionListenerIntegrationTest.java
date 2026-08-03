@@ -13,7 +13,7 @@ import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 @EnvTest
-public class PlayerActionListenerTest {
+public class PlayerActionListenerIntegrationTest {
 
     @Test
     public void testStabInvalidWeapon(Env env) {

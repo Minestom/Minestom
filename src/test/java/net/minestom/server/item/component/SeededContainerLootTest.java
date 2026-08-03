@@ -6,7 +6,7 @@ import net.minestom.server.component.DataComponents;
 import java.util.List;
 import java.util.Map;
 
-public class SeededContainerLootTest extends AbstractItemComponentTest<SeededContainerLoot> {
+public class SeededContainerLootTest extends AbstractItemComponentRegistriesTest<SeededContainerLoot> {
 
     @Override
     protected DataComponent<SeededContainerLoot> component() {

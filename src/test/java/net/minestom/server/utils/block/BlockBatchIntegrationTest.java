@@ -14,7 +14,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 @EnvTest
-public class BlockBatchTest {
+public class BlockBatchIntegrationTest {
 
     @Test
     public void inverseConsumerNotNull(Env env) {

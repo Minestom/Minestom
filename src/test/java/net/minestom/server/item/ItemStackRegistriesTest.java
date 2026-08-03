@@ -1,8 +1,7 @@
 package net.minestom.server.item;
 
 import net.minestom.server.component.DataComponents;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
+import net.minestom.testing.RegistriesTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,11 +10,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@EnvTest
-public class ItemStackTest {
+@RegistriesTest
+public class ItemStackRegistriesTest {
 
     @Test
-    void resetRevertsToMaterialDefault(Env env) {
+    void resetRevertsToMaterialDefault() {
         ItemStack apple = ItemStack.of(Material.APPLE).without(DataComponents.FOOD);
 
         assertFalse(apple.has(DataComponents.FOOD));
@@ -24,7 +23,7 @@ public class ItemStackTest {
     }
 
     @Test
-    void componentsReturnsResolvedView(Env env) {
+    void componentsReturnsResolvedView() {
         ItemStack item = ItemStack.of(Material.APPLE)
                 .without(DataComponents.FOOD)
                 .with(DataComponents.REPAIR_COST, 5);

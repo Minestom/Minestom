@@ -10,8 +10,7 @@ import net.minestom.server.component.DataComponent;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTranscoder;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
+import net.minestom.testing.RegistriesTest;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -25,8 +24,8 @@ import static java.util.Map.entry;
 import static net.minestom.server.codec.CodecAssertions.assertOk;
 import static org.junit.jupiter.api.Assertions.*;
 
-@EnvTest
-public class ItemComponentReadWriteIntegrationTest {
+@RegistriesTest
+public class ItemComponentReadWriteRegistriesTest {
     private static final Gson GSON = new Gson();
 
     // This test will go through all of the default components present on vanilla items and make sure that we are
@@ -41,7 +40,7 @@ public class ItemComponentReadWriteIntegrationTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testReadWrite(Env env) throws IOException {
+    public void testReadWrite(Registries registries) throws IOException {
         var componentEntries = new ArrayList<>(EXTRA_CASES.entrySet());
         try (InputStream is = MinestomData.resource("item.json")) {
             Objects.requireNonNull(is, "item.json not found");
@@ -57,7 +56,7 @@ public class ItemComponentReadWriteIntegrationTest {
         assertAll(componentEntries.stream().map(entry -> () -> {
             var component = DataComponent.fromKey(entry.getKey());
             assertNotNull(component, "Component not found: " + entry.getKey());
-            readWriteTestImpl((DataComponent<Object>) component, entry.getValue(), env.process());
+            readWriteTestImpl((DataComponent<Object>) component, entry.getValue(), registries);
         }));
     }
 

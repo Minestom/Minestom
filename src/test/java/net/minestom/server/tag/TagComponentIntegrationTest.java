@@ -1,12 +1,15 @@
 package net.minestom.server.tag;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class TagComponentTest {
+@EnvTest
+public class TagComponentIntegrationTest {
 
     @Test
     public void get() {
@@ -25,7 +28,7 @@ public class TagComponentTest {
     }
 
     @Test
-    public void invalidTag() {
+    public void invalidTag(Env env) {
         var tag = Tag.Component("entry");
         var handler = TagHandler.newHandler();
         handler.setTag(Tag.Integer("entry"), 1);
@@ -33,7 +36,7 @@ public class TagComponentTest {
     }
 
     @Test
-    public void nbtFallback() {
+    public void nbtFallback(Env env) {
         var component = Component.text("Hey");
         var tag = Tag.Component("component");
         var handler = TagHandler.newHandler();

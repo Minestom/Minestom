@@ -2,6 +2,8 @@ package net.minestom.server.tag;
 
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import java.lang.ref.WeakReference;
@@ -11,7 +13,8 @@ import static net.minestom.testing.TestUtils.waitUntilCleared;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class TagItemTest {
+@EnvTest
+public class TagItemIntegrationTest {
 
     @Test
     public void get() {
@@ -74,7 +77,7 @@ public class TagItemTest {
 
     @Test
     @SuppressWarnings("deprecation") // deliberately keeps coverage of the deprecated API until its removal
-    public void differentTagInvalidation() {
+    public void differentTagInvalidation(Env env) {
         var item = ItemStack.of(Material.DIAMOND);
         var item2 = ItemStack.of(Material.DIAMOND, 2);
         var handler = TagHandler.newHandler();
@@ -96,7 +99,7 @@ public class TagItemTest {
     }
 
     @Test
-    public void snbt() {
+    public void snbt(Env env) {
         var handler = TagHandler.newHandler();
         var tag = Tag.ItemStack("item");
         handler.setTag(tag, ItemStack.of(Material.DIAMOND));

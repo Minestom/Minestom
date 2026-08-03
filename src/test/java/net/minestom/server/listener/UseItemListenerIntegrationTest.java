@@ -19,7 +19,7 @@ import java.util.function.UnaryOperator;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
-public class TestUseItemListenerIntegration {
+public class UseItemListenerIntegrationTest {
 
     @Test
     void useItemNonSpecial(Env env) {
