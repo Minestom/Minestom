@@ -16,7 +16,7 @@ import static java.util.Map.entry;
 import static net.minestom.server.codec.CodecAssertions.assertOk;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ColorTest extends AbstractItemComponentTest<RGBLike> {
+public class ColorTest extends AbstractItemComponentRegistriesTest<RGBLike> {
     // This is not a test, but it creates a compile error if the component type is changed away from Integer,
     // as a reminder that tests should be added for that new component type.
     private static final List<DataComponent<RGBLike>> SHARED_COMPONENTS = List.of(

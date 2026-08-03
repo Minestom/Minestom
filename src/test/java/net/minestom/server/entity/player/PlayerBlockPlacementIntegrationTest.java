@@ -6,6 +6,7 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.instance.block.BlockKeys;
 import net.minestom.server.instance.block.predicate.BlockPredicate;
 import net.minestom.server.instance.block.predicate.PropertiesPredicate;
 import net.minestom.server.item.ItemStack;
@@ -54,7 +55,7 @@ public class PlayerBlockPlacementIntegrationTest {
         return Stream.of(
                 Arguments.of(Block.ACACIA_STAIRS.withProperty("facing", "south"), new BlockPredicates(new BlockPredicate(Block.ACACIA_STAIRS))),
                 Arguments.of(Block.ACACIA_STAIRS.withProperty("facing", "south"),
-                        new BlockPredicates(new BlockPredicate(RegistryTag.direct(Block.ACACIA_STAIRS.registryKey()),
+                        new BlockPredicates(new BlockPredicate(RegistryTag.direct(BlockKeys.ACACIA_STAIRS),
                                 PropertiesPredicate.exact("facing", "south"), null))),
                 Arguments.of(Block.AMETHYST_BLOCK, new BlockPredicates(new BlockPredicate(Block.AMETHYST_BLOCK)))
         );

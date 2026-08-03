@@ -18,7 +18,7 @@ import java.util.Map;
 import static java.util.Map.entry;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CustomDataTest extends AbstractItemComponentTest<CustomData> {
+public class CustomDataTest extends AbstractItemComponentRegistriesTest<CustomData> {
     // This is not a test, but it creates a compile error if the component type is changed away,
     // as a reminder that tests should be added for that new component type.
     private static final List<DataComponent<CustomData>> SHARED_COMPONENTS = List.of(

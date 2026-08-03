@@ -8,7 +8,7 @@ import java.util.Map;
 
 import static java.util.Map.entry;
 
-public class DebugStickStateTest extends AbstractItemComponentTest<DebugStickState> {
+public class DebugStickStateTest extends AbstractItemComponentRegistriesTest<DebugStickState> {
 
     @Override
     protected DataComponent<DebugStickState> component() {

@@ -1,13 +1,11 @@
 package net.minestom.server.command;
 
 import net.minestom.server.command.builder.Command;
-import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import static net.minestom.server.command.builder.arguments.ArgumentType.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@EnvTest
 public class CommandSuggestionSubcommandTest {
 
     /**
