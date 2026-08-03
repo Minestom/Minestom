@@ -3,6 +3,10 @@ package net.minestom.server.network;
 import net.minestom.server.network.packet.PacketVanilla;
 import net.minestom.server.network.packet.PacketWriting;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
@@ -12,7 +16,13 @@ import static net.minestom.server.network.NetworkBuffer.STRING;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-public class SocketWriteTest {
+@EnvTest
+public class SocketWriteIntegrationTest {
+
+    @BeforeAll
+    public static void setup(Env env) { // PACKET_POOL
+        Assertions.assertNotNull(env.process().registries());
+    }
 
     record IntPacket(int value) implements ServerPacket.Play {
         public static final NetworkBuffer.Type<IntPacket> SERIALIZER = NetworkBufferTemplate.template(

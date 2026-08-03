@@ -6,6 +6,10 @@ import net.minestom.server.network.packet.PacketWriting;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.common.ClientPluginMessagePacket;
 import net.minestom.server.registry.Registries;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -15,7 +19,13 @@ import java.util.zip.DataFormatException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SocketReadTest {
+@EnvTest
+public class SocketReadIntegrationTest {
+
+    @BeforeAll
+    public static void setup(Env env) { // PACKET_POOL
+        Assertions.assertNotNull(env.process().registries());
+    }
 
     @ParameterizedTest
     @ValueSource(booleans = {false, true})
