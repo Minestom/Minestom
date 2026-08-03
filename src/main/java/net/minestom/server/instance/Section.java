@@ -8,15 +8,6 @@ public record Section(Palette blockPalette, Palette biomePalette, Light skyLight
         this(blockPalette, biomePalette, Light.sky(), Light.block());
     }
 
-    public Section() {
-        this(Palette.blocks(), Palette.biomes());
-    }
-
-    public void clear() {
-        this.blockPalette.fill(0);
-        this.biomePalette.fill(0);
-    }
-
     public void invalidate() {
         this.skyLight.invalidate();
         this.blockLight.invalidate();

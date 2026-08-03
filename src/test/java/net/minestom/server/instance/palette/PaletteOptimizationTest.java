@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PaletteOptimizationTest {
@@ -41,6 +43,38 @@ public class PaletteOptimizationTest {
         paletteEqualsOptimized(palette);
         palette.setAll((_, _, _) -> 0);
         paletteEqualsOptimized(palette);
+    }
+
+    @Test
+    public void sizeOptimizationKeepsDirectPastIndirectCapacity() {
+        var palette = createPalette();
+        palette.setAll((x, y, z) -> (x | z << 4 | y << 8) % 300);
+        assertEquals(Palette.BLOCK_PALETTE_DIRECT_BITS, palette.bitsPerEntry());
+        var optimized = (PaletteImpl) optimized(palette, Palette.Optimization.SIZE);
+        assertEquals(Palette.BLOCK_PALETTE_DIRECT_BITS, optimized.bitsPerEntry);
+        assertNull(optimized.table);
+        for (int y = 0; y < 16; y++) {
+            for (int z = 0; z < 16; z++) {
+                for (int x = 0; x < 16; x++) {
+                    assertEquals((x | z << 4 | y << 8) % 300, optimized.get(x, y, z),
+                            "Mismatch at (" + x + "," + y + "," + z + ")");
+                }
+            }
+        }
+    }
+
+    @Test
+    public void sizeOptimizationCollapsesUniformDirectToSingle() {
+        var palette = createPalette();
+        palette.setAll((x, _, _) -> x & 1);
+        assertEquals(Palette.BLOCK_PALETTE_DIRECT_BITS, palette.bitsPerEntry());
+        palette.replace(1, 0);
+        assertEquals(Palette.BLOCK_PALETTE_DIRECT_BITS, palette.bitsPerEntry());
+        var optimized = (PaletteImpl) optimized(palette, Palette.Optimization.SIZE);
+        assertEquals(0, optimized.bitsPerEntry);
+        assertEquals(0, optimized.singleValue);
+        assertNull(optimized.values);
+        assertNull(optimized.table);
     }
 
     PaletteImpl createPalette() {

@@ -9,6 +9,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.generator.GeneratorImpl;
 import net.minestom.server.instance.heightmap.Heightmap;
+import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.PacketReading;
@@ -242,7 +243,7 @@ public final class Scratch {
         private static FlatWorld create(Registries registries) {
             GeneratorImpl.GenSection[] genSections = new GeneratorImpl.GenSection[SECTION_COUNT];
             for (int i = 0; i < SECTION_COUNT; i++) {
-                Section section = new Section();
+                Section section = new Section(Palette.blocks(), Palette.biomes(registries.biome().size()));
                 genSections[i] = new GeneratorImpl.GenSection(section.blockPalette(), section.biomePalette());
             }
             GENERATOR.generate(GeneratorImpl.chunk(registries.biome(), genSections, 0, MIN_Y / 16, 0));
@@ -250,10 +251,11 @@ public final class Scratch {
             final NetworkBuffer.Type<ChunkData.Section> serializer = ChunkData.Section.networkType(registries.biome().size());
             byte[] data = NetworkBuffer.makeArray(buffer -> {
                 for (GeneratorImpl.GenSection section : genSections) {
-                    final int blockCount = section.blocks().count();
+                    final int blockCount = section.blocks().count(value -> !Objects.requireNonNull(Block.fromStateId(value)).air());
+                    final int fluidCount = section.blocks().count(value -> Objects.requireNonNull(Block.fromStateId(value)).fluid());
                     buffer.write(serializer, new ChunkData.Section(
                             (short) blockCount,
-                            (short) (blockCount > 0 ? 1 : 0),  // fluid count (26.1)
+                            (short) fluidCount,
                             section.blocks(), section.biomes()
                     ));
                 }

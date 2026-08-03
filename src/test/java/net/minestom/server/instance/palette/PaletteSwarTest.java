@@ -37,13 +37,51 @@ public class PaletteSwarTest {
             final int range = 1 << bits;
             final int size = random.nextInt(1, 5000);
             // Bias towards small ranges so both present/absent outcomes are common.
-            final int effectiveRange = Math.max(2, Math.min(range, random.nextInt(2, 9)));
+            final int effectiveRange = Math.clamp(range, 2, random.nextInt(2, 9));
             final int[] indices = randomIndices(random, size, effectiveRange);
             final long[] packed = Palettes.pack(indices, bits);
             final int target = random.nextInt(0, range);
             assertEquals(naiveAny(indices, target), Palettes.anyEquals(bits, packed, size, target),
                     () -> "any bits=" + bits + " size=" + size + " target=" + target);
         }
+    }
+
+    @Test
+    public void allEqualsMatchesNaive() {
+        final Random random = new Random(24681357);
+        for (int it = 0; it < ITERATIONS; it++) {
+            final int bits = random.nextInt(1, 17);
+            final int range = 1 << bits;
+            final int size = random.nextInt(1, 5000);
+            final int target = random.nextInt(0, range);
+            // Bias towards uniform arrays so the all-true outcome is common; a flipped lane at a
+            // random position exercises early exits in every long.
+            final int[] indices = new int[size];
+            Arrays.fill(indices, target);
+            if (random.nextBoolean()) indices[random.nextInt(size)] ^= 1 + random.nextInt(range - 1 > 0 ? range - 1 : 1);
+            final long[] packed = Palettes.pack(indices, bits);
+            boolean expected = true;
+            for (final int index : indices) {
+                if (index != target) {
+                    expected = false;
+                    break;
+                }
+            }
+            assertEquals(expected, Palettes.allEquals(bits, packed, size, target & ((1 << bits) - 1)),
+                    () -> "all bits=" + bits + " size=" + size + " target=" + target);
+        }
+    }
+
+    @Test
+    public void allEqualsIgnoresLanesPastTheEnd() {
+        final int bits = 6;
+        final int size = 10 + 3; // one full long of ten lanes plus a partial long
+        final int[] indices = new int[size];
+        Arrays.fill(indices, 7);
+        final long[] packed = Palettes.pack(indices, bits);
+        packed[packed.length - 1] |= -1L << (3 * bits);
+        assertTrue(Palettes.allEquals(bits, packed, size, 7));
+        assertFalse(Palettes.allEquals(bits, packed, size, 8));
     }
 
     @Test

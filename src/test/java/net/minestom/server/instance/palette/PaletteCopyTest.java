@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Random;
 
 import static net.minestom.server.instance.palette.PaletteAssertions.assertAllEquals;
+import static net.minestom.server.instance.palette.PaletteAssertions.assertCountsMatchContent;
+import static net.minestom.server.instance.palette.PaletteAssertions.nonZeroCount;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -27,7 +29,7 @@ public class PaletteCopyTest {
 
             target.copyFrom(source);
 
-            assertEquals(0, target.count());
+            assertEquals(0, nonZeroCount(target));
             assertEquals(0, target.bitsPerEntry());
             assertTrue(target.compare(source));
         }
@@ -41,7 +43,7 @@ public class PaletteCopyTest {
             source.fill(42);
             target.copyFrom(source);
 
-            assertEquals(source.count(), target.count());
+            assertEquals(nonZeroCount(source), nonZeroCount(target));
             assertEquals(source.bitsPerEntry(), target.bitsPerEntry());
             assertTrue(target.compare(source));
 
@@ -62,7 +64,7 @@ public class PaletteCopyTest {
 
             target.copyFrom(source);
 
-            assertEquals(source.count(), target.count());
+            assertEquals(nonZeroCount(source), nonZeroCount(target));
             assertEquals(source.bitsPerEntry(), target.bitsPerEntry());
             assertTrue(target.compare(source));
 
@@ -131,8 +133,8 @@ public class PaletteCopyTest {
         @Test
         @DisplayName("Copy between biome palettes")
         void copyBetweenBiomePalettes() {
-            Palette source = Palette.biomes();
-            Palette target = Palette.biomes();
+            Palette source = Palette.biomes(64);
+            Palette target = Palette.biomes(64);
 
             // Set up source with biome data
             source.set(0, 0, 0, 1); // Plains
@@ -148,6 +150,25 @@ public class PaletteCopyTest {
             assertEquals(3, target.get(2, 2, 2));
             assertEquals(4, target.get(3, 3, 3));
         }
+
+        @Test
+        @DisplayName("Copy from single value source with different config collapses to single")
+        void copyFromSingleSourceWithDifferentConfigCollapsesToSingle() {
+            Palette source = Palette.empty(16, 1, 5, 15);
+            Palette target = Palette.blocks();
+
+            source.fill(7);
+            target.set(0, 0, 0, 1);
+            target.set(1, 0, 0, 2);
+            assertEquals(4, target.bitsPerEntry());
+
+            target.copyFrom(source);
+
+            assertEquals(0, target.bitsPerEntry());
+            assertNull(((PaletteImpl) target).values);
+            assertAllEquals(7, target);
+            assertTrue(target.compare(source));
+        }
     }
 
     @Nested
@@ -158,7 +179,7 @@ public class PaletteCopyTest {
         @DisplayName("Copy from palette with dimension mismatch throws exception")
         void copyDimensionMismatchThrowsException() {
             Palette blockPalette = Palette.blocks(); // 16x16x16
-            Palette biomePalette = Palette.biomes();  // 4x4x4
+            Palette biomePalette = Palette.biomes(64);  // 4x4x4
 
             IllegalArgumentException exception = assertThrows(
                     IllegalArgumentException.class,
@@ -166,38 +187,6 @@ public class PaletteCopyTest {
             );
 
             assertTrue(exception.getMessage().contains("dimension"));
-        }
-
-        @Test
-        @DisplayName("Copy from zero bits per entry palette")
-        void copyFromZeroBitsPerEntry() {
-            Palette source = Palette.blocks();
-            Palette target = Palette.blocks();
-
-            // Source has zero bits per entry (single value)
-            assertEquals(0, source.bitsPerEntry());
-
-            target.copyFrom(source);
-
-            assertEquals(0, target.bitsPerEntry());
-            assertEquals(0, target.count());
-            assertTrue(target.compare(source));
-        }
-
-        @Test
-        @DisplayName("Copy from palette with zero count")
-        void copyFromZeroCount() {
-            Palette source = Palette.blocks();
-            Palette target = Palette.blocks();
-
-            // Ensure source has zero count
-            assertEquals(0, source.count());
-
-            target.copyFrom(source);
-
-            assertEquals(0, target.count());
-            assertEquals(0, target.bitsPerEntry());
-            assertTrue(target.compare(source));
         }
 
         @Test
@@ -264,12 +253,12 @@ public class PaletteCopyTest {
                 source.set(x, y, z, value);
             }
 
-            int originalCount = source.count();
+            int originalCount = nonZeroCount(source);
             int originalBitsPerEntry = source.bitsPerEntry();
 
             target.copyFrom(source);
 
-            assertEquals(originalCount, target.count());
+            assertEquals(originalCount, nonZeroCount(target));
             assertEquals(originalBitsPerEntry, target.bitsPerEntry());
             assertTrue(target.compare(source));
 
@@ -340,12 +329,12 @@ public class PaletteCopyTest {
                 }
             }
 
-            assertEquals(4096, source.count()); // 16^3 = 4096
+            assertEquals(4096, nonZeroCount(source)); // 16^3 = 4096
 
             target.copyFrom(source);
 
             assertTrue(target.compare(source));
-            assertEquals(4096, target.count());
+            assertEquals(4096, nonZeroCount(target));
 
             // Verify all values are preserved
             value = 1;
@@ -369,12 +358,12 @@ public class PaletteCopyTest {
             source.set(7, 8, 9, 200);
             source.set(15, 15, 15, 300);
 
-            assertEquals(3, source.count());
+            assertEquals(3, nonZeroCount(source));
 
             target.copyFrom(source);
 
             assertTrue(target.compare(source));
-            assertEquals(3, target.count());
+            assertEquals(3, nonZeroCount(target));
             assertEquals(100, target.get(0, 0, 0));
             assertEquals(200, target.get(7, 8, 9));
             assertEquals(300, target.get(15, 15, 15));
@@ -433,6 +422,275 @@ public class PaletteCopyTest {
             target.copyFrom(source);
             assertTrue(target.compare(source));
             assertTrue(target.compare(backup));
+        }
+    }
+
+    @Nested
+    @DisplayName("Offset Copy Operations")
+    class OffsetCopyOperations {
+
+        @Test
+        @DisplayName("Offset copy from single value source")
+        void offsetCopyFromSingleValueSource() {
+            Palette source = Palette.blocks();
+            Palette target = Palette.blocks();
+
+            source.fill(7);
+            target.copyFrom(source, 1, 1, 1);
+
+            for (int x = 0; x < 16; x++) {
+                for (int y = 0; y < 16; y++) {
+                    for (int z = 0; z < 16; z++) {
+                        final int expected = x >= 1 && y >= 1 && z >= 1 ? 7 : 0;
+                        assertEquals(expected, target.get(x, y, z),
+                                String.format("Mismatch at (%d, %d, %d)", x, y, z));
+                    }
+                }
+            }
+            assertCountsMatchContent(target);
+        }
+
+        @Test
+        @DisplayName("Offset copy from direct source")
+        void offsetCopyFromDirectSource() {
+            Palette source = Palette.blocks();
+            Palette target = Palette.blocks();
+
+            source.setAll((x, y, z) -> x | z << 4 | y << 8);
+            assertEquals(15, source.bitsPerEntry());
+
+            target.copyFrom(source, 1, 2, 3);
+
+            for (int x = 0; x < 16; x++) {
+                for (int y = 0; y < 16; y++) {
+                    for (int z = 0; z < 16; z++) {
+                        final int expected = x >= 1 && y >= 2 && z >= 3
+                                ? (x - 1) | (z - 3) << 4 | (y - 2) << 8
+                                : 0;
+                        assertEquals(expected, target.get(x, y, z),
+                                String.format("Mismatch at (%d, %d, %d)", x, y, z));
+                    }
+                }
+            }
+            assertCountsMatchContent(target);
+        }
+
+        @Test
+        @DisplayName("Offset self copy falls back to per-entry copy")
+        void offsetSelfCopyFallsBackToPerEntryCopy() {
+            Palette palette = Palette.blocks();
+            palette.setAll((x, _, _) -> x + 1);
+            palette.optimize(Palette.Optimization.SIZE);
+            assertNotNull(((PaletteImpl) palette).table);
+
+            // Negative offset only: the per-entry loop ascends, so a positive offset
+            // self copy would read cells it has already overwritten.
+            palette.copyFrom(palette, -1, 0, 0);
+
+            for (int x = 0; x < 16; x++) {
+                for (int y = 0; y < 16; y++) {
+                    for (int z = 0; z < 16; z++) {
+                        final int expected = x < 15 ? x + 2 : 16;
+                        assertEquals(expected, palette.get(x, y, z),
+                                String.format("Mismatch at (%d, %d, %d)", x, y, z));
+                    }
+                }
+            }
+            assertCountsMatchContent(palette);
+        }
+
+        @Test
+        @DisplayName("Offset copy into direct target")
+        void offsetCopyIntoDirectTarget() {
+            Palette source = Palette.blocks();
+            Palette target = Palette.blocks();
+
+            source.set(0, 0, 0, 500);
+            source.set(1, 1, 1, 600);
+            source.set(2, 3, 4, 700);
+            assertNotNull(((PaletteImpl) source).table);
+            target.setAll((x, y, z) -> x | z << 4 | y << 8);
+            assertEquals(15, target.bitsPerEntry());
+            assertNull(((PaletteImpl) target).table);
+
+            target.copyFrom(source, 1, 1, 1);
+
+            assertEquals(15, target.bitsPerEntry());
+            assertNull(((PaletteImpl) target).table);
+            for (int x = 0; x < 16; x++) {
+                for (int y = 0; y < 16; y++) {
+                    for (int z = 0; z < 16; z++) {
+                        final int expected = x >= 1 && y >= 1 && z >= 1
+                                ? source.get(x - 1, y - 1, z - 1)
+                                : x | z << 4 | y << 8;
+                        assertEquals(expected, target.get(x, y, z),
+                                String.format("Mismatch at (%d, %d, %d)", x, y, z));
+                    }
+                }
+            }
+            assertCountsMatchContent(target);
+        }
+
+        @Test
+        @DisplayName("Offset copy grows target table mid-copy")
+        void offsetCopyGrowsTargetTableMidCopy() {
+            Palette source = Palette.blocks();
+            Palette target = Palette.blocks();
+
+            for (int i = 0; i < 6; i++) source.set(i, 0, 0, 100 + i);
+            target.setAll((x, y, _) -> (x % 4) + (y % 4) * 4 + 1);
+            target.optimize(Palette.Optimization.SIZE);
+            assertEquals(4, target.bitsPerEntry());
+
+            target.copyFrom(source, 1, 1, 1);
+
+            assertEquals(5, target.bitsPerEntry());
+            for (int x = 0; x < 16; x++) {
+                for (int y = 0; y < 16; y++) {
+                    for (int z = 0; z < 16; z++) {
+                        final int expected = x >= 1 && y >= 1 && z >= 1
+                                ? source.get(x - 1, y - 1, z - 1)
+                                : (x % 4) + (y % 4) * 4 + 1;
+                        assertEquals(expected, target.get(x, y, z),
+                                String.format("Mismatch at (%d, %d, %d)", x, y, z));
+                    }
+                }
+            }
+            assertCountsMatchContent(target);
+        }
+
+        @Test
+        @DisplayName("Offset copy flips target to direct mid-copy")
+        void offsetCopyFlipsTargetToDirectMidCopy() {
+            Palette source = Palette.blocks();
+            Palette target = Palette.blocks();
+
+            source.setAll((x, y, z) -> 1000 + (x + z * 16 + y * 256) % 20);
+            source.optimize(Palette.Optimization.SIZE);
+            assertNotNull(((PaletteImpl) source).table);
+            target.setAll((x, y, z) -> (x + z * 16 + y * 256) % 250 + 1);
+            target.optimize(Palette.Optimization.SIZE);
+            assertEquals(8, target.bitsPerEntry());
+            assertNotNull(((PaletteImpl) target).table);
+
+            target.copyFrom(source, 1, 1, 1);
+
+            assertEquals(15, target.bitsPerEntry());
+            assertNull(((PaletteImpl) target).table);
+            for (int x = 0; x < 16; x++) {
+                for (int y = 0; y < 16; y++) {
+                    for (int z = 0; z < 16; z++) {
+                        final int expected = x >= 1 && y >= 1 && z >= 1
+                                ? 1000 + ((x - 1) + (z - 1) * 16 + (y - 1) * 256) % 20
+                                : (x + z * 16 + y * 256) % 250 + 1;
+                        assertEquals(expected, target.get(x, y, z),
+                                String.format("Mismatch at (%d, %d, %d)", x, y, z));
+                    }
+                }
+            }
+            assertCountsMatchContent(target);
+        }
+
+        @Test
+        @DisplayName("Offset copy into populated indirect target")
+        void offsetCopyIntoPopulatedIndirectTarget() {
+            Palette source = Palette.blocks();
+            Palette target = Palette.blocks();
+
+            target.set(0, 0, 0, 70);
+            target.set(2, 2, 2, 50);
+            target.set(3, 3, 3, 60);
+            source.set(1, 1, 1, 80);
+            source.set(2, 2, 2, 90);
+            assertNotNull(((PaletteImpl) source).table);
+            assertNotNull(((PaletteImpl) target).table);
+
+            target.copyFrom(source, 1, 1, 1);
+
+            for (int x = 0; x < 16; x++) {
+                for (int y = 0; y < 16; y++) {
+                    for (int z = 0; z < 16; z++) {
+                        final int expected;
+                        if (x == 0 && y == 0 && z == 0) expected = 70;
+                        else if (x >= 1 && y >= 1 && z >= 1) expected = source.get(x - 1, y - 1, z - 1);
+                        else expected = 0;
+                        assertEquals(expected, target.get(x, y, z),
+                                String.format("Mismatch at (%d, %d, %d)", x, y, z));
+                    }
+                }
+            }
+            assertCountsMatchContent(target);
+        }
+
+        @Test
+        @DisplayName("Zero offset copy delegates to exact copy")
+        void zeroOffsetCopyDelegatesToExactCopy() {
+            Palette source = Palette.blocks();
+            Palette target = Palette.blocks();
+
+            for (int x = 0; x < 16; x++) source.set(x, 0, 0, x + 1);
+            assertEquals(5, source.bitsPerEntry());
+            source.replace(16, 15);
+            assertEquals(5, source.bitsPerEntry());
+
+            target.copyFrom(source, 0, 0, 0);
+
+            assertEquals(5, target.bitsPerEntry());
+            assertTrue(target.compare(source));
+        }
+
+        @Test
+        @DisplayName("Offset copy validates dimension and skips empty region")
+        void offsetCopyValidatesDimensionAndSkipsEmptyRegion() {
+            Palette blockPalette = Palette.blocks();
+            Palette biomePalette = Palette.biomes(64);
+
+            IllegalArgumentException exception = assertThrows(
+                    IllegalArgumentException.class,
+                    () -> blockPalette.copyFrom(biomePalette, 1, 0, 0)
+            );
+            assertTrue(exception.getMessage().contains("must equal target palette dimension"));
+
+            Palette source = Palette.blocks();
+            Palette target = Palette.blocks();
+            source.fill(7);
+
+            target.copyFrom(source, 16, 0, 0);
+            target.copyFrom(source, 0, 16, 0);
+            target.copyFrom(source, 0, 0, 16);
+
+            assertEquals(0, target.bitsPerEntry());
+            assertEquals(0, nonZeroCount(target));
+            assertAllEquals(0, target);
+        }
+
+        @Test
+        @DisplayName("Offset copy handles axis aligned offsets")
+        void offsetCopyHandlesAxisAlignedOffsets() {
+            Palette source = Palette.blocks();
+            source.fill(3);
+
+            Palette target = Palette.blocks();
+            target.copyFrom(source, 0, 1, 0);
+            for (int x = 0; x < 16; x++) {
+                for (int y = 0; y < 16; y++) {
+                    for (int z = 0; z < 16; z++) {
+                        assertEquals(y >= 1 ? 3 : 0, target.get(x, y, z));
+                    }
+                }
+            }
+            assertCountsMatchContent(target);
+
+            target = Palette.blocks();
+            target.copyFrom(source, 0, 0, 1);
+            for (int x = 0; x < 16; x++) {
+                for (int y = 0; y < 16; y++) {
+                    for (int z = 0; z < 16; z++) {
+                        assertEquals(z >= 1 ? 3 : 0, target.get(x, y, z));
+                    }
+                }
+            }
+            assertCountsMatchContent(target);
         }
     }
 }
