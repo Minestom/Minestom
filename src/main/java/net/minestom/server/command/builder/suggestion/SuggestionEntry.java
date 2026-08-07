@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public class SuggestionEntry {
+public final class SuggestionEntry {
     private final String entry;
     private final Component tooltip;
 

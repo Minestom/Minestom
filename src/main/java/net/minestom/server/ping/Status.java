@@ -86,7 +86,7 @@ public record Status(
         }
 
         public static PlayerInfo onlineCount() {
-            final Collection<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
+            final Set<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
             return new PlayerInfo(players.size(), players.size() + 1, List.of());
         }
 
@@ -97,7 +97,7 @@ public record Status(
          * @return A {@link PlayerInfo} containing the online count, and a sample of online players.
          */
         public static PlayerInfo online(int maxSamples) {
-            final Collection<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
+            final Set<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
             final List<NamedAndIdentified> samples = new ArrayList<>(Math.min(maxSamples, players.size()));
             for (final Player player : players) {
                 if (!player.getSettings().allowServerListings())
