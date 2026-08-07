@@ -73,13 +73,13 @@ tasks.register<CheckAbiTask>("checkBinaryCompatibility") {
 
     val baselineJarDir = providers.gradleProperty("baselineJarDir")
     oldJar = layout.file(baselineJarDir.flatMap { dir ->
-        val file = project.rootProject.layout.projectDirectory.file("$dir/${project.name}.jar")
+        val file = layout.settingsDirectory.file("$dir/${project.name}.jar")
         providers.provider { if (file.asFile.exists()) file.asFile else null }
     })
 
     newJar = tasks.named<Jar>("jar").flatMap { it.archiveFile }
 
-    rootProjectDir.set(project.rootProject.projectDir)
+    rootProjectDir.set(layout.settingsDirectory.asFile)
     val javaExtension = project.extensions.findByType<JavaPluginExtension>() // No java plugin applied
     if (javaExtension != null) {
         sourceDirectories.from(javaExtension.sourceSets["main"].java.srcDirs)
