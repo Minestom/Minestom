@@ -18,7 +18,7 @@ public class CookieCommand extends Command {
     }
 
     public static class Store extends Command {
-        private final Argument<Key> keyArg = ArgumentType.ResourceLocation("key");
+        private final Argument<Key> keyArg = ArgumentType.Key("key");
         private final Argument<String[]> valueArg = ArgumentType.StringArray("value");
 
         public Store() {
@@ -39,7 +39,7 @@ public class CookieCommand extends Command {
     }
 
     public static class Fetch extends Command {
-        private final Argument<Key> keyArg = ArgumentType.ResourceLocation("key");
+        private final Argument<Key> keyArg = ArgumentType.Key("key");
 
         public Fetch() {
             super("fetch");
