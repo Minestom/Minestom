@@ -51,7 +51,7 @@ public interface SignatureValidator {
                 sig.initVerify(publicKey);
                 sig.update(payload);
                 return sig.verify(signature);
-            } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException e) {
+            } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException _) {
                 return false;
             }
         };

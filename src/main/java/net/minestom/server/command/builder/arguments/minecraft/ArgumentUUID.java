@@ -19,7 +19,7 @@ public class ArgumentUUID extends Argument<UUID> {
     public UUID parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         try {
             return UUID.fromString(input);
-        } catch (IllegalArgumentException exception) {
+        } catch (IllegalArgumentException _) {
             throw new ArgumentSyntaxException("Invalid UUID", input, INVALID_UUID);
         }
     }

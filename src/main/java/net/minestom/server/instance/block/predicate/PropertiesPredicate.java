@@ -109,7 +109,7 @@ public record PropertiesPredicate(Map<String, ValuePredicate> properties) implem
                     int value = Integer.parseInt(prop);
                     return (min == null || value >= Integer.parseInt(min))
                             && (max == null || value < Integer.parseInt(max));
-                } catch (NumberFormatException e) {
+                } catch (NumberFormatException _) {
                     // Not an integer, just compare the strings
                     return (min == null || prop.compareTo(min) >= 0)
                             && (max == null || prop.compareTo(max) < 0);

@@ -284,7 +284,7 @@ public class AnvilLoader implements ChunkLoader {
                             try {
                                 LOGGER.warn("Fail to parse block state properties {}, expected a string tag for {}, but contents were {}",
                                         propertiesNBT, property.getKey(), MinestomAdventure.tagStringIO().asString(property.getValue()));
-                            } catch (IOException e) {
+                            } catch (IOException _) {
                                 LOGGER.warn("Fail to parse block state properties {}, expected a string tag for {}, but contents were a {} tag", propertiesNBT, property.getKey(), property.getValue());
                             }
                         }

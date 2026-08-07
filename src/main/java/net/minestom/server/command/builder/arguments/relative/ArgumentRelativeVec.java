@@ -74,7 +74,7 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
                         break;
                     }
                 }
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException _) {
                 throw new ArgumentSyntaxException("Invalid number", input, INVALID_NUMBER_ERROR);
             }
         }

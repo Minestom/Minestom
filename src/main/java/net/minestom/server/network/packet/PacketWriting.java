@@ -162,7 +162,7 @@ public final class PacketWriting {
         try {
             writeFramedPacket(tmpBuffer, serializer, id, packet, compressionThreshold);
             return tmpBuffer.copy(0, tmpBuffer.writeIndex());
-        } catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException _) {
             final long sizeOf = serializer.sizeOf(packet, tmpBuffer.registries());
             if (sizeOf > ServerFlag.MAX_PACKET_SIZE) {
                 throw new IllegalStateException("Packet too large: " + sizeOf);
@@ -189,7 +189,7 @@ public final class PacketWriting {
             boolean success;
             try {
                 success = writer.test(buffer, packet);
-            } catch (IndexOutOfBoundsException e) {
+            } catch (IndexOutOfBoundsException _) {
                 success = false;
             }
             assert !success || buffer.writeIndex() > 0;

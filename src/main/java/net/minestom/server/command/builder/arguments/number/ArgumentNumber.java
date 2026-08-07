@@ -60,7 +60,7 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
             }
 
             return value;
-        } catch (NumberFormatException | NullPointerException e) {
+        } catch (NumberFormatException | NullPointerException _) {
             throw new ArgumentSyntaxException("Input is not a number, or it's invalid for the given type", input, NOT_NUMBER_ERROR);
         }
     }
@@ -177,7 +177,7 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
     protected String removeScientificNotation(String value) {
         try {
             return new BigDecimal(value).toPlainString();
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             return null;
         }
     }

@@ -41,7 +41,7 @@ public record PlayerSkin(String textures, String signature) {
                 return new PlayerSkin(textureValue, signatureValue);
             }
             return null;
-        } catch (Exception e) {
+        } catch (Exception _) {
             return null;
         }
     }
@@ -60,7 +60,7 @@ public record PlayerSkin(String textures, String signature) {
             final String uuid = jsonObject.get("id").getAsString();
             // Retrieve the skin data from the mojang uuid
             return fromUuid(uuid);
-        } catch (Exception e) {
+        } catch (Exception _) {
             return null;
         }
     }

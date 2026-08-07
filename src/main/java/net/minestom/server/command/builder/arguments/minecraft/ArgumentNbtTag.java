@@ -28,7 +28,7 @@ public class ArgumentNbtTag extends Argument<BinaryTag> {
     public BinaryTag parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         try {
             return MinestomAdventure.tagStringIO().asTag(input);
-        } catch (IOException e) {
+        } catch (IOException _) {
             throw new ArgumentSyntaxException("Invalid NBT", input, INVALID_NBT);
         }
     }

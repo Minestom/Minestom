@@ -404,7 +404,7 @@ public class PlayerSocketConnection extends PlayerConnection {
                     yield writeBuffer(buffer, rawBuffer, index, length);
                 }
             };
-        } catch (IndexOutOfBoundsException exception) {
+        } catch (IndexOutOfBoundsException _) {
             buffer.writeIndex(start);
             return false;
         }

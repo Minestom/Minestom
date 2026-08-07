@@ -151,7 +151,7 @@ public class AcquirableSyncBenchmark {
     @Benchmark
     public void multiDoubleAcquireTickThread() {
         launch(tickThreads, (acquirable) -> {
-            for (int i = 0; i < 10_000; i++) acquirable.sync(t -> acquirable.sync(test -> test.value++));
+            for (int i = 0; i < 10_000; i++) acquirable.sync(_ -> acquirable.sync(test -> test.value++));
         });
     }
 

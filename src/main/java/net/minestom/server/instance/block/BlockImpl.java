@@ -165,7 +165,7 @@ record BlockImpl(RegistryData.BlockEntry registry,
         final Map<String, String> propertyMap = BlockUtils.parseProperties(query);
         try {
             return block.withProperties(propertyMap);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException _) {
             return null;
         }
     }

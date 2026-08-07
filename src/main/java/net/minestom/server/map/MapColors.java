@@ -86,7 +86,7 @@ public enum MapColors {
         ColorMappingStrategy strategy;
         try {
             strategy = ColorMappingStrategy.valueOf(ServerFlag.MAP_RGB_MAPPING.toUpperCase(Locale.ROOT));
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException _) {
             logger.warn("Unknown color mapping strategy '{}', defaulting to LAZY.", ServerFlag.MAP_RGB_MAPPING);
             strategy = ColorMappingStrategy.LAZY;
         }

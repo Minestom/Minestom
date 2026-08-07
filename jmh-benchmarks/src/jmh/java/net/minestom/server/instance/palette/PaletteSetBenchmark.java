@@ -49,7 +49,7 @@ public class PaletteSetBenchmark {
     @Benchmark
     public void incrWriteAll() {
         AtomicInteger value = new AtomicInteger(0);
-        palette.setAll((x, y, z) -> {
+        palette.setAll((_, _, _) -> {
             final int v = value.getPlain();
             value.setPlain(v + 1);
             return v;
@@ -70,7 +70,7 @@ public class PaletteSetBenchmark {
 
     @Benchmark
     public void constantWriteAll() {
-        palette.setAll((x, y, z) -> 5);
+        palette.setAll((_, _, _) -> 5);
     }
 
     @Benchmark
