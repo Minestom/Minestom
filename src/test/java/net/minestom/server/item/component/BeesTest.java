@@ -11,7 +11,7 @@ import static java.util.Map.entry;
 
 import net.minestom.server.entity.EntityType;
 
-public class BeesTest extends AbstractItemComponentTest<List<Bee>> {
+public class BeesTest extends AbstractItemComponentRegistriesTest<List<Bee>> {
     private static final TypedCustomData<EntityType> SOME_DATA = new TypedCustomData<>(
             EntityType.BEE, CompoundBinaryTag.empty()
     );

@@ -140,6 +140,12 @@ tasks.register("errorproneCheck") {
     dependsOn(tasks.withType<JavaCompile>())
 }
 
+tasks.register<CheckTestNamingTask>("testNamingCheck") {
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
+    description = "Checks that test classes are named after their declared fixture."
+    sources.from(project.extensions.getByType<SourceSetContainer>().named("test").map { it.allJava })
+}
+
 tasks.named(LifecycleBasePlugin.CHECK_TASK_NAME) {
-    dependsOn("errorproneCheck", "forbiddenImportsCheck")
+    dependsOn("errorproneCheck", "forbiddenImportsCheck", "testNamingCheck")
 }

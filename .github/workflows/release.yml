@@ -33,13 +33,15 @@ jobs:
             echo "Reachability metadata is fully synchronized."
           fi
 
-      - name: Gradle pre-run
-        run: ./gradlew determineMinecraftVersion --no-configuration-cache
       - id: version
         name: Determine Version
         run: |
           DATE=$(date +'%Y.%m.%d')
-          MC_VERSION=$(./gradlew determineMinecraftVersion --quiet --console=plain --no-configuration-cache)
+          MC_VERSION=$(./gradlew determineMinecraftVersion --quiet --console=plain)
+          if ! [[ "$MC_VERSION" =~ ^[0-9]+(\.[0-9]+)+$ ]]; then
+            echo "Unexpected Minecraft version output: $MC_VERSION"
+            exit 1
+          fi
 
           TAGS=$(git tag --list "${DATE}*")
           echo "Existing tags: $TAGS"

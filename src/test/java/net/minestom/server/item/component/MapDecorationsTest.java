@@ -6,7 +6,7 @@ import net.minestom.server.component.DataComponents;
 import java.util.List;
 import java.util.Map;
 
-public class MapDecorationsTest extends AbstractItemComponentTest<MapDecorations> {
+public class MapDecorationsTest extends AbstractItemComponentRegistriesTest<MapDecorations> {
 
     @Override
     protected DataComponent<MapDecorations> component() {

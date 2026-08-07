@@ -12,7 +12,7 @@ import java.util.Map;
 
 import static net.minestom.server.codec.CodecAssertions.assertOk;
 
-public class ComponentTest extends AbstractItemComponentTest<Component> {
+public class ComponentTest extends AbstractItemComponentRegistriesTest<Component> {
     // This is not a test, but it creates a compile error if the component type is changed away from Component,
     // as a reminder that tests should be added for that new component type.
     private static final List<DataComponent<Component>> SHARED_COMPONENTS = List.of(

@@ -598,6 +598,10 @@ public class InstanceContainer extends Instance {
         this.sharedInstances.add(sharedInstance);
     }
 
+    void removeSharedInstance(SharedInstance sharedInstance) {
+        this.sharedInstances.remove(sharedInstance);
+    }
+
     /**
      * Copies all the chunks of this instance and create a new instance container with all of them.
      * <p>

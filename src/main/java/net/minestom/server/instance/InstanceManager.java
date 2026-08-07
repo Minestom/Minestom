@@ -123,6 +123,9 @@ public final class InstanceManager {
                 var dispatcher = MinecraftServer.process().dispatcher();
                 instance.getChunks().forEach(dispatcher::deletePartition);
             }
+            if (instance instanceof SharedInstance sharedInstance) {
+                sharedInstance.getInstanceContainer().removeSharedInstance(sharedInstance);
+            }
             // Unregister
             instance.setRegistered(false);
             this.instances.remove(instance);

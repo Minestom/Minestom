@@ -249,7 +249,21 @@ final class CommandParserImpl implements CommandParser {
                     // correct thing would be to say that the command is unknown.
                     if (!(childResult.chain.size() == 2 && childResult.argumentResult instanceof ArgumentResult.IncompatibleType<?>)) {
                         // If the last successful result is null, throw an exception instead of having unintended behaviour
-                        error = Objects.requireNonNull(childResult.chain().lastSuccessfulResult());
+                        NodeResult lastSuccess = Objects.requireNonNull(childResult.chain().lastSuccessfulResult());
+                        final SuggestionCallback deepestSuggestion = childResult.chain().suggestionCallback;
+
+                        if (deepestSuggestion != null) {
+                            final Chain errorChain = lastSuccess.chain().fork();
+                            errorChain.suggestionCallback = deepestSuggestion;
+
+                            lastSuccess = new NodeResult(
+                                    lastSuccess.node(),
+                                    errorChain,
+                                    lastSuccess.argumentResult(),
+                                    lastSuccess.callback()
+                            );
+                        }
+                        error = lastSuccess;
                     }
                 }
                 reader.cursor(start);

@@ -8,6 +8,7 @@ import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockKeys;
 import net.minestom.server.instance.block.predicate.BlockPredicate;
 import net.minestom.server.instance.block.predicate.ComponentPredicateSet;
 import net.minestom.server.instance.block.predicate.DataComponentPredicate;
@@ -25,7 +26,7 @@ import static net.minestom.server.codec.CodecAssertions.assertOk;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class BlockPredicatesTest extends AbstractItemComponentTest<BlockPredicates> {
+public class BlockPredicatesTest extends AbstractItemComponentRegistriesTest<BlockPredicates> {
 
     @Override
     protected DataComponent<@NotNull BlockPredicates> component() {
@@ -53,7 +54,7 @@ public class BlockPredicatesTest extends AbstractItemComponentTest<BlockPredicat
         var expected = new BlockPredicates(new BlockPredicate(RegistryTag.direct(RegistryKey.unsafeOf("minecraft:stone"))));
         assertEquals(expected, component);
         assertEquals(1, component.predicates().getFirst().blocks().size());
-        assertTrue(component.predicates().getFirst().blocks().contains(Block.STONE.registryKey()));
+        assertTrue(component.predicates().getFirst().blocks().contains(BlockKeys.STONE));
     }
 
     @Test

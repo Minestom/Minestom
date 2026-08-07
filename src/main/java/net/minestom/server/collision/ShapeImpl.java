@@ -13,7 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public record ShapeImpl(ShapeData shapeData, OcclusionData occlusionData) implements Shape {
-    private static final Pattern PATTERN = Pattern.compile("\\d.\\d+", Pattern.MULTILINE);
+    private static final Pattern PATTERN = Pattern.compile("-?\\d+\\.\\d+");
 
     record ShapeData(List<BoundingBox> boundingBoxes,
                      Point relativeStart, Point relativeEnd,

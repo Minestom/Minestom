@@ -8,7 +8,7 @@ import java.util.Map;
 
 import static java.util.Map.entry;
 
-public class IntTest extends AbstractItemComponentTest<Integer> {
+public class IntTest extends AbstractItemComponentRegistriesTest<Integer> {
     // This is not a test, but it creates a compile error if the component type is changed away from Integer,
     // as a reminder that tests should be added for that new component type.
     private static final List<DataComponent<Integer>> INT_COMPONENTS = List.of(
