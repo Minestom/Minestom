@@ -156,7 +156,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
                 this.index = 0;
 
                 return result;
-            } catch (IOException e) {
+            } catch (IOException _) {
                 throw new ArgumentSyntaxException("Invalid NBT", input, INVALID_NBT);
             }
         }

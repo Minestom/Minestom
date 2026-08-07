@@ -35,7 +35,7 @@ public enum TeamColor implements RGBLike {
     public static @Nullable TeamColor fromName(String name) {
         try {
             return valueOf(name.toUpperCase(Locale.ROOT));
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException _) {
             return null;
         }
     }

@@ -33,7 +33,7 @@ public class PaletteGetBenchmark {
     public void setup() {
         palette = Palette.sized(dimension, 4, 8, 15, 4);
         AtomicInteger value = new AtomicInteger();
-        palette.setAll((x, y, z) -> value.getAndIncrement());
+        palette.setAll((_, _, _) -> value.getAndIncrement());
     }
 
     @Benchmark
@@ -50,6 +50,6 @@ public class PaletteGetBenchmark {
 
     @Benchmark
     public void readAll(Blackhole blackHole) {
-        palette.getAll((x, y, z, value) -> blackHole.consume(value));
+        palette.getAll((_, _, _, value) -> blackHole.consume(value));
     }
 }

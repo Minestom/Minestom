@@ -26,7 +26,7 @@ public class ArgumentNbtCompoundTag extends Argument<CompoundBinaryTag> {
     public CompoundBinaryTag parse(CommandSender sender, String input) throws ArgumentSyntaxException {
         try {
             return MinestomAdventure.tagStringIO().asCompound(input);
-        } catch (IOException e) {
+        } catch (IOException _) {
             throw new ArgumentSyntaxException("NBTCompound is invalid", input, INVALID_NBT);
         }
     }

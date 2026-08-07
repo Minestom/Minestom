@@ -3409,13 +3409,13 @@ public interface StructCodec<R> extends Codec<R> {
     private static <D, T> Result<@UnknownNullability T> get(Transcoder<D> coder, Codec<T> codec, String key, MapLike<D> map) {
         if (INLINE.equals(key)) {
             final Codec<T> decodeCodec = codec instanceof CodecImpl.OptionalImpl<T>(
-                    Codec<T> inner, T ignored
+                    Codec<T> inner, _
             ) ? inner : codec;
             if (!(decodeCodec instanceof StructCodec<T> s)) return new Result.Error<>(key + ": not a struct");
 
             final Result<T> decodeResult = s.decodeFromMap(coder, map);
             if (decodeResult instanceof Result.Error<T> && codec instanceof CodecImpl.OptionalImpl<T>(
-                    Codec<T> ignored, T defaultValue
+                    _, T defaultValue
             )) return new Result.Ok<>(defaultValue);
 
             return decodeResult.mapError(e -> key + ": " + e);
@@ -3442,7 +3442,7 @@ public interface StructCodec<R> extends Codec<R> {
 
         if (INLINE.equals(key)) {
             final Codec<T> encodeCodec = codec instanceof CodecImpl.OptionalImpl<T>(
-                    Codec<T> inner, T ignored
+                    Codec<T> inner, _
             ) ? inner : codec;
             if (!(encodeCodec instanceof StructCodec<T> s))
                 return new Result.Error<>(key + ": not a struct");

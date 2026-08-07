@@ -38,7 +38,7 @@ public class MultiNodeBenchmark {
         node = EventNode.all("node");
         for (int i = 0; i < children; i++) {
             var child = EventNode.all("child-" + i);
-            child.addListener(TestEvent.class, e -> {
+            child.addListener(TestEvent.class, _ -> {
                 // Empty
             });
 
@@ -46,7 +46,7 @@ public class MultiNodeBenchmark {
 
             // Real-world code are very unlikely to use entirely empty nodes.
             // This ensures that the handle map is properly lazily initialized to prevent fast exits.
-            child.addListener(TestEvent2.class, e -> {
+            child.addListener(TestEvent2.class, _ -> {
                 // Empty
             }).call(new TestEvent2());
         }

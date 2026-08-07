@@ -260,7 +260,7 @@ final class TranscoderJsonImpl implements Transcoder<JsonElement> {
                     new Result.Ok<>(coder.createDouble(primitive.getAsDouble()));
             case JsonPrimitive primitive when primitive.isString() ->
                     new Result.Ok<>(coder.createString(primitive.getAsString()));
-            case JsonNull jsonNull -> new Result.Ok<>(coder.createNull());
+            case JsonNull _ -> new Result.Ok<>(coder.createNull());
             default -> new Result.Error<>("Unknown JSON type: " + value);
         };
     }

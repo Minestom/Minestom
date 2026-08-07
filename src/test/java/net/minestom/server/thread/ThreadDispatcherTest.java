@@ -151,7 +151,7 @@ public class ThreadDispatcherTest {
         }
         try {
             latch.await();
-        } catch (InterruptedException e) {
+        } catch (InterruptedException _) {
             Thread.currentThread().interrupt();
             fail("Latch was interrupted");
         }

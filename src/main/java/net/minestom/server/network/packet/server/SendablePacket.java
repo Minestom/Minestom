@@ -15,7 +15,7 @@ public sealed interface SendablePacket
             case ServerPacket serverPacket -> serverPacket;
             case CachedPacket cachedPacket -> cachedPacket.packet(state);
             case FramedPacket framedPacket -> framedPacket.packet();
-            case BufferedPacket bufferedPacket -> null;
+            case BufferedPacket _ -> null;
         };
     }
 }

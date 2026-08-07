@@ -36,7 +36,7 @@ public class PaletteReplaceBenchmark {
 
     @Benchmark
     public void replaceAll() {
-        palette.replaceAll((x, y, z, value) -> value + 1);
+        palette.replaceAll((_, _, _, value) -> value + 1);
     }
 
     @Benchmark

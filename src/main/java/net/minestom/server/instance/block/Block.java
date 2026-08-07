@@ -587,7 +587,7 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
     static @Nullable Block fromKey(@KeyPattern String key) {
         try {
             return fromKey(Key.key(key));
-        } catch (InvalidKeyException e) {
+        } catch (InvalidKeyException _) {
             return null;
         }
     }

@@ -237,7 +237,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                 try {
                     final GameMode gameMode = GameMode.valueOf(gameModeName.toUpperCase(Locale.ROOT));
                     entityFinder.setGameMode(gameMode, include ? EntityFinder.ToggleableType.INCLUDE : EntityFinder.ToggleableType.EXCLUDE);
-                } catch (IllegalArgumentException e) {
+                } catch (IllegalArgumentException _) {
                     throw new ArgumentSyntaxException("Invalid entity game mode", input, INVALID_ARGUMENT_VALUE);
                 }
             }
@@ -246,7 +246,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                 try {
                     limit = Integer.parseInt(value);
                     entityFinder.setLimit(limit);
-                } catch (NumberFormatException e) {
+                } catch (NumberFormatException _) {
                     throw new ArgumentSyntaxException("Invalid limit number", input, INVALID_ARGUMENT_VALUE);
                 }
                 if (limit <= 0) {
@@ -257,7 +257,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                 try {
                     EntityFinder.EntitySort entitySort = EntityFinder.EntitySort.valueOf(value.toUpperCase(Locale.ROOT));
                     entityFinder.setEntitySort(entitySort);
-                } catch (IllegalArgumentException e) {
+                } catch (IllegalArgumentException _) {
                     throw new ArgumentSyntaxException("Invalid entity sort", input, INVALID_ARGUMENT_VALUE);
                 }
             }
@@ -265,7 +265,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                 try {
                     final Range.Int level = Argument.parse(sender, new ArgumentIntRange(value));
                     entityFinder.setLevel(level);
-                } catch (ArgumentSyntaxException e) {
+                } catch (ArgumentSyntaxException _) {
                     throw new ArgumentSyntaxException("Invalid level number", input, INVALID_ARGUMENT_VALUE);
                 }
             }
@@ -273,7 +273,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                 final Range.Float distanceRange;
                 try {
                     distanceRange = Argument.parse(sender, new ArgumentFloatRange(value));
-                } catch (ArgumentSyntaxException e) {
+                } catch (ArgumentSyntaxException _) {
                     throw new ArgumentSyntaxException("Invalid distance", input, INVALID_ARGUMENT_VALUE);
                 }
 

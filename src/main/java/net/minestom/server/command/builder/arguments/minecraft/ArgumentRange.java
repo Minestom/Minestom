@@ -56,9 +56,9 @@ public abstract class ArgumentRange<T extends Range<N>, N extends Number> extend
                 final N number = parser.apply(input);
                 return rangeConstructor.apply(number, number);
             }
-        } catch (NumberFormatException e2) {
+        } catch (NumberFormatException _) {
             throw new ArgumentSyntaxException("Invalid number", input, FORMAT_ERROR);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException _) {
             throw new ArgumentSyntaxException("Invalid range", input, FORMAT_ERROR);
         }
         throw new ArgumentSyntaxException("Invalid range format", input, FORMAT_ERROR);

@@ -67,7 +67,7 @@ public final class MojangUtils {
     public static @Nullable JsonObject fromUuid(UUID uuid) {
         try {
             return retrieve(String.format(FROM_UUID_URL, uuid));
-        } catch (IOException e) {
+        } catch (IOException _) {
             return null;
         }
     }
@@ -83,7 +83,7 @@ public final class MojangUtils {
         final UUID parsed;
         try {
             parsed = UUID.fromString(formatUUID(uuid));
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException _) {
             return null;
         }
         return fromUuid(parsed);
@@ -100,7 +100,7 @@ public final class MojangUtils {
         if (!USERNAME_PATTERN.matcher(username).matches()) return null;
         try {
             return retrieve(String.format(FROM_USERNAME_URL, username));
-        } catch (IOException e) {
+        } catch (IOException _) {
             return null;
         }
     }

@@ -152,7 +152,7 @@ record TagImpl<T>(int index, String key,
             if (readable == null || (result = entry.read(readable)) == null)
                 return createDefault();
             return result;
-        } catch (ClassCastException e) {
+        } catch (ClassCastException _) {
             return createDefault();
         }
     }

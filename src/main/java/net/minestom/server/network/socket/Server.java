@@ -81,7 +81,7 @@ public final class Server {
                 final SocketChannel client;
                 try {
                     client = serverSocket.accept();
-                } catch (ClosedChannelException e) {
+                } catch (ClosedChannelException _) {
                     break; // We are exiting, bye bye!
                 } catch (IOException e) {
                     MinecraftServer.getExceptionManager().handleException(e);

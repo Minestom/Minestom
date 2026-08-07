@@ -270,7 +270,7 @@ public final class ConnectionManager {
             List<SelectKnownPacksPacket.Entry> knownPacks;
             try {
                 knownPacks = knownPacksFuture.get(ServerFlag.KNOWN_PACKS_RESPONSE_TIMEOUT, TimeUnit.MILLISECONDS);
-            } catch (InterruptedException | TimeoutException e) {
+            } catch (InterruptedException | TimeoutException _) {
                 LOGGER.warn("Player {} failed to respond to known packs query", player.getUsername());
                 player.getPlayerConnection().disconnect();
                 return;

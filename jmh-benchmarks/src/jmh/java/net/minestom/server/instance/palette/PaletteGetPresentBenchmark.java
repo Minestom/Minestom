@@ -43,17 +43,17 @@ public class PaletteGetPresentBenchmark {
 
     @Benchmark
     public void readAll(Blackhole blackHole) {
-        palette.getAll((x, y, z, value) -> blackHole.consume(value));
+        palette.getAll((_, _, _, value) -> blackHole.consume(value));
     }
 
     @Benchmark
     public void readAllPresent(Blackhole blackHole) {
-        palette.getAllPresent((x, y, z, value) -> blackHole.consume(value));
+        palette.getAllPresent((_, _, _, value) -> blackHole.consume(value));
     }
 
     @Benchmark
     public void readAllPresentAlt(Blackhole blackHole) {
-        palette.getAll((x, y, z, value) -> {
+        palette.getAll((_, _, _, value) -> {
             if (value != 0) {
                 blackHole.consume(value);
             }

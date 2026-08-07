@@ -38,13 +38,13 @@ public class SingleNodeBenchmark {
     public void setup() {
         node = EventNode.all("node");
         for (int i = 0; i < listenerCount; i++) {
-            node.addListener(TestEvent.class, e -> {
+            node.addListener(TestEvent.class, _ -> {
                 // Empty
             });
         }
         // Real-world code are very unlikely to use entirely empty nodes.
         // This ensures that the handle map is properly lazily initialized to prevent fast exits.
-        node.addListener(TestEvent2.class, e -> {
+        node.addListener(TestEvent2.class, _ -> {
             // Empty
         });
         node.call(new TestEvent2());

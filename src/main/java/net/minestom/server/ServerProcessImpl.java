@@ -209,8 +209,8 @@ final class ServerProcessImpl implements ServerProcess, Registries.Delegating {
         switch (auth) {
             case Auth.Offline _ ->
                     LOGGER.info("Running in offline mode. Beware that this is not secure and players can impersonate each other.");
-            case Auth.Online ignored -> LOGGER.info("Running in online mode with Mojang's authentication.");
-            case Auth.Velocity ignored -> LOGGER.info("Running in Velocity mode with modern IP forwarding.");
+            case Auth.Online _ -> LOGGER.info("Running in online mode with Mojang's authentication.");
+            case Auth.Velocity _ -> LOGGER.info("Running in Velocity mode with modern IP forwarding.");
             case Auth.Bungee bungee -> {
                 if (bungee.guard()) {
                     LOGGER.info("Running in BungeeCord mode, using legacy IP forwarding with Guard enabled.");
