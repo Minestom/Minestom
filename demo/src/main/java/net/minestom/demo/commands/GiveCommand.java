@@ -12,7 +12,9 @@ import net.minestom.server.utils.entity.EntityFinder;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.minestom.server.command.builder.arguments.ArgumentType.*;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Entity;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Integer;
+import static net.minestom.server.command.builder.arguments.ArgumentType.ItemStack;
 
 public class GiveCommand extends Command {
     public GiveCommand() {

@@ -1,11 +1,11 @@
 package net.minestom.server.event;
 
-import java.util.Set;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;

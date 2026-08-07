@@ -3,7 +3,12 @@ package net.minestom.server.instance;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.packet.server.play.InitializeWorldBorderPacket;
+import net.minestom.server.network.packet.server.play.WorldBorderCenterPacket;
+import net.minestom.server.network.packet.server.play.WorldBorderLerpSizePacket;
+import net.minestom.server.network.packet.server.play.WorldBorderSizePacket;
+import net.minestom.server.network.packet.server.play.WorldBorderWarningDelayPacket;
+import net.minestom.server.network.packet.server.play.WorldBorderWarningReachPacket;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 
@@ -22,7 +27,8 @@ import org.jetbrains.annotations.Contract;
  *                                  this world from another dimension (should be at
  *                                  least the diameter of the world border)
  */
-public record WorldBorder(double diameter, double centerX, double centerZ, int warningDistance, int warningTime, int dimensionTeleportBoundary) {
+public record WorldBorder(double diameter, double centerX, double centerZ, int warningDistance, int warningTime,
+                          int dimensionTeleportBoundary) {
     public static final WorldBorder DEFAULT_BORDER = new WorldBorder(ServerFlag.WORLD_BORDER_SIZE * 2, 0, 0, 5, 15, ServerFlag.WORLD_BORDER_SIZE);
 
     /**
@@ -85,8 +91,8 @@ public record WorldBorder(double diameter, double centerX, double centerZ, int w
      * @param targetDiameter the target diameter if there is a current lerp in progress
      * @param transitionTime the transition time in milliseconds of the current
      *                       lerp in progress
-     * @return               an {@link InitializeWorldBorderPacket} reflecting the
-     *                       properties of this border
+     * @return an {@link InitializeWorldBorderPacket} reflecting the
+     * properties of this border
      */
     public InitializeWorldBorderPacket createInitializePacket(double targetDiameter, long transitionTime) {
         return new InitializeWorldBorderPacket(centerX, centerZ, diameter, targetDiameter, transitionTime, dimensionTeleportBoundary, warningTime, warningDistance);
@@ -107,7 +113,7 @@ public record WorldBorder(double diameter, double centerX, double centerZ, int w
      *
      * @param targetDiameter the final diameter of the border after this transition
      * @param transitionTime the transition time in milliseconds for this lerp
-     * @return               the {@link WorldBorderLerpSizePacket} representing this lerp
+     * @return the {@link WorldBorderLerpSizePacket} representing this lerp
      */
     public WorldBorderLerpSizePacket createLerpSizePacket(double targetDiameter, long transitionTime) {
         return new WorldBorderLerpSizePacket(diameter, targetDiameter, transitionTime);

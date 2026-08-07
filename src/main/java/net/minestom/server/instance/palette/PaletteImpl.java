@@ -13,7 +13,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.IntUnaryOperator;
 
 import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
-import static net.minestom.server.instance.palette.Palettes.*;
+import static net.minestom.server.instance.palette.Palettes.arrayLength;
+import static net.minestom.server.instance.palette.Palettes.maxPaletteSize;
+import static net.minestom.server.instance.palette.Palettes.read;
+import static net.minestom.server.instance.palette.Palettes.sectionIndex;
+import static net.minestom.server.instance.palette.Palettes.write;
 
 final class PaletteImpl implements Palette {
     private static final ThreadLocal<int[]> WRITE_CACHE = ThreadLocal.withInitial(() -> new int[SECTION_BLOCK_COUNT]);

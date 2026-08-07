@@ -1,13 +1,12 @@
 package net.minestom.server.map;
 
-import java.util.Locale;
 import net.minestom.server.ServerFlag;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 import java.util.function.ToIntFunction;
 
 public enum MapColors {

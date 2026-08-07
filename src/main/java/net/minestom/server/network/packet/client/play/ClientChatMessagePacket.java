@@ -9,7 +9,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.BitSet;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BYTE;
+import static net.minestom.server.network.NetworkBuffer.FixedBitSet;
+import static net.minestom.server.network.NetworkBuffer.LONG;
+import static net.minestom.server.network.NetworkBuffer.STRING;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record ClientChatMessagePacket(String message, long timestamp,
                                       long salt, @Nullable MessageSignature signature,

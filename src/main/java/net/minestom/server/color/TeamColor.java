@@ -1,6 +1,5 @@
 package net.minestom.server.color;
 
-import java.util.Locale;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.util.HSVLike;
@@ -9,6 +8,8 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
+
+import java.util.Locale;
 
 public enum TeamColor implements RGBLike {
     BLACK("black", NamedTextColor.BLACK),

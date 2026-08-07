@@ -9,10 +9,6 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 public class SalmonMeta extends AbstractFishMeta {
     public SalmonMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);

@@ -6,11 +6,13 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.Nullable;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BYTE;
+import static net.minestom.server.network.NetworkBuffer.STRING;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record StopSoundPacket(byte flags, @Nullable Sound.Source source,
                               @Nullable String sound) implements ServerPacket.Play {
-    public static final NetworkBuffer.Type<StopSoundPacket> SERIALIZER = new Type<>() {
+    public static final NetworkBuffer.Type<StopSoundPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
         public void write(NetworkBuffer buffer, StopSoundPacket value) {
             buffer.write(BYTE, value.flags());

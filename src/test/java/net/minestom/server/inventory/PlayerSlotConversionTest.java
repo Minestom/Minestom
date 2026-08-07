@@ -2,7 +2,17 @@ package net.minestom.server.inventory;
 
 import org.junit.jupiter.api.Test;
 
-import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.BOOTS_SLOT;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.CHESTPLATE_SLOT;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.CRAFT_RESULT;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.CRAFT_SLOT_1;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.CRAFT_SLOT_2;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.CRAFT_SLOT_3;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.CRAFT_SLOT_4;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.HELMET_SLOT;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.LEGGINGS_SLOT;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.OFFHAND_SLOT;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.convertWindow0SlotToMinestomSlot;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**

@@ -1,6 +1,5 @@
 package net.minestom.demo.commands;
 
-import java.nio.charset.StandardCharsets;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
@@ -8,6 +7,8 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.entity.Player;
+
+import java.nio.charset.StandardCharsets;
 
 public class CookieCommand extends Command {
     public CookieCommand() {

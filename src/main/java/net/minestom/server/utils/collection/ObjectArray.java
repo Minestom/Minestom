@@ -1,6 +1,10 @@
 package net.minestom.server.utils.collection;
 
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
 
@@ -28,7 +32,8 @@ public sealed interface ObjectArray<T>
         return concurrent(0);
     }
 
-    @UnknownNullability T get(int index);
+    @UnknownNullability
+    T get(int index);
 
     void set(int index, @Nullable T object);
 
@@ -39,7 +44,8 @@ public sealed interface ObjectArray<T>
     void trim();
 
     @Contract(pure = true)
-    @UnknownNullability T [] arrayCopy(Class<T> type);
+    @UnknownNullability
+    T[] arrayCopy(Class<T> type);
 
     /**
      * Copies the array into a list.
@@ -48,5 +54,6 @@ public sealed interface ObjectArray<T>
      * @return List of the array elements
      */
     @Contract(pure = true)
-    @Unmodifiable List<T> toList();
+    @Unmodifiable
+    List<T> toList();
 }

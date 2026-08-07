@@ -3,7 +3,6 @@ package net.minestom.server.item.component;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import java.nio.charset.StandardCharsets;
 import net.minestom.data.MinestomData;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
@@ -16,13 +15,16 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 
 import static java.util.Map.entry;
 import static net.minestom.server.codec.CodecAssertions.assertOk;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @RegistriesTest
 public class ItemComponentReadWriteRegistriesTest {

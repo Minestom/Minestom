@@ -7,7 +7,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import static net.minestom.testing.TestUtils.assertEqualsSNBT;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 public class TagListTest {
 

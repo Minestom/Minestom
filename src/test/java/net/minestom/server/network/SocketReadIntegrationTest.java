@@ -17,7 +17,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.List;
 import java.util.zip.DataFormatException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 @EnvTest
 public class SocketReadIntegrationTest {

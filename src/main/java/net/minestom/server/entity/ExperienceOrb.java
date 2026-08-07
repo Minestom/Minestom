@@ -3,9 +3,9 @@ package net.minestom.server.entity;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.thread.Acquirable;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
-import org.jetbrains.annotations.Nullable;
 
 public class ExperienceOrb extends Entity {
 

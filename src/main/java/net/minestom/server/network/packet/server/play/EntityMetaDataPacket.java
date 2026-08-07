@@ -1,13 +1,12 @@
 package net.minestom.server.network.packet.server.play;
 
-import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.UnaryOperator;
 

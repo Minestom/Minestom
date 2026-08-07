@@ -2,7 +2,26 @@ package net.minestom.server.codec;
 
 import net.minestom.server.codec.Transcoder.MapBuilder;
 import net.minestom.server.codec.Transcoder.MapLike;
-import net.minestom.server.network.NetworkBufferTemplate.*;
+import net.minestom.server.network.NetworkBufferTemplate.F1;
+import net.minestom.server.network.NetworkBufferTemplate.F10;
+import net.minestom.server.network.NetworkBufferTemplate.F11;
+import net.minestom.server.network.NetworkBufferTemplate.F12;
+import net.minestom.server.network.NetworkBufferTemplate.F13;
+import net.minestom.server.network.NetworkBufferTemplate.F14;
+import net.minestom.server.network.NetworkBufferTemplate.F15;
+import net.minestom.server.network.NetworkBufferTemplate.F16;
+import net.minestom.server.network.NetworkBufferTemplate.F17;
+import net.minestom.server.network.NetworkBufferTemplate.F18;
+import net.minestom.server.network.NetworkBufferTemplate.F19;
+import net.minestom.server.network.NetworkBufferTemplate.F2;
+import net.minestom.server.network.NetworkBufferTemplate.F20;
+import net.minestom.server.network.NetworkBufferTemplate.F3;
+import net.minestom.server.network.NetworkBufferTemplate.F4;
+import net.minestom.server.network.NetworkBufferTemplate.F5;
+import net.minestom.server.network.NetworkBufferTemplate.F6;
+import net.minestom.server.network.NetworkBufferTemplate.F7;
+import net.minestom.server.network.NetworkBufferTemplate.F8;
+import net.minestom.server.network.NetworkBufferTemplate.F9;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 

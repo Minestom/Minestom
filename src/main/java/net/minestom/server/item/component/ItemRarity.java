@@ -1,10 +1,10 @@
 package net.minestom.server.item.component;
 
-import java.util.Locale;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;

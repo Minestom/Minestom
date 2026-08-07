@@ -13,7 +13,9 @@ import java.util.Set;
 
 import static net.minestom.server.coordinate.CoordConversion.hashBlockCoord;
 import static net.minestom.server.coordinate.CoordConversion.hashGlobalCoord;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CoordinateHashTest {
 

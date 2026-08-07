@@ -16,7 +16,12 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.*;
+import java.util.AbstractList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @SuppressWarnings("removal")
 record BlockImpl(RegistryData.BlockEntry registry,
@@ -69,8 +74,7 @@ record BlockImpl(RegistryData.BlockEntry registry,
                             int i = 0;
                             for (var entry : stateProperties) {
                                 final var k = entry.getKey();
-                                @SuppressWarnings("unchecked")
-                                final var v = (List<String>) entry.getValue();
+                                @SuppressWarnings("unchecked") final var v = (List<String>) entry.getValue();
                                 assert v.size() < MAX_VALUES;
                                 final PropertyTypeKey propertyTypeKey = new PropertyTypeKey(k, v);
                                 propertyTypes[i++] = propertyTypeCache.computeIfAbsent(propertyTypeKey,
@@ -100,8 +104,7 @@ record BlockImpl(RegistryData.BlockEntry registry,
                         Arrays.fill(stateIds, -1);
                         for (var stateEntry : stateObject) {
                             final String query = stateEntry.getKey();
-                            @SuppressWarnings("unchecked")
-                            final var stateOverride = (Map<String, Object>) stateEntry.getValue();
+                            @SuppressWarnings("unchecked") final var stateOverride = (Map<String, Object>) stateEntry.getValue();
                             final var propertyMap = BlockUtils.parseProperties(query);
                             if (propertyTypes.length != propertyMap.size()) {
                                 throw new IllegalStateException("Invalid property count for block state " + namespace + query);

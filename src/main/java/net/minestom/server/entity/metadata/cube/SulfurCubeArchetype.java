@@ -7,7 +7,11 @@ import net.minestom.server.entity.attribute.AttributeModifier;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.*;
+import net.minestom.server.registry.BuiltinRegistries;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.RegistryKey;
+import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -156,7 +160,8 @@ public sealed interface SulfurCubeArchetype extends SulfurCubeArchetypes permits
         private KnockbackModifiers knockbackModifiers = KnockbackModifiers.DEFAULT;
         private SoundSettings soundSettings = SoundSettings.DEFAULT;
 
-        private Builder() {}
+        private Builder() {
+        }
 
         public Builder items(RegistryTag<Material> items) {
             this.items = Objects.requireNonNull(items, "items");

@@ -7,7 +7,11 @@ import net.minestom.server.particle.Particle;
 
 import java.util.Objects;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
+import static net.minestom.server.network.NetworkBuffer.DOUBLE;
+import static net.minestom.server.network.NetworkBuffer.FLOAT;
+import static net.minestom.server.network.NetworkBuffer.INT;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record ParticlePacket(Particle particle, boolean overrideLimiter, boolean longDistance, double x, double y, double z,
                              float offsetX, float offsetY, float offsetZ, float maxSpeed,
@@ -24,7 +28,7 @@ public record ParticlePacket(Particle particle, boolean overrideLimiter, boolean
         this(particle, false, false, position, offset, maxSpeed, particleCount);
     }
 
-    public static final NetworkBuffer.Type<ParticlePacket> SERIALIZER = new Type<>() {
+    public static final NetworkBuffer.Type<ParticlePacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
         public void write(NetworkBuffer buffer, ParticlePacket value) {
             buffer.write(BOOLEAN, value.overrideLimiter);

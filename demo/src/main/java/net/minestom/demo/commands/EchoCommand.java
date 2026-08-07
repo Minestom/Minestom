@@ -1,6 +1,5 @@
 package net.minestom.demo.commands;
 
-import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.minestom.server.command.builder.Command;

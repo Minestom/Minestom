@@ -1,7 +1,5 @@
 package net.minestom.server.listener;
 
-import java.util.List;
-import java.util.Set;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Player;

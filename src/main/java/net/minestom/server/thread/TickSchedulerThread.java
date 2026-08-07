@@ -1,10 +1,11 @@
 package net.minestom.server.thread;
 
-import java.util.Locale;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.ServerProcess;
 import org.jetbrains.annotations.ApiStatus;
+
+import java.util.Locale;
 
 @ApiStatus.Internal
 public final class TickSchedulerThread extends MinestomThread {

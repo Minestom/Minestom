@@ -6,7 +6,9 @@ import net.minestom.server.network.packet.server.ServerPacket;
 
 import java.util.Arrays;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
+import static net.minestom.server.network.NetworkBuffer.BYTE_ARRAY;
+import static net.minestom.server.network.NetworkBuffer.STRING;
 
 public record EncryptionRequestPacket(
         String serverId,

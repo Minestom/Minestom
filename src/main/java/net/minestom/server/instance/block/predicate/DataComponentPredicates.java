@@ -7,7 +7,7 @@ import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 
-import java.util.*;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 public record DataComponentPredicates(DataComponentMap exact,

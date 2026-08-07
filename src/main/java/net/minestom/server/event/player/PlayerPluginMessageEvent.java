@@ -1,9 +1,10 @@
 package net.minestom.server.event.player;
 
-import java.nio.charset.StandardCharsets;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.network.packet.client.common.ClientPluginMessagePacket;
+
+import java.nio.charset.StandardCharsets;
 
 /**
  * Called when a player send {@link ClientPluginMessagePacket}.
