@@ -6,14 +6,19 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
-import org.jetbrains.annotations.Nullable;
 
 import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
-import static net.minestom.server.instance.light.LightCompute.*;
+import static net.minestom.server.instance.light.LightCompute.CONTENT_FULLY_LIT;
+import static net.minestom.server.instance.light.LightCompute.EMPTY_CONTENT;
+import static net.minestom.server.instance.light.LightCompute.FACES;
+import static net.minestom.server.instance.light.LightCompute.UNSET_CONTENT;
+import static net.minestom.server.instance.light.LightCompute.buildExternalQueue;
+import static net.minestom.server.instance.light.LightCompute.lazyArray;
 
 final class SkyLight implements Light {
     private byte[] content;

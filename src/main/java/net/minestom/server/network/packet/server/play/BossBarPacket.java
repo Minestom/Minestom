@@ -13,16 +13,20 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BYTE;
+import static net.minestom.server.network.NetworkBuffer.COMPONENT;
+import static net.minestom.server.network.NetworkBuffer.Enum;
+import static net.minestom.server.network.NetworkBuffer.FLOAT;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record BossBarPacket(UUID uuid,
                             Action action) implements ServerPacket.Play, ServerPacket.ComponentHolding {
-    public static final NetworkBuffer.Type<BossBarPacket> SERIALIZER = new Type<>() {
+    public static final NetworkBuffer.Type<BossBarPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
         public void write(NetworkBuffer buffer, BossBarPacket value) {
             buffer.write(NetworkBuffer.UUID, value.uuid);
             buffer.write(VAR_INT, value.action.id());
-            @SuppressWarnings("unchecked") final Type<Action> serializer = (Type<Action>) actionSerializer(value.action.id());
+            @SuppressWarnings("unchecked") final NetworkBuffer.Type<Action> serializer = (NetworkBuffer.Type<Action>) actionSerializer(value.action.id());
             buffer.write(serializer, value.action);
         }
 
@@ -30,7 +34,7 @@ public record BossBarPacket(UUID uuid,
         public BossBarPacket read(NetworkBuffer buffer) {
             final UUID uuid = buffer.read(NetworkBuffer.UUID);
             final int id = buffer.read(VAR_INT);
-            final Type<? extends Action> serializer = actionSerializer(id);
+            final NetworkBuffer.Type<? extends Action> serializer = actionSerializer(id);
             return new BossBarPacket(uuid, serializer.read(buffer));
         }
     };
@@ -42,7 +46,7 @@ public record BossBarPacket(UUID uuid,
                 : List.of();
     }
 
-    private static Type<? extends Action> actionSerializer(int id) {
+    private static NetworkBuffer.Type<? extends Action> actionSerializer(int id) {
         return switch (id) {
             case 0 -> AddAction.SERIALIZER;
             case 1 -> RemoveAction.SERIALIZER;

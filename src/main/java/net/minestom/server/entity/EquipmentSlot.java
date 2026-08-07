@@ -8,7 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.BOOTS_SLOT;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.CHESTPLATE_SLOT;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.HELMET_SLOT;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.LEGGINGS_SLOT;
 
 public enum EquipmentSlot {
     MAIN_HAND(0, 0, "mainhand", false, -1),

@@ -1,6 +1,5 @@
 package net.minestom.server.network.packet.server.play;
 
-import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.crypto.ChatSession;
 import net.minestom.server.entity.GameMode;
@@ -10,10 +9,17 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.GameProfile;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.UUID;
 import java.util.function.UnaryOperator;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
+import static net.minestom.server.network.NetworkBuffer.COMPONENT;
+import static net.minestom.server.network.NetworkBuffer.EnumSet;
+import static net.minestom.server.network.NetworkBuffer.STRING;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record PlayerInfoUpdatePacket(
         EnumSet<Action> actions,
@@ -38,7 +44,7 @@ public record PlayerInfoUpdatePacket(
         entries = List.copyOf(entries);
     }
 
-    public static final NetworkBuffer.Type<PlayerInfoUpdatePacket> SERIALIZER = new Type<>() {
+    public static final NetworkBuffer.Type<PlayerInfoUpdatePacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
         public void write(NetworkBuffer writer, PlayerInfoUpdatePacket value) {
             writer.write(EnumSet(Action.class), value.actions);
@@ -89,7 +95,7 @@ public record PlayerInfoUpdatePacket(
         }
 
         public static NetworkBuffer.Type<Entry> serializer(EnumSet<Action> actions) {
-            return new Type<>() {
+            return new NetworkBuffer.Type<>() {
                 @Override
                 public void write(NetworkBuffer buffer, Entry value) {
                     buffer.write(NetworkBuffer.UUID, value.uuid);

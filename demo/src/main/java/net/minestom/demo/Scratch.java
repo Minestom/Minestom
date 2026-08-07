@@ -30,7 +30,17 @@ import net.minestom.server.network.packet.server.configuration.FinishConfigurati
 import net.minestom.server.network.packet.server.configuration.SelectKnownPacksPacket;
 import net.minestom.server.network.packet.server.configuration.UpdateEnabledFeaturesPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
-import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.packet.server.play.ChangeGameStatePacket;
+import net.minestom.server.network.packet.server.play.ChunkBatchFinishedPacket;
+import net.minestom.server.network.packet.server.play.ChunkBatchStartPacket;
+import net.minestom.server.network.packet.server.play.ChunkDataPacket;
+import net.minestom.server.network.packet.server.play.JoinGamePacket;
+import net.minestom.server.network.packet.server.play.PlayerAbilitiesPacket;
+import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
+import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
+import net.minestom.server.network.packet.server.play.SpawnPositionPacket;
+import net.minestom.server.network.packet.server.play.UpdateViewDistancePacket;
+import net.minestom.server.network.packet.server.play.UpdateViewPositionPacket;
 import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.network.packet.server.play.data.PlayerSpawnInfo;
@@ -50,7 +60,12 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.util.*;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import static net.minestom.server.MinecraftServer.PROTOCOL_VERSION;
 

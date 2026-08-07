@@ -8,10 +8,10 @@ import net.minestom.server.entity.ai.TargetSelector;
 import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Attacks the entity's target ({@link EntityCreature#getTarget()}) OR the closest entity

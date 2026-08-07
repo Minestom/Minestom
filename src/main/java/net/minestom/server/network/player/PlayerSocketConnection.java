@@ -26,7 +26,11 @@ import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPa
 import net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
 import net.minestom.server.network.packet.client.status.StatusRequestPacket;
-import net.minestom.server.network.packet.server.*;
+import net.minestom.server.network.packet.server.BufferedPacket;
+import net.minestom.server.network.packet.server.CachedPacket;
+import net.minestom.server.network.packet.server.FramedPacket;
+import net.minestom.server.network.packet.server.SendablePacket;
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.utils.collection.ConcurrentMessageQueues;
 import net.minestom.server.utils.validate.Check;

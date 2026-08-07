@@ -11,7 +11,10 @@ import net.minestom.server.utils.MathUtils;
 import java.util.Locale;
 import java.util.Objects;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
+import static net.minestom.server.network.NetworkBuffer.BYTE;
+import static net.minestom.server.network.NetworkBuffer.Enum;
+import static net.minestom.server.network.NetworkBuffer.STRING;
 
 public record ClientSettings(Locale locale, byte viewDistance,
                              ChatMessageType chatMessageType, boolean chatColors,
@@ -56,6 +59,7 @@ public record ClientSettings(Locale locale, byte viewDistance,
 
     /**
      * Deprecated in favor of {@link Player#effectiveViewDistance()}
+     *
      * @return The effective view distance, which is the smaller of either the client's view distance settings and the server's max view distance
      */
     @Deprecated

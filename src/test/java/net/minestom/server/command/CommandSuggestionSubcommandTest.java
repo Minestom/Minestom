@@ -3,8 +3,8 @@ package net.minestom.server.command;
 import net.minestom.server.command.builder.Command;
 import org.junit.jupiter.api.Test;
 
-import static net.minestom.server.command.builder.arguments.ArgumentType.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Word;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class CommandSuggestionSubcommandTest {
 

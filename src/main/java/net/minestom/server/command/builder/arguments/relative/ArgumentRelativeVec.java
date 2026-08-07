@@ -9,7 +9,9 @@ import net.minestom.server.utils.location.RelativeVec;
 
 import java.util.function.Function;
 
-import static net.minestom.server.utils.location.RelativeVec.CoordinateType.*;
+import static net.minestom.server.utils.location.RelativeVec.CoordinateType.ABSOLUTE;
+import static net.minestom.server.utils.location.RelativeVec.CoordinateType.LOCAL;
+import static net.minestom.server.utils.location.RelativeVec.CoordinateType.RELATIVE;
 
 /**
  * Common interface for all the relative location arguments.

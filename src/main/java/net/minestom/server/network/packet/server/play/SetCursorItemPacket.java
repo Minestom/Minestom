@@ -1,6 +1,5 @@
 package net.minestom.server.network.packet.server.play;
 
-import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;

@@ -2,7 +2,11 @@ package net.minestom.server.codec;
 
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @ApiStatus.Internal
 final class TranscoderJavaImpl implements Transcoder<Object> {

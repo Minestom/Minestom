@@ -4,7 +4,6 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerHandAnimationEvent;
-import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.client.play.ClientAnimationPacket;
 
 public class AnimationListener {

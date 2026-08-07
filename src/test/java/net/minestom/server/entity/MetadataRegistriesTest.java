@@ -5,7 +5,9 @@ import net.minestom.server.registry.Registries;
 import net.minestom.testing.RegistriesTest;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @RegistriesTest
 public class MetadataRegistriesTest {

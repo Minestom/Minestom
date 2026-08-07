@@ -7,7 +7,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
+import static net.minestom.server.network.NetworkBuffer.LONG;
+import static net.minestom.server.network.NetworkBuffer.STRING;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record PlayerSpawnInfo(int dimensionType, String world, long hashedSeed, GameMode gameMode,
                               @Nullable GameMode previousGameMode, boolean debug, boolean flat,

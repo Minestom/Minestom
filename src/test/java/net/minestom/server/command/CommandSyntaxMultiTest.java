@@ -5,14 +5,14 @@ import net.minestom.server.command.builder.arguments.Argument;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
-import java.lang.String;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static net.minestom.server.command.builder.arguments.ArgumentType.Float;
 import static net.minestom.server.command.builder.arguments.ArgumentType.Integer;
-import static net.minestom.server.command.builder.arguments.ArgumentType.*;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Word;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 

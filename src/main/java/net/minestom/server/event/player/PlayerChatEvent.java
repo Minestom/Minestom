@@ -1,6 +1,5 @@
 package net.minestom.server.event.player;
 
-import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
@@ -8,6 +7,7 @@ import net.minestom.server.event.trait.PlayerInstanceEvent;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Called every time a {@link Player} writes and sends something in the chat.

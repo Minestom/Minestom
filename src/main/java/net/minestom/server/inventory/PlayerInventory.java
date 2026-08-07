@@ -16,7 +16,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.BOOTS_SLOT;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.CHESTPLATE_SLOT;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.HELMET_SLOT;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.LEGGINGS_SLOT;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.OFFHAND_SLOT;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.convertMinestomSlotToPlayerInventorySlot;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.convertMinestomSlotToWindowSlot;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.isPlayerInventorySlot;
 
 /**
  * Represents the inventory of a {@link Player}, retrieved with {@link Player#getInventory()}.
@@ -255,7 +262,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
                     player, slot, clicked, cursor
             );
 
-            if(clickResult.isCancel()) {
+            if (clickResult.isCancel()) {
                 clickResult = clickProcessor.shiftClick(
                         this, this,
                         0, 9, 1,
@@ -271,7 +278,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
                     player, slot, clicked, cursor
             );
 
-            if(clickResult.isCancel()) {
+            if (clickResult.isCancel()) {
                 clickResult = clickProcessor.shiftClick(
                         this, this,
                         INNER_INVENTORY_SIZE - 1, 8, -1,

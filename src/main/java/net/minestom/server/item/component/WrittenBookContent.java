@@ -9,7 +9,9 @@ import net.minestom.server.network.NetworkBufferTemplate;
 
 import java.util.List;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
+import static net.minestom.server.network.NetworkBuffer.STRING;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record WrittenBookContent(FilteredText<String> title, String author, int generation,
                                  List<FilteredText<Component>> pages, boolean resolved) {

@@ -7,7 +7,9 @@ import java.security.PublicKey;
 import java.time.Instant;
 import java.util.Arrays;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BYTE_ARRAY;
+import static net.minestom.server.network.NetworkBuffer.INSTANT_MS;
+import static net.minestom.server.network.NetworkBuffer.PUBLIC_KEY;
 
 /**
  * Player's public key used to sign chat messages

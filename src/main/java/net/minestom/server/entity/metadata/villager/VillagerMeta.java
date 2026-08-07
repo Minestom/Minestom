@@ -2,7 +2,11 @@ package net.minestom.server.entity.metadata.villager;
 
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
-import net.minestom.server.entity.*;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetadataDef;
+import net.minestom.server.entity.MetadataHolder;
+import net.minestom.server.entity.VillagerProfession;
+import net.minestom.server.entity.VillagerType;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import org.jetbrains.annotations.Nullable;

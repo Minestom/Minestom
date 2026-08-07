@@ -9,7 +9,11 @@ import net.minestom.server.network.packet.server.ServerPacket;
 
 import java.util.UUID;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BYTE;
+import static net.minestom.server.network.NetworkBuffer.DOUBLE;
+import static net.minestom.server.network.NetworkBuffer.LP_VECTOR3;
+import static net.minestom.server.network.NetworkBuffer.UUID;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record SpawnEntityPacket(
         int entityId, UUID uuid, EntityType type,

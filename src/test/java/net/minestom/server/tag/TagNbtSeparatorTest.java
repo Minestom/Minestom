@@ -1,6 +1,15 @@
 package net.minestom.server.tag;
 
-import net.kyori.adventure.nbt.*;
+import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.BinaryTagTypes;
+import net.kyori.adventure.nbt.ByteBinaryTag;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.DoubleBinaryTag;
+import net.kyori.adventure.nbt.FloatBinaryTag;
+import net.kyori.adventure.nbt.IntBinaryTag;
+import net.kyori.adventure.nbt.ListBinaryTag;
+import net.kyori.adventure.nbt.LongBinaryTag;
+import net.kyori.adventure.nbt.ShortBinaryTag;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;

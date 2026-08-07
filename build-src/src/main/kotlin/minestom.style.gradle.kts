@@ -110,6 +110,9 @@ tasks.withType<JavaCompile>().configureEach {
                 "NullableTypeParameter",
                 "NullableVoid",
                 "NullableWildcard",
+                "RemoveUnusedImports",
+                "WildcardImport",
+                "UnnecessaryStaticImport"
         )
 
         disable(

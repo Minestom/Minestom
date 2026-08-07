@@ -5,7 +5,9 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.Enum;
+import static net.minestom.server.network.NetworkBuffer.FLOAT;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record ClientUseItemPacket(PlayerHand hand, int sequence, float yaw,
                                   float pitch) implements ClientPacket.Play {

@@ -7,7 +7,11 @@ import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.client.play.ClientCloseWindowPacket;
-import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
+import net.minestom.server.network.packet.server.play.SetCursorItemPacket;
+import net.minestom.server.network.packet.server.play.SetPlayerInventorySlotPacket;
+import net.minestom.server.network.packet.server.play.SetSlotPacket;
+import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
@@ -15,7 +19,9 @@ import org.junit.jupiter.api.Test;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @EnvTest
 public class PlayerInventoryIntegrationTest {

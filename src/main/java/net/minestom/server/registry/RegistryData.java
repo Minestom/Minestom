@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
-import java.nio.charset.StandardCharsets;
 import net.kyori.adventure.key.Key;
 import net.minestom.data.MinestomData;
 import net.minestom.server.MinecraftServer;
@@ -37,9 +36,15 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -317,20 +322,20 @@ public final class RegistryData {
             var signalSource = fromParent(parent, BlockEntry::isSignalSource, main, "signalSource", Properties::getBoolean, false);
             this.packedFlags = (short) (
                     (air ? AIR_OFFSET : 0) |
-                    (liquid ? LIQUID_OFFSET : 0) |
-                    (fluid ? FLUID_OFFSET : 0) |
-                    (solid ? SOLID_OFFSET : 0) |
-                    (occludes ? OCCLUDES_OFFSET : 0) |
-                    (requiresTool ? REQUIRES_TOOL_OFFSET : 0) |
-                    (replaceable ? REPLACEABLE_OFFSET : 0) |
-                    (redstoneConductor ? REDSTONE_CONDUCTOR_OFFSET : 0) |
-                    (signalSource ? SIGNAL_SOURCE_OFFSET : 0)
+                            (liquid ? LIQUID_OFFSET : 0) |
+                            (fluid ? FLUID_OFFSET : 0) |
+                            (solid ? SOLID_OFFSET : 0) |
+                            (occludes ? OCCLUDES_OFFSET : 0) |
+                            (requiresTool ? REQUIRES_TOOL_OFFSET : 0) |
+                            (replaceable ? REPLACEABLE_OFFSET : 0) |
+                            (redstoneConductor ? REDSTONE_CONDUCTOR_OFFSET : 0) |
+                            (signalSource ? SIGNAL_SOURCE_OFFSET : 0)
             );
         }
 
-        private static <R>  R fromParent(@Nullable BlockEntry parent, Function<BlockEntry, R> parentProperty,
-                                @Nullable Properties main, String name, BiFunction<Properties, String, R> function,
-                                @Nullable R defaultValue) {
+        private static <R> R fromParent(@Nullable BlockEntry parent, Function<BlockEntry, R> parentProperty,
+                                        @Nullable Properties main, String name, BiFunction<Properties, String, R> function,
+                                        @Nullable R defaultValue) {
             R value = null;
             if (main != null && main.containsKey(name)) {  // Required to have a nullable properties method
                 value = function.apply(main, name);

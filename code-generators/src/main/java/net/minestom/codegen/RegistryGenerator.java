@@ -2,7 +2,12 @@ package net.minestom.codegen;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.palantir.javapoet.*;
+import com.palantir.javapoet.ClassName;
+import com.palantir.javapoet.CodeBlock;
+import com.palantir.javapoet.FieldSpec;
+import com.palantir.javapoet.ParameterizedTypeName;
+import com.palantir.javapoet.TypeName;
+import com.palantir.javapoet.TypeSpec;
 import org.jetbrains.annotations.ApiStatus;
 
 import javax.lang.model.element.Modifier;

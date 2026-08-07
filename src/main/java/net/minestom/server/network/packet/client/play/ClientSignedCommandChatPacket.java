@@ -7,7 +7,9 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.utils.validate.Check;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BYTE;
+import static net.minestom.server.network.NetworkBuffer.LONG;
+import static net.minestom.server.network.NetworkBuffer.STRING;
 
 public record ClientSignedCommandChatPacket(String message, long timestamp,
                                             long salt, ArgumentSignatures signatures,

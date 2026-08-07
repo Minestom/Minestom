@@ -17,7 +17,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BYTE;
+import static net.minestom.server.network.NetworkBuffer.BYTE_ARRAY;
+import static net.minestom.server.network.NetworkBuffer.LONG_ARRAY;
+import static net.minestom.server.network.NetworkBuffer.NBT;
+import static net.minestom.server.network.NetworkBuffer.SHORT;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record ChunkData(Map<Heightmap.Type, long[]> heightmaps, byte[] data,
                         Map<Integer, Block> blockEntities) {

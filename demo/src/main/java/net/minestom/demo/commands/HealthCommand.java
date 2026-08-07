@@ -1,6 +1,5 @@
 package net.minestom.demo.commands;
 
-import java.util.Locale;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
@@ -10,6 +9,8 @@ import net.minestom.server.command.builder.arguments.number.ArgumentNumber;
 import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.entity.Player;
+
+import java.util.Locale;
 
 public class HealthCommand extends Command {
 

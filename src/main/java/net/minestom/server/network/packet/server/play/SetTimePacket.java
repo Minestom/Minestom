@@ -8,7 +8,9 @@ import net.minestom.server.world.clock.WorldClock;
 
 import java.util.Map;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.FLOAT;
+import static net.minestom.server.network.NetworkBuffer.LONG;
+import static net.minestom.server.network.NetworkBuffer.VAR_LONG;
 
 public record SetTimePacket(long gameTime,
                             Map<RegistryKey<WorldClock>, ClockState> clocks) implements ServerPacket.Play {
@@ -24,9 +26,9 @@ public record SetTimePacket(long gameTime,
     /**
      * Represents a clock state update for time.
      *
-     * @param totalTicks the number of ticks since this clock was ticking
+     * @param totalTicks  the number of ticks since this clock was ticking
      * @param partialTick the partial tick of the clock (based on rate), wiped on full update
-     * @param rate the rate of the clock in ticks, 1 for normal
+     * @param rate        the rate of the clock in ticks, 1 for normal
      */
     public record ClockState(long totalTicks, float partialTick, float rate) {
         public static final NetworkBuffer.Type<ClockState> NETWORK_TYPE = NetworkBufferTemplate.template(

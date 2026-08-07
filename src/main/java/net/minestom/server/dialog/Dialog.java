@@ -6,7 +6,13 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.*;
+import net.minestom.server.registry.BuiltinRegistries;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.Holder;
+import net.minestom.server.registry.HolderSet;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 

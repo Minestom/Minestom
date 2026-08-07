@@ -6,7 +6,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

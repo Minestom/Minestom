@@ -1,12 +1,19 @@
 package net.minestom.codegen;
 
 import com.google.gson.JsonObject;
-import com.palantir.javapoet.*;
-import java.util.Locale;
+import com.palantir.javapoet.ArrayTypeName;
+import com.palantir.javapoet.ClassName;
+import com.palantir.javapoet.FieldSpec;
+import com.palantir.javapoet.MethodSpec;
+import com.palantir.javapoet.ParameterSpec;
+import com.palantir.javapoet.ParameterizedTypeName;
+import com.palantir.javapoet.TypeName;
+import com.palantir.javapoet.TypeSpec;
 import org.jetbrains.annotations.Nullable;
 
 import javax.lang.model.element.Modifier;
 import java.util.List;
+import java.util.Locale;
 
 record WorldEventGenerator(Codegen codegen, String packageName, String worldEventClassName, String resource) {
 

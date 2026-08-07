@@ -1,14 +1,32 @@
 package net.minestom.server.command;
 
 import net.minestom.server.command.builder.Command;
-import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Fork;
+import org.openjdk.jmh.annotations.Measurement;
+import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.Setup;
+import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
 import org.openjdk.jmh.infra.Blackhole;
 
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-import static net.minestom.server.command.builder.arguments.ArgumentType.*;
+import static net.minestom.server.command.builder.arguments.ArgumentType.BlockState;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Double;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Entity;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Float;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Integer;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Long;
+import static net.minestom.server.command.builder.arguments.ArgumentType.RelativeBlockPosition;
+import static net.minestom.server.command.builder.arguments.ArgumentType.RelativeVec3;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Word;
 
 @BenchmarkMode(Mode.AverageTime)
 @State(Scope.Benchmark)

@@ -1,9 +1,8 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.component.DataComponents;
 import net.kyori.adventure.key.Key;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeModifier;
 import net.minestom.server.entity.attribute.AttributeOperation;

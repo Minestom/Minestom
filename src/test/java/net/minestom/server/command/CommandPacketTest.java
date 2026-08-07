@@ -6,7 +6,9 @@ import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommandPacketTest {
 

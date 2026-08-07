@@ -5,7 +5,10 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
+import static net.minestom.server.network.NetworkBuffer.FLOAT;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
+import static net.minestom.server.network.NetworkBuffer.VECTOR3D;
 
 public record EntityPositionSyncPacket(
         int entityId, Point position, Point delta,

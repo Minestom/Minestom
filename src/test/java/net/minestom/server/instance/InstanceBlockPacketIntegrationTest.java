@@ -14,7 +14,6 @@ import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collection;
 import java.util.List;
 
 import static net.minestom.testing.TestUtils.assertPoint;

@@ -3,7 +3,17 @@ package net.minestom.server.network.debug;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.debug.info.*;
+import net.minestom.server.network.debug.info.DebugBeeInfo;
+import net.minestom.server.network.debug.info.DebugBrainDump;
+import net.minestom.server.network.debug.info.DebugBreezeInfo;
+import net.minestom.server.network.debug.info.DebugEntityBlockIntersection;
+import net.minestom.server.network.debug.info.DebugGameEventInfo;
+import net.minestom.server.network.debug.info.DebugGameEventListenerInfo;
+import net.minestom.server.network.debug.info.DebugGoalInfo;
+import net.minestom.server.network.debug.info.DebugHiveInfo;
+import net.minestom.server.network.debug.info.DebugPathInfo;
+import net.minestom.server.network.debug.info.DebugPoiInfo;
+import net.minestom.server.network.debug.info.DebugStructureInfo;
 import net.minestom.server.utils.Unit;
 
 import java.util.List;
