@@ -5,7 +5,7 @@ plugins {
 
 dependencies {
     implementation(libs.fastutil)
-    jmhImplementation(rootProject)
+    jmhImplementation(project(":"))
     jmh(libs.jmh.core)
     jmhAnnotationProcessor(libs.jmh.annotationprocessor)
 }

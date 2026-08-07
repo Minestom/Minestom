@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation(rootProject)
+    implementation(project(":"))
 
     runtimeOnly(libs.bundles.logback)
 }
