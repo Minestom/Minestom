@@ -10,13 +10,10 @@ import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.instance.block.predicate.BlockPredicate;
-import net.minestom.server.instance.block.predicate.PropertiesPredicate;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.BlockPredicates;
 import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket;
-import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.world.DimensionType;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
@@ -26,13 +23,12 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @EnvTest
-public final class DynamicChunkTest {
+public final class ChunkIntegrationTest {
 
     @Test
     public void testBlockEntities(Env env) {
