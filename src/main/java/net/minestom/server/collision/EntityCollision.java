@@ -16,7 +16,7 @@ final class EntityCollision {
             BoundingBox boundingBox, Point point, Vec entityVelocity,
             double extendRadius, Function<Entity, Boolean> entityFilter, @Nullable PhysicsResult physicsResult
     ) {
-        double minimumRes = physicsResult != null ? physicsResult.res().res : Double.MAX_VALUE;
+        double minimumRes = physicsResult != null ? physicsResult.collisionFraction() : Double.MAX_VALUE;
 
         List<EntityCollisionResult> result = new ArrayList<>();
 

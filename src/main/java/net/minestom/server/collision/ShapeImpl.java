@@ -113,9 +113,9 @@ public record ShapeImpl(ShapeData shapeData, OcclusionData occlusionData) implem
                 finalResult.collidedPositionX = rayStart.x() + rayDirection.x() * finalResult.res;
                 finalResult.collidedPositionY = rayStart.y() + rayDirection.y() * finalResult.res;
                 finalResult.collidedPositionZ = rayStart.z() + rayDirection.z() * finalResult.res;
-                finalResult.collidedShapeX = shapePos.x();
-                finalResult.collidedShapeY = shapePos.y();
-                finalResult.collidedShapeZ = shapePos.z();
+                finalResult.collidedBlockX = shapePos.blockX();
+                finalResult.collidedBlockY = shapePos.blockY();
+                finalResult.collidedBlockZ = shapePos.blockZ();
                 finalResult.collidedShape = this;
                 hitBlock = true;
             }

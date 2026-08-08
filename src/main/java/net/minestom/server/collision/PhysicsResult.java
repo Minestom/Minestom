@@ -1,10 +1,10 @@
 package net.minestom.server.collision;
 
-import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.UnknownNullability;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The result of a physics simulation.
@@ -17,10 +17,9 @@ import org.jetbrains.annotations.UnknownNullability;
  * @param originalDelta the velocity delta of the entity
  * @param collisionPoints the points where the entity collided
  * @param collisionShapes the shapes the entity collided with
- * @param collisionShapePositions the positions of the shapes the entity collided with
+ * @param collisionShapePositions the block positions of the shapes the entity collided with
  * @param hasCollision if the entity collided
- * @param res sweep result of the collision
- * @param cached if the result was due to quickly exiting
+ * @param collisionFraction fraction accepted by the final collision sweep
  */
 @ApiStatus.Experimental
 public record PhysicsResult(
@@ -31,14 +30,10 @@ public record PhysicsResult(
         boolean collisionY,
         boolean collisionZ,
         Vec originalDelta,
-        @UnknownNullability Point @UnknownNullability [] collisionPoints,
-        @UnknownNullability Shape @UnknownNullability [] collisionShapes,
-        @UnknownNullability Point @UnknownNullability [] collisionShapePositions,
+        @Nullable Vec[] collisionPoints,
+        @Nullable Shape[] collisionShapes,
+        @Nullable BlockVec[] collisionShapePositions,
         boolean hasCollision,
-        SweepResult res,
-        boolean cached
+        double collisionFraction
 ) {
-    public PhysicsResult(Pos newPosition, Vec newVelocity, boolean isOnGround, boolean collisionX, boolean collisionY, boolean collisionZ, Vec originalDelta, Point[] collisionPoints, Shape[] collisionShapes, Point[] collisionShapePositions, boolean hasCollision, SweepResult res) {
-        this(newPosition, newVelocity, isOnGround, collisionX, collisionY, collisionZ, originalDelta, collisionPoints, collisionShapes, collisionShapePositions, hasCollision, res, false);
-    }
 }

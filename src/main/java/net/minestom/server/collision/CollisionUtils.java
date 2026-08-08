@@ -151,7 +151,7 @@ public final class CollisionUtils {
         return handlePhysics(entity, entityVelocity, null);
     }
 
-    public static Entity canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
+    public static @Nullable Entity canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
         return BlockCollision.canPlaceBlockAt(instance, blockPos, b);
     }
 
@@ -206,6 +206,6 @@ public final class CollisionUtils {
     public static PhysicsResult blocklessCollision(Pos entityPosition, Vec entityVelocity) {
         return new PhysicsResult(entityPosition.add(entityVelocity), entityVelocity, false,
                 false, false, false, entityVelocity, BlockCollision.NO_COLLISION_POINTS,
-                BlockCollision.NO_COLLISION_SHAPES, BlockCollision.NO_COLLISION_SHAPE_POSITIONS, false, SweepResult.NO_COLLISION);
+                BlockCollision.NO_COLLISION_SHAPES, BlockCollision.NO_COLLISION_SHAPE_POSITIONS, false, Double.MAX_VALUE);
     }
 }

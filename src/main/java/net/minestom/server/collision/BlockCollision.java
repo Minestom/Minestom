@@ -1,5 +1,6 @@
 package net.minestom.server.collision;
 
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -10,9 +11,9 @@ import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.Nullable;
 
 final class BlockCollision {
-    static final Point[] NO_COLLISION_POINTS = new Point[3];
-    static final Shape[] NO_COLLISION_SHAPES = new Shape[3];
-    static final Point[] NO_COLLISION_SHAPE_POSITIONS = new Point[3];
+    static final @Nullable Vec[] NO_COLLISION_POINTS = new Vec[3];
+    static final @Nullable Shape[] NO_COLLISION_SHAPES = new Shape[3];
+    static final @Nullable BlockVec[] NO_COLLISION_SHAPE_POSITIONS = new BlockVec[3];
 
     /**
      * Moves an entity with physics applied (ie checking against blocks)
@@ -27,7 +28,7 @@ final class BlockCollision {
                                        boolean singleCollision) {
         if (velocity.isZero()) {
             return new PhysicsResult(entityPosition, Vec.ZERO, false, false, false, false,
-                    velocity, NO_COLLISION_POINTS, NO_COLLISION_SHAPES, NO_COLLISION_SHAPE_POSITIONS, false, SweepResult.NO_COLLISION);
+                    velocity, NO_COLLISION_POINTS, NO_COLLISION_SHAPES, NO_COLLISION_SHAPE_POSITIONS, false, Double.MAX_VALUE);
         }
         // Fast-exit using cache
         final PhysicsResult cachedResult = cachedPhysics(velocity, entityPosition, getter, lastPhysicsResult);
@@ -38,6 +39,7 @@ final class BlockCollision {
         return stepPhysics(boundingBox, velocity, entityPosition, getter, singleCollision);
     }
 
+    @Nullable
     static Entity canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
         for (Entity entity : instance.getNearbyEntities(blockPos, 3)) {
             if (!entity.preventBlockPlacement())
@@ -59,32 +61,28 @@ final class BlockCollision {
         return null;
     }
 
+    @Nullable
     private static PhysicsResult cachedPhysics(Vec velocity, Pos entityPosition,
-                                               Block.Getter getter, PhysicsResult lastPhysicsResult) {
-        if (lastPhysicsResult != null && lastPhysicsResult.collisionShapes()[1] instanceof ShapeImpl shape) {
-            var currentBlock = getter.getBlock(lastPhysicsResult.collisionShapePositions()[1], Block.Getter.Condition.TYPE);
-            var lastBlockBoxes = shape.boundingBoxes();
-            var currentBlockBoxes = ((ShapeImpl) currentBlock.collisionShape()).boundingBoxes();
-
-            // Fast exit if entity hasn't moved
-            if (lastPhysicsResult.collisionY()
-                    && velocity.y() == lastPhysicsResult.originalDelta().y()
-                    // Check block below to fast exit gravity
-                    && currentBlockBoxes.equals(lastBlockBoxes)
-                    && velocity.x() == 0 && velocity.z() == 0
-                    && entityPosition.samePoint(lastPhysicsResult.newPosition())
-                    && !lastBlockBoxes.isEmpty()) {
-                if (lastPhysicsResult.cached()) {
-                    return lastPhysicsResult;
-                } else {
-                    return new PhysicsResult(lastPhysicsResult.newPosition(), lastPhysicsResult.newVelocity(),
-                            lastPhysicsResult.isOnGround(), lastPhysicsResult.collisionX(), lastPhysicsResult.collisionY(),
-                            lastPhysicsResult.collisionZ(), lastPhysicsResult.originalDelta(), lastPhysicsResult.collisionPoints(),
-                            lastPhysicsResult.collisionShapes(), lastPhysicsResult.collisionShapePositions(), lastPhysicsResult.hasCollision(), lastPhysicsResult.res(), true);
-                }
-            }
+                                               Block.Getter getter, @Nullable PhysicsResult lastPhysicsResult) {
+        if (lastPhysicsResult == null
+                || !lastPhysicsResult.collisionY()
+                || velocity.x() != 0 || velocity.z() != 0
+                || !velocity.samePoint(lastPhysicsResult.originalDelta())
+                || !entityPosition.samePoint(lastPhysicsResult.newPosition())) {
+            return null;
         }
-        return null;
+
+        if (!(lastPhysicsResult.collisionShapes()[1] instanceof ShapeImpl lastShape)) return null;
+        final @Nullable BlockVec blockPosition = lastPhysicsResult.collisionShapePositions()[1];
+        assert blockPosition != null;
+
+        final var lastBlockBoxes = lastShape.boundingBoxes();
+        if (lastBlockBoxes.isEmpty()) return null;
+
+        // Reuse an identical vertical collision while the supporting shape is unchanged.
+        final Shape currentShape = getter.getBlock(blockPosition, Block.Getter.Condition.TYPE).collisionShape();
+        return currentShape instanceof ShapeImpl shape && shape.boundingBoxes().equals(lastBlockBoxes)
+                ? lastPhysicsResult : null;
     }
 
     private static PhysicsResult stepPhysics(BoundingBox boundingBox,
@@ -93,9 +91,9 @@ final class BlockCollision {
         final SweepResult finalResult = new SweepResult(1 - Vec.EPSILON, 0, 0, 0, null, 0, 0, 0, 0, 0, 0);
 
         // Start as the shared (all-null) arrays; only allocate real ones on the first collision.
-        Point[] collidedPoints = NO_COLLISION_POINTS;
-        Shape[] collisionShapes = NO_COLLISION_SHAPES;
-        Point[] collisionShapePositions = NO_COLLISION_SHAPE_POSITIONS;
+        @Nullable Vec[] collidedPoints = NO_COLLISION_POINTS;
+        @Nullable Shape[] collisionShapes = NO_COLLISION_SHAPES;
+        @Nullable BlockVec[] collisionShapePositions = NO_COLLISION_SHAPE_POSITIONS;
 
         Pos position = entityPosition;
         Vec remaining = velocity;
@@ -119,12 +117,12 @@ final class BlockCollision {
             else break; // no collision this pass
 
             if (collisionShapes == NO_COLLISION_SHAPES) {
-                collidedPoints = new Point[3];
+                collidedPoints = new Vec[3];
                 collisionShapes = new Shape[3];
-                collisionShapePositions = new Point[3];
+                collisionShapePositions = new BlockVec[3];
             }
             collisionShapes[axis] = finalResult.collidedShape;
-            collisionShapePositions[axis] = new Vec(finalResult.collidedShapeX, finalResult.collidedShapeY, finalResult.collidedShapeZ);
+            collisionShapePositions[axis] = new BlockVec(finalResult.collidedBlockX, finalResult.collidedBlockY, finalResult.collidedBlockZ);
             collidedPoints[axis] = new Vec(finalResult.collidedPositionX, finalResult.collidedPositionY, finalResult.collidedPositionZ);
 
             if (singleCollision || (collisionShapes[0] != null && collisionShapes[1] != null && collisionShapes[2] != null))
@@ -159,7 +157,7 @@ final class BlockCollision {
                 foundY && velocity.y() < 0,
                 foundX, foundY, foundZ,
                 velocity, collidedPoints, collisionShapes, collisionShapePositions,
-                anyCollision, finalResult);
+                anyCollision, finalResult.res);
     }
 
     /**
@@ -229,11 +227,11 @@ final class BlockCollision {
         // only consider the block below if our current shape is sufficiently short
         if (currentShort && shouldCheckLower(entityVelocity, entityPosition, blockX, blockY, blockZ)) {
             // we need to check below for a tall block (fence, wall, ...)
-            final Vec belowPos = new Vec(blockX, blockY - 1, blockZ);
+            final BlockVec belowPos = new BlockVec(blockX, blockY - 1, blockZ);
             final Block belowBlock = getter.getBlock(belowPos, Block.Getter.Condition.TYPE);
             final Shape belowShape = belowBlock.collisionShape();
 
-            final Vec currentPos = new Vec(blockX, blockY, blockZ);
+            final BlockVec currentPos = new BlockVec(blockX, blockY, blockZ);
             // don't fall out of if statement, we could end up redundantly grabbing a block, and we only need to
             // collision check against the current shape since the below shape isn't tall
             if (belowShape.relativeEnd().y() > 1) {
@@ -248,10 +246,10 @@ final class BlockCollision {
         }
 
         if (currentCollidable && currentShape.intersectBoxSwept(entityPosition, entityVelocity,
-                new Vec(blockX, blockY, blockZ), boundingBox, finalResult)) {
+                new BlockVec(blockX, blockY, blockZ), boundingBox, finalResult)) {
             // if the current collision is sufficiently short, we might need to collide against the block below too
             if (currentShort) {
-                final Vec belowPos = new Vec(blockX, blockY - 1, blockZ);
+                final BlockVec belowPos = new BlockVec(blockX, blockY - 1, blockZ);
                 final Block belowBlock = getter.getBlock(belowPos, Block.Getter.Condition.TYPE);
                 final Shape belowShape = belowBlock.collisionShape();
                 // only do sweep if the below block is big enough to possibly hit
