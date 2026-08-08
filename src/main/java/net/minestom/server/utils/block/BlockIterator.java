@@ -4,11 +4,11 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * This class performs ray tracing and iterates along blocks on a line

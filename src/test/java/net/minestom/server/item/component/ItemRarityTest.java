@@ -12,7 +12,7 @@ import static net.kyori.adventure.nbt.StringBinaryTag.stringBinaryTag;
 import static net.minestom.server.codec.CodecAssertions.assertOk;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ItemRarityTest extends AbstractItemComponentTest<ItemRarity> {
+public class ItemRarityTest extends AbstractItemComponentRegistriesTest<ItemRarity> {
     @Override
     protected DataComponent<ItemRarity> component() {
         return DataComponents.RARITY;

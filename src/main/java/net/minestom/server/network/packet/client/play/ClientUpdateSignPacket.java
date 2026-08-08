@@ -6,7 +6,9 @@ import net.minestom.server.network.packet.client.ClientPacket;
 
 import java.util.List;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BLOCK_POSITION;
+import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
+import static net.minestom.server.network.NetworkBuffer.STRING;
 
 public record ClientUpdateSignPacket(
         Point blockPosition,

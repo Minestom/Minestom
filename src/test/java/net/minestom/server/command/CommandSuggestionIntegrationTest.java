@@ -11,7 +11,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static net.minestom.server.command.builder.arguments.ArgumentType.*;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Integer;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Word;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
@@ -120,5 +122,53 @@ public class CommandSuggestionIntegrationTest {
         player.interpretPacketQueue();
 
         listener.assertSingle(tabCompletePacket -> assertEquals(List.of(new TabCompletePacket.Match("suggestionB", null)), tabCompletePacket.matches()));
+    }
+
+    @Test
+    public void suggestionWhenArgumentFailsToParse(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+
+        var intArg = Integer("intArg").setSuggestionCallback(
+                (_, _, suggestion) -> suggestion.addEntry(new SuggestionEntry("42"))
+        );
+
+        var command = new Command("foo");
+        command.addSyntax((_, _) -> {}, intArg);
+        env.process().command().register(command);
+
+        var listener = connection.trackIncoming(TabCompletePacket.class);
+        player.addPacketToQueue(new ClientTabCompletePacket(1, "foo "));
+        player.interpretPacketQueue();
+
+        listener.assertSingle(tabCompletePacket -> assertEquals(List.of(new TabCompletePacket.Match("42", null)), tabCompletePacket.matches()));
+    }
+
+    @Test
+    public void suggestionNotLeakedFromUnrelatedSyntax(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+
+        var intArg = Integer("intArg").setSuggestionCallback(
+                (_, _, suggestion) -> suggestion.addEntry(new SuggestionEntry("42"))
+        );
+        var wordArg = Word("wordArg");
+        var secondIntArg = Integer("secondIntArg");
+
+        var command = new Command("foo");
+        command.addSyntax((_, _) -> {}, intArg);
+        command.addSyntax((_, _) -> {}, wordArg, secondIntArg);
+        env.process().command().register(command);
+
+        var listener = connection.trackIncoming(TabCompletePacket.class);
+        player.addPacketToQueue(new ClientTabCompletePacket(1, "foo text nope"));
+        player.interpretPacketQueue();
+
+        // "nope" fails to parse as secondIntArg, which has no suggestion callback of its
+        // own. It must not inherit the "42" suggestion attached to the unrelated intArg
+        // from the other syntax.
+        listener.assertEmpty();
     }
 }

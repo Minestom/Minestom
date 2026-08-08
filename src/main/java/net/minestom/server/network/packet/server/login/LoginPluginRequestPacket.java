@@ -6,7 +6,9 @@ import net.minestom.server.network.packet.server.ServerPacket;
 
 import java.util.Arrays;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.RAW_BYTES;
+import static net.minestom.server.network.NetworkBuffer.STRING;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record LoginPluginRequestPacket(int messageId, String channel,
                                        byte[] data) implements ServerPacket.Login {

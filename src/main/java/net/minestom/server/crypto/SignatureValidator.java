@@ -6,7 +6,11 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.crypto.KeyUtils;
 import org.jetbrains.annotations.Nullable;
 
-import java.security.*;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.SignatureException;
 import java.util.function.Consumer;
 
 /**
@@ -47,7 +51,7 @@ public interface SignatureValidator {
                 sig.initVerify(publicKey);
                 sig.update(payload);
                 return sig.verify(signature);
-            } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException e) {
+            } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException _) {
                 return false;
             }
         };

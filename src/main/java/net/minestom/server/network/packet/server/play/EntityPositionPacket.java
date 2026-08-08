@@ -6,7 +6,9 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
+import static net.minestom.server.network.NetworkBuffer.SHORT;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record EntityPositionPacket(int entityId, short deltaX, short deltaY, short deltaZ, boolean onGround)
         implements ServerPacket.Play {

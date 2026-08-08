@@ -1,6 +1,5 @@
 package net.minestom.server.command.builder.arguments.number;
 
-import java.util.Locale;
 import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
@@ -10,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
+import java.util.Locale;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -60,7 +60,7 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
             }
 
             return value;
-        } catch (NumberFormatException | NullPointerException e) {
+        } catch (NumberFormatException | NullPointerException _) {
             throw new ArgumentSyntaxException("Input is not a number, or it's invalid for the given type", input, NOT_NUMBER_ERROR);
         }
     }
@@ -177,7 +177,7 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
     protected String removeScientificNotation(String value) {
         try {
             return new BigDecimal(value).toPlainString();
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             return null;
         }
     }

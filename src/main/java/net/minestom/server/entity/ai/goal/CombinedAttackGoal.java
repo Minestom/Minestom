@@ -9,11 +9,11 @@ import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.function.Function;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Allows entity to perform both melee and ranged attacks.

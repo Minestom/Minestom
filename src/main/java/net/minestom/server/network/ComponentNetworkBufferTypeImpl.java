@@ -2,10 +2,22 @@ package net.minestom.server.network;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.text.*;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.KeybindComponent;
+import net.kyori.adventure.text.NBTComponent;
+import net.kyori.adventure.text.ObjectComponent;
+import net.kyori.adventure.text.ScoreComponent;
+import net.kyori.adventure.text.SelectorComponent;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.text.TranslationArgument;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.format.*;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.ShadowColor;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.object.PlayerHeadObjectContents;
 import net.kyori.adventure.text.object.SpriteObjectContents;
 import net.minestom.server.adventure.MinestomAdventure;
@@ -18,9 +30,16 @@ import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BYTE;
+import static net.minestom.server.network.NetworkBuffer.INT;
+import static net.minestom.server.network.NetworkBuffer.NBT;
+import static net.minestom.server.network.NetworkBuffer.STRING_IO_UTF8;
 
 record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Component> {
 
@@ -198,7 +217,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
                             final Key texture = player.texture();
                             if (texture != null) {
                                 buffer.write(BYTE, TAG_STRING);
-                                buffer.write(STRING_IO_UTF8, "body");
+                                buffer.write(STRING_IO_UTF8, "texture");
                                 buffer.write(STRING_IO_UTF8, texture.asMinimalString());
                             }
                         }
@@ -214,7 +233,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
                 }
                 var fallback = object.fallback();
                 if (fallback != null) {
-                    buffer.write(BYTE, TAG_STRING);
+                    buffer.write(BYTE, TAG_COMPOUND);
                     buffer.write(STRING_IO_UTF8, "fallback");
                     writeInnerComponent(buffer, fallback);
                 }

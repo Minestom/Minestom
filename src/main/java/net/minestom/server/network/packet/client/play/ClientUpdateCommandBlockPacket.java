@@ -6,7 +6,10 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.utils.validate.Check;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BLOCK_POSITION;
+import static net.minestom.server.network.NetworkBuffer.BYTE;
+import static net.minestom.server.network.NetworkBuffer.Enum;
+import static net.minestom.server.network.NetworkBuffer.STRING;
 
 public record ClientUpdateCommandBlockPacket(Point blockPosition, String command,
                                              Mode mode, byte flags) implements ClientPacket.Play {

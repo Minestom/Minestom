@@ -1,6 +1,16 @@
 package net.minestom.server.event;
 
-import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Fork;
+import org.openjdk.jmh.annotations.Measurement;
+import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.Param;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.Setup;
+import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
 
 import java.util.concurrent.TimeUnit;
 
@@ -28,13 +38,13 @@ public class SingleNodeBenchmark {
     public void setup() {
         node = EventNode.all("node");
         for (int i = 0; i < listenerCount; i++) {
-            node.addListener(TestEvent.class, e -> {
+            node.addListener(TestEvent.class, _ -> {
                 // Empty
             });
         }
         // Real-world code are very unlikely to use entirely empty nodes.
         // This ensures that the handle map is properly lazily initialized to prevent fast exits.
-        node.addListener(TestEvent2.class, e -> {
+        node.addListener(TestEvent2.class, _ -> {
             // Empty
         });
         node.call(new TestEvent2());

@@ -12,7 +12,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static net.minestom.server.command.builder.arguments.ArgumentType.*;
+import static net.minestom.server.command.builder.arguments.ArgumentType.BlockState;
+import static net.minestom.server.command.builder.arguments.ArgumentType.EntityType;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Group;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Integer;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Loop;
+import static net.minestom.server.command.builder.arguments.ArgumentType.String;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 

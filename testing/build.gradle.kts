@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    api(rootProject)
+    api(project(":"))
 
     implementation(libs.junit.api)
     implementation(libs.junit.params)

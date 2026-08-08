@@ -32,7 +32,7 @@ public class ArgumentComponent extends Argument<Component> {
                 case Result.Error(var message) ->
                         throw new ArgumentSyntaxException("Failed to parse component: " + message, input, INVALID_JSON_ERROR);
             };
-        } catch (JsonParseException e) {
+        } catch (JsonParseException _) {
             throw new ArgumentSyntaxException("Invalid JSON", input, INVALID_JSON_ERROR);
         }
     }

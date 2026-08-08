@@ -26,11 +26,35 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.UTFDataFormatException;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
+import static net.minestom.server.network.NetworkBuffer.BYTE;
+import static net.minestom.server.network.NetworkBuffer.BYTE_ARRAY;
+import static net.minestom.server.network.NetworkBuffer.DOUBLE;
+import static net.minestom.server.network.NetworkBuffer.FLOAT;
+import static net.minestom.server.network.NetworkBuffer.FixedBitSet;
+import static net.minestom.server.network.NetworkBuffer.FixedRawBytes;
+import static net.minestom.server.network.NetworkBuffer.INT;
+import static net.minestom.server.network.NetworkBuffer.LONG;
+import static net.minestom.server.network.NetworkBuffer.NBT;
+import static net.minestom.server.network.NetworkBuffer.RAW_BYTES;
+import static net.minestom.server.network.NetworkBuffer.SHORT;
+import static net.minestom.server.network.NetworkBuffer.STRING;
+import static net.minestom.server.network.NetworkBuffer.UNSIGNED_BYTE;
+import static net.minestom.server.network.NetworkBuffer.UNSIGNED_INT;
+import static net.minestom.server.network.NetworkBuffer.UNSIGNED_SHORT;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
+import static net.minestom.server.network.NetworkBuffer.VAR_LONG;
 import static net.minestom.server.network.NetworkBufferImpl.impl;
 
 interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
@@ -451,13 +475,13 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record UUIDType() implements NetworkBufferTypeImpl<UUID> {
         @Override
-        public void write(NetworkBuffer buffer, java.util.UUID value) {
+        public void write(NetworkBuffer buffer, UUID value) {
             buffer.write(LONG, value.getMostSignificantBits());
             buffer.write(LONG, value.getLeastSignificantBits());
         }
 
         @Override
-        public java.util.UUID read(NetworkBuffer buffer) {
+        public UUID read(NetworkBuffer buffer) {
             final long mostSignificantBits = buffer.read(LONG);
             final long leastSignificantBits = buffer.read(LONG);
             return new UUID(mostSignificantBits, leastSignificantBits);
@@ -706,7 +730,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     // Combinators
 
     record EnumSetType<E extends Enum<E>>(Class<E> enumType,
-                                          E[] values, Type<BitSet> bitSetType) implements Type<EnumSet<E>> {
+                                          E[] values, NetworkBuffer.Type<BitSet> bitSetType) implements NetworkBuffer.Type<EnumSet<E>> {
         public EnumSetType {
             Objects.requireNonNull(enumType, "enumType");
             Objects.requireNonNull(values, "values");
@@ -739,7 +763,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record FixedBitSetType(int length, Type<byte[]> arrayType) implements Type<BitSet> {
+    record FixedBitSetType(int length, NetworkBuffer.Type<byte[]> arrayType) implements NetworkBuffer.Type<BitSet> {
         public FixedBitSetType {
             Check.argCondition(length < 0, "Length is negative found {0}", length);
             Objects.requireNonNull(arrayType, "arrayType");
@@ -769,7 +793,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record OptionalType<T>(Type<T> parent) implements NetworkBufferTypeImpl<@Nullable T> {
+    record OptionalType<T>(NetworkBuffer.Type<T> parent) implements NetworkBufferTypeImpl<@Nullable T> {
         @Override
         public void write(NetworkBuffer buffer, T value) {
             buffer.write(BOOLEAN, value != null);
@@ -782,7 +806,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record LengthPrefixedType<T>(Type<T> parent, int maxLength) implements NetworkBufferTypeImpl<T> {
+    record LengthPrefixedType<T>(NetworkBuffer.Type<T> parent, int maxLength) implements NetworkBufferTypeImpl<T> {
         @Override
         public void write(NetworkBuffer buffer, T value) {
             // Write to another buffer and copy (kinda inefficient, but currently unused serverside so its ok for now)
@@ -804,7 +828,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record MaxLength<T>(Type<T> parent, long maxLength) implements NetworkBufferTypeImpl<T> {
+    record MaxLength<T>(NetworkBuffer.Type<T> parent, long maxLength) implements NetworkBufferTypeImpl<T> {
         @Override
         public void write(NetworkBuffer buffer, T value) {
             final long length = parent.sizeOf(value);
@@ -824,7 +848,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     final class LazyType<T> implements NetworkBufferTypeImpl<T> {
         private final Supplier<NetworkBuffer.Type<T>> supplier;
-        private Type<T> type;
+        private NetworkBuffer.Type<T> type;
 
         public LazyType(Supplier<NetworkBuffer.Type<T>> supplier) {
             this.supplier = supplier;
@@ -844,9 +868,9 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     }
 
     final class RecursiveType<T> implements NetworkBufferTypeImpl<T> {
-        final Type<T> delegate;
+        final NetworkBuffer.Type<T> delegate;
 
-        public RecursiveType(Function<Type<T>, Type<T>> self) {
+        public RecursiveType(Function<NetworkBuffer.Type<T>, NetworkBuffer.Type<T>> self) {
             Objects.requireNonNull(self, "self");
             this.delegate = Objects.requireNonNull(self.apply(this), "delegate");
         }
@@ -912,7 +936,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record TransformType<T, S>(Type<T> parent, Function<T, S> to,
+    record TransformType<T, S>(NetworkBuffer.Type<T> parent, Function<T, S> to,
                                Function<S, T> from) implements NetworkBufferTypeImpl<S> {
         @Override
         public void write(NetworkBuffer buffer, S value) {
@@ -925,7 +949,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record MapType<K, V>(Type<K> parent, NetworkBuffer.Type<V> valueType,
+    record MapType<K, V>(NetworkBuffer.Type<K> parent, NetworkBuffer.Type<V> valueType,
                          int maxSize) implements NetworkBufferTypeImpl<Map<K, V>> {
         @Override
         public void write(NetworkBuffer buffer, Map<K, V> map) {
@@ -951,7 +975,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record ListType<T>(Type<T> parent, int maxSize) implements NetworkBufferTypeImpl<List<T>> {
+    record ListType<T>(NetworkBuffer.Type<T> parent, int maxSize) implements NetworkBufferTypeImpl<List<T>> {
         @Override
         public void write(NetworkBuffer buffer, List<T> values) {
             if (values == null) {
@@ -973,7 +997,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record SetType<T>(Type<T> parent, int maxSize) implements NetworkBufferTypeImpl<Set<T>> {
+    record SetType<T>(NetworkBuffer.Type<T> parent, int maxSize) implements NetworkBufferTypeImpl<Set<T>> {
         @Override
         public void write(NetworkBuffer buffer, Set<T> values) {
             if (values == null) {
@@ -996,7 +1020,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     }
 
     record UnionType<T, K, TR extends T>(
-            Type<K> keyType, Function<T, ? extends K> keyFunc,
+            NetworkBuffer.Type<K> keyType, Function<T, ? extends K> keyFunc,
             Function<K, NetworkBuffer.Type<TR>> serializers
     ) implements NetworkBufferTypeImpl<T> {
 
@@ -1022,8 +1046,8 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     }
 
     record TaggedType<T, D>(
-            Type<D> discriminatorType, Function<? super T, ? extends D> discriminatorFromValue,
-            Map<? super D, Type<? extends T>> serializerMap, @Nullable Type<? extends T> fallback
+            NetworkBuffer.Type<D> discriminatorType, Function<? super T, ? extends D> discriminatorFromValue,
+            Map<? super D, NetworkBuffer.Type<? extends T>> serializerMap, @Nullable NetworkBuffer.Type<? extends T> fallback
     ) implements NetworkBufferTypeImpl<T> {
         public TaggedType {
             Objects.requireNonNull(discriminatorType, "discriminatorType");
@@ -1039,7 +1063,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             var serializer = serializerMap.getOrDefault(key, fallback);
             if (serializer == null)
                 throw new UnsupportedOperationException("Unrecognized type: " + key);
-            ((Type<T>) serializer).write(buffer, value);
+            ((NetworkBuffer.Type<T>) serializer).write(buffer, value);
         }
 
         @Override
@@ -1168,7 +1192,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    static <T> long sizeOf(Type<T> type, T value, @Nullable Registries registries) {
+    static <T> long sizeOf(NetworkBuffer.Type<T> type, T value, @Nullable Registries registries) {
         NetworkBuffer buffer = NetworkBufferImpl.dummy(registries);
         type.write(buffer, value);
         return buffer.writeIndex();

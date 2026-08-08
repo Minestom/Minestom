@@ -27,8 +27,8 @@ import net.minestom.server.instance.generator.GeneratorImpl;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
-import net.minestom.server.network.packet.server.play.MultiBlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
+import net.minestom.server.network.packet.server.play.MultiBlockChangePacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.network.packet.server.play.WorldEventPacket;
 import net.minestom.server.registry.Registries;
@@ -47,7 +47,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import space.vectrix.flare.fastutil.Long2ObjectSyncMap;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -372,7 +380,7 @@ public class InstanceContainer extends Instance {
                     // Loaders without parallel support load on the requesting thread, processing
                     // still hops off it to keep the chain from completing inside the mapping
                     : AsyncUtils.empty().thenApply(_ -> loaderSupplier.get())
-                            .thenApplyAsync(processChunk, Thread::startVirtualThread);
+                    .thenApplyAsync(processChunk, Thread::startVirtualThread);
             // The chain never completes inside the mapping, this callback is always async
             var _ = chain.whenComplete((chunk, e) -> {
                 if (e != null) {
@@ -596,6 +604,10 @@ public class InstanceContainer extends Instance {
      */
     protected void addSharedInstance(SharedInstance sharedInstance) {
         this.sharedInstances.add(sharedInstance);
+    }
+
+    void removeSharedInstance(SharedInstance sharedInstance) {
+        this.sharedInstances.remove(sharedInstance);
     }
 
     /**

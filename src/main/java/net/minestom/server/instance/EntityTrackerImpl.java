@@ -18,7 +18,14 @@ import org.slf4j.LoggerFactory;
 import space.vectrix.flare.fastutil.Int2ObjectSyncMap;
 import space.vectrix.flare.fastutil.Long2ObjectSyncMap;
 
-import java.util.*;
+import java.util.AbstractSet;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -151,16 +158,14 @@ final class EntityTrackerImpl implements EntityTracker {
         final Long2ObjectSyncMap<List<Entity>> entities = targetEntries[target.ordinal()].chunkEntities;
         if (chunkRange == 0) {
             // Single chunk
-            @SuppressWarnings("unchecked")
-            final var chunkEntities = (List<T>) entities.get(CoordConversion.chunkIndex(point));
+            @SuppressWarnings("unchecked") final var chunkEntities = (List<T>) entities.get(CoordConversion.chunkIndex(point));
             if (chunkEntities != null && !chunkEntities.isEmpty()) {
                 chunkEntities.forEach(query);
             }
         } else {
             // Multiple chunks
             ChunkRange.chunksInRange(point, chunkRange, (chunkX, chunkZ) -> {
-                @SuppressWarnings("unchecked")
-                final var chunkEntities = (List<T>) entities.get(CoordConversion.chunkIndex(chunkX, chunkZ));
+                @SuppressWarnings("unchecked") final var chunkEntities = (List<T>) entities.get(CoordConversion.chunkIndex(chunkX, chunkZ));
                 if (chunkEntities == null || chunkEntities.isEmpty()) return;
                 chunkEntities.forEach(query);
             });
@@ -177,8 +182,7 @@ final class EntityTrackerImpl implements EntityTracker {
         final double squaredRange = range * range;
         if (minChunkX == maxChunkX && minChunkZ == maxChunkZ) {
             // Single chunk
-            @SuppressWarnings("unchecked")
-            final var chunkEntities = (List<T>) entities.get(CoordConversion.chunkIndex(point));
+            @SuppressWarnings("unchecked") final var chunkEntities = (List<T>) entities.get(CoordConversion.chunkIndex(point));
             if (chunkEntities != null && !chunkEntities.isEmpty()) {
                 chunkEntities.forEach(entity -> {
                     final Point position = entriesByEntityId.get(entity.getEntityId()).getLastPosition();
@@ -189,8 +193,7 @@ final class EntityTrackerImpl implements EntityTracker {
             // Multiple chunks
             final int chunkRange = (int) (range / Chunk.CHUNK_SECTION_SIZE) + 1;
             ChunkRange.chunksInRange(point, chunkRange, (chunkX, chunkZ) -> {
-                @SuppressWarnings("unchecked")
-                final var chunkEntities = (List<T>) entities.get(CoordConversion.chunkIndex(chunkX, chunkZ));
+                @SuppressWarnings("unchecked") final var chunkEntities = (List<T>) entities.get(CoordConversion.chunkIndex(chunkX, chunkZ));
                 if (chunkEntities == null || chunkEntities.isEmpty()) return;
                 chunkEntities.forEach(entity -> {
                     final Point position = entriesByEntityId.get(entity.getEntityId()).getLastPosition();

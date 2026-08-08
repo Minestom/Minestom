@@ -14,7 +14,10 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.zip.DataFormatException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class SendablePacketTest {
 

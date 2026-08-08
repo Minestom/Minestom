@@ -9,14 +9,16 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BLOCK_POSITION;
+import static net.minestom.server.network.NetworkBuffer.BYTE;
+import static net.minestom.server.network.NetworkBuffer.NBT_COMPOUND;
 
 public record BlockEntityDataPacket(
         Point blockPosition,
         BlockEntityType type,
         @Nullable CompoundBinaryTag data
 ) implements ServerPacket.Play {
-    public static final NetworkBuffer.Type<BlockEntityDataPacket> SERIALIZER = new Type<>() {
+    public static final NetworkBuffer.Type<BlockEntityDataPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
         public void write(NetworkBuffer buffer, BlockEntityDataPacket value) {
             buffer.write(BLOCK_POSITION, value.blockPosition);

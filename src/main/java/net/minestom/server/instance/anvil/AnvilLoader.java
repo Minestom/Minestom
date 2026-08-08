@@ -6,7 +6,13 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.nbt.*;
+import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.BinaryTagIO;
+import net.kyori.adventure.nbt.BinaryTagTypes;
+import net.kyori.adventure.nbt.ByteArrayBinaryTag;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.ListBinaryTag;
+import net.kyori.adventure.nbt.StringBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.instance.Chunk;
@@ -33,11 +39,19 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
-import static net.minestom.server.coordinate.CoordConversion.*;
+import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
+import static net.minestom.server.coordinate.CoordConversion.chunkIndex;
+import static net.minestom.server.coordinate.CoordConversion.chunkToRegion;
+import static net.minestom.server.coordinate.CoordConversion.globalToSectionRelative;
+import static net.minestom.server.coordinate.CoordConversion.regionIndex;
 import static net.minestom.server.instance.Chunk.CHUNK_SIZE_X;
 import static net.minestom.server.instance.Chunk.CHUNK_SIZE_Z;
 
@@ -270,7 +284,7 @@ public class AnvilLoader implements ChunkLoader {
                             try {
                                 LOGGER.warn("Fail to parse block state properties {}, expected a string tag for {}, but contents were {}",
                                         propertiesNBT, property.getKey(), MinestomAdventure.tagStringIO().asString(property.getValue()));
-                            } catch (IOException e) {
+                            } catch (IOException _) {
                                 LOGGER.warn("Fail to parse block state properties {}, expected a string tag for {}, but contents were a {} tag", propertiesNBT, property.getKey(), property.getValue());
                             }
                         }

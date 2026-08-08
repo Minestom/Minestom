@@ -3,9 +3,12 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-
 import org.jetbrains.annotations.Nullable;
-import static net.minestom.server.network.NetworkBuffer.*;
+
+import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
+import static net.minestom.server.network.NetworkBuffer.Enum;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
+import static net.minestom.server.network.NetworkBuffer.VECTOR3D;
 
 public record FacePlayerPacket(FacePosition facePosition,
                                Point target, int entityId,

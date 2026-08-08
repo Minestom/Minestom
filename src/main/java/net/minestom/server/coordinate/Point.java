@@ -7,7 +7,9 @@ import org.jetbrains.annotations.Contract;
 
 import java.util.function.DoubleUnaryOperator;
 
-import static net.minestom.server.coordinate.CoordConversion.*;
+import static net.minestom.server.coordinate.CoordConversion.globalToBlock;
+import static net.minestom.server.coordinate.CoordConversion.globalToRegion;
+import static net.minestom.server.coordinate.CoordConversion.globalToSection;
 
 /**
  * Represents a 3D point in coordinate space.

@@ -19,10 +19,19 @@ import net.minestom.server.item.Material;
 import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.item.book.FilteredText;
-import net.minestom.server.item.component.*;
+import net.minestom.server.item.component.ArmorTrim;
+import net.minestom.server.item.component.AttributeList;
+import net.minestom.server.item.component.CustomData;
+import net.minestom.server.item.component.EnchantmentList;
+import net.minestom.server.item.component.FireworkExplosion;
+import net.minestom.server.item.component.FireworkList;
+import net.minestom.server.item.component.PotionContents;
+import net.minestom.server.item.component.WritableBookContent;
+import net.minestom.server.item.component.WrittenBookContent;
 import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.item.predicate.ItemPredicate;
 import net.minestom.server.potion.PotionType;
+import net.minestom.server.potion.PotionTypeKeys;
 import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.utils.Range;
 import org.jetbrains.annotations.Nullable;
@@ -147,9 +156,7 @@ public class DataComponentPredicateTest {
     @Test
     void testPotionContents() {
         var potions = new DataComponentPredicate.Potions(RegistryTag.direct(
-                PotionType.FIRE_RESISTANCE.registryKey(),
-                PotionType.HEALING.registryKey(),
-                PotionType.HARMING.registryKey()));
+                PotionTypeKeys.FIRE_RESISTANCE, PotionTypeKeys.HEALING, PotionTypeKeys.HARMING));
         assertPass(potions, DataComponents.POTION_CONTENTS, new PotionContents(PotionType.HEALING));
         assertFail(potions, DataComponents.POTION_CONTENTS, new PotionContents(PotionType.STRENGTH)); // Potion type isn't contained in the predicate's list
         assertFail(potions, DataComponents.POTION_CONTENTS, new PotionContents(null, null, List.of(), null));

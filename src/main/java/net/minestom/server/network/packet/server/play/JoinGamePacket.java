@@ -7,7 +7,10 @@ import net.minestom.server.network.packet.server.play.data.PlayerSpawnInfo;
 
 import java.util.List;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
+import static net.minestom.server.network.NetworkBuffer.INT;
+import static net.minestom.server.network.NetworkBuffer.STRING;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record JoinGamePacket(
         int entityId, boolean isHardcore, List<String> worlds, int maxPlayers,

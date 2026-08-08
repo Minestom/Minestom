@@ -13,7 +13,7 @@ import java.util.Map;
 import static net.minestom.server.codec.CodecAssertions.assertOk;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class SuspiciousStewEffectsTest extends AbstractItemComponentTest<SuspiciousStewEffects> {
+public class SuspiciousStewEffectsTest extends AbstractItemComponentRegistriesTest<SuspiciousStewEffects> {
 
     @Override
     protected DataComponent<SuspiciousStewEffects> component() {

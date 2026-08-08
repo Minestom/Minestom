@@ -18,6 +18,15 @@
 #### **Do you want to contribute to the Minestom documentation?**
 * Feel free to do so! Just make sure to conform to the [standard-readme](https://github.com/RichardLitt/standard-readme) specification when editing the README.md.
 
+#### **Naming Tests**
+* Plain unit tests are `*Test`.
+
+* Tests using the `@RegistriesTest` registry snapshot are `*RegistriesTest`.
+
+* Tests using the `@EnvTest` server are `*IntegrationTest`.
+
+* Prefer the lightest fixture that covers the behavior, and make sure your test class passes when run alone. The `testNamingCheck` task enforces the naming as part of `check`.
+
 ## General Contribution Rules
 * By contributing to the Minestom project your code/contribution will be licensed under the [Apache Version 2.0](../LICENSE) license.
 

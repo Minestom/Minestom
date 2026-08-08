@@ -8,7 +8,7 @@ import java.util.Map;
 
 import static java.util.Map.entry;
 
-public class StringTest extends AbstractItemComponentTest<String> {
+public class StringTest extends AbstractItemComponentRegistriesTest<String> {
     // This is not a test, but it creates a compile error if the component type is changed away,
     // as a reminder that tests should be added for that new component type.
     private static final List<DataComponent<String>> SHARED_COMPONENTS = List.of(

@@ -1,13 +1,16 @@
 package net.minestom.server.codec;
 
-import com.google.gson.*;
-import java.util.Set;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.AbstractList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @ApiStatus.Internal
 final class TranscoderJsonImpl implements Transcoder<JsonElement> {
@@ -257,7 +260,7 @@ final class TranscoderJsonImpl implements Transcoder<JsonElement> {
                     new Result.Ok<>(coder.createDouble(primitive.getAsDouble()));
             case JsonPrimitive primitive when primitive.isString() ->
                     new Result.Ok<>(coder.createString(primitive.getAsString()));
-            case JsonNull jsonNull -> new Result.Ok<>(coder.createNull());
+            case JsonNull _ -> new Result.Ok<>(coder.createNull());
             default -> new Result.Error<>("Unknown JSON type: " + value);
         };
     }

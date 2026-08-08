@@ -42,7 +42,11 @@ import net.minestom.server.network.packet.server.play.InitializeWorldBorderPacke
 import net.minestom.server.network.packet.server.play.SetTimePacket;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryKey;
-import net.minestom.server.snapshot.*;
+import net.minestom.server.snapshot.ChunkSnapshot;
+import net.minestom.server.snapshot.InstanceSnapshot;
+import net.minestom.server.snapshot.SnapshotImpl;
+import net.minestom.server.snapshot.SnapshotUpdater;
+import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
 import net.minestom.server.thread.ThreadDispatcher;
@@ -61,7 +65,16 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.TimeUnit;
@@ -550,9 +563,9 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
         var entries = new HashMap<RegistryKey<WorldClock>, SetTimePacket.ClockState>();
         for (var clockInstance : this.clocks.values()) {
             entries.put(clockInstance.clock(), new SetTimePacket.ClockState(
-                clockInstance.time(),
-                clockInstance.partialTick(),
-                clockInstance.effectiveRate()
+                    clockInstance.time(),
+                    clockInstance.partialTick(),
+                    clockInstance.effectiveRate()
             ));
         }
         return new SetTimePacket(worldAge, entries);

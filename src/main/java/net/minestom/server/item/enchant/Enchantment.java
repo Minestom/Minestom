@@ -8,7 +8,11 @@ import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.entity.EquipmentSlotGroup;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.*;
+import net.minestom.server.registry.BuiltinRegistries;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.RegistryKey;
+import net.minestom.server.registry.RegistryTag;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 

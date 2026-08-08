@@ -5,7 +5,6 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registry;
-import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Map;
 import java.util.Random;

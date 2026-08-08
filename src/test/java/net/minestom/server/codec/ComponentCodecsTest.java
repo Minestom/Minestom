@@ -9,6 +9,7 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.object.ObjectContents;
 import net.minestom.server.adventure.MinestomAdventure;
+import net.minestom.server.network.player.GameProfile;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -109,5 +110,22 @@ class ComponentCodecsTest {
         var actual = ComponentCodecs.COMPONENT.decode(Transcoder.NBT, nbt).orElseThrow();
 
         assertEquals(component, actual);
+    }
+
+    @Test
+    void writeObjectPlayerHeadProfileAndTexture() {
+        final UUID uuid = UUID.fromString("8667ba71-b85a-4004-af54-457a9734eed7");
+        var component = Component.object(ObjectContents.playerHead()
+                .name("Steve")
+                .id(uuid)
+                .profileProperty(new GameProfile.Property("test", "value", null))
+                .texture(Key.key("red"))
+                .build());
+
+        final var nbt = ComponentCodecs.COMPONENT.encode(Transcoder.NBT, component).orElseThrow();
+        final var player = ((CompoundBinaryTag) nbt).getCompound("player");
+        assertEquals("Steve", player.getString("name"));
+        assertEquals("minecraft:red", player.getString("texture"));
+        assertEquals(component, ComponentCodecs.COMPONENT.decode(Transcoder.NBT, nbt).orElseThrow());
     }
 }

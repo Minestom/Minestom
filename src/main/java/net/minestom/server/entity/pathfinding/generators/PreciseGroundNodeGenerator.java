@@ -1,6 +1,5 @@
 package net.minestom.server.entity.pathfinding.generators;
 
-import java.util.List;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.collision.PhysicsResult;
@@ -9,12 +8,13 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.pathfinding.PNode;
 import net.minestom.server.instance.block.Block;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.OptionalDouble;
 import java.util.Set;
-import org.jetbrains.annotations.Nullable;
 
 public class PreciseGroundNodeGenerator implements NodeGenerator {
     private @Nullable PNode tempNode = null;

@@ -2,7 +2,6 @@ package net.minestom.server.instance.generator;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minestom.server.coordinate.Area;
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
@@ -20,11 +19,16 @@ import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
-import static net.minestom.server.coordinate.CoordConversion.*;
+import static net.minestom.server.coordinate.CoordConversion.SECTION_SIZE;
+import static net.minestom.server.coordinate.CoordConversion.ceilSection;
+import static net.minestom.server.coordinate.CoordConversion.chunkBlockIndex;
+import static net.minestom.server.coordinate.CoordConversion.floorSection;
+import static net.minestom.server.coordinate.CoordConversion.globalToChunk;
+import static net.minestom.server.coordinate.CoordConversion.globalToSectionRelative;
 
 @ApiStatus.Internal
 public final class GeneratorImpl {
-public record GenSection(Palette blocks, Palette biomes, Int2ObjectMap<Block> specials) {
+    public record GenSection(Palette blocks, Palette biomes, Int2ObjectMap<Block> specials) {
         public GenSection(Palette blocks, Palette biomes) {
             this(blocks, biomes, new Int2ObjectOpenHashMap<>(0));
         }
@@ -86,7 +90,8 @@ public record GenSection(Palette blocks, Palette biomes, Int2ObjectMap<Block> sp
         final DynamicRegistry<Biome> biomeRegistry;
         @Nullable Fork fork;
 
-        record Fork(BlockVec minSection, int width, int height, int depth, List<GenerationUnit> sections) {}
+        record Fork(BlockVec minSection, int width, int height, int depth, List<GenerationUnit> sections) {
+        }
 
         DynamicFork(DynamicRegistry<Biome> biomeRegistry) {
             this.biomeRegistry = biomeRegistry;

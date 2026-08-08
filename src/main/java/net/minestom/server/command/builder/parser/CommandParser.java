@@ -10,7 +10,13 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 import static net.minestom.server.command.builder.parser.ArgumentParser.validate;

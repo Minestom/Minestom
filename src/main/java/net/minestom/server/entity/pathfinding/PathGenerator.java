@@ -9,7 +9,11 @@ import net.minestom.server.entity.pathfinding.generators.NodeGenerator;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
 
 public final class PathGenerator {
     private static final Comparator<PNode> pNodeComparator = (s1, s2) -> (int) (((s1.g() + s1.h()) - (s2.g() + s2.h())) * 1000);

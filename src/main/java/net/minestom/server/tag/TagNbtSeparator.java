@@ -1,8 +1,12 @@
 package net.minestom.server.tag;
 
-import net.kyori.adventure.nbt.*;
-import net.minestom.server.utils.nbt.BinaryTagUtil;
+import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.BinaryTagType;
+import net.kyori.adventure.nbt.BinaryTagTypes;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.ListBinaryTag;
 import net.minestom.server.ServerFlag;
+import net.minestom.server.utils.nbt.BinaryTagUtil;
 
 import java.util.ArrayList;
 import java.util.List;

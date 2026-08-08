@@ -1,8 +1,25 @@
 package net.minestom.server.command.builder.parser;
 
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.builder.arguments.*;
-import net.minestom.server.command.builder.arguments.minecraft.*;
+import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.arguments.ArgumentBoolean;
+import net.minestom.server.command.builder.arguments.ArgumentCommand;
+import net.minestom.server.command.builder.arguments.ArgumentLiteral;
+import net.minestom.server.command.builder.arguments.ArgumentString;
+import net.minestom.server.command.builder.arguments.ArgumentStringArray;
+import net.minestom.server.command.builder.arguments.ArgumentWord;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentBlockState;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentComponent;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentFloatRange;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentIntRange;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentItemStack;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentNbtCompoundTag;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentNbtTag;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentResourceLocation;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentTeamColor;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentTime;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentUUID;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentParticle;
 import net.minestom.server.command.builder.arguments.number.ArgumentDouble;

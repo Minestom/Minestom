@@ -1,12 +1,11 @@
 package net.minestom.server.instance;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.minestom.server.coordinate.BlockVec;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.BlockEntityType;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;

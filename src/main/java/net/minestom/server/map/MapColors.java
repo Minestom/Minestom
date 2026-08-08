@@ -1,13 +1,12 @@
 package net.minestom.server.map;
 
-import java.util.Locale;
 import net.minestom.server.ServerFlag;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 import java.util.function.ToIntFunction;
 
 public enum MapColors {
@@ -87,7 +86,7 @@ public enum MapColors {
         ColorMappingStrategy strategy;
         try {
             strategy = ColorMappingStrategy.valueOf(ServerFlag.MAP_RGB_MAPPING.toUpperCase(Locale.ROOT));
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException _) {
             logger.warn("Unknown color mapping strategy '{}', defaulting to LAZY.", ServerFlag.MAP_RGB_MAPPING);
             strategy = ColorMappingStrategy.LAZY;
         }

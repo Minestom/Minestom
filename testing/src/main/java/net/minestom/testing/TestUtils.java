@@ -10,7 +10,9 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public final class TestUtils {
     public static void waitUntilCleared(WeakReference<?> ref) {

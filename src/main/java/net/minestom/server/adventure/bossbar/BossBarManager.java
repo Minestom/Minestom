@@ -1,13 +1,17 @@
 package net.minestom.server.adventure.bossbar;
 
-import java.util.List;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.utils.PacketSendingUtils;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -47,7 +51,7 @@ public class BossBarManager {
         BossBarHolder holder = this.getOrCreateHandler(bar);
         if (holder.addViewer(player)) {
             player.sendPacket(holder.createAddPacket());
-            this.playerBars.computeIfAbsent(player.getUuid(), _ -> new HashSet<>()).add(holder);
+            this.addPlayer(player, holder);
         }
     }
 
@@ -76,6 +80,10 @@ public class BossBarManager {
         BossBarHolder holder = this.getOrCreateHandler(bar);
         List<? extends Player> addedPlayers = players.stream().filter(holder::addViewer).toList();
         if (!addedPlayers.isEmpty()) {
+            for (Player player : addedPlayers) {
+                this.addPlayer(player, holder);
+            }
+
             PacketSendingUtils.sendGroupedPacket(addedPlayers, holder.createAddPacket());
         }
     }
@@ -91,6 +99,10 @@ public class BossBarManager {
         if (holder != null) {
             List<? extends Player> removedPlayers = players.stream().filter(holder::removeViewer).toList();
             if (!removedPlayers.isEmpty()) {
+                for (Player player : removedPlayers) {
+                    this.removePlayer(player, holder);
+                }
+
                 PacketSendingUtils.sendGroupedPacket(removedPlayers, holder.createRemovePacket());
             }
         }
@@ -104,6 +116,7 @@ public class BossBarManager {
     public void destroyBossBar(BossBar bossBar) {
         BossBarHolder holder = this.bars.remove(bossBar);
         if (holder != null) {
+            bossBar.removeListener(this.listener);
             PacketSendingUtils.sendGroupedPacket(holder.players, holder.createRemovePacket());
             for (Player player : holder.players) {
                 this.removePlayer(player, holder);
@@ -165,13 +178,21 @@ public class BossBarManager {
         });
     }
 
-    private void removePlayer(Player player, BossBarHolder holder) {
-        Set<BossBarHolder> holders = this.playerBars.get(player.getUuid());
-        if (holders != null) {
-            holders.remove(holder);
-            if (holders.isEmpty()) {
-                this.playerBars.remove(player.getUuid());
+    private void addPlayer(Player player, BossBarHolder holder) {
+        this.playerBars.compute(player.getUuid(), (_, holders) -> {
+            if (holders == null) {
+                holders = ConcurrentHashMap.newKeySet();
             }
-        }
+
+            holders.add(holder);
+            return holders;
+        });
+    }
+
+    private void removePlayer(Player player, BossBarHolder holder) {
+        this.playerBars.computeIfPresent(player.getUuid(), (_, holders) -> {
+            holders.remove(holder);
+            return holders.isEmpty() ? null : holders;
+        });
     }
 }

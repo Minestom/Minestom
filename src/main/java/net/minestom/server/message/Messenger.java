@@ -5,11 +5,9 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.SystemChatPacket;
 import net.minestom.server.utils.PacketSendingUtils;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * Utility class to handle client chat settings.

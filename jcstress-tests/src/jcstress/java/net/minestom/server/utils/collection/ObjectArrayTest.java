@@ -1,6 +1,10 @@
 package net.minestom.server.utils.collection;
 
-import org.openjdk.jcstress.annotations.*;
+import org.openjdk.jcstress.annotations.Actor;
+import org.openjdk.jcstress.annotations.Arbiter;
+import org.openjdk.jcstress.annotations.JCStressTest;
+import org.openjdk.jcstress.annotations.Outcome;
+import org.openjdk.jcstress.annotations.State;
 import org.openjdk.jcstress.infra.results.LL_Result;
 
 import static org.openjdk.jcstress.annotations.Expect.ACCEPTABLE;

@@ -4,7 +4,9 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.DOUBLE;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
+import static net.minestom.server.network.NetworkBuffer.VAR_LONG;
 
 public record InitializeWorldBorderPacket(double x, double z,
                                           double oldDiameter, double newDiameter, long speed,

@@ -149,7 +149,7 @@ public final class PacketReading {
         final int packetLength;
         try {
             packetLength = buffer.read(VAR_INT);
-        } catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException _) {
             // Couldn't read a single var-int
             return new Result.Failure<>(MAX_VAR_INT_SIZE);
         }

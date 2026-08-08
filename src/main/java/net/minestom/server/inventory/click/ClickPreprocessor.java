@@ -35,8 +35,8 @@ public final class ClickPreprocessor {
      */
     public boolean isCreativeClick(Click click, boolean hasCursorItem) {
         return switch (click) {
-            case Click.Middle ignored -> !hasCursorItem; // Block clones (except the edge case)
-            case Click.MiddleDrag ignored -> true; // Block clone drags
+            case Click.Middle _ -> !hasCursorItem; // Block clones (except the edge case)
+            case Click.MiddleDrag _ -> true; // Block clone drags
             default -> false;
         };
     }

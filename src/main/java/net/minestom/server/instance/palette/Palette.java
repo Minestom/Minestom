@@ -9,7 +9,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.IntUnaryOperator;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BYTE;
+import static net.minestom.server.network.NetworkBuffer.LONG;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT_ARRAY;
 
 /**
  * Palette is a data storage with three storage models used to store blocks and biomes
@@ -153,6 +156,7 @@ public sealed interface Palette permits PaletteImpl {
      * Attempts to optimize the current {@link Palette}
      * <br>
      * If plausible the only optimization will be performed is converting to a single value regardless of {@link Optimization}
+     *
      * @param focus the optimization focus
      */
     void optimize(Optimization focus);

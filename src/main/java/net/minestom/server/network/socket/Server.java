@@ -10,7 +10,13 @@ import org.jetbrains.annotations.UnknownNullability;
 
 import java.io.EOFException;
 import java.io.IOException;
-import java.net.*;
+import java.net.InetSocketAddress;
+import java.net.ProtocolFamily;
+import java.net.Socket;
+import java.net.SocketAddress;
+import java.net.SocketException;
+import java.net.StandardProtocolFamily;
+import java.net.UnixDomainSocketAddress;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
@@ -75,7 +81,7 @@ public final class Server {
                 final SocketChannel client;
                 try {
                     client = serverSocket.accept();
-                } catch (ClosedChannelException e) {
+                } catch (ClosedChannelException _) {
                     break; // We are exiting, bye bye!
                 } catch (IOException e) {
                     MinecraftServer.getExceptionManager().handleException(e);

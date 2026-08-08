@@ -57,7 +57,7 @@ public class ArgumentBlockState extends Argument<Block> {
             final var propertyMap = BlockUtils.parseProperties(query);
             try {
                 return block.withProperties(propertyMap);
-            } catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException _) {
                 throw new ArgumentSyntaxException("Invalid property values", input, INVALID_PROPERTY_VALUE);
             }
         }

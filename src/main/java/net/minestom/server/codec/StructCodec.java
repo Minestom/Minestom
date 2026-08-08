@@ -2,7 +2,26 @@ package net.minestom.server.codec;
 
 import net.minestom.server.codec.Transcoder.MapBuilder;
 import net.minestom.server.codec.Transcoder.MapLike;
-import net.minestom.server.network.NetworkBufferTemplate.*;
+import net.minestom.server.network.NetworkBufferTemplate.F1;
+import net.minestom.server.network.NetworkBufferTemplate.F10;
+import net.minestom.server.network.NetworkBufferTemplate.F11;
+import net.minestom.server.network.NetworkBufferTemplate.F12;
+import net.minestom.server.network.NetworkBufferTemplate.F13;
+import net.minestom.server.network.NetworkBufferTemplate.F14;
+import net.minestom.server.network.NetworkBufferTemplate.F15;
+import net.minestom.server.network.NetworkBufferTemplate.F16;
+import net.minestom.server.network.NetworkBufferTemplate.F17;
+import net.minestom.server.network.NetworkBufferTemplate.F18;
+import net.minestom.server.network.NetworkBufferTemplate.F19;
+import net.minestom.server.network.NetworkBufferTemplate.F2;
+import net.minestom.server.network.NetworkBufferTemplate.F20;
+import net.minestom.server.network.NetworkBufferTemplate.F3;
+import net.minestom.server.network.NetworkBufferTemplate.F4;
+import net.minestom.server.network.NetworkBufferTemplate.F5;
+import net.minestom.server.network.NetworkBufferTemplate.F6;
+import net.minestom.server.network.NetworkBufferTemplate.F7;
+import net.minestom.server.network.NetworkBufferTemplate.F8;
+import net.minestom.server.network.NetworkBufferTemplate.F9;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
@@ -3390,13 +3409,13 @@ public interface StructCodec<R> extends Codec<R> {
     private static <D, T> Result<@UnknownNullability T> get(Transcoder<D> coder, Codec<T> codec, String key, MapLike<D> map) {
         if (INLINE.equals(key)) {
             final Codec<T> decodeCodec = codec instanceof CodecImpl.OptionalImpl<T>(
-                    Codec<T> inner, T ignored
+                    Codec<T> inner, _
             ) ? inner : codec;
             if (!(decodeCodec instanceof StructCodec<T> s)) return new Result.Error<>(key + ": not a struct");
 
             final Result<T> decodeResult = s.decodeFromMap(coder, map);
             if (decodeResult instanceof Result.Error<T> && codec instanceof CodecImpl.OptionalImpl<T>(
-                    Codec<T> ignored, T defaultValue
+                    _, T defaultValue
             )) return new Result.Ok<>(defaultValue);
 
             return decodeResult.mapError(e -> key + ": " + e);
@@ -3423,7 +3442,7 @@ public interface StructCodec<R> extends Codec<R> {
 
         if (INLINE.equals(key)) {
             final Codec<T> encodeCodec = codec instanceof CodecImpl.OptionalImpl<T>(
-                    Codec<T> inner, T ignored
+                    Codec<T> inner, _
             ) ? inner : codec;
             if (!(encodeCodec instanceof StructCodec<T> s))
                 return new Result.Error<>(key + ": not a struct");

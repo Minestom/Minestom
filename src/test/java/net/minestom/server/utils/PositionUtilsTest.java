@@ -3,7 +3,8 @@ package net.minestom.server.utils;
 import net.minestom.server.utils.position.PositionUtils;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class PositionUtilsTest {
 

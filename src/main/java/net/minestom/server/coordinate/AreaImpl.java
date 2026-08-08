@@ -2,7 +2,12 @@ package net.minestom.server.coordinate;
 
 import net.minestom.server.utils.validate.Check;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 
 import static net.minestom.server.coordinate.CoordConversion.SECTION_BOUND;
 import static net.minestom.server.coordinate.CoordConversion.SECTION_SIZE;

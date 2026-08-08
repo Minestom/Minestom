@@ -11,7 +11,11 @@ import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
@@ -122,6 +126,9 @@ public final class InstanceManager {
                 instance.getChunks().forEach(instance::unloadChunk);
                 var dispatcher = MinecraftServer.process().dispatcher();
                 instance.getChunks().forEach(dispatcher::deletePartition);
+            }
+            if (instance instanceof SharedInstance sharedInstance) {
+                sharedInstance.getInstanceContainer().removeSharedInstance(sharedInstance);
             }
             // Unregister
             instance.setRegistered(false);

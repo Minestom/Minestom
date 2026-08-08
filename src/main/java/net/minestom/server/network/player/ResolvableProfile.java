@@ -84,14 +84,14 @@ public record ResolvableProfile(
 
     public static ResolvableProfile fromPlayerHeadContents(PlayerHeadObjectContents contents) {
         final Key texture = contents.texture();
-        if (texture != null) return new ResolvableProfile(Partial.EMPTY, new PlayerSkin.Patch(texture));
-
         final List<GameProfile.Property> properties = new ArrayList<>(contents.profileProperties().size());
         for (PlayerHeadObjectContents.ProfileProperty property : contents.profileProperties()) {
             properties.add(property instanceof GameProfile.Property p ? p :
                     new GameProfile.Property(property.name(), property.value(), property.signature()));
         }
-        return new ResolvableProfile(new Partial(contents.name(), contents.id(), properties));
+        final Partial profile = new Partial(contents.name(), contents.id(), properties);
+        final PlayerSkin.Patch patch = texture != null ? new PlayerSkin.Patch(texture) : PlayerSkin.Patch.EMPTY;
+        return new ResolvableProfile(profile, patch);
     }
 
     @Override
