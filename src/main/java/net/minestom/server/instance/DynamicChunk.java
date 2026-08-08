@@ -399,43 +399,4 @@ public class DynamicChunk extends Chunk {
             unlockReadLock();
         }
     }
-
-    @Override
-    public void forEachBlockEntity(BiConsumer<Point, Block> consumer) {
-        lockReadLock();
-        try {
-            this.entries.int2ObjectEntrySet().forEach(e -> {
-                final int index = e.getIntKey();
-                final int x = CoordConversion.chunkBlockIndexGetX(index);
-                final int y = CoordConversion.chunkBlockIndexGetY(index);
-                final int z = CoordConversion.chunkBlockIndexGetZ(index);
-                final BlockVec pos = new BlockVec(x, y, z);
-                consumer.accept(pos, e.getValue());
-            });
-        } finally {
-            unlockReadLock();
-        }
-    }
-
-    @Override
-    public Map<Point, Block> filterBlockEntities(BiPredicate<Point, Block> filter) {
-        lockReadLock();
-        try {
-            final Map<Point, Block> accepted = new HashMap<>();
-            for (final Int2ObjectMap.Entry<Block> entry : this.entries.int2ObjectEntrySet()) {
-                final int index = entry.getIntKey();
-                final int x = CoordConversion.chunkBlockIndexGetX(index);
-                final int y = CoordConversion.chunkBlockIndexGetY(index);
-                final int z = CoordConversion.chunkBlockIndexGetZ(index);
-                final BlockVec pos = new BlockVec(x, y, z);
-                final Block block = entry.getValue();
-                if (filter.test(pos, block)) {
-                    accepted.put(pos, block);
-                }
-            }
-            return accepted;
-        } finally {
-            unlockReadLock();
-        }
-    }
 }

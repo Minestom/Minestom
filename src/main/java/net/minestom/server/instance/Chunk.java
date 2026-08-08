@@ -291,18 +291,6 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      */
     public abstract @Unmodifiable Map<Point, Block> getBlockEntities();
 
-    /**
-     *
-     * Iterates over all block entities in the chunk
-     */
-    public abstract void forEachBlockEntity(BiConsumer<Point, Block> consumer);
-
-    /**
-     * Finds all block entities that match {@code filter}
-     * @return map of blocks that pass the filter
-     */
-    public abstract Map<Point, Block> filterBlockEntities(BiPredicate<Point, Block> filter);
-
     @Override
     public String toString() {
         return getClass().getSimpleName() + "[" + chunkX + ":" + chunkZ + "]";
