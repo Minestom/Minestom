@@ -217,7 +217,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
                             final Key texture = player.texture();
                             if (texture != null) {
                                 buffer.write(BYTE, TAG_STRING);
-                                buffer.write(STRING_IO_UTF8, "body");
+                                buffer.write(STRING_IO_UTF8, "texture");
                                 buffer.write(STRING_IO_UTF8, texture.asMinimalString());
                             }
                         }
@@ -233,7 +233,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
                 }
                 var fallback = object.fallback();
                 if (fallback != null) {
-                    buffer.write(BYTE, TAG_STRING);
+                    buffer.write(BYTE, TAG_COMPOUND);
                     buffer.write(STRING_IO_UTF8, "fallback");
                     writeInnerComponent(buffer, fallback);
                 }

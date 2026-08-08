@@ -1,8 +1,11 @@
 package net.minestom.server.network;
 
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.object.ObjectContents;
-import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.Transcoder;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -11,15 +14,10 @@ import java.util.UUID;
 import static net.minestom.server.network.NetworkBuffer.COMPONENT;
 import static net.minestom.server.network.NetworkBuffer.NBT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 public class ComponentNetworkBufferTypeTest {
-    // All of these tests use NbtComponentSerializerImpl as the source of truth. If there is an inaccuracy in that
-    // implementation, these tests will not be accurate. This will be replaced with the adventure serializer once
-    // it is merged into adventure (see https://github.com/KyoriPowered/adventure/pull/1084). This can be considered
-    // a known-good implementation.
-
-    private static final NbtComponentSerializer NBT_READER = NbtComponentSerializer.nbt();
-
     @Test
     void empty() {
         var comp = Component.empty();
@@ -89,10 +87,39 @@ public class ComponentNetworkBufferTypeTest {
         assertWriteReadEquality(comp);
     }
 
+    @Test
+    void objectComponentHeadTexture() {
+        var comp = Component.object(ObjectContents.playerHead()
+                .texture(Key.key("red"))
+                .build());
+
+        final CompoundBinaryTag player = write(comp).getCompound("player");
+        assertEquals("red", player.getString("texture"));
+        assertFalse(player.contains("body"));
+        assertWriteReadEquality(comp);
+    }
+
+    @Test
+    void objectComponentFallback() {
+        var comp = Component.object()
+                .contents(ObjectContents.sprite(Key.key("missing")))
+                .fallback(Component.text("Missing"))
+                .build();
+
+        final CompoundBinaryTag written = write(comp);
+        assertInstanceOf(CompoundBinaryTag.class, written.get("fallback"));
+        assertEquals(comp, Codec.COMPONENT.decode(Transcoder.NBT, written).orElseThrow());
+    }
+
     private static void assertWriteReadEquality(Component comp) {
+        final CompoundBinaryTag written = write(comp);
+        final Component actual = Codec.COMPONENT.decode(Transcoder.NBT, written).orElseThrow();
+        assertEquals(comp, actual);
+    }
+
+    private static CompoundBinaryTag write(Component comp) {
         var array = NetworkBuffer.makeArray(buffer -> buffer.write(COMPONENT, comp));
         var buffer = NetworkBuffer.wrap(array, 0, array.length);
-        var actual = NBT_READER.deserialize(buffer.read(NBT));
-        assertEquals(comp, actual);
+        return assertInstanceOf(CompoundBinaryTag.class, buffer.read(NBT));
     }
 }

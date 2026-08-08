@@ -80,15 +80,42 @@ public record PlayerSkin(String textures, String signature) {
                 NetworkBuffer.BOOLEAN.optional(), Patch::slim,
                 Patch::new);
         public static final StructCodec<Patch> CODEC = StructCodec.struct(
-                "body", Codec.KEY.optional(), Patch::body,
+                "texture", Codec.KEY.optional(), Patch::body,
                 "cape", Codec.KEY.optional(), Patch::cape,
                 "elytra", Codec.KEY.optional(), Patch::elytra,
-                "slim", Codec.BOOLEAN.optional(), Patch::slim,
+                "model", Model.BOOLEAN_CODEC.optional(), Patch::slim,
                 Patch::new);
 
         public Patch(Key body) {
             this(body, null, null, null);
         }
+
+        /// Use [#model()] instead
+        /// @return slim
+        @Deprecated
+        @Override
+        public @Nullable Boolean slim() {
+            return slim;
+        }
+
+        public @Nullable Model model() {
+            if (slim == null) return null;
+            return slim ? Model.SLIM : Model.WIDE;
+        }
+    }
+
+    public enum Model {
+        WIDE,
+        SLIM;
+
+        public static final Codec<Model> CODEC = Codec.Enum(Model.class);
+        public static final NetworkBuffer.Type<Model> NETWORK_TYPE = NetworkBuffer.Enum(Model.class); // slim == 1
+
+        // TODO(next): move to model directly in the codec instead of weird boolean
+        private static final Codec<Boolean> BOOLEAN_CODEC = CODEC.transform(
+                model -> model == Model.SLIM,
+                slim -> slim ? Model.SLIM : Model.WIDE
+        );
     }
 
 }
