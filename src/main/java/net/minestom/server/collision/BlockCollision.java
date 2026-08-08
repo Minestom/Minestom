@@ -38,9 +38,10 @@ final class BlockCollision {
         return stepPhysics(boundingBox, velocity, entityPosition, getter, singleCollision);
     }
 
-    static Entity canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
+    static Entity canPlaceBlockAt(Instance instance, Point blockPos, Block b, @Nullable Player placer) {
         for (Entity entity : instance.getNearbyEntities(blockPos, 3)) {
-            if (!entity.preventBlockPlacement())
+            final boolean prevents = placer != null ? entity.preventBlockPlacement(placer) : entity.preventBlockPlacement();
+            if (!prevents)
                 continue;
 
             final boolean intersects;
