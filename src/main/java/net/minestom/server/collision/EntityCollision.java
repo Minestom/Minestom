@@ -35,13 +35,13 @@ final class EntityCollision {
             }
 
             // Check collisions with entity
-            SweepResult sweepResult = new SweepResult(minimumRes, 0, 0, 0, null, 0, 0, 0, 0, 0, 0);
-            boolean intersected = e.getBoundingBox().intersectBoxSwept(point, entityVelocity, e.getPosition(), boundingBox, sweepResult);
+            final double percentage = RayUtils.boundingBoxIntersectionPercentage(
+                    boundingBox, point, entityVelocity, e.getBoundingBox(), e.getPosition(), minimumRes);
 
-            if (intersected && sweepResult.res < 1) {
-                var p = point.asPos().add(entityVelocity.mul(sweepResult.res));
-                Vec direction = new Vec(sweepResult.collidedPositionX, sweepResult.collidedPositionY, sweepResult.collidedPositionZ);
-                result.add(new EntityCollisionResult(p, e, direction, sweepResult.res));
+            if (percentage < 1) {
+                var p = point.asPos().add(entityVelocity.mul(percentage));
+                Vec direction = new Vec(p.x(), p.y(), p.z());
+                result.add(new EntityCollisionResult(p, e, direction, percentage));
             }
         });
 
