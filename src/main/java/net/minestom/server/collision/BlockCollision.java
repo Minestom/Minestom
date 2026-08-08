@@ -7,6 +7,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,6 +27,15 @@ final class BlockCollision {
                                        Block.Getter getter,
                                        @Nullable PhysicsResult lastPhysicsResult,
                                        boolean singleCollision) {
+        return handlePhysics(boundingBox, velocity, entityPosition, getter, lastPhysicsResult, singleCollision, null);
+    }
+
+    static PhysicsResult handlePhysics(BoundingBox boundingBox,
+                                       Vec velocity, Pos entityPosition,
+                                       Block.Getter getter,
+                                       @Nullable PhysicsResult lastPhysicsResult,
+                                       boolean singleCollision,
+                                       @Nullable WorldBorder worldBorder) {
         if (velocity.isZero()) {
             return new PhysicsResult(entityPosition, Vec.ZERO, false, false, false, false,
                     velocity, NO_COLLISION_POINTS, NO_COLLISION_SHAPES, NO_COLLISION_SHAPE_POSITIONS, false, Double.MAX_VALUE);
@@ -36,7 +46,7 @@ final class BlockCollision {
             return cachedResult;
         }
         // Expensive AABB computation
-        return stepPhysics(boundingBox, velocity, entityPosition, getter, singleCollision);
+        return stepPhysics(boundingBox, velocity, entityPosition, getter, singleCollision, worldBorder);
     }
 
     @Nullable
@@ -87,7 +97,8 @@ final class BlockCollision {
 
     private static PhysicsResult stepPhysics(BoundingBox boundingBox,
                                              Vec velocity, Pos entityPosition,
-                                             Block.Getter getter, boolean singleCollision) {
+                                             Block.Getter getter, boolean singleCollision,
+                                             @Nullable WorldBorder worldBorder) {
         final SweepResult finalResult = new SweepResult(1 - Vec.EPSILON, 0, 0, 0, null, 0, 0, 0, 0, 0, 0);
 
         // Start as the shared (all-null) arrays; only allocate real ones on the first collision.
@@ -95,15 +106,50 @@ final class BlockCollision {
         @Nullable Shape[] collisionShapes = NO_COLLISION_SHAPES;
         @Nullable BlockVec[] collisionShapePositions = NO_COLLISION_SHAPE_POSITIONS;
 
+        // The world border acts as four vertical walls around the complete bounding box.
+        double borderMinX = 0, borderMaxX = 0, borderMinZ = 0, borderMaxZ = 0;
+        boolean sweepBorder = false;
+        if (worldBorder != null) {
+            final double radius = worldBorder.diameter() / 2;
+            final double wallMinX = Math.floor(worldBorder.centerX() - radius);
+            final double wallMaxX = Math.ceil(worldBorder.centerX() + radius);
+            final double wallMinZ = Math.floor(worldBorder.centerZ() - radius);
+            final double wallMaxZ = Math.ceil(worldBorder.centerZ() + radius);
+            borderMinX = wallMinX - boundingBox.minX();
+            borderMaxX = wallMaxX - boundingBox.maxX();
+            borderMinZ = wallMinZ - boundingBox.minZ();
+            borderMaxZ = wallMaxZ - boundingBox.maxZ();
+            // The border only collides entities inside it, with a margin of the bounding
+            // box size (at least one block). Entities farther outside move freely.
+            final double margin = Math.max(Math.max(boundingBox.width(), boundingBox.depth()), 1);
+            final double targetX = entityPosition.x() + velocity.x();
+            final double targetZ = entityPosition.z() + velocity.z();
+            sweepBorder = (targetX < borderMinX || targetX > borderMaxX || targetZ < borderMinZ || targetZ > borderMaxZ)
+                    && entityPosition.x() >= wallMinX - margin && entityPosition.x() < wallMaxX + margin
+                    && entityPosition.z() >= wallMinZ - margin && entityPosition.z() < wallMaxZ + margin;
+        }
+
         Pos position = entityPosition;
         Vec remaining = velocity;
+        boolean foundX = false;
+        boolean foundY = false;
+        boolean foundZ = false;
         // Each sweep advances along `remaining` until the first hit, zeroes the
         // collided axis, then repeats so the entity slides along the others.
         while (true) {
+            if (sweepBorder) {
+                sweepWorldBorderAxis(position.x(), remaining.x(),
+                        borderMinX, borderMaxX, 0,
+                        position, remaining, finalResult);
+                sweepWorldBorderAxis(position.z(), remaining.z(),
+                        borderMinZ, borderMaxZ, 2,
+                        position, remaining, finalResult);
+            }
             sweepBlocks(boundingBox, remaining, position, getter, finalResult);
-            double dx = finalResult.res * remaining.x();
-            double dy = finalResult.res * remaining.y();
-            double dz = finalResult.res * remaining.z();
+            final double res = finalResult.res;
+            double dx = res * remaining.x();
+            double dy = res * remaining.y();
+            double dz = res * remaining.z();
             if (Math.abs(dx) < Vec.EPSILON) dx = 0;
             if (Math.abs(dy) < Vec.EPSILON) dy = 0;
             if (Math.abs(dz) < Vec.EPSILON) dz = 0;
@@ -116,16 +162,26 @@ final class BlockCollision {
             else if (finalResult.normalZ != 0) axis = 2;
             else break; // no collision this pass
 
-            if (collisionShapes == NO_COLLISION_SHAPES) {
-                collidedPoints = new Vec[3];
-                collisionShapes = new Shape[3];
-                collisionShapePositions = new BlockVec[3];
-            }
-            collisionShapes[axis] = finalResult.collidedShape;
-            collisionShapePositions[axis] = new BlockVec(finalResult.collidedBlockX, finalResult.collidedBlockY, finalResult.collidedBlockZ);
-            collidedPoints[axis] = new Vec(finalResult.collidedPositionX, finalResult.collidedPositionY, finalResult.collidedPositionZ);
+            if (axis == 0) foundX = true;
+            else if (axis == 1) foundY = true;
+            else foundZ = true;
 
-            if (singleCollision || (collisionShapes[0] != null && collisionShapes[1] != null && collisionShapes[2] != null))
+            if (collidedPoints == NO_COLLISION_POINTS) {
+                collidedPoints = new Vec[3];
+            }
+            collidedPoints[axis] = new Vec(finalResult.collidedPositionX, finalResult.collidedPositionY, finalResult.collidedPositionZ);
+            // World border collisions have a point and axis, but no block shape or position.
+            final Shape collidedShape = finalResult.collidedShape;
+            if (collidedShape != null) {
+                if (collisionShapes == NO_COLLISION_SHAPES) {
+                    collisionShapes = new Shape[3];
+                    collisionShapePositions = new BlockVec[3];
+                }
+                collisionShapes[axis] = collidedShape;
+                collisionShapePositions[axis] = new BlockVec(finalResult.collidedBlockX, finalResult.collidedBlockY, finalResult.collidedBlockZ);
+            }
+
+            if (singleCollision || (foundX && foundY && foundZ))
                 break;
 
             remaining = new Vec(
@@ -140,9 +196,6 @@ final class BlockCollision {
             finalResult.res = 1 - Vec.EPSILON;
         }
 
-        final boolean foundX = collisionShapes[0] != null;
-        final boolean foundY = collisionShapes[1] != null;
-        final boolean foundZ = collisionShapes[2] != null;
         final boolean anyCollision = foundX || foundY || foundZ;
         final boolean allCollision = foundX && foundY && foundZ;
         final Vec newDelta;
@@ -158,6 +211,39 @@ final class BlockCollision {
                 foundX, foundY, foundZ,
                 velocity, collidedPoints, collisionShapes, collisionShapePositions,
                 anyCollision, finalResult.res);
+    }
+
+    /**
+     * Sweeps against one pair of world border walls, located entity-relative at {@code minimum}
+     * and {@code maximum}. A wall only stops a box that has not yet crossed it. A box already
+     * extending past a wall keeps moving away from the border freely.
+     */
+    private static void sweepWorldBorderAxis(double position, double velocity,
+                                             double minimum, double maximum, int axis,
+                                             Pos entityPosition, Vec entityVelocity,
+                                             SweepResult finalResult) {
+        final double percentage;
+        if (velocity > 0) {
+            if (position > maximum || position + velocity <= maximum) return;
+            percentage = (maximum - position) / velocity;
+        } else if (velocity < 0) {
+            if (position < minimum || position + velocity >= minimum) return;
+            percentage = (minimum - position) / velocity;
+        } else {
+            return;
+        }
+
+        final double acceptedPercentage = percentage * 0.99999;
+        if (!(acceptedPercentage <= finalResult.res)) return;
+
+        finalResult.res = acceptedPercentage;
+        finalResult.normalX = axis == 0 ? 1 : 0;
+        finalResult.normalY = 0;
+        finalResult.normalZ = axis == 2 ? 1 : 0;
+        finalResult.collidedPositionX = entityPosition.x() + entityVelocity.x() * acceptedPercentage;
+        finalResult.collidedPositionY = entityPosition.y() + entityVelocity.y() * acceptedPercentage;
+        finalResult.collidedPositionZ = entityPosition.z() + entityVelocity.z() * acceptedPercentage;
+        finalResult.collidedShape = null;
     }
 
     /**

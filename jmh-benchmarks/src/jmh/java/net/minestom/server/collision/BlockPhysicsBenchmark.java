@@ -33,6 +33,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  *     <li>{@link #largeMoveSlow()} - {@code slowPhysics} ray-cast (velocity length &gt; 1)</li>
  *     <li>{@link #fenceCollision()} - multi-box shape + tall-below ({@code shouldCheckLower}) path</li>
  *     <li>{@link #denseCollision()} - collisions on all axes, multiple step-physics iterations</li>
+ *     <li>{@link #walkOnFloorFarBorder()} - {@link #walkOnFloor()} plus a distant border (skip path)</li>
+ *     <li>{@link #walkIntoBorder()} - {@link #walkOnFloor()} into a border wall (sweep engaged)</li>
  *     <li>{@link #simulateOnGround()} - full movement incl. friction lookup + velocity update</li>
  *     <li>{@link #simulateFalling()} - full movement incl. gravity velocity update</li>
  * </ul>
@@ -50,6 +52,8 @@ public class BlockPhysicsBenchmark {
     // Representative player aerodynamics (gravity, horizontal drag, vertical drag)
     private static final Aerodynamics AERO = new Aerodynamics(0.08, 0.91, 0.98);
     private static final WorldBorder BORDER = WorldBorder.DEFAULT_BORDER;
+    // Walls at +-1, so walking +x from x=0.6 crosses the wall at x=1 (entity-relative 0.7).
+    private static final WorldBorder NEAR_BORDER = new WorldBorder(2, 0, 0, 0, 0);
 
     // --- In-memory block getters ---
 
@@ -157,6 +161,22 @@ public class BlockPhysicsBenchmark {
         // multiple iterations of the stepPhysics while-loop.
         return CollisionUtils.handlePhysics(DENSE_GETTER, PLAYER_BB, new Pos(0.5, 64.5, 0.5),
                 new Vec(0.3, -0.3, 0.3), null, false);
+    }
+
+    // --- world border variants: measure the border sweep cost against walkOnFloor ---
+
+    @Benchmark
+    public PhysicsResult walkOnFloorFarBorder() {
+        // The default 60M block border takes the up-front in-bounds skip path.
+        return CollisionUtils.handlePhysics(FLOOR_GETTER, BORDER, PLAYER_BB, new Pos(0.5, 64.0, 0.5),
+                new Vec(0.2, -0.08, 0.15), null, false);
+    }
+
+    @Benchmark
+    public PhysicsResult walkIntoBorder() {
+        // The target crosses the wall at x=1, so the border is swept on every slide pass.
+        return CollisionUtils.handlePhysics(FLOOR_GETTER, NEAR_BORDER, PLAYER_BB, new Pos(0.6, 64.0, 0.5),
+                new Vec(0.2, -0.08, 0.15), null, false);
     }
 
     // --- locking-getter variants: measure block-lookup cost (dedup benefit) ---

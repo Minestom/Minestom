@@ -126,6 +126,27 @@ public final class CollisionUtils {
     }
 
     /**
+     * Moves a bounding box with physics applied, colliding with blocks and the world border.
+     * <p>
+     * The world border collides as four vertical walls at the block-aligned border bounds.
+     * A box whose movement target stays inside the walls never collides with them, and a box
+     * already extending past a wall keeps moving away from the border freely.
+     *
+     * @param blockGetter the block getter to check collisions against, ensure block access is synchronized
+     * @param worldBorder the world border to collide with
+     * @return the result of physics simulation
+     */
+    @ApiStatus.Internal
+    public static PhysicsResult handlePhysics(Block.Getter blockGetter, WorldBorder worldBorder,
+                                              BoundingBox boundingBox,
+                                              Pos position, Vec velocity,
+                                              @Nullable PhysicsResult lastPhysicsResult, boolean singleCollision) {
+        return BlockCollision.handlePhysics(boundingBox,
+                velocity, position,
+                blockGetter, lastPhysicsResult, singleCollision, worldBorder);
+    }
+
+    /**
      * Checks whether shape is reachable by the given line of sight
      * (ie there are no blocks colliding with it).
      *
@@ -153,27 +174,6 @@ public final class CollisionUtils {
 
     public static @Nullable Entity canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
         return BlockCollision.canPlaceBlockAt(instance, blockPos, b);
-    }
-
-    /**
-     * Applies world border collision.
-     *
-     * @param worldBorder     the world border
-     * @param currentPosition the current position
-     * @param newPosition     the future target position
-     * @return the position with the world border collision applied (can be {@code newPosition} if not changed)
-     */
-    public static Pos applyWorldBorder(WorldBorder worldBorder, Pos currentPosition, Pos newPosition) {
-        double radius = worldBorder.diameter() / 2;
-        // If there is a collision on a given axis prevent the entity
-        // from moving forward by supplying their previous position's value
-        boolean xCollision = newPosition.x() > worldBorder.centerX() + radius || newPosition.x() < worldBorder.centerX() - radius;
-        boolean zCollision = newPosition.z() > worldBorder.centerZ() + radius || newPosition.z() < worldBorder.centerZ() - radius;
-        if (xCollision || zCollision) {
-            return newPosition.withCoord(xCollision ? currentPosition.x() : newPosition.x(), newPosition.y(),
-                    zCollision ? currentPosition.z() : newPosition.z());
-        }
-        return newPosition;
     }
 
     @ApiStatus.Internal

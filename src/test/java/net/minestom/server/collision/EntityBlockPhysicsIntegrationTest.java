@@ -7,6 +7,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.metadata.cube.SlimeMeta;
+import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
@@ -17,6 +18,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -1124,6 +1126,171 @@ public class EntityBlockPhysicsIntegrationTest {
         var physicsResult = CollisionUtils.handlePhysics(entity, new Vec(0, -10, 0), null);
 
         assertEquals(blockPosition, physicsResult.collisionShapePositions()[1]);
+    }
+
+    @Test
+    public void worldBorderCollidesWithCompleteBoundingBoxAndSlides(Env env) {
+        var instance = env.createFlatInstance();
+        instance.loadChunk(-1, -1).join();
+        instance.loadChunk(-1, 0).join();
+        instance.loadChunk(0, -1).join();
+        instance.loadChunk(0, 0).join();
+        var boundingBox = new BoundingBox(0.6, 1.8, 0.6);
+        var worldBorder = new WorldBorder(4, 0, 0, 0, 0);
+
+        var result = CollisionUtils.handlePhysics(instance, worldBorder, boundingBox,
+                new Pos(0, 42, 0), new Vec(3, 0, 1), null, false);
+
+        assertEquals(2, result.newPosition().x() + boundingBox.maxX(), Vec.EPSILON * 20);
+        assertEquals(1, result.newPosition().z(), Vec.EPSILON);
+        assertEquals(new Vec(0, 0, 1), result.newVelocity());
+        assertTrue(result.collisionX());
+        assertFalse(result.collisionY());
+        assertFalse(result.collisionZ());
+        assertTrue(result.hasCollision());
+        assertNotSame(BlockCollision.NO_COLLISION_POINTS, result.collisionPoints());
+        assertSame(BlockCollision.NO_COLLISION_SHAPES, result.collisionShapes());
+        assertSame(BlockCollision.NO_COLLISION_SHAPE_POSITIONS, result.collisionShapePositions());
+        assertNotNull(result.collisionPoints()[0]);
+    }
+
+    @Test
+    public void worldBorderUsesEverySideOfAnAsymmetricBoundingBox(Env env) {
+        var instance = env.createFlatInstance();
+        instance.loadChunk(-1, -1).join();
+        instance.loadChunk(-1, 0).join();
+        instance.loadChunk(0, -1).join();
+        instance.loadChunk(0, 0).join();
+        var boundingBox = new BoundingBox(new Vec(-0.2, 0, -0.4), new Vec(0.6, 1, 0.1));
+        var worldBorder = new WorldBorder(4, 0, 0, 0, 0);
+
+        record Case(Vec velocity, double expectedPosition, boolean xAxis) {}
+        for (var testCase : List.of(
+                new Case(new Vec(3, 0, 0), 1.4, true),
+                new Case(new Vec(-3, 0, 0), -1.8, true),
+                new Case(new Vec(0, 0, 3), 1.9, false),
+                new Case(new Vec(0, 0, -3), -1.6, false))) {
+            var result = CollisionUtils.handlePhysics(instance, worldBorder, boundingBox,
+                    new Pos(0, 42, 0), testCase.velocity(), null, false);
+
+            assertEquals(testCase.expectedPosition(),
+                    testCase.xAxis() ? result.newPosition().x() : result.newPosition().z(), Vec.EPSILON * 25);
+            assertEquals(testCase.xAxis(), result.collisionX());
+            assertEquals(!testCase.xAxis(), result.collisionZ());
+            assertTrue(worldBorder.inBounds(result.newPosition(), boundingBox));
+        }
+    }
+
+    @Test
+    public void worldBorderFreesABoxAlreadyPastTheWall(Env env) {
+        var instance = env.createFlatInstance();
+        instance.loadChunk(0, -1).join();
+        instance.loadChunk(0, 0).join();
+        var boundingBox = new BoundingBox(0.6, 1.8, 0.6);
+        var worldBorder = new WorldBorder(4, 0, 0, 0, 0);
+        // The box spans [1.6, 2.2] and already extends past the wall at x=2.
+        var start = new Pos(1.9, 42, 0);
+
+        var inward = CollisionUtils.handlePhysics(instance, worldBorder, boundingBox,
+                start, new Vec(-0.5, 0, 0), null, false);
+        assertEquals(1.4, inward.newPosition().x(), Vec.EPSILON);
+        assertFalse(inward.collisionX());
+
+        var outward = CollisionUtils.handlePhysics(instance, worldBorder, boundingBox,
+                start, new Vec(0.5, 0, 0), null, false);
+        assertEquals(2.4, outward.newPosition().x(), Vec.EPSILON);
+        assertFalse(outward.collisionX());
+    }
+
+    @Test
+    public void worldBorderDoesNotTrapABoxWiderThanTheBorder(Env env) {
+        var instance = env.createFlatInstance();
+        instance.loadChunk(-1, -1).join();
+        instance.loadChunk(-1, 0).join();
+        instance.loadChunk(0, -1).join();
+        instance.loadChunk(0, 0).join();
+        var boundingBox = new BoundingBox(4, 1, 4);
+        var worldBorder = new WorldBorder(2, 0, 0, 0, 0);
+
+        var result = CollisionUtils.handlePhysics(instance, worldBorder, boundingBox,
+                new Pos(0, 42, 0), new Vec(1, 0, 0), null, false);
+
+        assertEquals(1, result.newPosition().x(), Vec.EPSILON * 2);
+        assertFalse(result.hasCollision());
+    }
+
+    @Test
+    public void worldBorderOffCenterUsesBlockAlignedWalls(Env env) {
+        var instance = env.createFlatInstance();
+        instance.loadChunk(0, 0).join();
+        var boundingBox = new BoundingBox(0.6, 1.8, 0.6);
+        // Exact bounds [6.5, 9.5] on both axes with block aligned walls at 6 and 10.
+        var worldBorder = new WorldBorder(3, 8, 8, 0, 0);
+
+        var result = CollisionUtils.handlePhysics(instance, worldBorder, boundingBox,
+                new Pos(8.5, 42, 8), new Vec(3, 0, 0), null, false);
+
+        assertEquals(10, result.newPosition().x() + boundingBox.maxX(), Vec.EPSILON * 20);
+        assertTrue(result.collisionX());
+    }
+
+    @Test
+    public void simulateMovementWithoutPhysicsIgnoresWorldBorder(Env env) {
+        var instance = env.createFlatInstance();
+        instance.loadChunk(0, 0).join();
+        var boundingBox = new BoundingBox(0.6, 1.8, 0.6);
+        var worldBorder = new WorldBorder(4, 0, 0, 0, 0);
+        var aerodynamics = new Aerodynamics(0, 1, 1);
+
+        var result = PhysicsUtils.simulateMovement(new Pos(1.5, 42, 0.5), new Vec(2, 0, 0), boundingBox,
+                worldBorder, instance, aerodynamics, true, false, false, false, null);
+
+        assertEquals(3.5, result.newPosition().x(), Vec.EPSILON);
+        assertFalse(result.hasCollision());
+    }
+
+    @Test
+    public void worldBorderIgnoresEntitiesFarOutside(Env env) {
+        var instance = env.createFlatInstance();
+        instance.loadChunk(0, -1).join();
+        instance.loadChunk(0, 0).join();
+        var boundingBox = new BoundingBox(0.6, 1.8, 0.6);
+        var worldBorder = new WorldBorder(4, 0, 0, 0, 0);
+        // Walls at +-2 with a one block margin, so the border stops colliding beyond x=3.
+        var start = new Pos(3.5, 42, 0);
+
+        var outward = CollisionUtils.handlePhysics(instance, worldBorder, boundingBox,
+                start, new Vec(0.5, 0, 0), null, false);
+        assertEquals(4, outward.newPosition().x(), Vec.EPSILON);
+        assertFalse(outward.collisionX());
+
+        var inward = CollisionUtils.handlePhysics(instance, worldBorder, boundingBox,
+                start, new Vec(-0.5, 0, 0), null, false);
+        assertEquals(3, inward.newPosition().x(), Vec.EPSILON);
+        assertFalse(inward.collisionX());
+    }
+
+    @Test
+    public void worldBorderCornerCollidesOnBothAxes(Env env) {
+        var instance = env.createFlatInstance();
+        instance.loadChunk(-1, -1).join();
+        instance.loadChunk(-1, 0).join();
+        instance.loadChunk(0, -1).join();
+        instance.loadChunk(0, 0).join();
+        var boundingBox = new BoundingBox(0.6, 1.8, 0.6);
+        var worldBorder = new WorldBorder(4, 0, 0, 0, 0);
+
+        // Moving diagonally into a corner must hit one wall, slide, then hit the other.
+        var result = CollisionUtils.handlePhysics(instance, worldBorder, boundingBox,
+                new Pos(0, 42, 0), new Vec(3, 0, 3), null, false);
+
+        assertEquals(2, result.newPosition().x() + boundingBox.maxX(), Vec.EPSILON * 20);
+        assertEquals(2, result.newPosition().z() + boundingBox.maxZ(), Vec.EPSILON * 20);
+        assertEquals(Vec.ZERO, result.newVelocity());
+        assertTrue(result.collisionX());
+        assertTrue(result.collisionZ());
+        assertFalse(result.collisionY());
+        assertTrue(worldBorder.inBounds(result.newPosition(), boundingBox));
     }
 
     @Test
