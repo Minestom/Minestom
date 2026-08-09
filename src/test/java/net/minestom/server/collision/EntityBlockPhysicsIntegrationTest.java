@@ -1,5 +1,6 @@
 package net.minestom.server.collision;
 
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -16,6 +17,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -1111,6 +1113,20 @@ public class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
+    public void collisionShapePositionUsesBlockCoordinates(Env env) {
+        var instance = env.createFlatInstance();
+        var blockPosition = new BlockVec(-3, 42, 5);
+        instance.setBlock(blockPosition, Block.STONE);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(-2.5, 43.5, 5.5)).join();
+
+        var physicsResult = CollisionUtils.handlePhysics(entity, new Vec(0, -10, 0), null);
+
+        assertEquals(blockPosition, physicsResult.collisionShapePositions()[1]);
+    }
+
+    @Test
     public void entityPhysicsCacheTest(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 42, 0, Block.STONE);
@@ -1127,13 +1143,37 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEqualsPoint(deltaPos, physicsResult.originalDelta());
 
         // Create a new instance of the physics result to simulate gravity or we will never cache because velocity would be zero.
-        var velocityFixedResult = new PhysicsResult(physicsResult.newPosition(), physicsResult.newVelocity().add(deltaPos), physicsResult.isOnGround(), physicsResult.collisionX(), physicsResult.collisionY(), physicsResult.collisionZ(), physicsResult.originalDelta(), physicsResult.collisionPoints(), physicsResult.collisionShapes(), physicsResult.collisionShapePositions(), physicsResult.hasCollision(), physicsResult.res(), false);
+        var velocityFixedResult = new PhysicsResult(physicsResult.newPosition(), physicsResult.newVelocity().add(deltaPos), physicsResult.isOnGround(), physicsResult.collisionX(), physicsResult.collisionY(), physicsResult.collisionZ(), physicsResult.originalDelta(), physicsResult.collisionPoints(), physicsResult.collisionShapes(), physicsResult.collisionShapePositions(), physicsResult.hasCollision(), physicsResult.collisionFraction());
 
         var physicsResult2 = CollisionUtils.handlePhysics(instance, entity.getChunk(),
                 entity.getBoundingBox(),
                 physicsResult.newPosition(), deltaPos,
                 velocityFixedResult, false);
 
-        assertTrue(physicsResult2.cached());
+        assertSame(velocityFixedResult, physicsResult2);
+
+        var physicsResult3 = PhysicsUtils.simulateMovement(
+                physicsResult.newPosition(), deltaPos, entity.getBoundingBox(),
+                instance.getWorldBorder(), instance, new Aerodynamics(0, 1, 1),
+                true, true, true, false, physicsResult);
+
+        assertSame(physicsResult, physicsResult3);
+    }
+
+    @Test
+    public void entityPhysicsCacheRejectsDifferentVelocity(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 42, 0, Block.STONE);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0, 43.5, 0)).join();
+
+        var previousResult = CollisionUtils.handlePhysics(entity, new Vec(0.25, -10, 0), null);
+        var currentResult = CollisionUtils.handlePhysics(instance, entity.getChunk(),
+                entity.getBoundingBox(), previousResult.newPosition(), new Vec(0, -10, 0),
+                previousResult, false);
+
+        assertNotSame(previousResult, currentResult);
+        assertEquals(Vec.ZERO, currentResult.newVelocity());
     }
 }

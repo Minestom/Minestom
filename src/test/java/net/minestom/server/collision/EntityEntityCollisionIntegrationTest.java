@@ -8,6 +8,7 @@ import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @EnvTest
 public class EntityEntityCollisionIntegrationTest {
@@ -54,5 +55,28 @@ public class EntityEntityCollisionIntegrationTest {
         var result = CollisionUtils.checkEntityCollisions(movingEntity, new Vec(0, 0, 2), 1.51, entity -> entity != movingEntity, null);
 
         assertEquals(2, result.size());
+    }
+
+    @Test
+    public void entityCollisionDetailsTest(Env env) {
+        var instance = env.createFlatInstance();
+        instance.loadChunk(0, 0).join();
+
+        var movingEntity = new Entity(EntityType.ZOMBIE);
+        var stillEntity = new Entity(EntityType.ZOMBIE);
+        movingEntity.setInstance(instance, new Vec(0, 42, 0)).join();
+        stillEntity.setInstance(instance, new Vec(0, 42, 2)).join();
+
+        var results = CollisionUtils.checkEntityCollisions(
+                movingEntity, new Vec(0, 0, 4), 1.51, entity -> entity != movingEntity, null);
+
+        assertEquals(1, results.size());
+        final var result = results.getFirst();
+        final double expectedPercentage = 0.35 * 0.99999;
+        final var expectedPoint = new Vec(0, 42, 4 * expectedPercentage);
+        assertEquals(expectedPercentage, result.percentage());
+        assertTrue(expectedPoint.samePoint(result.collisionPoint()));
+        assertEquals(expectedPoint, result.direction());
+        assertEquals(stillEntity, result.entity());
     }
 }
