@@ -9,7 +9,6 @@ import static net.minestom.server.instance.palette.PaletteAssertions.assertAllEq
 import static net.minestom.server.instance.palette.PaletteAssertions.nonZeroCount;
 import static net.minestom.server.instance.palette.PaletteAssertions.testPalettes;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
