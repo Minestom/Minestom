@@ -246,8 +246,8 @@ public class PaletteCloneTest {
             assertTrue(original.compare(cloned));
 
             // Verify independence
-            original.set(0, 0, 0, 999);
-            assertNotEquals(999, cloned.get(0, 0, 0));
+            original.set(0, 0, 0, 63);
+            assertNotEquals(63, cloned.get(0, 0, 0));
         }
     }
 

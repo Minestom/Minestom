@@ -20,6 +20,7 @@ final class PaletteImpl implements Palette {
 
     PaletteImpl(byte dimension, byte minBitsPerEntry, byte maxBitsPerEntry, byte directBits) {
         validateDimension(dimension);
+        validateConfiguration(minBitsPerEntry, maxBitsPerEntry, directBits);
         this.dimension = dimension;
         this.minBitsPerEntry = minBitsPerEntry;
         this.maxBitsPerEntry = maxBitsPerEntry;
@@ -87,6 +88,7 @@ final class PaletteImpl implements Palette {
     public void set(int x, int y, int z, int value) {
         final int dimension = this.dimension;
         validateCoord(dimension, x, y, z);
+        validateValue(value);
         setUnchecked(this, dimension, x, y, z, value);
     }
 
@@ -141,6 +143,7 @@ final class PaletteImpl implements Palette {
 
     @Override
     public void fill(int value) {
+        validateValue(value);
         this.bitsPerEntry = 0;
         this.singleValue = value;
         this.values = null;
@@ -150,6 +153,7 @@ final class PaletteImpl implements Palette {
     @Override
     public void load(int[] palette, long[] values) {
         if (palette.length == 0) throw new IllegalArgumentException("Palette cannot be empty");
+        validateValues(palette);
         final int dimension = this.dimension;
         final int maxBitsPerEntry = this.maxBitsPerEntry;
         final byte directBits = this.directBits;
@@ -229,11 +233,14 @@ final class PaletteImpl implements Palette {
     public void offset(int offset) {
         if (offset == 0) return;
         if (isSingle(bitsPerEntry)) {
-            this.singleValue += offset;
+            final int newValue = singleValue + offset;
+            validateValue(newValue);
+            this.singleValue = newValue;
             return;
         }
         final PaletteTable table = this.table;
         if (isIndirect(table)) {
+            validateTableValues(table, offset);
             table.offset(offset);
             return;
         }
@@ -242,6 +249,7 @@ final class PaletteImpl implements Palette {
 
     @Override
     public void replace(int oldValue, int newValue) {
+        validateValue(newValue);
         if (oldValue == newValue) return;
         final int bitsPerEntry = this.bitsPerEntry;
         if (isSingle(bitsPerEntry)) {
@@ -276,6 +284,7 @@ final class PaletteImpl implements Palette {
             for (int z = 0; z < dimension; z++) {
                 for (int x = 0; x < dimension; x++) {
                     final int value = supplier.get(x, y, z);
+                    validateValue(value);
                     if (index == 0) {
                         firstValue = value;
                     } else if (rawValues == null && value != firstValue) {
@@ -300,6 +309,7 @@ final class PaletteImpl implements Palette {
         final int oldValue = isSingle(bitsPerEntry) ? singleValue : Palettes.readValue(
                 dimension, bitsPerEntry, values, paletteValues(table), x, y, z);
         final int newValue = operator.applyAsInt(oldValue);
+        validateValue(newValue);
         if (oldValue != newValue) setUnchecked(this, dimension, x, y, z, newValue);
     }
 
@@ -321,6 +331,7 @@ final class PaletteImpl implements Palette {
                     final int oldValue = isSingle(bitsPerEntry) ? singleValue : Palettes.readValue(
                             dimension, bitsPerEntry, values, paletteValues, x, y, z);
                     final int value = function.apply(x, y, z, oldValue);
+                    validateValue(value);
                     changed |= value != oldValue;
                     if (index == 0) {
                         firstValue = value;
@@ -358,6 +369,7 @@ final class PaletteImpl implements Palette {
         boolean direct = false;
         for (int index = 0; index < rawValues.length; index++) {
             final int value = rawValues[index];
+            palette.validateValue(value);
             int paletteIndex = table.indexOf(value);
             if (paletteIndex == -1) {
                 paletteIndex = table.insert(value);
@@ -434,6 +446,7 @@ final class PaletteImpl implements Palette {
             for (int z = sourceMinZ; z < sourceMaxZ; z++) {
                 for (int x = sourceMinX; x < sourceMaxX; x++) {
                     final int value = getUnchecked(sourcePalette, dimension, x, y, z);
+                    validateValue(value);
                     setUnchecked(this, dimension, x + offsetX, y + offsetY, z + offsetZ, value);
                 }
             }
@@ -446,6 +459,7 @@ final class PaletteImpl implements Palette {
                                          int sourceMinX, int sourceMinY, int sourceMinZ,
                                          int sourceMaxX, int sourceMaxY, int sourceMaxZ,
                                          int offsetX, int offsetY, int offsetZ) {
+        target.validateTableValues(sourceTable, 0);
         if (isDirect(target.bitsPerEntry, target.table)) {
             Palettes.copyIndirectToDirect(dimension,
                     target.bitsPerEntry, target.values,
@@ -701,6 +715,7 @@ final class PaletteImpl implements Palette {
     private static void makeDirect(PaletteImpl palette, int dimension, int directBits,
                                    int bitsPerEntry, long[] values, @Nullable PaletteTable table) {
         if (!isIndirect(table)) return;
+        palette.validateTableValues(table, 0);
         palette.values = Palettes.remap(dimension, bitsPerEntry, directBits, values, table::value);
         palette.table = null;
         palette.bitsPerEntry = (byte) directBits;
@@ -739,6 +754,7 @@ final class PaletteImpl implements Palette {
 
     @Override
     public int valueToPaletteIndex(int value) {
+        validateValue(value);
         final int dimension = this.dimension;
         int bitsPerEntry = this.bitsPerEntry;
         long[] values = this.values;
@@ -771,6 +787,23 @@ final class PaletteImpl implements Palette {
         return values == null ? null : values.clone();
     }
 
+    private void validateValue(int value) {
+        if (value < 0 || value >= 1L << directBits) {
+            throw new IllegalArgumentException("Palette value must fit the direct width " + directBits
+                    + ", got " + value);
+        }
+    }
+
+    private void validateTableValues(PaletteTable table, int offset) {
+        for (int index = 0; index < table.size(); index++) {
+            if (table.countAt(index) != 0) validateValue(table.value(index) + offset);
+        }
+    }
+
+    private void validateValues(int[] values) {
+        for (int value : values) validateValue(value);
+    }
+
     private static void validateCoord(int dimension, int x, int y, int z) {
         if (x < 0 || y < 0 || z < 0) throw new IllegalArgumentException("Coordinates must be non-negative");
         if (x >= dimension || y >= dimension || z >= dimension) {
@@ -782,6 +815,16 @@ final class PaletteImpl implements Palette {
     private static void validateDimension(int dimension) {
         if (dimension <= 1 || (dimension & dimension - 1) != 0) {
             throw new IllegalArgumentException("Dimension must be a positive power of 2, got " + dimension);
+        }
+    }
+
+    private static void validateConfiguration(int minBitsPerEntry, int maxBitsPerEntry, int directBits) {
+        if (minBitsPerEntry < 1 || minBitsPerEntry > maxBitsPerEntry || maxBitsPerEntry > 30) {
+            throw new IllegalArgumentException("Indirect widths must satisfy 1 <= min <= max <= 30, got ["
+                    + minBitsPerEntry + ", " + maxBitsPerEntry + "]");
+        }
+        if (directBits < 1 || directBits > 31) {
+            throw new IllegalArgumentException("Direct width must be within [1, 31], got " + directBits);
         }
     }
 

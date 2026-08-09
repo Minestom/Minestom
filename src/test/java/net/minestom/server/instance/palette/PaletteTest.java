@@ -69,7 +69,7 @@ public class PaletteTest {
 
     @Test
     public void placementHighValue() {
-        final int value = 250_000;
+        final int value = (1 << 15) - 1;
         for (Palette palette : testPalettes()) {
             palette.set(0, 0, 1, value);
             assertEquals(value, palette.get(0, 0, 1));
@@ -190,10 +190,7 @@ public class PaletteTest {
             palette.getAllCounts((_, count) -> sum.addAndGet(count));
             assertEquals(palette.maxSize(), sum.get());
         }
-        final IllegalArgumentException failure = assertThrows(IllegalArgumentException.class,
-                () -> palette.set(0, 0, 2, 8));
-        assertEquals("Palette cannot hold more than 8 distinct values, its direct width (3)"
-                + " does not exceed its indirect width (3)", failure.getMessage());
+        assertThrows(IllegalArgumentException.class, () -> palette.set(0, 0, 2, 8));
         assertEquals(3, palette.bitsPerEntry());
     }
 
@@ -654,13 +651,10 @@ public class PaletteTest {
             assertEquals(palette.maxSize(), palette.count(0));
             assertEquals(0, palette.count(-1));
             assertEquals(0, palette.count(Integer.MAX_VALUE));
-            // Fill with negative value
-            palette.fill(-7);
-            assertEquals(palette.maxSize(), palette.count(-7));
-            assertEquals(0, palette.count(0));
-            // Fill with max int
-            palette.fill(Integer.MAX_VALUE);
-            assertEquals(palette.maxSize(), palette.count(Integer.MAX_VALUE));
+            // Fill with the largest direct value
+            final int maxValue = (1 << 15) - 1;
+            palette.fill(maxValue);
+            assertEquals(palette.maxSize(), palette.count(maxValue));
             assertEquals(0, palette.count(0));
         }
         for (Palette palette : testPalettes()) {
@@ -951,14 +945,29 @@ public class PaletteTest {
 
     @Test
     public void dimension() {
-        assertThrows(Exception.class, () -> Palette.empty(-4, 5, 3, 15));
-        assertThrows(Exception.class, () -> Palette.empty(0, 5, 3, 15));
-        assertThrows(Exception.class, () -> Palette.empty(1, 5, 3, 15));
-        assertDoesNotThrow(() -> Palette.empty(2, 5, 3, 15));
-        assertThrows(Exception.class, () -> Palette.empty(3, 5, 3, 15));
-        assertDoesNotThrow(() -> Palette.empty(4, 5, 3, 15));
-        assertThrows(Exception.class, () -> Palette.empty(6, 5, 3, 15));
-        assertDoesNotThrow(() -> Palette.empty(16, 5, 3, 15));
+        assertThrows(Exception.class, () -> Palette.empty(-4, 3, 5, 15));
+        assertThrows(Exception.class, () -> Palette.empty(0, 3, 5, 15));
+        assertThrows(Exception.class, () -> Palette.empty(1, 3, 5, 15));
+        assertDoesNotThrow(() -> Palette.empty(2, 3, 5, 15));
+        assertThrows(Exception.class, () -> Palette.empty(3, 3, 5, 15));
+        assertDoesNotThrow(() -> Palette.empty(4, 3, 5, 15));
+        assertThrows(Exception.class, () -> Palette.empty(6, 3, 5, 15));
+        assertDoesNotThrow(() -> Palette.empty(16, 3, 5, 15));
+    }
+
+    @Test
+    public void configurationValidation() {
+        assertThrows(IllegalArgumentException.class, () -> Palette.empty(4, 0, 3, 15));
+        assertThrows(IllegalArgumentException.class, () -> Palette.empty(4, 5, 3, 15));
+        assertThrows(IllegalArgumentException.class, () -> Palette.empty(4, 1, 31, 31));
+        assertThrows(IllegalArgumentException.class, () -> Palette.empty(4, 1, 3, 0));
+        assertThrows(IllegalArgumentException.class, () -> Palette.empty(4, 1, 3, -1));
+        assertThrows(IllegalArgumentException.class, () -> Palette.empty(4, 1, 3, 32));
+
+        // The widest accepted direct width holds every non negative int
+        final Palette widest = Palette.empty(4, 1, 3, 31);
+        widest.set(0, 0, 0, Integer.MAX_VALUE);
+        assertEquals(Integer.MAX_VALUE, widest.get(0, 0, 0));
     }
 
     @Test
@@ -1068,27 +1077,20 @@ public class PaletteTest {
     }
 
     @Test
-    public void serializationNegativeValues() {
-        NetworkBuffer buffer = NetworkBuffer.resizableBuffer();
-        Palette single = Palette.blocks();
-        single.fill(-5);
-        buffer.write(Palette.BLOCK_SERIALIZER, single);
-        Palette singleDeserialized = buffer.read(Palette.BLOCK_SERIALIZER);
-        assertTrue(single.compare(singleDeserialized));
-        assertEquals(-5, singleDeserialized.get(4, 4, 4));
-
-        buffer = NetworkBuffer.resizableBuffer();
-        Palette indirect = Palette.blocks();
-        indirect.set(0, 0, 0, -1);
-        indirect.set(1, 0, 0, -32);
-        indirect.set(2, 0, 0, 7);
-        buffer.write(Palette.BLOCK_SERIALIZER, indirect);
-        Palette indirectDeserialized = buffer.read(Palette.BLOCK_SERIALIZER);
-        assertTrue(indirect.compare(indirectDeserialized));
-        assertEquals(-1, indirectDeserialized.get(0, 0, 0));
-        assertEquals(-32, indirectDeserialized.get(1, 0, 0));
-        assertEquals(7, indirectDeserialized.get(2, 0, 0));
-        assertEquals(0, indirectDeserialized.get(5, 5, 5));
+    public void mutationsRejectOutOfRangeValues() {
+        for (Palette palette : testPalettes()) {
+            assertThrows(IllegalArgumentException.class, () -> palette.set(0, 0, 0, -1));
+            assertThrows(IllegalArgumentException.class, () -> palette.set(0, 0, 0, 1 << 15));
+            assertThrows(IllegalArgumentException.class, () -> palette.fill(-5));
+            assertThrows(IllegalArgumentException.class, () -> palette.replace(0, -2));
+            assertThrows(IllegalArgumentException.class, () -> palette.valueToPaletteIndex(-6));
+            assertThrows(IllegalArgumentException.class, () -> palette.setAll((_, _, _) -> -1));
+            assertThrows(IllegalArgumentException.class, () -> palette.replace(0, 0, 0, _ -> -3));
+            assertThrows(IllegalArgumentException.class, () -> palette.replaceAll((_, _, _, _) -> -4));
+            assertThrows(IllegalArgumentException.class, () -> palette.offset(-1));
+            assertThrows(IllegalArgumentException.class, () -> palette.load(new int[]{0, -7}, new long[0]));
+            assertAllEquals(0, palette);
+        }
     }
 
     @Test
@@ -1193,7 +1195,7 @@ public class PaletteTest {
     public void loadOversizedPaletteWithoutDirectModeStaysIndirect() {
         final PaletteImpl palette = (PaletteImpl) Palette.empty(4, 1, 3, 3);
         final int[] paletteData = new int[16];
-        for (int i = 0; i < paletteData.length; i++) paletteData[i] = 10 + (i % 6);
+        for (int i = 0; i < paletteData.length; i++) paletteData[i] = i % 6;
         final int[] indices = new int[palette.maxSize()];
         for (int i = 0; i < indices.length; i++) indices[i] = i % 16;
         palette.load(paletteData, Palettes.pack(indices, 4));
@@ -1207,9 +1209,7 @@ public class PaletteTest {
         final int[] oversized = new int[16];
         for (int i = 0; i < oversized.length; i++) oversized[i] = i % 9;
         final Palette fresh = Palette.empty(4, 1, 3, 3);
-        final IllegalArgumentException failure = assertThrows(IllegalArgumentException.class,
-                () -> fresh.load(oversized, Palettes.pack(indices, 4)));
-        assertTrue(failure.getMessage().contains("cannot hold more than 8 distinct values"));
+        assertThrows(IllegalArgumentException.class, () -> fresh.load(oversized, Palettes.pack(indices, 4)));
     }
 
     @Test

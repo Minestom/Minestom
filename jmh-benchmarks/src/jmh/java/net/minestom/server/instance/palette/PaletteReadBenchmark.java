@@ -68,7 +68,7 @@ public class PaletteReadBenchmark {
         coordinateMask = palette.dimension() - 1;
         equalPalette = palette.clone();
         differentPalette = palette.clone();
-        differentPalette.set(0, 0, 0, ABSENT_VALUE);
+        differentPalette.set(0, 0, 0, palette.get(0, 0, 0) ^ 1);
     }
 
     private void setupBlocks(int cardinality) {

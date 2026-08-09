@@ -12,6 +12,7 @@ import java.util.Random;
 import static net.minestom.server.instance.palette.PaletteAssertions.assertCountsMatchContent;
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.LONG;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT_ARRAY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -255,9 +256,9 @@ final class PaletteTableTest {
     @Test
     void bulkOperationsSelectSmallestRepresentation() {
         final Palette palette = Palette.blocks();
-        palette.setAll((_, _, _) -> -1);
+        palette.setAll((_, _, _) -> 7);
         assertEquals(0, palette.bitsPerEntry());
-        assertEquals(-1, palette.singleValue());
+        assertEquals(7, palette.singleValue());
 
         PaletteImpl implementation = (PaletteImpl) palette;
         palette.setAll((x, y, z) -> (x + y + z) & 15);
@@ -530,6 +531,25 @@ final class PaletteTableTest {
     }
 
     @Test
+    void serializerRejectsOutOfRangeValues() {
+        for (final int value : new int[]{-1, 1 << 15}) {
+            final NetworkBuffer single = NetworkBuffer.resizableBuffer();
+            single.write(BYTE, (byte) 0);
+            single.write(VAR_INT, value);
+            final IllegalArgumentException singleFailure = assertThrows(IllegalArgumentException.class,
+                    () -> single.read(Palette.BLOCK_SERIALIZER));
+            assertEquals("Invalid palette value: " + value, singleFailure.getMessage());
+
+            final NetworkBuffer indirect = NetworkBuffer.resizableBuffer();
+            indirect.write(BYTE, (byte) 4);
+            indirect.write(VAR_INT_ARRAY, new int[]{0, value});
+            final IllegalArgumentException indirectFailure = assertThrows(IllegalArgumentException.class,
+                    () -> indirect.read(Palette.BLOCK_SERIALIZER));
+            assertEquals("Invalid palette value: " + value, indirectFailure.getMessage());
+        }
+    }
+
+    @Test
     void randomizedMutationMaintainsCountsAndContent() {
         final Random random = new Random(0x5EEDBEEFL);
         final Palette palette = Palette.blocks();
@@ -540,7 +560,7 @@ final class PaletteTableTest {
             final int x = index & 15;
             final int z = index >> 4 & 15;
             final int y = index >> 8;
-            final int value = random.nextInt(96) - 32;
+            final int value = random.nextInt(96);
             palette.set(x, y, z, value);
             expected[index] = value;
 
