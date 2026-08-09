@@ -195,7 +195,7 @@ public class PaletteCopyTest {
             Palette source = Palette.blocks();
             Palette target = Palette.blocks();
 
-            int highValue = 1_000_000;
+            int highValue = (1 << 15) - 2;
             source.set(0, 0, 0, highValue);
             source.set(15, 15, 15, highValue + 1);
 

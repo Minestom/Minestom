@@ -30,6 +30,9 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT_ARRAY;
 /// A palette holds `dimension * dimension * dimension` entries addressed by local coordinates, each in the range `[0, dimension)`.
 /// Methods taking coordinates throw [IllegalArgumentException] when a coordinate is outside that range.
 ///
+/// Values must be in `[0, 1 << directBits)`. An out of range value is not representable by direct storage.
+/// Mutations throw [IllegalArgumentException] when a value is out of range.
+///
 /// Implementations are mutable and not thread safe. Concurrent reads are safe only when no thread writes.
 /// The storage mode is an implementation detail that any mutation may change.
 public sealed interface Palette extends Cloneable permits PaletteImpl {
@@ -89,7 +92,8 @@ public sealed interface Palette extends Cloneable permits PaletteImpl {
     /// @param maxBitsPerEntry the largest indirect storage width, above which direct storage is used
     /// @param directBits      the storage width used by direct mode, wide enough for every representable value
     /// @return a new empty palette
-    /// @throws IllegalArgumentException if the dimension is not a power of two greater than 1
+    /// @throws IllegalArgumentException if the dimension is not a power of two greater than 1, if the
+    ///         indirect widths do not satisfy `1 <= min <= max <= 30`, or if the direct width is outside `[1, 31]`
     static Palette empty(int dimension, int minBitsPerEntry, int maxBitsPerEntry, int directBits) {
         return new PaletteImpl((byte) dimension, (byte) minBitsPerEntry, (byte) maxBitsPerEntry, (byte) directBits);
     }
@@ -106,7 +110,9 @@ public sealed interface Palette extends Cloneable permits PaletteImpl {
     /// @param directBits      the storage width used by direct mode, wide enough for every representable value
     /// @param bitsPerEntry    the initial number of bits per entry
     /// @return a new empty palette
-    /// @throws IllegalArgumentException if the dimension is not a power of two greater than 1
+    /// @throws IllegalArgumentException if the dimension is not a power of two greater than 1, if the
+    ///         indirect widths do not satisfy `1 <= min <= max <= 30`, if the direct width is outside `[1, 31]`,
+    ///         or if `bitsPerEntry` is not `0`, within the indirect widths, or the direct width
     static Palette sized(int dimension, int minBitsPerEntry, int maxBitsPerEntry, int directBits, int bitsPerEntry) {
         return new PaletteImpl((byte) dimension, (byte) minBitsPerEntry, (byte) maxBitsPerEntry, (byte) directBits, (byte) bitsPerEntry);
     }
@@ -148,11 +154,13 @@ public sealed interface Palette extends Cloneable permits PaletteImpl {
     /// @param z     the local Z coordinate
     /// @param value the value to store
     /// @throws IllegalArgumentException if a coordinate is outside `[0, dimension())`
+    /// @throws IllegalArgumentException if the value is out of range
     void set(int x, int y, int z, int value);
 
     /// Sets every entry to the given value, releasing any allocated storage.
     ///
     /// @param value the value to store in every entry
+    /// @throws IllegalArgumentException if the value is out of range
     void fill(int value);
 
     /// Replaces the content of this palette with packed data, as stored on disk or received over the network.
@@ -164,18 +172,20 @@ public sealed interface Palette extends Cloneable permits PaletteImpl {
     ///
     /// @param palette the values addressed by the packed indices, must not be empty
     /// @param values  the packed indices, one per entry of this palette
-    /// @throws IllegalArgumentException if `palette` is empty
+    /// @throws IllegalArgumentException if `palette` is empty or holds an out of range value
     void load(int[] palette, long[] values);
 
     /// Adds the given offset to every stored value.
     ///
     /// @param offset the value added to every entry
+    /// @throws IllegalArgumentException if a resulting value would be out of range
     void offset(int offset);
 
     /// Replaces every entry equal to `oldValue` with `newValue`.
     ///
     /// @param oldValue the value to replace
     /// @param newValue the replacement value
+    /// @throws IllegalArgumentException if the replacement value is out of range
     void replace(int oldValue, int newValue);
 
     /// Replaces every entry with the value returned by the supplier.
@@ -184,6 +194,7 @@ public sealed interface Palette extends Cloneable permits PaletteImpl {
     /// this palette.
     ///
     /// @param supplier the supplier providing the new value of each entry
+    /// @throws IllegalArgumentException if the supplier returns an out of range value
     void setAll(EntrySupplier supplier);
 
     /// Replaces the entry at the given coordinates with the result of applying the operator to its current value.
@@ -195,6 +206,7 @@ public sealed interface Palette extends Cloneable permits PaletteImpl {
     /// @param z        the local Z coordinate
     /// @param operator the operator applied to the current value
     /// @throws IllegalArgumentException if a coordinate is outside `[0, dimension())`
+    /// @throws IllegalArgumentException if the operator returns an out of range value
     void replace(int x, int y, int z, IntUnaryOperator operator);
 
     /// Replaces every entry with the result of applying the function to its current value.
@@ -203,6 +215,7 @@ public sealed interface Palette extends Cloneable permits PaletteImpl {
     /// this palette.
     ///
     /// @param function the function applied to each entry
+    /// @throws IllegalArgumentException if the function returns an out of range value
     void replaceAll(EntryFunction function);
 
     /// Efficiently copies values from another palette with the given offset.
@@ -214,6 +227,7 @@ public sealed interface Palette extends Cloneable permits PaletteImpl {
     /// @param offsetY the Y offset to apply when copying
     /// @param offsetZ the Z offset to apply when copying
     /// @throws IllegalArgumentException if the palettes have different dimensions
+    /// @throws IllegalArgumentException if the source holds a value out of range for this palette
     void copyFrom(Palette source, int offsetX, int offsetY, int offsetZ);
 
     /// Efficiently copies values from another palette starting at position (0, 0, 0).
@@ -224,6 +238,7 @@ public sealed interface Palette extends Cloneable permits PaletteImpl {
     ///
     /// @param source the source palette to copy from
     /// @throws IllegalArgumentException if the palettes have different dimensions
+    /// @throws IllegalArgumentException if the source holds a value out of range for this palette
     void copyFrom(Palette source);
 
     /// Returns the number of entries in this palette that match the given value.
@@ -340,6 +355,7 @@ public sealed interface Palette extends Cloneable permits PaletteImpl {
     ///
     /// @param value the value to resolve
     /// @return the packed index representing the value
+    /// @throws IllegalArgumentException if the value is out of range
     @ApiStatus.Internal
     int valueToPaletteIndex(int value);
 
@@ -432,7 +448,7 @@ public sealed interface Palette extends Cloneable permits PaletteImpl {
     ///
     /// A palette is written as a storage width byte, followed by the single value for a width of `0`, or by the
     /// value table for an indirect width, then the packed longs. Reading throws [IllegalArgumentException] when
-    /// the incoming storage width or value table is invalid.
+    /// the incoming storage width or value table is invalid, or when a value does not fit the direct width.
     ///
     /// A written palette must have been created with the same settings as the serializer, because the receiver derives
     /// the direct storage width from its own registry rather than from the width byte. Use
@@ -480,7 +496,7 @@ public sealed interface Palette extends Cloneable permits PaletteImpl {
                 result.bitsPerEntry = bitsPerEntry;
                 if (bitsPerEntry == 0) {
                     // Single value palette
-                    result.singleValue = buffer.read(VAR_INT);
+                    result.singleValue = validateValue(buffer.read(VAR_INT));
                     return result;
                 }
                 int[] palette = null;
@@ -489,6 +505,7 @@ public sealed interface Palette extends Cloneable permits PaletteImpl {
                     palette = buffer.read(VAR_INT_ARRAY);
                     if (palette.length == 0 || palette.length > Palettes.maxPaletteSize(bitsPerEntry))
                         throw new IllegalArgumentException("Invalid palette length: " + palette.length);
+                    for (int value : palette) validateValue(value);
                 }
                 final long[] data = new long[Palettes.arrayLength(dimension, bitsPerEntry)];
                 for (int i = 0; i < data.length; i++) data[i] = buffer.read(LONG);
@@ -499,6 +516,12 @@ public sealed interface Palette extends Cloneable permits PaletteImpl {
                     result.loadIndirect(bitsPerEntry, palette, data);
                 }
                 return result;
+            }
+
+            private int validateValue(int value) {
+                if (value < 0 || value >= 1L << directBits)
+                    throw new IllegalArgumentException("Invalid palette value: " + value);
+                return value;
             }
         };
     }
