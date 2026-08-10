@@ -8,6 +8,11 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * The result of a physics simulation.
+ * <p>
+ * A world border collision records a collision axis and point without a shape. The
+ * corresponding {@code collisionShapes} and {@code collisionShapePositions} entries stay
+ * null even though the axis flag is set and the {@code collisionPoints} entry is present.
+ *
  * @param newPosition the new position of the entity
  * @param newVelocity the new velocity of the entity
  * @param isOnGround if the entity is on the ground

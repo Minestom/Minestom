@@ -199,7 +199,7 @@ public class EntityVelocityIntegrationTest {
         loadChunks(instance);
 
         var entity = new Entity(EntityTypes.ZOMBIE);
-        var point = new Pos(1.9, 40, 0.2);
+        var point = new Pos(1.5, 40, 0.2);
         instance.setWorldBorder(new WorldBorder(4, 0, 0, 0, 0));
         instance.setBlock(new Vec(1, 39, 0), Block.ICE);
         instance.setBlock(new Vec(1, 39, 1), Block.SOUL_SAND);
@@ -219,11 +219,12 @@ public class EntityVelocityIntegrationTest {
         double expectedDrag = newFriction * horizontalAirResistance;
         double expectedOldDrag = oldFriction * horizontalAirResistance;
 
-        assertEquals(point.x(), entity.getPosition().x(), Vec.EPSILON);
+        assertEquals(2, entity.getPosition().x() + entity.getBoundingBox().maxX(), Vec.EPSILON * 20);
+        assertTrue(instance.getWorldBorder().inBounds(entity.getPosition(), entity.getBoundingBox()));
         assertTrue(entity.getPosition().z() > point.z());
-        assertEquals(initialVelocity.x() * expectedDrag, entity.getVelocity().x(), Vec.EPSILON);
+        assertEquals(0, entity.getVelocity().x(), Vec.EPSILON);
         assertEquals(initialVelocity.z() * expectedDrag, entity.getVelocity().z(), Vec.EPSILON);
-        assertNotEquals(initialVelocity.x() * expectedOldDrag, entity.getVelocity().x(), Vec.EPSILON);
+        assertNotEquals(initialVelocity.z() * expectedOldDrag, entity.getVelocity().z(), Vec.EPSILON);
     }
 
     private static void testMovement(Env env, Entity entity, Vec... sample) {
