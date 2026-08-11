@@ -96,7 +96,7 @@ final class ServerProcessImpl implements ServerProcess, Registries.Delegating {
         this.bossBar = new BossBarManager();
         this.clickCallbackManager = new ClickCallbackManager();
 
-        this.server = new Server(packetParser);
+        this.server = new Server(packetParser, exception);
 
         this.dispatcher = ThreadDispatcher.dispatcher(ThreadProvider.counter(), ServerFlag.DISPATCHER_THREADS);
         this.ticker = new TickerImpl();

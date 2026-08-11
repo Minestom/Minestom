@@ -2,6 +2,7 @@ package net.minestom.server.network.socket;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
+import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.PacketVanilla;
 import net.minestom.server.network.player.PlayerSocketConnection;
@@ -28,16 +29,24 @@ public final class Server {
     private volatile boolean stop;
 
     private final PacketParser.Client packetParser;
+    private final ExceptionManager exceptionManager;
 
     private @UnknownNullability ServerSocketChannel serverSocket;
     private @UnknownNullability SocketAddress socketAddress;
     private @UnknownNullability String address;
     private int port;
 
-    public Server(PacketParser.Client packetParser) {
+    public Server(PacketParser.Client packetParser, ExceptionManager exceptionManager) {
         this.packetParser = packetParser;
+        this.exceptionManager = exceptionManager;
     }
 
+    @Deprecated
+    public Server(PacketParser.Client packetParser) {
+        this(packetParser, MinecraftServer.getExceptionManager());
+    }
+
+    @Deprecated
     public Server() {
         this(PacketVanilla.CLIENT_PACKET_PARSER);
     }
@@ -84,7 +93,7 @@ public final class Server {
                 } catch (ClosedChannelException _) {
                     break; // We are exiting, bye bye!
                 } catch (IOException e) {
-                    MinecraftServer.getExceptionManager().handleException(e);
+                    exceptionManager.handleException(e);
                     continue;
                 }
 
@@ -93,7 +102,7 @@ public final class Server {
                     configureSocket(client);
                     Thread readThread = readBuilder.unstarted(() -> playerReadLoop(reference.get()));
                     Thread writeThread = writeBuilder.unstarted(() -> playerWriteLoop(reference.get()));
-                    PlayerSocketConnection connection = new PlayerSocketConnection(client, client.getRemoteAddress(), readThread, writeThread);
+                    PlayerSocketConnection connection = new PlayerSocketConnection(client, client.getRemoteAddress(), readThread, writeThread, exceptionManager);
                     reference.set(connection);
                     readThread.start();
                     writeThread.start();
@@ -129,7 +138,7 @@ public final class Server {
                 break;
             } catch (Throwable e) {
                 boolean isExpected = e instanceof SocketException && e.getMessage().equals("Connection reset");
-                if (!isExpected) MinecraftServer.getExceptionManager().handleException(e);
+                if (!isExpected) exceptionManager.handleException(e);
                 connection.disconnect();
                 break;
             }
@@ -146,7 +155,7 @@ public final class Server {
                     connection.disconnect();
                 } catch (Throwable e) {
                     boolean isExpected = e instanceof IOException && e.getMessage().equals("Broken pipe");
-                    if (!isExpected) MinecraftServer.getExceptionManager().handleException(e);
+                    if (!isExpected) exceptionManager.handleException(e);
                     connection.disconnect();
                 }
                 if (!connection.isOnline()) {
@@ -185,7 +194,7 @@ public final class Server {
                 Files.deleteIfExists(unixDomainSocketAddress.getPath());
             }
         } catch (IOException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
+            exceptionManager.handleException(e);
         }
     }
 
