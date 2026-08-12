@@ -1,5 +1,7 @@
 package net.minestom.server.advancements;
 
+import net.kyori.adventure.audience.Audience;
+import net.minestom.server.entity.Player;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,6 +53,27 @@ public class AdvancementManager {
      */
     public Collection<AdvancementTab> getTabs() {
         return advancementTabMap.values();
+    }
+
+    /**
+     * See {@link Map#remove(Object)}
+     *
+     * @param rootIdentifier key whose mapping is to be removed from the map
+     * @param removeViewers whether the current viewers of the advancement tab should be ignored. This
+     *                      is only used if the return value of this method is not null.
+     * @return the previous advancement tab associated with {@code rootIdentifier}, or {@code null}
+     * if there was .no tab associated with {@code rootIdentifier}
+     */
+    @Nullable
+    public AdvancementTab removeTab(String rootIdentifier, boolean removeViewers) {
+        final AdvancementTab advancementTab = advancementTabMap.remove(rootIdentifier);
+        if (advancementTab == null || !removeViewers) {
+            return advancementTab;
+        }
+        for (final Player viewer : advancementTab.getViewers()) {
+            advancementTab.removeViewer(viewer);
+        }
+        return advancementTab;
     }
 
 }
