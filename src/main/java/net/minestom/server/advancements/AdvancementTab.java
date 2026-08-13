@@ -5,8 +5,10 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.AdvancementsPacket;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -139,8 +141,9 @@ public class AdvancementTab implements Viewable {
     }
 
     @Override
+    @Unmodifiable
     public Set<? extends Player> getViewers() {
-        return viewers;
+        return Collections.unmodifiableSet(viewers);
     }
 
     /**

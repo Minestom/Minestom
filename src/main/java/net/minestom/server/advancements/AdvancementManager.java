@@ -1,7 +1,5 @@
 package net.minestom.server.advancements;
 
-import net.kyori.adventure.audience.Audience;
-import net.minestom.server.entity.Player;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
 
@@ -70,9 +68,7 @@ public class AdvancementManager {
         if (advancementTab == null || !removeViewers) {
             return advancementTab;
         }
-        for (final Player viewer : advancementTab.getViewers()) {
-            advancementTab.removeViewer(viewer);
-        }
+        advancementTab.clearViewers();
         return advancementTab;
     }
 
