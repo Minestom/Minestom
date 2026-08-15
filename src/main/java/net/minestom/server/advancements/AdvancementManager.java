@@ -67,7 +67,7 @@ public class AdvancementManager {
         if (advancementTab == null) {
             return null;
         }
-        advancementTab.removeViewers();
+        advancementTab.removeAllViewers();
         return advancementTab;
     }
 }

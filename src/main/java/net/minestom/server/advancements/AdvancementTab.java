@@ -146,6 +146,17 @@ public class AdvancementTab implements Viewable {
         return Collections.unmodifiableSet(viewers);
     }
 
+    protected void removeAllViewers() {
+        viewers.removeIf(player -> {
+            if (player.isRemoved()) {
+                return true;
+            }
+            player.sendPacket(removePacket);
+            removePlayer(player);
+            return true;
+        });
+    }
+
     /**
      * Adds the tab to the player set.
      *
