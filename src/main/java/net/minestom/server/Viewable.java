@@ -7,7 +7,6 @@ import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.PacketSendingUtils;
 import org.jetbrains.annotations.Unmodifiable;
-import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collection;
 import java.util.List;
@@ -35,25 +34,11 @@ public interface Viewable {
     boolean removeViewer(Player player);
 
     /**
-     * Removes all viewers
-     *
-     * @return all players that were removed
-     */
-    @Unmodifiable
-    default Set<? extends Player> clearViewers() {
-        final Set<? extends Player> copy = Set.copyOf(getViewers());
-        for (final Player player : copy) {
-            this.removeViewer(player);
-        }
-        return copy;
-    }
-
-    /**
      * Gets all the viewers of this viewable element.
      *
      * @return A Set containing all the element's viewers
      */
-    @UnmodifiableView
+    @Unmodifiable
     Set<? extends Player> getViewers();
 
     /**
