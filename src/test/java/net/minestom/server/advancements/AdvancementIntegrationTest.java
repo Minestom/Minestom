@@ -10,6 +10,7 @@ import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -135,26 +136,23 @@ public class AdvancementIntegrationTest {
         tab3.addViewer(player2);
 
         assertEquals(2, tab1.getViewers().size());
-        final AdvancementTab tab1Removed = env.process().advancement().removeTab(tab1.getRoot().getIdentifier(), true);
+        final AdvancementTab tab1Removed = env.process().advancement().removeTab(tab1.getRoot().getIdentifier());
         assertNotNull(tab1Removed);
+        assertFalse(tab1Removed.isViewer(player1));
+        assertFalse(tab1Removed.isViewer(player2));
         assertEquals(0, tab1Removed.getViewers().size());
-        assertEquals(0, tab1Removed.getViewers().size());
-        assertNull(env.process().advancement().removeTab(tab1.getRoot().getIdentifier(), true));
-        assertNull(env.process().advancement().removeTab(tab1.getRoot().getIdentifier(), false));
+        assertNull(env.process().advancement().removeTab(tab1.getRoot().getIdentifier()));
 
-        final AdvancementTab tab2Removed = env.process().advancement().removeTab(tab2.getRoot().getIdentifier(), false);
+        final AdvancementTab tab2Removed = env.process().advancement().removeTab(tab2.getRoot().getIdentifier());
         assertNotNull(tab2Removed);
-        assertEquals(2, tab2Removed.getViewers().size());
-        assertTrue(tab2Removed.isViewer(player1));
-        assertTrue(tab2Removed.isViewer(player2));
-        assertNull(env.process().advancement().removeTab(tab2.getRoot().getIdentifier(), true));
-        assertNull(env.process().advancement().removeTab(tab2.getRoot().getIdentifier(), false));
+        assertEquals(0, tab2Removed.getViewers().size());
+        assertFalse(tab2Removed.isViewer(player1));
+        assertFalse(tab2Removed.isViewer(player2));
+        assertNull(env.process().advancement().removeTab(tab2.getRoot().getIdentifier()));
 
-        final AdvancementTab tab3Removed = env.process().advancement().removeTab(tab3.getRoot().getIdentifier(), false);
+        final AdvancementTab tab3Removed = env.process().advancement().removeTab(tab3.getRoot().getIdentifier());
         assertNotNull(tab3Removed);
-        assertEquals(1, tab3Removed.getViewers().size());
-        assertTrue(tab3Removed.isViewer(player2));
-        assertNull(env.process().advancement().removeTab(tab3.getRoot().getIdentifier(), true));
-        assertNull(env.process().advancement().removeTab(tab3.getRoot().getIdentifier(), false));
+        assertEquals(0, tab3Removed.getViewers().size());
+        assertFalse(tab3Removed.isViewer(player2));
     }
 }
