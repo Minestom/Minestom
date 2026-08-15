@@ -1762,6 +1762,11 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         return gameMode;
     }
 
+    @Override
+    public boolean canPickupItem() {
+        return super.canPickupItem() && gameMode != GameMode.SPECTATOR;
+    }
+
     /**
      * Changes the player {@link GameMode}
      *
