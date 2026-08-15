@@ -183,14 +183,12 @@ final class EntityTrackerImpl implements EntityTracker {
         if (minChunkX == maxChunkX && minChunkZ == maxChunkZ) {
             // Single chunk
             @SuppressWarnings("unchecked") final var chunkEntities = (List<T>) entities.get(CoordConversion.chunkIndex(point));
-            if (chunkEntities != null && !chunkEntities.isEmpty()) {
-                chunkEntities.forEach(entity -> {
-                    if (entriesByEntityId.containsKey(entity.getEntityId())) {
-                        final Point position = entriesByEntityId.get(entity.getEntityId()).getLastPosition();
-                        if (point.distanceSquared(position) <= squaredRange) query.accept(entity);
-                    }
-                });
-            }
+            if (chunkEntities == null || chunkEntities.isEmpty()) return;
+            chunkEntities.forEach(entity -> {
+                if (!entriesByEntityId.containsKey(entity.getEntityId())) return;
+                final Point position = entriesByEntityId.get(entity.getEntityId()).getLastPosition();
+                if (point.distanceSquared(position) <= squaredRange) query.accept(entity);
+            });
         } else {
             // Multiple chunks
             final int chunkRange = (int) (range / Chunk.CHUNK_SECTION_SIZE) + 1;
@@ -198,10 +196,9 @@ final class EntityTrackerImpl implements EntityTracker {
                 @SuppressWarnings("unchecked") final var chunkEntities = (List<T>) entities.get(CoordConversion.chunkIndex(chunkX, chunkZ));
                 if (chunkEntities == null || chunkEntities.isEmpty()) return;
                 chunkEntities.forEach(entity -> {
-                    if (entriesByEntityId.containsKey(entity.getEntityId())) {
-                        final Point position = entriesByEntityId.get(entity.getEntityId()).getLastPosition();
-                        if (point.distanceSquared(position) <= squaredRange) query.accept(entity);
-                    }
+                    if (!entriesByEntityId.containsKey(entity.getEntityId())) return;
+                    final Point position = entriesByEntityId.get(entity.getEntityId()).getLastPosition();
+                    if (point.distanceSquared(position) <= squaredRange) query.accept(entity);
                 });
             });
         }
