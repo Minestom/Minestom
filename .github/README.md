@@ -51,7 +51,7 @@ dependencies {
 
 PR branches tagged with the "Publish Pull Request" tag are published to the maven central snapshot repository, which can
 be used to test new features before they are released. The version for these snapshots is `<branch>-SNAPSHOT`, where 
-`<branch>` is the name of the branch.
+`<branch>` is the name of the branch. The master branch is also published as `master-SNAPSHOT`.
 
 ```kotlin
 repositories {

@@ -9,7 +9,7 @@ package net.minestom.server.exception;
 public interface ExceptionHandler {
 
     /**
-     * Called when a exception was caught.
+     * Called when an exception was caught.
      *
      * @param e the thrown exception
      */

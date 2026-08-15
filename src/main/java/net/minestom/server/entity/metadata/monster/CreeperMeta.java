@@ -3,9 +3,10 @@ package net.minestom.server.entity.metadata.monster;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import org.jetbrains.annotations.Nullable;
 
 public class CreeperMeta extends MonsterMeta {
-    public CreeperMeta(Entity entity, MetadataHolder metadata) {
+    public CreeperMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

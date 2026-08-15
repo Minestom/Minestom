@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class VillagerInventory extends Inventory {
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     private final CachedPacket tradeCache = new CachedPacket(this::createTradePacket);
     private final List<TradeListPacket.Trade> trades = new ArrayList<>();
     private int villagerLevel;

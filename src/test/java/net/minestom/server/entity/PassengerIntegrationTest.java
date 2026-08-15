@@ -1,13 +1,20 @@
 package net.minestom.server.entity;
 
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.network.packet.server.play.SetPassengersPacket;
 import net.minestom.server.network.packet.server.play.SpawnEntityPacket;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @EnvTest
 public class PassengerIntegrationTest {
@@ -45,7 +52,7 @@ public class PassengerIntegrationTest {
         assertEquals(1, vehicle.getPassengers().size());
         assertEquals(vehicle, passenger.getVehicle());
 
-        assertTrue(passenger.getDistance(vehicle) < 2);
+        assertTrue(passenger.getDistance(vehicle) < 3);
     }
 
     @Test
@@ -84,5 +91,45 @@ public class PassengerIntegrationTest {
             // Entity#updateNewViewer ran as it should
             assertEquals(startingId + i, spawnPackets.get(i).entityId());
         }
+    }
+
+    @Test
+    public void passengersOnCamelsAtDifferentHeights(Env env) {
+        var instance = env.createFlatInstance();
+        var camel1 = new Entity(EntityType.CAMEL);
+        var camel2 = new Entity(EntityType.CAMEL);
+        var rider1 = new Entity(EntityType.ZOMBIE);
+        var rider2 = new Entity(EntityType.ZOMBIE);
+
+        camel1.setInstance(instance, new Pos(0, 42, 0)).join();
+        camel2.setInstance(instance, new Pos(0, 42, 0)).join();
+
+        camel2.setPose(EntityPose.SITTING);
+        camel1.addPassenger(rider1);
+        camel2.addPassenger(rider2);
+
+        assertNotEquals(rider2.getPosition().y(), rider1.getPosition().y());
+    }
+
+    @Test
+    public void passengerOffsetProcessedCorrectly(Env env) {
+        var instance = env.createFlatInstance();
+        var vehicle = new Entity(EntityType.ZOMBIE);
+        var passenger = new Entity(EntityType.SKELETON);
+
+        vehicle.setInstance(instance, new Pos(0, 42, 0, 0, 0)).join();
+        vehicle.addPassenger(passenger);
+
+        // Default case
+
+        List<Vec> passengerAttachments = vehicle.getEntityType().entityAttachments("PASSENGER");
+        List<Vec> vehicleAttachments = passenger.getEntityType().entityAttachments("VEHICLE");
+        assertNotNull(passengerAttachments);
+        assertNotNull(vehicleAttachments);
+
+        Vec passengerAttachment = passengerAttachments.getFirst();
+        Vec vehicleAttachment = vehicleAttachments.getFirst();
+        Pos assumedPosition = vehicle.getPosition().add(passengerAttachment).sub(vehicleAttachment);
+        assertEquals(passenger.getPosition(), assumedPosition);
     }
 }

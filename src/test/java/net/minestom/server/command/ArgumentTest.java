@@ -9,7 +9,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ArgumentTest {
 
@@ -24,7 +26,7 @@ public class ArgumentTest {
         var arg = ArgumentType.String("id");
 
         assertFalse(arg.hasErrorCallback());
-        arg.setCallback((sender, exception) -> {
+        arg.setCallback((_, _) -> {
         });
         assertTrue(arg.hasErrorCallback());
     }
@@ -45,7 +47,7 @@ public class ArgumentTest {
 
         assertFalse(arg.hasSuggestion());
 
-        arg.setSuggestionCallback((sender, context, suggestion) -> suggestion.addEntry(new SuggestionEntry("entry")));
+        arg.setSuggestionCallback((_, _, suggestion) -> suggestion.addEntry(new SuggestionEntry("entry")));
         assertTrue(arg.hasSuggestion());
 
         Suggestion suggestion = new Suggestion("input", 2, 4);

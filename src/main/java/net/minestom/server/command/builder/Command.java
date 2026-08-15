@@ -15,7 +15,15 @@ import org.jetbrains.annotations.UnknownNullability;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -144,6 +152,7 @@ public class Command {
      * @return the created {@link CommandSyntax syntaxes},
      * there can be multiple of them when optional arguments are used
      */
+    @SuppressWarnings("unchecked")
     public Collection<CommandSyntax> addConditionalSyntax(@Nullable CommandCondition commandCondition,
                                                           CommandExecutor executor,
                                                           Argument<?>... args) {
@@ -183,13 +192,13 @@ public class Command {
                     if (!optionalBranch && !requiredArguments.isEmpty()) {
                         // First optional argument, create a syntax with current cached arguments
                         final CommandSyntax syntax = new CommandSyntax(commandCondition, executor, defaultValuesMap,
-                                requiredArguments.toArray(new Argument[0]));
+                                requiredArguments.toArray(new Argument<?>[0]));
                         optionalSyntaxes.add(syntax);
                         optionalBranch = true;
                     } else {
                         // New optional argument, save syntax with current cached arguments and save default value
                         final CommandSyntax syntax = new CommandSyntax(commandCondition, executor, defaultValuesMap,
-                                requiredArguments.toArray(new Argument[0]));
+                                requiredArguments.toArray(new Argument<?>[0]));
                         optionalSyntaxes.add(syntax);
                     }
                 }
@@ -197,7 +206,7 @@ public class Command {
                 if (isLast) {
                     // Create the last syntax
                     final CommandSyntax syntax = new CommandSyntax(commandCondition, executor, defaultValuesMap,
-                            requiredArguments.toArray(new Argument[0]));
+                            requiredArguments.toArray(new Argument<?>[0]));
                     optionalSyntaxes.add(syntax);
                 }
             }
@@ -410,11 +419,11 @@ public class Command {
         return false;
     }
 
-    private void processNode(Node node, JsonObject jsonObject) {
+    private static void processNode(Node node, JsonObject jsonObject) {
         BiConsumer<String, Consumer<JsonArray>> processor = (s, consumer) -> {
             JsonArray array = new JsonArray();
             consumer.accept(array);
-            if (array.size() != 0) {
+            if (!array.isEmpty()) {
                 jsonObject.add(s, array);
             }
         };

@@ -7,7 +7,13 @@ import net.minestom.server.utils.collection.ObjectArray;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -93,7 +99,7 @@ final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registr
     }
 
     @Override
-    public Collection<T> values() {
+    public Set<T> values() {
         return this.valueToKey.keySet();
     }
 

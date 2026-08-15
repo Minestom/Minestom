@@ -2,7 +2,12 @@ package net.minestom.server.thread;
 
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -102,6 +107,9 @@ public class AcquirableCollection<E> implements Collection<Acquirable<E>> {
     }
 
     /**
+     * Separates a collection of acquirable elements into a map of thread to elements,
+     * consuming immediately the elements already owned by the current thread.
+     *
      * @param collection the acquirable collection
      * @param consumer   the consumer to execute when an element is already in the current thread
      * @return a new Thread to acquirable elements map
@@ -119,7 +127,7 @@ public class AcquirableCollection<E> implements Collection<Acquirable<E>> {
                 consumer.accept(value);
             } else {
                 // The element is manager in a different thread, cache it
-                List<T> threadCacheList = threadCacheMap.computeIfAbsent(elementThread, tickThread -> new ArrayList<>());
+                List<T> threadCacheList = threadCacheMap.computeIfAbsent(elementThread, _ -> new ArrayList<>());
                 threadCacheList.add(value);
             }
         }

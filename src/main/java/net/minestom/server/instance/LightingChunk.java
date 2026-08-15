@@ -17,7 +17,13 @@ import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.data.LightData;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -37,17 +43,17 @@ public class LightingChunk extends DynamicChunk {
 
     private static final ExecutorService pool = Executors.newWorkStealingPool();
 
-    private int[] occlusionMap;
+    private volatile @Nullable OcclusionData occlusionData;
+    @SuppressWarnings("this-escape") // deliberate self registration during construction
     final CachedPacket partialLightCache = new CachedPacket(this::createLightPacket);
-    private LightData partialLightData;
-    private LightData fullLightData;
+    private @Nullable LightData partialLightData;
+    private @Nullable LightData fullLightData;
 
-    private int highestBlock;
     private boolean freezeInvalidation = false;
 
     private final ReentrantLock packetGenerationLock = new ReentrantLock();
     private final AtomicInteger resendTimer = new AtomicInteger(-1);
-    private final int resendDelay = ServerFlag.SEND_LIGHT_AFTER_BLOCK_PLACEMENT_DELAY;
+    private static final int resendDelay = ServerFlag.SEND_LIGHT_AFTER_BLOCK_PLACEMENT_DELAY;
 
     private boolean doneInit = false;
 
@@ -87,6 +93,7 @@ public class LightingChunk extends DynamicChunk {
             Block.LAVA.key()
     );
 
+    @Override
     public void invalidate() {
         this.partialLightCache.invalidate();
         this.chunkCache.invalidate();
@@ -102,13 +109,13 @@ public class LightingChunk extends DynamicChunk {
         super(instance, chunkX, chunkZ, sections);
     }
 
-    private boolean checkSkyOcclusion(Block block) {
+    private static boolean checkSkyOcclusion(Block block) {
         if (block == Block.AIR) return false;
         if (DIFFUSE_SKY_LIGHT.contains(block.key())) return true;
 
-        Shape shape = block.registry().occlusionShape();
-        boolean occludesTop = Block.AIR.registry().occlusionShape().isOccluded(shape, BlockFace.TOP);
-        boolean occludesBottom = Block.AIR.registry().occlusionShape().isOccluded(shape, BlockFace.BOTTOM);
+        Shape shape = block.occlusionShape();
+        boolean occludesTop = Block.AIR.occlusionShape().isOccluded(shape, BlockFace.TOP);
+        boolean occludesBottom = Block.AIR.occlusionShape().isOccluded(shape, BlockFace.BOTTOM);
 
         return occludesBottom || occludesTop;
     }
@@ -134,8 +141,7 @@ public class LightingChunk extends DynamicChunk {
                 for (int k = -1; k <= 1; k++) {
                     if (k + coordinate < neighborChunk.getMinSection() || k + coordinate >= neighborChunk.getMaxSection())
                         continue;
-                    neighborChunk.getSection(k + coordinate).blockLight().invalidate();
-                    neighborChunk.getSection(k + coordinate).skyLight().invalidate();
+                    neighborChunk.getSection(k + coordinate).invalidate();
                 }
             }
         }
@@ -161,7 +167,7 @@ public class LightingChunk extends DynamicChunk {
                          @Nullable BlockHandler.Placement placement,
                          @Nullable BlockHandler.Destroy destroy) {
         super.setBlock(x, y, z, block, placement, destroy);
-        this.occlusionMap = null;
+        this.occlusionData = null;
 
         // Invalidate neighbor chunks, since they can be updated by this block change
         int coordinate = CoordConversion.globalToChunk(y);
@@ -187,8 +193,7 @@ public class LightingChunk extends DynamicChunk {
         super.onGenerate();
 
         for (int section = minSection; section < maxSection; section++) {
-            getSection(section).blockLight().invalidate();
-            getSection(section).skyLight().invalidate();
+            getSection(section).invalidate();
         }
 
         invalidate();
@@ -204,8 +209,7 @@ public class LightingChunk extends DynamicChunk {
                         light.invalidate();
 
                         for (int section = minSection; section < maxSection; section++) {
-                            light.getSection(section).blockLight().invalidate();
-                            light.getSection(section).skyLight().invalidate();
+                            light.getSection(section).invalidate();
                         }
                     }
                 }
@@ -213,33 +217,41 @@ public class LightingChunk extends DynamicChunk {
         }
     }
 
-    // Lazy compute occlusion map
-    public int[] getOcclusionMap() {
-        if (this.occlusionMap != null) return this.occlusionMap;
-        var occlusionMap = new int[CHUNK_SIZE_X * CHUNK_SIZE_Z];
+    protected OcclusionData getOcclusionData() {
+        assertReadLock();
+        final OcclusionData currentOcclusionData = this.occlusionData;
+        if (currentOcclusionData != null) return currentOcclusionData;
+
+        final int[] occlusionMap = new int[CHUNK_SIZE_X * CHUNK_SIZE_Z];
 
         int minY = instance.getCachedDimensionType().minY();
-        highestBlock = minY - 1;
+        int highestBlock = minY - 1;
 
-        synchronized (this) {
-            int startY = Heightmap.getHighestBlockSection(this);
+        int startY = Heightmap.getHighestBlockSection(this);
 
-            for (int x = 0; x < CHUNK_SIZE_X; x++) {
-                for (int z = 0; z < CHUNK_SIZE_Z; z++) {
-                    int height = startY;
-                    while (height >= minY) {
-                        Block block = getBlock(x, height, z, Condition.TYPE);
-                        if (block != Block.AIR) highestBlock = Math.max(highestBlock, height);
-                        if (checkSkyOcclusion(block)) break;
-                        height--;
-                    }
-                    occlusionMap[z << 4 | x] = (height + 1);
+        for (int x = 0; x < CHUNK_SIZE_X; x++) {
+            for (int z = 0; z < CHUNK_SIZE_Z; z++) {
+                int height = startY;
+                while (height >= minY) {
+                    Block block = getBlock(x, height, z, Condition.TYPE);
+                    if (block != Block.AIR) highestBlock = Math.max(highestBlock, height);
+                    if (checkSkyOcclusion(block)) break;
+                    height--;
                 }
+                occlusionMap[z << 4 | x] = (height + 1);
             }
         }
 
-        this.occlusionMap = occlusionMap;
-        return occlusionMap;
+        var occlusionData = new OcclusionData(highestBlock, occlusionMap);
+        // While we only assert that we are in a read-lock, this should still be OK because even if two threads concurrently
+        // compute the occlusionData, then both results will be the same, and the differing OcclusionData identites are of no concern.
+        this.occlusionData = occlusionData;
+        return occlusionData;
+    }
+
+    // Lazy compute occlusion map
+    public int[] getOcclusionMap() {
+        return getOcclusionData().occlusionMap();
     }
 
     @Override
@@ -271,8 +283,12 @@ public class LightingChunk extends DynamicChunk {
                     if (neighborChunk == null) continue;
 
                     if (neighborChunk instanceof LightingChunk light) {
-                        light.getOcclusionMap();
-                        highestNeighborBlock = Math.max(highestNeighborBlock, light.highestBlock);
+                        light.lockReadLock();
+                        try {
+                            highestNeighborBlock = Math.max(highestNeighborBlock, light.getOcclusionData().highestBlock);
+                        } finally {
+                            light.unlockReadLock();
+                        }
                     }
                 }
             }
@@ -299,7 +315,7 @@ public class LightingChunk extends DynamicChunk {
                 final int sectionMinY = index * 16 + chunkMin;
                 index++;
 
-                if ((wasUpdatedSky) && this.instance.getCachedDimensionType().hasSkylight() && sectionMinY <= (highestNeighborBlock + 16)) {
+                if (wasUpdatedSky && this.instance.getCachedDimensionType().hasSkylight() && sectionMinY <= highestNeighborBlock + 16) {
                     final byte[] skyLight = section.skyLight().array();
 
                     if (skyLight.length != 0 && skyLight != EMPTY_CONTENT) {
@@ -392,15 +408,21 @@ public class LightingChunk extends DynamicChunk {
             final Palette blockPalette = section.blockPalette();
             CompletableFuture<Void> task = CompletableFuture.runAsync(() -> {
                 try {
-                    final Set<Point> toAdd = switch (queueType) {
-                        case INTERNAL -> light.calculateInternal(blockPalette,
-                                chunk.getChunkX(), point.blockY(), chunk.getChunkZ(),
-                                lightingChunk.getOcclusionMap(), chunk.instance.getCachedDimensionType().maxY(),
-                                lightLookup);
-                        case EXTERNAL -> light.calculateExternal(blockPalette,
-                                Light.getNeighbors(chunk, point.blockY()),
-                                lightLookup, paletteLookup);
-                    };
+                    final Set<Point> toAdd;
+                    lightingChunk.lockReadLock();
+                    try {
+                        toAdd = switch (queueType) {
+                            case INTERNAL -> light.calculateInternal(blockPalette,
+                                    chunk.getChunkX(), point.blockY(), chunk.getChunkZ(),
+                                    lightingChunk.getOcclusionMap(), chunk.instance.getCachedDimensionType().maxY(),
+                                    lightLookup);
+                            case EXTERNAL -> light.calculateExternal(blockPalette,
+                                    Light.getNeighbors(chunk, point.blockY()),
+                                    lightLookup, paletteLookup);
+                        };
+                    } finally {
+                        lightingChunk.unlockReadLock();
+                    }
 
                     sections.add(light);
 
@@ -443,8 +465,7 @@ public class LightingChunk extends DynamicChunk {
                 if (!(chunk instanceof LightingChunk lighting)) continue;
                 for (int sectionIndex = chunk.minSection; sectionIndex < chunk.maxSection; sectionIndex++) {
                     Section section = chunk.getSection(sectionIndex);
-                    section.blockLight().invalidate();
-                    section.skyLight().invalidate();
+                    section.invalidate();
                     sections.add(new Vec(chunk.getChunkX(), sectionIndex, chunk.getChunkZ()));
                 }
                 lighting.invalidate();
@@ -489,9 +510,12 @@ public class LightingChunk extends DynamicChunk {
                 if (chunkCheck == null) continue;
 
                 if (chunkCheck instanceof LightingChunk lighting) {
-                    // Ensure heightmap is calculated before taking values from it
-                    lighting.getOcclusionMap();
-                    highestRegionPoint = Math.max(highestRegionPoint, lighting.highestBlock);
+                    lighting.lockReadLock();
+                    try {
+                        highestRegionPoint = Math.max(highestRegionPoint, lighting.getOcclusionData().highestBlock);
+                    } finally {
+                        lighting.unlockReadLock();
+                    }
                 }
             }
         }
@@ -564,6 +588,7 @@ public class LightingChunk extends DynamicChunk {
 
     @Override
     public Chunk copy(Instance instance, int chunkX, int chunkZ) {
+        assertReadLock();
         var sections = this.sections.stream().map(Section::clone).toList();
         LightingChunk lightingChunk = new LightingChunk(instance, chunkX, chunkZ, sections);
         lightingChunk.entries.putAll(entries);
@@ -573,5 +598,8 @@ public class LightingChunk extends DynamicChunk {
     @Override
     public boolean isLoaded() {
         return super.isLoaded() && doneInit;
+    }
+
+    protected record OcclusionData(int highestBlock, int[] occlusionMap) {
     }
 }

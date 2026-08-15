@@ -7,11 +7,12 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import net.minestom.server.instance.block.Block;
+import org.jetbrains.annotations.Nullable;
 
 public class FallingBlockMeta extends EntityMeta implements ObjectDataProvider {
     private Block block = Block.STONE;
 
-    public FallingBlockMeta(Entity entity, MetadataHolder metadata) {
+    public FallingBlockMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

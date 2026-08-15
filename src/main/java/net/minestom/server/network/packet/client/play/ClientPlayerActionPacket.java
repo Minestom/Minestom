@@ -6,12 +6,14 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BLOCK_POSITION;
+import static net.minestom.server.network.NetworkBuffer.BYTE;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record ClientPlayerActionPacket(
         Status status, Point blockPosition,
         BlockFace blockFace, int sequence
-) implements ClientPacket {
+) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientPlayerActionPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.Enum(Status.class), ClientPlayerActionPacket::status,
             BLOCK_POSITION, ClientPlayerActionPacket::blockPosition,

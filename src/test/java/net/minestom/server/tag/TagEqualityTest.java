@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class TagEqualityTest {
 
+    @SuppressWarnings("EqualsWithItself")
     @Test
     public void sameType() {
         var tag1 = Tag.Integer("key");

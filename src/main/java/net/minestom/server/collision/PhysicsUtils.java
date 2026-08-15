@@ -17,7 +17,7 @@ public final class PhysicsUtils {
      * @param entityPosition the current entity position
      * @param entityVelocityPerTick the current entity velocity in blocks/tick
      * @param entityBoundingBox the current entity bounding box
-     * @param worldBorder the world border to test bounds against
+     * @param worldBorder the world border colliding with the entity, applied only when {@code entityHasPhysics} is true
      * @param blockGetter the block getter to test block collisions against
      * @param aerodynamics the current entity aerodynamics
      * @param entityNoGravity whether the entity has gravity
@@ -31,19 +31,20 @@ public final class PhysicsUtils {
                                                           WorldBorder worldBorder, Block.Getter blockGetter, Aerodynamics aerodynamics, boolean entityNoGravity,
                                                           boolean entityHasPhysics, boolean entityOnGround, boolean entityFlying, @Nullable PhysicsResult previousPhysicsResult) {
         final PhysicsResult physicsResult = entityHasPhysics ?
-                CollisionUtils.handlePhysics(blockGetter, entityBoundingBox, entityPosition, entityVelocityPerTick, previousPhysicsResult, false) :
+                CollisionUtils.handlePhysics(blockGetter, worldBorder, entityBoundingBox, entityPosition, entityVelocityPerTick, previousPhysicsResult, false) :
                 CollisionUtils.blocklessCollision(entityPosition, entityVelocityPerTick);
 
         Pos newPosition = physicsResult.newPosition();
         Vec newVelocity = physicsResult.newVelocity();
 
-        Pos positionWithinBorder = CollisionUtils.applyWorldBorder(worldBorder, entityPosition, newPosition);
-        newVelocity = updateVelocity(positionWithinBorder, newVelocity, blockGetter, aerodynamics, !positionWithinBorder.samePoint(entityPosition), entityFlying, entityOnGround, entityNoGravity);
+        newVelocity = updateVelocity(newPosition, newVelocity, blockGetter, aerodynamics, !newPosition.samePoint(entityPosition), entityFlying, entityOnGround, entityNoGravity);
 
-        final boolean stillCached = physicsResult.cached() && newVelocity.samePoint(physicsResult.newVelocity()) && positionWithinBorder.samePoint(physicsResult.newPosition());
+        if (physicsResult == previousPhysicsResult && newVelocity.samePoint(physicsResult.newVelocity())) {
+            return physicsResult;
+        }
 
-        return new PhysicsResult(positionWithinBorder, newVelocity, physicsResult.isOnGround(), physicsResult.collisionX(), physicsResult.collisionY(), physicsResult.collisionZ(),
-                physicsResult.originalDelta(), physicsResult.collisionPoints(), physicsResult.collisionShapes(), physicsResult.collisionShapePositions(), physicsResult.hasCollision(), physicsResult.res(), stillCached);
+        return new PhysicsResult(newPosition, newVelocity, physicsResult.isOnGround(), physicsResult.collisionX(), physicsResult.collisionY(), physicsResult.collisionZ(),
+                physicsResult.originalDelta(), physicsResult.collisionPoints(), physicsResult.collisionShapes(), physicsResult.collisionShapePositions(), physicsResult.hasCollision(), physicsResult.collisionFraction());
     }
 
     /**
@@ -69,8 +70,8 @@ public final class PhysicsUtils {
             return new Vec(0, entityNoGravity ? 0 : -aerodynamics.gravity() * aerodynamics.verticalAirResistance(), 0);
         }
 
-        double drag = entityOnGround ? blockGetter.getBlock(entityPosition.sub(0, 0.5000001, 0)).registry().friction() * aerodynamics.horizontalAirResistance() :
-                aerodynamics.horizontalAirResistance();
+        double drag = entityOnGround ? blockGetter.getBlock(entityPosition.sub(0, 0.5000001, 0)).friction() * aerodynamics.horizontalAirResistance()
+                : aerodynamics.horizontalAirResistance();
         double gravity = entityFlying ? 0 : aerodynamics.gravity();
         double gravityDrag = entityFlying ? 0.6 : aerodynamics.verticalAirResistance();
 

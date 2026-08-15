@@ -7,12 +7,15 @@ import net.minestom.server.network.packet.client.ClientPacket;
 
 import java.util.Map;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BYTE;
+import static net.minestom.server.network.NetworkBuffer.Enum;
+import static net.minestom.server.network.NetworkBuffer.SHORT;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record ClientClickWindowPacket(int windowId, int stateId,
                                       short slot, byte button, ClickType clickType,
                                       Map<Short, ItemStack.Hash> changedSlots,
-                                      ItemStack.Hash clickedItem) implements ClientPacket {
+                                      ItemStack.Hash clickedItem) implements ClientPacket.Play {
     public static final int MAX_CHANGED_SLOTS = 128;
 
     public static final NetworkBuffer.Type<ClientClickWindowPacket> SERIALIZER = NetworkBufferTemplate.template(

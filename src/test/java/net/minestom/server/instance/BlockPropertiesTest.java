@@ -37,6 +37,13 @@ public class BlockPropertiesTest {
     }
 
     @Test
+    public void malformedEntries() {
+        assertEquals(Map.of("b", "c"), parseProperties("[a,b=c]"));
+        assertEquals(Map.of("a", "b"), parseProperties("[a=b,c]"));
+        assertEquals(Map.of(), parseProperties("[a,b]"));
+    }
+
+    @Test
     public void single() {
         assertEquals(Map.of("facing", "east"), parseProperties("[facing=east]"));
     }

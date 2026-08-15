@@ -1,13 +1,18 @@
 package net.minestom.server.timer;
 
 import net.minestom.server.MinecraftServer;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class TestScheduler {
 
@@ -16,7 +21,7 @@ public class TestScheduler {
         Scheduler scheduler = Scheduler.newScheduler();
         AtomicBoolean result = new AtomicBoolean(false);
         Task task = scheduler.scheduleNextTick(() -> result.set(true));
-        assertEquals(task.executionType(), ExecutionType.TICK_START, "Tasks default execution type should be tick start");
+        assertEquals(ExecutionType.TICK_START, task.executionType(), "Tasks default execution type should be tick start");
 
         assertFalse(result.get(), "Tick task should not be executed after scheduling");
         scheduler.process();
@@ -114,6 +119,7 @@ public class TestScheduler {
     @Test
     public void exceptionTask() {
         MinecraftServer.init();
+        MinecraftServer.getExceptionManager().setExceptionHandler(Assertions::assertNotNull);
         Scheduler scheduler = Scheduler.newScheduler();
         scheduler.scheduleNextTick(() -> {
             throw new RuntimeException("Test exception");

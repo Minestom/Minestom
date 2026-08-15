@@ -4,9 +4,10 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.water.WaterAnimalMeta;
+import org.jetbrains.annotations.Nullable;
 
 public class AbstractFishMeta extends WaterAnimalMeta {
-    protected AbstractFishMeta(Entity entity, MetadataHolder metadata) {
+    protected AbstractFishMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

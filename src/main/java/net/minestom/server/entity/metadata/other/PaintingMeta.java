@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class PaintingMeta extends HangingMeta {
 
-    public PaintingMeta(Entity entity, MetadataHolder metadata) {
+    public PaintingMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

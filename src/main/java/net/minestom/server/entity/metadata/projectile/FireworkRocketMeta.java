@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 public class FireworkRocketMeta extends EntityMeta implements ProjectileMeta {
     private Entity shooter;
 
-    public FireworkRocketMeta(Entity entity, MetadataHolder metadata) {
+    public FireworkRocketMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

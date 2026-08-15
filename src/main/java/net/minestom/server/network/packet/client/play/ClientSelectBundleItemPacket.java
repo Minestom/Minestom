@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record ClientSelectBundleItemPacket(int slot, int selectedIndex) implements ClientPacket {
+public record ClientSelectBundleItemPacket(int slot, int selectedIndex) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientSelectBundleItemPacket> SERIALIZER = NetworkBufferTemplate.template(
             VAR_INT, ClientSelectBundleItemPacket::slot,
             VAR_INT, ClientSelectBundleItemPacket::selectedIndex,

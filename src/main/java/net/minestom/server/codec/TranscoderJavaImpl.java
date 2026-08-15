@@ -2,7 +2,11 @@ package net.minestom.server.codec;
 
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @ApiStatus.Internal
 final class TranscoderJavaImpl implements Transcoder<Object> {
@@ -98,6 +102,18 @@ final class TranscoderJavaImpl implements Transcoder<Object> {
     }
 
     @Override
+    public Object createNumber(Number value) {
+        return value;
+    }
+
+    @Override
+    public Result<Number> getNumber(Object value) {
+        if (!(value instanceof Number n))
+            return new Result.Error<>("Not a number: " + value);
+        return new Result.Ok<>(n);
+    }
+
+    @Override
     public Result<String> getString(Object value) {
         if (!(value instanceof String s))
             return new Result.Error<>("Not a string: " + value);
@@ -110,16 +126,16 @@ final class TranscoderJavaImpl implements Transcoder<Object> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Result<List<Object>> getList(Object value) {
         if (!(value instanceof List<?> list))
             return new Result.Error<>("Not a list: " + value);
-        //noinspection unchecked
         return new Result.Ok<>((List<Object>) list);
     }
 
     @Override
     public ListBuilder<Object> createList(int expectedSize) {
-        final List<Object> list = new java.util.ArrayList<>(expectedSize);
+        final List<Object> list = new ArrayList<>(expectedSize);
         return new ListBuilder<>() {
             @Override
             public ListBuilder<Object> add(Object value) {
@@ -145,11 +161,11 @@ final class TranscoderJavaImpl implements Transcoder<Object> {
             return new Result.Error<>("Not a map: " + value);
         return new Result.Ok<>(new MapLike<>() {
             @Override
-            public Collection<String> keys() {
+            @SuppressWarnings("unchecked")
+            public List<String> keys() {
                 if (map.isEmpty()) return List.of();
                 var keys = List.copyOf(map.keySet());
                 if (keys.getFirst() instanceof String)
-                    //noinspection unchecked
                     return (List<String>) keys;
                 return List.of(); // No string keys
             }

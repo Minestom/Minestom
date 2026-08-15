@@ -3,20 +3,8 @@ package net.minestom.server.instance;
 import net.minestom.server.instance.light.Light;
 import net.minestom.server.instance.palette.Palette;
 
-public final class Section {
-    private final Palette blockPalette;
-    private final Palette biomePalette;
-    private final Light skyLight;
-    private final Light blockLight;
-
-    private Section(Palette blockPalette, Palette biomePalette, Light skyLight, Light blockLight) {
-        this.blockPalette = blockPalette;
-        this.biomePalette = biomePalette;
-        this.skyLight = skyLight;
-        this.blockLight = blockLight;
-    }
-
-    private Section(Palette blockPalette, Palette biomePalette) {
+public record Section(Palette blockPalette, Palette biomePalette, Light skyLight, Light blockLight) {
+    public Section(Palette blockPalette, Palette biomePalette) {
         this(blockPalette, biomePalette, Light.sky(), Light.block());
     }
 
@@ -24,17 +12,14 @@ public final class Section {
         this(Palette.blocks(), Palette.biomes());
     }
 
-    public Palette blockPalette() {
-        return blockPalette;
-    }
-
-    public Palette biomePalette() {
-        return biomePalette;
-    }
-
     public void clear() {
         this.blockPalette.fill(0);
         this.biomePalette.fill(0);
+    }
+
+    public void invalidate() {
+        this.skyLight.invalidate();
+        this.blockLight.invalidate();
     }
 
     @Override
@@ -54,13 +39,5 @@ public final class Section {
 
     public void setBlockLight(byte[] copyArray) {
         this.blockLight.set(copyArray);
-    }
-
-    public Light skyLight() {
-        return skyLight;
-    }
-
-    public Light blockLight() {
-        return blockLight;
     }
 }

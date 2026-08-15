@@ -7,6 +7,7 @@ import net.minestom.server.event.trait.PlayerInstanceEvent;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Called every time a {@link Player} writes and sends something in the chat.
@@ -14,7 +15,7 @@ import java.util.Collection;
  */
 public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
     private final Player player;
-    private final Collection<Player> recipients;
+    private final List<Player> recipients;
     private final String rawMessage;
     private Component formattedMessage;
     private boolean cancelled;
@@ -34,6 +35,7 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
      *
      * @return a modifiable list of the message's targets
      */
+    @SuppressWarnings("PreferredInterfaceType") // wider type kept for binary compatibility until the next breaking release
     public Collection<Player> getRecipients() {
         return recipients;
     }

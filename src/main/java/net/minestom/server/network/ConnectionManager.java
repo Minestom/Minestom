@@ -13,7 +13,6 @@ import net.minestom.server.listener.preplay.LoginListener;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.common.KeepAlivePacket;
 import net.minestom.server.network.packet.server.common.PluginMessagePacket;
-import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.network.packet.server.configuration.FinishConfigurationPacket;
 import net.minestom.server.network.packet.server.configuration.ResetChatPacket;
 import net.minestom.server.network.packet.server.configuration.SelectKnownPacksPacket;
@@ -28,15 +27,27 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.collection.ConcurrentMessageQueues;
-import net.minestom.server.utils.validate.Check;
 import org.jctools.queues.MessagePassingQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.function.Function;
 
 /**
@@ -48,7 +59,8 @@ public final class ConnectionManager {
     private static final Component TIMEOUT_TEXT = Component.text("Timeout", NamedTextColor.RED);
     private static final Component SHUTDOWN_TEXT = Component.text("Server shutting down");
 
-    private final CachedPacket cachedTagsPacket = new CachedPacket(this::createTagsPacket);
+    private final CachedPacket cachedTagsPacket =
+            new CachedPacket(() -> Registries.tagsPacket(MinecraftServer.getRegistries()));
 
     // All players once their Player object has been instantiated.
     private final Map<PlayerConnection, Player> connectionPlayerMap = new ConcurrentHashMap<>();
@@ -74,7 +86,7 @@ public final class ConnectionManager {
     private volatile PlayerProvider playerProvider = Player::new;
 
     /**
-     * Gets the number of "online" players, eg for the query response.
+     * Gets the number of "online" players, e.g. for the query response.
      *
      * <p>Only includes players in the play state, not players in configuration.</p>
      */
@@ -85,6 +97,7 @@ public final class ConnectionManager {
     /**
      * Returns an unmodifiable set containing the players currently in the play state.
      */
+    @SuppressWarnings("PreferredInterfaceType") // wider type kept for binary compatibility until the next breaking release
     public Collection<Player> getOnlinePlayers() {
         return unmodifiablePlayPlayers;
     }
@@ -92,6 +105,7 @@ public final class ConnectionManager {
     /**
      * Returns an unmodifiable set containing the players currently in the configuration state.
      */
+    @SuppressWarnings("PreferredInterfaceType") // wider type kept for binary compatibility until the next breaking release
     public Collection<Player> getConfigPlayers() {
         return unmodifiableConfigurationPlayers;
     }
@@ -105,7 +119,7 @@ public final class ConnectionManager {
      * @param connection the player connection
      * @return the player linked to the connection
      */
-    public Player getPlayer(PlayerConnection connection) {
+    public @Nullable Player getPlayer(PlayerConnection connection) {
         return connectionPlayerMap.get(connection);
     }
 
@@ -157,7 +171,7 @@ public final class ConnectionManager {
             return StringUtils.jaroWinklerScore(username1, username2);
         };
         return getOnlinePlayers().stream()
-                .min(Comparator.comparingDouble(distanceFunction::apply))
+                .max(Comparator.comparingDouble(distanceFunction::apply))
                 .filter(player -> distanceFunction.apply(player) > 0)
                 .orElse(null);
     }
@@ -211,8 +225,12 @@ public final class ConnectionManager {
             connection.kick(LoginListener.INVALID_PROXY_RESPONSE);
             throw new RuntimeException("Error getting replies for login plugin messages", t);
         }
+        // Publish the final profile before the client could possibly respond
+        if (connection instanceof PlayerSocketConnection socketConnection) {
+            socketConnection.UNSAFE_setProfile(gameProfile);
+        }
         // Send login success packet (and switch to configuration phase)
-        connection.sendPacket(new LoginSuccessPacket(gameProfile));
+        connection.sendPacket(new LoginSuccessPacket(gameProfile, new UUID(0L, 0L)));
         return gameProfile;
     }
 
@@ -243,7 +261,7 @@ public final class ConnectionManager {
         player.sendPacket(new UpdateEnabledFeaturesPacket(event.getFeatureFlags().stream().map(StaticProtocolObject::name).toList()));
 
         final Instance spawningInstance = event.getSpawningInstance();
-        Check.notNull(spawningInstance, "You need to specify a spawning instance in the AsyncPlayerConfigurationEvent");
+        Objects.requireNonNull(spawningInstance, "You need to specify a spawning instance in the AsyncPlayerConfigurationEvent");
 
         if (event.willClearChat()) player.sendPacket(new ResetChatPacket());
 
@@ -252,7 +270,7 @@ public final class ConnectionManager {
             List<SelectKnownPacksPacket.Entry> knownPacks;
             try {
                 knownPacks = knownPacksFuture.get(ServerFlag.KNOWN_PACKS_RESPONSE_TIMEOUT, TimeUnit.MILLISECONDS);
-            } catch (InterruptedException | TimeoutException e) {
+            } catch (InterruptedException | TimeoutException _) {
                 LOGGER.warn("Player {} failed to respond to known packs query", player.getUsername());
                 player.getPlayerConnection().disconnect();
                 return;
@@ -261,29 +279,8 @@ public final class ConnectionManager {
             }
             boolean excludeVanilla = knownPacks.contains(SelectKnownPacksPacket.MINECRAFT_CORE);
 
-            Registries registries = MinecraftServer.process();
-            player.sendPacket(registries.chatType().registryDataPacket(registries, excludeVanilla));
-            player.sendPacket(registries.biome().registryDataPacket(registries, excludeVanilla));
-            player.sendPacket(registries.dialog().registryDataPacket(registries, excludeVanilla));
-            player.sendPacket(registries.damageType().registryDataPacket(registries, excludeVanilla));
-            player.sendPacket(registries.trimMaterial().registryDataPacket(registries, excludeVanilla));
-            player.sendPacket(registries.trimPattern().registryDataPacket(registries, excludeVanilla));
-            player.sendPacket(registries.bannerPattern().registryDataPacket(registries, excludeVanilla));
-            player.sendPacket(registries.enchantment().registryDataPacket(registries, excludeVanilla));
-            player.sendPacket(registries.paintingVariant().registryDataPacket(registries, excludeVanilla));
-            player.sendPacket(registries.jukeboxSong().registryDataPacket(registries, excludeVanilla));
-            player.sendPacket(registries.instrument().registryDataPacket(registries, excludeVanilla));
-            player.sendPacket(registries.wolfVariant().registryDataPacket(registries, excludeVanilla));
-            player.sendPacket(registries.wolfSoundVariant().registryDataPacket(registries, excludeVanilla));
-            player.sendPacket(registries.catVariant().registryDataPacket(registries, excludeVanilla));
-            player.sendPacket(registries.chickenVariant().registryDataPacket(registries, excludeVanilla));
-            player.sendPacket(registries.cowVariant().registryDataPacket(registries, excludeVanilla));
-            player.sendPacket(registries.frogVariant().registryDataPacket(registries, excludeVanilla));
-            player.sendPacket(registries.pigVariant().registryDataPacket(registries, excludeVanilla));
-            player.sendPacket(registries.zombieNautilusVariant().registryDataPacket(registries, excludeVanilla));
-            player.sendPacket(registries.timeline().registryDataPacket(registries, excludeVanilla));
-            player.sendPacket(registries.dimensionType().registryDataPacket(registries, excludeVanilla));
-            // MUST BE IN SYNC WITH #createTagsPacket
+            Registries registries = MinecraftServer.getRegistries();
+            player.sendPackets(Registries.registryDataPackets(registries, excludeVanilla));
             // TODO: TEST_ENVIRONMENT, TEST_INSTANCE
 
             sendRegistryTags(player);
@@ -383,7 +380,7 @@ public final class ConnectionManager {
      *
      * @param tickStart the time of the update in nanoseconds, forwarded to the packet
      */
-    private void handleKeepAlive(Collection<Player> playerGroup, long tickStart) {
+    private static void handleKeepAlive(Collection<Player> playerGroup, long tickStart) {
         final KeepAlivePacket keepAlivePacket = new KeepAlivePacket(tickStart);
         for (Player player : playerGroup) {
             final long lastKeepAlive = tickStart - player.getLastKeepAlive();
@@ -396,43 +393,4 @@ public final class ConnectionManager {
         }
     }
 
-    private TagsPacket createTagsPacket() {
-        final List<TagsPacket.Registry> entries = new ArrayList<>();
-
-        // The following are the registries which contain tags used by the vanilla client.
-        // We don't care about registries unused by the client.
-        final Registries registries = MinecraftServer.process();
-
-        // static registries (with tags)
-        entries.add(registries.blocks().tagRegistry());
-        entries.add(registries.entityType().tagRegistry());
-        entries.add(registries.fluid().tagRegistry());
-        entries.add(registries.gameEvent().tagRegistry());
-        entries.add(registries.material().tagRegistry());
-        // dynamic registries
-        entries.add(registries.chatType().tagRegistry());
-        entries.add(registries.biome().tagRegistry());
-        entries.add(registries.dialog().tagRegistry());
-        entries.add(registries.damageType().tagRegistry());
-        entries.add(registries.trimMaterial().tagRegistry());
-        entries.add(registries.trimPattern().tagRegistry());
-        entries.add(registries.bannerPattern().tagRegistry());
-        entries.add(registries.enchantment().tagRegistry());
-        entries.add(registries.paintingVariant().tagRegistry());
-        entries.add(registries.jukeboxSong().tagRegistry());
-        entries.add(registries.instrument().tagRegistry());
-        entries.add(registries.wolfVariant().tagRegistry());
-        entries.add(registries.wolfSoundVariant().tagRegistry());
-        entries.add(registries.catVariant().tagRegistry());
-        entries.add(registries.chickenVariant().tagRegistry());
-        entries.add(registries.cowVariant().tagRegistry());
-        entries.add(registries.frogVariant().tagRegistry());
-        entries.add(registries.pigVariant().tagRegistry());
-        entries.add(registries.zombieNautilusVariant().tagRegistry());
-        entries.add(registries.timeline().tagRegistry());
-        entries.add(registries.dimensionType().tagRegistry());
-        // MUST BE IN SYNC WITH #doConfiguration
-
-        return new TagsPacket(entries);
-    }
 }

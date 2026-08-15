@@ -9,7 +9,7 @@ import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.Nullable;
 
 public class CowMeta extends AnimalMeta {
-    public CowMeta(Entity entity, MetadataHolder metadata) {
+    public CowMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -34,6 +34,8 @@ public class CowMeta extends AnimalMeta {
     protected <T> @Nullable T get(DataComponent<T> component) {
         if (component == DataComponents.COW_VARIANT)
             return (T) getVariant();
+        if (component == DataComponents.COW_SOUND_VARIANT)
+            return (T) metadata.get(MetadataDef.Cow.SOUND_VARIANT);
         return super.get(component);
     }
 
@@ -42,6 +44,8 @@ public class CowMeta extends AnimalMeta {
     protected <T> void set(DataComponent<T> component, T value) {
         if (component == DataComponents.COW_VARIANT)
             setVariant((RegistryKey<CowVariant>) value);
+        else if (component == DataComponents.COW_SOUND_VARIANT)
+            metadata.set(MetadataDef.Cow.SOUND_VARIANT, (RegistryKey<CowSoundVariant>) value);
         else super.set(component, value);
     }
 

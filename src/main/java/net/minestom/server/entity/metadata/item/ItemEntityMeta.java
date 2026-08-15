@@ -6,9 +6,10 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import net.minestom.server.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 public class ItemEntityMeta extends EntityMeta implements ObjectDataProvider {
-    public ItemEntityMeta(Entity entity, MetadataHolder metadata) {
+    public ItemEntityMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

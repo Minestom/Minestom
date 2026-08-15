@@ -5,9 +5,10 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.Rotation;
+import org.jetbrains.annotations.Nullable;
 
 public class ItemFrameMeta extends HangingMeta {
-    public ItemFrameMeta(Entity entity, MetadataHolder metadata) {
+    public ItemFrameMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

@@ -13,6 +13,6 @@ public class RedirectTestCommand extends Command {
         final ArgumentLiteral c = new ArgumentLiteral("c");
         final ArgumentLiteral d = new ArgumentLiteral("d");
 
-        addSyntax(((sender, context) -> {}), new ArgumentLoop<>("test", a,b,c,d));
+        addSyntax((_, _) -> {}, new ArgumentLoop<>("test", a,b,c,d));
     }
 }

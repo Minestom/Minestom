@@ -1,14 +1,32 @@
 package net.minestom.server.command;
 
 import net.minestom.server.command.builder.Command;
-import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Fork;
+import org.openjdk.jmh.annotations.Measurement;
+import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.Setup;
+import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
 import org.openjdk.jmh.infra.Blackhole;
 
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-import static net.minestom.server.command.builder.arguments.ArgumentType.*;
+import static net.minestom.server.command.builder.arguments.ArgumentType.BlockState;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Double;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Entity;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Float;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Integer;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Long;
+import static net.minestom.server.command.builder.arguments.ArgumentType.RelativeBlockPosition;
+import static net.minestom.server.command.builder.arguments.ArgumentType.RelativeVec3;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Word;
 
 @BenchmarkMode(Mode.AverageTime)
 @State(Scope.Benchmark)
@@ -23,31 +41,31 @@ public class CommandBenchmark {
     public void setup() {
         var graph = Graph.merge(Set.of(
                 new Command("tp", "teleport") {{
-                    addSyntax((sender, context) -> {}, RelativeVec3("pos"));
-                    addSyntax((sender, context) -> {}, Entity("entity"), RelativeVec3("pos"));
+                    addSyntax((_, _) -> {}, RelativeVec3("pos"));
+                    addSyntax((_, _) -> {}, Entity("entity"), RelativeVec3("pos"));
                 }},
                 new Command("setblock", "set") {{
-                    addSyntax((sender, context) -> {}, RelativeBlockPosition("pos"), BlockState("block"));
+                    addSyntax((_, _) -> {}, RelativeBlockPosition("pos"), BlockState("block"));
                 }},
                 new Command("foo") {{
-                    setCondition((sender, commandString) -> true);
+                    setCondition((_, _) -> true);
                     addSubcommand(new Command("bar") {{
-                        addConditionalSyntax((sender, commandString) -> true, (sender, context) -> {});
+                        addConditionalSyntax((_, _) -> true, (_, _) -> {});
                     }});
                     addSubcommand(new Command("baz"){{
-                        addSyntax((sender, context) -> {}, Word("A").from("a", "b", "c"), Word("B").from("a", "b", "c"));
+                        addSyntax((_, _) -> {}, Word("A").from("a", "b", "c"), Word("B").from("a", "b", "c"));
                     }});
                 }},
                 new Command("def") {{
-                    addSyntax((sender, context) -> {}, Literal("a"), Literal("b"), Literal("c"), Literal("d"),
+                    addSyntax((_, _) -> {}, Literal("a"), Literal("b"), Literal("c"), Literal("d"),
                             Literal("e"), Literal("f"));
-                    setDefaultExecutor((sender, context) -> {});
+                    setDefaultExecutor((_, _) -> {});
                 }},
                 new Command("parse") {{
-                    addSyntax((sender, context) -> {}, Literal("int"), Integer("val"));
-                    addSyntax((sender, context) -> {}, Literal("double"), Double("val"));
-                    addSyntax((sender, context) -> {}, Literal("float"), Float("val"));
-                    addSyntax((sender, context) -> {}, Literal("long"), Long("val"));
+                    addSyntax((_, _) -> {}, Literal("int"), Integer("val"));
+                    addSyntax((_, _) -> {}, Literal("double"), Double("val"));
+                    addSyntax((_, _) -> {}, Literal("float"), Float("val"));
+                    addSyntax((_, _) -> {}, Literal("long"), Long("val"));
                 }}
         ));
         final CommandParser commandParser = CommandParser.parser();

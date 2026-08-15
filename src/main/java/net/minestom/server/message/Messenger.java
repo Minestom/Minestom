@@ -5,11 +5,9 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.SystemChatPacket;
 import net.minestom.server.utils.PacketSendingUtils;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * Utility class to handle client chat settings.
@@ -19,7 +17,6 @@ public final class Messenger {
      * The message sent to the client if they send a chat message but it is rejected by the server.
      */
     public static final Component CANNOT_SEND_MESSAGE = Component.translatable("chat.cannotSend", NamedTextColor.RED);
-    private static final UUID NO_SENDER = new UUID(0, 0);
     private static final SystemChatPacket CANNOT_SEND_PACKET = new SystemChatPacket(CANNOT_SEND_MESSAGE, false);
 
     /**
@@ -28,10 +25,9 @@ public final class Messenger {
      * @param player   the player
      * @param message  the message
      * @param position the position
-     * @param uuid     the UUID of the sender, if any
      * @return if the message was sent
      */
-    public static boolean sendMessage(Player player, Component message, ChatPosition position, @Nullable UUID uuid) {
+    public static boolean sendMessage(Player player, Component message, ChatPosition position) {
         if (getChatMessageType(player).accepts(position)) {
             player.sendPacket(new SystemChatPacket(message, false));
             return true;
@@ -45,10 +41,8 @@ public final class Messenger {
      * @param players  the players
      * @param message  the message
      * @param position the position
-     * @param uuid     the UUID of the sender, if any
      */
-    public static void sendMessage(Collection<Player> players, Component message,
-                                   ChatPosition position, @Nullable UUID uuid) {
+    public static void sendMessage(Collection<? extends Player> players, Component message, ChatPosition position) {
         PacketSendingUtils.sendGroupedPacket(players, new SystemChatPacket(message, false),
                 player -> getChatMessageType(player).accepts(position));
     }

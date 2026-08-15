@@ -5,8 +5,8 @@ import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.enchant.Enchantment;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTranscoder;
-import net.minestom.testing.Env;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.Map;
 import static net.minestom.server.codec.CodecAssertions.assertOk;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class EnchantmentListTest extends AbstractItemComponentTest<EnchantmentList> {
+public class EnchantmentListTest extends AbstractItemComponentRegistriesTest<EnchantmentList> {
     // This is not a test, but it creates a compile error if the component type is changed away from Unit,
     // as a reminder that tests should be added for that new component type.
     private static final List<DataComponent<EnchantmentList>> SHARED_COMPONENTS = List.of(
@@ -38,14 +38,14 @@ public class EnchantmentListTest extends AbstractItemComponentTest<EnchantmentLi
     }
 
     @Test
-    void testShorthandNbtSyntax(Env env) throws Exception {
+    void testShorthandNbtSyntax(Registries registries) throws Exception {
         var tag = MinestomAdventure.tagStringIO().asTag("""
                 {
                     "sharpness": 1,
                     "punch": 2,
                 }
                 """);
-        var coder = new RegistryTranscoder<>(Transcoder.NBT, env.process());
+        var coder = new RegistryTranscoder<>(Transcoder.NBT, registries);
         var value = assertOk(component().decode(coder, tag));
         assertEquals(new EnchantmentList(Map.of(Enchantment.SHARPNESS, 1, Enchantment.PUNCH, 2)), value);
     }

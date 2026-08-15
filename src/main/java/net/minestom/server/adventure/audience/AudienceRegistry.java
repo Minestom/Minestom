@@ -4,7 +4,11 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -25,7 +29,7 @@ public class AudienceRegistry {
      */
     public AudienceRegistry(Map<Key, Collection<Audience>> backingMap, Supplier<Collection<Audience>> backingCollection) {
         this.registry = backingMap;
-        this.provider = key -> backingCollection.get();
+        this.provider = _ -> backingCollection.get();
     }
 
     /**
@@ -53,7 +57,7 @@ public class AudienceRegistry {
      * @param keyed     the provider of the key
      * @param audiences the audiences
      */
-    public void register(Keyed keyed, Collection<Audience> audiences) {
+    public void register(Keyed keyed, Collection<? extends Audience> audiences) {
         this.register(keyed.key(), audiences);
     }
 
@@ -77,7 +81,7 @@ public class AudienceRegistry {
      * @param key       the key to store the audiences under
      * @param audiences the audiences
      */
-    public void register(Key key, Collection<Audience> audiences) {
+    public void register(Key key, Collection<? extends Audience> audiences) {
         if (!audiences.isEmpty()) {
             this.registry.computeIfAbsent(key, this.provider).addAll(audiences);
         }
@@ -122,7 +126,7 @@ public class AudienceRegistry {
      * @param filter the predicate
      * @return the matching audience members
      */
-    public Iterable<? extends Audience> of(Predicate<Audience> filter) {
+    public Iterable<? extends Audience> of(Predicate<? super Audience> filter) {
         return this.registry.values().stream().flatMap(Collection::stream).filter(filter).toList();
     }
 }

@@ -2,7 +2,6 @@ package net.minestom.server.listener;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.component.DataComponents;
-import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
@@ -10,7 +9,11 @@ import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.item.PlayerCancelItemUseEvent;
-import net.minestom.server.event.player.*;
+import net.minestom.server.event.player.PlayerCancelDiggingEvent;
+import net.minestom.server.event.player.PlayerFinishDiggingEvent;
+import net.minestom.server.event.player.PlayerStabEvent;
+import net.minestom.server.event.player.PlayerStartDiggingEvent;
+import net.minestom.server.event.player.PlayerSwapItemEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
@@ -57,7 +60,7 @@ public final class PlayerActionListener {
             player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
             if (!diggingResult.success()) {
                 // Refresh block on player screen in case it had special data (like a sign)
-                var blockEntityType = diggingResult.block().registry().blockEntityType();
+                var blockEntityType = diggingResult.block().blockEntityType();
                 if (blockEntityType != null) {
                     final CompoundBinaryTag data = BlockUtils.extractClientNbt(diggingResult.block());
                     player.sendPacketToViewersAndSelf(new BlockEntityDataPacket(blockPosition, blockEntityType, data));
@@ -77,7 +80,7 @@ public final class PlayerActionListener {
         final int breakTicks = BlockBreakCalculation.breakTicks(block, player);
         final boolean instantBreak = breakTicks == 0;
         if (!instantBreak) {
-            PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, block, new BlockVec(blockPosition), blockFace);
+            PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, instance, block, blockPosition.asBlockVec(), blockFace);
             EventDispatcher.call(playerStartDiggingEvent);
             return new DiggingResult(block, !playerStartDiggingEvent.isCancelled());
         }
@@ -88,7 +91,7 @@ public final class PlayerActionListener {
     private static DiggingResult cancelDigging(Player player, Instance instance, Point blockPosition) {
         final Block block = instance.getBlock(blockPosition);
 
-        PlayerCancelDiggingEvent playerCancelDiggingEvent = new PlayerCancelDiggingEvent(player, block, new BlockVec(blockPosition));
+        PlayerCancelDiggingEvent playerCancelDiggingEvent = new PlayerCancelDiggingEvent(player, instance, block, blockPosition.asBlockVec());
         EventDispatcher.call(playerCancelDiggingEvent);
         return new DiggingResult(block, true);
     }
@@ -104,14 +107,14 @@ public final class PlayerActionListener {
         // Realistically shouldn't happen, but a hacked client can send any packet, also illegal ones
         // If the block is unbreakable, prevent a hacked client from breaking it!
         if (breakTicks == BlockBreakCalculation.UNBREAKABLE) {
-            PlayerCancelDiggingEvent playerCancelDiggingEvent = new PlayerCancelDiggingEvent(player, block, new BlockVec(blockPosition));
+            PlayerCancelDiggingEvent playerCancelDiggingEvent = new PlayerCancelDiggingEvent(player, instance, block, blockPosition.asBlockVec());
             EventDispatcher.call(playerCancelDiggingEvent);
             return new DiggingResult(block, false);
         }
         // TODO maybe add a check if the player has spent enough time mining the block.
         //   a hacked client could send START_DIGGING and FINISH_DIGGING to instamine any block
 
-        PlayerFinishDiggingEvent playerFinishDiggingEvent = new PlayerFinishDiggingEvent(player, block, new BlockVec(blockPosition));
+        PlayerFinishDiggingEvent playerFinishDiggingEvent = new PlayerFinishDiggingEvent(player, instance, block, blockPosition.asBlockVec());
         EventDispatcher.call(playerFinishDiggingEvent);
 
         return breakBlock(instance, player, blockPosition, playerFinishDiggingEvent.getBlock(), blockFace);
@@ -186,11 +189,11 @@ public final class PlayerActionListener {
         final boolean success = instance.breakBlock(player, blockPosition, blockFace);
         final Block updatedBlock = instance.getBlock(blockPosition);
         if (!success) {
-            if (previousBlock.isSolid()) {
+            if (previousBlock.solid()) {
                 final Pos playerPosition = player.getPosition();
                 // Teleport the player back if he broke a solid block just below him
                 if (playerPosition.sub(0, 1, 0).samePoint(blockPosition)) {
-                    player.teleport(playerPosition);
+                    var _ = player.teleport(playerPosition);
                 }
             }
         }

@@ -15,6 +15,10 @@ public record MoveMinecartPacket(int entityId, List<LerpStep> lerpSteps) impleme
             LerpStep.SERIALIZER.list(Short.MAX_VALUE), MoveMinecartPacket::lerpSteps,
             MoveMinecartPacket::new);
 
+    public MoveMinecartPacket {
+        lerpSteps = List.copyOf(lerpSteps);
+    }
+
     public record LerpStep(
             Point position, Point velocity,
             float yaw, float pitch, float weight

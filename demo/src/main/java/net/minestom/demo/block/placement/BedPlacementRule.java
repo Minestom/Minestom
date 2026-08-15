@@ -7,10 +7,11 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
 import java.util.Objects;
 
 /**
- * https://gist.github.com/mworzala/0676c28343310458834d70ed29b11a37
+ * <a href="https://gist.github.com/mworzala/0676c28343310458834d70ed29b11a37">...</a>
  */
 public class BedPlacementRule extends BlockPlacementRule {
 
@@ -31,11 +32,11 @@ public class BedPlacementRule extends BlockPlacementRule {
         if (!(placementState.instance() instanceof Instance instance)) return null;
 
         var headPosition = placementState.placePosition().relative(facing);
-        if (!instance.getBlock(headPosition, Block.Getter.Condition.TYPE).isAir())
+        if (!instance.getBlock(headPosition, Block.Getter.Condition.TYPE).air())
             return null;
 
         var headBlock = this.block.withProperty(PROP_PART, "head")
-                .withProperty(PROP_FACING, facing.name().toLowerCase());
+                .withProperty(PROP_FACING, facing.name().toLowerCase(Locale.ROOT));
         instance.setBlock(headPosition, headBlock);
 
         return headBlock.withProperty(PROP_PART, "foot");

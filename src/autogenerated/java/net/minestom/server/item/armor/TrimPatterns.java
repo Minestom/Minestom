@@ -9,39 +9,39 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface TrimPatterns permits TrimPattern {
-    RegistryKey<TrimPattern> TIDE = RegistryKey.unsafeOf("tide");
-
-    RegistryKey<TrimPattern> RIB = RegistryKey.unsafeOf("rib");
-
     RegistryKey<TrimPattern> BOLT = RegistryKey.unsafeOf("bolt");
-
-    RegistryKey<TrimPattern> HOST = RegistryKey.unsafeOf("host");
-
-    RegistryKey<TrimPattern> SILENCE = RegistryKey.unsafeOf("silence");
-
-    RegistryKey<TrimPattern> WILD = RegistryKey.unsafeOf("wild");
-
-    RegistryKey<TrimPattern> WAYFINDER = RegistryKey.unsafeOf("wayfinder");
-
-    RegistryKey<TrimPattern> FLOW = RegistryKey.unsafeOf("flow");
-
-    RegistryKey<TrimPattern> DUNE = RegistryKey.unsafeOf("dune");
-
-    RegistryKey<TrimPattern> RAISER = RegistryKey.unsafeOf("raiser");
-
-    RegistryKey<TrimPattern> SNOUT = RegistryKey.unsafeOf("snout");
-
-    RegistryKey<TrimPattern> VEX = RegistryKey.unsafeOf("vex");
-
-    RegistryKey<TrimPattern> SPIRE = RegistryKey.unsafeOf("spire");
-
-    RegistryKey<TrimPattern> SENTRY = RegistryKey.unsafeOf("sentry");
-
-    RegistryKey<TrimPattern> EYE = RegistryKey.unsafeOf("eye");
-
-    RegistryKey<TrimPattern> WARD = RegistryKey.unsafeOf("ward");
 
     RegistryKey<TrimPattern> COAST = RegistryKey.unsafeOf("coast");
 
+    RegistryKey<TrimPattern> DUNE = RegistryKey.unsafeOf("dune");
+
+    RegistryKey<TrimPattern> EYE = RegistryKey.unsafeOf("eye");
+
+    RegistryKey<TrimPattern> FLOW = RegistryKey.unsafeOf("flow");
+
+    RegistryKey<TrimPattern> HOST = RegistryKey.unsafeOf("host");
+
+    RegistryKey<TrimPattern> RAISER = RegistryKey.unsafeOf("raiser");
+
+    RegistryKey<TrimPattern> RIB = RegistryKey.unsafeOf("rib");
+
+    RegistryKey<TrimPattern> SENTRY = RegistryKey.unsafeOf("sentry");
+
     RegistryKey<TrimPattern> SHAPER = RegistryKey.unsafeOf("shaper");
+
+    RegistryKey<TrimPattern> SILENCE = RegistryKey.unsafeOf("silence");
+
+    RegistryKey<TrimPattern> SNOUT = RegistryKey.unsafeOf("snout");
+
+    RegistryKey<TrimPattern> SPIRE = RegistryKey.unsafeOf("spire");
+
+    RegistryKey<TrimPattern> TIDE = RegistryKey.unsafeOf("tide");
+
+    RegistryKey<TrimPattern> VEX = RegistryKey.unsafeOf("vex");
+
+    RegistryKey<TrimPattern> WARD = RegistryKey.unsafeOf("ward");
+
+    RegistryKey<TrimPattern> WAYFINDER = RegistryKey.unsafeOf("wayfinder");
+
+    RegistryKey<TrimPattern> WILD = RegistryKey.unsafeOf("wild");
 }

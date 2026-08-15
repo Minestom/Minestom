@@ -4,9 +4,9 @@ import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -14,13 +14,14 @@ public sealed interface CowVariant extends CowVariants permits CowVariantImpl {
     Codec<CowVariant> REGISTRY_CODEC = StructCodec.struct(
             "model", Model.CODEC.optional(Model.NORMAL), CowVariant::model,
             "asset_id", Codec.KEY, CowVariant::assetId,
-            CowVariantImpl::new);
+            "baby_asset_id", Codec.KEY, CowVariant::babyAssetId,
+            CowVariant::create);
 
     NetworkBuffer.Type<RegistryKey<CowVariant>> NETWORK_TYPE = RegistryKey.networkType(Registries::cowVariant);
     Codec<RegistryKey<CowVariant>> CODEC = RegistryKey.codec(Registries::cowVariant);
 
-    static CowVariant create(Model model, Key assetId) {
-        return new CowVariantImpl(model, assetId);
+    static CowVariant create(Model model, Key assetId, Key babyAssetId) {
+        return new CowVariantImpl(model, assetId, babyAssetId);
     }
 
     /**
@@ -30,12 +31,14 @@ public sealed interface CowVariant extends CowVariants permits CowVariantImpl {
      */
     @ApiStatus.Internal
     static DynamicRegistry<CowVariant> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("cow_variant"), REGISTRY_CODEC, RegistryData.Resource.COW_VARIANTS);
+        return DynamicRegistry.create(BuiltinRegistries.COW_VARIANT, REGISTRY_CODEC);
     }
 
     Model model();
 
     Key assetId();
+
+    Key babyAssetId();
 
     enum Model {
         NORMAL,

@@ -12,6 +12,7 @@ import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -51,7 +52,7 @@ public final class InstanceManager {
      * @return the created {@link InstanceContainer}
      */
     public InstanceContainer createInstanceContainer(RegistryKey<DimensionType> dimensionType, @Nullable ChunkLoader loader) {
-        final InstanceContainer instanceContainer = new InstanceContainer(registries.dimensionType(), UUID.randomUUID(), dimensionType, loader, dimensionType.key());
+        final InstanceContainer instanceContainer = new InstanceContainer(registries, UUID.randomUUID(), dimensionType, loader, dimensionType.key());
         registerInstance(instanceContainer);
         return instanceContainer;
     }
@@ -84,7 +85,7 @@ public final class InstanceManager {
      */
     public SharedInstance registerSharedInstance(SharedInstance sharedInstance) {
         final InstanceContainer instanceContainer = sharedInstance.getInstanceContainer();
-        Check.notNull(instanceContainer, "SharedInstance needs to have an InstanceContainer to be created!");
+        Objects.requireNonNull(instanceContainer, "SharedInstance needs to have an InstanceContainer to be created!");
 
         instanceContainer.addSharedInstance(sharedInstance);
         UNSAFE_registerInstance(sharedInstance);
@@ -99,7 +100,7 @@ public final class InstanceManager {
      * @throws IllegalStateException if {@code instanceContainer} is not registered
      */
     public SharedInstance createSharedInstance(InstanceContainer instanceContainer) {
-        Check.notNull(instanceContainer, "Instance container cannot be null when creating a SharedInstance!");
+        Objects.requireNonNull(instanceContainer, "Instance container cannot be null when creating a SharedInstance!");
         Check.stateCondition(!instanceContainer.isRegistered(), "The container needs to be register in the InstanceManager");
 
         final SharedInstance sharedInstance = new SharedInstance(UUID.randomUUID(), instanceContainer);
@@ -125,6 +126,9 @@ public final class InstanceManager {
                 instance.getChunks().forEach(instance::unloadChunk);
                 var dispatcher = MinecraftServer.process().dispatcher();
                 instance.getChunks().forEach(dispatcher::deletePartition);
+            }
+            if (instance instanceof SharedInstance sharedInstance) {
+                sharedInstance.getInstanceContainer().removeSharedInstance(sharedInstance);
             }
             // Unregister
             instance.setRegistered(false);

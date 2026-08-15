@@ -128,7 +128,7 @@ public final class CoordConversion {
         return (z << 28)                          // Z component (shifted to the upper 4 bits)
                 | (y & 0x80000000) >>> 4          // Y sign bit if y was negative
                 | (Math.abs(y) & 0x007FFFFF) << 4 // Y component (23 bits for Y, sign encoded in the 24th)
-                | (x);                            // X component (4 bits for X)
+                | x;                              // X component (4 bits for X)
     }
 
     public static int chunkBlockIndexGetX(int index) {
@@ -220,6 +220,10 @@ public final class CoordConversion {
 
     public static long encodeSectionBlockChange(int localX, int localY, int localZ, long value) {
         return encodeSectionBlockChange(sectionBlockIndex(localX, localY, localZ), value);
+    }
+
+    public static short deltaShort4096(double newCoordinate, double oldCoordinate) {
+        return (short) ((newCoordinate - oldCoordinate) * 4096);
     }
 
     // HASHING

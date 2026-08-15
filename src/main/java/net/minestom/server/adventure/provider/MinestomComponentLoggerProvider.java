@@ -6,7 +6,7 @@ import net.kyori.adventure.text.serializer.ansi.ANSIComponentSerializer;
 import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("UnstableApiUsage") // we are permitted to provide this
-public class MinestomComponentLoggerProvider implements ComponentLoggerProvider {
+public final class MinestomComponentLoggerProvider implements ComponentLoggerProvider {
     private static final ANSIComponentSerializer SERIALIZER = ANSIComponentSerializer.ansi();
 
     @Override

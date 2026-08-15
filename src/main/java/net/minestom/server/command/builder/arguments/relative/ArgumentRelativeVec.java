@@ -9,7 +9,9 @@ import net.minestom.server.utils.location.RelativeVec;
 
 import java.util.function.Function;
 
-import static net.minestom.server.utils.location.RelativeVec.CoordinateType.*;
+import static net.minestom.server.utils.location.RelativeVec.CoordinateType.ABSOLUTE;
+import static net.minestom.server.utils.location.RelativeVec.CoordinateType.LOCAL;
+import static net.minestom.server.utils.location.RelativeVec.CoordinateType.RELATIVE;
 
 /**
  * Common interface for all the relative location arguments.
@@ -35,8 +37,9 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
     abstract Function<String, ? extends Number> getAbsoluteNumberParser();
 
     @Override
+    @SuppressWarnings("fallthrough") // local coordinates deliberately continue into the relative branch
     public RelativeVec parse(CommandSender sender, String input) throws ArgumentSyntaxException {
-        final String[] split = input.split(StringUtils.SPACE);
+        final String[] split = input.split(StringUtils.SPACE, 0);
         if (split.length != getNumberCount()) {
             throw new ArgumentSyntaxException("Invalid number of values", input, INVALID_NUMBER_COUNT_ERROR);
         }
@@ -71,7 +74,7 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
                         break;
                     }
                 }
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException _) {
                 throw new ArgumentSyntaxException("Invalid number", input, INVALID_NUMBER_ERROR);
             }
         }

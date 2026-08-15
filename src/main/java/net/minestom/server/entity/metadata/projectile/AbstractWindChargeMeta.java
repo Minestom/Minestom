@@ -7,7 +7,7 @@ import net.minestom.server.entity.metadata.ObjectDataProvider;
 import org.jetbrains.annotations.Nullable;
 
 public class AbstractWindChargeMeta extends EntityMeta implements ObjectDataProvider, ProjectileMeta {
-    private Entity shooter;
+    private @Nullable Entity shooter;
 
     public AbstractWindChargeMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);

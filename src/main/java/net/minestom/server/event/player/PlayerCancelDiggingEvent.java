@@ -4,6 +4,7 @@ import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 
 /**
@@ -11,13 +12,20 @@ import net.minestom.server.instance.block.Block;
  */
 public class PlayerCancelDiggingEvent implements PlayerInstanceEvent, BlockEvent {
     private final Player player;
+    private final Instance instance;
     private final Block block;
     private final BlockVec blockPosition;
 
-    public PlayerCancelDiggingEvent(Player player, Block block, BlockVec blockPosition) {
+    public PlayerCancelDiggingEvent(Player player, Instance instance, Block block, BlockVec blockPosition) {
         this.player = player;
+        this.instance = instance;
         this.block = block;
         this.blockPosition = blockPosition;
+    }
+
+    @Override
+    public Instance getInstance() {
+        return instance;
     }
 
     /**

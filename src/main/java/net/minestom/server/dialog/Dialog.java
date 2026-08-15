@@ -6,14 +6,20 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.*;
+import net.minestom.server.registry.BuiltinRegistries;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.Holder;
+import net.minestom.server.registry.HolderSet;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
 
-public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike {
+public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike, Dialogs {
     Registry<StructCodec<? extends Dialog>> REGISTRY = DynamicRegistry.fromMap(
             Key.key("dialog_type"),
             Map.entry(Key.key("notice"), Notice.CODEC),
@@ -21,7 +27,7 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike {
             Map.entry(Key.key("dialog_list"), DialogList.CODEC),
             Map.entry(Key.key("multi_action"), MultiAction.CODEC),
             Map.entry(Key.key("confirmation"), Confirmation.CODEC));
-    Codec<Dialog> REGISTRY_CODEC = Codec.RegistryTaggedUnion(REGISTRY, Dialog::codec);
+    StructCodec<Dialog> REGISTRY_CODEC = Codec.RegistryTaggedUnion(REGISTRY, Dialog::codec);
     NetworkBuffer.Type<Dialog> REGISTRY_NETWORK_TYPE = NetworkBuffer.TypedNBT(REGISTRY_CODEC);
 
     NetworkBuffer.Type<Holder<Dialog>> NETWORK_TYPE = Holder.networkType(Registries::dialog, REGISTRY_NETWORK_TYPE);
@@ -64,9 +70,18 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike {
      */
     @ApiStatus.Internal
     static DynamicRegistry<Dialog> createDefaultRegistry(Registries registries) {
-        return DynamicRegistry.createForDialogWithSelfReferentialLoadingNightmare(
-                Key.key("dialog"), REGISTRY_CODEC, RegistryData.Resource.DIALOGS, registries
-        );
+        return DynamicRegistry.create(BuiltinRegistries.DIALOG, REGISTRY_CODEC,
+                registries, (delegate, registry) -> new Registries.Delegating() {
+                    @Override
+                    public Registries registries() {
+                        return delegate;
+                    }
+
+                    @Override
+                    public DynamicRegistry<Dialog> dialog() {
+                        return registry;
+                    }
+                });
     }
 
     record Notice(DialogMetadata metadata, DialogActionButton action) implements Dialog {
@@ -77,7 +92,7 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike {
                 Notice::new);
 
         @Override
-        public StructCodec<? extends Dialog> codec() {
+        public StructCodec<Notice> codec() {
             return CODEC;
         }
     }
@@ -95,7 +110,7 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike {
                 ServerLinks::new);
 
         @Override
-        public StructCodec<? extends Dialog> codec() {
+        public StructCodec<ServerLinks> codec() {
             return CODEC;
         }
     }
@@ -115,7 +130,7 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike {
                 DialogList::new);
 
         @Override
-        public StructCodec<? extends Dialog> codec() {
+        public StructCodec<DialogList> codec() {
             return CODEC;
         }
     }
@@ -134,7 +149,7 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike {
                 MultiAction::new);
 
         @Override
-        public StructCodec<? extends Dialog> codec() {
+        public StructCodec<MultiAction> codec() {
             return CODEC;
         }
     }
@@ -151,13 +166,14 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike {
                 Confirmation::new);
 
         @Override
-        public StructCodec<? extends Dialog> codec() {
+        public StructCodec<Confirmation> codec() {
             return CODEC;
         }
     }
 
     DialogMetadata metadata();
 
+    @ApiStatus.OverrideOnly
     StructCodec<? extends Dialog> codec();
 
 }

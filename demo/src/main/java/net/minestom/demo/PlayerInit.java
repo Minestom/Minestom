@@ -1,6 +1,8 @@
 package net.minestom.demo;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.StringBinaryTag;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -14,11 +16,24 @@ import net.minestom.server.advancements.FrameType;
 import net.minestom.server.advancements.Notification;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.Audiences;
+import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.dialog.*;
-import net.minestom.server.entity.*;
+import net.minestom.server.dialog.Dialog;
+import net.minestom.server.dialog.DialogAction;
+import net.minestom.server.dialog.DialogActionButton;
+import net.minestom.server.dialog.DialogAfterAction;
+import net.minestom.server.dialog.DialogBody;
+import net.minestom.server.dialog.DialogInput;
+import net.minestom.server.dialog.DialogMetadata;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityType;
+import net.minestom.server.entity.GameMode;
+import net.minestom.server.entity.ItemEntity;
+import net.minestom.server.entity.LivingEntity;
+import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.entity.metadata.avatar.MannequinMeta;
 import net.minestom.server.entity.metadata.golem.CopperGolemMeta;
@@ -26,8 +41,27 @@ import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.inventory.CreativeInventoryActionEvent;
-import net.minestom.server.event.item.*;
-import net.minestom.server.event.player.*;
+import net.minestom.server.event.item.ItemDropEvent;
+import net.minestom.server.event.item.PickupItemEvent;
+import net.minestom.server.event.item.PlayerBeginItemUseEvent;
+import net.minestom.server.event.item.PlayerCancelItemUseEvent;
+import net.minestom.server.event.item.PlayerFinishItemUseEvent;
+import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
+import net.minestom.server.event.player.PlayerBlockBreakEvent;
+import net.minestom.server.event.player.PlayerBlockInteractEvent;
+import net.minestom.server.event.player.PlayerBlockPlaceEvent;
+import net.minestom.server.event.player.PlayerChatEvent;
+import net.minestom.server.event.player.PlayerCustomClickEvent;
+import net.minestom.server.event.player.PlayerDeathEvent;
+import net.minestom.server.event.player.PlayerDisconnectEvent;
+import net.minestom.server.event.player.PlayerEditSignEvent;
+import net.minestom.server.event.player.PlayerGameModeRequestEvent;
+import net.minestom.server.event.player.PlayerInputEvent;
+import net.minestom.server.event.player.PlayerLeaveBedEvent;
+import net.minestom.server.event.player.PlayerPacketEvent;
+import net.minestom.server.event.player.PlayerPacketOutEvent;
+import net.minestom.server.event.player.PlayerSpawnEvent;
+import net.minestom.server.event.player.PlayerUseItemOnBlockEvent;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
@@ -37,20 +71,27 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.predicate.BlockPredicate;
+import net.minestom.server.instance.block.predicate.ComponentPredicateSet;
+import net.minestom.server.instance.block.predicate.DataComponentPredicate;
+import net.minestom.server.instance.block.predicate.DataComponentPredicates;
+import net.minestom.server.instance.block.predicate.NbtPredicate;
+import net.minestom.server.instance.block.predicate.PropertiesPredicate;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemAnimation;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.component.Bee;
 import net.minestom.server.item.component.BlockPredicates;
 import net.minestom.server.item.component.Consumable;
-import net.minestom.server.monitoring.BenchmarkManager;
+import net.minestom.server.item.component.TypedCustomData;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.packet.server.common.CustomReportDetailsPacket;
 import net.minestom.server.network.packet.server.common.ServerLinksPacket;
 import net.minestom.server.network.packet.server.play.TrackedWaypointPacket;
 import net.minestom.server.network.player.ResolvableProfile;
+import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.MathUtils;
@@ -60,6 +101,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -69,29 +111,28 @@ public class PlayerInit {
 
     private final Inventory inventory;
 
-    private final EventNode<Event> DEMO_NODE = EventNode.all("demo")
+    private static final EventNode<Event> DEMO_NODE = EventNode.all("demo")
             .addListener(EntityAttackEvent.class, event -> {
                 final Entity source = event.getEntity();
                 final Entity entity = event.getTarget();
 
                 entity.takeKnockback(0.4f, Math.sin(source.getPosition().yaw() * 0.017453292), -Math.cos(source.getPosition().yaw() * 0.017453292));
 
-                if (entity instanceof Player) {
-                    Player target = (Player) entity;
+                if (entity instanceof Player target) {
                     target.damage(Damage.fromEntity(source, 5));
                 }
 
-                if (source instanceof Player) {
-                    ((Player) source).sendMessage("You attacked something!");
+                if (source instanceof Player player) {
+                    player.sendMessage("You attacked something!");
                 }
             })
             .addListener(PlayerDeathEvent.class, event -> event.setChatMessage(Component.text("custom death message")))
             .addListener(PickupItemEvent.class, event -> {
                 final Entity entity = event.getLivingEntity();
-                if (entity instanceof Player) {
+                if (entity instanceof Player player) {
                     // Cancel event if player does not have enough inventory space
                     final ItemStack itemStack = event.getItemEntity().getItemStack();
-                    event.setCancelled(!((Player) entity).getInventory().addItemStack(itemStack));
+                    event.setCancelled(!player.getInventory().addItemStack(itemStack));
                 }
             })
             .addListener(ItemDropEvent.class, event -> {
@@ -101,7 +142,7 @@ public class PlayerInit {
                 Pos playerPos = player.getPosition();
                 ItemEntity itemEntity = new ItemEntity(droppedItem);
                 itemEntity.setPickupDelay(Duration.of(500, TimeUnit.MILLISECOND));
-                itemEntity.setInstance(player.getInstance(), playerPos.withY(y -> y + 1.5));
+                itemEntity.setInstance(player.getInstance(), playerPos.withY(y -> y + 1.5)).join();
                 Vec velocity = playerPos.direction().mul(6);
                 itemEntity.setVelocity(velocity);
             })
@@ -115,22 +156,36 @@ public class PlayerInit {
                 var instances = MinecraftServer.getInstanceManager().getInstances();
                 Instance instance = instances.stream().skip(new Random().nextInt(instances.size())).findFirst().orElse(null);
                 event.setSpawningInstance(instance);
-                int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
-                int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
                 player.setRespawnPoint(new Pos(0, 40f, 0));
             })
             .addListener(PlayerSpawnEvent.class, event -> {
                 final Player player = event.getPlayer();
                 player.setGameMode(GameMode.CREATIVE);
                 player.setPermissionLevel(4);
-
                 player.sendMessage(Component.text("click me for less health ")
-                                           .clickEvent(ClickEvent.runCommand("health set 2"))
-                                           .append(Component.object(ObjectContents.sprite(Key.key("block/stone"))))
-                                           .append(Component.object(ObjectContents.playerHead("Minestom"))));
+                        .clickEvent(ClickEvent.runCommand("health set 2"))
+                        .append(Component.object(ObjectContents.sprite(Key.key("block/stone"))))
+                        .append(Component.object(ObjectContents.playerHead("Minestom"))));
                 ItemStack itemStack = ItemStack.builder(Material.STONE)
                         .amount(64)
-                        .set(DataComponents.CAN_PLACE_ON, new BlockPredicates(new BlockPredicate(Block.STONE)))
+                        .set(DataComponents.CAN_PLACE_ON, new BlockPredicates(List.of(
+                                new BlockPredicate(RegistryTag.direct(Block.OAK_SIGN.registryKey()),
+                                        PropertiesPredicate.exact("rotation", "1"), null,
+                                        DataComponentPredicates.EMPTY),
+                                new BlockPredicate(RegistryTag.direct(
+                                        Block.PLAYER_HEAD.registryKey(), Block.PLAYER_WALL_HEAD.registryKey()), null,
+                                        new NbtPredicate(CompoundBinaryTag.builder()
+                                                .put("Owner", StringBinaryTag.stringBinaryTag("test")).build())),
+                                new BlockPredicate(RegistryTag.direct(
+                                        Block.BEEHIVE.registryKey(), Block.BEE_NEST.registryKey()), null, null,
+                                        new DataComponentPredicates(DataComponentMap.builder().set(DataComponents.BEES, List.of(new Bee(new TypedCustomData<>(EntityType.BEE, CompoundBinaryTag.empty()), 10, 5))).build(), ComponentPredicateSet.EMPTY)
+                                ),
+                                new BlockPredicate(RegistryTag.direct(
+                                        Block.PLAYER_HEAD.registryKey(),
+                                        Block.PLAYER_WALL_HEAD.registryKey()), null, null,
+                                        new DataComponentPredicates(DataComponentMap.EMPTY, ComponentPredicateSet.EMPTY.add(new DataComponentPredicate.CustomData(CompoundBinaryTag.builder().put("Owner", StringBinaryTag.stringBinaryTag("test")).build())))
+                                )
+                        )))
                         .set(DataComponents.CAN_BREAK, new BlockPredicates(new BlockPredicate(Block.DIAMOND_ORE)))
                         .build();
                 player.getInventory().addItemStack(itemStack);
@@ -170,13 +225,13 @@ public class PlayerInit {
                     var happyGhast = new LivingEntity(EntityType.HAPPY_GHAST);
                     happyGhast.setNoGravity(true);
                     happyGhast.setBodyEquipment(ItemStack.of(Material.GREEN_HARNESS));
-                    happyGhast.setInstance(player.getInstance(), new Pos(10, 43, 5, 45, 0));
+                    var _ = happyGhast.setInstance(player.getInstance(), new Pos(10, 43, 5, 45, 0));
 
                     var copperGolem = new LivingEntity(EntityType.COPPER_GOLEM);
                     copperGolem.setNoGravity(true);
                     copperGolem.setItemInMainHand(ItemStack.of(Material.STICK));
                     ((CopperGolemMeta) copperGolem.getEntityMeta()).setState(CopperGolemMeta.State.GETTING_ITEM);
-                    copperGolem.setInstance(player.getInstance(), new Pos(-10, 40, 5, -133, 0));
+                    var _ = copperGolem.setInstance(player.getInstance(), new Pos(-10, 40, 5, -133, 0));
 
                     player.getInstance().setBlock(new Vec(-12, 40, 5), Block.WEATHERED_COPPER_GOLEM_STATUE.withProperty("copper_golem_pose", "star"));
 
@@ -187,7 +242,7 @@ public class PlayerInit {
                     )));
 
                     var playerEntity = new PlayerEntity();
-                    playerEntity.setInstance(player.getInstance(), new Pos(-2.5, 40, 6.7, -163, 0));
+                    var _ = playerEntity.setInstance(player.getInstance(), new Pos(-2.5, 40, 6.7, -163, 0));
                     player.sendPacket(new TrackedWaypointPacket(TrackedWaypointPacket.Operation.TRACK, new TrackedWaypointPacket.Waypoint(
                             Either.left(playerEntity.getUuid()),
                             TrackedWaypointPacket.Icon.DEFAULT,
@@ -202,9 +257,9 @@ public class PlayerInit {
                     mannequinMeta.setProfile(new ResolvableProfile(new ResolvableProfile.Partial("Minestom", null, List.of())));
                     mannequinMeta.setImmovable(true);
                     mannequinMeta.setDescription(Component.text("npc"));
-                    mannequinEntity.setInstance(player.getInstance(), new Pos(-4, 40, 6, -131, 0));
+                    var _ = mannequinEntity.setInstance(player.getInstance(), new Pos(-4, 40, 6, -131, 0));
                     mannequinEntity.setItemInMainHand(ItemStack.of(Material.PLAYER_HEAD).with(DataComponents.PROFILE,
-                          new ResolvableProfile(new ResolvableProfile.Partial("Minestom", null, List.of()))));
+                            new ResolvableProfile(new ResolvableProfile.Partial("Minestom", null, List.of()))));
                     player.sendPacket(new TrackedWaypointPacket(TrackedWaypointPacket.Operation.TRACK, new TrackedWaypointPacket.Waypoint(
                             Either.left(mannequinEntity.getUuid()),
                             TrackedWaypointPacket.Icon.DEFAULT,
@@ -273,10 +328,10 @@ public class PlayerInit {
                 }
                 System.out.println(event.getKey() + " -> " + payload);
             })
-            .addListener(PlayerPacketOutEvent.class, event -> {
+            .addListener(PlayerPacketOutEvent.class, _ -> {
                 //System.out.println("out " + event.getPacket().getClass().getSimpleName());
             })
-            .addListener(PlayerPacketEvent.class, event -> {
+            .addListener(PlayerPacketEvent.class, _ -> {
 
                 //System.out.println("in " + event.getPacket().getClass().getSimpleName());
             })
@@ -285,8 +340,8 @@ public class PlayerInit {
                 var block = event.getBlock();
                 var pos = event.getBlockPosition();
                 if (block.getProperty("part") == null || block.getProperty("facing") == null) return;
-                var isHead = "head".equals(block.getProperty("part"));
-                var facing = BlockFace.valueOf(block.getProperty("facing").toUpperCase());
+                boolean isHead = "head".equals(block.getProperty("part"));
+                var facing = BlockFace.valueOf(block.getProperty("facing").toUpperCase(Locale.ROOT));
                 var other = (isHead ? pos.add(facing.getOppositeFace().toDirection().vec().asPos()) : pos.add(facing.toDirection().vec().asPos()));
                 var otherBlock = instance.getBlock(other);
                 if (otherBlock.id() == block.id()) {
@@ -300,8 +355,8 @@ public class PlayerInit {
                 if (event.getBlock().key().asMinimalString().endsWith("_bed")) {
                     var pos = event.getBlockPosition();
                     if (block.getProperty("part") == null || block.getProperty("facing") == null) return;
-                    var isHead = "head".equals(block.getProperty("part"));
-                    var facing = BlockFace.valueOf(block.getProperty("facing").toUpperCase());
+                    boolean isHead = "head".equals(block.getProperty("part"));
+                    var facing = BlockFace.valueOf(block.getProperty("facing").toUpperCase(Locale.ROOT));
                     var other = (isHead ? pos.add(facing.getOppositeFace().toDirection().vec().asPos()) : pos.add(facing.toDirection().vec().asPos()));
                     var otherBlock = instance.getBlock(other);
                     if (otherBlock.id() == block.id()) {
@@ -346,7 +401,6 @@ public class PlayerInit {
                     player.setItemInHand(event.getHand(), itemStack.without(DataComponents.CHARGED_PROJECTILES));
                     event.getPlayer().sendMessage("pew pew!");
                     event.setItemUseDuration(0); // Do not start using the item
-                    return;
                 }
             })
             .addListener(PlayerFinishItemUseEvent.class, event -> {
@@ -359,7 +413,6 @@ public class PlayerInit {
                 final ItemStack itemStack = event.getItemStack();
                 if (itemStack.material() == Material.CROSSBOW && event.getUseDuration() > 25) {
                     player.setItemInHand(event.getHand(), itemStack.with(DataComponents.CHARGED_PROJECTILES, List.of(ItemStack.of(Material.ARROW))));
-                    return;
                 }
             })
             .addListener(PlayerBlockInteractEvent.class, event -> {
@@ -387,29 +440,25 @@ public class PlayerInit {
                 if (handler != null) return;
                 event.setBlock(event.getBlock().withHandler(MinecraftServer.getBlockManager().getHandler(block.key().asString())));
             })
-            .addListener(PlayerEditSignEvent.class, event -> {
-                event.getLines()
-                        .stream()
-                        .map(Component::text)
-                        .forEach(comp -> event.getPlayer().sendMessage(comp));
-            })
-            .addListener(PlayerInputEvent.class, event -> {
-                event.getPlayer().sendActionBar(Component.empty()
-                        .append(Component.keybind("key.left").color(event.isHoldingLeftKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
-                        .append(Component.text(" "))
-                        .append(Component.keybind("key.forward").color(event.isHoldingForwardKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
-                        .append(Component.text(" "))
-                        .append(Component.keybind("key.back").color(event.isHoldingBackwardKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
-                        .append(Component.text(" "))
-                        .append(Component.keybind("key.right").color(event.isHoldingRightKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
-                        .append(Component.text(" | "))
-                        .append(Component.keybind("key.jump").color(event.isHoldingJumpKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
-                        .append(Component.text(" "))
-                        .append(Component.keybind("key.sneak").color(event.isHoldingShiftKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
-                        .append(Component.text(" "))
-                        .append(Component.keybind("key.sprint").color(event.isHoldingSprintKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
-                );
-            });
+            .addListener(PlayerEditSignEvent.class, event -> event.getLines()
+                    .stream()
+                    .map(Component::text)
+                    .forEach(comp -> event.getPlayer().sendMessage(comp)))
+            .addListener(PlayerInputEvent.class, event -> event.getPlayer().sendActionBar(Component.empty()
+                    .append(Component.keybind("key.left").color(event.isHoldingLeftKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
+                    .append(Component.text(" "))
+                    .append(Component.keybind("key.forward").color(event.isHoldingForwardKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
+                    .append(Component.text(" "))
+                    .append(Component.keybind("key.back").color(event.isHoldingBackwardKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
+                    .append(Component.text(" "))
+                    .append(Component.keybind("key.right").color(event.isHoldingRightKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
+                    .append(Component.text(" | "))
+                    .append(Component.keybind("key.jump").color(event.isHoldingJumpKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
+                    .append(Component.text(" "))
+                    .append(Component.keybind("key.sneak").color(event.isHoldingShiftKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
+                    .append(Component.text(" "))
+                    .append(Component.keybind("key.sprint").color(event.isHoldingSprintKey() ? NamedTextColor.GREEN : NamedTextColor.RED))
+            ));
 
     {
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
@@ -423,31 +472,28 @@ public class PlayerInit {
             }
         });
         instanceContainer.setChunkSupplier(LightingChunk::new);
-        instanceContainer.setTimeRate(0);
-        instanceContainer.setTime(12000);
+
+        var defaultClock = instanceContainer.defaultClock();
+        defaultClock.rate(4f);
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));
         inventory.setItemStack(3, ItemStack.of(Material.DIAMOND, 34));
     }
 
-    private final AtomicReference<TickMonitor> LAST_TICK = new AtomicReference<>();
+    private static final AtomicReference<TickMonitor> LAST_TICK = new AtomicReference<>();
 
     public void init() {
         var eventHandler = MinecraftServer.getGlobalEventHandler();
         eventHandler.addChild(DEMO_NODE);
 
-        MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION = true;
-        MinestomAdventure.COMPONENT_TRANSLATOR = (c, l) -> c;
-
         eventHandler.addListener(ServerTickMonitorEvent.class, event -> LAST_TICK.set(event.getTickMonitor()));
 
-        BenchmarkManager benchmarkManager = MinecraftServer.getBenchmarkManager();
         MinecraftServer.getSchedulerManager().buildTask(() -> {
             if (LAST_TICK.get() == null || MinecraftServer.getConnectionManager().getOnlinePlayerCount() == 0)
                 return;
 
-            long ramUsage = benchmarkManager.getUsedMemory();
-            ramUsage /= 1e6; // bytes to MB
+            long ramUsage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+            ramUsage /= 1_000_000; // bytes to MB
 
             TickMonitor tickMonitor = LAST_TICK.get();
             final Component header = Component.text("RAM USAGE: " + ramUsage + " MB")
@@ -455,8 +501,7 @@ public class PlayerInit {
                     .append(Component.text("TICK TIME: " + MathUtils.round(tickMonitor.getTickTime(), 2) + "ms"))
                     .append(Component.newline())
                     .append(Component.text("ACQ TIME: " + MathUtils.round(tickMonitor.getAcquisitionTime(), 2) + "ms"));
-            final Component footer = benchmarkManager.getCpuMonitoringMessage();
-            Audiences.players().sendPlayerListHeaderAndFooter(header, footer);
+            Audiences.players().sendPlayerListHeader(header);
         }).repeat(10, TimeUnit.SERVER_TICK).schedule();
     }
 

@@ -7,7 +7,7 @@ import net.minestom.server.coordinate.Vec;
 import java.util.List;
 import java.util.Map;
 
-public class LodestoneTrackerTest extends AbstractItemComponentTest<LodestoneTracker> {
+public class LodestoneTrackerTest extends AbstractItemComponentRegistriesTest<LodestoneTracker> {
 
     @Override
     protected DataComponent<LodestoneTracker> component() {

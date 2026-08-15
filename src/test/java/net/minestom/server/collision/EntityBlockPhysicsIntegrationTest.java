@@ -1,23 +1,28 @@
 package net.minestom.server.collision;
 
-import net.minestom.server.utils.block.BlockIterator;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
-import net.minestom.server.entity.metadata.other.SlimeMeta;
+import net.minestom.server.entity.metadata.cube.SlimeMeta;
+import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @EnvTest
 public class EntityBlockPhysicsIntegrationTest {
@@ -650,13 +655,6 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEqualsPoint(new Pos(0.7, 42, 0), res.newPosition());
     }
 
-    @Test
-    public void tmp(Env env) {
-        BoundingBox boundingBox = new BoundingBox(3,2.8,3);
-        Vec velocity = new Vec(1,3,5);
-        Pos entityPosition = new Pos(0,0,0);
-    }
-
     // Checks C include all checks for crossing one intermediate block (3 block checks)
     @Test
     public void entityPhysicsSmallMoveC0(Env env) {
@@ -974,7 +972,7 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, Vec.ZERO);
-        entity.teleport(res.newPosition());
+        entity.teleport(res.newPosition()).join();
         res = CollisionUtils.handlePhysics(entity, Vec.ZERO, res);
         assertEqualsPoint(new Pos(5, 42, 5), res.newPosition());
     }
@@ -993,7 +991,7 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, Vec.ZERO);
-        entity.teleport(res.newPosition());
+        entity.teleport(res.newPosition()).join();
         res = CollisionUtils.handlePhysics(entity, new Vec((distance - 1) * 16, 0, 0), res);
         assertEqualsPoint(new Pos(distance * 8 - 0.3, 42, 5), res.newPosition());
     }
@@ -1012,7 +1010,7 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec((distance - 1) * 16, 0, 0));
-        entity.teleport(res.newPosition());
+        entity.teleport(res.newPosition()).join();
         res = CollisionUtils.handlePhysics(entity, Vec.ZERO, res);
         assertEqualsPoint(new Pos(distance * 8 - 0.3, 42, 5), res.newPosition());
     }
@@ -1029,7 +1027,7 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, -0.4));
-        entity.teleport(res.newPosition());
+        entity.teleport(res.newPosition()).join();
         res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, -0.4), res);
 
         assertEqualsPoint(new Pos(0.5, 42.5, 0.487), res.newPosition());
@@ -1049,7 +1047,7 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, 10));
-        entity.teleport(res.newPosition());
+        entity.teleport(res.newPosition()).join();
         res = CollisionUtils.handlePhysics(entity, new Vec(0, -10, 0), res);
 
         assertEqualsPoint(new Pos(0, 40, 0.7), res.newPosition());
@@ -1069,16 +1067,16 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEquals(instance, entity.getInstance());
 
         PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, 10));
-        entity.teleport(res.newPosition());
+        entity.teleport(res.newPosition()).join();
         res = CollisionUtils.handlePhysics(entity, new Vec(0, -10, 0), res);
-        entity.teleport(res.newPosition());
+        entity.teleport(res.newPosition()).join();
 
         PhysicsResult lastPhysicsResult;
 
         for (int x = 0; x < 50; ++x) {
             lastPhysicsResult = res;
             res = CollisionUtils.handlePhysics(entity, new Vec(0, -1.7, 0), res);
-            entity.teleport(res.newPosition());
+            entity.teleport(res.newPosition()).join();
 
             if (x > 10) assertSame(lastPhysicsResult, res, "Physics result not cached");
         }
@@ -1092,7 +1090,7 @@ public class EntityBlockPhysicsIntegrationTest {
         instance.setBlock(0, 42, 0, Block.STONE);
 
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setInstance(instance, new Pos(0, 43.00001, 0));
+        entity.setInstance(instance, new Pos(0, 43.00001, 0)).join();
 
         var deltaPos = new Vec(0.0, -10, 0.0);
         var physicsResult = CollisionUtils.handlePhysics(entity, deltaPos, null);
@@ -1107,7 +1105,7 @@ public class EntityBlockPhysicsIntegrationTest {
         instance.setBlock(0, 42, 0, Block.STONE);
 
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setInstance(instance, new Pos(0, 43.5, 0));
+        entity.setInstance(instance, new Pos(0, 43.5, 0)).join();
 
         var deltaPos = new Vec(0.0, -10, 0.0);
         var physicsResult = CollisionUtils.handlePhysics(entity, deltaPos, null);
@@ -1117,12 +1115,191 @@ public class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
+    public void collisionShapePositionUsesBlockCoordinates(Env env) {
+        var instance = env.createFlatInstance();
+        var blockPosition = new BlockVec(-3, 42, 5);
+        instance.setBlock(blockPosition, Block.STONE);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(-2.5, 43.5, 5.5)).join();
+
+        var physicsResult = CollisionUtils.handlePhysics(entity, new Vec(0, -10, 0), null);
+
+        assertEquals(blockPosition, physicsResult.collisionShapePositions()[1]);
+    }
+
+    @Test
+    public void worldBorderCollidesWithCompleteBoundingBoxAndSlides(Env env) {
+        var instance = env.createFlatInstance();
+        instance.loadChunk(-1, -1).join();
+        instance.loadChunk(-1, 0).join();
+        instance.loadChunk(0, -1).join();
+        instance.loadChunk(0, 0).join();
+        var boundingBox = new BoundingBox(0.6, 1.8, 0.6);
+        var worldBorder = new WorldBorder(4, 0, 0, 0, 0);
+
+        var result = CollisionUtils.handlePhysics(instance, worldBorder, boundingBox,
+                new Pos(0, 42, 0), new Vec(3, 0, 1), null, false);
+
+        assertEquals(2, result.newPosition().x() + boundingBox.maxX(), Vec.EPSILON * 20);
+        assertEquals(1, result.newPosition().z(), Vec.EPSILON);
+        assertEquals(new Vec(0, 0, 1), result.newVelocity());
+        assertTrue(result.collisionX());
+        assertFalse(result.collisionY());
+        assertFalse(result.collisionZ());
+        assertTrue(result.hasCollision());
+        assertNotSame(BlockCollision.NO_COLLISION_POINTS, result.collisionPoints());
+        assertSame(BlockCollision.NO_COLLISION_SHAPES, result.collisionShapes());
+        assertSame(BlockCollision.NO_COLLISION_SHAPE_POSITIONS, result.collisionShapePositions());
+        assertNotNull(result.collisionPoints()[0]);
+    }
+
+    @Test
+    public void worldBorderUsesEverySideOfAnAsymmetricBoundingBox(Env env) {
+        var instance = env.createFlatInstance();
+        instance.loadChunk(-1, -1).join();
+        instance.loadChunk(-1, 0).join();
+        instance.loadChunk(0, -1).join();
+        instance.loadChunk(0, 0).join();
+        var boundingBox = new BoundingBox(new Vec(-0.2, 0, -0.4), new Vec(0.6, 1, 0.1));
+        var worldBorder = new WorldBorder(4, 0, 0, 0, 0);
+
+        record Case(Vec velocity, double expectedPosition, boolean xAxis) {}
+        for (var testCase : List.of(
+                new Case(new Vec(3, 0, 0), 1.4, true),
+                new Case(new Vec(-3, 0, 0), -1.8, true),
+                new Case(new Vec(0, 0, 3), 1.9, false),
+                new Case(new Vec(0, 0, -3), -1.6, false))) {
+            var result = CollisionUtils.handlePhysics(instance, worldBorder, boundingBox,
+                    new Pos(0, 42, 0), testCase.velocity(), null, false);
+
+            assertEquals(testCase.expectedPosition(),
+                    testCase.xAxis() ? result.newPosition().x() : result.newPosition().z(), Vec.EPSILON * 25);
+            assertEquals(testCase.xAxis(), result.collisionX());
+            assertEquals(!testCase.xAxis(), result.collisionZ());
+            assertTrue(worldBorder.inBounds(result.newPosition(), boundingBox));
+        }
+    }
+
+    @Test
+    public void worldBorderFreesABoxAlreadyPastTheWall(Env env) {
+        var instance = env.createFlatInstance();
+        instance.loadChunk(0, -1).join();
+        instance.loadChunk(0, 0).join();
+        var boundingBox = new BoundingBox(0.6, 1.8, 0.6);
+        var worldBorder = new WorldBorder(4, 0, 0, 0, 0);
+        // The box spans [1.6, 2.2] and already extends past the wall at x=2.
+        var start = new Pos(1.9, 42, 0);
+
+        var inward = CollisionUtils.handlePhysics(instance, worldBorder, boundingBox,
+                start, new Vec(-0.5, 0, 0), null, false);
+        assertEquals(1.4, inward.newPosition().x(), Vec.EPSILON);
+        assertFalse(inward.collisionX());
+
+        var outward = CollisionUtils.handlePhysics(instance, worldBorder, boundingBox,
+                start, new Vec(0.5, 0, 0), null, false);
+        assertEquals(2.4, outward.newPosition().x(), Vec.EPSILON);
+        assertFalse(outward.collisionX());
+    }
+
+    @Test
+    public void worldBorderDoesNotTrapABoxWiderThanTheBorder(Env env) {
+        var instance = env.createFlatInstance();
+        instance.loadChunk(-1, -1).join();
+        instance.loadChunk(-1, 0).join();
+        instance.loadChunk(0, -1).join();
+        instance.loadChunk(0, 0).join();
+        var boundingBox = new BoundingBox(4, 1, 4);
+        var worldBorder = new WorldBorder(2, 0, 0, 0, 0);
+
+        var result = CollisionUtils.handlePhysics(instance, worldBorder, boundingBox,
+                new Pos(0, 42, 0), new Vec(1, 0, 0), null, false);
+
+        assertEquals(1, result.newPosition().x(), Vec.EPSILON * 2);
+        assertFalse(result.hasCollision());
+    }
+
+    @Test
+    public void worldBorderOffCenterUsesBlockAlignedWalls(Env env) {
+        var instance = env.createFlatInstance();
+        instance.loadChunk(0, 0).join();
+        var boundingBox = new BoundingBox(0.6, 1.8, 0.6);
+        // Exact bounds [6.5, 9.5] on both axes with block aligned walls at 6 and 10.
+        var worldBorder = new WorldBorder(3, 8, 8, 0, 0);
+
+        var result = CollisionUtils.handlePhysics(instance, worldBorder, boundingBox,
+                new Pos(8.5, 42, 8), new Vec(3, 0, 0), null, false);
+
+        assertEquals(10, result.newPosition().x() + boundingBox.maxX(), Vec.EPSILON * 20);
+        assertTrue(result.collisionX());
+    }
+
+    @Test
+    public void simulateMovementWithoutPhysicsIgnoresWorldBorder(Env env) {
+        var instance = env.createFlatInstance();
+        instance.loadChunk(0, 0).join();
+        var boundingBox = new BoundingBox(0.6, 1.8, 0.6);
+        var worldBorder = new WorldBorder(4, 0, 0, 0, 0);
+        var aerodynamics = new Aerodynamics(0, 1, 1);
+
+        var result = PhysicsUtils.simulateMovement(new Pos(1.5, 42, 0.5), new Vec(2, 0, 0), boundingBox,
+                worldBorder, instance, aerodynamics, true, false, false, false, null);
+
+        assertEquals(3.5, result.newPosition().x(), Vec.EPSILON);
+        assertFalse(result.hasCollision());
+    }
+
+    @Test
+    public void worldBorderIgnoresEntitiesFarOutside(Env env) {
+        var instance = env.createFlatInstance();
+        instance.loadChunk(0, -1).join();
+        instance.loadChunk(0, 0).join();
+        var boundingBox = new BoundingBox(0.6, 1.8, 0.6);
+        var worldBorder = new WorldBorder(4, 0, 0, 0, 0);
+        // Walls at +-2 with a one block margin, so the border stops colliding beyond x=3.
+        var start = new Pos(3.5, 42, 0);
+
+        var outward = CollisionUtils.handlePhysics(instance, worldBorder, boundingBox,
+                start, new Vec(0.5, 0, 0), null, false);
+        assertEquals(4, outward.newPosition().x(), Vec.EPSILON);
+        assertFalse(outward.collisionX());
+
+        var inward = CollisionUtils.handlePhysics(instance, worldBorder, boundingBox,
+                start, new Vec(-0.5, 0, 0), null, false);
+        assertEquals(3, inward.newPosition().x(), Vec.EPSILON);
+        assertFalse(inward.collisionX());
+    }
+
+    @Test
+    public void worldBorderCornerCollidesOnBothAxes(Env env) {
+        var instance = env.createFlatInstance();
+        instance.loadChunk(-1, -1).join();
+        instance.loadChunk(-1, 0).join();
+        instance.loadChunk(0, -1).join();
+        instance.loadChunk(0, 0).join();
+        var boundingBox = new BoundingBox(0.6, 1.8, 0.6);
+        var worldBorder = new WorldBorder(4, 0, 0, 0, 0);
+
+        // Moving diagonally into a corner must hit one wall, slide, then hit the other.
+        var result = CollisionUtils.handlePhysics(instance, worldBorder, boundingBox,
+                new Pos(0, 42, 0), new Vec(3, 0, 3), null, false);
+
+        assertEquals(2, result.newPosition().x() + boundingBox.maxX(), Vec.EPSILON * 20);
+        assertEquals(2, result.newPosition().z() + boundingBox.maxZ(), Vec.EPSILON * 20);
+        assertEquals(Vec.ZERO, result.newVelocity());
+        assertTrue(result.collisionX());
+        assertTrue(result.collisionZ());
+        assertFalse(result.collisionY());
+        assertTrue(worldBorder.inBounds(result.newPosition(), boundingBox));
+    }
+
+    @Test
     public void entityPhysicsCacheTest(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 42, 0, Block.STONE);
 
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setInstance(instance, new Pos(0, 43.5, 0));
+        entity.setInstance(instance, new Pos(0, 43.5, 0)).join();
 
         var deltaPos = new Vec(0.0, -10, 0.0);
         var physicsResult = CollisionUtils.handlePhysics(entity, deltaPos, null);
@@ -1133,13 +1310,37 @@ public class EntityBlockPhysicsIntegrationTest {
         assertEqualsPoint(deltaPos, physicsResult.originalDelta());
 
         // Create a new instance of the physics result to simulate gravity or we will never cache because velocity would be zero.
-        var velocityFixedResult = new PhysicsResult(physicsResult.newPosition(), physicsResult.newVelocity().add(deltaPos), physicsResult.isOnGround(), physicsResult.collisionX(), physicsResult.collisionY(), physicsResult.collisionZ(), physicsResult.originalDelta(), physicsResult.collisionPoints(), physicsResult.collisionShapes(), physicsResult.collisionShapePositions(), physicsResult.hasCollision(), physicsResult.res(), false);
+        var velocityFixedResult = new PhysicsResult(physicsResult.newPosition(), physicsResult.newVelocity().add(deltaPos), physicsResult.isOnGround(), physicsResult.collisionX(), physicsResult.collisionY(), physicsResult.collisionZ(), physicsResult.originalDelta(), physicsResult.collisionPoints(), physicsResult.collisionShapes(), physicsResult.collisionShapePositions(), physicsResult.hasCollision(), physicsResult.collisionFraction());
 
         var physicsResult2 = CollisionUtils.handlePhysics(instance, entity.getChunk(),
                 entity.getBoundingBox(),
                 physicsResult.newPosition(), deltaPos,
                 velocityFixedResult, false);
 
-        assertTrue(physicsResult2.cached());
+        assertSame(velocityFixedResult, physicsResult2);
+
+        var physicsResult3 = PhysicsUtils.simulateMovement(
+                physicsResult.newPosition(), deltaPos, entity.getBoundingBox(),
+                instance.getWorldBorder(), instance, new Aerodynamics(0, 1, 1),
+                true, true, true, false, physicsResult);
+
+        assertSame(physicsResult, physicsResult3);
+    }
+
+    @Test
+    public void entityPhysicsCacheRejectsDifferentVelocity(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 42, 0, Block.STONE);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0, 43.5, 0)).join();
+
+        var previousResult = CollisionUtils.handlePhysics(entity, new Vec(0.25, -10, 0), null);
+        var currentResult = CollisionUtils.handlePhysics(instance, entity.getChunk(),
+                entity.getBoundingBox(), previousResult.newPosition(), new Vec(0, -10, 0),
+                previousResult, false);
+
+        assertNotSame(previousResult, currentResult);
+        assertEquals(Vec.ZERO, currentResult.newVelocity());
     }
 }

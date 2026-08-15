@@ -8,6 +8,8 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.entity.Player;
 
+import java.nio.charset.StandardCharsets;
+
 public class CookieCommand extends Command {
     public CookieCommand() {
         super("cookie");
@@ -30,7 +32,7 @@ public class CookieCommand extends Command {
             if (!(sender instanceof Player player)) return;
 
             String key = context.get(keyArg).asString();
-            byte[] value = String.join(" ", context.get(valueArg)).getBytes();
+            byte[] value = String.join(" ", context.get(valueArg)).getBytes(StandardCharsets.UTF_8);
 
             player.getPlayerConnection().storeCookie(key, value);
             player.sendMessage(key + " stored");
@@ -51,11 +53,11 @@ public class CookieCommand extends Command {
 
             String key = context.get(keyArg).asString();
 
-            player.getPlayerConnection().fetchCookie(key).thenAccept(value -> {
+            var _ = player.getPlayerConnection().fetchCookie(key).thenAccept(value -> {
                 if (value == null) {
                     player.sendMessage(key + ": null");
                 } else {
-                    player.sendMessage(key + ": " + new String(value));
+                    player.sendMessage(key + ": " + new String(value, StandardCharsets.UTF_8));
                 }
             });
         }

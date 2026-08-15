@@ -1,12 +1,26 @@
 package net.minestom.server.codec;
 
-import net.kyori.adventure.nbt.*;
+import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.ByteArrayBinaryTag;
+import net.kyori.adventure.nbt.ByteBinaryTag;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.DoubleBinaryTag;
+import net.kyori.adventure.nbt.EndBinaryTag;
+import net.kyori.adventure.nbt.FloatBinaryTag;
+import net.kyori.adventure.nbt.IntArrayBinaryTag;
+import net.kyori.adventure.nbt.IntBinaryTag;
+import net.kyori.adventure.nbt.ListBinaryTag;
+import net.kyori.adventure.nbt.LongArrayBinaryTag;
+import net.kyori.adventure.nbt.LongBinaryTag;
+import net.kyori.adventure.nbt.NumberBinaryTag;
+import net.kyori.adventure.nbt.ShortBinaryTag;
+import net.kyori.adventure.nbt.StringBinaryTag;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.AbstractList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @ApiStatus.Internal
 final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
@@ -104,6 +118,13 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     }
 
     @Override
+    public Result<Number> getNumber(BinaryTag value) {
+        return value instanceof NumberBinaryTag number
+                ? new Result.Ok<>(number.numberValue())
+                : new Result.Error<>("Not a number: " + value);
+    }
+
+    @Override
     public Result<String> getString(BinaryTag value) {
         return value instanceof StringBinaryTag string
                 ? new Result.Ok<>(string.value())
@@ -161,7 +182,7 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
             return new Result.Error<>("Not a compound: " + value);
         return new Result.Ok<>(new MapLike<>() {
             @Override
-            public Collection<String> keys() {
+            public Set<String> keys() {
                 return compoundTag.keySet();
             }
 
@@ -218,7 +239,7 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     public Result<byte[]> getByteArray(BinaryTag value) {
         return value instanceof ByteArrayBinaryTag byteArray
                 ? new Result.Ok<>(byteArray.value())
-                : new Result.Error<>("Not a byte array: " + value);
+                : Transcoder.super.getByteArray(value);
     }
 
     @Override
@@ -230,7 +251,7 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     public Result<int[]> getIntArray(BinaryTag value) {
         return value instanceof IntArrayBinaryTag intArray
                 ? new Result.Ok<>(intArray.value())
-                : new Result.Error<>("Not an int array: " + value);
+                : Transcoder.super.getIntArray(value);
     }
 
     @Override
@@ -242,7 +263,7 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     public Result<long[]> getLongArray(BinaryTag value) {
         return value instanceof LongArrayBinaryTag longArray
                 ? new Result.Ok<>(longArray.value())
-                : new Result.Error<>("Not a long array: " + value);
+                : Transcoder.super.getLongArray(value);
     }
 
     @Override
@@ -253,7 +274,7 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     @Override
     public <O> Result<O> convertTo(Transcoder<O> coder, BinaryTag value) {
         return switch (value) {
-            case EndBinaryTag ignored -> new Result.Ok<>(coder.createNull());
+            case EndBinaryTag _ -> new Result.Ok<>(coder.createNull());
             case ByteBinaryTag byteTag -> new Result.Ok<>(coder.createByte(byteTag.byteValue()));
             case ShortBinaryTag shortTag -> new Result.Ok<>(coder.createShort(shortTag.shortValue()));
             case IntBinaryTag intTag -> new Result.Ok<>(coder.createInt(intTag.intValue()));

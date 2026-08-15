@@ -12,14 +12,15 @@ import net.minestom.server.utils.entity.EntityFinder;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.minestom.server.command.builder.arguments.ArgumentType.Entity;
 import static net.minestom.server.command.builder.arguments.ArgumentType.Integer;
-import static net.minestom.server.command.builder.arguments.ArgumentType.*;
+import static net.minestom.server.command.builder.arguments.ArgumentType.ItemStack;
 
 public class GiveCommand extends Command {
     public GiveCommand() {
         super("give");
 
-        setDefaultExecutor((sender, context) ->
+        setDefaultExecutor((sender, _) ->
                 sender.sendMessage(Component.text("Usage: /give <target> <item> [<count>]")));
 
         addSyntax((sender, context) -> {
@@ -43,8 +44,7 @@ public class GiveCommand extends Command {
 
             final List<Entity> targets = entityFinder.find(sender);
             for (Entity target : targets) {
-                if (target instanceof Player) {
-                    Player player = (Player) target;
+                if (target instanceof Player player) {
                     player.getInventory().addItemStacks(itemStacks, TransactionOption.ALL);
                 }
             }

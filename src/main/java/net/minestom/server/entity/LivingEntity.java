@@ -29,9 +29,11 @@ import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.component.AttributeList;
 import net.minestom.server.network.ConnectionState;
-import net.minestom.server.network.packet.server.LazyPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.packet.server.play.CollectItemPacket;
+import net.minestom.server.network.packet.server.play.DamageEventPacket;
+import net.minestom.server.network.packet.server.play.EntityAnimationPacket;
+import net.minestom.server.network.packet.server.play.EntityAttributesPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.scoreboard.Team;
@@ -45,12 +47,19 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.time.Duration;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class LivingEntity extends Entity implements EquipmentHandler {
 
-    private static final AttributeModifier SPRINTING_SPEED_MODIFIER = new AttributeModifier(Key.key("sprinting"), 0.3, AttributeOperation.ADD_MULTIPLIED_TOTAL);
+    private static final AttributeModifier SPRINTING_SPEED_MODIFIER = new AttributeModifier(Key.key("sprinting"), 0.3F, AttributeOperation.ADD_MULTIPLIED_TOTAL);
 
     /**
      * IDs of modifiers that are protected from removal by methods like {@link AttributeInstance#clearModifiers()}.
@@ -450,7 +459,11 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public AttributeInstance getAttribute(Attribute attribute) {
         return attributeModifiers.computeIfAbsent(attribute.name(),
-                s -> new AttributeInstance(attribute, this::onAttributeChanged));
+                _ -> {
+                    double defaultValue = entityType.defaultAttributes()
+                            .getOrDefault(attribute, attribute.defaultValue());
+                    return new AttributeInstance(attribute, defaultValue, new ArrayList<>(), this::onAttributeChanged);
+                });
     }
 
     /**
@@ -480,7 +493,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
                 new EntityAttributesPacket.Property(
                         attributeInstance.attribute(),
                         attributeInstance.getBaseValue(),
-                        attributeInstance.getModifiers())
+                        attributeInstance.modifiers())
         ));
         if (self) {
             sendPacketToViewersAndSelf(propertiesPacket);
@@ -497,7 +510,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public double getAttributeValue(Attribute attribute) {
         AttributeInstance instance = attributeModifiers.get(attribute.name());
-        return (instance != null) ? instance.getValue() : attribute.defaultValue();
+        if (instance != null) return instance.getValue();
+        return entityType.defaultAttributes().getOrDefault(attribute, attribute.defaultValue());
     }
 
     /**
@@ -534,16 +548,16 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @return true if this entity needs to send attributes, false otherwise
      */
     protected boolean shouldSendAttributes() {
-        return this.entityType.registry().shouldSendAttributes();
+        return this.entityType.shouldSendAttributes();
     }
 
     @Override
     public void updateNewViewer(Player player) {
         super.updateNewViewer(player);
-        player.sendPacket(new LazyPacket(this::getEquipmentsPacket));
+        player.sendPacket(this.getEquipmentsPacket());
 
         if (shouldSendAttributes())
-            player.sendPacket(new LazyPacket(this::getPropertiesPacket));
+            player.sendPacket(this.getPropertiesPacket());
     }
 
     @Override
@@ -661,7 +675,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     protected EntityAttributesPacket getPropertiesPacket() {
         List<EntityAttributesPacket.Property> properties = new ArrayList<>();
         for (AttributeInstance instance : attributeModifiers.values()) {
-            properties.add(new EntityAttributesPacket.Property(instance.attribute(), instance.getBaseValue(), instance.getModifiers()));
+            properties.add(new EntityAttributesPacket.Property(instance.attribute(), instance.getBaseValue(), instance.modifiers()));
         }
         return new EntityAttributesPacket(getEntityId(), properties);
     }
@@ -702,7 +716,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         Iterator<Point> it = new BlockIterator(this, maxDistance);
         while (it.hasNext()) {
             final Point position = it.next();
-            if (!getInstance().getBlock(position).isAir()) return position;
+            if (!getInstance().getBlock(position).air()) return position;
         }
         return null;
     }

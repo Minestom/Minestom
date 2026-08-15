@@ -10,9 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class InstanceContainerTest {
 
-    static {
-    }
-
     @Test
     public void copyPreservesTag() {
         var tag = Tag.String("test");

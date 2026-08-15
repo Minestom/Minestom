@@ -1,6 +1,16 @@
 package net.minestom.server.instance.palette;
 
-import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Fork;
+import org.openjdk.jmh.annotations.Measurement;
+import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.Param;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.Setup;
+import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
 import org.openjdk.jmh.infra.Blackhole;
 
 import java.util.Random;
@@ -33,17 +43,17 @@ public class PaletteGetPresentBenchmark {
 
     @Benchmark
     public void readAll(Blackhole blackHole) {
-        palette.getAll((x, y, z, value) -> blackHole.consume(value));
+        palette.getAll((_, _, _, value) -> blackHole.consume(value));
     }
 
     @Benchmark
     public void readAllPresent(Blackhole blackHole) {
-        palette.getAllPresent((x, y, z, value) -> blackHole.consume(value));
+        palette.getAllPresent((_, _, _, value) -> blackHole.consume(value));
     }
 
     @Benchmark
     public void readAllPresentAlt(Blackhole blackHole) {
-        palette.getAll((x, y, z, value) -> {
+        palette.getAll((_, _, _, value) -> {
             if (value != 0) {
                 blackHole.consume(value);
             }

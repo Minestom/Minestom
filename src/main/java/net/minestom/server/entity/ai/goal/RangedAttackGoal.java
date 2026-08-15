@@ -10,6 +10,7 @@ import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
@@ -29,7 +30,7 @@ public class RangedAttackGoal extends GoalSelector {
     private ProjectileGenerator projectileGenerator;
 
     private boolean stop;
-    private Entity cachedTarget;
+    private @Nullable Entity cachedTarget;
 
     /**
      * @param entityCreature the entity to add the goal to.
@@ -76,7 +77,7 @@ public class RangedAttackGoal extends GoalSelector {
     public void setProjectileGenerator(Function<Entity, EntityProjectile> projectileGenerator) {
         this.projectileGenerator = (shooter, target, pow, spr) -> {
             EntityProjectile projectile = projectileGenerator.apply(shooter);
-            projectile.setInstance(shooter.getInstance(), shooter.getPosition().add(0D, shooter.getEyeHeight(), 0D));
+            projectile.setInstance(shooter.getInstance(), shooter.getPosition().add(0D, shooter.getEyeHeight(), 0D)).join();
             projectile.shoot(target, pow, spr);
         };
     }

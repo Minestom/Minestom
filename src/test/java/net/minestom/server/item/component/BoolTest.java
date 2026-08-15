@@ -8,7 +8,7 @@ import java.util.Map;
 
 import static java.util.Map.entry;
 
-public class BoolTest extends AbstractItemComponentTest<Boolean> {
+public class BoolTest extends AbstractItemComponentRegistriesTest<Boolean> {
     // This is not a test, but it creates a compile error if the component type is changed away from boolean,
     // as a reminder that tests should be added for that new component type.
     private static final List<DataComponent<Boolean>> SHARED_COMPONENTS = List.of(

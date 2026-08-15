@@ -10,7 +10,11 @@ import net.minestom.server.command.builder.condition.CommandCondition;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -65,8 +69,8 @@ record GraphImpl(NodeImpl root) implements Graph {
         }
     }
 
-    record NodeImpl(Argument<?> argument, ExecutionImpl execution, List<Graph.Node> next) implements Graph.Node {
-        NodeImpl(Argument<?> argument, ExecutionImpl execution, List<Graph.Node> next) {
+    record NodeImpl(Argument<?> argument, @Nullable ExecutionImpl execution, List<Graph.Node> next) implements Graph.Node {
+        NodeImpl(Argument<?> argument, @Nullable ExecutionImpl execution, List<Graph.Node> next) {
             this.argument = argument;
             this.execution = execution;
             this.next = next.stream().sorted(nodePriority).toList();
@@ -102,7 +106,7 @@ record GraphImpl(NodeImpl root) implements Graph {
 
     record ExecutionImpl(
             @UnknownNullability Predicate<CommandSender> predicate,
-            @UnknownNullability CommandExecutor defaultExecutor,
+            @Nullable CommandExecutor defaultExecutor,
             @Nullable CommandExecutor globalListener,
             @Nullable CommandExecutor executor,
             @Nullable CommandCondition condition
@@ -152,7 +156,7 @@ record GraphImpl(NodeImpl root) implements Graph {
         ExecutionImpl execution;
         final Map<Argument<?>, ConversionNode> nextMap;
 
-        public ConversionNode(Argument<?> argument, ExecutionImpl execution, Map<Argument<?>, ConversionNode> nextMap) {
+        ConversionNode(Argument<?> argument, @Nullable ExecutionImpl execution, Map<Argument<?>, ConversionNode> nextMap) {
             this.argument = argument;
             this.execution = execution;
             this.nextMap = nextMap;

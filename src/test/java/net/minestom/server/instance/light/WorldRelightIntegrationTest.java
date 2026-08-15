@@ -16,7 +16,7 @@ import static net.minestom.server.instance.BlockLightMergeIntegrationTest.assert
 
 @EnvTest
 public class WorldRelightIntegrationTest {
-    private Instance createLightingInstance(ServerProcess process) {
+    private static Instance createLightingInstance(ServerProcess process) {
         var instance = process.instance().createInstanceContainer();
         instance.setGenerator(unit -> {
             unit.modifier().fillHeight(39, 40, Block.STONE);
@@ -63,6 +63,52 @@ public class WorldRelightIntegrationTest {
                 entry(new Vec(-1, 37, 0), 3),
                 entry(new Vec(-8, 37, -8), 0)
         );
+        assertLightInstance(instance, expectedLights);
+    }
+
+    @Test
+    public void testJackOLantern(Env env) {
+        Instance instance = createLightingInstance(env.process());
+        instance.setChunkSupplier(LightingChunk::new);
+
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                instance.loadChunk(x, z).join();
+            }
+        }
+
+        instance.setBlock(10, 60, 10, Block.JACK_O_LANTERN);
+        LightingChunk.relight(instance, instance.getChunks());
+
+        var expectedLights = Map.ofEntries(
+                entry(new Vec(11, 60, 10), 14),
+                entry(new Vec(10, 61, 10), 14),
+                entry(new Vec(15, 60, 10), 10)
+        );
+
+        assertLightInstance(instance, expectedLights);
+    }
+
+    @Test
+    public void testRedstoneLamp(Env env) {
+        Instance instance = createLightingInstance(env.process());
+        instance.setChunkSupplier(LightingChunk::new);
+
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                instance.loadChunk(x, z).join();
+            }
+        }
+
+        instance.setBlock(10, 60, 10, Block.REDSTONE_LAMP.withProperty("lit", "true"));
+        LightingChunk.relight(instance, instance.getChunks());
+
+        var expectedLights = Map.ofEntries(
+                entry(new Vec(11, 60, 10), 14),
+                entry(new Vec(10, 61, 10), 14),
+                entry(new Vec(15, 60, 10), 10)
+        );
+
         assertLightInstance(instance, expectedLights);
     }
 }

@@ -11,7 +11,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
+import static net.minestom.server.network.NetworkBuffer.FLOAT;
+import static net.minestom.server.network.NetworkBuffer.INT;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record TradeListPacket(int windowId, List<Trade> trades,
                               int villagerLevel, int experience,

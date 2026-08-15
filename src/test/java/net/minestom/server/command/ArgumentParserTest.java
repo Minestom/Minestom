@@ -24,7 +24,7 @@ public class ArgumentParserTest {
         assertParserEquals("Word<example>", ArgumentType.Word("example"));
         assertParserEquals("StringArray<example>", ArgumentType.StringArray("example"));
         assertParserEquals("Command<example>", ArgumentType.Command("example"));
-        assertParserEquals("Color<example>", ArgumentType.Color("example"));
+        assertParserEquals("Color<example>", ArgumentType.TeamColor("example"));
         assertParserEquals("Time<example>", ArgumentType.Time("example"));
         assertParserEquals("Particle<example>", ArgumentType.Particle("example"));
         assertParserEquals("ResourceLocation<example>", ArgumentType.ResourceLocation("example"));

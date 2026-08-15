@@ -106,7 +106,7 @@ public class CommandSyntax {
     public String getSyntaxString() {
         StringBuilder builder = new StringBuilder();
         for (Argument<?> argument : args) {
-            builder.append(argument.toString())
+            builder.append(argument)
                     .append(StringUtils.SPACE);
         }
         return builder.toString().trim();

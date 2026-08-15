@@ -9,7 +9,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.IntUnaryOperator;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BYTE;
+import static net.minestom.server.network.NetworkBuffer.LONG;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT_ARRAY;
 
 /**
  * Palette is a data storage with three storage models used to store blocks and biomes
@@ -153,6 +156,7 @@ public sealed interface Palette permits PaletteImpl {
      * Attempts to optimize the current {@link Palette}
      * <br>
      * If plausible the only optimization will be performed is converting to a single value regardless of {@link Optimization}
+     *
      * @param focus the optimization focus
      */
     void optimize(Optimization focus);
@@ -252,6 +256,8 @@ public sealed interface Palette permits PaletteImpl {
             @Override
             public Palette read(NetworkBuffer buffer) {
                 final byte bitsPerEntry = buffer.read(BYTE);
+                if (bitsPerEntry != 0 && (bitsPerEntry < minIndirect || (bitsPerEntry > maxIndirect && bitsPerEntry != directBits)))
+                    throw new IllegalArgumentException("Invalid bitsPerEntry: " + bitsPerEntry);
                 PaletteImpl result = new PaletteImpl((byte) dimension, (byte) minIndirect, (byte) maxIndirect, (byte) directBits);
                 result.bitsPerEntry = bitsPerEntry;
                 if (bitsPerEntry == 0) {
@@ -259,11 +265,15 @@ public sealed interface Palette permits PaletteImpl {
                     result.count = buffer.read(VAR_INT);
                     return result;
                 }
+                int[] palette = null;
                 if (result.hasPalette()) {
                     // Indirect palette
-                    final int[] palette = buffer.read(VAR_INT_ARRAY);
+                    palette = buffer.read(VAR_INT_ARRAY);
+                    if (palette.length == 0 || palette.length > Palettes.maxPaletteSize(bitsPerEntry))
+                        throw new IllegalArgumentException("Invalid palette length: " + palette.length);
                     result.paletteToValueList = new IntArrayList(palette);
                     result.valueToPaletteMap = new Int2IntOpenHashMap(palette.length);
+                    result.valueToPaletteMap.defaultReturnValue(-1);
                     for (int i = 0; i < palette.length; i++) {
                         result.valueToPaletteMap.put(palette[i], i);
                     }
@@ -271,6 +281,7 @@ public sealed interface Palette permits PaletteImpl {
                 final long[] data = new long[Palettes.arrayLength(dimension, bitsPerEntry)];
                 for (int i = 0; i < data.length; i++) data[i] = buffer.read(LONG);
                 result.values = data;
+                if (palette != null) Palettes.validateIndices(bitsPerEntry, dimension, data, palette.length);
                 result.recount();
                 return result;
             }

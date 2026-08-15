@@ -1,12 +1,16 @@
 package net.minestom.server.codec;
 
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.AbstractList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @ApiStatus.Internal
 final class TranscoderJsonImpl implements Transcoder<JsonElement> {
@@ -102,6 +106,18 @@ final class TranscoderJsonImpl implements Transcoder<JsonElement> {
     }
 
     @Override
+    public Result<Number> getNumber(JsonElement value) {
+        if (value instanceof JsonPrimitive primitive && primitive.isNumber())
+            return new Result.Ok<>(primitive.getAsNumber());
+        return new Result.Error<>("Not a number: " + value);
+    }
+
+    @Override
+    public JsonElement createNumber(Number value) {
+        return new JsonPrimitive(value);
+    }
+
+    @Override
     public Result<String> getString(JsonElement value) {
         if (!(value instanceof JsonPrimitive primitive))
             return new Result.Error<>("Not a string: " + value);
@@ -158,7 +174,7 @@ final class TranscoderJsonImpl implements Transcoder<JsonElement> {
             return new Result.Error<>("Not an object: " + value);
         return new Result.Ok<>(new MapLike<>() {
             @Override
-            public Collection<String> keys() {
+            public Set<String> keys() {
                 return object.keySet();
             }
 
@@ -244,7 +260,7 @@ final class TranscoderJsonImpl implements Transcoder<JsonElement> {
                     new Result.Ok<>(coder.createDouble(primitive.getAsDouble()));
             case JsonPrimitive primitive when primitive.isString() ->
                     new Result.Ok<>(coder.createString(primitive.getAsString()));
-            case JsonNull jsonNull -> new Result.Ok<>(coder.createNull());
+            case JsonNull _ -> new Result.Ok<>(coder.createNull());
             default -> new Result.Error<>("Unknown JSON type: " + value);
         };
     }

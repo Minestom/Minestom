@@ -45,7 +45,7 @@ public enum ArgumentParserType implements StaticProtocolObject<ArgumentParserTyp
 
     ITEM_PREDICATE("item_predicate"),
 
-    COLOR("color"),
+    TEAM_COLOR("team_color"),
 
     HEX_COLOR("hex_color"),
 

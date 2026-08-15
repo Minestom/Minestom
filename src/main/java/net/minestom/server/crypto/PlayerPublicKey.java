@@ -5,8 +5,11 @@ import net.minestom.server.network.NetworkBufferTemplate;
 
 import java.security.PublicKey;
 import java.time.Instant;
+import java.util.Arrays;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BYTE_ARRAY;
+import static net.minestom.server.network.NetworkBuffer.INSTANT_MS;
+import static net.minestom.server.network.NetworkBuffer.PUBLIC_KEY;
 
 /**
  * Player's public key used to sign chat messages
@@ -18,4 +21,22 @@ public record PlayerPublicKey(Instant expiresAt, PublicKey publicKey, byte[] sig
             BYTE_ARRAY, PlayerPublicKey::signature,
             PlayerPublicKey::new
     );
+
+    public PlayerPublicKey {
+        signature = signature.clone();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof PlayerPublicKey(Instant at, PublicKey key, byte[] signature1))) return false;
+        return Arrays.equals(signature(), signature1) && expiresAt().equals(at) && publicKey().equals(key);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = expiresAt().hashCode();
+        result = 31 * result + publicKey().hashCode();
+        result = 31 * result + Arrays.hashCode(signature());
+        return result;
+    }
 }

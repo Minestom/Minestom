@@ -11,9 +11,19 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.time.Duration;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 @EnvTest
 public class GeneratorIntegrationTest {
@@ -127,11 +137,64 @@ public class GeneratorIntegrationTest {
         var instance = env.createEmptyInstance();
         DynamicChunk chunk = (DynamicChunk) instance.loadChunk(0, 0).join();
         Generator generator = unit -> {
-            chunk.assertLock();
+            chunk.assertWriteLock();
             unit.modifier().fill(Block.GRASS_BLOCK);
         };
         instance.generateChunk(0, 0, generator).join();
         assertEquals(Block.GRASS_BLOCK, instance.getBlock(0, 0, 0));
+    }
+
+    @Test
+    public void chunkReadLockCannotUpgradeToWriteLock(Env env) {
+        assumeTrue(Chunk.class.desiredAssertionStatus(), "Chunk lock contract checks require assertions");
+        var instance = env.createEmptyInstance();
+        var chunk = instance.loadChunk(0, 0).join();
+        chunk.lockReadLock();
+        try {
+            assertThrows(AssertionError.class, chunk::lockWriteLock);
+        } finally {
+            chunk.unlockReadLock();
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    public void loaderExceptionCompletesChunkFuture(boolean parallel, Env env) {
+        var exception = new RuntimeException("loader failure");
+        env.process().exception().setExceptionHandler(_ -> {
+        });
+        ChunkLoader chunkLoader = new ChunkLoader() {
+            @Override
+            public Chunk loadChunk(Instance instance, int chunkX, int chunkZ) {
+                throw exception;
+            }
+
+            @Override
+            public void saveChunk(Chunk chunk) {
+            }
+
+            @Override
+            public boolean supportsParallelLoading() {
+                return parallel;
+            }
+        };
+        var instance = env.createEmptyInstance(chunkLoader);
+
+        var thrown = assertThrows(CompletionException.class, () -> instance.loadChunk(0, 0).join());
+        assertSame(exception, thrown.getCause());
+        assertNull(instance.getChunk(0, 0));
+    }
+
+    @Test
+    public void concurrentChunkLoadsComplete(Env env) {
+        var instance = env.createEmptyInstance();
+        CompletableFuture<?>[] futures = new CompletableFuture<?>[64];
+        for (int i = 0; i < futures.length; i++) {
+            futures[i] = instance.loadChunk(i & 7, i >> 3);
+        }
+
+        assertTimeoutPreemptively(Duration.ofSeconds(5), () -> CompletableFuture.allOf(futures).join());
+        assertEquals(futures.length, instance.getChunks().size());
     }
 
     @Test

@@ -9,12 +9,8 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 public class SalmonMeta extends AbstractFishMeta {
-    public SalmonMeta(Entity entity, MetadataHolder metadata) {
+    public SalmonMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -58,9 +54,6 @@ public class SalmonMeta extends AbstractFishMeta {
 
         public static final NetworkBuffer.Type<Size> NETWORK_TYPE = NetworkBuffer.Enum(Size.class);
         public static final Codec<Size> CODEC = Codec.Enum(Size.class);
-
-        private static final Map<String, Size> BY_ID = Arrays.stream(values())
-                .collect(Collectors.toMap(Size::id, (size) -> size));
 
         private final String id;
 

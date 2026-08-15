@@ -7,8 +7,8 @@ public class CommandResult {
 
     protected Type type = Type.UNKNOWN;
     protected String input;
-    protected ParsedCommand parsedCommand;
-    protected CommandData commandData;
+    protected @Nullable ParsedCommand parsedCommand;
+    protected @Nullable CommandData commandData;
 
     public Type getType() {
         return type;
@@ -54,10 +54,8 @@ public class CommandResult {
     }
 
     @ApiStatus.Internal
-    public static CommandResult of(Type type, String input, ParsedCommand parsedCommand, CommandData data) {
-        CommandResult result = new CommandResult();
-        result.type = type;
-        result.input = input;
+    public static CommandResult of(Type type, String input, ParsedCommand parsedCommand, @Nullable CommandData data) {
+        CommandResult result = of(type, input);
         result.parsedCommand = parsedCommand;
         result.commandData = data;
         return result;

@@ -36,7 +36,7 @@ public interface AudienceProvider<A> {
      * @param filter the predicate
      * @return all players matching the predicate
      */
-    A players(Predicate<Player> filter);
+    A players(Predicate<? super Player> filter);
 
     /**
      * Gets the console as an audience.
@@ -78,7 +78,7 @@ public interface AudienceProvider<A> {
      * @param filter the predicate
      * @return all custom audience members stored using the key
      */
-    default A custom(Keyed keyed, Predicate<Audience> filter) {
+    default A custom(Keyed keyed, Predicate<? super Audience> filter) {
         return this.custom(keyed.key(), filter);
     }
 
@@ -90,7 +90,7 @@ public interface AudienceProvider<A> {
      * @param filter the predicate
      * @return all custom audience members stored using the key
      */
-    A custom(Key key, Predicate<Audience> filter);
+    A custom(Key key, Predicate<? super Audience> filter);
 
     /**
      * Gets all custom audience members.
@@ -105,7 +105,7 @@ public interface AudienceProvider<A> {
      * @param filter the predicate
      * @return all matching custom audience members
      */
-    A customs(Predicate<Audience> filter);
+    A customs(Predicate<? super Audience> filter);
 
     /**
      * Gets all audience members that match the given predicate.
@@ -113,7 +113,7 @@ public interface AudienceProvider<A> {
      * @param filter the predicate
      * @return all matching audience members
      */
-    A all(Predicate<Audience> filter);
+    A all(Predicate<? super Audience> filter);
 
     /**
      * Gets the audience registry used to register custom audiences.

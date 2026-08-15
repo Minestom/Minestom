@@ -9,7 +9,16 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -21,7 +30,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
 
     static final Object GLOBAL_CHILD_LOCK = new Object();
 
-    private final Map<Class, Handle<T>> handleMap = new ConcurrentHashMap<>();
+    private final Map<Class<?>, Handle<T>> handleMap = new ConcurrentHashMap<>();
     final Map<Class<? extends T>, ListenerEntry<T>> listenerMap = new ConcurrentHashMap<>();
     final Set<EventNodeImpl<T>> children = new CopyOnWriteArraySet<>();
 
@@ -36,10 +45,10 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
 
     final String name;
     final EventFilter<T, ?> filter;
-    final BiPredicate<T, Object> predicate;
+    final @Nullable BiPredicate<T, Object> predicate;
     final Class<T> eventType;
     volatile int priority;
-    volatile EventNodeImpl<? super T> parent;
+    volatile @Nullable EventNodeImpl<? super T> parent;
 
     EventNodeImpl(String name,
                   EventFilter<T, ?> filter,
@@ -58,6 +67,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <E extends T> List<EventNode<E>> findChildren(String name, Class<E> eventType) {
         synchronized (GLOBAL_CHILD_LOCK) {
             final Set<EventNode<T>> children = getChildren();
@@ -73,6 +83,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
         }
     }
 
+    @Override
     @Contract(pure = true)
     public Set<EventNode<T>> getChildren() {
         return Collections.unmodifiableSet(children);
@@ -110,6 +121,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public EventNode<T> addChild(EventNode<? extends T> child) {
         synchronized (GLOBAL_CHILD_LOCK) {
             final var childImpl = (EventNodeImpl<? extends T>) child;
@@ -135,6 +147,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public EventNode<T> addListener(EventListener<? extends T> listener) {
         synchronized (GLOBAL_CHILD_LOCK) {
             final var eventType = listener.eventType();
@@ -157,6 +170,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <E extends T, H> EventNode<E> map(H value, EventFilter<E, H> filter) {
         EventNodeImpl<E> node;
         synchronized (GLOBAL_CHILD_LOCK) {
@@ -186,17 +200,20 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void register(EventBinding<? extends T> binding) {
         synchronized (GLOBAL_CHILD_LOCK) {
             for (var eventType : binding.eventTypes()) {
+                @SuppressWarnings("unchecked")
                 ListenerEntry<T> entry = getEntry((Class<? extends T>) eventType);
-                final boolean added = entry.bindingConsumers.add((Consumer<T>) binding.consumer(eventType));
+                @SuppressWarnings("unchecked") final boolean added = entry.bindingConsumers.add((Consumer<T>) binding.consumer(eventType));
                 if (added) invalidateEvent((Class<? extends T>) eventType);
             }
         }
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void unregister(EventBinding<? extends T> binding) {
         synchronized (GLOBAL_CHILD_LOCK) {
             for (var eventType : binding.eventTypes()) {
@@ -286,6 +303,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void invalidateEvent(Class<? extends T> eventClass) {
         forTargetEvents(eventClass, type -> {
             Handle<T> handle = handleMap.computeIfAbsent(type,
@@ -308,11 +326,11 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     private ListenerEntry<T> getEntry(Class<? extends T> type) {
-        return listenerMap.computeIfAbsent(type, aClass -> new ListenerEntry<>());
+        return listenerMap.computeIfAbsent(type, _ -> new ListenerEntry<>());
     }
 
     private static boolean equals(EventNode<?> node, String name, Class<?> eventType) {
-        return node.getName().equals(name) && eventType.isAssignableFrom((node.getEventType()));
+        return node.getName().equals(name) && eventType.isAssignableFrom(node.getEventType());
     }
 
     private static void forTargetEvents(Class<?> type, Consumer<Class<?>> consumer) {
@@ -334,7 +352,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     @SuppressWarnings("unchecked")
     final class Handle<E extends Event> implements ListenerHandle<E> {
         private final Class<E> eventType;
-        private Consumer<E> listener = null;
+        private @Nullable Consumer<E> listener = null;
         private volatile boolean updated;
 
         Handle(Class<E> eventType) {
@@ -392,7 +410,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
             // Children
             final Consumer<E>[] childrenListeners = node.children.stream()
                     .filter(child -> child.eventType.isAssignableFrom(eventType)) // Invalid event type
-                    .sorted(Comparator.comparing(EventNode::getPriority))
+                    .sorted(Comparator.comparingInt(EventNode::getPriority))
                     .map(child -> ((Handle<E>) child.getHandle(eventType)).updatedListener())
                     .filter(Objects::nonNull)
                     .toArray(Consumer[]::new);

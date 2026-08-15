@@ -1,6 +1,5 @@
 package net.minestom.server.instance;
 
-import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
@@ -9,7 +8,12 @@ import org.junit.jupiter.api.Test;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class EntityTrackerTest {
     @Test
@@ -144,7 +148,7 @@ public class EntityTrackerTest {
         tracker.register(ent2, new Vec(5, 0, 0), EntityTracker.Target.ENTITIES, updater);
         tracker.register(ent3, new Vec(50, 0, 0), EntityTracker.Target.ENTITIES, updater);
 
-        tracker.nearbyEntities(Vec.ZERO, 4, EntityTracker.Target.ENTITIES, entity -> fail("No entity should be nearby"));
+        tracker.nearbyEntities(Vec.ZERO, 4, EntityTracker.Target.ENTITIES, _ -> fail("No entity should be nearby"));
 
         tracker.register(ent1, Vec.ZERO, EntityTracker.Target.ENTITIES, updater);
 

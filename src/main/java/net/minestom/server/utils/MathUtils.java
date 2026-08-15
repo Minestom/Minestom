@@ -43,7 +43,7 @@ public final class MathUtils {
         // +45f gives a 90° angle for the direction (-1° and 1° are towards the same direction)
         int directionIndex = (int) Math.floor(((yawInDegrees + 45f) / 90f));
         if (directionIndex < 0) {
-            directionIndex = (-directionIndex) % Direction.HORIZONTAL.length;
+            directionIndex = -directionIndex % Direction.HORIZONTAL.length;
             directionIndex = Direction.HORIZONTAL.length - directionIndex;
         }
         directionIndex %= Direction.HORIZONTAL.length;
@@ -83,15 +83,15 @@ public final class MathUtils {
     }
 
     public static int clamp(int value, int min, int max) {
-        return Math.min(Math.max(value, min), max);
+        return Math.clamp(value, min, max);
     }
 
     public static float clamp(float value, float min, float max) {
-        return Math.min(Math.max(value, min), max);
+        return Math.clamp(value, min, max);
     }
 
     public static double clamp(double value, double min, double max) {
-        return Math.min(Math.max(value, min), max);
+        return Math.clamp(value, min, max);
     }
 
     public static double mod(final double a, final double b) {

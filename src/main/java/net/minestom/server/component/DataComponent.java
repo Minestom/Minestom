@@ -3,6 +3,8 @@ package net.minestom.server.component;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.Decoder;
+import net.minestom.server.codec.Encoder;
 import net.minestom.server.item.enchant.EffectComponent;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
@@ -20,10 +22,10 @@ import java.util.function.UnaryOperator;
  * @see net.minestom.server.component.DataComponent
  * @see EffectComponent
  */
-public sealed interface DataComponent<T> extends StaticProtocolObject<DataComponent<T>>, Codec<T> permits DataComponentImpl {
+public sealed interface DataComponent<T> extends StaticProtocolObject<DataComponent<T>>, Encoder<T>, Decoder<T> permits DataComponentImpl {
 
     NetworkBuffer.Type<DataComponent<?>> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(DataComponent::fromId, DataComponent::id);
-    Codec<DataComponent<?>> CODEC = Codec.STRING.transform(DataComponent::fromKey, DataComponent::name);
+    Codec<DataComponent<?>> CODEC = Codec.KEY.transform(DataComponent::fromKey, DataComponent::key);
 
     NetworkBuffer.Type<DataComponentMap> MAP_NETWORK_TYPE = DataComponentMap.networkType(DataComponent::fromId);
     Codec<DataComponentMap> MAP_NBT_TYPE = DataComponentMap.codec(DataComponent::fromId, DataComponent::fromKey);
@@ -55,6 +57,8 @@ public sealed interface DataComponent<T> extends StaticProtocolObject<DataCompon
 
     boolean isSynced();
     boolean isSerialized();
+    @Nullable NetworkBuffer.Type<T> networkType();
+    @Nullable Codec<T> codec();
 
     T read(NetworkBuffer reader);
     void write(NetworkBuffer writer, T value);

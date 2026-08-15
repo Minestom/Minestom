@@ -6,6 +6,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.TagReadable;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 public record CustomData(CompoundBinaryTag nbt) implements TagReadable {
@@ -23,7 +24,7 @@ public record CustomData(CompoundBinaryTag nbt) implements TagReadable {
         return tagHandler.getTag(tag);
     }
 
-    public <T> CustomData withTag(Tag<T> tag, T value) {
+    public <T> CustomData withTag(Tag<T> tag, @Nullable T value) {
         TagHandler tagHandler = TagHandler.fromCompound(nbt);
         tagHandler.setTag(tag, value);
         return new CustomData(tagHandler.asCompound());

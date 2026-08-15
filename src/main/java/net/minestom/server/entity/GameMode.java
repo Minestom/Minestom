@@ -44,16 +44,8 @@ public enum GameMode {
             gameMode -> (byte) gameMode.ordinal()
     );
 
-    public static final NetworkBuffer.Type<GameMode> OPT_NETWORK_TYPE = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(NetworkBuffer buffer, GameMode value) {
-            buffer.write(BYTE, value != null ? (byte) value.ordinal() : -1);
-        }
-
-        @Override
-        public GameMode read(NetworkBuffer buffer) {
-            final byte id = buffer.read(BYTE);
-            return id != -1 ? VALUES[id] : null;
-        }
-    };
+    public static final NetworkBuffer.Type<GameMode> OPT_NETWORK_TYPE = BYTE.transform(
+            id -> id != -1 ? VALUES[id] : null,
+            gameMode -> gameMode != null ? (byte) gameMode.ordinal() : -1
+    );
 }

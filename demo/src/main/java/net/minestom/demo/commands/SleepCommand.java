@@ -10,7 +10,7 @@ public class SleepCommand extends Command {
         super("sleep");
 
         setCondition(Conditions::playerOnly);
-        setDefaultExecutor((sender, context) -> {
+        setDefaultExecutor((sender, _) -> {
             Player player = (Player) sender;
             player.enterBed(player.getPosition());
         });

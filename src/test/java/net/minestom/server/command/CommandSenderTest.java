@@ -1,6 +1,5 @@
 package net.minestom.server.command;
 
-import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -33,7 +32,7 @@ public class CommandSenderTest {
 
         private final TagHandler handler = TagHandler.newHandler();
 
-        private Component mostRecentMessage = null;
+        private @Nullable Component mostRecentMessage = null;
 
         @Override
         public TagHandler tagHandler() {
@@ -41,11 +40,11 @@ public class CommandSenderTest {
         }
 
         @Override
-        public void sendMessage(Identity source, Component message, MessageType type) {
+        public void sendMessage(Component message) {
             mostRecentMessage = message;
         }
 
-        public @Nullable Component getMostRecentMessage() {
+        @Nullable Component getMostRecentMessage() {
             return mostRecentMessage;
         }
 

@@ -6,7 +6,7 @@ import net.minestom.server.component.DataComponents;
 import java.util.List;
 import java.util.Map;
 
-public class MapPostProcessingTest extends AbstractItemComponentTest<MapPostProcessing> {
+public class MapPostProcessingTest extends AbstractItemComponentRegistriesTest<MapPostProcessing> {
     @Override
     protected DataComponent<MapPostProcessing> component() {
         return DataComponents.MAP_POST_PROCESSING;

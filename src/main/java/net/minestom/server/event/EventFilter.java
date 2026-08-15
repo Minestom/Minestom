@@ -2,7 +2,12 @@ package net.minestom.server.event;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.trait.*;
+import net.minestom.server.event.trait.BlockEvent;
+import net.minestom.server.event.trait.EntityEvent;
+import net.minestom.server.event.trait.InstanceEvent;
+import net.minestom.server.event.trait.InventoryEvent;
+import net.minestom.server.event.trait.ItemEvent;
+import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.AbstractInventory;
@@ -67,8 +72,8 @@ public interface EventFilter<E extends Event, H> {
     @Nullable H getHandler(E event);
 
     @ApiStatus.Internal
+    @SuppressWarnings("unchecked")
     default @Nullable H castHandler(Object event) {
-        //noinspection unchecked
         return getHandler((E) event);
     }
 

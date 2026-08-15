@@ -16,8 +16,9 @@ public class EntityActionListener {
             case STOP_SPRINTING -> EntityActionListener.setSprinting(player, false);
             case START_FLYING_ELYTRA -> EntityActionListener.startFlyingElytra(player);
             case LEAVE_BED -> EntityActionListener.onLeaveBed(player);
-
-            // TODO do remaining actions
+            // TODO handle the horse actions
+            case START_JUMP_HORSE, STOP_JUMP_HORSE, OPEN_HORSE_INVENTORY -> {
+            }
         }
     }
 

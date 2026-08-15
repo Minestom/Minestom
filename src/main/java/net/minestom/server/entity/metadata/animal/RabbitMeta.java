@@ -10,7 +10,7 @@ import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.Nullable;
 
 public class RabbitMeta extends AnimalMeta {
-    public RabbitMeta(Entity entity, MetadataHolder metadata) {
+    public RabbitMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

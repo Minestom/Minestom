@@ -7,7 +7,6 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
@@ -17,11 +16,11 @@ public record TestInstanceBlockStatus(
 ) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final NetworkBuffer.Type<TestInstanceBlockStatus> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.COMPONENT, TestInstanceBlockStatus::status,
-            NetworkBuffer.VECTOR3I, TestInstanceBlockStatus::size,
+            NetworkBuffer.VECTOR3I.optional(), TestInstanceBlockStatus::size,
             TestInstanceBlockStatus::new);
 
     @Override
-    public Collection<Component> components() {
+    public List<Component> components() {
         return List.of(status);
     }
 

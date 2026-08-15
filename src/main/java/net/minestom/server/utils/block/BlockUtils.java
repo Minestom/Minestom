@@ -6,7 +6,6 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -54,6 +53,8 @@ public class BlockUtils {
         return instance.getBlock(position);
     }
 
+    @SuppressWarnings("NonOverridingEquals")
+    @Deprecated(forRemoval = true)
     public boolean equals(Block block) {
         return getBlock().compare(block);
     }
@@ -62,8 +63,10 @@ public class BlockUtils {
         if (!query.startsWith("[") || !query.endsWith("]")) return Map.of();
         if (query.length() == 2) return Map.of();
 
-        final int entries = StringUtils.countMatches(query, ',') + 1;
-        assert entries > 0;
+        int entries = 1;
+        for (int i = 0; i < query.length(); i++) {
+            if (query.charAt(i) == ',') entries++;
+        }
         String[] keys = new String[entries];
         String[] values = new String[entries];
         int entryCount = 0;
@@ -74,7 +77,7 @@ public class BlockUtils {
         while (index <= length) {
             if (query.charAt(index) == ',' || index == length) {
                 final int equalIndex = query.indexOf('=', start);
-                if (equalIndex != -1) {
+                if (equalIndex != -1 && equalIndex < index) {
                     final String key = query.substring(start, equalIndex).trim();
                     final String value = query.substring(equalIndex + 1, index).trim();
                     keys[entryCount] = key;
@@ -88,7 +91,7 @@ public class BlockUtils {
     }
 
     public static @Nullable CompoundBinaryTag extractClientNbt(Block block) {
-        if (!block.registry().isBlockEntity()) return null;
+        if (block.blockEntityType() == null) return null;
         // Append handler tags
         final BlockHandler handler = block.handler();
         final CompoundBinaryTag blockNbt = Objects.requireNonNullElseGet(block.nbt(), CompoundBinaryTag::empty);

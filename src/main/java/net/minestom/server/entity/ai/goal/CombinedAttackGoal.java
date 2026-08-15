@@ -9,6 +9,7 @@ import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
@@ -34,7 +35,7 @@ public class CombinedAttackGoal extends GoalSelector {
 
     private long lastAttack;
     private boolean stop;
-    private Entity cachedTarget;
+    private @Nullable Entity cachedTarget;
 
     /**
      * @param entityCreature the entity to add the goal to.
@@ -180,7 +181,7 @@ public class CombinedAttackGoal extends GoalSelector {
                         projectileGenerator = shooter -> new EntityProjectile(shooter, EntityType.ARROW);
                     }
                     EntityProjectile projectile = projectileGenerator.apply(this.entityCreature);
-                    projectile.setInstance(this.entityCreature.getInstance(), this.entityCreature.getPosition());
+                    projectile.setInstance(this.entityCreature.getInstance(), this.entityCreature.getPosition()).join();
 
                     projectile.shoot(to, this.rangedPower, this.rangedSpread);
                     this.lastAttack = time;

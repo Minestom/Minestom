@@ -11,7 +11,6 @@ import org.jetbrains.annotations.ApiStatus;
 public record FramedPacket(ServerPacket packet,
                            NetworkBuffer body) implements SendablePacket {
     public FramedPacket {
-        body.readIndex(0);
-        body.readOnly();
+        body = body.readOnly().readIndex(0);
     }
 }

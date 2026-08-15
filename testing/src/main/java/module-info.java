@@ -4,4 +4,6 @@ module net.minestom.testing {
 
     exports net.minestom.testing;
     exports net.minestom.testing.util;
+
+    opens net.minestom.testing to org.junit.platform.commons;
 }

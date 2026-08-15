@@ -3,7 +3,7 @@ package net.minestom.server.map.framebuffers;
 import net.minestom.server.map.Framebuffer;
 import net.minestom.server.map.MapColors;
 
-import java.awt.*;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 

@@ -12,7 +12,7 @@ import net.minestom.server.utils.chunk.ChunkCache;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -50,8 +50,8 @@ public final class CollisionUtils {
      *                     This is used to extend the search radius for entities we collide with
      *                     For players this is (0.3^2 + 0.3^2 + 1.8^2) ^ (1/3) ~= 1.51
      */
-    public static Collection<EntityCollisionResult> checkEntityCollisions(Instance instance, BoundingBox boundingBox, Point pos, Vec velocity, double extendRadius, Function<Entity, Boolean> entityFilter, @Nullable PhysicsResult physicsResult) {
-        return EntityCollision.checkCollision(instance, boundingBox, pos, velocity, extendRadius, entityFilter, physicsResult);
+    public static List<EntityCollisionResult> checkEntityCollisions(Instance instance, BoundingBox boundingBox, Point pos, Vec velocity, double extendRadius, Function<Entity, Boolean> entityFilter, @Nullable PhysicsResult physicsResult) {
+        return EntityCollision.checkCollision(instance.getEntityTracker(), boundingBox, pos, velocity, extendRadius, entityFilter, physicsResult);
     }
 
     /**
@@ -64,8 +64,8 @@ public final class CollisionUtils {
      * @param physicsResult optional physics result
      * @return the entity collision results
      */
-    public static Collection<EntityCollisionResult> checkEntityCollisions(Entity entity, Vec velocity, double extendRadius, Function<Entity, Boolean> entityFilter, @Nullable PhysicsResult physicsResult) {
-        return EntityCollision.checkCollision(entity.getInstance(), entity.getBoundingBox(), entity.getPosition(), velocity, extendRadius, entityFilter, physicsResult);
+    public static List<EntityCollisionResult> checkEntityCollisions(Entity entity, Vec velocity, double extendRadius, Function<Entity, Boolean> entityFilter, @Nullable PhysicsResult physicsResult) {
+        return EntityCollision.checkCollision(entity.getInstance().getEntityTracker(), entity.getBoundingBox(), entity.getPosition(), velocity, extendRadius, entityFilter, physicsResult);
     }
 
     /**
@@ -126,6 +126,27 @@ public final class CollisionUtils {
     }
 
     /**
+     * Moves a bounding box with physics applied, colliding with blocks and the world border.
+     * <p>
+     * The world border collides as four vertical walls at the block-aligned border bounds.
+     * A box whose movement target stays inside the walls never collides with them, and a box
+     * already extending past a wall keeps moving away from the border freely.
+     *
+     * @param blockGetter the block getter to check collisions against, ensure block access is synchronized
+     * @param worldBorder the world border to collide with
+     * @return the result of physics simulation
+     */
+    @ApiStatus.Internal
+    public static PhysicsResult handlePhysics(Block.Getter blockGetter, WorldBorder worldBorder,
+                                              BoundingBox boundingBox,
+                                              Pos position, Vec velocity,
+                                              @Nullable PhysicsResult lastPhysicsResult, boolean singleCollision) {
+        return BlockCollision.handlePhysics(boundingBox,
+                velocity, position,
+                blockGetter, lastPhysicsResult, singleCollision, worldBorder);
+    }
+
+    /**
      * Checks whether shape is reachable by the given line of sight
      * (ie there are no blocks colliding with it).
      *
@@ -151,29 +172,8 @@ public final class CollisionUtils {
         return handlePhysics(entity, entityVelocity, null);
     }
 
-    public static Entity canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
+    public static @Nullable Entity canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
         return BlockCollision.canPlaceBlockAt(instance, blockPos, b);
-    }
-
-    /**
-     * Applies world border collision.
-     *
-     * @param worldBorder     the world border
-     * @param currentPosition the current position
-     * @param newPosition     the future target position
-     * @return the position with the world border collision applied (can be {@code newPosition} if not changed)
-     */
-    public static Pos applyWorldBorder(WorldBorder worldBorder, Pos currentPosition, Pos newPosition) {
-        double radius = worldBorder.diameter() / 2;
-        // If there is a collision on a given axis prevent the entity
-        // from moving forward by supplying their previous position's value
-        boolean xCollision = newPosition.x() > worldBorder.centerX() + radius || newPosition.x() < worldBorder.centerX() - radius;
-        boolean zCollision = newPosition.z() > worldBorder.centerZ() + radius || newPosition.z() < worldBorder.centerZ() - radius;
-        if (xCollision || zCollision) {
-            return newPosition.withCoord(xCollision ? currentPosition.x() : newPosition.x(), newPosition.y(),
-                    zCollision ? currentPosition.z() : newPosition.z());
-        }
-        return newPosition;
     }
 
     @ApiStatus.Internal
@@ -182,7 +182,7 @@ public final class CollisionUtils {
         if (cachedShape != null) return cachedShape;
         final Shape parsedShape = ShapeImpl.parseShapeFromRegistry(shape, (byte) 0);
         internCache.put(shape, parsedShape);
-        return (Shape) internCache.computeIfAbsent(parsedShape, k -> parsedShape);
+        return (Shape) internCache.computeIfAbsent(parsedShape, _ -> parsedShape);
     }
 
     @ApiStatus.Internal
@@ -193,7 +193,7 @@ public final class CollisionUtils {
         if (cachedShape != null) return cachedShape;
         final Shape parsedShape = occludes ? ShapeImpl.parseShapeFromRegistry(shape, lightEmission) : ShapeImpl.emptyShape(lightEmission);
         internCache.put(entry, parsedShape);
-        return (Shape) internCache.computeIfAbsent(parsedShape, k -> parsedShape);
+        return (Shape) internCache.computeIfAbsent(parsedShape, _ -> parsedShape);
     }
 
     /**
@@ -205,7 +205,7 @@ public final class CollisionUtils {
      */
     public static PhysicsResult blocklessCollision(Pos entityPosition, Vec entityVelocity) {
         return new PhysicsResult(entityPosition.add(entityVelocity), entityVelocity, false,
-                false, false, false, entityVelocity, new Point[3],
-                new Shape[3], new Point[3], false, SweepResult.NO_COLLISION);
+                false, false, false, entityVelocity, BlockCollision.NO_COLLISION_POINTS,
+                BlockCollision.NO_COLLISION_SHAPES, BlockCollision.NO_COLLISION_SHAPE_POSITIONS, false, Double.MAX_VALUE);
     }
 }

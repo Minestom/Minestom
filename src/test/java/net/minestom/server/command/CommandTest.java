@@ -7,7 +7,9 @@ import org.junit.jupiter.api.Test;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommandTest {
 
@@ -42,7 +44,7 @@ public class CommandTest {
         manager.register(command);
 
         AtomicBoolean checkSet = new AtomicBoolean(false);
-        command.setDefaultExecutor((sender, context) -> checkSet.set("value".equals(context.get("key"))));
+        command.setDefaultExecutor((_, context) -> checkSet.set("value".equals(context.get("key"))));
 
         manager.executeServerCommand("command");
 

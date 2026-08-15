@@ -21,6 +21,6 @@ public record Music(
             "sound", SoundEvent.CODEC, Music::sound,
             "min_delay", Codec.INT, Music::minDelay,
             "max_delay", Codec.INT, Music::maxDelay,
-            "replace_current_music", Codec.BOOLEAN, Music::replaceCurrentMusic,
+            "replace_current_music", Codec.BOOLEAN.optional(false), Music::replaceCurrentMusic,
             Music::new);
 }

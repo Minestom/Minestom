@@ -91,6 +91,8 @@ public enum WorldEvent {
 
     SOUND_WIND_CHARGE_SHOOT(1051),
 
+    SOUND_SULFUR_SPIKE_LAND(1052),
+
     COMPOSTER_FILL(1500),
 
     LAVA_FIZZ(1501),

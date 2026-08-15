@@ -19,7 +19,12 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -49,6 +54,9 @@ import java.util.function.Supplier;
  *
  * @param <T> The type to be represented by this codec, nullable T will provide nullable results.
  */
+// Static fields intentionally construct the implementation subclass; the cycle cannot
+// race because the implementation types are only ever reached through this interface
+@SuppressWarnings("ClassInitializationDeadlock")
 public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>, Decoder<T> {
 
     /**
@@ -180,14 +188,13 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
     }
 
     /**
-     * @deprecated Use {@link #RegistryTaggedUnion(String, Registry, Function)} instead.
-     * Shortcut for {@link Codec#RegistryTaggedUnion(Registries.Selector, Function, String)}
-     *
      * @param registry         the codec registry
      * @param serializerGetter the codec getter
      * @param key              the map key
      * @param <T>              the struct codec type.
      * @return a {@link StructCodec}
+     * @deprecated Use {@link #RegistryTaggedUnion(String, Registry, Function)} instead.
+     * Shortcut for {@link Codec#RegistryTaggedUnion(Registries.Selector, Function, String)}
      */
     @Deprecated
     @Contract(pure = true, value = "_, _, _ -> new")
@@ -200,17 +207,16 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
     }
 
     /**
-     * @deprecated Use {@link #RegistryTaggedUnion(String, Registries.Selector, Function)} instead.
-     * Creates a {@link StructCodec} to bidirectionally map values of {@link T} to their encoded values
-     * <br>
-     * Registry selectors will be used to lookup values of codecs of {@link T}.
-     * Then will be used to map to object {@link T} from {@code key}
-     *
      * @param registrySelector the registry selector used during lookup.
      * @param serializerGetter the serializer for each value of {@link T}
      * @param key              the map key for {@link T}
      * @param <T>              the codec type
      * @return a {@link StructCodec} bidirectionally mapping values of {@link T}
+     * @deprecated Use {@link #RegistryTaggedUnion(String, Registries.Selector, Function)} instead.
+     * Creates a {@link StructCodec} to bidirectionally map values of {@link T} to their encoded values
+     * <br>
+     * Registry selectors will be used to lookup values of codecs of {@link T}.
+     * Then will be used to map to object {@link T} from {@code key}
      */
     @Deprecated
     @Contract(pure = true, value = "_, _, _ -> new")
@@ -256,7 +262,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
             Function<T, StructCodec<? extends T>> serializerGetter
     ) {
         Objects.requireNonNull(registry, "registry");
-        return Codec.RegistryTaggedUnion(key, (ignored) -> registry, serializerGetter); // Stable Value/Lazy Constant
+        return Codec.RegistryTaggedUnion(key, (_) -> registry, serializerGetter); // Stable Value/Lazy Constant
     }
 
     /**
@@ -490,9 +496,9 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * Creates an unmodifiable map of key {@link T} and value of {@link V}
      * where the codec for {@link V} is determined by the key {@link T}
      *
-     * @param mapper  the function to get the codec for {@link V} from {@link T}
-     * @param cached  whether to cache codecs for each key
-     * @param <V>     the value type
+     * @param mapper the function to get the codec for {@link V} from {@link T}
+     * @param cached whether to cache codecs for each key
+     * @param <V>    the value type
      * @return the map codec of type {@link T} and {@link V}
      */
     @Contract(pure = true, value = "_, _ -> new")
@@ -504,8 +510,8 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * Creates an unmodifiable map of key {@link T} and value of {@link V}
      * where the codec for {@link V} is determined by the key {@link T}
      *
-     * @param mapper  the function to get the codec for {@link V} from {@link T}
-     * @param <V>     the value type
+     * @param mapper the function to get the codec for {@link V} from {@link T}
+     * @param <V>    the value type
      * @return the map codec of type {@link T} and {@link V}
      */
     @Contract(pure = true, value = "_ -> new")
@@ -568,11 +574,11 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * <br>
      * If both codecs fail the first error will be returned instead.
      *
-     * @param other the other codec
+     * @param other  the other codec
      * @param mapper the mapper to transform the error into a value of {@link T}
      * @return the or else codec of {@link T}
      */
-    @Contract(pure = true, value = "_ -> new")
+    @Contract(pure = true, value = "_, _ -> new")
     default <S> Codec<T> orElse(Codec<S> other, ThrowingFunction<S, T> mapper) {
         return new CodecImpl.OrElseImpl<>(this, other.transform(mapper, _ -> {
             throw new UnsupportedOperationException("unreachable");

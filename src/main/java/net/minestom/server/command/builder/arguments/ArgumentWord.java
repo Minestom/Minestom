@@ -5,8 +5,9 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.StringUtils;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 /**
  * Represents a single word in the command.
@@ -40,8 +41,7 @@ public class ArgumentWord extends Argument<String> {
     public ArgumentWord from(@Nullable String... restrictions) {
         if (restrictions != null) {
             for (String restriction : restrictions) {
-                Check.notNull(restriction,
-                        "ArgumentWord restriction cannot be null, you can pass 'null' instead of an empty array");
+                Objects.requireNonNull(restriction, "ArgumentWord restriction cannot be null, you can pass 'null' instead of an empty array");
             }
         }
 

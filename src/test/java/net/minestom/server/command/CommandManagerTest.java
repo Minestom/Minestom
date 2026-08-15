@@ -3,12 +3,13 @@ package net.minestom.server.command;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandResult;
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommandManagerTest {
 
@@ -36,7 +37,7 @@ public class CommandManagerTest {
         var manager = new CommandManager();
 
         AtomicBoolean check = new AtomicBoolean(false);
-        manager.setUnknownCommandCallback((sender, command) -> check.set(true));
+        manager.setUnknownCommandCallback((_, _) -> check.set(true));
 
         manager.register(new Command("valid_command"));
 
@@ -57,8 +58,8 @@ public class CommandManagerTest {
         var cmd = new Command("cmd");
         var argA = ArgumentType.String("a");
         var argB = ArgumentType.String("b");
-        cmd.addSyntax((sender, context) -> checkAB.set(true), argA, argB);
-        cmd.addSyntax((sender, context) -> checkA.set(true), argA);
+        cmd.addSyntax((_, _) -> checkAB.set(true), argA, argB);
+        cmd.addSyntax((_, _) -> checkA.set(true), argA);
         manager.register(cmd);
 
         var result = manager.executeServerCommand("cmd a");
@@ -85,8 +86,8 @@ public class CommandManagerTest {
         var cmd = new Command("cmd");
         var argA = ArgumentType.String("a");
         var argB = ArgumentType.String("b");
-        cmd.addSyntax((sender, context) -> checkA.set(true), argA);
-        cmd.addSyntax((sender, context) -> checkAB.set(true), argA, argB);
+        cmd.addSyntax((_, _) -> checkA.set(true), argA);
+        cmd.addSyntax((_, _) -> checkAB.set(true), argA, argB);
         manager.register(cmd);
 
         var result = manager.executeServerCommand("cmd a");
@@ -101,17 +102,6 @@ public class CommandManagerTest {
         assertEquals(CommandResult.Type.SUCCESS, result.getType());
         assertFalse(checkA.get());
         assertTrue(checkAB.get());
-    }
-
-    private static void assertNodeEquals(DeclareCommandsPacket.Node node, byte flags, int[] children, int redirectedNode,
-                                         String name, String parser, byte[] properties, String suggestionsType) {
-        assertEquals(flags, node.flags);
-        assertArrayEquals(children, node.children);
-        assertEquals(redirectedNode, node.redirectedNode);
-        assertEquals(name, node.name);
-        assertEquals(parser, node.parser);
-        assertArrayEquals(properties, node.properties);
-        assertEquals(suggestionsType, node.suggestionsType);
     }
 
 }

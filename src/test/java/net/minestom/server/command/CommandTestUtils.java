@@ -4,7 +4,15 @@ import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.opentest4j.AssertionFailedError;
 
 import java.math.BigInteger;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -41,24 +49,24 @@ public class CommandTestUtils {
                 '!', s -> {
                     final String[] strings = splitDeclaration(s);
                     final ArrayList<String> result = new ArrayList<>();
-                    for (String s1 : strings[0].split(" ")) {
-                        result.add(s1 + "=" + (strings[1].replaceAll("!", s1)));
+                    for (String s1 : strings[0].split(" ", 0)) {
+                        result.add(s1 + "=" + strings[1].replaceAll("!", s1));
                     }
                     return result;
                 },
                 '%', s -> {
                     final String[] strings = splitDeclaration(s);
                     final ArrayList<String> result = new ArrayList<>();
-                    for (String s1 : strings[0].split(" ")) {
-                        result.add(s1 + "=" + (strings[1].replaceAll("%", "'" + s1 + "'")));
+                    for (String s1 : strings[0].split(" ", 0)) {
+                        result.add(s1 + "=" + strings[1].replaceAll("%", "'" + s1 + "'"));
                     }
                     return result;
                 },
                 '§', s -> {
                     final String[] strings = splitDeclaration(s);
                     final ArrayList<String> result = new ArrayList<>();
-                    for (String s1 : strings[0].split(" ")) {
-                        result.add(s1 + "=" + (strings[1].replaceAll("§", "'" + (s1.toUpperCase(Locale.ROOT)) + "'")));
+                    for (String s1 : strings[0].split(" ", 0)) {
+                        result.add(s1 + "=" + strings[1].replaceAll("§", "'" + s1.toUpperCase(Locale.ROOT) + "'"));
                     }
                     return result;
                 }
@@ -139,7 +147,7 @@ public class CommandTestUtils {
                         final int spaceIndex = s.indexOf(" ");
                         if (spaceIndex > -1 && spaceIndex < s.indexOf('=')) {
                             final String[] split = s.split("=", 2);
-                            for (String s1 : split[0].split(" ")) {
+                            for (String s1 : split[0].split(" ", 0)) {
                                 result.add(s1 + "=" + split[1]);
                             }
                         } else {
@@ -150,12 +158,12 @@ public class CommandTestUtils {
                     final int spaceIndex = s.indexOf(" ");
                     if (spaceIndex > -1 && spaceIndex < s.indexOf('-')) {
                         final String[] split = s.split("-", 2);
-                        for (String s1 : split[0].split(" ")) {
+                        for (String s1 : split[0].split(" ", 0)) {
                             result.add(s1 + "-" + split[1]);
                         }
                     } else if (spaceIndex > -1 && spaceIndex < s.indexOf('+')) {
                         final String[] split = s.split("\\+", 2);
-                        for (String s1 : split[0].split(" ")) {
+                        for (String s1 : split[0].split(" ", 0)) {
                             result.add(s1 + "+" + split[1]);
                         }
                     } else {
@@ -197,7 +205,7 @@ public class CommandTestUtils {
         }
 
         private static String resolveNode(String id, Map<String, String[]> references,
-                                          Map<String, TestNode> nodes, ArrayList<TestNode> result,
+                                          Map<String, TestNode> nodes, List<TestNode> result,
                                           Map<String, String> nameToMetaPath,
                                           List<Runnable> redirectSetters, String metaPath) {
             final TestNode node = nodes.get(id);
@@ -222,9 +230,9 @@ public class CommandTestUtils {
         record TestNode(List<String> children, String meta, AtomicReference<String> redirect) {
             @Override
             public boolean equals(Object obj) {
-                if (obj instanceof TestNode that) {
-                    return this.meta.equals(that.meta) && Objects.equals(this.redirect.get(), that.redirect.get()) &&
-                            this.children.containsAll(that.children) && this.children.size() == that.children.size();
+                if (obj instanceof TestNode(List<String> children1, String meta1, AtomicReference<String> redirect1)) {
+                    return this.meta.equals(meta1) && Objects.equals(this.redirect.get(), redirect1.get()) &&
+                            this.children.containsAll(children1) && this.children.size() == children1.size();
                 } else {
                     return false;
                 }
@@ -279,7 +287,7 @@ public class CommandTestUtils {
         if (prettyPrint)
             return builder.toString()
                     .replaceFirst("\\{r", "{\n  r")
-                    .replaceAll(";", "\n  ")
+                    .replace(";", "\n  ")
                     .replaceFirst(" {2}}$", "}\n");
         else
             return builder.toString();

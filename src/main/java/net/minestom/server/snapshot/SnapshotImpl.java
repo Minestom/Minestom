@@ -1,13 +1,13 @@
 package net.minestom.server.snapshot;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
@@ -21,12 +21,16 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static net.minestom.server.coordinate.CoordConversion.*;
+import static net.minestom.server.coordinate.CoordConversion.chunkBlockIndex;
+import static net.minestom.server.coordinate.CoordConversion.chunkIndex;
+import static net.minestom.server.coordinate.CoordConversion.globalToChunk;
+import static net.minestom.server.coordinate.CoordConversion.globalToSectionRelative;
 
 @ApiStatus.Internal
 public final class SnapshotImpl {
@@ -61,7 +65,7 @@ public final class SnapshotImpl {
         }
 
         @Override
-        public Collection<EntitySnapshot> entities() {
+        public List<EntitySnapshot> entities() {
             return new IntMappedArray<>(entitiesIds, id -> server().entity(id));
         }
 
@@ -81,6 +85,7 @@ public final class SnapshotImpl {
                         Int2ObjectOpenHashMap<Block> blockEntries,
                         int[] entitiesIds,
                         AtomicReference<InstanceSnapshot> instanceRef,
+                        DynamicRegistry<Biome> biomeRegistry,
                         TagReadable tagReadable) implements ChunkSnapshot {
         @Override
         public @UnknownNullability Block getBlock(int x, int y, int z, Condition condition) {
@@ -104,7 +109,7 @@ public final class SnapshotImpl {
             final Section section = sections[globalToChunk(y) - minSection];
             final int id = section.biomePalette()
                     .get(globalToSectionRelative(x) / 4, globalToSectionRelative(y) / 4, globalToSectionRelative(z) / 4);
-            RegistryKey<Biome> key = MinecraftServer.getBiomeRegistry().getKey(id);
+            RegistryKey<Biome> key = biomeRegistry.getKey(id);
             Check.notNull(key, "Biome with id {0} is not registered", id);
             return key;
         }
@@ -120,7 +125,7 @@ public final class SnapshotImpl {
         }
 
         @Override
-        public Collection<EntitySnapshot> entities() {
+        public List<EntitySnapshot> entities() {
             return new IntMappedArray<>(entitiesIds, id -> instance().server().entity(id));
         }
     }
@@ -145,12 +150,12 @@ public final class SnapshotImpl {
         }
 
         @Override
-        public Collection<PlayerSnapshot> viewers() {
+        public List<PlayerSnapshot> viewers() {
             return new IntMappedArray<>(viewersId, id -> (PlayerSnapshot) instance().server().entity(id));
         }
 
         @Override
-        public Collection<EntitySnapshot> passengers() {
+        public List<EntitySnapshot> passengers() {
             return new IntMappedArray<>(passengersId, id -> instance().server().entity(id));
         }
 

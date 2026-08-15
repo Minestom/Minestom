@@ -7,33 +7,33 @@ package net.minestom.server.entity;
  */
 @SuppressWarnings("unused")
 sealed interface VillagerProfessions permits VillagerProfession {
-    VillagerProfession NONE = VillagerProfessionImpl.get("none");
+    VillagerProfession NONE = VillagerProfessionImpl.get(VillagerProfessionKeys.NONE);
 
-    VillagerProfession ARMORER = VillagerProfessionImpl.get("armorer");
+    VillagerProfession ARMORER = VillagerProfessionImpl.get(VillagerProfessionKeys.ARMORER);
 
-    VillagerProfession BUTCHER = VillagerProfessionImpl.get("butcher");
+    VillagerProfession BUTCHER = VillagerProfessionImpl.get(VillagerProfessionKeys.BUTCHER);
 
-    VillagerProfession CARTOGRAPHER = VillagerProfessionImpl.get("cartographer");
+    VillagerProfession CARTOGRAPHER = VillagerProfessionImpl.get(VillagerProfessionKeys.CARTOGRAPHER);
 
-    VillagerProfession CLERIC = VillagerProfessionImpl.get("cleric");
+    VillagerProfession CLERIC = VillagerProfessionImpl.get(VillagerProfessionKeys.CLERIC);
 
-    VillagerProfession FARMER = VillagerProfessionImpl.get("farmer");
+    VillagerProfession FARMER = VillagerProfessionImpl.get(VillagerProfessionKeys.FARMER);
 
-    VillagerProfession FISHERMAN = VillagerProfessionImpl.get("fisherman");
+    VillagerProfession FISHERMAN = VillagerProfessionImpl.get(VillagerProfessionKeys.FISHERMAN);
 
-    VillagerProfession FLETCHER = VillagerProfessionImpl.get("fletcher");
+    VillagerProfession FLETCHER = VillagerProfessionImpl.get(VillagerProfessionKeys.FLETCHER);
 
-    VillagerProfession LEATHERWORKER = VillagerProfessionImpl.get("leatherworker");
+    VillagerProfession LEATHERWORKER = VillagerProfessionImpl.get(VillagerProfessionKeys.LEATHERWORKER);
 
-    VillagerProfession LIBRARIAN = VillagerProfessionImpl.get("librarian");
+    VillagerProfession LIBRARIAN = VillagerProfessionImpl.get(VillagerProfessionKeys.LIBRARIAN);
 
-    VillagerProfession MASON = VillagerProfessionImpl.get("mason");
+    VillagerProfession MASON = VillagerProfessionImpl.get(VillagerProfessionKeys.MASON);
 
-    VillagerProfession NITWIT = VillagerProfessionImpl.get("nitwit");
+    VillagerProfession NITWIT = VillagerProfessionImpl.get(VillagerProfessionKeys.NITWIT);
 
-    VillagerProfession SHEPHERD = VillagerProfessionImpl.get("shepherd");
+    VillagerProfession SHEPHERD = VillagerProfessionImpl.get(VillagerProfessionKeys.SHEPHERD);
 
-    VillagerProfession TOOLSMITH = VillagerProfessionImpl.get("toolsmith");
+    VillagerProfession TOOLSMITH = VillagerProfessionImpl.get(VillagerProfessionKeys.TOOLSMITH);
 
-    VillagerProfession WEAPONSMITH = VillagerProfessionImpl.get("weaponsmith");
+    VillagerProfession WEAPONSMITH = VillagerProfessionImpl.get(VillagerProfessionKeys.WEAPONSMITH);
 }

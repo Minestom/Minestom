@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 public class TameableAnimalMeta extends AnimalMeta {
-    protected TameableAnimalMeta(Entity entity, MetadataHolder metadata) {
+    protected TameableAnimalMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

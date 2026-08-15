@@ -3,16 +3,19 @@ package net.minestom.server.entity.metadata.monster;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import org.jetbrains.annotations.Nullable;
 
 public class BlazeMeta extends MonsterMeta {
-    public BlazeMeta(Entity entity, MetadataHolder metadata) {
+    public BlazeMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 
+    @Override
     public boolean isOnFire() {
         return metadata.get(MetadataDef.Blaze.IS_ON_FIRE);
     }
 
+    @Override
     public void setOnFire(boolean value) {
         metadata.set(MetadataDef.Blaze.IS_ON_FIRE, value);
     }

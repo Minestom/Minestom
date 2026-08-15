@@ -5,7 +5,14 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.*;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityStatuses;
+import net.minestom.server.entity.EntityType;
+import net.minestom.server.entity.GameMode;
+import net.minestom.server.entity.MainHand;
+import net.minestom.server.entity.MetadataDef;
+import net.minestom.server.entity.Player;
+import net.minestom.server.entity.RelativeFlags;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.player.PlayerChunkUnloadEvent;
@@ -16,7 +23,19 @@ import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.packet.client.common.ClientSettingsPacket;
 import net.minestom.server.network.packet.client.play.ClientInputPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
+import net.minestom.server.network.packet.server.play.EntityAttributesPacket;
+import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
+import net.minestom.server.network.packet.server.play.EntityStatusPacket;
+import net.minestom.server.network.packet.server.play.FacePlayerPacket;
+import net.minestom.server.network.packet.server.play.JoinGamePacket;
+import net.minestom.server.network.packet.server.play.PlayerAbilitiesPacket;
+import net.minestom.server.network.packet.server.play.PlayerInfoUpdatePacket;
+import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
+import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
+import net.minestom.server.network.packet.server.play.SetExperiencePacket;
+import net.minestom.server.network.packet.server.play.SpawnPositionPacket;
+import net.minestom.server.network.packet.server.play.UpdateHealthPacket;
 import net.minestom.server.network.player.ClientSettings;
 import net.minestom.server.world.DimensionType;
 import net.minestom.testing.Collector;
@@ -27,10 +46,16 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Predicate;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @EnvTest
 public class PlayerIntegrationTest {
@@ -117,7 +142,7 @@ public class PlayerIntegrationTest {
         assertEquals(ClientSettings.ParticleSetting.ALL, player.getSettings().particleSetting());
     }
 
-    private void assertAbilities(Player player, boolean isInvulnerable, boolean isFlying, boolean isAllowFlying,
+    private static void assertAbilities(Player player, boolean isInvulnerable, boolean isFlying, boolean isAllowFlying,
                                  boolean isInstantBreak) {
         assertEquals(isInvulnerable, player.isInvulnerable());
         assertEquals(isFlying, player.isFlying());
@@ -209,7 +234,25 @@ public class PlayerIntegrationTest {
     }
 
     @Test
+    public void fullInfoSync(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var tracker = connection.trackIncoming(PlayerInfoUpdatePacket.class);
+        var _ = connection.connect(instance, new Pos(0, 42, 0));
+        tracker.assertSingle(
+                it -> assertEquals(EnumSet.allOf(PlayerInfoUpdatePacket.Action.class), it.actions(), "Not fully synced on join")
+        );
+
+        var connection2 = env.createConnection();
+        var tracker2 = connection2.trackIncoming(PlayerInfoUpdatePacket.class);
+        var _ = connection2.connect(instance, new Pos(5, 42, 0));
+        tracker2.assertCount(2, packet -> packet.actions().equals(EnumSet.allOf(PlayerInfoUpdatePacket.Action.class)));
+    }
+
+    @Test
     public void displayNameTest(Env env) {
+        Predicate<PlayerInfoUpdatePacket> predicate =
+                packet -> packet.actions().contains(PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME);
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var tracker = connection.trackIncoming(PlayerInfoUpdatePacket.class);
@@ -221,24 +264,87 @@ public class PlayerIntegrationTest {
         var tracker2 = connection2.trackIncoming(PlayerInfoUpdatePacket.class);
         connection2.connect(instance, new Pos(0, 42, 0));
 
-        var displayNamePackets = tracker2.collect().stream().filter((packet) ->
-                        packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
-                .count();
-        assertEquals(1, displayNamePackets);
+        tracker2.assertCount(2, predicate);
 
         var tracker3 = connection2.trackIncoming(PlayerInfoUpdatePacket.class);
 
         player.setDisplayName(Component.text("Other Name!"));
 
-        var displayNamePackets2 = tracker3.collect().stream().filter((packet) ->
-                        packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
-                .count();
-        assertEquals(1, displayNamePackets2);
+        tracker3.assertCount(1, predicate);
+        tracker.assertCount(4, predicate);
+    }
 
-        var displayNamePackets3 = tracker.collect().stream().filter((packet) ->
-                        packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
+    @Test
+    public void gameModeInfoTest(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var tracker = connection.trackIncoming(PlayerInfoUpdatePacket.class);
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+
+        tracker.assertCount(1, packet ->
+                packet.actions().contains(PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE));
+        var tracker2 = connection.trackIncoming(PlayerInfoUpdatePacket.class);
+
+        player.setGameMode(GameMode.CREATIVE);
+
+        tracker2.assertCount(1, packet ->
+                packet.actions().contains(PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE));
+    }
+
+    @Test
+    public void latencyTest(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var tracker = connection.trackIncoming(PlayerInfoUpdatePacket.class);
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+
+        tracker.assertCount(1, packet ->
+                packet.actions().contains(PlayerInfoUpdatePacket.Action.UPDATE_LATENCY));
+
+        var tracker2 = connection.trackIncoming(PlayerInfoUpdatePacket.class);
+        player.refreshLatency(100);
+
+        tracker2.assertCount(1, packet ->
+                packet.actions().contains(PlayerInfoUpdatePacket.Action.UPDATE_LATENCY));
+    }
+
+    @Test
+    public void listedTest(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var tracker = connection.trackIncoming(PlayerInfoUpdatePacket.class);
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+
+
+        assertTrue(player.isListed());
+
+        player.setListed(false);
+
+        long listedPackets = tracker.collect().stream().filter((packet) ->
+                        packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_LISTED))
                 .count();
-        assertEquals(2, displayNamePackets3);
+
+        assertEquals(2, listedPackets);
+        assertFalse(player.isListed());
+    }
+
+    @Test
+    public void listOrderTest(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var tracker = connection.trackIncoming(PlayerInfoUpdatePacket.class);
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+
+        assertEquals(0, player.getListOrder());
+
+        player.setListOrder(1);
+
+        long orderPackets = tracker.collect().stream().filter((packet) ->
+                        packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_LIST_ORDER))
+                .count();
+
+        assertEquals(2, orderPackets);
+        assertEquals(1, player.getListOrder());
     }
 
     @Test
@@ -273,7 +379,7 @@ public class PlayerIntegrationTest {
 
         tracker = connection.trackIncoming(FacePlayerPacket.class);
         Entity entity = new Entity(EntityType.ZOMBIE);
-        entity.setInstance(player.getInstance(), new Pos(9, 9, 9));
+        entity.setInstance(player.getInstance(), new Pos(9, 9, 9)).join();
         player.lookAt(entity);
         tracker.assertSingle(FacePlayerPacket.class, packet -> assertEquals(entity.getEntityId(), packet.entityId()));
 

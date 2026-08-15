@@ -4,10 +4,10 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.adventure.ComponentHolder;
-import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.ConnectionState;
@@ -63,8 +63,8 @@ public final class PacketSendingUtils {
      * @param packet    the packet to send to the players
      * @param predicate predicate to ignore specific players
      */
-    public static void sendGroupedPacket(Collection<Player> players, ServerPacket packet,
-                                         Predicate<Player> predicate) {
+    public static <T extends Player> void sendGroupedPacket(Collection<T> players, ServerPacket packet,
+                                         Predicate<? super T> predicate) {
         final SendablePacket sendablePacket = groupedPacket(packet);
         players.forEach(player -> {
             if (predicate.test(player)) player.sendPacket(sendablePacket);
@@ -77,7 +77,7 @@ public final class PacketSendingUtils {
      *
      * @see #sendGroupedPacket(Collection, ServerPacket, Predicate)
      */
-    public static void sendGroupedPacket(Collection<Player> players, ServerPacket packet) {
+    public static void sendGroupedPacket(Collection<? extends Player> players, ServerPacket packet) {
         final SendablePacket sendablePacket = groupedPacket(packet);
         players.forEach(player -> player.sendPacket(sendablePacket));
     }
@@ -86,8 +86,8 @@ public final class PacketSendingUtils {
         sendGroupedPacket(MinecraftServer.getConnectionManager().getOnlinePlayers(), packet);
     }
 
-    static SendablePacket groupedPacket(ServerPacket packet) {
-        return shouldUseCachePacket(packet) ? new CachedPacket(packet) : packet;
+    private static SendablePacket groupedPacket(ServerPacket packet) {
+        return ServerFlag.GROUPED_PACKET && shouldUseCachePacket(packet) ? new CachedPacket(packet) : packet;
     }
 
     /**
@@ -96,9 +96,9 @@ public final class PacketSendingUtils {
      *
      * @see CachedPacket#body(ConnectionState)
      */
-    static boolean shouldUseCachePacket(final ServerPacket packet) {
-        if (!MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION) return ServerFlag.GROUPED_PACKET;
-        if (!(packet instanceof ServerPacket.ComponentHolding holder)) return ServerFlag.GROUPED_PACKET;
+    private static boolean shouldUseCachePacket(final ServerPacket packet) {
+        if (!ServerFlag.AUTOMATIC_COMPONENT_TRANSLATION) return true;
+        if (!(packet instanceof ServerPacket.ComponentHolding holder)) return true;
         return !containsTranslatableComponents(holder);
     }
 
@@ -111,6 +111,9 @@ public final class PacketSendingUtils {
 
     private static boolean isTranslatable(final Component component) {
         if (component instanceof TranslatableComponent) return true;
+        final HoverEvent<?> hoverEvent = component.hoverEvent();
+        if (hoverEvent != null && hoverEvent.value() instanceof Component hoverComponent && isTranslatable(hoverComponent))
+            return true;
         final List<Component> children = component.children();
         if (children.isEmpty()) return false;
         for (final Component child : children) {

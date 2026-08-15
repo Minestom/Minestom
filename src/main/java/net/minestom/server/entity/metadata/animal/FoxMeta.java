@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 public class FoxMeta extends AnimalMeta {
-    public FoxMeta(Entity entity, MetadataHolder metadata) {
+    public FoxMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

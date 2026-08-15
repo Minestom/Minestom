@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
@@ -28,6 +27,10 @@ import java.util.function.IntFunction;
 record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implements DataComponentMap {
     private static final char REMOVAL_PREFIX = '!';
 
+    static DataComponentMap fromMap(Int2ObjectMap<@Nullable Object> components) {
+        return components.isEmpty() ? DataComponentMap.EMPTY : new DataComponentMapImpl(components);
+    }
+
     @Override
     public boolean isEmpty() {
         return components.isEmpty();
@@ -39,8 +42,8 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T> @Nullable T get(DataComponent<T> component) {
-        //noinspection unchecked
         return (T) components.get(component.id());
     }
 
@@ -54,9 +57,9 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T> @Nullable T get(DataComponentMap prototype, DataComponent<T> component) {
         if (components.containsKey(component.id())) {
-            //noinspection unchecked
             return (T) components.get(component.id());
         } else {
             return prototype.get(component);
@@ -78,7 +81,15 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
     }
 
     @Override
-    public Collection<DataComponent.Value> entrySet() {
+    public DataComponentMap reset(DataComponent<?> component) {
+        if (!components.containsKey(component.id())) return this;
+        Int2ObjectMap<@Nullable Object> newComponents = new Int2ObjectArrayMap<>(components);
+        newComponents.remove(component.id());
+        return fromMap(newComponents);
+    }
+
+    @Override
+    public List<DataComponent.Value> entrySet() {
         if (components.isEmpty()) return List.of();
         final List<DataComponent.Value> entries = new ArrayList<>(components.size());
         for (var entry : components.int2ObjectEntrySet())
@@ -104,20 +115,20 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public <T> @Nullable T get(DataComponent<T> component) {
-            //noinspection unchecked
             return (T) components.get(component.id());
         }
 
         @Override
         public <T> Builder set(DataComponent<T> component, T value) {
-            components.put(component.id(), value);
+            components.put(component.id(), component.freeze(value));
             return this;
         }
 
         @Override
         public DataComponentMap build() {
-            return new DataComponentMapImpl(new Int2ObjectArrayMap<>(components));
+            return fromMap(new Int2ObjectArrayMap<>(components));
         }
     }
 
@@ -129,14 +140,14 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public <T> @Nullable T get(DataComponent<T> component) {
-            //noinspection unchecked
             return (T) components.get(component.id());
         }
 
         @Override
         public <T> PatchBuilder set(DataComponent<T> component, T value) {
-            components.put(component.id(), value);
+            components.put(component.id(), component.freeze(value));
             return this;
         }
 
@@ -147,8 +158,14 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
         }
 
         @Override
+        public PatchBuilder reset(DataComponent<?> component) {
+            components.remove(component.id());
+            return this;
+        }
+
+        @Override
         public DataComponentMap build() {
-            return new DataComponentMapImpl(new Int2ObjectArrayMap<>(components));
+            return fromMap(new Int2ObjectArrayMap<>(components));
         }
     }
 
@@ -172,7 +189,7 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
                 if (entry.getValue() == null) continue;
 
                 buffer.write(NetworkBuffer.VAR_INT, entry.getIntKey());
-                //noinspection unchecked
+                @SuppressWarnings("unchecked")
                 DataComponent<Object> type = (DataComponent<@NotNull Object>) this.idToType.apply(entry.getIntKey());
                 Check.notNull(type, "Unknown component id: {0}", entry.getIntKey());
                 if (isTrusted) {
@@ -200,7 +217,7 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
             Int2ObjectMap<@Nullable Object> patch = new Int2ObjectArrayMap<>(added + removed);
             for (int i = 0; i < added; i++) {
                 int id = buffer.read(NetworkBuffer.VAR_INT);
-                //noinspection unchecked
+                @SuppressWarnings("unchecked")
                 DataComponent<Object> type = (DataComponent<@NotNull Object>) this.idToType.apply(id);
                 Check.notNull(type, "Unknown component: {0}", id);
                 if (isTrusted) {
@@ -259,7 +276,7 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
                 }
             }
 
-            return new Result.Ok<>(new DataComponentMapImpl(patch));
+            return new Result.Ok<>(fromMap(patch));
         }
 
         @Override
@@ -269,7 +286,7 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
 
             final Transcoder.MapBuilder<D> map = coder.createMap();
             for (var entry : patch.components.int2ObjectEntrySet()) {
-                //noinspection unchecked
+                @SuppressWarnings("unchecked")
                 DataComponent<Object> type = (DataComponent<@NotNull Object>) this.idToType.apply(entry.getIntKey());
                 if (type == null) return new Result.Error<>("unknown data component id: " + entry.getIntKey());
                 if (entry.getValue() == null) {

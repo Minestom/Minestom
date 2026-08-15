@@ -17,6 +17,7 @@ dependencies {
 
 application {
     mainClass.set("net.minestom.codegen.Generators")
+    mainModule.set("net.minestom.codegen")
 }
 
 tasks.getByName<JavaExec>("run") {

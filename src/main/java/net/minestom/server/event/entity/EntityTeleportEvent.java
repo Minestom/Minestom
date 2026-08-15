@@ -31,21 +31,26 @@ public class EntityTeleportEvent implements EntityEvent {
     }
 
     /**
-     * @return The position that the {@link Entity} is about to teleport to. This is an absolute position.
+     * Gets the absolute position that the {@link Entity} is about to teleport to.
+     *
+     * @return the absolute teleport position
      */
     public Pos getNewPosition() {
         return PositionUtils.getPositionWithRelativeFlags(this.getEntity().getPosition(), getTeleportPosition(), relativeFlags);
     }
 
     /**
-     * @return The position that the {@link Entity} is about to teleport to. This may be (partially) relative depending on the flags.
+     * Gets the raw position that the {@link Entity} is about to teleport to,
+     * which may be (partially) relative depending on the flags.
+     *
+     * @return the raw teleport position
      */
     public Pos getTeleportPosition() {
         return teleportPosition;
     }
 
     /**
-     * @return The flags that determine which fields of the position are relative.
+     * {@return the flags that determine which fields of the position are relative}
      */
     @MagicConstant(flagsFromClass = RelativeFlags.class)
     public int getRelativeFlags() {

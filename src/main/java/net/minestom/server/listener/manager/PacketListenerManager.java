@@ -3,15 +3,56 @@ package net.minestom.server.listener.manager;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerPacketEvent;
-import net.minestom.server.listener.*;
-import net.minestom.server.listener.common.*;
+import net.minestom.server.listener.AbilitiesListener;
+import net.minestom.server.listener.AdvancementTabListener;
+import net.minestom.server.listener.AnimationListener;
+import net.minestom.server.listener.AnvilListener;
+import net.minestom.server.listener.BlockPlacementListener;
+import net.minestom.server.listener.BookListener;
+import net.minestom.server.listener.ChatMessageListener;
+import net.minestom.server.listener.ChunkBatchListener;
+import net.minestom.server.listener.CreativeInventoryActionListener;
+import net.minestom.server.listener.DebugSubscriptionListener;
+import net.minestom.server.listener.EditSignListener;
+import net.minestom.server.listener.EntityActionListener;
+import net.minestom.server.listener.PlayPingListener;
+import net.minestom.server.listener.PlayStatusListener;
+import net.minestom.server.listener.PlayerActionListener;
+import net.minestom.server.listener.PlayerGameModeChangeListener;
+import net.minestom.server.listener.PlayerHeldListener;
+import net.minestom.server.listener.PlayerInputListener;
+import net.minestom.server.listener.PlayerLoadedListener;
+import net.minestom.server.listener.PlayerPickListener;
+import net.minestom.server.listener.PlayerPositionListener;
+import net.minestom.server.listener.PlayerSettingsMenuListener;
+import net.minestom.server.listener.PlayerSpectatorListener;
+import net.minestom.server.listener.PlayerTickListener;
+import net.minestom.server.listener.PlayerVehicleListener;
+import net.minestom.server.listener.RecipeListener;
+import net.minestom.server.listener.TabCompleteListener;
+import net.minestom.server.listener.UseEntityListener;
+import net.minestom.server.listener.UseItemListener;
+import net.minestom.server.listener.WindowListener;
+import net.minestom.server.listener.common.CookieListener;
+import net.minestom.server.listener.common.CustomClickListener;
+import net.minestom.server.listener.common.KeepAliveListener;
+import net.minestom.server.listener.common.PluginMessageListener;
+import net.minestom.server.listener.common.ResourcePackListener;
+import net.minestom.server.listener.common.SettingsListener;
 import net.minestom.server.listener.preplay.HandshakeListener;
 import net.minestom.server.listener.preplay.LoginListener;
 import net.minestom.server.listener.preplay.StatusListener;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.PacketVanilla;
 import net.minestom.server.network.packet.client.ClientPacket;
-import net.minestom.server.network.packet.client.common.*;
+import net.minestom.server.network.packet.client.common.ClientCookieResponsePacket;
+import net.minestom.server.network.packet.client.common.ClientCustomClickActionPacket;
+import net.minestom.server.network.packet.client.common.ClientKeepAlivePacket;
+import net.minestom.server.network.packet.client.common.ClientPingRequestPacket;
+import net.minestom.server.network.packet.client.common.ClientPluginMessagePacket;
+import net.minestom.server.network.packet.client.common.ClientPongPacket;
+import net.minestom.server.network.packet.client.common.ClientResourcePackStatusPacket;
+import net.minestom.server.network.packet.client.common.ClientSettingsPacket;
 import net.minestom.server.network.packet.client.configuration.ClientFinishConfigurationPacket;
 import net.minestom.server.network.packet.client.configuration.ClientSelectKnownPacksPacket;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
@@ -19,7 +60,51 @@ import net.minestom.server.network.packet.client.login.ClientEncryptionResponseP
 import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPacket;
 import net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
-import net.minestom.server.network.packet.client.play.*;
+import net.minestom.server.network.packet.client.play.ClientAdvancementTabPacket;
+import net.minestom.server.network.packet.client.play.ClientAnimationPacket;
+import net.minestom.server.network.packet.client.play.ClientAttackPacket;
+import net.minestom.server.network.packet.client.play.ClientChangeGameModePacket;
+import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
+import net.minestom.server.network.packet.client.play.ClientChatSessionUpdatePacket;
+import net.minestom.server.network.packet.client.play.ClientChunkBatchReceivedPacket;
+import net.minestom.server.network.packet.client.play.ClientClickWindowButtonPacket;
+import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
+import net.minestom.server.network.packet.client.play.ClientCloseWindowPacket;
+import net.minestom.server.network.packet.client.play.ClientCommandChatPacket;
+import net.minestom.server.network.packet.client.play.ClientConfigurationAckPacket;
+import net.minestom.server.network.packet.client.play.ClientCreativeInventoryActionPacket;
+import net.minestom.server.network.packet.client.play.ClientDebugSubscriptionRequestPacket;
+import net.minestom.server.network.packet.client.play.ClientEditBookPacket;
+import net.minestom.server.network.packet.client.play.ClientEntityActionPacket;
+import net.minestom.server.network.packet.client.play.ClientHeldItemChangePacket;
+import net.minestom.server.network.packet.client.play.ClientInputPacket;
+import net.minestom.server.network.packet.client.play.ClientInteractEntityPacket;
+import net.minestom.server.network.packet.client.play.ClientNameItemPacket;
+import net.minestom.server.network.packet.client.play.ClientPickItemFromBlockPacket;
+import net.minestom.server.network.packet.client.play.ClientPickItemFromEntityPacket;
+import net.minestom.server.network.packet.client.play.ClientPlaceRecipePacket;
+import net.minestom.server.network.packet.client.play.ClientPlayerAbilitiesPacket;
+import net.minestom.server.network.packet.client.play.ClientPlayerActionPacket;
+import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket;
+import net.minestom.server.network.packet.client.play.ClientPlayerLoadedPacket;
+import net.minestom.server.network.packet.client.play.ClientPlayerPositionAndRotationPacket;
+import net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket;
+import net.minestom.server.network.packet.client.play.ClientPlayerPositionStatusPacket;
+import net.minestom.server.network.packet.client.play.ClientPlayerRotationPacket;
+import net.minestom.server.network.packet.client.play.ClientSelectBundleItemPacket;
+import net.minestom.server.network.packet.client.play.ClientSetGameRulesPacket;
+import net.minestom.server.network.packet.client.play.ClientSetRecipeBookStatePacket;
+import net.minestom.server.network.packet.client.play.ClientSignedCommandChatPacket;
+import net.minestom.server.network.packet.client.play.ClientSpectatorActionPacket;
+import net.minestom.server.network.packet.client.play.ClientStatusPacket;
+import net.minestom.server.network.packet.client.play.ClientSteerBoatPacket;
+import net.minestom.server.network.packet.client.play.ClientTabCompletePacket;
+import net.minestom.server.network.packet.client.play.ClientTeleportConfirmPacket;
+import net.minestom.server.network.packet.client.play.ClientTeleportToEntityPacket;
+import net.minestom.server.network.packet.client.play.ClientTickEndPacket;
+import net.minestom.server.network.packet.client.play.ClientUpdateSignPacket;
+import net.minestom.server.network.packet.client.play.ClientUseItemPacket;
+import net.minestom.server.network.packet.client.play.ClientVehicleMovePacket;
 import net.minestom.server.network.packet.client.status.StatusRequestPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import org.slf4j.Logger;
@@ -32,6 +117,7 @@ public final class PacketListenerManager {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(PacketListenerManager.class);
 
+    @SuppressWarnings({"unchecked", "rawtypes"}) // generic array creation
     private final Map<Class<? extends ClientPacket>, PacketPrePlayListenerConsumer>[] listeners = new Map[ConnectionState.values().length];
 
     public PacketListenerManager() {
@@ -53,7 +139,7 @@ public final class PacketListenerManager {
         setConfigurationListener(ClientSettingsPacket.class, SettingsListener::listener);
         setConfigurationListener(ClientPluginMessagePacket.class, PluginMessageListener::listener);
         setConfigurationListener(ClientKeepAlivePacket.class, KeepAliveListener::listener);
-        setConfigurationListener(ClientPongPacket.class, (packet, player) -> {/* empty */});
+        setConfigurationListener(ClientPongPacket.class, (_, _) -> {/* empty */});
         setConfigurationListener(ClientResourcePackStatusPacket.class, ResourcePackListener::listener);
         setConfigurationListener(ClientSelectKnownPacksPacket.class, LoginListener::selectKnownPacks);
         setConfigurationListener(ClientFinishConfigurationPacket.class, LoginListener::finishConfigListener);
@@ -65,6 +151,7 @@ public final class PacketListenerManager {
         setPlayListener(ClientChatMessagePacket.class, ChatMessageListener::chatMessageListener);
         setPlayListener(ClientClickWindowPacket.class, WindowListener::clickWindowListener);
         setPlayListener(ClientCloseWindowPacket.class, WindowListener::closeWindowListener);
+        setPlayListener(ClientClickWindowButtonPacket.class, WindowListener::inventoryButtonClickListener);
         setPlayListener(ClientConfigurationAckPacket.class, LoginListener::configAckListener);
         setPlayListener(ClientPongPacket.class, WindowListener::pong);
         setPlayListener(ClientEntityActionPacket.class, EntityActionListener::listener);
@@ -82,33 +169,36 @@ public final class PacketListenerManager {
         setPlayListener(ClientPlayerActionPacket.class, PlayerActionListener::playerActionListener);
         setPlayListener(ClientAnimationPacket.class, AnimationListener::animationListener);
         setPlayListener(ClientInteractEntityPacket.class, UseEntityListener::useEntityListener);
+        setPlayListener(ClientAttackPacket.class, UseEntityListener::attackEntityListener);
         setPlayListener(ClientUseItemPacket.class, UseItemListener::useItemListener);
         setPlayListener(ClientPickItemFromBlockPacket.class, PlayerPickListener::playerPickBlockListener);
         setPlayListener(ClientPickItemFromEntityPacket.class, PlayerPickListener::playerPickEntityListener);
         setPlayListener(ClientStatusPacket.class, PlayStatusListener::listener);
         setPlayListener(ClientSettingsPacket.class, SettingsListener::listener);
         setPlayListener(ClientCreativeInventoryActionPacket.class, CreativeInventoryActionListener::listener);
-        setPlayListener(ClientSetRecipeBookStatePacket.class, (packet, player) -> {/* empty */});
+        setPlayListener(ClientSetRecipeBookStatePacket.class, (_, _) -> {/* empty */});
         setPlayListener(ClientPlaceRecipePacket.class, RecipeListener::listener);
         setPlayListener(ClientTabCompletePacket.class, TabCompleteListener::listener);
         setPlayListener(ClientPluginMessagePacket.class, PluginMessageListener::listener);
         setPlayListener(ClientPlayerAbilitiesPacket.class, AbilitiesListener::listener);
         setPlayListener(ClientResourcePackStatusPacket.class, ResourcePackListener::listener);
         setPlayListener(ClientAdvancementTabPacket.class, AdvancementTabListener::listener);
-        setPlayListener(ClientSpectatePacket.class, SpectateListener::listener);
+        setPlayListener(ClientSpectatorActionPacket.class, PlayerSpectatorListener::listener);
+        setPlayListener(ClientTeleportToEntityPacket.class, PlayerSpectatorListener::listener);
         setPlayListener(ClientEditBookPacket.class, BookListener::listener);
-        setPlayListener(ClientChatSessionUpdatePacket.class, (packet, player) -> {/* empty */});
+        setPlayListener(ClientChatSessionUpdatePacket.class, (_, _) -> {/* empty */});
         setPlayListener(ClientChunkBatchReceivedPacket.class, ChunkBatchListener::batchReceivedListener);
         setPlayListener(ClientPingRequestPacket.class, PlayPingListener::requestListener);
         setListener(ConnectionState.PLAY, ClientCookieResponsePacket.class, CookieListener::handleCookieResponse);
         setPlayListener(ClientNameItemPacket.class, AnvilListener::nameItemListener);
         setPlayListener(ClientTickEndPacket.class, PlayerTickListener::listener);
         setPlayListener(ClientPlayerLoadedPacket.class, PlayerLoadedListener::listener);
-        setPlayListener(ClientSelectBundleItemPacket.class, (packet, player) -> {/* noop for now */});
+        setPlayListener(ClientSelectBundleItemPacket.class, WindowListener::selectBundleItemListener);
         setPlayListener(ClientSignedCommandChatPacket.class, ChatMessageListener::signedCommandChatListener);
         setPlayListener(ClientCustomClickActionPacket.class, CustomClickListener::listener);
         setPlayListener(ClientUpdateSignPacket.class, EditSignListener::listener);
         setPlayListener(ClientDebugSubscriptionRequestPacket.class, DebugSubscriptionListener::requestListener);
+        setPlayListener(ClientSetGameRulesPacket.class, PlayerSettingsMenuListener::setGameRules);
     }
 
     /**
@@ -125,7 +215,8 @@ public final class PacketListenerManager {
         final ConnectionState nextState = PacketVanilla.nextClientState(packet, currState);
         if (nextState != currState) connection.setClientState(nextState);
 
-        final Class clazz = packet.getClass();
+        final Class<?> clazz = packet.getClass();
+        @SuppressWarnings("unchecked")
         PacketPrePlayListenerConsumer<T> packetListenerConsumer = listeners[currState.ordinal()].get(clazz);
 
         // Listener can be null if none has been set before, call PacketConsumer anyway

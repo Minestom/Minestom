@@ -1,6 +1,6 @@
 package net.minestom.server.message;
 
-import net.minestom.server.utils.validate.Check;
+import java.util.Objects;
 
 record ChatTypeImpl(
         ChatTypeDecoration chat,
@@ -8,8 +8,8 @@ record ChatTypeImpl(
 ) implements ChatType {
 
     ChatTypeImpl {
-        Check.notNull(chat, "missing chat");
-        Check.notNull(narration, "missing narration");
+        Objects.requireNonNull(chat, "missing chat");
+        Objects.requireNonNull(narration, "missing narration");
     }
 
 }

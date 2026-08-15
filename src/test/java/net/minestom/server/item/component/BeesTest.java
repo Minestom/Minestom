@@ -3,16 +3,17 @@ package net.minestom.server.item.component;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
+import net.minestom.server.entity.EntityType;
 
 import java.util.List;
 import java.util.Map;
 
 import static java.util.Map.entry;
 
-public class BeesTest extends AbstractItemComponentTest<List<Bee>> {
-    private static final CustomData SOME_DATA = new CustomData(CompoundBinaryTag.builder()
-            .putString("Id", "minecraft:bee")
-            .build());
+public class BeesTest extends AbstractItemComponentRegistriesTest<List<Bee>> {
+    private static final TypedCustomData<EntityType> SOME_DATA = new TypedCustomData<>(
+            EntityType.BEE, CompoundBinaryTag.empty()
+    );
 
     @Override
     protected DataComponent<List<Bee>> component() {

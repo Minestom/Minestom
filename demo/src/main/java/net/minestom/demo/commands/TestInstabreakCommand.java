@@ -27,7 +27,7 @@ public class TestInstabreakCommand extends Command {
         super("testinstabreak");
 
         ArgumentInteger level = ArgumentType.Integer("level");
-        addConditionalSyntax((sender, commandString) -> sender instanceof Player, (sender, context) -> {
+        addConditionalSyntax((sender, _) -> sender instanceof Player, (sender, context) -> {
             Player player = (Player) sender;
 
             int l = context.get(level);
@@ -36,7 +36,7 @@ public class TestInstabreakCommand extends Command {
                 player.addEffect(new Potion(PotionEffect.HASTE, (byte) (l - 1), -1));
             }
         }, ArgumentType.Literal("haste"), level);
-        addConditionalSyntax((sender, commandString) -> sender instanceof Player, (sender, context) -> {
+        addConditionalSyntax((sender, _) -> sender instanceof Player, (sender, context) -> {
             Player player = (Player) sender;
 
             int l = context.get(level);
@@ -45,7 +45,7 @@ public class TestInstabreakCommand extends Command {
                 player.addEffect(new Potion(PotionEffect.CONDUIT_POWER, (byte) (l - 1), -1));
             }
         }, ArgumentType.Literal("conduit"), level);
-        addConditionalSyntax((sender, commandString) -> sender instanceof Player, (sender, context) -> {
+        addConditionalSyntax((sender, _) -> sender instanceof Player, (sender, context) -> {
             Player player = (Player) sender;
 
             int l = context.get(level);
@@ -55,12 +55,12 @@ public class TestInstabreakCommand extends Command {
             }
         }, ArgumentType.Literal("fatigue"), level);
 
-        addConditionalSyntax((sender, commandString) -> sender instanceof Player, (sender, context) -> {
+        addConditionalSyntax((sender, _) -> sender instanceof Player, (sender, _) -> {
             Player player = (Player) sender;
             giveItems(player);
         }, ArgumentType.Literal("giveItems"));
 
-        addConditionalSyntax((sender, commandString) -> sender instanceof Player, (sender, context) -> {
+        addConditionalSyntax((sender, _) -> sender instanceof Player, (sender, _) -> {
             Player player = (Player) sender;
             player.openInventory(new Inventory(InventoryType.ANVIL, Component.translatable("container.repair")));
         }, ArgumentType.Literal("anvil"));
@@ -108,18 +108,18 @@ public class TestInstabreakCommand extends Command {
         }
 
 
-        addConditionalSyntax((sender, commandString) -> sender instanceof Player, (sender, context) -> {
+        addConditionalSyntax((sender, _) -> sender instanceof Player, (sender, _) -> {
             Player player = (Player) sender;
             areaBatch.apply(player.getInstance(), player.getPosition(), null);
         }, ArgumentType.Literal("placeArea"));
 
-        addConditionalSyntax((sender, commandString) -> sender instanceof Player, (sender, context) -> {
+        addConditionalSyntax((sender, _) -> sender instanceof Player, (sender, context) -> {
             Player player = (Player) sender;
             boolean state = context.get("state");
             player.setInstantBreak(state);
         }, ArgumentType.Literal("instabreak"), ArgumentType.Boolean("state"));
 
-        addConditionalSyntax((sender, commandString) -> sender instanceof Player, (sender, context) -> {
+        addConditionalSyntax((sender, _) -> sender instanceof Player, (sender, _) -> {
             Player player = (Player) sender;
             player.setGameMode(GameMode.SURVIVAL);
             player.getInventory().clear();
@@ -128,7 +128,7 @@ public class TestInstabreakCommand extends Command {
         });
     }
 
-    private void giveItems(Player player) {
+    private static void giveItems(Player player) {
         List<ItemStack> items = new ArrayList<>();
         items.add(ItemStack.builder(Material.SHEARS).set(DataComponents.ENCHANTMENTS, EnchantmentList.EMPTY.with(Enchantment.EFFICIENCY, 5)).build());
         items.add(ItemStack.builder(Material.WHITE_WOOL).amount(64).build());

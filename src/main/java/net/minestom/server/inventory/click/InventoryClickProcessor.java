@@ -10,7 +10,6 @@ import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.inventory.TransactionType;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.Material;
 import net.minestom.server.item.component.Equippable;
 import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.utils.MathUtils;
@@ -86,7 +85,7 @@ public final class InventoryClickProcessor {
     }
 
     public InventoryClickResult changeHeld(ItemStack clicked, ItemStack cursor) {
-        return new InventoryClickResult(cursor, clicked); // Swap items
+        return new InventoryClickResult(/* clicked= */ cursor, /* cursor= */ clicked); // Swap items
     }
 
     public InventoryClickResult shiftClick(AbstractInventory inventory, AbstractInventory targetInventory,
@@ -104,7 +103,7 @@ public final class InventoryClickProcessor {
             if (equippableComponent != null) {
                 final EquipmentSlot equipmentSlot = equippableComponent.slot();
                 RegistryTag<EntityType> allowed = equippableComponent.allowedEntities();
-                if ((allowed == null || allowed.contains(EntityType.PLAYER))
+                if ((allowed == null || allowed.contains(EntityType.PLAYER.registryKey()))
                         && (equipmentSlot.isArmor() || equipmentSlot == EquipmentSlot.OFF_HAND)
                         && !craftingGridClick) {
                     // Shift-click equip
@@ -118,7 +117,7 @@ public final class InventoryClickProcessor {
         }
 
         clickResult.setCancel(true);
-        final var pair = TransactionType.ADD.process(targetInventory, clicked, (index, itemStack) -> {
+        final var pair = TransactionType.ADD.process(targetInventory, clicked, (index, _) -> {
             if (inventory == targetInventory && index == slot) {
                 return false; // Prevent item lose/duplication
             }
@@ -227,7 +226,7 @@ public final class InventoryClickProcessor {
             return clickResult;
         }
         final BiFunction<AbstractInventory, ItemStack, ItemStack> func = (inv, rest) -> {
-            var pair = TransactionType.TAKE.process(inv, rest, (index, itemStack) -> {
+            var pair = TransactionType.TAKE.process(inv, rest, (index, _) -> {
                 // Prevent item loss/duplication
                 return index != slot || clickedInventory != inv;
             });
@@ -327,7 +326,7 @@ public final class InventoryClickProcessor {
         return clickResult;
     }
 
-    private void callClickEvent(Player player, AbstractInventory inventory, int slot,
+    private static void callClickEvent(Player player, AbstractInventory inventory, int slot,
                                 ClickType clickType, ItemStack clicked, ItemStack cursor) {
         EventDispatcher.call(new InventoryClickEvent(inventory, player, slot, clickType, clicked, cursor));
     }

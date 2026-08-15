@@ -40,7 +40,7 @@ class SingleAudienceProvider implements AudienceProvider<Audience> {
     }
 
     @Override
-    public Audience players(Predicate<Player> filter) {
+    public Audience players(Predicate<? super Player> filter) {
         return PacketGroupingAudience.of(MinecraftServer.getConnectionManager().getOnlinePlayers().stream().filter(filter).toList());
     }
 
@@ -65,17 +65,17 @@ class SingleAudienceProvider implements AudienceProvider<Audience> {
     }
 
     @Override
-    public Audience custom(Key key, Predicate<Audience> filter) {
+    public Audience custom(Key key, Predicate<? super Audience> filter) {
         return Audience.audience(this.iterable().custom(key, filter));
     }
 
     @Override
-    public Audience customs(Predicate<Audience> filter) {
+    public Audience customs(Predicate<? super Audience> filter) {
         return Audience.audience(this.iterable().customs(filter));
     }
 
     @Override
-    public Audience all(Predicate<Audience> filter) {
+    public Audience all(Predicate<? super Audience> filter) {
         return Audience.audience(this.iterable().all(filter));
     }
 

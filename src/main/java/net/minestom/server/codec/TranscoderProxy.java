@@ -106,6 +106,16 @@ public interface TranscoderProxy<D> extends Transcoder<D> {
     }
 
     @Override
+    default Result<Number> getNumber(D value) {
+        return delegate().getNumber(value);
+    }
+
+    @Override
+    default D createNumber(Number value) {
+        return delegate().createNumber(value);
+    }
+
+    @Override
     default Result<String> getString(D value) {
         return delegate().getString(value);
     }

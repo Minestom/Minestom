@@ -8,7 +8,6 @@ import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.block.BlockUtils;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collection;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,7 +29,7 @@ public class BlockClientNbtTest {
     public void handler() {
         var handler = new BlockHandler() {
             @Override
-            public Collection<Tag<?>> getBlockEntityTags() {
+            public List<Tag<?>> getBlockEntityTags() {
                 return List.of(Tag.String("test"));
             }
 

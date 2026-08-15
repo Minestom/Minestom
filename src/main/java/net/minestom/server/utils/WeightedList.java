@@ -24,6 +24,7 @@ public final class WeightedList<T> implements Iterable<T> {
     }
 
     @SafeVarargs
+    @SuppressWarnings("varargs")
     public static <T> WeightedList<T> of(Entry<T>... entries) {
         return new WeightedList<>(List.of(entries));
     }
@@ -86,5 +87,18 @@ public final class WeightedList<T> implements Iterable<T> {
                     "weight", Codec.INT, Entry::weight,
                     Entry::new);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof WeightedList<?> that)) return false;
+        return totalWeight == that.totalWeight && entries.equals(that.entries);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = entries.hashCode();
+        result = 31 * result + totalWeight;
+        return result;
     }
 }

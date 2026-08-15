@@ -12,7 +12,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.COMPONENT;
+import static net.minestom.server.network.NetworkBuffer.STRING;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record TabCompletePacket(int transactionId, int start, int length,
                                 List<Match> matches) implements ServerPacket.Play, ServerPacket.ComponentHolding {
@@ -30,7 +32,7 @@ public record TabCompletePacket(int transactionId, int start, int length,
     }
 
     @Override
-    public Collection<Component> components() {
+    public List<Component> components() {
         if (matches.isEmpty()) return List.of();
         List<Component> components = new ArrayList<>(matches.size());
         for (Match match : matches) {

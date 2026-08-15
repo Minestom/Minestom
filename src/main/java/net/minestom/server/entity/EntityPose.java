@@ -18,5 +18,5 @@ public enum EntityPose {
     DIGGING,
     SLIDING,
     SHOOTING,
-    INHALING;
+    INHALING
 }

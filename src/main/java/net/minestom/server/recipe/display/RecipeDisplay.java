@@ -6,7 +6,6 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
@@ -27,8 +26,12 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
                 SlotDisplay.NETWORK_TYPE, CraftingShapeless::craftingStation,
                 CraftingShapeless::new);
 
+        public CraftingShapeless {
+            ingredients = List.copyOf(ingredients);
+        }
+
         @Override
-        public Collection<Component> components() {
+        public List<Component> components() {
             final var components = new ArrayList<Component>();
             for (SlotDisplay ingredient : ingredients)
                 components.addAll(ingredient.components());
@@ -69,7 +72,7 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
         }
 
         @Override
-        public Collection<Component> components() {
+        public List<Component> components() {
             final var components = new ArrayList<Component>();
             for (SlotDisplay ingredient : ingredients)
                 components.addAll(ingredient.components());
@@ -104,7 +107,7 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
                 Furnace::new);
 
         @Override
-        public Collection<Component> components() {
+        public List<Component> components() {
             final var components = new ArrayList<Component>();
             components.addAll(ingredient.components());
             components.addAll(fuel.components());
@@ -133,7 +136,7 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
                 Stonecutter::new);
 
         @Override
-        public Collection<Component> components() {
+        public List<Component> components() {
             final var components = new ArrayList<Component>();
             components.addAll(ingredient.components());
             components.addAll(result.components());
@@ -164,7 +167,7 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
                 Smithing::new);
 
         @Override
-        public Collection<Component> components() {
+        public List<Component> components() {
             final var components = new ArrayList<Component>();
             components.addAll(template.components());
             components.addAll(base.components());
@@ -193,11 +196,11 @@ public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
 
     private static RecipeDisplayType recipeDisplayToType(RecipeDisplay recipeDisplay) {
         return switch (recipeDisplay) {
-            case CraftingShapeless ignored -> RecipeDisplayType.CRAFTING_SHAPELESS;
-            case CraftingShaped ignored -> RecipeDisplayType.CRAFTING_SHAPED;
-            case Furnace ignored -> RecipeDisplayType.FURNACE;
-            case Stonecutter ignored -> RecipeDisplayType.STONECUTTER;
-            case Smithing ignored -> RecipeDisplayType.SMITHING;
+            case CraftingShapeless _ -> RecipeDisplayType.CRAFTING_SHAPELESS;
+            case CraftingShaped _ -> RecipeDisplayType.CRAFTING_SHAPED;
+            case Furnace _ -> RecipeDisplayType.FURNACE;
+            case Stonecutter _ -> RecipeDisplayType.STONECUTTER;
+            case Smithing _ -> RecipeDisplayType.SMITHING;
         };
     }
 }

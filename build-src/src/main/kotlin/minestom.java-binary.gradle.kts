@@ -1,7 +1,7 @@
 plugins {
     java
     application
-    alias(libs.plugins.shadow)
+    id("minestom.style")
 }
 
 val javaVersion = System.getenv("JAVA_VERSION") ?: "25"
@@ -26,8 +26,4 @@ java {
 
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
-}
-
-tasks.shadowJar {
-    mergeServiceFiles()
 }

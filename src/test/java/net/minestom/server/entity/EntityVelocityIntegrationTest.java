@@ -15,7 +15,10 @@ import org.junit.jupiter.api.Test;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BooleanSupplier;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @EnvTest
 public class EntityVelocityIntegrationTest {
@@ -114,7 +117,7 @@ public class EntityVelocityIntegrationTest {
 
         final double epsilon = 0.000001;
 
-        assertEquals(player.getVelocity().y(), -1.568, epsilon);
+        assertEquals(-1.568, player.getVelocity().y(), epsilon);
         double previousVelocity = player.getVelocity().y();
 
         player.setFlying(true);
@@ -126,7 +129,7 @@ public class EntityVelocityIntegrationTest {
             previousVelocity = player.getVelocity().y();
             env.tick();
         }
-        assertEquals(player.getVelocity().y(), 0);
+        assertEquals(0, player.getVelocity().y());
     }
 
     @Test
@@ -183,10 +186,8 @@ public class EntityVelocityIntegrationTest {
         AtomicInteger i = new AtomicInteger();
         BooleanSupplier tickLoopCondition = () -> i.getAndIncrement() < Math.max(entity.getSynchronizationTicks() - 1, 19);
 
-        var tracker = viewerConnection.trackIncoming(EntityVelocityPacket.class);
-
         entity.setVelocity(new Vec(0, 5, 0));
-        tracker = viewerConnection.trackIncoming(EntityVelocityPacket.class);
+        var tracker = viewerConnection.trackIncoming(EntityVelocityPacket.class);
         i.set(0);
         env.tickWhile(tickLoopCondition, null);
         tracker.assertCount(1); // Verify the update is only sent once
@@ -198,7 +199,7 @@ public class EntityVelocityIntegrationTest {
         loadChunks(instance);
 
         var entity = new Entity(EntityTypes.ZOMBIE);
-        var point = new Pos(1.9, 40, 0.2);
+        var point = new Pos(1.5, 40, 0.2);
         instance.setWorldBorder(new WorldBorder(4, 0, 0, 0, 0));
         instance.setBlock(new Vec(1, 39, 0), Block.ICE);
         instance.setBlock(new Vec(1, 39, 1), Block.SOUL_SAND);
@@ -211,21 +212,22 @@ public class EntityVelocityIntegrationTest {
         env.tick();
 
         double horizontalAirResistance = entity.getAerodynamics().horizontalAirResistance();
-        double oldFriction = Block.ICE.registry().friction();
-        double newFriction = Block.SOUL_SAND.registry().friction();
+        double oldFriction = Block.ICE.friction();
+        double newFriction = Block.SOUL_SAND.friction();
         assertNotEquals(oldFriction, newFriction, Vec.EPSILON);
 
         double expectedDrag = newFriction * horizontalAirResistance;
         double expectedOldDrag = oldFriction * horizontalAirResistance;
 
-        assertEquals(point.x(), entity.getPosition().x(), Vec.EPSILON);
+        assertEquals(2, entity.getPosition().x() + entity.getBoundingBox().maxX(), Vec.EPSILON * 20);
+        assertTrue(instance.getWorldBorder().inBounds(entity.getPosition(), entity.getBoundingBox()));
         assertTrue(entity.getPosition().z() > point.z());
-        assertEquals(initialVelocity.x() * expectedDrag, entity.getVelocity().x(), Vec.EPSILON);
+        assertEquals(0, entity.getVelocity().x(), Vec.EPSILON);
         assertEquals(initialVelocity.z() * expectedDrag, entity.getVelocity().z(), Vec.EPSILON);
-        assertNotEquals(initialVelocity.x() * expectedOldDrag, entity.getVelocity().x(), Vec.EPSILON);
+        assertNotEquals(initialVelocity.z() * expectedOldDrag, entity.getVelocity().z(), Vec.EPSILON);
     }
 
-    private void testMovement(Env env, Entity entity, Vec... sample) {
+    private static void testMovement(Env env, Entity entity, Vec... sample) {
         final double epsilon = 0.003;
         for (Vec vec : sample) {
             assertEquals(vec.x(), entity.getPosition().x(), epsilon);
@@ -235,7 +237,7 @@ public class EntityVelocityIntegrationTest {
         }
     }
 
-    private void loadChunks(Instance instance) {
+    private static void loadChunks(Instance instance) {
         ChunkUtils.optionalLoadAll(instance, new long[]{
                 CoordConversion.chunkIndex(-1, -1),
                 CoordConversion.chunkIndex(-1, 0),

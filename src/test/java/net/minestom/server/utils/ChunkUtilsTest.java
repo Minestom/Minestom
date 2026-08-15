@@ -6,7 +6,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public class ChunkUtilsTest {
@@ -21,8 +25,8 @@ public class ChunkUtilsTest {
 
         final List<ChunkCoordinate> actualNew = new ArrayList<>();
         final List<ChunkCoordinate> actualOld = new ArrayList<>();
-        ChunkRange.chunksInRangeDiffering(nx, nz, ox, oz, r, ((x, z) -> actualNew.add(new ChunkCoordinate(x, z))),
-                ((x, z) -> actualOld.add(new ChunkCoordinate(x, z))));
+        ChunkRange.chunksInRangeDiffering(nx, nz, ox, oz, r, (x, z) -> actualNew.add(new ChunkCoordinate(x, z)),
+                (x, z) -> actualOld.add(new ChunkCoordinate(x, z)));
 
         final Comparator<ChunkCoordinate> sorter = Comparator.comparingInt(ChunkCoordinate::x).thenComparingInt(ChunkCoordinate::z);
         final List<ChunkCoordinate> expectedNew = n.stream().filter(x -> !o.contains(x)).sorted(sorter).toList();

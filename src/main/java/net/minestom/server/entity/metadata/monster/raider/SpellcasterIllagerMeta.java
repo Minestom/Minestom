@@ -3,9 +3,10 @@ package net.minestom.server.entity.metadata.monster.raider;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import org.jetbrains.annotations.Nullable;
 
 public class SpellcasterIllagerMeta extends AbstractIllagerMeta {
-    protected SpellcasterIllagerMeta(Entity entity, MetadataHolder metadata) {
+    protected SpellcasterIllagerMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

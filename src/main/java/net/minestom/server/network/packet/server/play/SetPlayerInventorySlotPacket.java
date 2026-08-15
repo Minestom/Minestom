@@ -18,6 +18,7 @@ public record SetPlayerInventorySlotPacket(int slot, ItemStack itemStack) implem
             SetPlayerInventorySlotPacket::new);
 
     @Override
+    @SuppressWarnings("PreferredInterfaceType") // wider type kept for binary compatibility until the next breaking release
     public Collection<Component> components() {
         return ItemStack.textComponents(itemStack);
     }

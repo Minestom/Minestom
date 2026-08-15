@@ -1,11 +1,13 @@
 package net.minestom.server.map;
 
 import net.minestom.server.ServerFlag;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
+import java.util.function.ToIntFunction;
 
 public enum MapColors {
     NONE(0, 0, 0),
@@ -75,7 +77,7 @@ public enum MapColors {
     private static final Logger logger = LoggerFactory.getLogger(MapColors.class);
     private static final ConcurrentHashMap<Integer, PreciseMapColor> rgbMap = new ConcurrentHashMap<>();
     // only used if mappingStrategy == ColorMappingStrategy.PRECISE
-    private static volatile PreciseMapColor[] rgbArray = null;
+    private static volatile PreciseMapColor @Nullable [] rgbArray = null;
 
     private static final ColorMappingStrategy mappingStrategy;
     private static final int colorReduction;
@@ -83,8 +85,8 @@ public enum MapColors {
     static {
         ColorMappingStrategy strategy;
         try {
-            strategy = ColorMappingStrategy.valueOf(ServerFlag.MAP_RGB_MAPPING.toUpperCase());
-        } catch (IllegalArgumentException e) {
+            strategy = ColorMappingStrategy.valueOf(ServerFlag.MAP_RGB_MAPPING.toUpperCase(Locale.ROOT));
+        } catch (IllegalArgumentException _) {
             logger.warn("Unknown color mapping strategy '{}', defaulting to LAZY.", ServerFlag.MAP_RGB_MAPPING);
             strategy = ColorMappingStrategy.LAZY;
         }
@@ -290,10 +292,10 @@ public enum MapColors {
         x0_71(MapColors::multiply71, 0.71),
         x0_86(MapColors::multiply86, 0.86);
 
-        private final Function<MapColors, Byte> indexGetter;
+        private final ToIntFunction<MapColors> indexGetter;
         private final double multiplier;
 
-        Multiplier(Function<MapColors, Byte> indexGetter, double multiplier) {
+        Multiplier(ToIntFunction<MapColors> indexGetter, double multiplier) {
             this.indexGetter = indexGetter;
             this.multiplier = multiplier;
         }
@@ -303,7 +305,7 @@ public enum MapColors {
         }
 
         public byte apply(MapColors baseColor) {
-            return indexGetter.apply(baseColor);
+            return (byte) indexGetter.applyAsInt(baseColor);
         }
     }
 

@@ -10,6 +10,7 @@ public enum Direction {
     WEST(-1, 0, 0),
     EAST(1, 0, 0);
 
+    @SuppressWarnings("MutablePublicArray")
     public static final Direction[] HORIZONTAL = {SOUTH, WEST, NORTH, EAST};
 
     private final int normalX;

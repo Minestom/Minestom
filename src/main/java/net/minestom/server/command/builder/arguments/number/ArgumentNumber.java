@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
+import java.util.Locale;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -59,7 +60,7 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
             }
 
             return value;
-        } catch (NumberFormatException | NullPointerException e) {
+        } catch (NumberFormatException | NullPointerException _) {
             throw new ArgumentSyntaxException("Input is not a number, or it's invalid for the given type", input, NOT_NUMBER_ERROR);
         }
     }
@@ -102,7 +103,7 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
     }
 
     /**
-     * Creates the byteflag based on the number's min/max existance.
+     * Creates the byteflag based on the number's min/max existence.
      *
      * @return A byteflag for argument specification.
      */
@@ -156,7 +157,7 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
             value = value.replaceFirst(Pattern.quote("0b"), "");
         } else if (value.startsWith("0x")) {
             value = value.replaceFirst(Pattern.quote("0x"), "");
-        } else if (value.toLowerCase().contains("e")) {
+        } else if (value.toLowerCase(Locale.ROOT).contains("e")) {
             value = removeScientificNotation(value);
         }
         // TODO number suffix support (k,m,b,t)
@@ -176,7 +177,7 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
     protected String removeScientificNotation(String value) {
         try {
             return new BigDecimal(value).toPlainString();
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             return null;
         }
     }

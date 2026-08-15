@@ -13,7 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public record ShapeImpl(ShapeData shapeData, OcclusionData occlusionData) implements Shape {
-    private static final Pattern PATTERN = Pattern.compile("\\d.\\d+", Pattern.MULTILINE);
+    private static final Pattern PATTERN = Pattern.compile("-?\\d+\\.\\d+");
 
     record ShapeData(List<BoundingBox> boundingBoxes,
                      Point relativeStart, Point relativeEnd,
@@ -24,6 +24,10 @@ public record ShapeImpl(ShapeData shapeData, OcclusionData occlusionData) implem
     }
 
     record OcclusionData(byte blockOcclusion, byte airOcclusion, byte lightEmission) {}
+
+    public ShapeImpl withLightEmission(byte lightEmission) {
+        return new ShapeImpl(this.shapeData, new OcclusionData(this.occlusionData.blockOcclusion(), this.occlusionData.airOcclusion, lightEmission));
+    }
 
     /**
      * Computes the occlusion for a given face.
@@ -105,13 +109,13 @@ public record ShapeImpl(ShapeData shapeData, OcclusionData occlusionData) implem
         boolean hitBlock = false;
         for (BoundingBox blockSection : shapeData.boundingBoxes) {
             // Update final result if the temp result collision is sooner than the current final result
-            if (RayUtils.BoundingBoxIntersectionCheck(moving, rayStart, rayDirection, blockSection, shapePos, finalResult)) {
+            if (RayUtils.boundingBoxIntersectionCheck(moving, rayStart, rayDirection, blockSection, shapePos, finalResult)) {
                 finalResult.collidedPositionX = rayStart.x() + rayDirection.x() * finalResult.res;
                 finalResult.collidedPositionY = rayStart.y() + rayDirection.y() * finalResult.res;
                 finalResult.collidedPositionZ = rayStart.z() + rayDirection.z() * finalResult.res;
-                finalResult.collidedShapeX = shapePos.x();
-                finalResult.collidedShapeY = shapePos.y();
-                finalResult.collidedShapeZ = shapePos.z();
+                finalResult.collidedBlockX = shapePos.blockX();
+                finalResult.collidedBlockY = shapePos.blockY();
+                finalResult.collidedBlockZ = shapePos.blockZ();
                 finalResult.collidedShape = this;
                 hitBlock = true;
             }
@@ -199,7 +203,7 @@ public record ShapeImpl(ShapeData shapeData, OcclusionData occlusionData) implem
         byte fullCollisionFaces = 0;
         for (BlockFace f : BlockFace.values()) {
             final byte res = isFaceCovered(computeOcclusionSet(f, collisionBoundingBoxes));
-            fullCollisionFaces |= ((res == 2) ? 0b1 : 0b0) << (byte) f.ordinal();
+            fullCollisionFaces = (byte) (fullCollisionFaces | ((res == 2) ? 0b1 : 0b0) << f.ordinal());
         }
 
         return new ShapeData(collisionBoundingBoxes, relativeStart, relativeEnd, fullCollisionFaces);
@@ -210,8 +214,8 @@ public record ShapeImpl(ShapeData shapeData, OcclusionData occlusionData) implem
         byte airFaces = 0;
         for (BlockFace f : BlockFace.values()) {
             final byte res = isFaceCovered(computeOcclusionSet(f, shapeData.boundingBoxes));
-            fullFaces |= ((res == 2) ? 0b1 : 0b0) << (byte) f.ordinal();
-            airFaces |= ((res == 0) ? 0b1 : 0b0) << (byte) f.ordinal();
+            fullFaces = (byte) (fullFaces | ((res == 2) ? 0b1 : 0b0) << f.ordinal());
+            airFaces = (byte) (airFaces | ((res == 0) ? 0b1 : 0b0) << f.ordinal());
         }
         return new OcclusionData(fullFaces, airFaces, lightEmission);
     }

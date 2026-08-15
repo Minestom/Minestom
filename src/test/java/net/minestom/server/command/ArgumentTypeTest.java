@@ -11,6 +11,7 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.color.TeamColor;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
@@ -33,12 +34,15 @@ import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ArgumentTypeTest {
 
     static {
-        MinecraftServer.init();
+        MinecraftServer.init(); // TODO, some args require a ServerProcess.
     }
 
     @Test
@@ -69,11 +73,10 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentColor() {
-        var arg = ArgumentType.Color("color");
+    public void testArgumentTeamColor() {
+        var arg = ArgumentType.TeamColor("color");
         assertInvalidArg(arg, "invalid_color");
-        assertArg(arg, Style.style(NamedTextColor.DARK_PURPLE), "dark_purple");
-        assertArg(arg, Style.empty(), "reset");
+        assertArg(arg, TeamColor.DARK_PURPLE, "dark_purple");
     }
 
     @Test
@@ -122,8 +125,19 @@ public class ArgumentTypeTest {
 
         assertValidArg(arg, "@e[distance=500]");
         assertValidArg(arg, "@e[distance=50..150]");
+        assertValidArg(arg, "@e[distance=5..]");
+        assertValidArg(arg, "@e[distance=..10]");
+        assertValidArg(arg, "@e[distance=1.5..3.5]");
         assertInvalidArg(arg, "@e[distance=-500-500]");
-        assertInvalidArg(arg, "@e[distance=2147483648]");
+        assertInvalidArg(arg, "@e[distance=-5]");
+        assertInvalidArg(arg, "@e[distance=-3..-1]");
+        assertInvalidArg(arg, "@e[distance=..-3]");
+        assertInvalidArg(arg, "@e[distance=NaN]");
+        assertInvalidArg(arg, "@e[distance=Infinity..]");
+
+        assertInvalidArg(arg, "@e[type=pig,garbage]");
+        assertInvalidArg(arg, "@e[type=pig,]");
+        assertInvalidArg(arg, "@e[garbage]");
     }
 
     @Test
@@ -132,8 +146,8 @@ public class ArgumentTypeTest {
         assertArg(arg, new Range.Float(0f, 50f), "0..50");
         assertArg(arg, new Range.Float(0f, 0f), "0..0");
         assertArg(arg, new Range.Float(-50f, 0f), "-50..0");
-        assertArg(arg, new Range.Float(-Float.MAX_VALUE, 50f), "..50");
-        assertArg(arg, new Range.Float(0f, Float.MAX_VALUE), "0..");
+        assertArg(arg, new Range.Float(null, 50f), "..50");
+        assertArg(arg, new Range.Float(0f, null), "0..");
         assertArg(arg, new Range.Float(-Float.MAX_VALUE, Float.MAX_VALUE), "-3.4028235E38..3.4028235E38");
         assertArg(arg, new Range.Float(0.5f, 24f), "0.5..24");
         assertArg(arg, new Range.Float(12f, 45.6f), "12..45.6");
@@ -148,8 +162,8 @@ public class ArgumentTypeTest {
         assertArg(arg, new Range.Int(0, 50), "0..50");
         assertArg(arg, new Range.Int(0, 0), "0..0");
         assertArg(arg, new Range.Int(-50, 0), "-50..0");
-        assertArg(arg, new Range.Int(Integer.MIN_VALUE, 50), "..50");
-        assertArg(arg, new Range.Int(0, Integer.MAX_VALUE), "0..");
+        assertArg(arg, new Range.Int(null, 50), "..50");
+        assertArg(arg, new Range.Int(0, null), "0..");
         assertArg(arg, new Range.Int(Integer.MIN_VALUE, Integer.MAX_VALUE), "-2147483648..2147483647");
 
         assertInvalidArg(arg, "..");
@@ -276,7 +290,7 @@ public class ArgumentTypeTest {
     @Test
     public void testArgumentLong() {
         var arg = ArgumentType.Long("long");
-        assertArg(arg, 2564l, "2564");
+        assertArg(arg, 2564L, "2564");
         assertInvalidArg(arg, "256.4");
         assertInvalidArg(arg, "9223372036854775808");
     }
@@ -419,7 +433,7 @@ public class ArgumentTypeTest {
 
     @Test
     public void testArgumentLoop() {
-        var arg = ArgumentType.Loop("loop", ArgumentType.String("string"), ArgumentType.String("string2").map(s -> {
+        var arg = ArgumentType.Loop("loop", ArgumentType.String("string"), ArgumentType.String("string2").map(_ -> {
             throw new IllegalArgumentException("This argument should never be triggered");
         }));
 

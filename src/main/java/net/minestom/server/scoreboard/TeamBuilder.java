@@ -1,9 +1,10 @@
 package net.minestom.server.scoreboard;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import net.minestom.server.color.TeamColor;
 import net.minestom.server.network.packet.server.play.TeamsPacket.CollisionRule;
 import net.minestom.server.network.packet.server.play.TeamsPacket.NameTagVisibility;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A builder which represents a fluent Object to built teams.
@@ -62,7 +63,7 @@ public class TeamBuilder {
      * @param color The new color
      * @return this builder, for chaining
      */
-    public TeamBuilder updateTeamColor(NamedTextColor color) {
+    public TeamBuilder updateTeamColor(@Nullable TeamColor color) {
         this.team.updateTeamColor(color);
         return this;
     }
@@ -176,7 +177,7 @@ public class TeamBuilder {
      * @param color The new team color
      * @return this builder, for chaining
      */
-    public TeamBuilder teamColor(NamedTextColor color) {
+    public TeamBuilder teamColor(@Nullable TeamColor color) {
         this.team.setTeamColor(color);
         return this;
     }

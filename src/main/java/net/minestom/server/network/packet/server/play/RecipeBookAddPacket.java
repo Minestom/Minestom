@@ -10,7 +10,6 @@ import net.minestom.server.recipe.display.RecipeDisplay;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
@@ -19,6 +18,10 @@ import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
 public record RecipeBookAddPacket(List<Entry> entries, boolean replace) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final byte FLAG_NOTIFICATION = 1;
     public static final byte FLAG_HIGHLIGHT = 1 << 1;
+
+    public RecipeBookAddPacket {
+        entries = List.copyOf(entries);
+    }
 
     public static final NetworkBuffer.Type<RecipeBookAddPacket> SERIALIZER = NetworkBufferTemplate.template(
             Entry.SERIALIZER.list(), RecipeBookAddPacket::entries,
@@ -40,6 +43,10 @@ public record RecipeBookAddPacket(List<Entry> entries, boolean replace) implemen
                 NetworkBuffer.BYTE, Entry::flags,
                 Entry::new);
 
+        public Entry {
+            craftingRequirements = craftingRequirements != null ? List.copyOf(craftingRequirements) : null;
+        }
+
         public Entry(int displayId, RecipeDisplay display,
                      @Nullable Integer group, RecipeBookCategory category,
                      @Nullable List<Ingredient> craftingRequirements,
@@ -58,7 +65,7 @@ public record RecipeBookAddPacket(List<Entry> entries, boolean replace) implemen
     }
 
     @Override
-    public Collection<Component> components() {
+    public List<Component> components() {
         final var components = new ArrayList<Component>();
         for (Entry entry : entries)
             components.addAll(entry.display.components());

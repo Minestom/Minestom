@@ -5,20 +5,17 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.entity.Player;
-import net.minestom.server.network.ConnectionState;
 
-import java.util.Collection;
 import java.util.List;
 
 public class PlayersCommand extends Command {
 
     public PlayersCommand() {
         super("players");
-        setDefaultExecutor(this::usage);
+        setDefaultExecutor(PlayersCommand::usage);
     }
 
-    private void usage(CommandSender sender, CommandContext context) {
+    private static void usage(CommandSender sender, CommandContext context) {
         final var players = List.copyOf(MinecraftServer.getConnectionManager().getOnlinePlayers());
         final int playerCount = players.size();
         sender.sendMessage(Component.text("Total players: " + playerCount));

@@ -8,7 +8,6 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
@@ -30,7 +29,7 @@ public record WindowItemsPacket(int windowId, int stateId, List<ItemStack> items
     }
 
     @Override
-    public Collection<Component> components() {
+    public List<Component> components() {
         final var list = new ArrayList<>(this.items);
         list.add(this.carriedItem);
 

@@ -7,6 +7,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.text.MessageFormat;
@@ -25,9 +26,11 @@ public sealed interface DialogInput {
     StructCodec<DialogInput> CODEC = Codec.RegistryTaggedUnion(REGISTRY, DialogInput::codec);
 
     static void validateKey(String key) {
-        for (var c : key.toCharArray())
+        for (int i = 0; i < key.length(); i++) {
+            final char c = key.charAt(i);
             if (!Character.isLetterOrDigit(c) && c != '_')
                 throw new IllegalArgumentException(MessageFormat.format("Invalid input key: {0}. Must match [a-zA-Z0-9_]+", key));
+        }
     }
 
     record Boolean(
@@ -51,7 +54,7 @@ public sealed interface DialogInput {
         }
 
         @Override
-        public StructCodec<? extends DialogInput> codec() {
+        public StructCodec<Boolean> codec() {
             return CODEC;
         }
     }
@@ -81,7 +84,7 @@ public sealed interface DialogInput {
         }
 
         @Override
-        public StructCodec<? extends DialogInput> codec() {
+        public StructCodec<NumberRange> codec() {
             return CODEC;
         }
     }
@@ -111,7 +114,7 @@ public sealed interface DialogInput {
         }
 
         @Override
-        public StructCodec<? extends DialogInput> codec() {
+        public StructCodec<SingleOption> codec() {
             return CODEC;
         }
 
@@ -147,7 +150,7 @@ public sealed interface DialogInput {
         }
 
         @Override
-        public StructCodec<? extends DialogInput> codec() {
+        public StructCodec<Text> codec() {
             return CODEC;
         }
 
@@ -159,6 +162,7 @@ public sealed interface DialogInput {
         }
     }
 
+    @ApiStatus.OverrideOnly
     StructCodec<? extends DialogInput> codec();
 
 }

@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.Map;
 
 import static net.minestom.testing.TestUtils.assertEqualsSNBT;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TagRecordTest {
 
@@ -88,24 +90,26 @@ public class TagRecordTest {
 
     @Test
     public void unsupportedList() {
-        record Test(List<Object> list) {
+        record ListRecord(List<Object> list) {
         }
-        assertThrows(IllegalArgumentException.class, () -> Tag.Structure("test", Test.class));
+        assertThrows(IllegalArgumentException.class, () -> Tag.Structure("test", ListRecord.class));
     }
 
     @Test
     public void unsupportedArray() {
-        record Test(Object[] array) {
+        record ArrayRecord(Object[] array) {
         }
-        assertThrows(IllegalArgumentException.class, () -> Tag.Structure("test", Test.class));
+        assertThrows(IllegalArgumentException.class, () -> Tag.Structure("test", ArrayRecord.class));
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void forceRecord() {
         assertThrows(Throwable.class, () -> Tag.Structure("entity", Class.class.cast(Entity.class)));
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void invalidItem() {
         // ItemStack cannot become a record due to `ItemStack#toItemNBT` being serialized differently, and independently of
         // the item record components

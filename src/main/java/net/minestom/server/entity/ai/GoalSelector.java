@@ -16,7 +16,7 @@ public abstract class GoalSelector {
     }
 
     /**
-     * Whether or not this {@link GoalSelector} should start.
+     * Whether this {@link GoalSelector} should start.
      *
      * @return true to start
      */
@@ -35,7 +35,7 @@ public abstract class GoalSelector {
     public abstract void tick(long time);
 
     /**
-     * Whether or not this {@link GoalSelector} should end.
+     * Whether this {@link GoalSelector} should end.
      *
      * @return true to end
      */

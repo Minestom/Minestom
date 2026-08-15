@@ -3,6 +3,7 @@ package net.minestom.server.collision;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
+import org.jetbrains.annotations.Nullable;
 
 final class RayUtils {
     /**
@@ -11,169 +12,117 @@ final class RayUtils {
      * @param rayStart         Ray start position
      * @param rayDirection     Ray to check
      * @param collidableStatic Bounding box
-     * @param finalResult
+     * @param finalResult      the sweep result to write the intersection details to
      * @return true if an intersection between the ray and the bounding box was found
      */
-    public static boolean BoundingBoxIntersectionCheck(BoundingBox moving, Point rayStart, Point rayDirection, BoundingBox collidableStatic, Point staticCollidableOffset, SweepResult finalResult) {
-        Point bbCentre = new Vec(moving.minX() + moving.width() / 2, moving.minY() + moving.height() / 2, moving.minZ() + moving.depth() / 2);
-        Point rayCentre = rayStart.add(bbCentre);
+    static boolean boundingBoxIntersectionCheck(BoundingBox moving, Point rayStart, Point rayDirection, BoundingBox collidableStatic, Point staticCollidableOffset, SweepResult finalResult) {
+        return !Double.isNaN(boundingBoxIntersectionPercentage(moving, rayStart, rayDirection,
+                collidableStatic, staticCollidableOffset, finalResult.res, finalResult));
+    }
 
-        // Translate bounding box
-        Vec bbOffMin = new Vec(collidableStatic.minX() - rayCentre.x() + staticCollidableOffset.x() - moving.width() / 2, collidableStatic.minY() - rayCentre.y() + staticCollidableOffset.y() - moving.height() / 2, collidableStatic.minZ() - rayCentre.z() + staticCollidableOffset.z() - moving.depth() / 2);
-        Vec bbOffMax = new Vec(collidableStatic.maxX() - rayCentre.x() + staticCollidableOffset.x() + moving.width() / 2, collidableStatic.maxY() - rayCentre.y() + staticCollidableOffset.y() + moving.height() / 2, collidableStatic.maxZ() - rayCentre.z() + staticCollidableOffset.z() + moving.depth() / 2);
+    static boolean boundingBoxRayIntersectionCheck(Vec start, Vec direction, BoundingBox boundingBox, Pos position) {
+        return !Double.isNaN(boundingBoxIntersectionPercentage(
+                BoundingBox.ZERO, start, direction, boundingBox, position, Double.MAX_VALUE));
+    }
 
-        // This check is done in 2d. it can be visualised as a rectangle (the face we are checking), and a point.
-        // If the point is within the rectangle, we know the vector intersects the face.
+    /**
+     * Returns the accepted movement percentage, or {@link Double#NaN} if the boxes do not intersect.
+     */
+    static double boundingBoxIntersectionPercentage(BoundingBox moving, Point rayStart, Point rayDirection,
+                                                     BoundingBox collidableStatic, Point staticCollidableOffset,
+                                                     double maxPercentage) {
+        return boundingBoxIntersectionPercentage(moving, rayStart, rayDirection,
+                collidableStatic, staticCollidableOffset, maxPercentage, null);
+    }
 
-        double signumRayX = Math.signum(rayDirection.x());
-        double signumRayY = Math.signum(rayDirection.y());
-        double signumRayZ = Math.signum(rayDirection.z());
+    @SuppressWarnings("DuplicatedCode")
+    private static double boundingBoxIntersectionPercentage(BoundingBox moving, Point rayStart, Point rayDirection,
+                                                            BoundingBox collidableStatic, Point staticCollidableOffset,
+                                                            double maxPercentage, @Nullable SweepResult finalResult) {
+        final double halfWidth = moving.width() / 2;
+        final double halfHeight = moving.height() / 2;
+        final double halfDepth = moving.depth() / 2;
 
-        boolean isHit = false;
-        double percentage = Double.MAX_VALUE;
-        int collisionFace = -1;
+        final double rayCentreX = rayStart.x() + moving.minX() + halfWidth;
+        final double rayCentreY = rayStart.y() + moving.minY() + halfHeight;
+        final double rayCentreZ = rayStart.z() + moving.minZ() + halfDepth;
 
-        // Intersect X
-        // Left side of bounding box
-        if (rayDirection.x() > 0) {
-            double xFac = epsilon(bbOffMin.x() / rayDirection.x());
-            if (xFac < percentage) {
-                double yix = rayDirection.y() * xFac + rayCentre.y();
-                double zix = rayDirection.z() * xFac + rayCentre.z();
+        final double rayDirX = rayDirection.x();
+        final double rayDirY = rayDirection.y();
+        final double rayDirZ = rayDirection.z();
 
-                // Check if ray passes through y/z plane
-                if (((yix - rayCentre.y()) * signumRayY) >= 0
-                        && ((zix - rayCentre.z()) * signumRayZ) >= 0
-                        && yix >= collidableStatic.minY() + staticCollidableOffset.y() - moving.height() / 2
-                        && yix <= collidableStatic.maxY() + staticCollidableOffset.y() + moving.height() / 2
-                        && zix >= collidableStatic.minZ() + staticCollidableOffset.z() - moving.depth() / 2
-                        && zix <= collidableStatic.maxZ() + staticCollidableOffset.z() + moving.depth() / 2) {
-                    isHit = true;
-                    percentage = xFac;
-                    collisionFace = 0;
-                }
-            }
-        }
-        // Right side of bounding box
-        if (rayDirection.x() < 0) {
-            double xFac = epsilon(bbOffMax.x() / rayDirection.x());
-            if (xFac < percentage) {
-                double yix = rayDirection.y() * xFac + rayCentre.y();
-                double zix = rayDirection.z() * xFac + rayCentre.z();
+        // Expand the static box by the moving box and intersect its three axis slabs.
+        final double expandedMinX = collidableStatic.minX() + staticCollidableOffset.x() - halfWidth;
+        final double expandedMinY = collidableStatic.minY() + staticCollidableOffset.y() - halfHeight;
+        final double expandedMinZ = collidableStatic.minZ() + staticCollidableOffset.z() - halfDepth;
+        final double expandedMaxX = collidableStatic.maxX() + staticCollidableOffset.x() + halfWidth;
+        final double expandedMaxY = collidableStatic.maxY() + staticCollidableOffset.y() + halfHeight;
+        final double expandedMaxZ = collidableStatic.maxZ() + staticCollidableOffset.z() + halfDepth;
 
-                if (((yix - rayCentre.y()) * signumRayY) >= 0
-                        && ((zix - rayCentre.z()) * signumRayZ) >= 0
-                        && yix >= collidableStatic.minY() + staticCollidableOffset.y() - moving.height() / 2
-                        && yix <= collidableStatic.maxY() + staticCollidableOffset.y() + moving.height() / 2
-                        && zix >= collidableStatic.minZ() + staticCollidableOffset.z() - moving.depth() / 2
-                        && zix <= collidableStatic.maxZ() + staticCollidableOffset.z() + moving.depth() / 2) {
-                    isHit = true;
-                    percentage = xFac;
-                    collisionFace = 0;
-                }
-            }
+        final double entryX, exitX;
+        if (rayDirX == 0) {
+            if (rayCentreX < expandedMinX || rayCentreX > expandedMaxX) return Double.NaN;
+            entryX = Double.NEGATIVE_INFINITY;
+            exitX = Double.POSITIVE_INFINITY;
+        } else if (rayDirX > 0) {
+            entryX = epsilon((expandedMinX - rayCentreX) / rayDirX);
+            exitX = (expandedMaxX - rayCentreX) / rayDirX;
+        } else {
+            entryX = epsilon((expandedMaxX - rayCentreX) / rayDirX);
+            exitX = (expandedMinX - rayCentreX) / rayDirX;
         }
 
-        // Intersect Z
-        if (rayDirection.z() > 0) {
-            double zFac = epsilon(bbOffMin.z() / rayDirection.z());
-            if (zFac < percentage) {
-                double xiz = rayDirection.x() * zFac + rayCentre.x();
-                double yiz = rayDirection.y() * zFac + rayCentre.y();
-
-                if (((yiz - rayCentre.y()) * signumRayY) >= 0
-                        && ((xiz - rayCentre.x()) * signumRayX) >= 0
-                        && xiz >= collidableStatic.minX() + staticCollidableOffset.x() - moving.width() / 2
-                        && xiz <= collidableStatic.maxX() + staticCollidableOffset.x() + moving.width() / 2
-                        && yiz >= collidableStatic.minY() + staticCollidableOffset.y() - moving.height() / 2
-                        && yiz <= collidableStatic.maxY() + staticCollidableOffset.y() + moving.height() / 2) {
-                    isHit = true;
-                    percentage = zFac;
-                    collisionFace = 1;
-                }
-            }
-        }
-        if (rayDirection.z() < 0) {
-            double zFac = epsilon(bbOffMax.z() / rayDirection.z());
-            if (zFac < percentage) {
-                double xiz = rayDirection.x() * zFac + rayCentre.x();
-                double yiz = rayDirection.y() * zFac + rayCentre.y();
-
-                if (((yiz - rayCentre.y()) * signumRayY) >= 0
-                        && ((xiz - rayCentre.x()) * signumRayX) >= 0
-                        && xiz >= collidableStatic.minX() + staticCollidableOffset.x() - moving.width() / 2
-                        && xiz <= collidableStatic.maxX() + staticCollidableOffset.x() + moving.width() / 2
-                        && yiz >= collidableStatic.minY() + staticCollidableOffset.y() - moving.height() / 2
-                        && yiz <= collidableStatic.maxY() + staticCollidableOffset.y() + moving.height() / 2) {
-                    isHit = true;
-                    percentage = zFac;
-                    collisionFace = 1;
-                }
-            }
+        final double entryZ, exitZ;
+        if (rayDirZ == 0) {
+            if (rayCentreZ < expandedMinZ || rayCentreZ > expandedMaxZ) return Double.NaN;
+            entryZ = Double.NEGATIVE_INFINITY;
+            exitZ = Double.POSITIVE_INFINITY;
+        } else if (rayDirZ > 0) {
+            entryZ = epsilon((expandedMinZ - rayCentreZ) / rayDirZ);
+            exitZ = (expandedMaxZ - rayCentreZ) / rayDirZ;
+        } else {
+            entryZ = epsilon((expandedMaxZ - rayCentreZ) / rayDirZ);
+            exitZ = (expandedMinZ - rayCentreZ) / rayDirZ;
         }
 
-        // Intersect Y
-        if (rayDirection.y() > 0) {
-            double yFac = epsilon(bbOffMin.y() / rayDirection.y());
-            if (yFac < percentage) {
-                double xiy = rayDirection.x() * yFac + rayCentre.x();
-                double ziy = rayDirection.z() * yFac + rayCentre.z();
-
-                if (((ziy - rayCentre.z()) * signumRayZ) >= 0
-                        && ((xiy - rayCentre.x()) * signumRayX) >= 0
-                        && xiy >= collidableStatic.minX() + staticCollidableOffset.x() - moving.width() / 2
-                        && xiy <= collidableStatic.maxX() + staticCollidableOffset.x() + moving.width() / 2
-                        && ziy >= collidableStatic.minZ() + staticCollidableOffset.z() - moving.depth() / 2
-                        && ziy <= collidableStatic.maxZ() + staticCollidableOffset.z() + moving.depth() / 2) {
-                    isHit = true;
-                    percentage = yFac;
-                    collisionFace = 2;
-                }
-            }
+        final double entryY, exitY;
+        if (rayDirY == 0) {
+            if (rayCentreY < expandedMinY || rayCentreY > expandedMaxY) return Double.NaN;
+            entryY = Double.NEGATIVE_INFINITY;
+            exitY = Double.POSITIVE_INFINITY;
+        } else if (rayDirY > 0) {
+            entryY = epsilon((expandedMinY - rayCentreY) / rayDirY);
+            exitY = (expandedMaxY - rayCentreY) / rayDirY;
+        } else {
+            entryY = epsilon((expandedMaxY - rayCentreY) / rayDirY);
+            exitY = (expandedMinY - rayCentreY) / rayDirY;
         }
 
-        if (rayDirection.y() < 0) {
-            double yFac = epsilon(bbOffMax.y() / rayDirection.y());
-            if (yFac < percentage) {
-                double xiy = rayDirection.x() * yFac + rayCentre.x();
-                double ziy = rayDirection.z() * yFac + rayCentre.z();
-
-                if (((ziy - rayCentre.z()) * signumRayZ) >= 0
-                        && ((xiy - rayCentre.x()) * signumRayX) >= 0
-                        && xiy >= collidableStatic.minX() + staticCollidableOffset.x() - moving.width() / 2
-                        && xiy <= collidableStatic.maxX() + staticCollidableOffset.x() + moving.width() / 2
-                        && ziy >= collidableStatic.minZ() + staticCollidableOffset.z() - moving.depth() / 2
-                        && ziy <= collidableStatic.maxZ() + staticCollidableOffset.z() + moving.depth() / 2) {
-                    isHit = true;
-                    percentage = yFac;
-                    collisionFace = 2;
-                }
-            }
+        double percentage = entryX;
+        int collisionFace = 0;
+        if (entryZ > percentage) {
+            percentage = entryZ;
+            collisionFace = 1;
+        }
+        if (entryY > percentage) {
+            percentage = entryY;
+            collisionFace = 2;
         }
 
+        if (percentage > Math.min(exitX, Math.min(exitY, exitZ)) || percentage < 0) return Double.NaN;
         percentage *= 0.99999;
+        if (!(percentage <= maxPercentage)) return Double.NaN;
 
-        if (isHit && percentage >= 0 && percentage <= finalResult.res) {
+        if (finalResult != null) {
             finalResult.res = percentage;
-            finalResult.normalX = 0;
-            finalResult.normalY = 0;
-            finalResult.normalZ = 0;
-
-            if (collisionFace == 0) finalResult.normalX = 1;
-            if (collisionFace == 1) finalResult.normalZ = 1;
-            if (collisionFace == 2) finalResult.normalY = 1;
-
-            return true;
+            finalResult.normalX = collisionFace == 0 ? 1 : 0;
+            finalResult.normalY = collisionFace == 2 ? 1 : 0;
+            finalResult.normalZ = collisionFace == 1 ? 1 : 0;
         }
-
-        return false;
+        return percentage;
     }
 
     private static double epsilon(double value) {
         return Math.abs(value) < Vec.EPSILON ? 0 : value;
-    }
-
-    public static boolean BoundingBoxRayIntersectionCheck(Vec start, Vec direction, BoundingBox boundingBox, Pos position) {
-        return BoundingBoxIntersectionCheck(BoundingBox.ZERO, start, direction, boundingBox, position, new SweepResult(Double.MAX_VALUE, 0, 0, 0, null, 0, 0, 0, 0, 0, 0));
     }
 }

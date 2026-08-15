@@ -8,7 +8,7 @@ import net.minestom.server.MinecraftServer;
 @SuppressWarnings("UnstableApiUsage") // we are permitted to provide this
 public final class MinestomClickCallbackProvider implements ClickCallback.Provider {
     @Override
-    public ClickEvent create(ClickCallback<Audience> callback, ClickCallback.Options options) {
+    public ClickEvent<ClickEvent.Payload.Custom> create(ClickCallback<Audience> callback, ClickCallback.Options options) {
         return MinecraftServer.getClickCallbackManager().createClickEvent(callback, options);
     }
 }

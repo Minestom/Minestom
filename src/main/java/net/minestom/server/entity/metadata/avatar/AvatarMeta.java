@@ -5,10 +5,11 @@ import net.minestom.server.entity.MainHand;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
+import org.jetbrains.annotations.Nullable;
 
 public class AvatarMeta extends LivingEntityMeta {
 
-    protected AvatarMeta(Entity entity, MetadataHolder metadata) {
+    protected AvatarMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
     

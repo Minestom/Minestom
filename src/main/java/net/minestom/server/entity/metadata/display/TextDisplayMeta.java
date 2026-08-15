@@ -4,9 +4,10 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import org.jetbrains.annotations.Nullable;
 
 public class TextDisplayMeta extends AbstractDisplayMeta {
-    public TextDisplayMeta(Entity entity, MetadataHolder metadata) {
+    public TextDisplayMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

@@ -1,6 +1,19 @@
 package net.minestom.server.command.builder.arguments;
 
-import net.minestom.server.command.builder.arguments.minecraft.*;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentBlockState;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentComponent;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentFloatRange;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentIntRange;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentItemStack;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentNbtCompoundTag;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentNbtTag;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentResource;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentResourceLocation;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentResourceOrTag;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentTeamColor;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentTime;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentUUID;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentParticle;
 import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
@@ -21,6 +34,8 @@ import org.jetbrains.annotations.ApiStatus;
 public class ArgumentType {
 
     /**
+     * Creates a new {@link ArgumentLiteral}.
+     *
      * @see ArgumentLiteral
      */
     public static ArgumentLiteral Literal(String id) {
@@ -28,6 +43,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentGroup}.
+     *
      * @see ArgumentGroup
      */
     public static ArgumentGroup Group(String id, Argument<?>... arguments) {
@@ -35,14 +52,19 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentLoop}.
+     *
      * @see ArgumentLoop
      */
     @SafeVarargs
+    @SuppressWarnings("varargs")
     public static <T> ArgumentLoop<T> Loop(String id, Argument<T>... arguments) {
         return new ArgumentLoop<>(id, arguments);
     }
 
     /**
+     * Creates a new {@link ArgumentBoolean}.
+     *
      * @see ArgumentBoolean
      */
     public static ArgumentBoolean Boolean(String id) {
@@ -50,6 +72,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentInteger}.
+     *
      * @see ArgumentInteger
      */
     public static ArgumentInteger Integer(String id) {
@@ -57,6 +81,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentDouble}.
+     *
      * @see ArgumentDouble
      */
     public static ArgumentDouble Double(String id) {
@@ -64,6 +90,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentFloat}.
+     *
      * @see ArgumentFloat
      */
     public static ArgumentFloat Float(String id) {
@@ -71,6 +99,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentString}.
+     *
      * @see ArgumentString
      */
     public static ArgumentString String(String id) {
@@ -78,6 +108,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentWord}.
+     *
      * @see ArgumentWord
      */
     public static ArgumentWord Word(String id) {
@@ -85,6 +117,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentStringArray}.
+     *
      * @see ArgumentStringArray
      */
     public static ArgumentStringArray StringArray(String id) {
@@ -92,6 +126,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentCommand}.
+     *
      * @see ArgumentCommand
      */
     public static ArgumentCommand Command(String id) {
@@ -99,6 +135,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentEnum}.
+     *
      * @see ArgumentEnum
      */
     @SuppressWarnings("rawtypes")
@@ -109,13 +147,17 @@ public class ArgumentType {
     // Minecraft specific arguments
 
     /**
-     * @see ArgumentColor
+     * Creates a new {@link ArgumentTeamColor}.
+     *
+     * @see ArgumentTeamColor
      */
-    public static ArgumentColor Color(String id) {
-        return new ArgumentColor(id);
+    public static ArgumentTeamColor TeamColor(String id) {
+        return new ArgumentTeamColor(id);
     }
 
     /**
+     * Creates a new {@link ArgumentTime}.
+     *
      * @see ArgumentTime
      */
     public static ArgumentTime Time(String id) {
@@ -123,6 +165,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentParticle}.
+     *
      * @see ArgumentParticle
      */
     public static ArgumentParticle Particle(String id) {
@@ -130,6 +174,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentResource}.
+     *
      * @see ArgumentResource
      */
     public static ArgumentResource Resource(String id, String identifier) {
@@ -137,6 +183,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentResourceLocation}.
+     *
      * @see ArgumentResourceLocation
      */
     public static ArgumentResourceLocation ResourceLocation(String id) {
@@ -144,6 +192,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentResourceOrTag}.
+     *
      * @see ArgumentResourceOrTag
      */
     public static ArgumentResourceOrTag ResourceOrTag(String id, String identifier) {
@@ -151,6 +201,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentEntityType}.
+     *
      * @see ArgumentEntityType
      */
     public static ArgumentEntityType EntityType(String id) {
@@ -158,6 +210,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentBlockState}.
+     *
      * @see ArgumentBlockState
      */
     public static ArgumentBlockState BlockState(String id) {
@@ -165,6 +219,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentIntRange}.
+     *
      * @see ArgumentIntRange
      */
     public static ArgumentIntRange IntRange(String id) {
@@ -172,6 +228,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentFloatRange}.
+     *
      * @see ArgumentFloatRange
      */
     public static ArgumentFloatRange FloatRange(String id) {
@@ -179,6 +237,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentEntity}.
+     *
      * @see ArgumentEntity
      */
     public static ArgumentEntity Entity(String id) {
@@ -186,6 +246,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentItemStack}.
+     *
      * @see ArgumentItemStack
      */
     public static ArgumentItemStack ItemStack(String id) {
@@ -193,6 +255,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentComponent}.
+     *
      * @see ArgumentComponent
      */
     public static ArgumentComponent Component(String id) {
@@ -200,6 +264,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentUUID}.
+     *
      * @see ArgumentUUID
      */
     public static ArgumentUUID UUID(String id) {
@@ -207,6 +273,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentNbtTag}.
+     *
      * @see ArgumentNbtTag
      */
     public static ArgumentNbtTag NBT(String id) {
@@ -214,6 +282,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentNbtCompoundTag}.
+     *
      * @see ArgumentNbtCompoundTag
      */
     public static ArgumentNbtCompoundTag NbtCompound(String id) {
@@ -221,6 +291,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentRelativeBlockPosition}.
+     *
      * @see ArgumentRelativeBlockPosition
      */
     public static ArgumentRelativeBlockPosition RelativeBlockPosition(String id) {
@@ -228,6 +300,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentRelativeVec3}.
+     *
      * @see ArgumentRelativeVec3
      */
     public static ArgumentRelativeVec3 RelativeVec3(String id) {
@@ -235,6 +309,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentRelativeVec2}.
+     *
      * @see ArgumentRelativeVec2
      */
     public static ArgumentRelativeVec2 RelativeVec2(String id) {
@@ -254,6 +330,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentLong}.
+     *
      * @see ArgumentLong
      */
     public static ArgumentLong Long(String id) {
@@ -261,6 +339,8 @@ public class ArgumentType {
     }
 
     /**
+     * Creates a new {@link ArgumentEntity}.
+     *
      * @see ArgumentEntity
      * @deprecated use {@link #Entity(String)}
      */

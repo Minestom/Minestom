@@ -21,9 +21,9 @@ public class EntityBoundingBoxIntegrationTest {
         var player = connection.connect(instance, new Pos(0, 42, 0));
 
         // Bounding box should be from the registry
-        assertEquals(player.getEntityType().registry().boundingBox(), player.getBoundingBox());
+        assertEquals(player.getEntityType().boundingBox(), player.getBoundingBox());
         player.setPose(EntityPose.STANDING);
-        assertEquals(player.getEntityType().registry().boundingBox(), player.getBoundingBox());
+        assertEquals(player.getEntityType().boundingBox(), player.getBoundingBox());
 
         player.setPose(EntityPose.SLEEPING);
         assertEquals(new BoundingBox(0.2, 0.2, 0.2), player.getBoundingBox());
@@ -63,7 +63,7 @@ public class EntityBoundingBoxIntegrationTest {
         entity.setInstance(instance, spawnPos).join();
 
         // 0 is fine here, it's just a delta
-        var time = 0L;
+        long time = 0L;
 
         dropItem(instance, spawnPos);
         listener.followup();
@@ -71,10 +71,10 @@ public class EntityBoundingBoxIntegrationTest {
 
         dropItem(instance, spawnPos.sub(.5));
         listener.followup();
-        entity.update(time += 1_000L);
+        entity.update(time + 1_000L);
     }
 
-    private void dropItem(final Instance instance, final Pos position) {
+    private static void dropItem(final Instance instance, final Pos position) {
         final var entity = new ItemEntity(ItemStack.of(Material.STONE));
         entity.hasPhysics = false;
         entity.setNoGravity(true);

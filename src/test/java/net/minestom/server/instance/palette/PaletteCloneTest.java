@@ -5,7 +5,12 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static net.minestom.server.instance.palette.PaletteAssertions.assertAllEquals;
+import static net.minestom.server.instance.palette.PaletteAssertions.testPalettes;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Comprehensive test suite for Palette clone functionality.
@@ -79,14 +84,7 @@ public class PaletteCloneTest {
             assertEquals(original.dimension(), cloned.dimension());
             assertTrue(original.compare(cloned));
 
-            // Verify all values are 0
-            for (int x = 0; x < cloned.dimension(); x++) {
-                for (int y = 0; y < cloned.dimension(); y++) {
-                    for (int z = 0; z < cloned.dimension(); z++) {
-                        assertEquals(0, cloned.get(x, y, z));
-                    }
-                }
-            }
+            assertAllEquals(0, cloned);
         }
     }
 
@@ -103,14 +101,7 @@ public class PaletteCloneTest {
             assertEquals(original.maxSize(), cloned.count());
             assertTrue(original.compare(cloned));
 
-            // Verify all values are correct
-            for (int x = 0; x < cloned.dimension(); x++) {
-                for (int y = 0; y < cloned.dimension(); y++) {
-                    for (int z = 0; z < cloned.dimension(); z++) {
-                        assertEquals(123, cloned.get(x, y, z));
-                    }
-                }
-            }
+            assertAllEquals(123, cloned);
         }
     }
 
@@ -204,23 +195,8 @@ public class PaletteCloneTest {
             // Verify they're completely independent
             assertFalse(original.compare(cloned));
 
-            // Check original
-            for (int x = 0; x < original.dimension(); x++) {
-                for (int y = 0; y < original.dimension(); y++) {
-                    for (int z = 0; z < original.dimension(); z++) {
-                        assertEquals(500, original.get(x, y, z));
-                    }
-                }
-            }
-
-            // Check clone
-            for (int x = 0; x < cloned.dimension(); x++) {
-                for (int y = 0; y < cloned.dimension(); y++) {
-                    for (int z = 0; z < cloned.dimension(); z++) {
-                        assertEquals(600, cloned.get(x, y, z));
-                    }
-                }
-            }
+            assertAllEquals(500, original);
+            assertAllEquals(600, cloned);
         }
     }
 
@@ -263,13 +239,13 @@ public class PaletteCloneTest {
             Palette cloned = original.clone();
 
             // Apply replace operation to original
-            original.replaceAll((x, y, z, value) -> value * 2);
+            original.replaceAll((_, _, _, value) -> value * 2);
 
             // Verify clone is unaffected
             cloned.getAll((x, y, z, value) -> assertEquals(x + y + z, value));
 
             // Apply different replace to clone
-            cloned.replaceAll((x, y, z, value) -> value + 1000);
+            cloned.replaceAll((_, _, _, value) -> value + 1000);
 
             // Verify both have correct values
             original.getAll((x, y, z, value) -> assertEquals((x + y + z) * 2, value));
@@ -309,11 +285,11 @@ public class PaletteCloneTest {
 
             // Verify each has correct values
             assertEquals(original.maxSize(), original.count());
-            original.getAll((x, y, z, value) -> assertEquals(1, value));
+            original.getAll((_, _, _, value) -> assertEquals(1, value));
 
-            clone1.getAll((x, y, z, value) -> assertEquals(2, value));
-            clone2.getAll((x, y, z, value) -> assertEquals(3, value));
-            clone3.getAll((x, y, z, value) -> assertEquals(4, value));
+            clone1.getAll((_, _, _, value) -> assertEquals(2, value));
+            clone2.getAll((_, _, _, value) -> assertEquals(3, value));
+            clone3.getAll((_, _, _, value) -> assertEquals(4, value));
         }
     }
 
@@ -368,13 +344,4 @@ public class PaletteCloneTest {
         }
     }
 
-    private static List<Palette> testPalettes() {
-        return List.of(
-                Palette.sized(2, 1, 5, 15, 3),
-                Palette.sized(4, 1, 5, 15, 3),
-                Palette.sized(8, 1, 5, 15, 3),
-                Palette.sized(16, 1, 5, 15, 3),
-                Palette.blocks()
-        );
-    }
 }

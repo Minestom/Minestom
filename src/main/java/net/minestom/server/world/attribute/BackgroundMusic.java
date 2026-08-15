@@ -14,9 +14,9 @@ public record BackgroundMusic(
     public static final BackgroundMusic OVERWORLD = new BackgroundMusic(Music.GAME, Music.CREATIVE, null);
 
     public static final Codec<BackgroundMusic> CODEC = StructCodec.struct(
-            "music", Music.CODEC.optional(), BackgroundMusic::music,
-            "creative_music", Music.CODEC.optional(), BackgroundMusic::creativeMusic,
-            "underwater_music", Music.CODEC.optional(), BackgroundMusic::underwaterMusic,
+            "default", Music.CODEC.optional(), BackgroundMusic::music,
+            "creative", Music.CODEC.optional(), BackgroundMusic::creativeMusic,
+            "underwater", Music.CODEC.optional(), BackgroundMusic::underwaterMusic,
             BackgroundMusic::new);
     
 }

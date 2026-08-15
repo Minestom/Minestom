@@ -2,6 +2,7 @@ package net.minestom.server.monitoring;
 
 import jdk.jfr.Category;
 import jdk.jfr.Description;
+import jdk.jfr.Event;
 import jdk.jfr.Label;
 import jdk.jfr.Name;
 import org.jetbrains.annotations.ApiStatus;
@@ -12,20 +13,21 @@ import java.util.UUID;
  * JFR events for monitoring Minestom server activities.
  */
 @ApiStatus.Internal
-@SuppressWarnings("ALL")
+@SuppressWarnings({"ALL", "unused"})
 public final class EventsJFR {
     public static final boolean JFR_AVAILABLE = jfrAvailable();
 
     private static boolean jfrAvailable() {
         try {
-            Class<?> vmClass = Class.forName("org.graalvm.nativeimage.VMRuntime");
+            Class.forName("org.graalvm.nativeimage.VMRuntime");
             return false;
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException _) {
+            // Class absent means we are not running on a native image, JFR may be available
         }
         try {
             Class.forName("jdk.jfr.Event");
             return true;
-        } catch (Throwable t) {
+        } catch (Throwable _) {
             return false;
         }
     }
@@ -56,7 +58,7 @@ public final class EventsJFR {
         return JFR_AVAILABLE ? new ChunkGeneration(instance.toString(), chunkX, chunkZ) : NO_OP;
     }
 
-    public static EventMarker newChunkLoading(UUID instance, Class loader, int chunkX, int chunkZ) {
+    public static EventMarker newChunkLoading(UUID instance, Class<?> loader, int chunkX, int chunkZ) {
         return JFR_AVAILABLE ? new ChunkLoading(instance.toString(), loader, chunkX, chunkZ) : NO_OP;
     }
 
@@ -131,13 +133,13 @@ public final class EventsJFR {
         @Label("Instance UUID")
         String instance;
         @Label("Loader Class")
-        Class loader;
+        Class<?> loader;
         @Label("Chunk X")
         int chunkX;
         @Label("Chunk Z")
         int chunkZ;
 
-        private ChunkLoading(String instance, Class loader, int chunkX, int chunkZ) {
+        private ChunkLoading(String instance, Class<?> loader, int chunkX, int chunkZ) {
             this.instance = instance;
             this.loader = loader;
             this.chunkX = chunkX;
@@ -246,7 +248,7 @@ public final class EventsJFR {
         }
     }
 
-    private static class JFREventWrapper extends jdk.jfr.Event implements EventMarker {
+    private static class JFREventWrapper extends Event implements EventMarker {
     }
 
     private static final EventMarker NO_OP = new NoOpEvent();

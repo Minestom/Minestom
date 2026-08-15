@@ -6,7 +6,11 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.crypto.KeyUtils;
 import org.jetbrains.annotations.Nullable;
 
-import java.security.*;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.SignatureException;
 import java.util.function.Consumer;
 
 /**
@@ -24,8 +28,8 @@ import java.util.function.Consumer;
  */
 @FunctionalInterface
 public interface SignatureValidator {
-    SignatureValidator PASS = (payload, signature) -> true;
-    SignatureValidator FAIL = (payload, signature) -> false;
+    SignatureValidator PASS = (_, _) -> true;
+    SignatureValidator FAIL = (_, _) -> false;
     SignatureValidator YGGDRASIL = createYggdrasilValidator();
 
     /**
@@ -41,16 +45,16 @@ public interface SignatureValidator {
     }
 
     static SignatureValidator from(PublicKey publicKey, KeyUtils.SignatureAlgorithm algorithm) {
-        return ((payload, signature) -> {
+        return (payload, signature) -> {
             try {
                 final Signature sig = Signature.getInstance(algorithm.name());
                 sig.initVerify(publicKey);
                 sig.update(payload);
                 return sig.verify(signature);
-            } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException e) {
+            } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException _) {
                 return false;
             }
-        });
+        };
     }
 
     /**
@@ -60,8 +64,9 @@ public interface SignatureValidator {
      * @return null if the player didn't send a public key
      */
     static @Nullable SignatureValidator from(Player player) {
-        if (player.getPlayerConnection().playerPublicKey() == null) return null;
-        return from(player.getPlayerConnection().playerPublicKey().publicKey(), KeyUtils.SignatureAlgorithm.SHA256withRSA);
+        final PlayerPublicKey playerPublicKey = player.getPlayerConnection().playerPublicKey();
+        if (playerPublicKey == null) return null;
+        return from(playerPublicKey.publicKey(), KeyUtils.SignatureAlgorithm.SHA256withRSA);
     }
 
     private static SignatureValidator createYggdrasilValidator() {

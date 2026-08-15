@@ -1,13 +1,26 @@
+import net.kyori.adventure.text.event.ClickCallback;
+import net.kyori.adventure.text.event.DataComponentValueConverterRegistry;
+import net.kyori.adventure.text.logger.slf4j.ComponentLoggerProvider;
+import net.kyori.adventure.text.serializer.ansi.ANSIComponentSerializer;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.minestom.server.adventure.provider.MinestomAnsiComponentSerializerProvider;
+import net.minestom.server.adventure.provider.MinestomClickCallbackProvider;
+import net.minestom.server.adventure.provider.MinestomComponentLoggerProvider;
+import net.minestom.server.adventure.provider.MinestomDataComponentValueConverterProvider;
+import net.minestom.server.adventure.provider.MinestomGsonComponentSerializerProvider;
+import net.minestom.server.adventure.provider.MinestomLegacyComponentSerializerProvider;
+import net.minestom.server.adventure.provider.MinestomPlainTextComponentSerializerProvider;
+
+@SuppressWarnings({"UnstableApiUsage"}) // We are allowed to implement these
 module net.minestom.server {
     requires transitive static org.jetbrains.annotations;  // TODO remove this when jspecify matures.
     requires transitive com.google.gson;
     requires it.unimi.dsi.fastutil;
     requires space.vectrix.flare.fastutil;
-    requires jdk.unsupported; // Unsafe
-    requires transitive net.kyori.adventure;
+    requires transitive net.kyori.adventure.api;
     requires transitive net.kyori.adventure.nbt;
-    requires transitive net.kyori.adventure.key;
-    requires transitive net.kyori.examination.api;
     requires net.kyori.adventure.text.logger.slf4j;
     requires net.kyori.adventure.text.serializer.legacy;
     requires net.kyori.adventure.text.serializer.gson;
@@ -18,7 +31,7 @@ module net.minestom.server {
     requires org.jctools.core;
     requires jdk.jfr;
     requires java.desktop;
-    requires java.management;
+    requires net.minestom.data;
 
     // EXPORTS
     exports net.minestom.server;
@@ -58,6 +71,7 @@ module net.minestom.server {
     exports net.minestom.server.entity.metadata.animal;
     exports net.minestom.server.entity.metadata.animal.tameable;
     exports net.minestom.server.entity.metadata.avatar;
+    exports net.minestom.server.entity.metadata.cube;
     exports net.minestom.server.entity.metadata.display;
     exports net.minestom.server.entity.metadata.flying;
     exports net.minestom.server.entity.metadata.golem;
@@ -89,9 +103,6 @@ module net.minestom.server {
     exports net.minestom.server.exception;
     exports net.minestom.server.extras.lan;
     exports net.minestom.server.extras.mojangAuth;
-    exports net.minestom.server.extras.query;
-    exports net.minestom.server.extras.query.event;
-    exports net.minestom.server.extras.query.response;
     exports net.minestom.server.game;
     exports net.minestom.server.gamedata;
     exports net.minestom.server.instance;
@@ -103,6 +114,7 @@ module net.minestom.server {
     exports net.minestom.server.instance.block.predicate;
     exports net.minestom.server.instance.block.rule;
     exports net.minestom.server.instance.fluid;
+    exports net.minestom.server.instance.gamerule;
     exports net.minestom.server.instance.generator;
     exports net.minestom.server.instance.heightmap;
     exports net.minestom.server.instance.light;
@@ -178,8 +190,17 @@ module net.minestom.server {
     exports net.minestom.server.utils.url;
     exports net.minestom.server.utils.validate;
     exports net.minestom.server.world;
+    exports net.minestom.server.worldevent;
     exports net.minestom.server.world.attribute;
     exports net.minestom.server.world.biome;
     exports net.minestom.server.world.timeline;
+    exports net.minestom.server.world.clock;
 
+    provides ComponentLoggerProvider with MinestomComponentLoggerProvider;
+    provides ANSIComponentSerializer.Provider with MinestomAnsiComponentSerializerProvider;
+    provides ClickCallback.Provider with MinestomClickCallbackProvider;
+    provides PlainTextComponentSerializer.Provider with MinestomPlainTextComponentSerializerProvider;
+    provides LegacyComponentSerializer.Provider with MinestomLegacyComponentSerializerProvider;
+    provides GsonComponentSerializer.Provider with MinestomGsonComponentSerializerProvider;
+    provides DataComponentValueConverterRegistry.Provider with MinestomDataComponentValueConverterProvider;
 }

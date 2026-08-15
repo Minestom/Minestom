@@ -14,7 +14,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @EnvTest
 class BlockHandlerIntegrationTest {
@@ -81,7 +84,7 @@ class BlockHandlerIntegrationTest {
         };
 
         instance.setBlock(blockPosition, Block.STONE.withHandler(handler));
-        var player = env.createPlayer(instance, blockPosition.asPosition());
+        var player = env.createPlayer(instance, blockPosition.asPos());
         player.addPacketToQueue(new ClientPlayerBlockPlacementPacket(PlayerHand.MAIN, blockPosition, BlockFace.TOP, 0, 0, 0, false, false, 1));
         player.interpretPacketQueue(); // Use packets
 

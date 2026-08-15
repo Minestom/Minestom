@@ -7,7 +7,11 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static net.minestom.server.instance.palette.PaletteAssertions.assertAllEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PaletteCopyTest {
 
@@ -41,14 +45,7 @@ public class PaletteCopyTest {
             assertEquals(source.bitsPerEntry(), target.bitsPerEntry());
             assertTrue(target.compare(source));
 
-            // Verify all positions have the same value
-            for (int x = 0; x < 16; x++) {
-                for (int y = 0; y < 16; y++) {
-                    for (int z = 0; z < 16; z++) {
-                        assertEquals(42, target.get(x, y, z));
-                    }
-                }
-            }
+            assertAllEquals(42, target);
         }
 
         @Test

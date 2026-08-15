@@ -8,15 +8,14 @@ import org.jetbrains.annotations.Nullable;
  * Represents a packet that can be sent to a {@link PlayerConnection}.
  */
 public sealed interface SendablePacket
-        permits BufferedPacket, CachedPacket, FramedPacket, LazyPacket, ServerPacket {
+        permits BufferedPacket, CachedPacket, FramedPacket, ServerPacket {
 
     static @Nullable ServerPacket extractServerPacket(ConnectionState state, SendablePacket packet) {
         return switch (packet) {
             case ServerPacket serverPacket -> serverPacket;
             case CachedPacket cachedPacket -> cachedPacket.packet(state);
             case FramedPacket framedPacket -> framedPacket.packet();
-            case LazyPacket lazyPacket -> lazyPacket.packet();
-            case BufferedPacket bufferedPacket -> null;
+            case BufferedPacket _ -> null;
         };
     }
 }

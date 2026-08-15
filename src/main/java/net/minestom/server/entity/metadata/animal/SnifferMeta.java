@@ -4,9 +4,10 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
+import org.jetbrains.annotations.Nullable;
 
 public class SnifferMeta extends AnimalMeta {
-    public SnifferMeta(Entity entity, MetadataHolder metadata) {
+    public SnifferMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

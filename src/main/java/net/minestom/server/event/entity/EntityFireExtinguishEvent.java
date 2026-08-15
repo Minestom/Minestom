@@ -7,7 +7,7 @@ import net.minestom.server.event.trait.EntityInstanceEvent;
 public class EntityFireExtinguishEvent implements EntityInstanceEvent, CancellableEvent {
 
     private final Entity entity;
-    private boolean natural;
+    private final boolean natural;
 
     private boolean cancelled;
 

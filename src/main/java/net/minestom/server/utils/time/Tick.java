@@ -14,12 +14,12 @@ public final class Tick implements TemporalUnit {
      * A TemporalUnit representing the server tick. This is defined using
      * {@link MinecraftServer#TICK_MS}.
      */
-    public static Tick SERVER_TICKS = new Tick(MinecraftServer.TICK_MS);
+    public static final Tick SERVER_TICKS = new Tick(MinecraftServer.TICK_MS);
 
     /**
      * A TemporalUnit representing the client tick. This is always equal to 50ms.
      */
-    public static Tick CLIENT_TICKS = new Tick(50);
+    public static final Tick CLIENT_TICKS = new Tick(50);
 
     private final long milliseconds;
     private final int tps;

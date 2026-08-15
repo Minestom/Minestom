@@ -7,7 +7,7 @@ import net.minestom.server.item.Material;
 import java.util.List;
 import java.util.Map;
 
-public class PotDecorationsTest extends AbstractItemComponentTest<PotDecorations> {
+public class PotDecorationsTest extends AbstractItemComponentRegistriesTest<PotDecorations> {
     @Override
     protected DataComponent<PotDecorations> component() {
         return DataComponents.POT_DECORATIONS;

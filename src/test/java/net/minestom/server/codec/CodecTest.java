@@ -7,7 +7,12 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static net.kyori.adventure.nbt.IntBinaryTag.intBinaryTag;
@@ -17,7 +22,7 @@ public final class CodecTest {
 
     private static List<Arguments> optionalResults() {
         return nonDestructiveTranscoders().stream().flatMap(transcoder -> Stream.of(
-                Arguments.of(transcoder, Codec.BOOLEAN, Boolean.FALSE),
+                Arguments.of(transcoder, Codec.BOOLEAN, false),
                 Arguments.of(transcoder, Codec.INT, 5125),
                 Arguments.of(transcoder, Codec.LONG, 5125123L),
                 Arguments.of(transcoder, Codec.FLOAT, 0.62143f),

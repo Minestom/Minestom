@@ -8,7 +8,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
 import static net.minestom.server.command.builder.arguments.ArgumentType.Word;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CommandParseTest {
 
@@ -86,7 +88,7 @@ public class CommandParseTest {
                                 x1 -> x1.append(Word("c").setDefaultValue("C"),
                                         x2 -> x2.append(Word("d").setDefaultValue("D"),
                                                 new GraphImpl.ExecutionImpl(null, null, null,
-                                                        (sender, context) -> {
+                                                        (_, context) -> {
                                                             b.set(true);
                                                             assertEquals(expectedFirstArg.get(), context.get("a"));
                                                             assertEquals("B", context.get("b"));
@@ -156,6 +158,6 @@ public class CommandParseTest {
     }
 
     private static Graph.Execution createExecutor(AtomicBoolean atomicBoolean) {
-        return new GraphImpl.ExecutionImpl(null, null, null, (sender, context) -> atomicBoolean.set(true), null);
+        return new GraphImpl.ExecutionImpl(null, null, null, (_, _) -> atomicBoolean.set(true), null);
     }
 }

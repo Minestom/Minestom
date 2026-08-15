@@ -37,7 +37,7 @@ public class PlayerTransferOutIntegrationTest {
             Assertions.assertEquals(player, event.getPlayer());
             Assertions.assertEquals("example.com", event.getHost());
             Assertions.assertEquals(25565, event.getPort());
-        });;
+        });
 
         player.getPlayerConnection().transfer("example.com", 25565);
     }

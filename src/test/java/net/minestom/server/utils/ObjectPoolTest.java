@@ -8,7 +8,9 @@ import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ObjectPoolTest {
 
@@ -36,12 +38,12 @@ public class ObjectPoolTest {
     public void autoClose() {
         var pool = PacketVanilla.PACKET_POOL;
         assertEquals(0, pool.count());
-        try (var ignored = pool.hold()) {
+        try (var _ = pool.hold()) {
             assertEquals(0, pool.count());
         }
         assertEquals(1, pool.count());
 
-        try (var ignored = pool.hold()) {
+        try (var _ = pool.hold()) {
             assertEquals(0, pool.count());
         }
         assertEquals(1, pool.count());

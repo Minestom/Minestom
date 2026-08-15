@@ -8,12 +8,11 @@ import java.util.Objects;
 public record RegistryTranscoder<D>(
         Transcoder<D> transcoder,
         Registries registries,
-        boolean forClient,
-        boolean init // True for initial load
+        boolean forClient
 ) implements TranscoderProxy<D> {
 
     public RegistryTranscoder(Transcoder<D> transcoder, Registries registries) {
-        this(Objects.requireNonNull(transcoder), registries, false, false);
+        this(Objects.requireNonNull(transcoder), registries, false);
     }
 
     @Override

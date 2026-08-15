@@ -2,6 +2,7 @@ package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.crypto.FilterMask;
+import net.minestom.server.crypto.MessageSignature;
 import net.minestom.server.crypto.SignedMessageBody;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
@@ -9,17 +10,18 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.COMPONENT;
+import static net.minestom.server.network.NetworkBuffer.UUID;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 /**
  * Represents an outgoing chat message packet.
  */
-public record PlayerChatMessagePacket(int globalIndex, UUID sender, int index, byte @Nullable [] signature,
+public record PlayerChatMessagePacket(int globalIndex, UUID sender, int index, @Nullable MessageSignature signature,
                                       SignedMessageBody.Packed messageBody,
                                       @Nullable Component unsignedContent, FilterMask filterMask,
                                       int msgTypeId, Component msgTypeName,
@@ -29,18 +31,18 @@ public record PlayerChatMessagePacket(int globalIndex, UUID sender, int index, b
             VAR_INT, PlayerChatMessagePacket::globalIndex,
             UUID, PlayerChatMessagePacket::sender,
             VAR_INT, PlayerChatMessagePacket::index,
-            RAW_BYTES.optional(), PlayerChatMessagePacket::signature,
+            MessageSignature.SERIALIZER.optional(), PlayerChatMessagePacket::signature,
             SignedMessageBody.Packed.SERIALIZER, PlayerChatMessagePacket::messageBody,
             COMPONENT.optional(), PlayerChatMessagePacket::unsignedContent,
             FilterMask.SERIALIZER, PlayerChatMessagePacket::filterMask,
             VAR_INT, PlayerChatMessagePacket::msgTypeId,
             COMPONENT, PlayerChatMessagePacket::msgTypeName,
-            COMPONENT, PlayerChatMessagePacket::msgTypeTarget,
+            COMPONENT.optional(), PlayerChatMessagePacket::msgTypeTarget,
             PlayerChatMessagePacket::new
     );
 
     @Override
-    public Collection<Component> components() {
+    public List<Component> components() {
         final ArrayList<Component> list = new ArrayList<>();
         list.add(msgTypeName);
         if (unsignedContent != null) list.add(unsignedContent);

@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 
 import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
 
-public record ClientLockDifficultyPacket(boolean locked) implements ClientPacket {
+public record ClientLockDifficultyPacket(boolean locked) implements ClientPacket.Play {
     public static final NetworkBuffer.Type<ClientLockDifficultyPacket> SERIALIZER = NetworkBufferTemplate.template(
             BOOLEAN, ClientLockDifficultyPacket::locked,
             ClientLockDifficultyPacket::new);

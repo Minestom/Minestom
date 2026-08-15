@@ -2,17 +2,20 @@ package net.minestom.server.game;
 
 
 import net.kyori.adventure.key.Key;
+import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.UnknownNullability;
 
 /**
  * Represents a game event implementation.
  * Used for a wide variety of events, from weather to bed use to game mode to demo messages.
  */
+@SuppressWarnings("removal")
 record GameEventImpl(RegistryData.GameEventEntry registry, Key key, int id) implements GameEvent {
     static final Registry<GameEvent> REGISTRY = RegistryData.createStaticRegistry(
-            Key.key("game_event"), GameEventImpl::createImpl);
+            BuiltinRegistries.GAME_EVENT, GameEventImpl::createImpl);
 
     /**
      * Creates a new {@link GameEventImpl} with the given namespace and properties.
@@ -34,8 +37,8 @@ record GameEventImpl(RegistryData.GameEventEntry registry, Key key, int id) impl
         this(registry, registry.key(), registry.main().getInt("id"));
     }
 
-    public static @UnknownNullability GameEvent get(String key) {
-        return REGISTRY.get(Key.key(key));
+    public static @UnknownNullability GameEvent get(RegistryKey<GameEvent> key) {
+        return REGISTRY.get(key);
     }
 
 }

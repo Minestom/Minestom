@@ -14,7 +14,6 @@ import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collection;
 import java.util.List;
 
 import static net.minestom.testing.TestUtils.assertPoint;
@@ -53,7 +52,7 @@ public class InstanceBlockPacketIntegrationTest {
 
         BlockHandler signHandler = new BlockHandler() {
             @Override
-            public Collection<Tag<?>> getBlockEntityTags() {
+            public List<Tag<?>> getBlockEntityTags() {
                 return List.of(Tag.Byte("is_waxed"));
             }
 
@@ -83,7 +82,7 @@ public class InstanceBlockPacketIntegrationTest {
         });
         blockEntityTracker.assertSingle(packet -> {
             assertPoint(blockPoint, packet.blockPosition());
-            assertEquals(block.registry().blockEntityType(), packet.type());
+            assertEquals(block.blockEntityType(), packet.type());
             assertEquals(data, packet.data());
         });
 

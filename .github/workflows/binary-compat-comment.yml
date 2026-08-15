@@ -1,0 +1,88 @@
+name: Binary Compatibility Comment
+
+on:
+  workflow_run:
+    workflows: ["Build PR"]
+
+permissions:
+  actions: read
+  contents: read
+  pull-requests: write
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    if: |
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'failure'
+    steps:
+      - name: Sync PR Comment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          JOB_ID=$(gh api repos/$GH_REPO/actions/runs/${{ github.event.workflow_run.id }}/jobs --paginate | jq -r '
+            .jobs[] | 
+            select(.name == "Binary Compatibility" and .conclusion == "failure") | 
+            .id
+          ')
+
+          if [ -z "$JOB_ID" ]; then
+            exit 0
+          fi
+
+          HEAD_REPO="${{ github.event.workflow_run.head_repository.full_name }}"
+          HEAD_OWNER="${HEAD_REPO%%/*}"
+          HEAD_BRANCH="${{ github.event.workflow_run.head_branch }}"
+
+          PR_DATA=$(gh api "repos/$GH_REPO/pulls?head=${HEAD_OWNER}:${HEAD_BRANCH}" --jq 'first(.[]) | "\(.number) \(.base.ref)"')
+          read -r PR_NUMBER BASE_REF <<< "$PR_DATA"
+
+          if [ "$PR_NUMBER" = "null" ] || [ -z "$PR_NUMBER" ]; then
+            exit 0
+          fi
+
+          VIOLATIONS=$(gh run view "${{ github.event.workflow_run.id }}" --job "$JOB_ID" --log | grep "##\[error\]" | grep -v "Process completed with exit code" | sed -E 's/^.*[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]+Z[[:space:]]+//g' | sed -E 's/##\[error\]//' || true)
+
+          if [ -z "$VIOLATIONS" ]; then
+            exit 0
+          fi
+
+          cat << EOF > new_comment.md
+          ### Binary Compatibility
+
+          This Pull Request has introduced binary incompatible changes compared to the \`$BASE_REF\` branch.
+
+          **What is Binary Compatibility?**
+          Binary compatibility ensures that libraries compiled against Minestom can upgrade between versions without needing recompilation.
+
+          **What should you do?**
+          - If unintentional, please restore the compatibility. Feel free to ask for help if you are unsure how to proceed.
+          - If intentional, a maintainer will review them and label your PR as \`breaking\`, which will bypass this check. Please refer to [CONTRIBUTING.md](../blob/master/.github/CONTRIBUTING.md) for requirements regarding breaking changes.
+
+          <details>
+          <summary><b>View offending signatures</b></summary>
+
+          \`\`\`
+          $VIOLATIONS
+          \`\`\`
+          </details>
+          EOF
+
+          COMMENT_DATA=$(gh api repos/$GH_REPO/issues/$PR_NUMBER/comments --paginate | jq -r '
+            .[] | 
+            select(.user.login | contains("github-actions")) | 
+            select(.body | contains("Binary Compatibility")) | 
+            "\(.id) \(.body | @base64)"
+          ' | head -n 1)
+          read -r COMMENT_ID COMMENT_BODY_BASE64 <<< "$COMMENT_DATA"
+
+          if [ -n "$COMMENT_ID" ] && [ "$COMMENT_ID" != "null" ]; then
+            echo "$COMMENT_BODY_BASE64" | base64 --decode > old_comment.md
+            
+            if ! diff -q --strip-trailing-cr old_comment.md new_comment.md >/dev/null; then
+              gh api -X PATCH "repos/$GH_REPO/issues/comments/$COMMENT_ID" -F body=@new_comment.md
+            fi
+          else
+            gh pr comment "$PR_NUMBER" --body-file new_comment.md
+          fi

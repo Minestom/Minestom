@@ -1,12 +1,15 @@
 package net.minestom.server.codec;
 
+import com.google.gson.JsonParser;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.minestom.server.adventure.MinestomAdventure;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
 import static net.minestom.server.codec.CodecAssertions.assertError;
 import static net.minestom.server.codec.CodecAssertions.assertOk;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class StructCodecTest {
 
@@ -46,7 +49,7 @@ public class StructCodecTest {
 
     @Test
     void singleFieldOptionalMissing() {
-        record TheObject(String name) {
+        record TheObject(@Nullable String name) {
         }
 
         var codec = StructCodec.struct(
@@ -78,7 +81,31 @@ public class StructCodecTest {
                 TheObject::new
         );
         var result = codec.decode(TranscoderNbtImpl.INSTANCE, snbt("{\"name\": 2}"));
-        assertError("name: Not a string: BinaryTagType[IntBinaryTag 3 (numeric)]{value=2}", result);
+        assertError("name: Not a string: IntBinaryTagImpl[value=2]", result);
+    }
+
+    @Test
+    void singleFieldOptionalExplicitJsonNull() {
+        record TheObject(@Nullable String name) {
+        }
+
+        var codec = StructCodec.struct(
+                "name", Codec.STRING.optional(), TheObject::name,
+                TheObject::new);
+        var json = JsonParser.parseString("{\"name\": null}");
+        assertEquals(new TheObject(null), assertOk(codec.decode(Transcoder.JSON, json)));
+    }
+
+    @Test
+    void singleFieldOptionalExplicitJsonNullWithDefault() {
+        record TheObject(String name) {
+        }
+
+        var codec = StructCodec.struct(
+                "name", Codec.STRING.optional("defaultValue"), TheObject::name,
+                TheObject::new);
+        var json = JsonParser.parseString("{\"name\": null}");
+        assertEquals(new TheObject("defaultValue"), assertOk(codec.decode(Transcoder.JSON, json)));
     }
 
     @Test
@@ -123,7 +150,7 @@ public class StructCodecTest {
         assertEquals(snbt("{name: \"test\", value: \"innerValue\"}"), assertOk(encodeResult));
     }
 
-    private BinaryTag snbt(String snbt) {
+    private static BinaryTag snbt(String snbt) {
         return assertDoesNotThrow(() -> MinestomAdventure.tagStringIO().asTag(snbt));
     }
 

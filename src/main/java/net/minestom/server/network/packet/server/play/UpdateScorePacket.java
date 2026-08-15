@@ -8,11 +8,12 @@ import net.minestom.server.scoreboard.Sidebar;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.COMPONENT;
+import static net.minestom.server.network.NetworkBuffer.STRING;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record UpdateScorePacket(
         String entityName,
@@ -31,7 +32,7 @@ public record UpdateScorePacket(
     );
 
     @Override
-    public Collection<Component> components() {
+    public List<Component> components() {
         List<Component> list = new ArrayList<>();
 
         if (displayName != null) {

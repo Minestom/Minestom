@@ -7,11 +7,11 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 public class WitherMeta extends MonsterMeta {
-    private Entity centerHead;
-    private Entity leftHead;
-    private Entity rightHead;
+    private @Nullable Entity centerHead;
+    private @Nullable Entity leftHead;
+    private @Nullable Entity rightHead;
 
-    public WitherMeta(Entity entity, MetadataHolder metadata) {
+    public WitherMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

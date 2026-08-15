@@ -4,10 +4,12 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BYTE;
+import static net.minestom.server.network.NetworkBuffer.NBT_COMPOUND;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record NbtQueryResponsePacket(int transactionId, CompoundBinaryTag data) implements ServerPacket.Play {
-    public static final NetworkBuffer.Type<NbtQueryResponsePacket> SERIALIZER = new Type<>() {
+    public static final NetworkBuffer.Type<NbtQueryResponsePacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
         public void write(NetworkBuffer buffer, NbtQueryResponsePacket value) {
             buffer.write(VAR_INT, value.transactionId);

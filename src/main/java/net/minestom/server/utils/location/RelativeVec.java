@@ -59,7 +59,7 @@ public record RelativeVec(Vec vec, CoordinateType coordinateType, boolean relati
      * @return the position with any relativity
      */
     public Vec fromSender(@Nullable CommandSender sender) {
-        final var entityPosition = sender instanceof Player ? ((Player) sender).getPosition() : Pos.ZERO;
+        final var entityPosition = sender instanceof Player player ? player.getPosition() : Pos.ZERO;
         return from(entityPosition);
     }
 
@@ -131,7 +131,7 @@ public record RelativeVec(Vec vec, CoordinateType coordinateType, boolean relati
         /**
          * Local type used in direction, requires full relatively on XZ/XYZ
          */
-        LOCAL((local, origin, relativeX, relativeY, relativeZ) -> {
+        LOCAL((local, origin, _, _, _) -> {
             final Vec vec1 = new Vec(Math.cos(Math.toRadians(origin.yaw() + 90.0f)), 0, Math.sin(Math.toRadians(origin.yaw() + 90.0f)));
             final Vec a = vec1.mul(Math.cos(Math.toRadians(-origin.pitch()))).withY(Math.sin(Math.toRadians(-origin.pitch())));
             final Vec b = vec1.mul(Math.cos(Math.toRadians(-origin.pitch() + 90.0f))).withY(Math.sin(Math.toRadians(-origin.pitch() + 90.0f)));
@@ -142,7 +142,7 @@ public record RelativeVec(Vec vec, CoordinateType coordinateType, boolean relati
         /**
          * Absolute just returns the original vector.
          */
-        ABSOLUTE(((vec, origin, relativeX1, relativeY1, relativeZ1) -> vec));
+        ABSOLUTE((vec, _, _, _, _) -> vec);
 
         private final CoordinateConverter converter;
 

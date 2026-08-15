@@ -1,8 +1,8 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.coordinate.Pos;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
-import net.minestom.server.coordinate.Pos;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,9 +23,9 @@ public class EntityProjectileIntegrationTest {
 
         var before = projectile.getPosition(); // at start
         var after = projectile.getPosition(); // now - 1 tick, closest to target
-        var smallestDistance = 1e6;
+        double smallestDistance = 1e6;
         while (true) {
-            final var distance = projectile.getPosition().distanceSquared(target);
+            final double distance = projectile.getPosition().distanceSquared(target);
             if (distance <= smallestDistance) smallestDistance = distance;
             else break;
 
@@ -56,9 +56,9 @@ public class EntityProjectileIntegrationTest {
 
         var before = projectile.getPosition(); // at start
         var after = projectile.getPosition(); // now - 1 tick, closest to target
-        var smallestDistance = 1e6;
+        double smallestDistance = 1e6;
         while (true) {
-            final var distance = projectile.getPosition().distanceSquared(target);
+            final double distance = projectile.getPosition().distanceSquared(target);
             if (distance <= smallestDistance) smallestDistance = distance;
             else break;
 

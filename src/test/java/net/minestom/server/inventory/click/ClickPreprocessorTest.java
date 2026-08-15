@@ -1,20 +1,23 @@
 package net.minestom.server.inventory.click;
 
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minestom.server.MinecraftServer;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static net.minestom.server.inventory.click.ClickUtils.*;
-import static net.minestom.server.network.packet.client.play.ClientClickWindowPacket.ClickType.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static net.minestom.server.inventory.click.ClickUtils.SIZE;
+import static net.minestom.server.inventory.click.ClickUtils.assertProcessed;
+import static net.minestom.server.inventory.click.ClickUtils.clickPacket;
+import static net.minestom.server.network.packet.client.play.ClientClickWindowPacket.ClickType.CLONE;
+import static net.minestom.server.network.packet.client.play.ClientClickWindowPacket.ClickType.PICKUP;
+import static net.minestom.server.network.packet.client.play.ClientClickWindowPacket.ClickType.QUICK_CRAFT;
+import static net.minestom.server.network.packet.client.play.ClientClickWindowPacket.ClickType.QUICK_MOVE;
+import static net.minestom.server.network.packet.client.play.ClientClickWindowPacket.ClickType.SWAP;
+import static net.minestom.server.network.packet.client.play.ClientClickWindowPacket.ClickType.THROW;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ClickPreprocessorTest {
-
-    static {
-        MinecraftServer.init();
-    }
 
     @Test
     public void testPickupType() {

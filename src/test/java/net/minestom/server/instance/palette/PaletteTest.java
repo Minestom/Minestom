@@ -6,12 +6,21 @@ import net.minestom.server.network.NetworkBuffer;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static net.minestom.server.instance.palette.PaletteAssertions.assertAllEquals;
+import static net.minestom.server.instance.palette.PaletteAssertions.testPalettes;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class PaletteTest {
 
@@ -104,23 +113,11 @@ public class PaletteTest {
             palette.fill(6);
             assertEquals(6, palette.get(0, 0, 0));
             assertEquals(palette.maxSize(), palette.count());
-            for (int x = 0; x < palette.dimension(); x++) {
-                for (int y = 0; y < palette.dimension(); y++) {
-                    for (int z = 0; z < palette.dimension(); z++) {
-                        assertEquals(6, palette.get(x, y, z));
-                    }
-                }
-            }
+            assertAllEquals(6, palette);
 
             palette.fill(0);
             assertEquals(0, palette.count());
-            for (int x = 0; x < palette.dimension(); x++) {
-                for (int y = 0; y < palette.dimension(); y++) {
-                    for (int z = 0; z < palette.dimension(); z++) {
-                        assertEquals(0, palette.get(x, y, z));
-                    }
-                }
-            }
+            assertAllEquals(0, palette);
         }
     }
 
@@ -129,13 +126,7 @@ public class PaletteTest {
         for (Palette palette : testPalettes()) {
             palette.fill(0);
             palette.offset(1);
-            for (int x = 0; x < palette.dimension(); x++) {
-                for (int y = 0; y < palette.dimension(); y++) {
-                    for (int z = 0; z < palette.dimension(); z++) {
-                        assertEquals(1, palette.get(x, y, z));
-                    }
-                }
-            }
+            assertAllEquals(1, palette);
 
             palette.fill(1);
             palette.set(0, 0, 1, 2);
@@ -217,13 +208,7 @@ public class PaletteTest {
         for (Palette palette : testPalettes()) {
             palette.fill(0);
             palette.replace(0, 1);
-            for (int x = 0; x < palette.dimension(); x++) {
-                for (int y = 0; y < palette.dimension(); y++) {
-                    for (int z = 0; z < palette.dimension(); z++) {
-                        assertEquals(1, palette.get(x, y, z));
-                    }
-                }
-            }
+            assertAllEquals(1, palette);
 
             palette.fill(1);
             palette.set(0, 0, 1, 2);
@@ -283,6 +268,30 @@ public class PaletteTest {
             assertEquals(palette.maxSize(), palette.count());
             palette.replace(100, 0);
             assertEquals(palette.maxSize() - 1, palette.count());
+        }
+    }
+
+    @Test
+    public void replaceWithExistingValue() {
+        for (Palette palette : testPalettes()) {
+            palette.set(0, 0, 0, 1);
+            palette.set(1, 0, 0, 2);
+            palette.set(0, 1, 0, 2);
+
+            palette.replace(1, 2);
+
+            assertEquals(2, palette.get(0, 0, 0));
+            assertEquals(2, palette.get(1, 0, 0));
+            assertEquals(2, palette.get(0, 1, 0));
+            assertEquals(3, palette.count(2));
+            assertEquals(0, palette.count(1));
+            assertFalse(palette.any(1));
+            assertTrue(palette.any(2));
+
+            palette.set(1, 1, 0, 1);
+            assertEquals(1, palette.get(1, 1, 0));
+            assertEquals(1, palette.count(1));
+            assertEquals(3, palette.count(2));
         }
     }
 
@@ -433,7 +442,7 @@ public class PaletteTest {
 
             // Ensure that the lambda is called for every entry
             // even if the array is initialized
-            palette.getAll((x, y, z, value) -> count.incrementAndGet());
+            palette.getAll((_, _, _, _) -> count.incrementAndGet());
             assertEquals(count.get(), palette.maxSize());
 
             // Fill all entries
@@ -447,27 +456,27 @@ public class PaletteTest {
             assertEquals(palette.count(), count.get());
 
             count.set(0);
-            palette.getAll((x, y, z, value) -> assertEquals(count.incrementAndGet(), value));
+            palette.getAll((_, _, _, value) -> assertEquals(count.incrementAndGet(), value));
             assertEquals(count.get(), palette.count());
 
             // Replacing
             count.set(0);
-            palette.replaceAll((x, y, z, value) -> {
+            palette.replaceAll((_, _, _, value) -> {
                 assertEquals(count.incrementAndGet(), value);
                 return count.get();
             });
             assertEquals(count.get(), palette.count());
 
             count.set(0);
-            palette.getAll((x, y, z, value) -> assertEquals(count.incrementAndGet(), value));
+            palette.getAll((_, _, _, value) -> assertEquals(count.incrementAndGet(), value));
         }
     }
 
     @Test
     public void setAllConstant() {
         for (Palette palette : testPalettes()) {
-            palette.setAll((x, y, z) -> 1);
-            palette.getAll((x, y, z, value) -> assertEquals(1, value));
+            palette.setAll((_, _, _) -> 1);
+            palette.getAll((_, _, _, value) -> assertEquals(1, value));
         }
     }
 
@@ -487,14 +496,14 @@ public class PaletteTest {
     @Test
     public void getAllEmpty() {
         for (Palette palette : testPalettes()) {
-            palette.getAll((x, y, z, value) -> assertEquals(0, value));
+            palette.getAll((_, _, _, value) -> assertEquals(0, value));
         }
     }
 
     @Test
     public void getAllPresent() {
         for (Palette palette : testPalettes()) {
-            palette.getAllPresent((x, y, z, value) -> fail("The palette should be empty"));
+            palette.getAllPresent((_, _, _, _) -> fail("The palette should be empty"));
             palette.set(0, 0, 1, 1);
             palette.getAllPresent((x, y, z, value) -> {
                 assertEquals(0, x);
@@ -502,6 +511,40 @@ public class PaletteTest {
                 assertEquals(1, z);
                 assertEquals(1, value);
             });
+        }
+    }
+
+    @Test
+    public void getAllPresentNonAirFill() {
+        // Filling with a non-air value then editing a cell must still report every non-air cell.
+        for (Palette palette : testPalettes()) {
+            palette.fill(5);
+            palette.set(0, 0, 0, 7);
+            AtomicInteger reported = new AtomicInteger();
+            palette.getAllPresent((x, y, z, value) -> {
+                assertNotEquals(0, value, "air must never be reported as present");
+                assertEquals(x == 0 && y == 0 && z == 0 ? 7 : 5, value);
+                reported.incrementAndGet();
+            });
+            assertEquals(palette.maxSize(), reported.get());
+            assertEquals(palette.count(), reported.get(), "getAllPresent must agree with count()");
+        }
+    }
+
+    @Test
+    public void getAllPresentNonAirFillThenAir() {
+        // Carving a single air cell out of a non-air fill must exclude only that cell.
+        for (Palette palette : testPalettes()) {
+            palette.fill(5);
+            palette.set(0, 0, 0, 0);
+            AtomicInteger reported = new AtomicInteger();
+            palette.getAllPresent((x, y, z, value) -> {
+                assertEquals(5, value);
+                assertFalse(x == 0 && y == 0 && z == 0, "the air cell must be excluded");
+                reported.incrementAndGet();
+            });
+            assertEquals(palette.maxSize() - 1, reported.get());
+            assertEquals(palette.count(), reported.get(), "getAllPresent must agree with count()");
         }
     }
 
@@ -518,20 +561,20 @@ public class PaletteTest {
 
         for (Palette palette : testPalettes()) {
             palette.fill(0);
-            palette.replaceAll((x, y, z, value) -> {
+            palette.replaceAll((_, _, _, value) -> {
                 assertEquals(0, value);
                 return value + 1;
             });
-            palette.getAll((x, y, z, value) -> assertEquals(1, value));
+            palette.getAll((_, _, _, value) -> assertEquals(1, value));
         }
 
         for (Palette palette : testPalettes()) {
             palette.fill(1);
-            palette.replaceAll((x, y, z, value) -> {
+            palette.replaceAll((_, _, _, value) -> {
                 assertEquals(1, value);
                 return value + 1;
             });
-            palette.getAll((x, y, z, value) -> assertEquals(2, value));
+            palette.getAll((_, _, _, value) -> assertEquals(2, value));
         }
     }
 
@@ -596,11 +639,28 @@ public class PaletteTest {
     }
 
     @Test
+    public void serializationBlockLinearMutation() {
+        NetworkBuffer buffer = NetworkBuffer.resizableBuffer();
+        Palette palette = Palette.blocks();
+        palette.set(0, 0, 0, 1);
+        palette.set(1, 0, 0, 2);
+
+        buffer.write(Palette.BLOCK_SERIALIZER, palette);
+        Palette deserialized = buffer.read(Palette.BLOCK_SERIALIZER);
+
+        deserialized.set(2, 0, 0, 3);
+
+        assertEquals(1, deserialized.get(0, 0, 0));
+        assertEquals(2, deserialized.get(1, 0, 0));
+        assertEquals(3, deserialized.get(2, 0, 0));
+    }
+
+    @Test
     public void serializationBlockDirect() {
         NetworkBuffer buffer = NetworkBuffer.resizableBuffer();
         Random random = new Random(12345);
         Palette palette = Palette.blocks();
-        palette.setAll((x, y, z) -> random.nextInt(2048));
+        palette.setAll((_, _, _) -> random.nextInt(2048));
 
         buffer.write(Palette.BLOCK_SERIALIZER, palette);
 
@@ -638,7 +698,7 @@ public class PaletteTest {
         NetworkBuffer buffer = NetworkBuffer.resizableBuffer();
         Palette palette = Palette.biomes();
         Random random = new Random(12345);
-        palette.setAll((x, y, z) -> random.nextInt(2048));
+        palette.setAll((_, _, _) -> random.nextInt(2048));
 
         buffer.write(serializer, palette);
 
@@ -867,25 +927,25 @@ public class PaletteTest {
 
             // Test with empty palette - predicate that always returns true should find the
             // top
-            assertEquals(dimension - 1, palette.height(0, 0, (x, y, z, value) -> true));
+            assertEquals(dimension - 1, palette.height(0, 0, (_, _, _, _) -> true));
             // Predicate that always returns false should return -1
-            assertEquals(-1, palette.height(0, 0, (x, y, z, value) -> false));
+            assertEquals(-1, palette.height(0, 0, (_, _, _, _) -> false));
 
             // Set a block at the top
             palette.set(0, dimension - 1, 0, 1);
-            assertEquals(dimension - 1, palette.height(0, 0, (x, y, z, value) -> value != 0));
+            assertEquals(dimension - 1, palette.height(0, 0, (_, _, _, value) -> value != 0));
 
             // Set a block in the middle
             if (dimension > 1) {
                 palette.set(1, dimension / 2, 1, 2);
-                assertEquals(dimension / 2, palette.height(1, 1, (x, y, z, value) -> value != 0));
+                assertEquals(dimension / 2, palette.height(1, 1, (_, _, _, value) -> value != 0));
             }
 
             // Set blocks at multiple heights - should return the highest one
             if (dimension > 2) {
                 palette.set(2, 1, 2, 3);
                 palette.set(2, dimension - 2, 2, 4);
-                assertEquals(dimension - 2, palette.height(2, 2, (x, y, z, value) -> value != 0));
+                assertEquals(dimension - 2, palette.height(2, 2, (_, _, _, value) -> value != 0));
             }
 
             // Test with predicate that matches air (value 0)
@@ -893,12 +953,12 @@ public class PaletteTest {
             int testX = Math.min(1, dimension - 1);
             int testZ = Math.min(1, dimension - 1);
             palette.set(testX, dimension / 2, testZ, 0); // Set one block to air
-            assertEquals(dimension / 2, palette.height(testX, testZ, (x, y, z, value) -> value == 0));
+            assertEquals(dimension / 2, palette.height(testX, testZ, (_, _, _, value) -> value == 0));
 
             // Test edge cases - coordinates at boundaries
             palette.fill(0);
             palette.set(dimension - 1, dimension - 1, dimension - 1, 10);
-            assertEquals(dimension - 1, palette.height(dimension - 1, dimension - 1, (x, y, z, value) -> value != 0));
+            assertEquals(dimension - 1, palette.height(dimension - 1, dimension - 1, (_, _, _, value) -> value != 0));
 
             // Test with complex predicate
             palette.fill(0);
@@ -913,7 +973,7 @@ public class PaletteTest {
                     break;
                 }
             }
-            assertEquals(expectedHeight, palette.height(0, 0, (x, y, z, value) -> value > 5));
+            assertEquals(expectedHeight, palette.height(0, 0, (_, _, _, value) -> value > 5));
         }
     }
 
@@ -923,10 +983,10 @@ public class PaletteTest {
         final int dimension = palette.dimension();
 
         // Test invalid coordinates
-        assertThrows(IllegalArgumentException.class, () -> palette.height(-1, 0, (x, y, z, value) -> true));
-        assertThrows(IllegalArgumentException.class, () -> palette.height(0, -1, (x, y, z, value) -> true));
-        assertThrows(IllegalArgumentException.class, () -> palette.height(dimension, 0, (x, y, z, value) -> true));
-        assertThrows(IllegalArgumentException.class, () -> palette.height(0, dimension, (x, y, z, value) -> true));
+        assertThrows(IllegalArgumentException.class, () -> palette.height(-1, 0, (_, _, _, _) -> true));
+        assertThrows(IllegalArgumentException.class, () -> palette.height(0, -1, (_, _, _, _) -> true));
+        assertThrows(IllegalArgumentException.class, () -> palette.height(dimension, 0, (_, _, _, _) -> true));
+        assertThrows(IllegalArgumentException.class, () -> palette.height(0, dimension, (_, _, _, _) -> true));
     }
 
     @Test
@@ -936,8 +996,8 @@ public class PaletteTest {
         singleValuePalette.fill(42);
         
         // Should find the value at the top
-        assertEquals(15, singleValuePalette.height(0, 0, (x, y, z, value) -> value == 42));
-        assertEquals(-1, singleValuePalette.height(0, 0, (x, y, z, value) -> value == 0));
+        assertEquals(15, singleValuePalette.height(0, 0, (_, _, _, value) -> value == 42));
+        assertEquals(-1, singleValuePalette.height(0, 0, (_, _, _, value) -> value == 0));
         
         // Test multi-value palette optimization
         Palette multiValuePalette = Palette.blocks();
@@ -946,11 +1006,11 @@ public class PaletteTest {
         multiValuePalette.set(5, 12, 5, 300);
         
         // Should find the highest matching block
-        assertEquals(12, multiValuePalette.height(5, 5, (x, y, z, value) -> value != 0));
-        assertEquals(10, multiValuePalette.height(5, 5, (x, y, z, value) -> value == 100));
-        assertEquals(8, multiValuePalette.height(5, 5, (x, y, z, value) -> value == 200));
-        assertEquals(12, multiValuePalette.height(5, 5, (x, y, z, value) -> value == 300));
-        assertEquals(-1, multiValuePalette.height(5, 5, (x, y, z, value) -> value == 999));
+        assertEquals(12, multiValuePalette.height(5, 5, (_, _, _, value) -> value != 0));
+        assertEquals(10, multiValuePalette.height(5, 5, (_, _, _, value) -> value == 100));
+        assertEquals(8, multiValuePalette.height(5, 5, (_, _, _, value) -> value == 200));
+        assertEquals(12, multiValuePalette.height(5, 5, (_, _, _, value) -> value == 300));
+        assertEquals(-1, multiValuePalette.height(5, 5, (_, _, _, value) -> value == 999));
     }
 
     @Test
@@ -983,13 +1043,4 @@ public class PaletteTest {
         assertEquals(testPalette.maxSize() - 12, testPalette.count());
     }
 
-    private static List<Palette> testPalettes() {
-        return List.of(
-                Palette.sized(2, 1, 5, 15, 3),
-                Palette.sized(4, 1, 5, 15, 3),
-                Palette.sized(8, 1, 5, 15, 3),
-                Palette.sized(16, 1, 5, 15, 3),
-                Palette.blocks()
-        );
-    }
 }

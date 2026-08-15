@@ -22,6 +22,7 @@ public final class ServerFlag {
     public static final long LOGIN_PLUGIN_MESSAGE_TIMEOUT = longProperty("minestom.login-plugin-message-timeout", 5_000); // 5s
     public static final long KNOWN_PACKS_RESPONSE_TIMEOUT = longProperty("minestom.known-packs-response-timeout", 5 * 60_000); // 5m
     public static final boolean ACCEPT_TRANSFERS = booleanProperty("minestom.accept-transfers", false);
+    public static final boolean AUTOMATIC_COMPONENT_TRANSLATION = booleanProperty("minestom.automatic-component-translation", false);
 
     // Network rate limiting
     public static final int PLAYER_PACKET_PER_TICK = intProperty("minestom.packet-per-tick", 50);
@@ -73,7 +74,11 @@ public final class ServerFlag {
     public static final boolean FASTER_SOCKET_WRITES = booleanProperty("minestom.new-socket-write-lock"); // TODO: promote to default
     public static final boolean ACQUIRABLE_STRICT = booleanProperty("minestom.acquirable-strict", false);
     public static final boolean UNSAFE_COLLECTIONS = booleanProperty("minestom.unsafe-collections", false); // Likely to be removed in the future
+    public static final boolean TEMPLATE_COMPILER = booleanProperty("minestom.template-compiler", false);
+    public static final boolean PROXY_PROTOCOL = booleanProperty("minestom.proxy-protocol", false);
+    public static final boolean PROXY_PROTOCOL_REQUIRED = booleanProperty("minestom.proxy-protocol.required", false);
 
+    @SuppressWarnings("ConstantField") // kept not final for binary compatibility until the next breaking release
     public static boolean INSIDE_TEST = booleanProperty("minestom.inside-test", false);
 
     private ServerFlag() {}
@@ -87,7 +92,8 @@ public final class ServerFlag {
         try {
             final String value = System.getProperty(name);
             if (value != null) result = Boolean.parseBoolean(value);
-        } catch (IllegalArgumentException | NullPointerException ignored) {
+        } catch (IllegalArgumentException | NullPointerException _) {
+            // Invalid or inaccessible property, keep the default
         }
         return result;
     }
@@ -97,6 +103,7 @@ public final class ServerFlag {
         return System.getProperty(name, defaultValue);
     }
 
+    @SuppressWarnings("unused")
     private static String stringProperty(String name) {
         return System.getProperty(name);
     }
@@ -125,7 +132,8 @@ public final class ServerFlag {
         try {
             final String value = System.getProperty(name);
             if (value != null) result = Float.parseFloat(value);
-        } catch (IllegalArgumentException | NullPointerException ignored) {
+        } catch (IllegalArgumentException | NullPointerException _) {
+            // Invalid or inaccessible property, keep the default
         }
         return result;
     }

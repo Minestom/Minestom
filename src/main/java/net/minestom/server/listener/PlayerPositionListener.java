@@ -3,18 +3,23 @@ package net.minestom.server.listener;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.RelativeFlags;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.network.packet.client.play.*;
+import net.minestom.server.network.packet.client.play.ClientPlayerPositionAndRotationPacket;
+import net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket;
+import net.minestom.server.network.packet.client.play.ClientPlayerPositionStatusPacket;
+import net.minestom.server.network.packet.client.play.ClientPlayerRotationPacket;
+import net.minestom.server.network.packet.client.play.ClientTeleportConfirmPacket;
 import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.ApiStatus;
 
 public class PlayerPositionListener {
-    private static final double MAX_COORDINATE = 30_000_000;
-    private static final Component KICK_MESSAGE = Component.text("You moved too far away!");
+    static final Component KICK_MESSAGE = Component.text("You moved too far away!");
 
     public static void playerPacketListener(ClientPlayerPositionStatusPacket packet, Player player) {
         // TODO: Should we expose horizontal collision here and the methods below?
@@ -48,9 +53,10 @@ public class PlayerPositionListener {
     private static void processMovement(Player player, Pos packetPosition, boolean onGround) {
         // Prevent the player from moving too far
         // Doubles close to max size can cause overflow, or simply have precision issues
-        if (Math.abs(packetPosition.x()) > MAX_COORDINATE ||
-                Math.abs(packetPosition.y()) > MAX_COORDINATE ||
-                Math.abs(packetPosition.z()) > MAX_COORDINATE) {
+        if (!Double.isFinite(packetPosition.x()) || !Double.isFinite(packetPosition.y()) || !Double.isFinite(packetPosition.z()) ||
+                Math.abs(packetPosition.x()) > Entity.MAX_COORDINATE ||
+                Math.abs(packetPosition.y()) > Entity.MAX_COORDINATE ||
+                Math.abs(packetPosition.z()) > Entity.MAX_COORDINATE) {
             player.kick(KICK_MESSAGE);
             return;
         }
@@ -71,7 +77,7 @@ public class PlayerPositionListener {
         }
         // Try to move in an unloaded chunk, prevent it
         if (!currentPosition.sameChunk(packetPosition) && !ChunkUtils.isLoaded(instance, packetPosition)) {
-            player.teleport(currentPosition);
+            var _ = player.teleport(currentPosition);
             return;
         }
 
@@ -84,7 +90,7 @@ public class PlayerPositionListener {
         if (playerMoveEvent.isCancelled()) {
             // Teleport to previous position & cancel any velocity
             player.sendPacket(new PlayerPositionAndLookPacket(player.getNextTeleportId(), currentPosition,
-                    Vec.ZERO, currentPosition.yaw(), currentPosition.pitch(), (byte) 0x00));
+                    Vec.ZERO, currentPosition.yaw(), currentPosition.pitch(), (byte) RelativeFlags.NONE));
             return;
         }
         final Pos eventPosition = playerMoveEvent.getNewPosition();
@@ -99,7 +105,7 @@ public class PlayerPositionListener {
                 player.refreshOnGround(onGround);
                 player.setView(eventPosition.yaw(), eventPosition.pitch());
             } else {
-                player.teleport(eventPosition);
+                var _ = player.teleport(eventPosition);
             }
         }
     }

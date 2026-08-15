@@ -5,6 +5,7 @@ import net.kyori.adventure.util.ARGBLike;
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.codec.Codec;
 
+import java.util.Collection;
 import java.util.Map;
 
 public sealed interface EnvironmentAttribute<T> extends EnvironmentAttributes permits EnvironmentAttributeImpl {
@@ -13,7 +14,13 @@ public sealed interface EnvironmentAttribute<T> extends EnvironmentAttributes pe
 
     Type<T> type();
 
+    T defaultValue();
+
     Codec<T> valueCodec();
+
+    static Collection<EnvironmentAttribute<?>> values() {
+        return EnvironmentAttributeImpl.REGISTRY.values();
+    }
 
     sealed interface Type<T> extends EnvironmentAttributeTypes permits EnvironmentAttributeTypeImpl {
 

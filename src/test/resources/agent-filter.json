@@ -1,0 +1,8 @@
+{
+  "rules": [
+    {"excludeClasses": "org.junit.**"},
+    {"excludeClasses": "org.opentest4j.**"},
+    {"excludeClasses": "org.gradle.**"},
+    {"excludeClasses": "org.graalvm.**"}
+  ]
+}

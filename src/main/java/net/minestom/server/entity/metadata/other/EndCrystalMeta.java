@@ -8,7 +8,7 @@ import net.minestom.server.entity.metadata.EntityMeta;
 import org.jetbrains.annotations.Nullable;
 
 public class EndCrystalMeta extends EntityMeta {
-    public EndCrystalMeta(Entity entity, MetadataHolder metadata) {
+    public EndCrystalMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

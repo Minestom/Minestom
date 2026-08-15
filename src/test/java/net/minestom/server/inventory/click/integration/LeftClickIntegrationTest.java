@@ -20,7 +20,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @EnvTest
 public class LeftClickIntegrationTest {
@@ -248,9 +250,7 @@ public class LeftClickIntegrationTest {
             for (int hotbarSlot = 0; hotbarSlot < 9; hotbarSlot++) {
                 player.getInventory().setItemStack(hotbarSlot, ItemStack.of(Material.BRICK));
             }
-            listener.followup(event -> {
-                assertEquals(inventory, event.getInventory());
-            });
+            listener.followup(event -> assertEquals(inventory, event.getInventory()));
             shiftClickOpenInventory(player, 1);
             assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
             assertEquals(ItemStack.of(Material.GOLD_INGOT), player.getInventory().getItemStack(35)); // The item should appear in the bottom right of the player's inventory excluding the hotbar
@@ -279,23 +279,67 @@ public class LeftClickIntegrationTest {
         }
     }
 
-    private void shiftClickOpenInventory(Player player, int slot) {
+    @Test
+    public void shiftClickHotbarToSlotNine(Env env) {
+        var instance = env.createFlatInstance();
+        var player = env.createPlayer(instance, new Pos(0, 40, 0));
+        var inventory = player.getInventory();
+
+        // Fill main inventory slots 10 to 35, leaving slot 9 empty
+        for (int i = 10; i <= 35; i++) {
+            inventory.setItemStack(i, ItemStack.of(Material.STONE));
+        }
+
+        // Put an item in a hotbar slot (slot 0)
+        inventory.setItemStack(0, ItemStack.of(Material.DIAMOND));
+
+        // Perform shift click on slot 0
+        shiftClick(player, 0);
+
+        // Assert that the item successfully lands in slot 9
+        assertEquals(ItemStack.of(Material.DIAMOND), inventory.getItemStack(9));
+        assertEquals(ItemStack.AIR, inventory.getItemStack(0));
+    }
+
+    @Test
+    public void shiftClickCraftingResultToSlotZero(Env env) {
+        var instance = env.createFlatInstance();
+        var player = env.createPlayer(instance, new Pos(0, 40, 0));
+        var inventory = player.getInventory();
+
+        // Fill hotbar slots 1 to 8, leaving slot 0 empty
+        for (int i = 1; i <= 8; i++) {
+            inventory.setItemStack(i, ItemStack.of(Material.STONE));
+        }
+
+        // Put an item in the crafting result slot (slot 36)
+        inventory.setItemStack(36, ItemStack.of(Material.IRON_HELMET));
+
+        // Perform shift click on slot 36
+        shiftClick(player, 36);
+
+        // Assert that the item successfully lands in slot 0
+        assertEquals(ItemStack.of(Material.IRON_HELMET), inventory.getItemStack(0));
+        assertEquals(ItemStack.AIR, inventory.getItemStack(36));
+    }
+
+    private static void shiftClickOpenInventory(Player player, int slot) {
         _leftClick(player.getOpenInventory(), true, player, slot, true);
     }
 
-    private void shiftClick(Player player, int slot) {
+    private static void shiftClick(Player player, int slot) {
         _leftClick(player.getOpenInventory(), false, player, slot, true);
     }
 
-    private void leftClickOpenInventory(Player player, int slot) {
+    private static void leftClickOpenInventory(Player player, int slot) {
         _leftClick(player.getOpenInventory(), true, player, slot, false);
     }
 
-    private void leftClick(Player player, int slot) {
+    private static void leftClick(Player player, int slot) {
         _leftClick(player.getOpenInventory(), false, player, slot, false);
     }
 
-    private void _leftClick(AbstractInventory openInventory, boolean clickOpenInventory, Player player, int slot, boolean shift) {
+    private static void _leftClick(AbstractInventory openInventory, boolean clickOpenInventory, Player player, int slot, boolean shift) {
         final byte windowId = openInventory != null ? openInventory.getWindowId() : 0;
         if (clickOpenInventory) {
             assertNotNull(openInventory);

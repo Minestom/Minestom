@@ -5,13 +5,19 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static net.minestom.server.command.builder.arguments.ArgumentType.*;
+import static net.minestom.server.command.builder.arguments.ArgumentType.BlockState;
+import static net.minestom.server.command.builder.arguments.ArgumentType.EntityType;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Group;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Integer;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Loop;
+import static net.minestom.server.command.builder.arguments.ArgumentType.String;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -145,7 +151,7 @@ public class CommandSyntaxSingleTest {
         assertSyntax(groupLoop, "minecraft:stone minecraft:stone", ExpectedExecution.DEFAULT);
     }
 
-    private static void assertSyntax(List<Argument<?>> args, String input, ExpectedExecution expectedExecution, Map<String, Object> expectedValues) {
+    private static void assertSyntax(List<Argument<?>> args, String input, ExpectedExecution expectedExecution, @Nullable Map<String, Object> expectedValues) {
         final String commandName = "name";
 
         var manager = new CommandManager();
@@ -155,13 +161,13 @@ public class CommandSyntaxSingleTest {
         AtomicReference<ExpectedExecution> result = new AtomicReference<>();
         AtomicReference<Map<String, Object>> values = new AtomicReference<>();
 
-        command.setDefaultExecutor((sender, context) -> {
+        command.setDefaultExecutor((_, _) -> {
             if (!result.compareAndSet(null, ExpectedExecution.DEFAULT)) {
                 fail("Multiple execution: " + result.get());
             }
         });
 
-        command.addSyntax((sender, context) -> {
+        command.addSyntax((_, context) -> {
             if (!result.compareAndSet(null, ExpectedExecution.SYNTAX)) {
                 fail("Multiple execution: " + result.get());
             }

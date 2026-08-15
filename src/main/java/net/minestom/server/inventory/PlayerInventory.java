@@ -16,7 +16,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.BOOTS_SLOT;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.CHESTPLATE_SLOT;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.HELMET_SLOT;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.LEGGINGS_SLOT;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.OFFHAND_SLOT;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.convertMinestomSlotToPlayerInventorySlot;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.convertMinestomSlotToWindowSlot;
+import static net.minestom.server.utils.inventory.PlayerInventoryUtils.isPlayerInventorySlot;
 
 /**
  * Represents the inventory of a {@link Player}, retrieved with {@link Player#getInventory()}.
@@ -50,7 +57,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
         return 0;
     }
 
-    private int getSlotId(EquipmentSlot slot, byte heldSlot) {
+    private static int getSlotId(EquipmentSlot slot, byte heldSlot) {
         return switch (slot) {
             case MAIN_HAND -> heldSlot;
             case OFF_HAND -> OFFHAND_SLOT;
@@ -58,7 +65,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
         };
     }
 
-    private @Nullable EquipmentSlot getEquipmentSlot(int slot, byte heldSlot) {
+    private static @Nullable EquipmentSlot getEquipmentSlot(int slot, byte heldSlot) {
         return switch (slot) {
             case OFFHAND_SLOT -> EquipmentSlot.OFF_HAND;
             case HELMET_SLOT -> EquipmentSlot.HELMET;
@@ -77,7 +84,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
 
     public void setEquipment(EquipmentSlot slot, byte heldSlot, ItemStack itemStack) {
         final int slotId = getSlotId(slot, heldSlot);
-        if (slotId < 0) Check.fail("PlayerInventory does not support " + slot + " equipment");
+        if (slotId < 0) Check.fail("PlayerInventory does not support {0} equipment", slot);
 
         setItemStack(slotId, itemStack);
     }
@@ -255,7 +262,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
                     player, slot, clicked, cursor
             );
 
-            if(clickResult.isCancel()) {
+            if (clickResult.isCancel()) {
                 clickResult = clickProcessor.shiftClick(
                         this, this,
                         0, 9, 1,
@@ -267,14 +274,14 @@ public non-sealed class PlayerInventory extends AbstractInventory {
             // we want to prioritize the hotbar from right-to-left and then the inventory from right-to-left
             clickResult = clickProcessor.shiftClick(
                     this, this,
-                    9, 0, -1,
+                    8, -1, -1,
                     player, slot, clicked, cursor
             );
 
-            if(clickResult.isCancel()) {
+            if (clickResult.isCancel()) {
                 clickResult = clickProcessor.shiftClick(
                         this, this,
-                        INNER_INVENTORY_SIZE, 9, -1,
+                        INNER_INVENTORY_SIZE - 1, 8, -1,
                         player, slot, clicked, cursor
                 );
             }

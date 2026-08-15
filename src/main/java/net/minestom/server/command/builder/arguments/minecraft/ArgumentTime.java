@@ -62,7 +62,7 @@ public class ArgumentTime extends Argument<Duration> {
             // Check if value is a number
             final int time = Integer.parseInt(input);
             return Duration.of(time, timeUnit);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             throw new ArgumentSyntaxException("Time needs to be a number", input, NO_NUMBER);
         }
     }

@@ -12,10 +12,8 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.listener.manager.PacketListenerManager;
-import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.PacketParser;
-import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.Registries;
@@ -29,6 +27,13 @@ import java.net.SocketAddress;
 
 @ApiStatus.NonExtendable
 public interface ServerProcess extends Registries, Snapshotable {
+    /**
+     * Gets the registries owned by this process.
+     *
+     * @return the process registries
+     */
+    Registries registries();
+
     Auth auth();
 
     /**
@@ -74,8 +79,6 @@ public interface ServerProcess extends Registries, Snapshotable {
      */
     SchedulerManager scheduler();
 
-    BenchmarkManager benchmark();
-
     /**
      * Handles registered advancements.
      */
@@ -101,7 +104,7 @@ public interface ServerProcess extends Registries, Snapshotable {
      * <p>
      * Can be used if you want to convert a buffer to a client packet object.
      */
-    PacketParser<ClientPacket> packetParser();
+    PacketParser.Client packetParser();
 
     /**
      * Exposed socket server.

@@ -5,7 +5,9 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
+import static net.minestom.server.network.NetworkBuffer.FLOAT;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record Food(int nutrition, float saturationModifier, boolean canAlwaysEat) {
 

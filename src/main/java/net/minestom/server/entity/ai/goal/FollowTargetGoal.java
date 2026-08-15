@@ -6,6 +6,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.pathfinding.Navigator;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 
@@ -13,7 +14,7 @@ public class FollowTargetGoal extends GoalSelector {
     private final Duration pathDuration;
     private long lastUpdateTime = 0;
     private boolean forceEnd = false;
-    private Point lastTargetPos;
+    private @Nullable Point lastTargetPos;
 
     private Entity target;
 

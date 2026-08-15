@@ -12,7 +12,12 @@ import net.minestom.server.utils.callback.CommandCallback;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Manager used to register {@link Command commands}.
@@ -187,7 +192,7 @@ public final class CommandManager {
      * @return the {@link DeclareCommandsPacket} for {@code player}
      */
     public DeclareCommandsPacket createDeclareCommandsPacket(Player player) {
-        return GraphConverter.createPacket(getGraph(), player);
+        return GraphConverter.createPacket(this, getGraph(), player);
     }
 
     public Set<Command> getCommands() {

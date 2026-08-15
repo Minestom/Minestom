@@ -9,25 +9,25 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface TrimMaterials permits TrimMaterial {
-    RegistryKey<TrimMaterial> LAPIS = RegistryKey.unsafeOf("lapis");
-
-    RegistryKey<TrimMaterial> IRON = RegistryKey.unsafeOf("iron");
-
-    RegistryKey<TrimMaterial> DIAMOND = RegistryKey.unsafeOf("diamond");
-
     RegistryKey<TrimMaterial> AMETHYST = RegistryKey.unsafeOf("amethyst");
 
     RegistryKey<TrimMaterial> COPPER = RegistryKey.unsafeOf("copper");
 
-    RegistryKey<TrimMaterial> QUARTZ = RegistryKey.unsafeOf("quartz");
+    RegistryKey<TrimMaterial> DIAMOND = RegistryKey.unsafeOf("diamond");
 
     RegistryKey<TrimMaterial> EMERALD = RegistryKey.unsafeOf("emerald");
 
-    RegistryKey<TrimMaterial> RESIN = RegistryKey.unsafeOf("resin");
+    RegistryKey<TrimMaterial> GOLD = RegistryKey.unsafeOf("gold");
+
+    RegistryKey<TrimMaterial> IRON = RegistryKey.unsafeOf("iron");
+
+    RegistryKey<TrimMaterial> LAPIS = RegistryKey.unsafeOf("lapis");
+
+    RegistryKey<TrimMaterial> NETHERITE = RegistryKey.unsafeOf("netherite");
+
+    RegistryKey<TrimMaterial> QUARTZ = RegistryKey.unsafeOf("quartz");
 
     RegistryKey<TrimMaterial> REDSTONE = RegistryKey.unsafeOf("redstone");
 
-    RegistryKey<TrimMaterial> GOLD = RegistryKey.unsafeOf("gold");
-
-    RegistryKey<TrimMaterial> NETHERITE = RegistryKey.unsafeOf("netherite");
+    RegistryKey<TrimMaterial> RESIN = RegistryKey.unsafeOf("resin");
 }

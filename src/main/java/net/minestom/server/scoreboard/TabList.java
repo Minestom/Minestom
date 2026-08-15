@@ -68,7 +68,7 @@ public class TabList implements Scoreboard {
     }
 
     @Override
-    public Set<Player> getViewers() {
+    public Set<? extends Player> getViewers() {
         return unmodifiableViewers;
     }
 

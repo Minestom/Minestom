@@ -8,19 +8,21 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.pathfinding.PNode;
 import net.minestom.server.instance.block.Block;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.OptionalDouble;
 import java.util.Set;
 
 public class PreciseGroundNodeGenerator implements NodeGenerator {
-    private PNode tempNode = null;
+    private @Nullable PNode tempNode = null;
     private final static int MAX_FALL_DISTANCE = 5;
 
     @Override
     public Collection<? extends PNode> getWalkable(Block.Getter getter, Set<PNode> visited, PNode current, Point goal, BoundingBox boundingBox) {
-        Collection<PNode> nearby = new ArrayList<>();
+        List<PNode> nearby = new ArrayList<>();
         tempNode = new PNode(0, 0, 0, 0, 0, current);
 
         int stepSize = (int) Math.max(Math.floor(boundingBox.width() / 2), 1);

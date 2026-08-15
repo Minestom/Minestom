@@ -6,7 +6,10 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.BYTE;
@@ -20,6 +23,7 @@ public record EntityEquipmentPacket(int entityId,
             throw new IllegalArgumentException("Equipments cannot be empty");
     }
 
+    @SuppressWarnings("deprecation") // legacy protocol ids are the wire format
     public static final NetworkBuffer.Type<EntityEquipmentPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
         public void write(NetworkBuffer buffer, EntityEquipmentPacket value) {
@@ -28,7 +32,7 @@ public record EntityEquipmentPacket(int entityId,
             for (var entry : value.equipments.entrySet()) {
                 final boolean last = index++ == value.equipments.size() - 1;
                 byte slotEnum = (byte) entry.getKey().legacyProtocolId();
-                if (!last) slotEnum |= 0x80;
+                if (!last) slotEnum = (byte) (slotEnum | 0x80);
                 buffer.write(BYTE, slotEnum);
                 buffer.write(ItemStack.NETWORK_TYPE, entry.getValue());
             }
@@ -41,7 +45,7 @@ public record EntityEquipmentPacket(int entityId,
     };
 
     @Override
-    public Collection<Component> components() {
+    public List<Component> components() {
         final var components = new ArrayList<Component>();
         for (var itemStack : this.equipments.values())
             components.addAll(ItemStack.textComponents(itemStack));
@@ -56,6 +60,7 @@ public record EntityEquipmentPacket(int entityId,
         return new EntityEquipmentPacket(this.entityId, newEquipment);
     }
 
+    @SuppressWarnings("deprecation") // legacy protocol ids are the wire format
     private static Map<EquipmentSlot, ItemStack> readEquipments(NetworkBuffer reader) {
         Map<EquipmentSlot, ItemStack> equipments = new EnumMap<>(EquipmentSlot.class);
         byte slot;

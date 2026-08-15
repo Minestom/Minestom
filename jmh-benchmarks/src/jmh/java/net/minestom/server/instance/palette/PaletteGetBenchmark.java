@@ -1,6 +1,16 @@
 package net.minestom.server.instance.palette;
 
-import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Fork;
+import org.openjdk.jmh.annotations.Measurement;
+import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.Param;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.Setup;
+import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
 import org.openjdk.jmh.infra.Blackhole;
 
 import java.util.concurrent.TimeUnit;
@@ -23,7 +33,7 @@ public class PaletteGetBenchmark {
     public void setup() {
         palette = Palette.sized(dimension, 4, 8, 15, 4);
         AtomicInteger value = new AtomicInteger();
-        palette.setAll((x, y, z) -> value.getAndIncrement());
+        palette.setAll((_, _, _) -> value.getAndIncrement());
     }
 
     @Benchmark
@@ -40,6 +50,6 @@ public class PaletteGetBenchmark {
 
     @Benchmark
     public void readAll(Blackhole blackHole) {
-        palette.getAll((x, y, z, value) -> blackHole.consume(value));
+        palette.getAll((_, _, _, value) -> blackHole.consume(value));
     }
 }

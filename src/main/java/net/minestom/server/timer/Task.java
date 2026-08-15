@@ -63,7 +63,7 @@ public sealed interface Task permits TaskImpl {
             var innerTask = this.innerTask;
             var delay = this.delay;
             var repeat = this.repeat;
-            var repeatOverride = this.repeatOverride;
+            boolean repeatOverride = this.repeatOverride;
             var executionType = this.executionType;
             return scheduler.submitTask(new Supplier<>() {
                 boolean first = true;

@@ -9,7 +9,7 @@ import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.Nullable;
 
 public class FrogMeta extends AnimalMeta {
-    public FrogMeta(Entity entity, MetadataHolder metadata) {
+    public FrogMeta(@Nullable Entity entity, MetadataHolder metadata) {
         super(entity, metadata);
     }
 

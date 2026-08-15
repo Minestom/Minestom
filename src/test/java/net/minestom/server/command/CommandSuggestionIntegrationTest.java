@@ -11,9 +11,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static net.minestom.server.command.builder.arguments.ArgumentType.*;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Integer;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Word;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 @EnvTest
 public class CommandSuggestionIntegrationTest {
@@ -25,7 +26,7 @@ public class CommandSuggestionIntegrationTest {
         var player = connection.connect(instance, new Pos(0, 42, 0));
 
         var command = new Command("test");
-        command.addSyntax((sender, context) -> {
+        command.addSyntax((_, _) -> {
 
         }, Literal("arg").setSuggestionCallback((sender, context, suggestion) -> {
             assertEquals(player, sender);
@@ -55,22 +56,20 @@ public class CommandSuggestionIntegrationTest {
         var player = connection.connect(instance, new Pos(0, 42, 0));
 
         var suggestArg = Word("suggestArg").setSuggestionCallback(
-                (sender, context, suggestion) -> suggestion.addEntry(new SuggestionEntry("suggestion"))
+                (_, _, suggestion) -> suggestion.addEntry(new SuggestionEntry("suggestion"))
         );
         var defaultArg = Integer("defaultArg").setDefaultValue(123);
 
         var command = new Command("foo");
 
-        command.addSyntax((sender,context)->{}, suggestArg, defaultArg);
+        command.addSyntax((_,_)->{}, suggestArg, defaultArg);
         env.process().command().register(command);
 
         var listener = connection.trackIncoming(TabCompletePacket.class);
         player.addPacketToQueue(new ClientTabCompletePacket(1, "foo 1"));
         player.interpretPacketQueue();
 
-        listener.assertSingle(tabCompletePacket -> {
-            assertEquals(List.of(new TabCompletePacket.Match("suggestion", null)), tabCompletePacket.matches());
-        });
+        listener.assertSingle(tabCompletePacket -> assertEquals(List.of(new TabCompletePacket.Match("suggestion", null)), tabCompletePacket.matches()));
     }
 
     @Test
@@ -83,16 +82,12 @@ public class CommandSuggestionIntegrationTest {
 
         var subCommand = new Command("bar");
 
-        var wordArg1 = Word("wordArg1").setSuggestionCallback((sender, context, suggestion) -> {
-            suggestion.addEntry(new SuggestionEntry("suggestionA"));
-        });
-        var wordArg2 = Word("wordArg2").setSuggestionCallback((sender, context, suggestion) -> {
-                    suggestion.addEntry(new SuggestionEntry("suggestionB"));
-                });
+        var wordArg1 = Word("wordArg1").setSuggestionCallback((_, _, suggestion) -> suggestion.addEntry(new SuggestionEntry("suggestionA")));
+        var wordArg2 = Word("wordArg2").setSuggestionCallback((_, _, suggestion) -> suggestion.addEntry(new SuggestionEntry("suggestionB")));
 
-        subCommand.addSyntax((sender, context) -> {}, wordArg1, wordArg2);
+        subCommand.addSyntax((_, _) -> {}, wordArg1, wordArg2);
 
-        command.addSyntax((sender,context)->{}, Literal("literal"), wordArg2);
+        command.addSyntax((_,_)->{}, Literal("literal"), wordArg2);
 
         command.addSubcommand(subCommand);
 
@@ -102,9 +97,7 @@ public class CommandSuggestionIntegrationTest {
         player.addPacketToQueue(new ClientTabCompletePacket(1, "foo bar "));
         player.interpretPacketQueue();
 
-        listener.assertSingle(tabCompletePacket -> {
-            assertEquals(List.of(new TabCompletePacket.Match("suggestionA", null)), tabCompletePacket.matches());
-        });
+        listener.assertSingle(tabCompletePacket -> assertEquals(List.of(new TabCompletePacket.Match("suggestionA", null)), tabCompletePacket.matches()));
     }
 
     @Test
@@ -115,16 +108,12 @@ public class CommandSuggestionIntegrationTest {
 
         var command = new Command("foo");
 
-        var wordArg1 = Word("wordArg1").setSuggestionCallback((sender, context, suggestion) -> {
-            suggestion.addEntry(new SuggestionEntry("suggestionA"));
-        });
-        var wordArg2 = Word("wordArg2").setSuggestionCallback((sender, context, suggestion) -> {
-            suggestion.addEntry(new SuggestionEntry("suggestionB"));
-        });
+        var wordArg1 = Word("wordArg1").setSuggestionCallback((_, _, suggestion) -> suggestion.addEntry(new SuggestionEntry("suggestionA")));
+        var wordArg2 = Word("wordArg2").setSuggestionCallback((_, _, suggestion) -> suggestion.addEntry(new SuggestionEntry("suggestionB")));
 
-        command.addSyntax((sender,context)->{}, Literal("literal1"), wordArg1);
+        command.addSyntax((_,_)->{}, Literal("literal1"), wordArg1);
 
-        command.addSyntax((sender,context)->{}, Literal("literal2"), wordArg2);
+        command.addSyntax((_,_)->{}, Literal("literal2"), wordArg2);
 
         env.process().command().register(command);
 
@@ -132,8 +121,54 @@ public class CommandSuggestionIntegrationTest {
         player.addPacketToQueue(new ClientTabCompletePacket(1, "foo literal2 "));
         player.interpretPacketQueue();
 
-        listener.assertSingle(tabCompletePacket -> {
-            assertEquals(List.of(new TabCompletePacket.Match("suggestionB", null)), tabCompletePacket.matches());
-        });
+        listener.assertSingle(tabCompletePacket -> assertEquals(List.of(new TabCompletePacket.Match("suggestionB", null)), tabCompletePacket.matches()));
+    }
+
+    @Test
+    public void suggestionWhenArgumentFailsToParse(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+
+        var intArg = Integer("intArg").setSuggestionCallback(
+                (_, _, suggestion) -> suggestion.addEntry(new SuggestionEntry("42"))
+        );
+
+        var command = new Command("foo");
+        command.addSyntax((_, _) -> {}, intArg);
+        env.process().command().register(command);
+
+        var listener = connection.trackIncoming(TabCompletePacket.class);
+        player.addPacketToQueue(new ClientTabCompletePacket(1, "foo "));
+        player.interpretPacketQueue();
+
+        listener.assertSingle(tabCompletePacket -> assertEquals(List.of(new TabCompletePacket.Match("42", null)), tabCompletePacket.matches()));
+    }
+
+    @Test
+    public void suggestionNotLeakedFromUnrelatedSyntax(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+
+        var intArg = Integer("intArg").setSuggestionCallback(
+                (_, _, suggestion) -> suggestion.addEntry(new SuggestionEntry("42"))
+        );
+        var wordArg = Word("wordArg");
+        var secondIntArg = Integer("secondIntArg");
+
+        var command = new Command("foo");
+        command.addSyntax((_, _) -> {}, intArg);
+        command.addSyntax((_, _) -> {}, wordArg, secondIntArg);
+        env.process().command().register(command);
+
+        var listener = connection.trackIncoming(TabCompletePacket.class);
+        player.addPacketToQueue(new ClientTabCompletePacket(1, "foo text nope"));
+        player.interpretPacketQueue();
+
+        // "nope" fails to parse as secondIntArg, which has no suggestion callback of its
+        // own. It must not inherit the "42" suggestion attached to the unrelated intArg
+        // from the other syntax.
+        listener.assertEmpty();
     }
 }

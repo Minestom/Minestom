@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 
-public record LegacyServerListPingPacket(byte payload) implements ClientPacket {
+public record LegacyServerListPingPacket(byte payload) implements ClientPacket.Status {
     public static final NetworkBuffer.Type<LegacyServerListPingPacket> SERIALIZER = NetworkBufferTemplate.template(
             BYTE, LegacyServerListPingPacket::payload,
             LegacyServerListPingPacket::new);

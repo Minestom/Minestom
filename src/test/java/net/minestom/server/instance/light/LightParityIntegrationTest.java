@@ -16,12 +16,19 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
+// The lighting fixture world uses the deprecated legacy layout
+@SuppressWarnings("removal")
 public class LightParityIntegrationTest {
     private static final int REGION_SIZE = 3;
 

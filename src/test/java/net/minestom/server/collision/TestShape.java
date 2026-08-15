@@ -1,7 +1,9 @@
 package net.minestom.server.collision;
 
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -30,6 +32,15 @@ public class TestShape {
     @ParameterizedTest
     @MethodSource("isFullFaceCases")
     void isFullFace(Block block, BlockFace face, boolean isFullFace) {
-        assertEquals(block.registry().collisionShape().isFaceFull(face), isFullFace);
+        assertEquals(block.collisionShape().isFaceFull(face), isFullFace);
+    }
+
+    @Test
+    void negativeCoordinates() {
+        // Pitcher crop's registry collision shape is [AABB[0.3125, -0.0625, 0.3125] -> [0.6875, 0.1875, 0.6875]],
+        // the sign of the negative Y coordinate must survive parsing
+        Shape shape = Block.PITCHER_CROP.collisionShape();
+        assertEquals(new Vec(0.3125, -0.0625, 0.3125), shape.relativeStart());
+        assertEquals(new Vec(0.6875, 0.1875, 0.6875), shape.relativeEnd());
     }
 }

@@ -6,11 +6,18 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.*;
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.KeyPair;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 import java.util.Set;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.BYTE;
+import static net.minestom.server.network.NetworkBuffer.RAW_BYTES;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public sealed interface Auth {
     record Offline() implements Auth {
@@ -54,7 +61,7 @@ public sealed interface Auth {
         }
 
         public static Key secretKey(String secret) {
-            return new SecretKeySpec(secret.getBytes(), MAC_ALGORITHM);
+            return new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), MAC_ALGORITHM);
         }
     }
 

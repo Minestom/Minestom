@@ -8,6 +8,7 @@ import net.minestom.server.entity.ai.TargetSelector;
 import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
@@ -25,7 +26,7 @@ public class MeleeAttackGoal extends GoalSelector {
     private final Duration delay;
 
     private boolean stop;
-    private Entity cachedTarget;
+    private @Nullable Entity cachedTarget;
 
     /**
      * @param entityCreature the entity to add the goal to

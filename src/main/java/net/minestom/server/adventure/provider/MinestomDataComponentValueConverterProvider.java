@@ -18,7 +18,8 @@ import java.util.List;
 
 import static net.kyori.adventure.text.event.DataComponentValueConverterRegistry.Conversion.convert;
 
-public class MinestomDataComponentValueConverterProvider implements DataComponentValueConverterRegistry.Provider {
+@SuppressWarnings("UnstableApiUsage") // we are permitted to provide this
+public final class MinestomDataComponentValueConverterProvider implements DataComponentValueConverterRegistry.Provider {
 
     @Override
     public Key id() {
@@ -27,7 +28,7 @@ public class MinestomDataComponentValueConverterProvider implements DataComponen
 
     @Override
     @SuppressWarnings("unchecked")
-    public Iterable<DataComponentValueConverterRegistry.Conversion<?, ?>> conversions() {
+    public List<DataComponentValueConverterRegistry.Conversion<?, ?>> conversions() {
         return List.of(
                 // GSON
                 convert(GsonDataComponentValue.class, MinestomDataComponentValue.class, (key, gsonValue) -> {
@@ -36,7 +37,7 @@ public class MinestomDataComponentValueConverterProvider implements DataComponen
                     final DataComponent<Object> component = (DataComponent<Object>) DataComponent.fromKey(key);
                     if (component == null) throw new IllegalArgumentException("Unknown data component: " + key);
                     final Object value = component.decode(new RegistryTranscoder<>(Transcoder.JSON,
-                            MinecraftServer.process()), gsonValue.element()).orElseThrow("failed to decode " + key);
+                            MinecraftServer.getRegistries()), gsonValue.element()).orElseThrow("failed to decode " + key);
                     return MinestomDataComponentValue.dataComponentValue(value);
                 }),
                 convert(MinestomDataComponentValue.class, GsonDataComponentValue.class, (key, minestomValue) -> {
@@ -45,7 +46,7 @@ public class MinestomDataComponentValueConverterProvider implements DataComponen
                     final DataComponent<Object> component = (DataComponent<Object>) DataComponent.fromKey(key);
                     if (component == null) throw new IllegalArgumentException("Unknown data component: " + key);
                     final JsonElement value = component.encode(new RegistryTranscoder<>(Transcoder.JSON,
-                            MinecraftServer.process()), minestomValue.value()).orElseThrow("failed to encode " + key);
+                            MinecraftServer.getRegistries()), minestomValue.value()).orElseThrow("failed to encode " + key);
                     return GsonDataComponentValue.gsonDataComponentValue(value);
                 }),
 
@@ -56,7 +57,7 @@ public class MinestomDataComponentValueConverterProvider implements DataComponen
                     final DataComponent<Object> component = (DataComponent<Object>) DataComponent.fromKey(key);
                     if (component == null) throw new IllegalArgumentException("Unknown data component: " + key);
                     final Object value = component.decode(new RegistryTranscoder<>(Transcoder.NBT,
-                            MinecraftServer.process()), nbtValue.value()).orElseThrow("failed to decode " + key);
+                            MinecraftServer.getRegistries()), nbtValue.value()).orElseThrow("failed to decode " + key);
                     return MinestomDataComponentValue.dataComponentValue(value);
                 }),
                 convert(MinestomDataComponentValue.class, NbtDataComponentValue.class, (key, minestomValue) -> {
@@ -65,7 +66,7 @@ public class MinestomDataComponentValueConverterProvider implements DataComponen
                     final DataComponent<Object> component = (DataComponent<Object>) DataComponent.fromKey(key);
                     if (component == null) throw new IllegalArgumentException("Unknown data component: " + key);
                     final BinaryTag value = component.encode(new RegistryTranscoder<>(Transcoder.NBT,
-                            MinecraftServer.process()), minestomValue.value()).orElseThrow("failed to encode " + key);
+                            MinecraftServer.getRegistries()), minestomValue.value()).orElseThrow("failed to encode " + key);
                     return NbtDataComponentValue.nbtDataComponentValue(value);
                 })
         );
