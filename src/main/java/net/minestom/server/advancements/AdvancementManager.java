@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Used to manage all the registered {@link AdvancementTab}.
  * <p>
  * Use {@link #createTab(String, AdvancementRoot)} to create a tab with the appropriate {@link AdvancementRoot}.
+ * Use {@link #removeTab(String)} to remove an advancement tab with the appropriate root identifier
  */
 public class AdvancementManager {
 
@@ -53,4 +54,20 @@ public class AdvancementManager {
         return advancementTabMap.values();
     }
 
+    /**
+     * Removes an advancement tab stored by this {@link AdvancementManager}
+     *
+     * @param rootIdentifier key whose mapping is to be removed from the map
+     * @return the previous advancement tab associated with {@code rootIdentifier}, or {@code null}
+     * if there was no tab associated with {@code rootIdentifier}
+     */
+    @Nullable
+    public AdvancementTab removeTab(String rootIdentifier) {
+        final AdvancementTab advancementTab = advancementTabMap.remove(rootIdentifier);
+        if (advancementTab == null) {
+            return null;
+        }
+        advancementTab.removeAllViewers();
+        return advancementTab;
+    }
 }
