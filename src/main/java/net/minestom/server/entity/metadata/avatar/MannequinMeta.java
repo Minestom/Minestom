@@ -93,7 +93,7 @@ public class MannequinMeta extends AvatarMeta {
 
     @Override
     public void setRightLegEnabled(boolean value) {
-        metadata.get(MetadataDef.Mannequin.IS_RIGHT_PANTS_LEG_ENABLED);
+        metadata.set(MetadataDef.Mannequin.IS_RIGHT_PANTS_LEG_ENABLED, value);
     }
 
     @Override
