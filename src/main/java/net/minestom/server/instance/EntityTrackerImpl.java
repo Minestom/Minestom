@@ -199,7 +199,7 @@ final class EntityTrackerImpl implements EntityTracker {
                 chunkEntities.forEach(entity -> {
                     EntityTrackerEntry trackerEntry = entriesByEntityId.get(entity.getEntityId());
                     if (trackerEntry == null) return;
-                    final Point position = entriesByEntityId.get(entity.getEntityId()).getLastPosition();
+                    final Point position = trackerEntry.getLastPosition();
                     if (position != null && point.distanceSquared(position) <= squaredRange) query.accept(entity);
                 });
             });
