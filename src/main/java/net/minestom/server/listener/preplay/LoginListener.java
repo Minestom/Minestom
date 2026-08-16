@@ -1,11 +1,11 @@
 package net.minestom.server.listener.preplay;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.Auth;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.entity.Player;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.network.NetworkBuffer;
@@ -33,10 +33,7 @@ import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.security.KeyPair;
 import java.security.SecureRandom;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
 
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
@@ -138,17 +135,10 @@ public final class LoginListener {
 
             // We have verified the session, parse response.
             socketConnection.setEncryptionKey(secretKey);
-            final UUID profileUUID = UUID.fromString(gameProfileJson.get("id").getAsString()
-                    .replaceFirst("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5"));
-            final String profileName = gameProfileJson.get("name").getAsString();
+            final GameProfile gameProfile = GameProfile.CODEC.decode(Transcoder.JSON, gameProfileJson).orElseThrow();
 
-            MinecraftServer.LOGGER.info("UUID of player {} is {}", profileName, profileUUID);
-            List<GameProfile.Property> propertyList = new ArrayList<>();
-            for (JsonElement element : gameProfileJson.get("properties").getAsJsonArray()) {
-                JsonObject object = element.getAsJsonObject();
-                propertyList.add(new GameProfile.Property(object.get("name").getAsString(), object.get("value").getAsString(), object.get("signature").getAsString()));
-            }
-            enterConfig(connection, new GameProfile(profileUUID, profileName, propertyList));
+            MinecraftServer.LOGGER.info("UUID of player {} is {}", gameProfile.name(), gameProfile.uuid());
+            enterConfig(connection, gameProfile);
         } catch (IOException e) {
             socketConnection.kick(ERROR_MOJANG_RESPONSE);
             MinecraftServer.getExceptionManager().handleException(e);
