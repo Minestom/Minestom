@@ -90,10 +90,10 @@ jobs:
       !contains(github.event.pull_request.labels.*.name, 'breaking')
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Base Branch
+      - name: Checkout Base Commit
         uses: actions/checkout@v7
         with:
-          ref: ${{ github.base_ref }}
+          ref: ${{ github.event.pull_request.base.sha }}
           path: baseline-repo
       - name: Setup Java
         uses: actions/setup-java@v5
@@ -104,7 +104,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v6
         with:
           cache-read-only: ${{ github.event_name != 'pull_request' || github.repository_owner != github.event.pull_request.head.repo.owner.login }}
-      - name: Build Base Branch Jars
+      - name: Build Base Commit Jars
         run: |
           cd baseline-repo
           ./gradlew jar
