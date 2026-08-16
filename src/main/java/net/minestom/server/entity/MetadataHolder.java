@@ -142,6 +142,7 @@ import net.minestom.server.entity.metadata.water.fish.SalmonMeta;
 import net.minestom.server.entity.metadata.water.fish.TadpoleMeta;
 import net.minestom.server.entity.metadata.water.fish.TropicalFishMeta;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
@@ -187,6 +188,7 @@ public final class MetadataHolder {
     }
 
     @SuppressWarnings("unchecked")
+    @CheckReturnValue
     public <T extends @UnknownNullability Object> T get(MetadataDef.Entry<T> entry) {
         final int id = entry.index();
 
