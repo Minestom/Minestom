@@ -7,10 +7,6 @@ on:
 permissions:
   contents: write
 
-concurrency:
-  group: build-main-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   build:
     name: JVM Check
@@ -84,6 +80,8 @@ jobs:
     name: Publish Snapshot
     needs: [ build, javadoc, native-test ]
     runs-on: ubuntu-latest
+    concurrency:
+      group: publish-${{ github.ref }}
     steps:
       - name: Generate Bot Token
         if: needs.native-test.outputs.metadata-updated == 'true'

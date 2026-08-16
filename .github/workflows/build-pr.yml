@@ -9,10 +9,6 @@ on:
 permissions:
   contents: read
 
-concurrency:
-  group: build-pr-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
-
 jobs:
   build:
     name: JVM Check
@@ -136,6 +132,8 @@ jobs:
       needs.native-test.result == 'success' &&
       (needs.binary-compatibility.result == 'success' || needs.binary-compatibility.result == 'skipped')
     runs-on: ubuntu-latest
+    concurrency:
+      group: publish-pr-${{ github.head_ref }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v7
