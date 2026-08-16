@@ -6,6 +6,8 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    concurrency:
+      group: publish-${{ github.ref }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v7
