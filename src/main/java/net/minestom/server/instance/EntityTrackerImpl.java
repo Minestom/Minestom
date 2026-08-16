@@ -185,9 +185,10 @@ final class EntityTrackerImpl implements EntityTracker {
             @SuppressWarnings("unchecked") final var chunkEntities = (List<T>) entities.get(CoordConversion.chunkIndex(point));
             if (chunkEntities == null || chunkEntities.isEmpty()) return;
             chunkEntities.forEach(entity -> {
-                if (!entriesByEntityId.containsKey(entity.getEntityId())) return;
-                final Point position = entriesByEntityId.get(entity.getEntityId()).getLastPosition();
-                if (point.distanceSquared(position) <= squaredRange) query.accept(entity);
+                EntityTrackerEntry trackerEntry = entriesByEntityId.get(entity.getEntityId());
+                if (trackerEntry == null) return;
+                final Point position = trackerEntry.getLastPosition();
+                if (position != null && point.distanceSquared(position) <= squaredRange) query.accept(entity);
             });
         } else {
             // Multiple chunks
@@ -196,9 +197,10 @@ final class EntityTrackerImpl implements EntityTracker {
                 @SuppressWarnings("unchecked") final var chunkEntities = (List<T>) entities.get(CoordConversion.chunkIndex(chunkX, chunkZ));
                 if (chunkEntities == null || chunkEntities.isEmpty()) return;
                 chunkEntities.forEach(entity -> {
-                    if (!entriesByEntityId.containsKey(entity.getEntityId())) return;
+                    EntityTrackerEntry trackerEntry = entriesByEntityId.get(entity.getEntityId());
+                    if (trackerEntry == null) return;
                     final Point position = entriesByEntityId.get(entity.getEntityId()).getLastPosition();
-                    if (point.distanceSquared(position) <= squaredRange) query.accept(entity);
+                    if (position != null && point.distanceSquared(position) <= squaredRange) query.accept(entity);
                 });
             });
         }
