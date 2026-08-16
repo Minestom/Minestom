@@ -140,13 +140,13 @@ public class ItemEntity extends Entity {
     /**
      * Gets if the item is currently pickable.
      * <p>
-     * {@link #setPickable(boolean)} needs to be true and the delay {@link #getPickupDelay()}
-     * to be long gone.
+     * {@link #setPickable(boolean)} needs to be true, the delay {@link #getPickupDelay()}
+     * to be long gone, and the item must not have been removed.
      *
      * @return true if the item is pickable, false otherwise
      */
     public boolean isPickable() {
-        return pickable && getTimeSinceSpawn() >= pickupDelay;
+        return pickable && getTimeSinceSpawn() >= pickupDelay && !isRemoved();
     }
 
     /**

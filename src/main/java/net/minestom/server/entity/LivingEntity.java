@@ -210,7 +210,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         }
 
         // Items picking
-        if (canPickupItem() && itemPickupCooldown.isReady(time)) {
+        if (canPickupItem() && !isDead() && itemPickupCooldown.isReady(time)) {
             itemPickupCooldown.refreshLastUpdate(time);
             this.instance.getEntityTracker().nearbyEntities(position, expandedBoundingBox.width(),
                     EntityTracker.Target.ITEMS, itemEntity -> {
