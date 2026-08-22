@@ -434,7 +434,7 @@ public class InstanceContainer extends Instance {
                 var sections = ((GeneratorImpl.AreaModifierImpl) fork.modifier()).sections();
                 for (var section : sections) {
                     if (section.modifier() instanceof GeneratorImpl.SectionModifierImpl sectionModifier) {
-                        if (sectionModifier.genSection().blocks().count() == 0)
+                        if (sectionModifier.genSection().blocks().all(0))
                             continue;
                         final Point start = section.absoluteStart();
                         final Chunk forkChunk = start.chunkX() == chunkX && start.chunkZ() == chunkZ ? chunk : getChunkAt(start);
@@ -482,7 +482,9 @@ public class InstanceContainer extends Instance {
             Section section = chunk.getSectionAt(sectionModifier.start().blockY());
             Palette currentBlocks = section.blockPalette();
             // -1 is necessary because forked units handle explicit changes by changing AIR 0 to 1
-            sectionModifier.genSection().blocks().getAllPresent((x, y, z, value) -> currentBlocks.set(x, y, z, value - 1));
+            sectionModifier.genSection().blocks().getAll((x, y, z, value) -> {
+                if (value != 0) currentBlocks.set(x, y, z, value - 1);
+            });
             applyGenerationData(chunk, sectionModifier);
         } finally {
             chunk.unlockWriteLock();
@@ -493,8 +495,9 @@ public class InstanceContainer extends Instance {
     private static void sendForkSectionUpdate(Chunk forkChunk, GeneratorImpl.SectionModifierImpl sectionModifier) {
         final int section = CoordConversion.globalToChunk(sectionModifier.start().blockY());
         final LongList packed = new LongArrayList();
-        sectionModifier.genSection().blocks().getAllPresent((x, y, z, value) ->
-                packed.add(CoordConversion.encodeSectionBlockChange(CoordConversion.sectionBlockIndex(x, y, z), value - 1)));
+        sectionModifier.genSection().blocks().getAll((x, y, z, value) -> { // 0 = no change
+            if (value != 0) packed.add(CoordConversion.encodeSectionBlockChange(CoordConversion.sectionBlockIndex(x, y, z), value - 1));
+        });
         for (var entry : sectionModifier.genSection().specials().int2ObjectEntrySet()) {
             final Block block = entry.getValue();
             final BlockEntityType blockEntityType = block.blockEntityType();

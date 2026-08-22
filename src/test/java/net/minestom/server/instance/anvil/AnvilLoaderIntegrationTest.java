@@ -28,6 +28,7 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
@@ -213,11 +214,15 @@ public class AnvilLoaderIntegrationTest {
             NetworkBuffer.Type<ChunkData.Section> sectionSerializer = ChunkData.Section.networkType(env.process().biome().size());
             // easiest equality check to write is a memory compare on written output
             var original = NetworkBuffer.makeArray(buffer ->
-                    buffer.write(sectionSerializer, new ChunkData.Section((short) originalSection.blockPalette().count(), (short) 0, originalSection.blockPalette(), originalSection.biomePalette())));
+                    buffer.write(sectionSerializer, new ChunkData.Section(blockCount(originalSection), (short) 0, originalSection.blockPalette(), originalSection.biomePalette())));
             var reloaded = NetworkBuffer.makeArray(buffer ->
-                    buffer.write(sectionSerializer, new ChunkData.Section((short) reloadedSection.blockPalette().count(), (short) 0, reloadedSection.blockPalette(), reloadedSection.biomePalette())));
+                    buffer.write(sectionSerializer, new ChunkData.Section(blockCount(reloadedSection), (short) 0, reloadedSection.blockPalette(), reloadedSection.biomePalette())));
             Assertions.assertArrayEquals(original, reloaded);
         }
+    }
+
+    private static short blockCount(Section section) {
+        return (short) section.blockPalette().count(value -> !Objects.requireNonNull(Block.fromStateId(value)).air());
     }
 
     @Test

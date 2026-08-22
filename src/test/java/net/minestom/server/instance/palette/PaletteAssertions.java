@@ -1,8 +1,11 @@
 package net.minestom.server.instance.palette;
 
+import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
+
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 final class PaletteAssertions {
     private PaletteAssertions() {
@@ -28,5 +31,26 @@ final class PaletteAssertions {
                 }
             }
         }
+    }
+
+    static int nonZeroCount(Palette palette) {
+        return palette.maxSize() - palette.count(0);
+    }
+
+    static void assertCountsMatchContent(Palette palette) {
+        final Int2IntOpenHashMap expectedCounts = new Int2IntOpenHashMap();
+        palette.getAll((_, _, _, value) -> expectedCounts.addTo(value, 1));
+        final Int2IntOpenHashMap reportedCounts = new Int2IntOpenHashMap();
+        palette.getAllCounts(reportedCounts::put);
+        assertEquals(expectedCounts, reportedCounts);
+        expectedCounts.int2IntEntrySet().forEach(entry -> {
+            final int value = entry.getIntKey();
+            final int count = entry.getIntValue();
+            assertEquals(count, palette.count(value));
+            assertEquals(count != 0, palette.any(value));
+            assertEquals(count == palette.maxSize(), palette.all(value));
+        });
+        assertEquals(0, palette.count(1_000_000));
+        assertFalse(palette.any(1_000_000));
     }
 }

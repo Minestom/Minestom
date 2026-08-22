@@ -36,10 +36,8 @@ final class BlockLight implements Light {
     }
 
     static ShortArrayFIFOQueue buildInternalQueue(Palette blockPalette) {
-        if (blockPalette.isEmpty()) return new ShortArrayFIFOQueue(0); // Avoid state id lookup for air
-
-        int singleValue = blockPalette.singleValue();
-        if (singleValue != -1) {
+        if (blockPalette.bitsPerEntry() == 0) {
+            final int singleValue = blockPalette.singleValue();
             Block block = Block.fromStateId(singleValue);
             assert block != null;
             int lightEmission = block.lightEmission();
@@ -53,7 +51,7 @@ final class BlockLight implements Light {
         } else {
             ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
             // Apply section light
-            blockPalette.getAllPresent((x, y, z, stateId) -> {
+            blockPalette.getAll((x, y, z, stateId) -> {
                 final Block block = Block.fromStateId(stateId);
                 assert block != null;
                 final int lightEmission = block.lightEmission();
