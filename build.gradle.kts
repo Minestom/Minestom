@@ -56,6 +56,7 @@ tasks.withType<JavaCompile> {
 }
 
 graalvmNative {
+    metadataRepository.enabled = false // https://github.com/graalvm/native-build-tools/issues/1013
     agent {
         defaultMode = "standard"
 
