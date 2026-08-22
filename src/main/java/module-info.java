@@ -28,7 +28,7 @@ module net.minestom.server {
     requires net.kyori.adventure.text.serializer.json;
     requires net.kyori.adventure.text.serializer.ansi;
     requires org.slf4j;
-    requires org.jctools.core;
+    requires org.jctools.core.jdk11;
     requires jdk.jfr;
     requires java.desktop;
     requires net.minestom.data;
