@@ -30,7 +30,6 @@ module net.minestom.server {
     requires org.slf4j;
     requires org.jctools.core;
     requires jdk.jfr;
-    requires java.desktop;
     requires net.minestom.data;
 
     // EXPORTS
@@ -133,8 +132,6 @@ module net.minestom.server {
     exports net.minestom.server.listener.common;
     exports net.minestom.server.listener.manager;
     exports net.minestom.server.listener.preplay;
-    exports net.minestom.server.map;
-    exports net.minestom.server.map.framebuffers;
     exports net.minestom.server.message;
     exports net.minestom.server.monitoring;
     exports net.minestom.server.network;
