@@ -2,6 +2,7 @@ package net.minestom.server.thread;
 
 import net.minestom.server.entity.Entity;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Optional;
@@ -175,4 +176,11 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      * @throws AcquirableOwnershipException if the current thread does not own the acquirable element
      */
     void assertOwnership();
+
+    /**
+     * Routes acquisition through an external {@link TickOwner} instead of the assigned {@link TickThread};
+     * {@code null} restores dispatcher routing.
+     */
+    @ApiStatus.Internal
+    void assignOwner(@Nullable TickOwner owner);
 }
