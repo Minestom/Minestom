@@ -28,7 +28,8 @@ public final class MojangUtils {
     private static final String BASE_AUTH_URL = ServerFlag.AUTH_URL.concat("?username=%s&serverId=%s");
     private static final String PREVENT_PROXY_CONNECTIONS_AUTH_URL = BASE_AUTH_URL.concat("&ip=%s");
 
-    private static final Pattern USERNAME_PATTERN = Pattern.compile("[a-zA-Z0-9_]{3,16}");
+    // Usernames are 1-16 characters. Accounts created before the 3-character minimum allow shorter names
+    private static final Pattern USERNAME_PATTERN = Pattern.compile("[a-zA-Z0-9_]{1,16}");
 
     /**
      * Gets a player's UUID from their username
@@ -97,9 +98,9 @@ public final class MojangUtils {
      */
     @Blocking
     public static @Nullable JsonObject fromUsername(String username) {
-        if (!USERNAME_PATTERN.matcher(username).matches()) return null;
+        if (!isValidUsername(username)) return null;
         try {
-            return retrieve(String.format(FROM_USERNAME_URL, username));
+            return retrieve(String.format(FROM_USERNAME_URL, encode(username)));
         } catch (IOException _) {
             return null;
         }
@@ -137,10 +138,14 @@ public final class MojangUtils {
     }
 
     private static String validateUsername(String username) throws IOException {
-        if (!USERNAME_PATTERN.matcher(username).matches()) {
+        if (!isValidUsername(username)) {
             throw new IOException("Invalid username: " + username);
         }
         return username;
+    }
+
+    static boolean isValidUsername(String username) {
+        return USERNAME_PATTERN.matcher(username).matches();
     }
 
     /**
