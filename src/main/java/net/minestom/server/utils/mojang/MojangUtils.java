@@ -28,7 +28,7 @@ public final class MojangUtils {
     private static final String BASE_AUTH_URL = ServerFlag.AUTH_URL.concat("?username=%s&serverId=%s");
     private static final String PREVENT_PROXY_CONNECTIONS_AUTH_URL = BASE_AUTH_URL.concat("&ip=%s");
 
-    private static final Pattern USERNAME_PATTERN = Pattern.compile("[a-zA-Z0-9_]{3,16}");
+    private static final Pattern USERNAME_PATTERN = Pattern.compile("[\\x21-\\x7E]{1,16}");
 
     /**
      * Gets a player's UUID from their username
@@ -41,7 +41,7 @@ public final class MojangUtils {
     public static UUID getUUID(String username) throws IOException {
         // Thanks stackoverflow: https://stackoverflow.com/a/19399768/13247146
         return UUID.fromString(
-                formatUUID(retrieve(String.format(FROM_USERNAME_URL, validateUsername(username))).get("id").getAsString())
+                formatUUID(retrieve(String.format(FROM_USERNAME_URL, encode(validateUsername(username)))).get("id").getAsString())
         );
     }
 
@@ -97,9 +97,9 @@ public final class MojangUtils {
      */
     @Blocking
     public static @Nullable JsonObject fromUsername(String username) {
-        if (!USERNAME_PATTERN.matcher(username).matches()) return null;
+        if (!isValidUsername(username)) return null;
         try {
-            return retrieve(String.format(FROM_USERNAME_URL, username));
+            return retrieve(String.format(FROM_USERNAME_URL, encode(username)));
         } catch (IOException _) {
             return null;
         }
@@ -137,10 +137,14 @@ public final class MojangUtils {
     }
 
     private static String validateUsername(String username) throws IOException {
-        if (!USERNAME_PATTERN.matcher(username).matches()) {
+        if (!isValidUsername(username)) {
             throw new IOException("Invalid username: " + username);
         }
         return username;
+    }
+
+    static boolean isValidUsername(String username) {
+        return USERNAME_PATTERN.matcher(username).matches();
     }
 
     /**
