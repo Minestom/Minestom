@@ -221,7 +221,7 @@ public final class PacketReading {
         final NetworkBuffer.Type<T> serializer = packetInfo.serializer();
         try {
             final T packet = serializer.read(buffer);
-            if (buffer.readableBytes() != 0) {
+            if (ServerFlag.WARN_UNREAD_BYTES_PACKET && buffer.readableBytes() != 0) {
                 LOGGER.warn("WARNING: Packet ({}) 0x{} not fully read ({})",
                         packetInfo.packetClass().getSimpleName(), Integer.toHexString(packetId), buffer);
             }

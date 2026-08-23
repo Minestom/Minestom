@@ -1,6 +1,5 @@
 package net.minestom.server.listener.manager;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerPacketEvent;
 import net.minestom.server.listener.AbilitiesListener;
@@ -203,6 +202,8 @@ public final class PacketListenerManager {
 
     /**
      * Processes a packet by getting its {@link PacketPlayListenerConsumer} and calling all the packet listeners.
+     * <p>
+     * Callers are responsible for handling any errors.
      *
      * @param packet     the received packet
      * @param connection the connection of the player who sent the packet
@@ -235,12 +236,7 @@ public final class PacketListenerManager {
         }
 
         // Finally execute the listener
-        try {
-            packetListenerConsumer.accept(packet, connection);
-        } catch (Exception e) {
-            // Packet is likely invalid
-            MinecraftServer.getExceptionManager().handleException(e);
-        }
+        packetListenerConsumer.accept(packet, connection); // possible throws
     }
 
     /**
