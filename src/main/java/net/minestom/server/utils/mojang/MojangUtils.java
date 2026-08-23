@@ -3,6 +3,7 @@ package net.minestom.server.utils.mojang;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minestom.server.ServerFlag;
+import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.url.URLUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Blocking;
@@ -15,7 +16,6 @@ import java.net.SocketAddress;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 /**
  * Utils class using mojang API.
@@ -27,8 +27,6 @@ public final class MojangUtils {
     // Auth
     private static final String BASE_AUTH_URL = ServerFlag.AUTH_URL.concat("?username=%s&serverId=%s");
     private static final String PREVENT_PROXY_CONNECTIONS_AUTH_URL = BASE_AUTH_URL.concat("&ip=%s");
-
-    private static final Pattern USERNAME_PATTERN = Pattern.compile("[\\x21-\\x7E]{1,16}");
 
     /**
      * Gets a player's UUID from their username
@@ -97,7 +95,7 @@ public final class MojangUtils {
      */
     @Blocking
     public static @Nullable JsonObject fromUsername(String username) {
-        if (!isValidUsername(username)) return null;
+        if (!StringUtils.isValidUsername(username)) return null;
         try {
             return retrieve(String.format(FROM_USERNAME_URL, encode(username)));
         } catch (IOException _) {
@@ -137,14 +135,10 @@ public final class MojangUtils {
     }
 
     private static String validateUsername(String username) throws IOException {
-        if (!isValidUsername(username)) {
+        if (!StringUtils.isValidUsername(username)) {
             throw new IOException("Invalid username: " + username);
         }
         return username;
-    }
-
-    static boolean isValidUsername(String username) {
-        return USERNAME_PATTERN.matcher(username).matches();
     }
 
     /**
