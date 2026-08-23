@@ -533,9 +533,13 @@ final class PaletteImpl implements Palette {
         final PaletteImpl palette = (PaletteImpl) p;
         final int dimension = this.dimension();
         if (palette.dimension() != dimension) return false;
-        if (palette.count != this.count) return false;
-        if (palette.count == 0) return true;
-        if (palette.bitsPerEntry == 0 && this.bitsPerEntry == 0) return true;
+        // `count` stores the palette value when bitsPerEntry == 0, and the non-air entry count
+        // otherwise, so it is only comparable between palettes using the same storage format
+        if (bitsPerEntry == 0 && palette.bitsPerEntry == 0) return count == palette.count;
+        if (bitsPerEntry > 0 && palette.bitsPerEntry > 0) {
+            if (palette.count != count) return false;
+            if (palette.count == 0) return true;
+        }
         final long[] thisValues = this.values;
         final long[] thatValues = palette.values;
         final int thisBpe = this.bitsPerEntry;
