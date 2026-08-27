@@ -88,7 +88,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<Point> VECTOR3I = new NetworkBufferTypeImpl.Vector3IType();
     Type<Point> VECTOR3B = new NetworkBufferTypeImpl.Vector3BType();
     Type<Vec> LP_VECTOR3 = new NetworkBufferTypeImpl.LpVector3Type();
-    Type<float[]> QUATERNION = new NetworkBufferTypeImpl.QuaternionType();
+    Type<float[]> QUATERNION = FixedRawFloats(4);
 
     Type<@Nullable Component> OPT_CHAT = COMPONENT.optional();
     Type<@Nullable Point> OPT_BLOCK_POSITION = BLOCK_POSITION.optional();

@@ -44,10 +44,12 @@ import static net.minestom.server.network.NetworkBuffer.DOUBLE;
 import static net.minestom.server.network.NetworkBuffer.FLOAT;
 import static net.minestom.server.network.NetworkBuffer.FixedBitSet;
 import static net.minestom.server.network.NetworkBuffer.FixedRawBytes;
+import static net.minestom.server.network.NetworkBuffer.FixedRawLongs;
 import static net.minestom.server.network.NetworkBuffer.INT;
 import static net.minestom.server.network.NetworkBuffer.LONG;
 import static net.minestom.server.network.NetworkBuffer.NBT;
 import static net.minestom.server.network.NetworkBuffer.RAW_BYTES;
+import static net.minestom.server.network.NetworkBuffer.RAW_LONGS;
 import static net.minestom.server.network.NetworkBuffer.SHORT;
 import static net.minestom.server.network.NetworkBuffer.STRING;
 import static net.minestom.server.network.NetworkBuffer.UNSIGNED_BYTE;
@@ -650,9 +652,6 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         @Override
         public byte[] read(NetworkBuffer buffer) {
             final int length = buffer.read(VAR_INT);
-            if (length == 0) return new byte[0];
-            final long remaining = buffer.readableBytes();
-            Check.argCondition(length > remaining, "String is too long (length: {0}, readable: {1})", length, remaining);
             return buffer.read(FixedRawBytes(length));
         }
     }
@@ -661,15 +660,13 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         @Override
         public void write(NetworkBuffer buffer, long[] value) {
             buffer.write(VAR_INT, value.length);
-            for (long l : value) buffer.write(LONG, l);
+            buffer.write(RAW_LONGS, value);
         }
 
         @Override
         public long[] read(NetworkBuffer buffer) {
             final int length = buffer.read(VAR_INT);
-            final long[] longs = new long[length];
-            for (int i = 0; i < length; i++) longs[i] = buffer.read(LONG);
-            return longs;
+            return buffer.read(FixedRawLongs(length));
         }
     }
 
@@ -836,25 +833,6 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
         private static double unpack(long value) {
             return Math.min((double) (value & DATA_BITS_MASK), MAX_QUANTIZED_VALUE) * 2.0 / MAX_QUANTIZED_VALUE - 1.0;
-        }
-    }
-
-    record QuaternionType() implements NetworkBufferTypeImpl<float[]> {
-        @Override
-        public void write(NetworkBuffer buffer, float[] value) {
-            buffer.write(FLOAT, value[0]);
-            buffer.write(FLOAT, value[1]);
-            buffer.write(FLOAT, value[2]);
-            buffer.write(FLOAT, value[3]);
-        }
-
-        @Override
-        public float[] read(NetworkBuffer buffer) {
-            final float x = buffer.read(FLOAT);
-            final float y = buffer.read(FLOAT);
-            final float z = buffer.read(FLOAT);
-            final float w = buffer.read(FLOAT);
-            return new float[]{x, y, z, w};
         }
     }
 
