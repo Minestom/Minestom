@@ -424,6 +424,18 @@ final class NetworkBufferImpl implements NetworkBuffer {
         return segment.get(SHORT_LAYOUT, index);
     }
 
+    void _putShorts(long index, short[] value) {
+        final MemorySegment segment = this.segment;
+        if (isDummy(segment)) return;
+        MemorySegment.copy(value, 0, segment, SHORT_LAYOUT, index, value.length);
+    }
+
+    void _getShorts(long index, short[] value) {
+        final MemorySegment segment = this.segment;
+        assertDummy(segment);
+        MemorySegment.copy(segment, SHORT_LAYOUT, index, value, 0, value.length);
+    }
+
     void _putInt(long index, int value) {
         final MemorySegment segment = this.segment;
         if (isDummy(segment)) return;
@@ -434,6 +446,18 @@ final class NetworkBufferImpl implements NetworkBuffer {
         final MemorySegment segment = this.segment;
         assertDummy(segment);
         return segment.get(INT_LAYOUT, index);
+    }
+
+    void _putInts(long index, int[] value) {
+        final MemorySegment segment = this.segment;
+        if (isDummy(segment)) return;
+        MemorySegment.copy(value, 0, segment, INT_LAYOUT, index, value.length);
+    }
+
+    void _getInts(long index, int[] value) {
+        final MemorySegment segment = this.segment;
+        assertDummy(segment);
+        MemorySegment.copy(segment, INT_LAYOUT, index, value, 0, value.length);
     }
 
     void _putLong(long index, long value) {
@@ -448,6 +472,18 @@ final class NetworkBufferImpl implements NetworkBuffer {
         return segment.get(LONG_LAYOUT, index);
     }
 
+    void _putLongs(long index, long[] value) {
+        final MemorySegment segment = this.segment;
+        if (isDummy(segment)) return;
+        MemorySegment.copy(value, 0, segment, LONG_LAYOUT, index, value.length);
+    }
+
+    void _getLongs(long index, long[] value) {
+        final MemorySegment segment = this.segment;
+        assertDummy(segment);
+        MemorySegment.copy(segment, LONG_LAYOUT, index, value, 0, value.length);
+    }
+
     void _putFloat(long index, float value) {
         final MemorySegment segment = this.segment;
         if (isDummy(segment)) return;
@@ -460,6 +496,18 @@ final class NetworkBufferImpl implements NetworkBuffer {
         return segment.get(FLOAT_LAYOUT, index);
     }
 
+    void _putFloats(long index, float[] value) {
+        final MemorySegment segment = this.segment;
+        if (isDummy(segment)) return;
+        MemorySegment.copy(value, 0, segment, FLOAT_LAYOUT, index, value.length);
+    }
+
+    void _getFloats(long index, float[] value) {
+        final MemorySegment segment = this.segment;
+        assertDummy(segment);
+        MemorySegment.copy(segment, FLOAT_LAYOUT, index, value, 0, value.length);
+    }
+
     void _putDouble(long index, double value) {
         final MemorySegment segment = this.segment;
         if (isDummy(segment)) return;
@@ -470,6 +518,18 @@ final class NetworkBufferImpl implements NetworkBuffer {
         final MemorySegment segment = this.segment;
         assertDummy(segment);
         return segment.get(DOUBLE_LAYOUT, index);
+    }
+
+    void _putDoubles(long index, double[] value) {
+        final MemorySegment segment = this.segment;
+        if (isDummy(segment)) return;
+        MemorySegment.copy(value, 0, segment, DOUBLE_LAYOUT, index, value.length);
+    }
+
+    void _getDoubles(long index, double[] value) {
+        final MemorySegment segment = this.segment;
+        assertDummy(segment);
+        MemorySegment.copy(segment, DOUBLE_LAYOUT, index, value, 0, value.length);
     }
 
     static NetworkBuffer wrap(MemorySegment segment, long readIndex, long writeIndex, @Nullable Registries registries) {
