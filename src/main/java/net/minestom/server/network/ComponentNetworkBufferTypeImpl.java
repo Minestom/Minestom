@@ -27,15 +27,20 @@ import net.minestom.server.codec.Transcoder;
 import net.minestom.server.dialog.Dialog;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTranscoder;
-import net.minestom.server.utils.nbt.BinaryTagWriter;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+import static net.minestom.server.network.BinaryTagTypeImpl.TAG_BYTE;
+import static net.minestom.server.network.BinaryTagTypeImpl.TAG_COMPOUND;
+import static net.minestom.server.network.BinaryTagTypeImpl.TAG_END;
+import static net.minestom.server.network.BinaryTagTypeImpl.TAG_INT;
+import static net.minestom.server.network.BinaryTagTypeImpl.TAG_INT_ARRAY;
+import static net.minestom.server.network.BinaryTagTypeImpl.TAG_LIST;
+import static net.minestom.server.network.BinaryTagTypeImpl.TAG_STRING;
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.INT;
 import static net.minestom.server.network.NetworkBuffer.NBT;
@@ -61,14 +66,6 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
     }
 
     // WRITING IMPL, pretty gross. Would not recommend reading.
-
-    private static final byte TAG_END = 0;
-    private static final byte TAG_BYTE = 1;
-    private static final byte TAG_INT = 3;
-    private static final byte TAG_STRING = 8;
-    private static final byte TAG_LIST = 9;
-    private static final byte TAG_COMPOUND = 10;
-    private static final byte TAG_INT_ARRAY = 11;
 
     private static void writeInnerComponent(NetworkBuffer buffer, Component component) {
         buffer.write(BYTE, TAG_STRING); // Start first tag (always the type)
@@ -374,18 +371,12 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
             case ClickEvent.Action.ShowDialog _ -> {
                 final ClickEvent.Payload.Dialog payload = checkPayload(clickEvent, ClickEvent.Payload.Dialog.class);
 
-                try {
-                    final Registries registries = buffer.registries();
-                    final Transcoder<BinaryTag> coder = registries != null
-                            ? new RegistryTranscoder<>(Transcoder.NBT, registries)
-                            : Transcoder.NBT;
-                    final BinaryTag dialog = Dialog.CODEC.encode(coder, Dialog.unwrap(payload.dialog())).orElseThrow();
-
-                    final BinaryTagWriter nbtWriter = new BinaryTagWriter(buffer.ioView());
-                    nbtWriter.writeNamed("dialog", dialog);
-                } catch (IOException e) {
-                    throw new RuntimeException("Failed to write dialog click event payload", e);
-                }
+                final Registries registries = buffer.registries();
+                final Transcoder<BinaryTag> coder = registries != null
+                        ? new RegistryTranscoder<>(Transcoder.NBT, registries)
+                        : Transcoder.NBT;
+                final BinaryTag dialog = Dialog.CODEC.encode(coder, Dialog.unwrap(payload.dialog())).orElseThrow();
+                BinaryTagTypeImpl.writeNamed(buffer, "dialog", dialog);
             }
             case ClickEvent.Action.Custom _ -> {
                 final ClickEvent.Payload.Custom payload = checkPayload(clickEvent, ClickEvent.Payload.Custom.class);
@@ -393,12 +384,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
                 buffer.write(STRING_IO_UTF8, "id");
                 buffer.write(STRING_IO_UTF8, payload.key().asString());
 
-                try {
-                    final BinaryTagWriter nbtWriter = new BinaryTagWriter(buffer.ioView());
-                    nbtWriter.writeNamed("payload", MinestomAdventure.unwrapNbt(payload.nbt()));
-                } catch (IOException e) {
-                    throw new RuntimeException("Failed to write custom click event payload", e);
-                }
+                BinaryTagTypeImpl.writeNamed(buffer, "payload", MinestomAdventure.unwrapNbt(payload.nbt()));
             }
             default -> throw new UnsupportedOperationException("Unknown click event action: " + clickEvent.action());
         }
@@ -441,21 +427,14 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
             buffer.write(BYTE, TAG_COMPOUND);
             buffer.write(STRING_IO_UTF8, "components");
             final Map<Key, NbtDataComponentValue> dataComponents = value.dataComponentsAs(NbtDataComponentValue.class);
-            if (!dataComponents.isEmpty()) {
-                final BinaryTagWriter nbtWriter = new BinaryTagWriter(buffer.ioView());
-                try {
-                    for (final Map.Entry<Key, NbtDataComponentValue> entry : dataComponents.entrySet()) {
-                        final BinaryTag dataComponentValue = entry.getValue().value();
-                        if (dataComponentValue == null) {
-                            buffer.write(BYTE, TAG_COMPOUND);
-                            buffer.write(STRING_IO_UTF8, "!" + entry.getKey().asString());
-                            buffer.write(BYTE, TAG_END);
-                        } else {
-                            nbtWriter.writeNamed(entry.getKey().asString(), dataComponentValue);
-                        }
-                    }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+            for (final Map.Entry<Key, NbtDataComponentValue> entry : dataComponents.entrySet()) {
+                final BinaryTag dataComponentValue = entry.getValue().value();
+                if (dataComponentValue == null) {
+                    buffer.write(BYTE, TAG_COMPOUND);
+                    buffer.write(STRING_IO_UTF8, "!" + entry.getKey().asString());
+                    buffer.write(BYTE, TAG_END);
+                } else {
+                    BinaryTagTypeImpl.writeNamed(buffer, entry.getKey().asString(), dataComponentValue);
                 }
             }
             buffer.write(BYTE, TAG_END);

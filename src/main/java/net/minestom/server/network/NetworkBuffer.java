@@ -65,9 +65,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<Key> KEY = STRING.transform(Key::key, Key::asString);
     Type<String> STRING_TERMINATED = new NetworkBufferTypeImpl.StringTerminatedType();
     Type<String> STRING_IO_UTF8 = new NetworkBufferTypeImpl.IOUTF8StringType();
-    Type<BinaryTag> NBT = new NetworkBufferTypeImpl.NbtType();
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    Type<CompoundBinaryTag> NBT_COMPOUND = (Type) new NetworkBufferTypeImpl.NbtType();
+    Type<BinaryTag> NBT = BinaryTagTypeImpl.INSTANCE;
+    Type<CompoundBinaryTag> NBT_COMPOUND = BinaryTagTypeImpl.INSTANCE_COMPOUND;
     Type<Point> BLOCK_POSITION = new NetworkBufferTypeImpl.BlockPositionType();
     Type<Component> COMPONENT = new ComponentNetworkBufferTypeImpl();
     Type<Component> JSON_COMPONENT = new NetworkBufferTypeImpl.JsonComponentType();

@@ -17,13 +17,10 @@ import net.minestom.server.utils.Either;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.json.JsonUtil;
-import net.minestom.server.utils.nbt.BinaryTagReader;
-import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.DataInputStream;
-import java.io.IOException;
 import java.io.UTFDataFormatException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -537,28 +534,6 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
                 bytes.add(b);
             }
             return new String(bytes.elements(), StandardCharsets.UTF_8);
-        }
-    }
-
-    record NbtType() implements NetworkBufferTypeImpl<BinaryTag> {
-        @Override
-        public void write(NetworkBuffer buffer, BinaryTag value) {
-            BinaryTagWriter nbtWriter = new BinaryTagWriter(buffer.ioView());
-            try {
-                nbtWriter.writeNameless(value);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        @Override
-        public BinaryTag read(NetworkBuffer buffer) {
-            BinaryTagReader nbtReader = new BinaryTagReader(buffer.ioView());
-            try {
-                return nbtReader.readNameless();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
         }
     }
 
