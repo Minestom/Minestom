@@ -9,6 +9,8 @@ import java.io.IOException;
 
 // Based on net.kyori.adventure.nbt.BinaryTagWriterImpl licensed under the MIT license.
 // https://github.com/KyoriPowered/adventure/blob/main/4/nbt/src/main/java/net/kyori/adventure/nbt/BinaryTagWriterImpl.java
+@Deprecated(forRemoval = true) // Use NetworkBuffer.NBT instead.
+@SuppressWarnings("removal")
 public class BinaryTagWriter {
 
     static {

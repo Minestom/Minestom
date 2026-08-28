@@ -65,9 +65,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<Key> KEY = STRING.transform(Key::key, Key::asString);
     Type<String> STRING_TERMINATED = new NetworkBufferTypeImpl.StringTerminatedType();
     Type<String> STRING_IO_UTF8 = new NetworkBufferTypeImpl.IOUTF8StringType();
-    Type<BinaryTag> NBT = new NetworkBufferTypeImpl.NbtType();
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    Type<CompoundBinaryTag> NBT_COMPOUND = (Type) new NetworkBufferTypeImpl.NbtType();
+    Type<BinaryTag> NBT = BinaryTagTypeImpl.INSTANCE;
+    Type<CompoundBinaryTag> NBT_COMPOUND = BinaryTagTypeImpl.INSTANCE_COMPOUND;
     Type<Point> BLOCK_POSITION = new NetworkBufferTypeImpl.BlockPositionType();
     Type<Component> COMPONENT = new ComponentNetworkBufferTypeImpl();
     Type<Component> JSON_COMPONENT = new NetworkBufferTypeImpl.JsonComponentType();
@@ -304,6 +303,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      *
      * @return the io view.
      */
+    @Deprecated(forRemoval = true) // Use NetworkBuffer directly, no DataInput or DataOutput replacement is provided.
     @ApiStatus.Experimental
     @Contract(pure = true, value = "-> new")
     IOView ioView();
@@ -444,6 +444,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @implNote This implementation removes checked exceptions as the backing {@link NetworkBuffer} would not throw {@link IOException}'s.
      * Also {@link #readLine()} is not implemented as it's already deprecated in {@link java.io.DataInputStream}.
      */
+    @Deprecated(forRemoval = true) // Use NetworkBuffer directly, no DataInput or DataOutput replacement is provided.
+    @SuppressWarnings("removal")
     @ApiStatus.Experimental
     sealed interface IOView extends DataInput, DataOutput permits NetworkBufferImpl.IOView {
 

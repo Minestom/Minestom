@@ -370,6 +370,8 @@ final class NetworkBufferImpl implements NetworkBuffer {
         return new NetworkBufferImpl(slice, readIndex, writeIndex, null, registries);
     }
 
+    @Deprecated(forRemoval = true)
+    @SuppressWarnings("removal")
     @Override
     public IOView ioView() {
         return new IOView(this);
@@ -626,6 +628,8 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     // Use a record for final field trusting, hopefully better scalar replacement, to avoid caching IOView
+    @Deprecated(forRemoval = true)
+    @SuppressWarnings("removal")
     record IOView(NetworkBufferImpl buffer) implements NetworkBuffer.IOView {
         @Override
         public void readFully(byte[] bytes) {
