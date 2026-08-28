@@ -77,6 +77,6 @@ public class TestMojangUtils {
     @Disabled
     @Test
     public void testGetInvalidNameThrows() {
-        assertThrows(IOException.class, () -> MojangUtils.getUUID("a")); // Too short
+        assertThrows(IOException.class, () -> MojangUtils.getUUID(""));
     }
 }
