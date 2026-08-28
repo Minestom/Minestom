@@ -22,6 +22,7 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.network.plugin.LoginPlugin;
 import net.minestom.server.network.plugin.LoginPluginMessageProcessor;
+import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.mojang.MojangUtils;
 
 import javax.crypto.SecretKey;
@@ -45,13 +46,18 @@ public final class LoginListener {
 
     private static final Component ALREADY_CONNECTED = Component.text("You are already on this server", NamedTextColor.RED);
     private static final Component ERROR_DURING_LOGIN = Component.text("Error during login!", NamedTextColor.RED);
-    private static final Component ERROR_MALFORMED_USERNAME = Component.text("Error malformed username", NamedTextColor.RED);
+    private static final Component ERROR_MALFORMED_USERNAME = Component.text("Malformed username!", NamedTextColor.RED);
     private static final Component ENCRYPTION_FAILED = Component.text("Encryption failed!", NamedTextColor.RED);
     private static final Component ERROR_MOJANG_RESPONSE = Component.text("Failed to contact Mojang's Session Servers (Are they down?)", NamedTextColor.RED);
 
     public static final Component INVALID_PROXY_RESPONSE = Component.text("Invalid proxy response!", NamedTextColor.RED);
 
     public static void loginStartListener(ClientLoginStartPacket packet, PlayerConnection connection) {
+        if (!StringUtils.isValidUsername(packet.username())) {
+            connection.kick(ERROR_MALFORMED_USERNAME);
+            return;
+        }
+
         final Auth auth = MinecraftServer.process().auth();
         final boolean isSocketConnection = connection instanceof PlayerSocketConnection;
         // Proxy support (only for socket clients) and cache the login username
