@@ -14,6 +14,7 @@ import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.crypto.KeyUtils;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
@@ -55,6 +56,11 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<Integer> VAR_INT_3 = new NetworkBufferTypeImpl.VarInt3Type();
     Type<Long> VAR_LONG = new NetworkBufferTypeImpl.VarLongType();
     Type<byte[]> RAW_BYTES = new NetworkBufferTypeImpl.RawBytesType(-1);
+    Type<short[]> RAW_SHORTS = new NetworkBufferTypeImpl.RawShortsType(-1);
+    Type<int[]> RAW_INTS = new NetworkBufferTypeImpl.RawIntsType(-1);
+    Type<long[]> RAW_LONGS = new NetworkBufferTypeImpl.RawLongsType(-1);
+    Type<float[]> RAW_FLOATS = new NetworkBufferTypeImpl.RawFloatsType(-1);
+    Type<double[]> RAW_DOUBLES = new NetworkBufferTypeImpl.RawDoublesType(-1);
     Type<String> STRING = new NetworkBufferTypeImpl.StringType();
     Type<Key> KEY = STRING.transform(Key::key, Key::asString);
     Type<String> STRING_TERMINATED = new NetworkBufferTypeImpl.StringTerminatedType();
@@ -82,7 +88,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<Point> VECTOR3I = new NetworkBufferTypeImpl.Vector3IType();
     Type<Point> VECTOR3B = new NetworkBufferTypeImpl.Vector3BType();
     Type<Vec> LP_VECTOR3 = new NetworkBufferTypeImpl.LpVector3Type();
-    Type<float[]> QUATERNION = new NetworkBufferTypeImpl.QuaternionType();
+    Type<float[]> QUATERNION = FixedRawFloats(4);
 
     Type<@Nullable Component> OPT_CHAT = COMPONENT.optional();
     Type<@Nullable Point> OPT_BLOCK_POSITION = BLOCK_POSITION.optional();
@@ -102,12 +108,81 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return new NetworkBufferTypeImpl.EnumSetType<>(enumClass, values);
     }
 
+    /**
+     * Creates a type for a bit set of exactly {@code length} bits, stored in {@code (length + 7) / 8} bytes.
+     *
+     * @param length the bit count, which must not be negative
+     * @return the fixed length bit set type
+     */
     static Type<BitSet> FixedBitSet(int length) {
+        Check.argCondition(length < 0, "Length cannot be negative: {0}", length);
         return new NetworkBufferTypeImpl.FixedBitSetType(length);
     }
 
+    /**
+     * Creates a type for exactly {@code length} bytes, unlike {@link #RAW_BYTES} which reads every byte left in the buffer.
+     *
+     * @param length the element count, which must not be negative
+     * @return the fixed length byte type
+     */
     static Type<byte[]> FixedRawBytes(int length) {
+        Check.argCondition(length < 0, "Length cannot be negative: {0}", length);
         return new NetworkBufferTypeImpl.RawBytesType(length);
+    }
+
+    /**
+     * Creates a type for exactly {@code length} shorts, unlike {@link #RAW_SHORTS} which reads every short left in the buffer.
+     *
+     * @param length the element count, which must not be negative
+     * @return the fixed length short type
+     */
+    static Type<short[]> FixedRawShorts(int length) {
+        Check.argCondition(length < 0, "Length cannot be negative: {0}", length);
+        return new NetworkBufferTypeImpl.RawShortsType(length);
+    }
+
+    /**
+     * Creates a type for exactly {@code length} ints, unlike {@link #RAW_INTS} which reads every int left in the buffer.
+     *
+     * @param length the element count, which must not be negative
+     * @return the fixed length int type
+     */
+    static Type<int[]> FixedRawInts(int length) {
+        Check.argCondition(length < 0, "Length cannot be negative: {0}", length);
+        return new NetworkBufferTypeImpl.RawIntsType(length);
+    }
+
+    /**
+     * Creates a type for exactly {@code length} longs, unlike {@link #RAW_LONGS} which reads every long left in the buffer.
+     *
+     * @param length the element count, which must not be negative
+     * @return the fixed length long type
+     */
+    static Type<long[]> FixedRawLongs(int length) {
+        Check.argCondition(length < 0, "Length cannot be negative: {0}", length);
+        return new NetworkBufferTypeImpl.RawLongsType(length);
+    }
+
+    /**
+     * Creates a type for exactly {@code length} floats, unlike {@link #RAW_FLOATS} which reads every float left in the buffer.
+     *
+     * @param length the element count, which must not be negative
+     * @return the fixed length float type
+     */
+    static Type<float[]> FixedRawFloats(int length) {
+        Check.argCondition(length < 0, "Length cannot be negative: {0}", length);
+        return new NetworkBufferTypeImpl.RawFloatsType(length);
+    }
+
+    /**
+     * Creates a type for exactly {@code length} doubles, unlike {@link #RAW_DOUBLES} which reads every double left in the buffer.
+     *
+     * @param length the element count, which must not be negative
+     * @return the fixed length double type
+     */
+    static Type<double[]> FixedRawDoubles(int length) {
+        Check.argCondition(length < 0, "Length cannot be negative: {0}", length);
+        return new NetworkBufferTypeImpl.RawDoublesType(length);
     }
 
     static <T> Type<T> Lazy(Supplier<Type<T>> supplier) {
