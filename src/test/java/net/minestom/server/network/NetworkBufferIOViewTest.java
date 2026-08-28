@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@SuppressWarnings("removal") // Covers ioView() until it is removed
 public class NetworkBufferIOViewTest {
     private static List<NetworkBuffer> buffers() {
         return List.of(NetworkBuffer.resizableBuffer(), NetworkBuffer.staticBuffer(512));

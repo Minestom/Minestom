@@ -303,6 +303,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      *
      * @return the io view.
      */
+    @Deprecated(forRemoval = true) // Use NetworkBuffer directly, no DataInput or DataOutput replacement is provided.
     @ApiStatus.Experimental
     @Contract(pure = true, value = "-> new")
     IOView ioView();
@@ -443,6 +444,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @implNote This implementation removes checked exceptions as the backing {@link NetworkBuffer} would not throw {@link IOException}'s.
      * Also {@link #readLine()} is not implemented as it's already deprecated in {@link java.io.DataInputStream}.
      */
+    @Deprecated(forRemoval = true) // Use NetworkBuffer directly, no DataInput or DataOutput replacement is provided.
+    @SuppressWarnings("removal")
     @ApiStatus.Experimental
     sealed interface IOView extends DataInput, DataOutput permits NetworkBufferImpl.IOView {
 
