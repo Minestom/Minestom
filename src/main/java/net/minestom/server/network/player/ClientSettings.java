@@ -1,11 +1,11 @@
 package net.minestom.server.network.player;
 
-import net.minestom.server.ServerFlag;
 import net.minestom.server.entity.MainHand;
 import net.minestom.server.entity.Player;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
+import net.minestom.server.property.ServerProperties;
 import net.minestom.server.utils.MathUtils;
 
 import java.util.Locale;
@@ -22,7 +22,7 @@ public record ClientSettings(Locale locale, byte viewDistance,
                              boolean enableTextFiltering, boolean allowServerListings,
                              ClientSettings.ParticleSetting particleSetting) {
     public static final ClientSettings DEFAULT = new ClientSettings(
-            Locale.US, (byte) ServerFlag.CHUNK_VIEW_DISTANCE,
+            Locale.US, ServerProperties.CHUNK_VIEW_DISTANCE.get().byteValue(),
             ChatMessageType.FULL, true,
             (byte) 0x7F, MainHand.RIGHT,
             true, true,
@@ -64,7 +64,7 @@ public record ClientSettings(Locale locale, byte viewDistance,
      */
     @Deprecated
     public int effectiveViewDistance() {
-        return Math.min(viewDistance(), ServerFlag.CHUNK_VIEW_DISTANCE);
+        return Math.min(viewDistance(), ServerProperties.CHUNK_VIEW_DISTANCE.get());
     }
 
     public enum ParticleSetting {

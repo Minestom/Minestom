@@ -22,7 +22,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.title.TitlePart;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.ServerFlag;
 import net.minestom.server.advancements.AdvancementTab;
 import net.minestom.server.advancements.Notification;
 import net.minestom.server.adventure.AdventurePacketConvertor;
@@ -117,6 +116,7 @@ import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.network.player.ClientSettings;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.property.ServerProperties;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.RegistryKey;
@@ -211,7 +211,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     /**
      * Keeps track of what chunks are sent to the client, this defines the center of the loaded area
-     * in the range of {@link ServerFlag#CHUNK_VIEW_DISTANCE}
+     * in the range of {@link ServerProperties#CHUNK_VIEW_DISTANCE}
      */
     private Vec chunksLoadedByClient = Vec.ZERO;
     private final ReentrantLock chunkQueueLock = new ReentrantLock();
@@ -235,7 +235,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     private final AtomicInteger teleportId = new AtomicInteger();
     private int receivedTeleportId;
 
-    private final MessagePassingQueue<ClientPacket> packets = ConcurrentMessageQueues.mpscArrayQueue(ServerFlag.PLAYER_PACKET_QUEUE_SIZE);
+    private final MessagePassingQueue<ClientPacket> packets = ConcurrentMessageQueues.mpscArrayQueue(ServerProperties.PLAYER_PACKET_QUEUE_SIZE.get());
     private final boolean levelFlat;
     private ClientSettings settings = ClientSettings.DEFAULT;
     private float exp;
@@ -261,7 +261,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     // Game state (https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol#Game_Event)
     private boolean enableRespawnScreen;
-    private final ChunkUpdateLimitChecker chunkUpdateLimitChecker = new ChunkUpdateLimitChecker(ServerFlag.PLAYER_CHUNK_UPDATE_LIMITER_HISTORY_SIZE);
+    private final ChunkUpdateLimitChecker chunkUpdateLimitChecker = new ChunkUpdateLimitChecker(ServerProperties.PLAYER_CHUNK_UPDATE_LIMITER_HISTORY_SIZE.get());
 
     // Experience orb pickup
     protected Cooldown experiencePickupCooldown = new Cooldown(Duration.of(10, TimeUnit.SERVER_TICK));
@@ -345,7 +345,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
         final JoinGamePacket joinGamePacket = new JoinGamePacket(
                 getEntityId(), this.hardcore, List.of(), 0,
-                ServerFlag.CHUNK_VIEW_DISTANCE, ServerFlag.CHUNK_VIEW_DISTANCE,
+                ServerProperties.CHUNK_VIEW_DISTANCE.get(), ServerProperties.CHUNK_VIEW_DISTANCE.get(),
                 false, true, false,
                 new PlayerSpawnInfo(dimensionTypeId, spawnInstance.getDimensionName(), 0,
                         gameMode, null, false, levelFlat,
@@ -830,9 +830,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     public void onChunkBatchReceived(float newTargetChunksPerTick) {
 //        logger.debug("chunk batch received player={} chunks/tick={} lead={}", username, newTargetChunksPerTick, chunkBatchLead);
         chunkBatchLead = Math.max(0, chunkBatchLead - 1);
-        newTargetChunksPerTick = newTargetChunksPerTick * ServerFlag.CHUNKS_PER_TICK_MULTIPLIER;
-        targetChunksPerTick = Float.isNaN(newTargetChunksPerTick) ? ServerFlag.MIN_CHUNKS_PER_TICK : MathUtils.clamp(
-                newTargetChunksPerTick, ServerFlag.MIN_CHUNKS_PER_TICK, ServerFlag.MAX_CHUNKS_PER_TICK);
+        newTargetChunksPerTick = newTargetChunksPerTick * ServerProperties.CHUNKS_PER_TICK_MULTIPLIER.get();
+        targetChunksPerTick = Float.isNaN(newTargetChunksPerTick) ? ServerProperties.MIN_CHUNKS_PER_TICK.get() : MathUtils.clamp(
+                newTargetChunksPerTick, ServerProperties.MIN_CHUNKS_PER_TICK.get(), ServerProperties.MAX_CHUNKS_PER_TICK.get());
 
         // Beyond the first batch we can preemptively send up to 10 (matching mojang server)
         if (maxChunkBatchLead == 1) maxChunkBatchLead = 10;
@@ -858,7 +858,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         if (chunkQueue.isEmpty() || chunkBatchLead >= maxChunkBatchLead) return;
 
         // Increment the pending chunk count by the target chunks per tick
-        pendingChunkCount = Math.min(pendingChunkCount + targetChunksPerTick, ServerFlag.MAX_CHUNKS_PER_TICK);
+        pendingChunkCount = Math.min(pendingChunkCount + targetChunksPerTick, ServerProperties.MAX_CHUNKS_PER_TICK.get());
         if (pendingChunkCount < 1) return; // Cant send anything
 
         chunkQueueLock.lock();
@@ -2275,7 +2275,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     public void interpretPacketQueue() {
         final PacketListenerManager manager = MinecraftServer.getPacketListenerManager();
         // This method is NOT thread-safe
-        this.packets.drain(packet -> manager.processClientPacket(packet, playerConnection), ServerFlag.PLAYER_PACKET_PER_TICK);
+        this.packets.drain(packet -> manager.processClientPacket(packet, playerConnection), ServerProperties.PLAYER_PACKET_PER_TICK.get());
     }
 
     /**
@@ -2540,7 +2540,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     }
 
     private int effectiveViewDistance(@Nullable Instance instance) {
-        int maxViewDistance = instance != null ? instance.viewDistance() : ServerFlag.CHUNK_VIEW_DISTANCE;
+        int maxViewDistance = instance != null ? instance.viewDistance() : ServerProperties.CHUNK_VIEW_DISTANCE.get();
         return Math.min(settings.viewDistance(), maxViewDistance) + 1;
     }
 

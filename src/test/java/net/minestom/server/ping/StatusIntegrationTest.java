@@ -1,10 +1,10 @@
 package net.minestom.server.ping;
 
-import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.MainHand;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.player.ClientSettings;
+import net.minestom.server.property.ServerProperties;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ public class StatusIntegrationTest {
         env.createPlayer(instance, Pos.ZERO);
         var player3 = env.createPlayer(instance, Pos.ZERO);
         player3.refreshSettings(new ClientSettings(
-                Locale.US, (byte) ServerFlag.CHUNK_VIEW_DISTANCE,
+                Locale.US, ServerProperties.CHUNK_VIEW_DISTANCE.get().byteValue(),
                 ChatMessageType.FULL, true,
                 (byte) 0x7F, MainHand.RIGHT,
                 true, false,

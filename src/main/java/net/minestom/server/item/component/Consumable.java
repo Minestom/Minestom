@@ -1,11 +1,11 @@
 package net.minestom.server.item.component;
 
-import net.minestom.server.ServerFlag;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.item.ItemAnimation;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
+import net.minestom.server.property.ServerProperties;
 import net.minestom.server.sound.SoundEvent;
 
 import java.util.List;
@@ -39,6 +39,6 @@ public record Consumable(
     }
 
     public int consumeTicks() {
-        return (int) (consumeSeconds * ServerFlag.SERVER_TICKS_PER_SECOND);
+        return (int) (consumeSeconds * ServerProperties.SERVER_TICKS_PER_SECOND.get());
     }
 }

@@ -1,10 +1,10 @@
 package net.minestom.server.network.packet;
 
-import net.minestom.server.ServerFlag;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.property.ServerProperties;
 import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -233,8 +233,8 @@ public final class PacketReading {
 
     public static int maxPacketSize(ConnectionState state) {
         return switch (state) {
-            case HANDSHAKE, LOGIN -> ServerFlag.MAX_PACKET_SIZE_PRE_AUTH;
-            default -> ServerFlag.MAX_PACKET_SIZE;
+            case HANDSHAKE, LOGIN -> ServerProperties.MAX_PACKET_SIZE_PRE_AUTH.get();
+            default -> ServerProperties.MAX_PACKET_SIZE.get();
         };
     }
 }

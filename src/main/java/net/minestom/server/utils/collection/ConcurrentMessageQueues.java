@@ -1,6 +1,6 @@
 package net.minestom.server.utils.collection;
 
-import net.minestom.server.ServerFlag;
+import net.minestom.server.property.ServerProperties;
 import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpmcUnboundedXaddArrayQueue;
 import org.jctools.queues.MpscArrayQueue;
@@ -14,15 +14,15 @@ import org.jetbrains.annotations.ApiStatus;
 public final class ConcurrentMessageQueues {
 
     public static <T> MessagePassingQueue<T> mpscArrayQueue(int capacity) {
-        return ServerFlag.UNSAFE_COLLECTIONS ? new MpscArrayQueue<>(capacity) : new MpscVarHandleArrayQueue<>(capacity);
+        return ServerProperties.UNSAFE_COLLECTIONS.get() ? new MpscArrayQueue<>(capacity) : new MpscVarHandleArrayQueue<>(capacity);
     }
 
     public static <T> MessagePassingQueue<T> mpscUnboundedArrayQueue(int chunkSize) {
-        return ServerFlag.UNSAFE_COLLECTIONS ? new MpscUnboundedXaddArrayQueue<>(chunkSize) : new MpscUnboundedVarHandleArrayQueue<>(chunkSize);
+        return ServerProperties.UNSAFE_COLLECTIONS.get() ? new MpscUnboundedXaddArrayQueue<>(chunkSize) : new MpscUnboundedVarHandleArrayQueue<>(chunkSize);
     }
 
     // Atomic is bounded; no unbounded atomic variant exists that is MPMC.
     public static <T> MessagePassingQueue<T> mpmcSpecialUnboundedArrayQueue(int value) {
-        return ServerFlag.UNSAFE_COLLECTIONS ? new MpmcUnboundedXaddArrayQueue<>(value) : new MpmcVarHandleArrayQueue<>(value);
+        return ServerProperties.UNSAFE_COLLECTIONS.get() ? new MpmcUnboundedXaddArrayQueue<>(value) : new MpmcVarHandleArrayQueue<>(value);
     }
 }

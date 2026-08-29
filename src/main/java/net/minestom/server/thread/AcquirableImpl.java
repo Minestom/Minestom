@@ -1,6 +1,6 @@
 package net.minestom.server.thread;
 
-import net.minestom.server.ServerFlag;
+import net.minestom.server.property.ServerProperties;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
@@ -105,7 +105,7 @@ final class AcquirableImpl<T> implements Acquirable<T> {
 
     @Override
     public void assertOwnership() {
-        if (!ASSERTIONS_ENABLED && !ServerFlag.ACQUIRABLE_STRICT) return;
+        if (!ASSERTIONS_ENABLED && !ServerProperties.ACQUIRABLE_STRICT.get()) return;
         if (isOwned()) return;
         TickThread assignedThread = this.assignedThread;
         Thread initThread = this.initThread;

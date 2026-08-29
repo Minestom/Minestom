@@ -13,7 +13,6 @@ import net.kyori.adventure.pointer.Pointers;
 import net.kyori.adventure.pointer.PointersSupplier;
 import net.kyori.adventure.sound.Sound;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.ServerFlag;
 import net.minestom.server.ServerProcess;
 import net.minestom.server.Tickable;
 import net.minestom.server.adventure.AdventurePacketConvertor;
@@ -40,6 +39,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.InitializeWorldBorderPacket;
 import net.minestom.server.network.packet.server.play.SetTimePacket;
+import net.minestom.server.property.ServerProperties;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.snapshot.ChunkSnapshot;
@@ -132,7 +132,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
     @SuppressWarnings("this-escape") // deliberate self registration during construction
     private final ChunkCache blockRetriever = new ChunkCache(this, null, null);
 
-    protected int chunkViewDistance = ServerFlag.CHUNK_VIEW_DISTANCE;
+    protected int chunkViewDistance = ServerProperties.CHUNK_VIEW_DISTANCE.get();
 
     // the uuid of this instance
     protected UUID uuid;
@@ -902,7 +902,7 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
     }
 
     /**
-     * Gets the chunk view distance of this instance, which defaults to {@link ServerFlag#CHUNK_VIEW_DISTANCE}.
+     * Gets the chunk view distance of this instance, which defaults to {@link ServerProperties#CHUNK_VIEW_DISTANCE}.
      *
      * @return The chunk view distance of this instance
      */

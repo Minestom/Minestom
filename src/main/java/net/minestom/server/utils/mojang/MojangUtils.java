@@ -2,7 +2,7 @@ package net.minestom.server.utils.mojang;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import net.minestom.server.ServerFlag;
+import net.minestom.server.property.ServerProperties;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.url.URLUtils;
 import org.jetbrains.annotations.ApiStatus;
@@ -25,7 +25,7 @@ public final class MojangUtils {
     private static final String FROM_USERNAME_URL = "https://api.minecraftservices.com/minecraft/profile/lookup/name/%s";
 
     // Auth
-    private static final String BASE_AUTH_URL = ServerFlag.AUTH_URL.concat("?username=%s&serverId=%s");
+    private static final String BASE_AUTH_URL = ServerProperties.AUTH_URL.get().concat("?username=%s&serverId=%s");
     private static final String PREVENT_PROXY_CONNECTIONS_AUTH_URL = BASE_AUTH_URL.concat("&ip=%s");
 
     /**
@@ -111,7 +111,7 @@ public final class MojangUtils {
 
         final String url;
         // getAddress() is null for unresolved addresses, fall back to the base URL then
-        final InetAddress address = ServerFlag.AUTH_PREVENT_PROXY_CONNECTIONS
+        final InetAddress address = ServerProperties.AUTH_PREVENT_PROXY_CONNECTIONS.get()
                 && userSocket instanceof InetSocketAddress inetSocketAddress
                 ? inetSocketAddress.getAddress() : null;
         if (address != null) {

@@ -1,12 +1,19 @@
 package net.minestom.server;
 
 import net.minestom.server.property.ServerProperties;
+import net.minestom.server.property.ServerProperty;
 
 /**
  * Contains server settings/flags to be set with system properties.
  *
  * <p>Some flags (labeled at the bottom) are experimental. They may be removed without notice, and may have issues.</p>
+ *
+ * @deprecated use {@link ServerProperties}, which names the same settings and reads them through
+ * {@link ServerProperty#get()}. Every constant here is the value its
+ * property held when this class was initialized, so a setting made writable with
+ * {@code <name>.mutable=true} never reaches a reader that came through this class.
  */
+@Deprecated(forRemoval = true)
 public final class ServerFlag {
 
     // Server Behavior

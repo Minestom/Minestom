@@ -1,7 +1,6 @@
 package net.minestom.server.network.player;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.ServerFlag;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
@@ -32,6 +31,7 @@ import net.minestom.server.network.packet.server.FramedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
+import net.minestom.server.property.ServerProperties;
 import net.minestom.server.utils.collection.ConcurrentMessageQueues;
 import net.minestom.server.utils.validate.Check;
 import org.jctools.queues.MessagePassingQueue;
@@ -89,7 +89,7 @@ public class PlayerSocketConnection extends PlayerConnection {
     private int protocolVersion;
 
     private final NetworkBuffer readBuffer = NetworkBuffer.resizableBuffer(
-            ServerFlag.POOLED_BUFFER_SIZE, MinecraftServer.getRegistries());
+            ServerProperties.POOLED_BUFFER_SIZE.get(), MinecraftServer.getRegistries());
     private final MessagePassingQueue<SendablePacket> packetQueue = ConcurrentMessageQueues.mpscUnboundedArrayQueue(1024);
     private final Thread readThread, writeThread;
 
@@ -99,7 +99,7 @@ public class PlayerSocketConnection extends PlayerConnection {
     private volatile long compressionStart = Long.MAX_VALUE;
 
     // Write lock as the default behavior of the writing thread is to park itself
-    // Requires ServerFlag.FASTER_SOCKET_WRITES to be enabled
+    // Requires ServerProperties.FASTER_SOCKET_WRITES to be enabled
     private final AtomicBoolean writeSignaled = new AtomicBoolean(false);
 
     private final ListenerHandle<PlayerPacketOutEvent> outgoing = EventDispatcher.getHandle(PlayerPacketOutEvent.class);
@@ -117,13 +117,13 @@ public class PlayerSocketConnection extends PlayerConnection {
         final long writeIndex = readBuffer.writeIndex();
         final int length = readBuffer.readChannel(channel);
 
-        if (ServerFlag.PROXY_PROTOCOL && !attemptedProxyProtocolDetection) {
+        if (ServerProperties.PROXY_PROTOCOL.get() && !attemptedProxyProtocolDetection) {
             final ProxyProtocolDecoder.Result result = ProxyProtocolDecoder.parse(remoteAddress, readBuffer);
             if (result.status() == ProxyProtocolDecoder.Status.NEED_MORE) return;
             attemptedProxyProtocolDetection = true;
             if (result.status() == ProxyProtocolDecoder.Status.PRESENT) {
                 this.remoteAddress = result.clientAddress();
-            } else if (ServerFlag.PROXY_PROTOCOL_REQUIRED) {
+            } else if (ServerProperties.PROXY_PROTOCOL_REQUIRED.get()) {
                 throw new IOException("Missing required PROXY protocol header");
             }
         }
@@ -228,9 +228,9 @@ public class PlayerSocketConnection extends PlayerConnection {
         unlockWriteThread();
     }
 
-    // Requires ServerFlag.FASTER_SOCKET_WRITES
+    // Requires ServerProperties.FASTER_SOCKET_WRITES
     private void unlockWriteThread() {
-        if (!ServerFlag.FASTER_SOCKET_WRITES) return;
+        if (!ServerProperties.FASTER_SOCKET_WRITES.get()) return;
         if (!this.writeSignaled.compareAndExchange(false, true)) {
             LockSupport.unpark(writeThread);
         }
@@ -367,7 +367,7 @@ public class PlayerSocketConnection extends PlayerConnection {
                 }
             }
             // Translation
-            if (ServerFlag.AUTOMATIC_COMPONENT_TRANSLATION && packet instanceof ServerPacket.ComponentHolding translatablePacket) {
+            if (ServerProperties.AUTOMATIC_COMPONENT_TRANSLATION.get() && packet instanceof ServerPacket.ComponentHolding translatablePacket) {
                 packet = translatablePacket.copyWithOperator(component ->
                         MinestomAdventure.COMPONENT_TRANSLATOR.apply(component, Objects.requireNonNullElseGet(player.getLocale(), MinestomAdventure::getDefaultLocale)));
             }
@@ -438,11 +438,11 @@ public class PlayerSocketConnection extends PlayerConnection {
         // Consume queued packets
         var packetQueue = this.packetQueue;
         if (packetQueue.isEmpty()) {
-            if (!ServerFlag.FASTER_SOCKET_WRITES) {
+            if (!ServerProperties.FASTER_SOCKET_WRITES.get()) {
                 try {
                     // Can probably be improved by waking up at the end of the tick
                     // But this work well enough and without additional state.
-                    Thread.sleep(1000 / ServerFlag.SERVER_TICKS_PER_SECOND / 2);
+                    Thread.sleep(1000 / ServerProperties.SERVER_TICKS_PER_SECOND.get() / 2);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

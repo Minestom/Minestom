@@ -1,6 +1,6 @@
 package net.minestom.server.map;
 
-import net.minestom.server.ServerFlag;
+import net.minestom.server.property.ServerProperties;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,16 +85,16 @@ public enum MapColors {
     static {
         ColorMappingStrategy strategy;
         try {
-            strategy = ColorMappingStrategy.valueOf(ServerFlag.MAP_RGB_MAPPING.toUpperCase(Locale.ROOT));
+            strategy = ColorMappingStrategy.valueOf(ServerProperties.MAP_RGB_MAPPING.get().toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException _) {
-            logger.warn("Unknown color mapping strategy '{}', defaulting to LAZY.", ServerFlag.MAP_RGB_MAPPING);
+            logger.warn("Unknown color mapping strategy '{}', defaulting to LAZY.", ServerProperties.MAP_RGB_MAPPING.get());
             strategy = ColorMappingStrategy.LAZY;
         }
         mappingStrategy = strategy;
 
         int reduction = 10;
-        if (ServerFlag.MAP_RGB_REDUCTION != -1) {
-            reduction = ServerFlag.MAP_RGB_REDUCTION;
+        if (ServerProperties.MAP_RGB_REDUCTION.get() != -1) {
+            reduction = ServerProperties.MAP_RGB_REDUCTION.get();
 
             if (reduction < 0 || reduction > 255) {
                 logger.warn("Reduction was found to be invalid: {}. Must in 0-255, defaulting to 10.", reduction);

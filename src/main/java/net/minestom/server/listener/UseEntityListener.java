@@ -1,6 +1,5 @@
 package net.minestom.server.listener;
 
-import net.minestom.server.ServerFlag;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
@@ -12,6 +11,7 @@ import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.player.PlayerEntityInteractEvent;
 import net.minestom.server.network.packet.client.play.ClientAttackPacket;
 import net.minestom.server.network.packet.client.play.ClientInteractEntityPacket;
+import net.minestom.server.property.ServerProperties;
 
 public class UseEntityListener {
 
@@ -35,7 +35,7 @@ public class UseEntityListener {
         if (!entity.isViewer(player))
             return true;
 
-        if (ServerFlag.ENFORCE_INTERACTION_LIMIT) {
+        if (ServerProperties.ENFORCE_INTERACTION_LIMIT.get()) {
             final double maxDistanceSquared = Math.pow(player.getAttributeValue(Attribute.ENTITY_INTERACTION_RANGE) + 1, 2);
 
             final double distSquared = getDistSquared(player, entity);

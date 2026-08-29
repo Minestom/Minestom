@@ -1,10 +1,10 @@
 package net.minestom.server.network.socket;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.ServerFlag;
 import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.PacketVanilla;
 import net.minestom.server.network.player.PlayerSocketConnection;
+import net.minestom.server.property.ServerProperties;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnknownNullability;
 
@@ -111,10 +111,10 @@ public final class Server {
     private static void configureSocket(SocketChannel channel) throws IOException {
         if (channel.getLocalAddress() instanceof InetSocketAddress) {
             Socket socket = channel.socket();
-            socket.setSendBufferSize(ServerFlag.SOCKET_SEND_BUFFER_SIZE);
-            socket.setReceiveBufferSize(ServerFlag.SOCKET_RECEIVE_BUFFER_SIZE);
-            socket.setTcpNoDelay(ServerFlag.SOCKET_NO_DELAY);
-            socket.setSoTimeout(ServerFlag.SOCKET_TIMEOUT);
+            socket.setSendBufferSize(ServerProperties.SOCKET_SEND_BUFFER_SIZE.get());
+            socket.setReceiveBufferSize(ServerProperties.SOCKET_RECEIVE_BUFFER_SIZE.get());
+            socket.setTcpNoDelay(ServerProperties.SOCKET_NO_DELAY.get());
+            socket.setSoTimeout(ServerProperties.SOCKET_TIMEOUT.get());
         }
     }
 
