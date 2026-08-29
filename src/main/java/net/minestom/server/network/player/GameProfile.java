@@ -40,7 +40,7 @@ public record GameProfile(
             Property.SERIALIZER.list(MAX_PROPERTIES), GameProfile::properties,
             GameProfile::new);
     public static final StructCodec<GameProfile> CODEC = StructCodec.struct(
-            "id", Codec.UUID, GameProfile::uuid,
+            "id", Codec.UUID_COERCED, GameProfile::uuid,
             "name", Codec.STRING, GameProfile::name,
             "properties", Property.LIST_CODEC.optional(List.of()), GameProfile::properties,
             GameProfile::new);
