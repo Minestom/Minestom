@@ -1,7 +1,6 @@
 package net.minestom.server;
 
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.Nullable;
+import net.minestom.server.property.ServerProperties;
 
 /**
  * Contains server settings/flags to be set with system properties.
@@ -11,131 +10,76 @@ import org.jetbrains.annotations.Nullable;
 public final class ServerFlag {
 
     // Server Behavior
-    public static final boolean SHUTDOWN_ON_SIGNAL = booleanProperty("minestom.shutdown-on-signal", true);
-    public static final int SERVER_TICKS_PER_SECOND = intProperty("minestom.tps", 20);
-    public static final int SERVER_MAX_TICK_CATCH_UP = intProperty("minestom.max-tick-catch-up", 5);
-    public static final int CHUNK_VIEW_DISTANCE = intProperty("minestom.chunk-view-distance", 8); // Base chunk view distance of instances and client settings
-    public static final int ENTITY_VIEW_DISTANCE = intProperty("minestom.entity-view-distance", 5);
-    public static final int ENTITY_SYNCHRONIZATION_TICKS = intProperty("minestom.entity-synchronization-ticks", 20);
-    public static final int DISPATCHER_THREADS = intProperty("minestom.dispatcher-threads", 1);
-    public static final int SEND_LIGHT_AFTER_BLOCK_PLACEMENT_DELAY = intProperty("minestom.send-light-after-block-placement-delay", 100);
-    public static final long LOGIN_PLUGIN_MESSAGE_TIMEOUT = longProperty("minestom.login-plugin-message-timeout", 5_000); // 5s
-    public static final long KNOWN_PACKS_RESPONSE_TIMEOUT = longProperty("minestom.known-packs-response-timeout", 5 * 60_000); // 5m
-    public static final boolean ACCEPT_TRANSFERS = booleanProperty("minestom.accept-transfers", false);
-    public static final boolean AUTOMATIC_COMPONENT_TRANSLATION = booleanProperty("minestom.automatic-component-translation", false);
+    public static final boolean SHUTDOWN_ON_SIGNAL = ServerProperties.SHUTDOWN_ON_SIGNAL.get();
+    public static final int SERVER_TICKS_PER_SECOND = ServerProperties.SERVER_TICKS_PER_SECOND.get();
+    public static final int SERVER_MAX_TICK_CATCH_UP = ServerProperties.SERVER_MAX_TICK_CATCH_UP.get();
+    public static final int CHUNK_VIEW_DISTANCE = ServerProperties.CHUNK_VIEW_DISTANCE.get();
+    public static final int ENTITY_VIEW_DISTANCE = ServerProperties.ENTITY_VIEW_DISTANCE.get();
+    public static final int ENTITY_SYNCHRONIZATION_TICKS = ServerProperties.ENTITY_SYNCHRONIZATION_TICKS.get();
+    public static final int DISPATCHER_THREADS = ServerProperties.DISPATCHER_THREADS.get();
+    public static final int SEND_LIGHT_AFTER_BLOCK_PLACEMENT_DELAY = ServerProperties.SEND_LIGHT_AFTER_BLOCK_PLACEMENT_DELAY.get();
+    public static final long LOGIN_PLUGIN_MESSAGE_TIMEOUT = ServerProperties.LOGIN_PLUGIN_MESSAGE_TIMEOUT.get();
+    public static final long KNOWN_PACKS_RESPONSE_TIMEOUT = ServerProperties.KNOWN_PACKS_RESPONSE_TIMEOUT.get();
+    public static final boolean ACCEPT_TRANSFERS = ServerProperties.ACCEPT_TRANSFERS.get();
+    public static final boolean AUTOMATIC_COMPONENT_TRANSLATION = ServerProperties.AUTOMATIC_COMPONENT_TRANSLATION.get();
 
     // Network rate limiting
-    public static final int PLAYER_PACKET_PER_TICK = intProperty("minestom.packet-per-tick", 50);
-    public static final int PLAYER_PACKET_QUEUE_SIZE = intProperty("minestom.packet-queue-size", 1000);
-    public static final long KEEP_ALIVE_DELAY = longProperty("minestom.keep-alive-delay", 10_000);
-    public static final long KEEP_ALIVE_KICK = longProperty("minestom.keep-alive-kick", 15_000);
-    public static final int PLAYER_CHUNK_UPDATE_LIMITER_HISTORY_SIZE = intProperty("minestom.player.chunk-update-limiter-history-size", 5, 0, Integer.MAX_VALUE);
+    public static final int PLAYER_PACKET_PER_TICK = ServerProperties.PLAYER_PACKET_PER_TICK.get();
+    public static final int PLAYER_PACKET_QUEUE_SIZE = ServerProperties.PLAYER_PACKET_QUEUE_SIZE.get();
+    public static final long KEEP_ALIVE_DELAY = ServerProperties.KEEP_ALIVE_DELAY.get();
+    public static final long KEEP_ALIVE_KICK = ServerProperties.KEEP_ALIVE_KICK.get();
+    public static final int PLAYER_CHUNK_UPDATE_LIMITER_HISTORY_SIZE = ServerProperties.PLAYER_CHUNK_UPDATE_LIMITER_HISTORY_SIZE.get();
 
     // Network buffers
-    public static final int MAX_PACKET_SIZE = intProperty("minestom.max-packet-size", 2_097_151); // 3 bytes var-int
-    public static final int MAX_PACKET_SIZE_PRE_AUTH = intProperty("minestom.max-packet-size-pre-auth", 8_192);
-    public static final int SOCKET_SEND_BUFFER_SIZE = intProperty("minestom.send-buffer-size", 262_143);
-    public static final int SOCKET_RECEIVE_BUFFER_SIZE = intProperty("minestom.receive-buffer-size", 32_767);
-    public static final boolean SOCKET_NO_DELAY = booleanProperty("minestom.tcp-no-delay", true);
-    public static final int SOCKET_TIMEOUT = intProperty("minestom.socket-timeout", 15_000);
-    public static final int POOLED_BUFFER_SIZE = intProperty("minestom.pooled-buffer-size", 16_383);
+    public static final int MAX_PACKET_SIZE = ServerProperties.MAX_PACKET_SIZE.get();
+    public static final int MAX_PACKET_SIZE_PRE_AUTH = ServerProperties.MAX_PACKET_SIZE_PRE_AUTH.get();
+    public static final int SOCKET_SEND_BUFFER_SIZE = ServerProperties.SOCKET_SEND_BUFFER_SIZE.get();
+    public static final int SOCKET_RECEIVE_BUFFER_SIZE = ServerProperties.SOCKET_RECEIVE_BUFFER_SIZE.get();
+    public static final boolean SOCKET_NO_DELAY = ServerProperties.SOCKET_NO_DELAY.get();
+    public static final int SOCKET_TIMEOUT = ServerProperties.SOCKET_TIMEOUT.get();
+    public static final int POOLED_BUFFER_SIZE = ServerProperties.POOLED_BUFFER_SIZE.get();
 
     // Chunk update
-    public static final float MIN_CHUNKS_PER_TICK = floatProperty("minestom.chunk-queue.min-per-tick", 0.01f);
-    public static final float MAX_CHUNKS_PER_TICK = floatProperty("minestom.chunk-queue.max-per-tick", 64.0f);
-    public static final float CHUNKS_PER_TICK_MULTIPLIER = floatProperty("minestom.chunk-queue.multiplier", 1f);
+    public static final float MIN_CHUNKS_PER_TICK = ServerProperties.MIN_CHUNKS_PER_TICK.get();
+    public static final float MAX_CHUNKS_PER_TICK = ServerProperties.MAX_CHUNKS_PER_TICK.get();
+    public static final float CHUNKS_PER_TICK_MULTIPLIER = ServerProperties.CHUNKS_PER_TICK_MULTIPLIER.get();
 
     // Packet sending optimizations
-    public static final boolean GROUPED_PACKET = booleanProperty("minestom.grouped-packet", true);
-    public static final boolean CACHED_PACKET = booleanProperty("minestom.cached-packet", true);
-    public static final boolean VIEWABLE_PACKET = booleanProperty("minestom.viewable-packet", true);
+    public static final boolean GROUPED_PACKET = ServerProperties.GROUPED_PACKET.get();
+    public static final boolean CACHED_PACKET = ServerProperties.CACHED_PACKET.get();
+    public static final boolean VIEWABLE_PACKET = ServerProperties.VIEWABLE_PACKET.get();
 
     // Tags
-    public static final boolean TAG_HANDLER_CACHE_ENABLED = booleanProperty("minestom.tag-handler-cache", true);
-    public static final boolean SERIALIZE_EMPTY_COMPOUND = booleanProperty("minestom.serialization.serialize-empty-nbt-compound", false);
+    public static final boolean TAG_HANDLER_CACHE_ENABLED = ServerProperties.TAG_HANDLER_CACHE_ENABLED.get();
+    public static final boolean SERIALIZE_EMPTY_COMPOUND = ServerProperties.SERIALIZE_EMPTY_COMPOUND.get();
 
     // Online Mode
-    public static final String AUTH_URL = stringProperty("minestom.auth.url", "https://sessionserver.mojang.com/session/minecraft/hasJoined");
-    public static final boolean AUTH_PREVENT_PROXY_CONNECTIONS = booleanProperty("minestom.auth.prevent-proxy-connections", false);
+    public static final String AUTH_URL = ServerProperties.AUTH_URL.get();
+    public static final boolean AUTH_PREVENT_PROXY_CONNECTIONS = ServerProperties.AUTH_PREVENT_PROXY_CONNECTIONS.get();
 
     // World
-    public static final int WORLD_BORDER_SIZE = intProperty("minestom.world-border-size", 29999984);
+    public static final int WORLD_BORDER_SIZE = ServerProperties.WORLD_BORDER_SIZE.get();
 
     // Maps
-    public static final String MAP_RGB_MAPPING = stringProperty("minestom.map.rgbmapping", "lazy");
-    public static final int MAP_RGB_REDUCTION = intProperty("minestom.map.rgbreduction", -1); // Only used if rgb mapping is "approximate"
+    public static final String MAP_RGB_MAPPING = ServerProperties.MAP_RGB_MAPPING.get();
+    public static final int MAP_RGB_REDUCTION = ServerProperties.MAP_RGB_REDUCTION.get();
 
     // Entities
-    public static final boolean ENFORCE_INTERACTION_LIMIT = booleanProperty("minestom.enforce-entity-interaction-range", true);
+    public static final boolean ENFORCE_INTERACTION_LIMIT = ServerProperties.ENFORCE_INTERACTION_LIMIT.get();
 
     // Experimental/Unstable
-    public static final boolean REGISTRY_UNSAFE_OPS = booleanProperty("minestom.registry.unsafe-ops");
-    public static final boolean EVENT_NODE_ALLOW_MULTIPLE_PARENTS = booleanProperty("minestom.event.multiple-parents");
-    public static final boolean FASTER_SOCKET_WRITES = booleanProperty("minestom.new-socket-write-lock"); // TODO: promote to default
-    public static final boolean ACQUIRABLE_STRICT = booleanProperty("minestom.acquirable-strict", false);
-    public static final boolean UNSAFE_COLLECTIONS = booleanProperty("minestom.unsafe-collections", false); // Likely to be removed in the future
-    public static final boolean TEMPLATE_COMPILER = booleanProperty("minestom.template-compiler", false);
-    public static final boolean PROXY_PROTOCOL = booleanProperty("minestom.proxy-protocol", false);
-    public static final boolean PROXY_PROTOCOL_REQUIRED = booleanProperty("minestom.proxy-protocol.required", false);
-    public static final int NBT_MAX_DEPTH = intProperty("minestom.nbt.max-depth", 512, 1, Integer.MAX_VALUE); // Binary tags are read and written recursively, so raising this can overflow the java stack
+    public static final boolean REGISTRY_UNSAFE_OPS = ServerProperties.REGISTRY_UNSAFE_OPS.get();
+    public static final boolean EVENT_NODE_ALLOW_MULTIPLE_PARENTS = ServerProperties.EVENT_NODE_ALLOW_MULTIPLE_PARENTS.get();
+    public static final boolean FASTER_SOCKET_WRITES = ServerProperties.FASTER_SOCKET_WRITES.get();
+    public static final boolean ACQUIRABLE_STRICT = ServerProperties.ACQUIRABLE_STRICT.get();
+    public static final boolean UNSAFE_COLLECTIONS = ServerProperties.UNSAFE_COLLECTIONS.get();
+    public static final boolean TEMPLATE_COMPILER = ServerProperties.TEMPLATE_COMPILER.get();
+    public static final boolean PROXY_PROTOCOL = ServerProperties.PROXY_PROTOCOL.get();
+    public static final boolean PROXY_PROTOCOL_REQUIRED = ServerProperties.PROXY_PROTOCOL_REQUIRED.get();
+    public static final int NBT_MAX_DEPTH = ServerProperties.NBT_MAX_DEPTH.get();
 
     @SuppressWarnings("ConstantField") // kept not final for binary compatibility until the next breaking release
-    public static boolean INSIDE_TEST = booleanProperty("minestom.inside-test", false);
+    public static boolean INSIDE_TEST = ServerProperties.INSIDE_TEST.get();
 
     private ServerFlag() {}
-
-    private static boolean booleanProperty(String name) {
-        return Boolean.getBoolean(name);
-    }
-
-    private static boolean booleanProperty(String name, boolean defaultValue) {
-        boolean result = defaultValue;
-        try {
-            final String value = System.getProperty(name);
-            if (value != null) result = Boolean.parseBoolean(value);
-        } catch (IllegalArgumentException | NullPointerException _) {
-            // Invalid or inaccessible property, keep the default
-        }
-        return result;
-    }
-
-    @Contract("_, null -> null; _, !null -> !null")
-    private static String stringProperty(String name, @Nullable String defaultValue) {
-        return System.getProperty(name, defaultValue);
-    }
-
-    @SuppressWarnings("unused")
-    private static String stringProperty(String name) {
-        return System.getProperty(name);
-    }
-
-    private static int intProperty(String name, int defaultValue, int minValue, int maxValue) {
-        int value = Integer.getInteger(name, defaultValue);
-        if (value < minValue || value > maxValue) {
-            throw new IllegalArgumentException(String.format(
-                    "Property '%s' value must be in range [%d..%d] but was %d",
-                    name, minValue, maxValue, value
-            ));
-        }
-        return value;
-    }
-
-    private static int intProperty(String name, int defaultValue) {
-        return intProperty(name, defaultValue, Integer.MIN_VALUE, Integer.MAX_VALUE);
-    }
-
-    private static long longProperty(String name, long defaultValue) {
-        return Long.getLong(name, defaultValue);
-    }
-
-    private static float floatProperty(String name, float defaultValue) {
-        float result = defaultValue;
-        try {
-            final String value = System.getProperty(name);
-            if (value != null) result = Float.parseFloat(value);
-        } catch (IllegalArgumentException | NullPointerException _) {
-            // Invalid or inaccessible property, keep the default
-        }
-        return result;
-    }
 }
