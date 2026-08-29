@@ -1,6 +1,5 @@
 package net.minestom.server.collision;
 
-import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -15,6 +14,7 @@ import net.minestom.server.event.entity.projectile.ProjectileUncollideEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.property.ServerProperties;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
@@ -50,7 +50,7 @@ public class EntityProjectileCollisionIntegrationTest {
         env.process().eventHandler().addListener(ProjectileCollideWithBlockEvent.class, eventRef::set);
 
         final long tick = TimeUnit.SERVER_TICK.getDuration().toMillis();
-        for (int i = 0; i < ServerFlag.SERVER_TICKS_PER_SECOND; ++i) {
+        for (int i = 0; i < ServerProperties.SERVER_TICKS_PER_SECOND.get(); ++i) {
             projectile.tick(i * tick);
         }
 
@@ -64,8 +64,8 @@ public class EntityProjectileCollisionIntegrationTest {
         eventRef.set(null);
         instance.setBlock(blockPosition, Block.AIR);
 
-        for (int i = 0; i < ServerFlag.SERVER_TICKS_PER_SECOND; ++i) {
-            projectile.tick((ServerFlag.SERVER_TICKS_PER_SECOND + i) * tick);
+        for (int i = 0; i < ServerProperties.SERVER_TICKS_PER_SECOND.get(); ++i) {
+            projectile.tick((ServerProperties.SERVER_TICKS_PER_SECOND.get() + i) * tick);
         }
         event = eventRef.get();
         final var event2 = eventRef2.get();
@@ -110,7 +110,7 @@ public class EntityProjectileCollisionIntegrationTest {
         env.process().eventHandler().addChild(eventNode);
 
         final long tick = TimeUnit.SERVER_TICK.getDuration().toMillis();
-        for (int i = 0; i < ServerFlag.SERVER_TICKS_PER_SECOND; ++i) {
+        for (int i = 0; i < ServerProperties.SERVER_TICKS_PER_SECOND.get(); ++i) {
             if (!projectile.isRemoved()) {
                 projectile.tick(i * tick);
             }
@@ -143,7 +143,7 @@ public class EntityProjectileCollisionIntegrationTest {
         });
 
         final long tick = TimeUnit.SERVER_TICK.getDuration().toMillis();
-        for (int i = 0; i < ServerFlag.SERVER_TICKS_PER_SECOND * 5; ++i) {
+        for (int i = 0; i < ServerProperties.SERVER_TICKS_PER_SECOND.get() * 5; ++i) {
             if (!projectile.isRemoved()) {
                 projectile.tick(i * tick);
             }

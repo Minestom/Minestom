@@ -1,9 +1,9 @@
 package net.minestom.server.instance;
 
-import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.ChunkRange;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
+import net.minestom.server.property.ServerProperties;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
@@ -49,7 +49,7 @@ public class ChunkViewerIntegrationTest {
 
     @Test
     public void renderDistance(Env env) {
-        final int viewRadius = ServerFlag.CHUNK_VIEW_DISTANCE;
+        final int viewRadius = ServerProperties.CHUNK_VIEW_DISTANCE.get();
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         // Check initial load
