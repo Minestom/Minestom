@@ -223,7 +223,7 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     @Override
-    public void sendPackets(Collection<SendablePacket> packets) {
+    public void sendPackets(Collection<? extends SendablePacket> packets) {
         for (SendablePacket packet : packets) this.packetQueue.relaxedOffer(packet);
         unlockWriteThread();
     }
