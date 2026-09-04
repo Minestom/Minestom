@@ -16,6 +16,7 @@ import net.kyori.adventure.nbt.LongArrayBinaryTag;
 import net.kyori.adventure.nbt.LongBinaryTag;
 import net.kyori.adventure.nbt.ShortBinaryTag;
 import net.kyori.adventure.nbt.StringBinaryTag;
+import net.minestom.server.property.ServerProperties;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -30,7 +31,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
 
-import static net.minestom.server.ServerFlag.NBT_MAX_DEPTH;
 import static net.minestom.server.network.BinaryTagTypeImpl.TAG_BYTE_ARRAY;
 import static net.minestom.server.network.BinaryTagTypeImpl.TAG_COMPOUND;
 import static net.minestom.server.network.BinaryTagTypeImpl.TAG_END;
@@ -125,14 +125,14 @@ public class BinaryTagTypeImplTest {
 
     @Test
     public void deepNesting() {
-        // NBT_MAX_DEPTH containers is the deepest which round trips, one more must fail either way
-        final BinaryTag deepest = nestedCompounds(NBT_MAX_DEPTH);
+        // ServerProperties.NBT_MAX_DEPTH.get() containers is the deepest which round trips, one more must fail either way
+        final BinaryTag deepest = nestedCompounds(ServerProperties.NBT_MAX_DEPTH.get());
         assertEquals(deepest, read(bytes(deepest)));
 
-        final BinaryTag tooDeep = nestedCompounds(NBT_MAX_DEPTH + 1);
+        final BinaryTag tooDeep = nestedCompounds(ServerProperties.NBT_MAX_DEPTH.get() + 1);
         assertThrows(IllegalArgumentException.class, () -> bytes(tooDeep));
 
-        final byte[] data = nestedCompoundBytes(NBT_MAX_DEPTH + 1);
+        final byte[] data = nestedCompoundBytes(ServerProperties.NBT_MAX_DEPTH.get() + 1);
         assertThrows(IllegalArgumentException.class, () -> read(data));
     }
 

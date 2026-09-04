@@ -1,11 +1,11 @@
 package net.minestom.server.item.instrument;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.ServerFlag;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
+import net.minestom.server.property.ServerProperties;
 import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Holder;
@@ -58,7 +58,7 @@ public sealed interface Instrument extends Holder.Direct<Instrument>, Instrument
     float useDuration();
 
     default int useDurationTicks() {
-        return (int) (useDuration() * ServerFlag.SERVER_TICKS_PER_SECOND);
+        return (int) (useDuration() * ServerProperties.SERVER_TICKS_PER_SECOND.get());
     }
 
     float range();

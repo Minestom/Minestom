@@ -1,6 +1,7 @@
 package net.minestom.server.thread;
 
 import net.minestom.server.entity.Entity;
+import net.minestom.server.property.ServerProperties;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnknownNullability;
 
@@ -170,7 +171,7 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      * Throws an {@link AcquirableOwnershipException} if not owned.
      * <p>
      * This method is only enabled when assertions are enabled or
-     * {@link net.minestom.server.ServerFlag#ACQUIRABLE_STRICT} is set to true.
+     * {@link ServerProperties#ACQUIRABLE_STRICT} is set to true.
      *
      * @throws AcquirableOwnershipException if the current thread does not own the acquirable element
      */

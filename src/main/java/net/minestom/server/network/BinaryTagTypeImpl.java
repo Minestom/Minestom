@@ -14,13 +14,13 @@ import net.kyori.adventure.nbt.LongArrayBinaryTag;
 import net.kyori.adventure.nbt.LongBinaryTag;
 import net.kyori.adventure.nbt.ShortBinaryTag;
 import net.kyori.adventure.nbt.StringBinaryTag;
+import net.minestom.server.property.ServerProperties;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Arrays;
 import java.util.Map;
 
-import static net.minestom.server.ServerFlag.NBT_MAX_DEPTH;
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.DOUBLE;
 import static net.minestom.server.network.NetworkBuffer.FLOAT;
@@ -74,7 +74,7 @@ record BinaryTagTypeImpl() implements NetworkBufferTypeImpl<BinaryTag> {
     private static void writePayload(NetworkBuffer buffer, BinaryTag tag, int depth) {
         switch (tag) {
             case CompoundBinaryTag value -> {
-                if (depth > NBT_MAX_DEPTH) throw new IllegalArgumentException("NBT is nested too deeply (max: " + NBT_MAX_DEPTH + ")");
+                if (depth > ServerProperties.NBT_MAX_DEPTH.get()) throw new IllegalArgumentException("NBT is nested too deeply (max: " + ServerProperties.NBT_MAX_DEPTH.get() + ")");
                 for (Map.Entry<String, ? extends BinaryTag> entry : value) {
                     final BinaryTag child = entry.getValue();
                     buffer.write(BYTE, child.type().id());
@@ -84,7 +84,7 @@ record BinaryTagTypeImpl() implements NetworkBufferTypeImpl<BinaryTag> {
                 buffer.write(BYTE, TAG_END);
             }
             case ListBinaryTag value -> {
-                if (depth > NBT_MAX_DEPTH) throw new IllegalArgumentException("NBT is nested too deeply (max: " + NBT_MAX_DEPTH + ")");
+                if (depth > ServerProperties.NBT_MAX_DEPTH.get()) throw new IllegalArgumentException("NBT is nested too deeply (max: " + ServerProperties.NBT_MAX_DEPTH.get() + ")");
                 // A list encodes a single element type, so a heterogeneous one is boxed into a list of compounds
                 final ListBinaryTag list = value.wrapHeterogeneity();
                 buffer.write(BYTE, list.elementType().id());
@@ -131,7 +131,7 @@ record BinaryTagTypeImpl() implements NetworkBufferTypeImpl<BinaryTag> {
     }
 
     private static CompoundBinaryTag readCompound(NetworkBuffer buffer, int depth) {
-        if (depth > NBT_MAX_DEPTH) throw new IllegalArgumentException("NBT is nested too deeply (max: " + NBT_MAX_DEPTH + ")");
+        if (depth > ServerProperties.NBT_MAX_DEPTH.get()) throw new IllegalArgumentException("NBT is nested too deeply (max: " + ServerProperties.NBT_MAX_DEPTH.get() + ")");
         final CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
         while (true) {
             final byte type = buffer.read(BYTE);
@@ -142,7 +142,7 @@ record BinaryTagTypeImpl() implements NetworkBufferTypeImpl<BinaryTag> {
     }
 
     private static ListBinaryTag readList(NetworkBuffer buffer, int depth) {
-        if (depth > NBT_MAX_DEPTH) throw new IllegalArgumentException("NBT is nested too deeply (max: " + NBT_MAX_DEPTH + ")");
+        if (depth > ServerProperties.NBT_MAX_DEPTH.get()) throw new IllegalArgumentException("NBT is nested too deeply (max: " + ServerProperties.NBT_MAX_DEPTH.get() + ")");
         final byte elementType = buffer.read(BYTE);
         final int size = buffer.read(INT);
         if (size == 0) return ListBinaryTag.empty(); // An empty list has no element type

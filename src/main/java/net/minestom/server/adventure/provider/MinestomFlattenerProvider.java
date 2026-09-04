@@ -3,8 +3,8 @@ package net.minestom.server.adventure.provider;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.flattener.ComponentFlattener;
-import net.minestom.server.ServerFlag;
 import net.minestom.server.adventure.MinestomAdventure;
+import net.minestom.server.property.ServerProperties;
 
 final class MinestomFlattenerProvider {
     static final ComponentFlattener INSTANCE;
@@ -13,7 +13,7 @@ final class MinestomFlattenerProvider {
 
         // handle server-side translations if needed
         builder.complexMapper(TranslatableComponent.class, (component, consumer) -> {
-            if (ServerFlag.AUTOMATIC_COMPONENT_TRANSLATION) {
+            if (ServerProperties.AUTOMATIC_COMPONENT_TRANSLATION.get()) {
                 final Component translated = MinestomAdventure.COMPONENT_TRANSLATOR.apply(component, MinestomAdventure.getDefaultLocale());
 
                 // In case the translated component is also a translatable component, we just leave the key to avoid infinite recursion

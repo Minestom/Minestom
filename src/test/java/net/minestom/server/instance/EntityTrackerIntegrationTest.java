@@ -1,10 +1,10 @@
 package net.minestom.server.instance;
 
-import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
+import net.minestom.server.property.ServerProperties;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ public class EntityTrackerIntegrationTest {
     public void maxDistance(Env env) {
         final Instance instance = env.createFlatInstance();
         final Pos spawnPos = new Pos(0, 41, 0);
-        final int viewDistanceInChunks = ServerFlag.ENTITY_VIEW_DISTANCE;
+        final int viewDistanceInChunks = ServerProperties.ENTITY_VIEW_DISTANCE.get();
 
         final Player viewer = env.createPlayer(instance, spawnPos);
         final AtomicInteger viewersCount = new AtomicInteger();
@@ -51,7 +51,7 @@ public class EntityTrackerIntegrationTest {
         final Instance instance = env.createFlatInstance();
         final Instance anotherInstance = env.createFlatInstance();
         final Pos spawnPos = new Pos(0, 41, 0);
-        final int viewDistanceInChunks = ServerFlag.ENTITY_VIEW_DISTANCE;
+        final int viewDistanceInChunks = ServerProperties.ENTITY_VIEW_DISTANCE.get();
 
         final Player viewer = env.createPlayer(instance, spawnPos);
         final AtomicInteger viewersCount = new AtomicInteger();
