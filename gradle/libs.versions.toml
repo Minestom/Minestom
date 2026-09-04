@@ -32,7 +32,7 @@ nmcp = "1.6.1"
 graaltools = "1.1.8"
 jmh-plugin = "0.7.3"
 jcstress-plugin = "0.9.0"
-errorprone-plugin = "5.1.0"
+errorprone-plugin = "5.1.1"
 
 [libraries]
 
