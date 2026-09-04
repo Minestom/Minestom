@@ -132,7 +132,10 @@ public abstract class Heightmap {
         for (int i = 0; i < sectionsCount; i++) {
             final int sectionY = chunk.getMaxSection() - i - 1;
             final Palette blockPalette = chunk.getSection(sectionY).blockPalette();
-            if (blockPalette.count() != 0) break;
+            if (blockPalette.any(stateId -> {
+                final Block block = Block.fromStateId(stateId);
+                return block == null || !block.air();
+            })) break;
             y -= 16;
         }
         return y;

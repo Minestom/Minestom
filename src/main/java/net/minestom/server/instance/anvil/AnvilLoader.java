@@ -446,7 +446,7 @@ public class AnvilLoader implements ChunkLoader {
 
                 final int globalSectionY = sectionY * 16;
                 // Retrieve block data
-                if (section.blockPalette().singleValue() != -1) {
+                if (section.blockPalette().bitsPerEntry() == 0) {
                     final Block block = Block.fromStateId(section.blockPalette().singleValue());
                     assert block != null;
                     final CompoundBinaryTag blockState = blockStateNbt(block);
@@ -482,7 +482,7 @@ public class AnvilLoader implements ChunkLoader {
                     });
                 }
                 // Retrieve biome data
-                if (section.biomePalette().singleValue() != -1) {
+                if (section.biomePalette().bitsPerEntry() == 0) {
                     final RegistryKey<Biome> biomeKey = biomeRegistry
                             .getKey(section.biomePalette().singleValue());
                     assert biomeKey != null;

@@ -33,8 +33,8 @@ public final class GeneratorImpl {
             this(blocks, biomes, new Int2ObjectOpenHashMap<>(0));
         }
 
-        public GenSection() {
-            this(Palette.blocks(), Palette.biomes());
+        GenSection(DynamicRegistry<Biome> biomeRegistry) {
+            this(Palette.blocks(), Palette.biomes(biomeRegistry.size()));
         }
     }
 
@@ -116,7 +116,7 @@ public final class GeneratorImpl {
             final Fork fork = this.fork;
             if (fork == null) {
                 var minSection = BlockVec.SECTION.mul(sectionX, sectionY, sectionZ);
-                var sections = List.of(section(biomeRegistry, new GenSection(), sectionX, sectionY, sectionZ, true));
+                var sections = List.of(section(biomeRegistry, new GenSection(biomeRegistry), sectionX, sectionY, sectionZ, true));
                 this.fork = new Fork(minSection, 1, 1, 1, sections);
                 return;
             }
@@ -158,7 +158,7 @@ public final class GeneratorImpl {
                     final int newX = indexToX(i, newWidth) + startX;
                     final int newY = indexToY(i, newWidth, newHeight) + startY;
                     final int newZ = indexToZ(i, newWidth, newHeight) + startZ;
-                    final GenerationUnit unit = section(biomeRegistry, new GenSection(), newX, newY, newZ, true);
+                    final GenerationUnit unit = section(biomeRegistry, new GenSection(biomeRegistry), newX, newY, newZ, true);
                     newSections[i] = unit;
                 }
             }
@@ -188,7 +188,7 @@ public final class GeneratorImpl {
             for (int sectionZ = minSectionZ; sectionZ < maxSectionZ; sectionZ++) {
                 for (int sectionY = minSectionY; sectionY < maxSectionY; sectionY++) {
                     for (int sectionX = minSectionX; sectionX < maxSectionX; sectionX++) {
-                        final GenerationUnit unit = section(biomeRegistry, new GenSection(), sectionX, sectionY, sectionZ, true);
+                        final GenerationUnit unit = section(biomeRegistry, new GenSection(biomeRegistry), sectionX, sectionY, sectionZ, true);
                         units[index++] = unit;
                     }
                 }
