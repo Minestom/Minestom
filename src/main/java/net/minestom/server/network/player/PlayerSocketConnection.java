@@ -50,7 +50,6 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.LockSupport;
-import java.util.zip.DataFormatException;
 
 /**
  * Represents a socket connection.
@@ -151,9 +150,15 @@ public class PlayerSocketConnection extends PlayerConnection {
                     startingState, PacketVanilla::nextClientState,
                     compression()
             );
-        } catch (DataFormatException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
-            disconnect();
+        } catch (Throwable e) {
+            // Errors thrown while still in the starting state are usually garbage
+            // from scanners. A packet that errors after a state change within the
+            // same batch is still checked against the starting state.
+            if (startingState.ordinal() > ServerFlag.SUPPRESS_MALFORMED_PACKET_ERROR_LEVEL)
+                MinecraftServer.getExceptionManager().handleException(e);
+            // The remaining packets of the batch are lost, disconnect to avoid
+            // reading from an invalid state.
+            if (ServerFlag.REJECT_MALFORMED_PACKET) disconnect();
             return;
         }
         switch (result) {
@@ -172,8 +177,11 @@ public class PlayerSocketConnection extends PlayerConnection {
                             assert player != null;
                             player.addPacketToQueue(packet);
                         }
-                    } catch (Exception e) {
-                        MinecraftServer.getExceptionManager().handleException(e);
+                    } catch (Throwable e) {
+                        if (startingState.ordinal() > ServerFlag.SUPPRESS_MISUSED_PACKET_ERROR_LEVEL)
+                            MinecraftServer.getExceptionManager().handleException(e);
+                        // Packets already in the queue are unaffected.
+                        if (ServerFlag.REJECT_MISUSED_PACKET) disconnect();
                     }
                 }
                 // Compact in case of incomplete read

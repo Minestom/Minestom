@@ -31,6 +31,15 @@ public final class ServerFlag {
     public static final long KEEP_ALIVE_KICK = longProperty("minestom.keep-alive-kick", 15_000);
     public static final int PLAYER_CHUNK_UPDATE_LIMITER_HISTORY_SIZE = intProperty("minestom.player.chunk-update-limiter-history-size", 5, 0, Integer.MAX_VALUE);
 
+    // Network error handling
+    public static final boolean SUPPRESS_CONNECTION_ACCEPT_ERRORS = booleanProperty("minestom.suppress-connection-accept-errors", true);
+    public static final boolean SUPPRESS_CONNECTION_IO_ERRORS = booleanProperty("minestom.suppress-connection-io-errors", true); // Like peer resets etc
+    public static final int SUPPRESS_MALFORMED_PACKET_ERROR_LEVEL = intProperty("minestom.suppress-malformed-packet-error-level", 0); // Suppress packet read errors for states with ordinal at or below this level
+    public static final int SUPPRESS_MISUSED_PACKET_ERROR_LEVEL = intProperty("minestom.suppress-misused-packet-error-level", 0); // Suppress packet handling errors for states with ordinal at or below this level
+    public static final boolean REJECT_MALFORMED_PACKET = booleanProperty("minestom.reject-malformed-packet", true);
+    public static final boolean REJECT_MISUSED_PACKET = booleanProperty("minestom.reject-misused-packet", false);
+    public static final boolean WARN_UNREAD_BYTES_PACKET = booleanProperty("minestom.warn-unread-bytes-packet", true);
+
     // Network buffers
     public static final int MAX_PACKET_SIZE = intProperty("minestom.max-packet-size", 2_097_151); // 3 bytes var-int
     public static final int MAX_PACKET_SIZE_PRE_AUTH = intProperty("minestom.max-packet-size-pre-auth", 8_192);
