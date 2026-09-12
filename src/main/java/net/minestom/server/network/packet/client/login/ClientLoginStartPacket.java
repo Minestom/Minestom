@@ -15,9 +15,4 @@ public record ClientLoginStartPacket(String username,
             STRING, ClientLoginStartPacket::username,
             UUID, ClientLoginStartPacket::profileId,
             ClientLoginStartPacket::new);
-
-    public ClientLoginStartPacket {
-        if (username.length() > 16)
-            throw new IllegalArgumentException("Username is not allowed to be longer than 16 characters");
-    }
 }

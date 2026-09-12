@@ -2,10 +2,8 @@ package net.minestom.server.timer;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectAVLTreeMap;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.ServerFlag;
+import net.minestom.server.utils.collection.ConcurrentMessageQueues;
 import org.jctools.queues.MessagePassingQueue;
-import org.jctools.queues.MpscUnboundedArrayQueue;
-import org.jctools.queues.atomic.MpscUnboundedAtomicArrayQueue;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -24,8 +22,8 @@ final class SchedulerImpl implements Scheduler {
         return thread;
     });
 
-    private final MessagePassingQueue<TaskImpl> tasksToExecute = ServerFlag.UNSAFE_COLLECTIONS ? new MpscUnboundedArrayQueue<>(64) : new MpscUnboundedAtomicArrayQueue<>(64);
-    private final MessagePassingQueue<TaskImpl> tickEndTasksToExecute = ServerFlag.UNSAFE_COLLECTIONS ? new MpscUnboundedArrayQueue<>(64) : new MpscUnboundedAtomicArrayQueue<>(64);
+    private final MessagePassingQueue<TaskImpl> tasksToExecute = ConcurrentMessageQueues.mpscUnboundedArrayQueue(64);
+    private final MessagePassingQueue<TaskImpl> tickEndTasksToExecute = ConcurrentMessageQueues.mpscUnboundedArrayQueue(64);
     // Tasks scheduled on a certain tick/tick end
     private final Int2ObjectAVLTreeMap<List<TaskImpl>> tickStartTaskQueue = new Int2ObjectAVLTreeMap<>();
     private final Int2ObjectAVLTreeMap<List<TaskImpl>> tickEndTaskQueue = new Int2ObjectAVLTreeMap<>();

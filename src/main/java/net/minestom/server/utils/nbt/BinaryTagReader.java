@@ -10,6 +10,8 @@ import java.util.Map;
 
 // Based on net.kyori.adventure.nbt.BinaryTagReaderImpl licensed under the MIT license.
 // https://github.com/KyoriPowered/adventure/blob/main/4/nbt/src/main/java/net/kyori/adventure/nbt/BinaryTagReaderImpl.java
+@Deprecated(forRemoval = true) // Use NetworkBuffer.NBT instead.
+@SuppressWarnings("removal")
 public class BinaryTagReader {
 
     static {

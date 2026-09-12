@@ -150,6 +150,7 @@ public final class Scratch {
                     }
                     case PacketReading.Result.Empty<ClientPacket> _ -> {
                     }
+                    case PacketReading.Result.Skipped<ClientPacket> _ -> connection.readBuffer.compact();
                     case PacketReading.Result.Failure<ClientPacket> failure ->
                             connection.readBuffer.resize(failure.requiredCapacity());
                 }

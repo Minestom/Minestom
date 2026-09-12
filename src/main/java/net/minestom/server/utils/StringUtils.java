@@ -7,6 +7,28 @@ public class StringUtils {
     public static final String SPACE = " ";
     public static final char SPACE_CHAR = ' ';
 
+    /**
+     * Checks whether a username is valid. (between 1 and 16 characters, printable ASCII)
+     *
+     * @param name The username to check
+     * @return true if the username is valid
+     */
+    public static boolean isValidUsername(final String name) {
+        if (name.isEmpty() || name.length() > 16) {
+            return false;
+        }
+
+        for (int index = 0; index < name.length(); index++) {
+            char character = name.charAt(index);
+
+            if (character <= 32 || character >= 127) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static int countMatches(final CharSequence str, final char ch) {
         if (str.isEmpty()) {
             return 0;

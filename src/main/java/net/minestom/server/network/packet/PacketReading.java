@@ -6,6 +6,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,10 +29,16 @@ public final class PacketReading {
 
     private static final int MAX_VAR_INT_SIZE = 5;
     private static final Result.Empty<?> EMPTY_CLIENT_PACKET = new Result.Empty<>();
+    private static final Result.Skipped<?> SKIPPED_CLIENT_PACKET = new Result.Skipped<>();
 
     @SuppressWarnings("unchecked")
     private static <T> Result<T> emptyResult() {
         return (Result<T>) EMPTY_CLIENT_PACKET;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> Result<T> skippedResult() {
+        return (Result<T>) SKIPPED_CLIENT_PACKET;
     }
 
     public sealed interface Result<T> {
@@ -62,6 +69,12 @@ public final class PacketReading {
         }
 
         /**
+         * Represents one or more complete packets that were intentionally skipped.
+         */
+        record Skipped<T>() implements Result<T> {
+        }
+
+        /**
          * Represents a failure to read a packet due to insufficient buffer capacity.
          * <p>
          * Buffer should be expanded to at least {@code requiredCapacity} bytes.
@@ -73,6 +86,16 @@ public final class PacketReading {
     }
 
     public record ParsedPacket<T>(ConnectionState nextState, T packet) {
+    }
+
+    @FunctionalInterface
+    public interface PacketReader<T> {
+        /**
+         * Reads or skips a packet payload.
+         *
+         * @return the decoded packet, or {@code null} to skip the remainder of the current packet
+         */
+        @Nullable T read(PacketRegistry.PacketInfo<? extends T> packetInfo, NetworkBuffer buffer);
     }
 
     public static Result<ClientPacket> readClients(
@@ -98,10 +121,22 @@ public final class PacketReading {
             BiFunction<T, ConnectionState, ConnectionState> stateUpdater,
             boolean compressed
     ) throws DataFormatException {
+        return readPackets(buffer, parser, state, stateUpdater, compressed, PacketReading::readPacketPayload);
+    }
+
+    public static <T> Result<T> readPackets(
+            NetworkBuffer buffer,
+            PacketParser<T> parser,
+            ConnectionState state,
+            BiFunction<T, ConnectionState, ConnectionState> stateUpdater,
+            boolean compressed,
+            PacketReader<T> packetReader
+    ) throws DataFormatException {
         List<ParsedPacket<T>> packets = new ArrayList<>();
+        boolean skipped = false;
         readLoop:
         while (buffer.readableBytes() > 0) {
-            final Result<T> result = readPacket(buffer, parser, state, stateUpdater, compressed);
+            final Result<T> result = readPacket(buffer, parser, state, stateUpdater, compressed, packetReader);
             if (buffer.readableBytes() == 0 && packets.isEmpty()) return result;
             switch (result) {
                 case Result.Success<T> success -> {
@@ -110,6 +145,7 @@ public final class PacketReading {
                     packets.add(parsedPacket);
                     state = parsedPacket.nextState();
                 }
+                case Result.Skipped<T> _ -> skipped = true;
                 case Result.Empty<T> _ -> {
                     break readLoop;
                 }
@@ -118,7 +154,8 @@ public final class PacketReading {
                 }
             }
         }
-        return !packets.isEmpty() ? new Result.Success<>(packets) : emptyResult();
+        if (!packets.isEmpty()) return new Result.Success<>(packets);
+        return skipped ? skippedResult() : emptyResult();
     }
 
     public static Result<ClientPacket> readClient(
@@ -143,6 +180,17 @@ public final class PacketReading {
             ConnectionState state,
             BiFunction<T, ConnectionState, ConnectionState> stateUpdater,
             boolean compressed
+    ) throws DataFormatException {
+        return readPacket(buffer, parser, state, stateUpdater, compressed, PacketReading::readPacketPayload);
+    }
+
+    public static <T> Result<T> readPacket(
+            NetworkBuffer buffer,
+            PacketParser<T> parser,
+            ConnectionState state,
+            BiFunction<T, ConnectionState, ConnectionState> stateUpdater,
+            boolean compressed,
+            PacketReader<T> packetReader
     ) throws DataFormatException {
         final long beginMark = buffer.readIndex();
         // READ PACKET LENGTH
@@ -176,24 +224,26 @@ public final class PacketReading {
         final PacketRegistry<? extends T> registry = parser.stateRegistry(state);
         final long offset = buffer.advanceRead(packetLength); // ensureReadable checked above
         final NetworkBuffer slice = buffer.slice(offset, packetLength, 0, packetLength).readOnly();
-        final T packet = readFramedPacket(slice, registry, compressed, maxPacketSize);
+        final @Nullable T packet = readFramedPacket(slice, registry, compressed, maxPacketSize, packetReader);
+        if (packet == null) return skippedResult();
         final ConnectionState nextState = stateUpdater.apply(packet, state);
         return new Result.Success<>(new ParsedPacket<>(nextState, packet));
     }
 
-    private static <T> T readFramedPacket(NetworkBuffer buffer,
-                                          PacketRegistry<T> registry,
-                                          boolean compressed,
-                                          int maxPacketSize) throws DataFormatException {
+    private static <T> @Nullable T readFramedPacket(NetworkBuffer buffer,
+                                                    PacketRegistry<? extends T> registry,
+                                                    boolean compressed,
+                                                    int maxPacketSize,
+                                                    PacketReader<T> packetReader) throws DataFormatException {
         if (!compressed) {
             // No compression format
-            return readPayload(buffer, registry);
+            return readPayload(buffer, registry, packetReader);
         }
 
         final int dataLength = buffer.read(VAR_INT);
         if (dataLength == 0) {
             // Uncompressed packet
-            return readPayload(buffer, registry);
+            return readPayload(buffer, registry, packetReader);
         }
         if (dataLength < 0 || dataLength > maxPacketSize) {
             throw new DataFormatException("Invalid decompressed length: " + dataLength);
@@ -209,18 +259,22 @@ public final class PacketReading {
             if (written != dataLength) {
                 throw new DataFormatException("Decompressed length mismatch: expected " + dataLength + ", got " + written);
             }
-            return readPayload(slice.readOnly(), registry);
+            return readPayload(slice.readOnly(), registry, packetReader);
         } finally {
             PacketVanilla.PACKET_POOL.add(poolBuffer);
         }
     }
 
-    private static <T> T readPayload(NetworkBuffer buffer, PacketRegistry<T> registry) {
+    private static <T> @Nullable T readPayload(NetworkBuffer buffer, PacketRegistry<? extends T> registry,
+                                               PacketReader<T> packetReader) {
         final int packetId = buffer.read(VAR_INT);
-        final PacketRegistry.PacketInfo<T> packetInfo = registry.packetInfo(packetId);
-        final NetworkBuffer.Type<T> serializer = packetInfo.serializer();
+        final PacketRegistry.PacketInfo<? extends T> packetInfo = registry.packetInfo(packetId);
         try {
-            final T packet = serializer.read(buffer);
+            final @Nullable T packet = packetReader.read(packetInfo, buffer);
+            if (packet == null) {
+                buffer.readIndex(buffer.writeIndex());
+                return null;
+            }
             if (buffer.readableBytes() != 0) {
                 LOGGER.warn("WARNING: Packet ({}) 0x{} not fully read ({})",
                         packetInfo.packetClass().getSimpleName(), Integer.toHexString(packetId), buffer);
@@ -231,9 +285,13 @@ public final class PacketReading {
         }
     }
 
+    private static <T> T readPacketPayload(PacketRegistry.PacketInfo<? extends T> packetInfo, NetworkBuffer buffer) {
+        return packetInfo.serializer().read(buffer);
+    }
+
     public static int maxPacketSize(ConnectionState state) {
         return switch (state) {
-            case HANDSHAKE, LOGIN -> ServerFlag.MAX_PACKET_SIZE_PRE_AUTH;
+            case HANDSHAKE, STATUS, LOGIN -> ServerFlag.MAX_PACKET_SIZE_PRE_AUTH;
             default -> ServerFlag.MAX_PACKET_SIZE;
         };
     }

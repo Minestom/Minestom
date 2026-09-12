@@ -6,7 +6,7 @@ import net.minestom.server.network.NetworkBuffer;
 public class ArgumentInteger extends ArgumentNumber<Integer> {
 
     public ArgumentInteger(String id) {
-        super(id, ArgumentParserType.INTEGER, Integer::parseInt, Integer::parseInt,
+        super(id, ArgumentParserType.INTEGER, Integer::parseInt,
                 NetworkBuffer.INT, Integer::compare);
     }
 
