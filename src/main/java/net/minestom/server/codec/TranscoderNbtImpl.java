@@ -25,6 +25,7 @@ import java.util.Set;
 @ApiStatus.Internal
 final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     static final TranscoderNbtImpl INSTANCE = new TranscoderNbtImpl();
+    private static final int MAX_DIAGNOSTIC_LENGTH = 64;
 
     @Override
     public BinaryTag createNull() {
@@ -35,7 +36,7 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     public Result<Boolean> getBoolean(BinaryTag value) {
         return value instanceof NumberBinaryTag number
                 ? new Result.Ok<>(number.byteValue() != 0)
-                : new Result.Error<>("Not a boolean: " + value);
+                : typeMismatch("boolean", value);
     }
 
     @Override
@@ -47,7 +48,7 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     public Result<Byte> getByte(BinaryTag value) {
         return value instanceof NumberBinaryTag number
                 ? new Result.Ok<>(number.byteValue())
-                : new Result.Error<>("Not a byte: " + value);
+                : typeMismatch("byte", value);
     }
 
     @Override
@@ -61,7 +62,7 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     public Result<Short> getShort(BinaryTag value) {
         return value instanceof NumberBinaryTag number
                 ? new Result.Ok<>(number.shortValue())
-                : new Result.Error<>("Not a short: " + value);
+                : typeMismatch("short", value);
     }
 
     @Override
@@ -73,7 +74,7 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     public Result<Integer> getInt(BinaryTag value) {
         return value instanceof NumberBinaryTag number
                 ? new Result.Ok<>(number.intValue())
-                : new Result.Error<>("Not an int: " + value);
+                : typeMismatch("int", value);
     }
 
     @Override
@@ -85,7 +86,7 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     public Result<Long> getLong(BinaryTag value) {
         return value instanceof NumberBinaryTag number
                 ? new Result.Ok<>(number.longValue())
-                : new Result.Error<>("Not a long: " + value);
+                : typeMismatch("long", value);
     }
 
     @Override
@@ -97,7 +98,7 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     public Result<Float> getFloat(BinaryTag value) {
         return value instanceof NumberBinaryTag number
                 ? new Result.Ok<>(number.floatValue())
-                : new Result.Error<>("Not a float: " + value);
+                : typeMismatch("float", value);
     }
 
     @Override
@@ -109,7 +110,7 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     public Result<Double> getDouble(BinaryTag value) {
         return value instanceof NumberBinaryTag number
                 ? new Result.Ok<>(number.doubleValue())
-                : new Result.Error<>("Not a double: " + value);
+                : typeMismatch("double", value);
     }
 
     @Override
@@ -121,14 +122,14 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     public Result<Number> getNumber(BinaryTag value) {
         return value instanceof NumberBinaryTag number
                 ? new Result.Ok<>(number.numberValue())
-                : new Result.Error<>("Not a number: " + value);
+                : typeMismatch("number", value);
     }
 
     @Override
     public Result<String> getString(BinaryTag value) {
         return value instanceof StringBinaryTag string
                 ? new Result.Ok<>(string.value())
-                : new Result.Error<>("Not a string: " + value);
+                : typeMismatch("string", value);
     }
 
     @Override
@@ -139,7 +140,7 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     @Override
     public Result<List<BinaryTag>> getList(BinaryTag value) {
         if (!(value instanceof ListBinaryTag listTagWrapped))
-            return new Result.Error<>("Not a list: " + value);
+            return typeMismatch("list", value);
         final ListBinaryTag listTag = listTagWrapped.unwrapHeterogeneity();
         return new Result.Ok<>(new AbstractList<>() {
             @Override
@@ -179,7 +180,7 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     @Override
     public Result<MapLike<BinaryTag>> getMap(BinaryTag value) {
         if (!(value instanceof CompoundBinaryTag compoundTag))
-            return new Result.Error<>("Not a compound: " + value);
+            return typeMismatch("compound", value);
         return new Result.Ok<>(new MapLike<>() {
             @Override
             public Set<String> keys() {
@@ -310,7 +311,28 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
             }
             case IntArrayBinaryTag intArrayTag -> new Result.Ok<>(coder.createIntArray(intArrayTag.value()));
             case LongArrayBinaryTag longArrayTag -> new Result.Ok<>(coder.createLongArray(longArrayTag.value()));
-            default -> new Result.Error<>("Unsupported type: " + value);
+            default -> new Result.Error<>("Unsupported NBT type: " + describe(value));
         };
+    }
+
+    private static <T> Result.Error<T> typeMismatch(String expected, BinaryTag value) {
+        return new Result.Error<>("Expected " + expected + " NBT, found " + describe(value));
+    }
+
+    // Tags may come from clients, so never render more than a bounded preview
+    private static String describe(BinaryTag value) {
+        final String preview = switch (value) {
+            case NumberBinaryTag number -> String.valueOf(number.numberValue());
+            case StringBinaryTag string -> string.value().length() > MAX_DIAGNOSTIC_LENGTH
+                    ? '"' + string.value().substring(0, MAX_DIAGNOSTIC_LENGTH) + "\"..."
+                    : '"' + string.value() + '"';
+            case CompoundBinaryTag compound -> "{" + compound.size() + " entries}";
+            case ListBinaryTag list -> "[" + list.size() + " entries]";
+            case ByteArrayBinaryTag array -> "[B; " + array.size() + " entries]";
+            case IntArrayBinaryTag array -> "[I; " + array.size() + " entries]";
+            case LongArrayBinaryTag array -> "[L; " + array.size() + " entries]";
+            default -> "";
+        };
+        return preview.isEmpty() ? value.type().toString() : value.type() + " " + preview;
     }
 }

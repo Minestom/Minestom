@@ -22,7 +22,7 @@ public record NbtPredicate(@Nullable CompoundBinaryTag nbt) implements Predicate
             },
             MinestomAdventure.tagStringIO()::asString
     )).transform(NbtPredicate::new, NbtPredicate::nbt);
-    public static final NetworkBuffer.Type<NbtPredicate> NETWORK_TYPE = NetworkBuffer.NBT_COMPOUND.transform(NbtPredicate::new, NbtPredicate::nbt);
+    public static final NetworkBuffer.Type<NbtPredicate> NETWORK_TYPE = NetworkBuffer.UNTRUSTED_NBT_COMPOUND.transform(NbtPredicate::new, NbtPredicate::nbt);
 
     /**
      * Checks to see if everything in {@code standard} is contained in {@code comparison}. The comparison is allowed to

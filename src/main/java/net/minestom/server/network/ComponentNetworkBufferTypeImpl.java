@@ -43,7 +43,7 @@ import static net.minestom.server.network.BinaryTagTypeImpl.TAG_LIST;
 import static net.minestom.server.network.BinaryTagTypeImpl.TAG_STRING;
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.INT;
-import static net.minestom.server.network.NetworkBuffer.NBT;
+import static net.minestom.server.network.NetworkBuffer.UNTRUSTED_NBT;
 import static net.minestom.server.network.NetworkBuffer.STRING_IO_UTF8;
 
 record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Component> {
@@ -62,7 +62,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
         final Transcoder<BinaryTag> coder = registries != null
                 ? new RegistryTranscoder<>(Transcoder.NBT, registries)
                 : Transcoder.NBT;
-        return Codec.COMPONENT.decode(coder, buffer.read(NBT)).orElseThrow();
+        return Codec.COMPONENT.decode(coder, buffer.read(UNTRUSTED_NBT)).orElseThrow();
     }
 
     // WRITING IMPL, pretty gross. Would not recommend reading.

@@ -16,6 +16,15 @@ import net.kyori.adventure.nbt.LongArrayBinaryTag;
 import net.kyori.adventure.nbt.LongBinaryTag;
 import net.kyori.adventure.nbt.ShortBinaryTag;
 import net.kyori.adventure.nbt.StringBinaryTag;
+import net.minestom.server.component.DataComponents;
+import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
+import net.minestom.server.item.component.CustomData;
+import net.minestom.server.network.packet.PacketReading;
+import net.minestom.server.network.packet.PacketWriting;
+import net.minestom.server.network.packet.client.play.ClientCreativeInventoryActionPacket;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -30,6 +39,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
 
+import static net.minestom.server.ServerFlag.MAX_PACKET_SIZE;
 import static net.minestom.server.ServerFlag.NBT_MAX_DEPTH;
 import static net.minestom.server.network.BinaryTagTypeImpl.TAG_BYTE_ARRAY;
 import static net.minestom.server.network.BinaryTagTypeImpl.TAG_COMPOUND;
@@ -42,12 +52,17 @@ import static net.minestom.server.network.NetworkBuffer.INT;
 import static net.minestom.server.network.NetworkBuffer.NBT;
 import static net.minestom.server.network.NetworkBuffer.NBT_COMPOUND;
 import static net.minestom.server.network.NetworkBuffer.STRING_IO_UTF8;
+import static net.minestom.server.network.NetworkBuffer.UNTRUSTED_NBT;
+import static net.minestom.server.network.NetworkBuffer.UNTRUSTED_NBT_COMPOUND;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class BinaryTagTypeImplTest {
+@EnvTest
+public class BinaryTagTypeImplIntegrationTest {
     private static final byte TAG_UNKNOWN = 42;
+    private static final int NBT_ENTRY_COUNT = 100_000;
 
     static {
         BinaryTagTypes.COMPOUND.id(); // Populates the adventure type registry read from below
@@ -162,6 +177,65 @@ public class BinaryTagTypeImplTest {
     }
 
     @Test
+    public void allocationLimit() {
+        final int entryCount = 8_000;
+        final byte[] value = new byte[256];
+        final NetworkBuffer buffer = NetworkBuffer.resizableBuffer();
+        buffer.write(BYTE, TAG_LIST);
+        buffer.write(BYTE, TAG_BYTE_ARRAY);
+        buffer.write(INT, entryCount);
+        for (int i = 0; i < entryCount; i++) {
+            buffer.write(INT, value.length);
+            buffer.write(NetworkBuffer.RAW_BYTES, value);
+        }
+
+        assertEquals(2_080_006, buffer.writeIndex());
+        assertTrue(buffer.writeIndex() < MAX_PACKET_SIZE,
+                "The encoded NBT fits in one packet despite exceeding its allocation budget");
+        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> buffer.read(UNTRUSTED_NBT));
+        assertTrue(exception.getMessage().contains("NBT is too large"));
+        // Trusted NBT is not limited
+        buffer.readIndex(0);
+        assertEquals(entryCount, ((ListBinaryTag) buffer.read(NBT)).size());
+    }
+
+    @Test
+    public void untrustedCompoundAllocationLimit() {
+        final CompoundBinaryTag tag = CompoundBinaryTag.builder()
+                .putByteArray("data", new byte[3_000_000])
+                .build();
+        final byte[] bytes = NetworkBuffer.makeArray(NBT_COMPOUND, tag);
+
+        assertEquals(tag, NetworkBuffer.wrap(bytes, 0, bytes.length).read(NBT_COMPOUND));
+        assertThrows(IllegalArgumentException.class,
+                () -> NetworkBuffer.wrap(bytes, 0, bytes.length).read(UNTRUSTED_NBT_COMPOUND));
+    }
+
+    @Test
+    public void packetAllocationLimit(Env env) {
+        assertTrue(env.process().registries() != null);
+        final CompoundBinaryTag.Builder nbt = CompoundBinaryTag.builder();
+        for (int i = 0; i < NBT_ENTRY_COUNT; i++) {
+            nbt.putByte(Integer.toString(i, Character.MAX_RADIX), (byte) 1);
+        }
+        final ItemStack item = ItemStack.of(Material.STONE)
+                .with(DataComponents.CUSTOM_DATA, new CustomData(nbt.build()));
+        final ClientCreativeInventoryActionPacket packet =
+                new ClientCreativeInventoryActionPacket((short) 1, item);
+
+        final NetworkBuffer framed = NetworkBuffer.resizableBuffer();
+        PacketWriting.writeFramedPacket(framed, ConnectionState.PLAY, packet, 0);
+        assertTrue(framed.writeIndex() < MAX_PACKET_SIZE,
+                "The high-object-count NBT fits in one permitted play packet");
+
+        final RuntimeException exception = assertThrows(RuntimeException.class,
+                () -> PacketReading.readClients(framed, ConnectionState.PLAY, false));
+        assertTrue(hasCauseMessage(exception, "too much decoded data") ||
+                hasCauseMessage(exception, "NBT is too large"), exception::toString);
+    }
+
+    @Test
     public void malformedInput() {
         assertRejected(IllegalArgumentException.class, buffer -> { // Non empty list of TAG_End
             buffer.write(BYTE, TAG_LIST);
@@ -223,6 +297,13 @@ public class BinaryTagTypeImplTest {
         final NetworkBuffer buffer = NetworkBuffer.resizableBuffer();
         writer.accept(buffer);
         assertThrows(expected, () -> buffer.read(NBT));
+    }
+
+    private static boolean hasCauseMessage(Throwable throwable, String expected) {
+        for (Throwable current = throwable; current != null; current = current.getCause()) {
+            if (current.getMessage() != null && current.getMessage().contains(expected)) return true;
+        }
+        return false;
     }
 
     private static BinaryTag nestedCompounds(int depth) {
