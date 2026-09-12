@@ -23,7 +23,7 @@ public record TypedCustomData<T>(T type, CompoundBinaryTag nbt) implements TagRe
     public static <T> NetworkBuffer.Type<TypedCustomData<T>> networkType(NetworkBuffer.Type<T> typeNetwork) {
         return NetworkBufferTemplate.template(
                 typeNetwork, TypedCustomData::type,
-                NetworkBuffer.NBT_COMPOUND, TypedCustomData::nbt,
+                NetworkBuffer.UNTRUSTED_NBT_COMPOUND, TypedCustomData::nbt,
                 TypedCustomData::new
         );
     }

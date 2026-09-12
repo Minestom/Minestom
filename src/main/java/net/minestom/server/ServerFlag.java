@@ -78,6 +78,7 @@ public final class ServerFlag {
     public static final boolean PROXY_PROTOCOL = booleanProperty("minestom.proxy-protocol", false);
     public static final boolean PROXY_PROTOCOL_REQUIRED = booleanProperty("minestom.proxy-protocol.required", false);
     public static final int NBT_MAX_DEPTH = intProperty("minestom.nbt.max-depth", 512, 1, Integer.MAX_VALUE); // Binary tags are read and written recursively, so raising this can overflow the java stack
+    public static final int NBT_MAX_BYTES = intProperty("minestom.nbt.max-bytes", 2_097_152, 1, Integer.MAX_VALUE); // Approximate decoded heap usage, not encoded bytes
 
     @SuppressWarnings("ConstantField") // kept not final for binary compatibility until the next breaking release
     public static boolean INSIDE_TEST = booleanProperty("minestom.inside-test", false);

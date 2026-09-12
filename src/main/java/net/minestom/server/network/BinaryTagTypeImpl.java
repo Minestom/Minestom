@@ -20,6 +20,7 @@ import org.jetbrains.annotations.ApiStatus;
 import java.util.Arrays;
 import java.util.Map;
 
+import static net.minestom.server.ServerFlag.NBT_MAX_BYTES;
 import static net.minestom.server.ServerFlag.NBT_MAX_DEPTH;
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.DOUBLE;
@@ -36,9 +37,11 @@ import static net.minestom.server.network.NetworkBuffer.SHORT;
 import static net.minestom.server.network.NetworkBuffer.STRING_IO_UTF8;
 
 @ApiStatus.Internal
-record BinaryTagTypeImpl() implements NetworkBufferTypeImpl<BinaryTag> {
-    static final NetworkBuffer.Type<BinaryTag> INSTANCE = new BinaryTagTypeImpl();
-    static final NetworkBuffer.Type<CompoundBinaryTag> INSTANCE_COMPOUND = new CompoundType();
+record BinaryTagTypeImpl(boolean untrusted) implements NetworkBufferTypeImpl<BinaryTag> {
+    static final NetworkBuffer.Type<BinaryTag> INSTANCE = new BinaryTagTypeImpl(false);
+    static final NetworkBuffer.Type<CompoundBinaryTag> INSTANCE_COMPOUND = new CompoundType(false);
+    static final NetworkBuffer.Type<BinaryTag> UNTRUSTED_INSTANCE = new BinaryTagTypeImpl(true);
+    static final NetworkBuffer.Type<CompoundBinaryTag> UNTRUSTED_INSTANCE_COMPOUND = new CompoundType(true);
 
     static final byte TAG_END = 0;
     static final byte TAG_BYTE = 1;
@@ -54,6 +57,10 @@ record BinaryTagTypeImpl() implements NetworkBufferTypeImpl<BinaryTag> {
     static final byte TAG_INT_ARRAY = 11;
     static final byte TAG_LONG_ARRAY = 12;
 
+    private static final long COMPOUND_KEY_HEADER_SIZE = 28;
+    private static final long COMPOUND_ENTRY_SIZE = 36;
+    private static final long LIST_ENTRY_SIZE = 4;
+
     @Override
     public void write(NetworkBuffer buffer, BinaryTag value) {
         buffer.write(BYTE, value.type().id());
@@ -68,7 +75,7 @@ record BinaryTagTypeImpl() implements NetworkBufferTypeImpl<BinaryTag> {
 
     @Override
     public BinaryTag read(NetworkBuffer buffer) {
-        return readPayload(buffer, buffer.read(BYTE), 1);
+        return readPayload(buffer, buffer.read(BYTE), 1, ReadLimiter.of(untrusted));
     }
 
     private static void writePayload(NetworkBuffer buffer, BinaryTag tag, int depth) {
@@ -111,7 +118,8 @@ record BinaryTagTypeImpl() implements NetworkBufferTypeImpl<BinaryTag> {
         }
     }
 
-    private static BinaryTag readPayload(NetworkBuffer buffer, byte type, int depth) {
+    private static BinaryTag readPayload(NetworkBuffer buffer, byte type, int depth, ReadLimiter limiter) {
+        limiter.accountTag(type);
         return switch (type) {
             case TAG_END -> EndBinaryTag.endBinaryTag();
             case TAG_BYTE -> ByteBinaryTag.byteBinaryTag(buffer.read(BYTE));
@@ -120,53 +128,62 @@ record BinaryTagTypeImpl() implements NetworkBufferTypeImpl<BinaryTag> {
             case TAG_LONG -> LongBinaryTag.longBinaryTag(buffer.read(LONG));
             case TAG_FLOAT -> FloatBinaryTag.floatBinaryTag(buffer.read(FLOAT));
             case TAG_DOUBLE -> DoubleBinaryTag.doubleBinaryTag(buffer.read(DOUBLE));
-            case TAG_STRING -> StringBinaryTag.stringBinaryTag(buffer.read(STRING_IO_UTF8));
-            case TAG_BYTE_ARRAY -> ByteArrayBinaryTag.byteArrayBinaryTag(readByteArray(buffer));
-            case TAG_INT_ARRAY -> IntArrayBinaryTag.intArrayBinaryTag(readIntArray(buffer));
-            case TAG_LONG_ARRAY -> LongArrayBinaryTag.longArrayBinaryTag(readLongArray(buffer));
-            case TAG_COMPOUND -> readCompound(buffer, depth);
-            case TAG_LIST -> readList(buffer, depth);
+            case TAG_STRING -> {
+                final String value = buffer.read(STRING_IO_UTF8);
+                limiter.accountBytes((long) Character.BYTES * value.length());
+                yield StringBinaryTag.stringBinaryTag(value);
+            }
+            case TAG_BYTE_ARRAY -> ByteArrayBinaryTag.byteArrayBinaryTag(readByteArray(buffer, limiter));
+            case TAG_INT_ARRAY -> IntArrayBinaryTag.intArrayBinaryTag(readIntArray(buffer, limiter));
+            case TAG_LONG_ARRAY -> LongArrayBinaryTag.longArrayBinaryTag(readLongArray(buffer, limiter));
+            case TAG_COMPOUND -> readCompound(buffer, depth, limiter);
+            case TAG_LIST -> readList(buffer, depth, limiter);
             default -> throw new IllegalArgumentException("Invalid NBT type id: " + type);
         };
     }
 
-    private static CompoundBinaryTag readCompound(NetworkBuffer buffer, int depth) {
+    private static CompoundBinaryTag readCompound(NetworkBuffer buffer, int depth, ReadLimiter limiter) {
         if (depth > NBT_MAX_DEPTH) throw new IllegalArgumentException("NBT is nested too deeply (max: " + NBT_MAX_DEPTH + ")");
         final CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
         while (true) {
             final byte type = buffer.read(BYTE);
             if (type == TAG_END) return builder.build();
             final String name = buffer.read(STRING_IO_UTF8);
-            builder.put(name, readPayload(buffer, type, depth + 1));
+            limiter.accountBytes(COMPOUND_KEY_HEADER_SIZE + (long) Character.BYTES * name.length());
+            // Charge every encoded entry. Duplicate keys still require parsing and temporary allocation.
+            limiter.accountBytes(COMPOUND_ENTRY_SIZE);
+            builder.put(name, readPayload(buffer, type, depth + 1, limiter));
         }
     }
 
-    private static ListBinaryTag readList(NetworkBuffer buffer, int depth) {
+    private static ListBinaryTag readList(NetworkBuffer buffer, int depth, ReadLimiter limiter) {
         if (depth > NBT_MAX_DEPTH) throw new IllegalArgumentException("NBT is nested too deeply (max: " + NBT_MAX_DEPTH + ")");
         final byte elementType = buffer.read(BYTE);
         final int size = buffer.read(INT);
+        Check.argCondition(size < 0, "NBT list size cannot be negative: {0}", size);
         if (size == 0) return ListBinaryTag.empty(); // An empty list has no element type
         Check.argCondition(elementType == TAG_END, "NBT list of TAG_End must be empty (size: {0})", size);
-        // Every entry takes at least minimumSize bytes, so a negative or larger size cannot be read
+        limiter.accountBytes(LIST_ENTRY_SIZE * size);
+        // Every entry takes at least minimumSize bytes, so an oversized claim cannot be read
         buffer.ensureReadable((long) size * minimumSize(elementType));
         final BinaryTag[] entries = new BinaryTag[size];
-        for (int i = 0; i < size; i++) entries[i] = readPayload(buffer, elementType, depth + 1);
+        for (int i = 0; i < size; i++) entries[i] = readPayload(buffer, elementType, depth + 1, limiter);
         // Every entry was read as elementType, so the first one carries it
         return ListBinaryTag.listBinaryTag(entries[0].type(), Arrays.asList(entries));
     }
 
-    private static byte[] readByteArray(NetworkBuffer buffer) {
-        final int length = readArrayLength(buffer, Byte.BYTES);
+    private static byte[] readByteArray(NetworkBuffer buffer, ReadLimiter limiter) {
+        final int length = readArrayLength(buffer, Byte.BYTES, limiter);
         return buffer.read(FixedRawBytes(length));
     }
 
-    private static int[] readIntArray(NetworkBuffer buffer) {
-        final int length = readArrayLength(buffer, Integer.BYTES);
+    private static int[] readIntArray(NetworkBuffer buffer, ReadLimiter limiter) {
+        final int length = readArrayLength(buffer, Integer.BYTES, limiter);
         return buffer.read(FixedRawInts(length));
     }
 
-    private static long[] readLongArray(NetworkBuffer buffer) {
-        final int length = readArrayLength(buffer, Long.BYTES);
+    private static long[] readLongArray(NetworkBuffer buffer, ReadLimiter limiter) {
+        final int length = readArrayLength(buffer, Long.BYTES, limiter);
         return buffer.read(FixedRawLongs(length));
     }
 
@@ -180,8 +197,10 @@ record BinaryTagTypeImpl() implements NetworkBufferTypeImpl<BinaryTag> {
         buffer.write(RAW_LONGS, array);
     }
 
-    private static int readArrayLength(NetworkBuffer buffer, int elementSize) {
+    private static int readArrayLength(NetworkBuffer buffer, int elementSize, ReadLimiter limiter) {
         final int length = buffer.read(INT);
+        Check.argCondition(length < 0, "NBT array size cannot be negative: {0}", length);
+        limiter.accountBytes((long) length * elementSize);
         buffer.ensureReadable((long) length * elementSize);
         return length;
     }
@@ -200,7 +219,35 @@ record BinaryTagTypeImpl() implements NetworkBufferTypeImpl<BinaryTag> {
         };
     }
 
-    private record CompoundType() implements NetworkBufferTypeImpl<CompoundBinaryTag> {
+    private static final class ReadLimiter {
+        // Approximate retained heap costs by tag (id).
+        private static final int[] TAG_SIZES = {8, 9, 10, 12, 16, 12, 16, 24, 36, 36, 48, 24, 24};
+
+        private long remainingBytes;
+
+        private ReadLimiter(long maxBytes) {
+            this.remainingBytes = maxBytes;
+        }
+
+        private static ReadLimiter of(boolean untrusted) {
+            return new ReadLimiter(untrusted ? NBT_MAX_BYTES : Long.MAX_VALUE);
+        }
+
+        private void accountTag(byte type) {
+            Check.argCondition(type < 0 || type >= TAG_SIZES.length, "Invalid NBT type id: {0}", type);
+            accountBytes(TAG_SIZES[type]);
+        }
+
+        private void accountBytes(long size) {
+            if (size < 0) throw new IllegalArgumentException("Cannot account a negative NBT size: " + size);
+            if (size > remainingBytes) {
+                throw new IllegalArgumentException("NBT is too large (max: " + NBT_MAX_BYTES + " bytes)");
+            }
+            remainingBytes -= size;
+        }
+    }
+
+    private record CompoundType(boolean untrusted) implements NetworkBufferTypeImpl<CompoundBinaryTag> {
         @Override
         public void write(NetworkBuffer buffer, CompoundBinaryTag value) {
             buffer.write(BYTE, TAG_COMPOUND);
@@ -211,7 +258,7 @@ record BinaryTagTypeImpl() implements NetworkBufferTypeImpl<BinaryTag> {
         public CompoundBinaryTag read(NetworkBuffer buffer) {
             final byte type = buffer.read(BYTE);
             Check.argCondition(type != TAG_COMPOUND, "Binary tag is not a compound: {0}", type);
-            return readCompound(buffer, 1);
+            return (CompoundBinaryTag) readPayload(buffer, type, 1, ReadLimiter.of(untrusted));
         }
     }
 }

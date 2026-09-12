@@ -45,6 +45,7 @@ import static net.minestom.server.network.NetworkBuffer.FixedRawLongs;
 import static net.minestom.server.network.NetworkBuffer.INT;
 import static net.minestom.server.network.NetworkBuffer.LONG;
 import static net.minestom.server.network.NetworkBuffer.NBT;
+import static net.minestom.server.network.NetworkBuffer.UNTRUSTED_NBT;
 import static net.minestom.server.network.NetworkBuffer.RAW_BYTES;
 import static net.minestom.server.network.NetworkBuffer.RAW_LONGS;
 import static net.minestom.server.network.NetworkBuffer.SHORT;
@@ -986,7 +987,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         public T read(NetworkBuffer buffer) {
             final Registries registries = buffer.registries();
             Check.stateCondition(registries == null, "Buffer does not have registries");
-            final Result<T> result = nbtType.decode(new RegistryTranscoder<>(Transcoder.NBT, registries), buffer.read(NBT));
+            final Result<T> result = nbtType.decode(new RegistryTranscoder<>(Transcoder.NBT, registries), buffer.read(UNTRUSTED_NBT));
             return switch (result) {
                 case Result.Ok(T value) -> value;
                 case Result.Error(String message) -> throw new IllegalArgumentException("Invalid NBT tag: " + message);
