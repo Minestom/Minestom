@@ -49,6 +49,7 @@ public abstract class PlayerConnection {
     private @Nullable PlayerPublicKey playerPublicKey;
     volatile boolean online;
     private volatile boolean wasTransferred;
+    private boolean statusRequestReceived;
 
     @SuppressWarnings("this-escape") // deliberate self registration during construction
     private @Nullable LoginPluginMessageProcessor loginPluginMessageProcessor = new LoginPluginMessageProcessor(this);
@@ -192,6 +193,18 @@ public abstract class PlayerConnection {
      */
     public boolean isOnline() {
         return online;
+    }
+
+    /**
+     * Marks the single status request permitted during a server-list ping exchange.
+     *
+     * @return {@code true} for the first request, {@code false} for duplicates
+     */
+    @ApiStatus.Internal
+    public boolean markStatusRequestReceived() {
+        if (statusRequestReceived) return false;
+        statusRequestReceived = true;
+        return true;
     }
 
     /**

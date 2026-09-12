@@ -233,7 +233,7 @@ public final class PacketReading {
 
     public static int maxPacketSize(ConnectionState state) {
         return switch (state) {
-            case HANDSHAKE, LOGIN -> ServerFlag.MAX_PACKET_SIZE_PRE_AUTH;
+            case HANDSHAKE, STATUS, LOGIN -> ServerFlag.MAX_PACKET_SIZE_PRE_AUTH;
             default -> ServerFlag.MAX_PACKET_SIZE;
         };
     }
