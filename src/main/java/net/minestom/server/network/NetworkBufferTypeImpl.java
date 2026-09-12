@@ -59,6 +59,15 @@ import static net.minestom.server.network.NetworkBufferImpl.impl;
 interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     int SEGMENT_BITS = 0x7F;
     int CONTINUE_BIT = 0x80;
+    int MAX_INITIAL_COLLECTION_SIZE = 65_536;
+
+    private static int initialCollectionSize(NetworkBuffer buffer, int size) {
+        if (size == 0) return 0;
+        // Avoid reserving substantially more storage than the input currently
+        // available. Zero-byte element types still work because arrays grow.
+        final long inputBackedSize = Math.max(1, buffer.readableBytes());
+        return (int) Math.min(size, Math.min(MAX_INITIAL_COLLECTION_SIZE, inputBackedSize));
+    }
 
     record UnitType() implements NetworkBufferTypeImpl<Unit> {
         @Override
@@ -1048,10 +1057,17 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         @Override
         public Map<K, V> read(NetworkBuffer buffer) {
             final int size = buffer.read(VAR_INT);
-            Check.argCondition(size > maxSize, "Map size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
-            K[] keys = (K[]) new Object[size];
-            V[] values = (V[]) new Object[size];
+            Check.argCondition(size < 0 || size > maxSize,
+                    "Map size ({0}) is outside the allowed range (0-{1})", size, maxSize);
+            final int initialSize = initialCollectionSize(buffer, size);
+            K[] keys = (K[]) new Object[initialSize];
+            V[] values = (V[]) new Object[initialSize];
             for (int i = 0; i < size; i++) {
+                if (i == keys.length) {
+                    final int newSize = (int) Math.min(size, (long) keys.length * 2);
+                    keys = Arrays.copyOf(keys, newSize);
+                    values = Arrays.copyOf(values, newSize);
+                }
                 keys[i] = buffer.read(parent);
                 values[i] = buffer.read(valueType);
             }
@@ -1074,9 +1090,16 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         @Override
         public List<T> read(NetworkBuffer buffer) {
             final int size = buffer.read(VAR_INT);
-            Check.argCondition(size > maxSize, "Collection size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
-            T[] values = (T[]) new Object[size];
-            for (int i = 0; i < size; i++) values[i] = buffer.read(parent);
+            Check.argCondition(size < 0 || size > maxSize,
+                    "Collection size ({0}) is outside the allowed range (0-{1})", size, maxSize);
+            T[] values = (T[]) new Object[initialCollectionSize(buffer, size)];
+            for (int i = 0; i < size; i++) {
+                if (i == values.length) {
+                    final int newSize = (int) Math.min(size, (long) values.length * 2);
+                    values = Arrays.copyOf(values, newSize);
+                }
+                values[i] = buffer.read(parent);
+            }
             return List.of(values);
         }
     }
@@ -1096,9 +1119,16 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         @Override
         public Set<T> read(NetworkBuffer buffer) {
             final int size = buffer.read(VAR_INT);
-            Check.argCondition(size > maxSize, "Collection size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
-            T[] values = (T[]) new Object[size];
-            for (int i = 0; i < size; i++) values[i] = buffer.read(parent);
+            Check.argCondition(size < 0 || size > maxSize,
+                    "Collection size ({0}) is outside the allowed range (0-{1})", size, maxSize);
+            T[] values = (T[]) new Object[initialCollectionSize(buffer, size)];
+            for (int i = 0; i < size; i++) {
+                if (i == values.length) {
+                    final int newSize = (int) Math.min(size, (long) values.length * 2);
+                    values = Arrays.copyOf(values, newSize);
+                }
+                values[i] = buffer.read(parent);
+            }
             return Set.of(values);
         }
     }

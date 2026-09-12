@@ -94,16 +94,21 @@ final class RegistryNetworkTypes {
         public RegistryTag<T> read(NetworkBuffer buffer) {
             final var registries = Objects.requireNonNull(buffer.registries(), "Buffer is missing registries");
             final var registry = selector.select(registries);
-            int count = buffer.read(NetworkBuffer.VAR_INT) - 1;
-            if (count < 0) {
+            final int encodedCount = buffer.read(NetworkBuffer.VAR_INT);
+            if (encodedCount == 0) {
                 final var key = buffer.read(NetworkBuffer.KEY);
                 final var tag = registry.getTag(key);
                 Check.stateCondition(tag == null, "No such tag {0} for registry {1}", key, registry.key());
                 return tag;
-            } else if (count == 0) {
+            } else if (encodedCount == 1) {
                 return RegistryTag.empty();
             } else {
-                final List<RegistryKey<T>> keys = new ArrayList<>(count);
+                Check.stateCondition(encodedCount < 0, "Invalid registry tag size: {0}", encodedCount);
+                final int count = encodedCount - 1;
+                Check.stateCondition(count > registry.size(),
+                        "Registry tag size ({0}) is higher than registry size ({1})", count, registry.size());
+                final int initialSize = (int) Math.min(count, buffer.readableBytes());
+                final List<RegistryKey<T>> keys = new ArrayList<>(initialSize);
                 for (int i = 0; i < count; i++) {
                     final int id = buffer.read(NetworkBuffer.VAR_INT);
                     final var key = registry.getKey(id);

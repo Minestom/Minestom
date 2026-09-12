@@ -211,10 +211,12 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
 
         @Override
         public DataComponentMap read(NetworkBuffer buffer) {
-            int added = buffer.read(NetworkBuffer.VAR_INT);
-            int removed = isPatch ? buffer.read(NetworkBuffer.VAR_INT) : 0;
-            Check.stateCondition(added + removed > 256, "Data component map too large: {0}", added + removed);
-            Int2ObjectMap<@Nullable Object> patch = new Int2ObjectArrayMap<>(added + removed);
+            final int added = buffer.read(NetworkBuffer.VAR_INT);
+            final int removed = isPatch ? buffer.read(NetworkBuffer.VAR_INT) : 0;
+            Check.stateCondition(added < 0 || added > 256, "Invalid added component count: {0}", added);
+            Check.stateCondition(removed < 0 || removed > 256, "Invalid removed component count: {0}", removed);
+            final int total = added + removed;
+            Int2ObjectMap<@Nullable Object> patch = new Int2ObjectArrayMap<>(total);
             for (int i = 0; i < added; i++) {
                 int id = buffer.read(NetworkBuffer.VAR_INT);
                 @SuppressWarnings("unchecked")
