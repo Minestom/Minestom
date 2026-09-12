@@ -222,6 +222,7 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
                 @SuppressWarnings("unchecked")
                 DataComponent<Object> type = (DataComponent<@NotNull Object>) this.idToType.apply(id);
                 Check.notNull(type, "Unknown component: {0}", id);
+                Check.stateCondition(patch.containsKey(type.id()), "Duplicate component: {0}", id);
                 if (isTrusted) {
                     patch.put(type.id(), type.read(buffer));
                 } else {
@@ -235,7 +236,10 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
             }
             for (int i = 0; i < removed; i++) {
                 int id = buffer.read(NetworkBuffer.VAR_INT);
-                patch.put(id, null);
+                final DataComponent<?> type = this.idToType.apply(id);
+                Check.notNull(type, "Unknown component: {0}", id);
+                Check.stateCondition(patch.containsKey(type.id()), "Duplicate component: {0}", id);
+                patch.put(type.id(), null);
             }
             return new DataComponentMapImpl(patch);
         }

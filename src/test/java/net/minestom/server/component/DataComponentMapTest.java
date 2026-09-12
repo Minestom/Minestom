@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class DataComponentMapTest {
 
     @Test
-    void networkPatchRejectsInvalidCounts() {
+    void networkPatchRejectsInvalidCountsAndRemovalIds() {
         final NetworkBuffer negative = NetworkBuffer.resizableBuffer();
         negative.write(NetworkBuffer.VAR_INT, -1);
         negative.write(NetworkBuffer.VAR_INT, 0);
@@ -29,6 +29,22 @@ public class DataComponentMapTest {
         tooManyRemoved.write(NetworkBuffer.VAR_INT, 0);
         tooManyRemoved.write(NetworkBuffer.VAR_INT, 257);
         assertThrows(RuntimeException.class, () -> tooManyRemoved.read(DataComponent.PATCH_NETWORK_TYPE));
+
+        final NetworkBuffer unknownRemoval = NetworkBuffer.resizableBuffer();
+        unknownRemoval.write(NetworkBuffer.VAR_INT, 0);
+        unknownRemoval.write(NetworkBuffer.VAR_INT, 1);
+        unknownRemoval.write(NetworkBuffer.VAR_INT, Integer.MAX_VALUE);
+        assertThrows(RuntimeException.class, () -> unknownRemoval.read(DataComponent.PATCH_NETWORK_TYPE));
+    }
+
+    @Test
+    void networkPatchRejectsDuplicateEntries() {
+        final NetworkBuffer duplicateRemoval = NetworkBuffer.resizableBuffer();
+        duplicateRemoval.write(NetworkBuffer.VAR_INT, 0);
+        duplicateRemoval.write(NetworkBuffer.VAR_INT, 2);
+        duplicateRemoval.write(NetworkBuffer.VAR_INT, DataComponents.CUSTOM_NAME.id());
+        duplicateRemoval.write(NetworkBuffer.VAR_INT, DataComponents.CUSTOM_NAME.id());
+        assertThrows(RuntimeException.class, () -> duplicateRemoval.read(DataComponent.PATCH_NETWORK_TYPE));
     }
 
     @Test
