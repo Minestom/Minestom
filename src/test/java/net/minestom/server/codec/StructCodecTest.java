@@ -19,7 +19,7 @@ public class StructCodecTest {
         }
 
         var codec = StructCodec.struct(Empty::new);
-        var result = codec.decode(TranscoderNbtImpl.INSTANCE, snbt("{}"));
+        var result = codec.decode(Transcoder.NBT, snbt("{}"));
         assertEquals(new Empty(), assertOk(result));
     }
 
@@ -31,7 +31,7 @@ public class StructCodecTest {
         var codec = StructCodec.struct(
                 "name", Codec.STRING, TheObject::name,
                 TheObject::new);
-        var result = codec.decode(TranscoderNbtImpl.INSTANCE, snbt("{name: \"test\"}"));
+        var result = codec.decode(Transcoder.NBT, snbt("{name: \"test\"}"));
         assertEquals(new TheObject("test"), assertOk(result));
     }
 
@@ -43,7 +43,7 @@ public class StructCodecTest {
         var codec = StructCodec.struct(
                 "name", Codec.STRING, TheObject::name,
                 TheObject::new);
-        var result = codec.decode(TranscoderNbtImpl.INSTANCE, snbt("{}"));
+        var result = codec.decode(Transcoder.NBT, snbt("{}"));
         assertError("name: No such key: name", result);
     }
 
@@ -55,7 +55,7 @@ public class StructCodecTest {
         var codec = StructCodec.struct(
                 "name", Codec.STRING.optional(), TheObject::name,
                 TheObject::new);
-        var result = codec.decode(TranscoderNbtImpl.INSTANCE, snbt("{}"));
+        var result = codec.decode(Transcoder.NBT, snbt("{}"));
         assertEquals(new TheObject(null), assertOk(result));
     }
 
@@ -67,7 +67,7 @@ public class StructCodecTest {
         var codec = StructCodec.struct(
                 "name", Codec.STRING.optional("defaultValue"), TheObject::name,
                 TheObject::new);
-        var result = codec.decode(TranscoderNbtImpl.INSTANCE, snbt("{}"));
+        var result = codec.decode(Transcoder.NBT, snbt("{}"));
         assertEquals(new TheObject("defaultValue"), assertOk(result));
     }
 
@@ -80,8 +80,24 @@ public class StructCodecTest {
                 "name", Codec.STRING.optional(), TheObject::name,
                 TheObject::new
         );
-        var result = codec.decode(TranscoderNbtImpl.INSTANCE, snbt("{\"name\": 2}"));
-        assertError("name: Not a string: IntBinaryTagImpl[value=2]", result);
+        var result = codec.decode(Transcoder.NBT, snbt("{\"name\": 2}"));
+        assertError("name: Expected string NBT, found BinaryTagType[IntBinaryTag 3 (numeric)] 2", result);
+    }
+
+    @Test
+    void incorrectTypeDiagnosticIsTruncated() {
+        record TheObject(int value) {
+        }
+
+        var codec = StructCodec.struct(
+                "value", Codec.INT, TheObject::value,
+                TheObject::new
+        );
+        var result = codec.decode(Transcoder.NBT, snbt("{value: \"" + "a".repeat(100) + "\"}"));
+        assertError("value: Expected int NBT, found BinaryTagType[StringBinaryTag 8] \"" + "a".repeat(64) + "\"...", result);
+
+        result = codec.decode(Transcoder.NBT, snbt("{value: [1, 2, 3]}"));
+        assertError("value: Expected int NBT, found BinaryTagType[ListBinaryTag 9] [3 entries]", result);
     }
 
     @Test
@@ -122,10 +138,10 @@ public class StructCodecTest {
                         InnerObject::new
                 ), TheObject::inner,
                 TheObject::new);
-        var result = codec.decode(TranscoderNbtImpl.INSTANCE, snbt("{name: \"test\", value: \"innerValue\"}"));
+        var result = codec.decode(Transcoder.NBT, snbt("{name: \"test\", value: \"innerValue\"}"));
         assertEquals(new TheObject("test", new InnerObject("innerValue")), assertOk(result));
 
-        var encodeResult = codec.encode(TranscoderNbtImpl.INSTANCE, new TheObject("test", new InnerObject("innerValue")));
+        var encodeResult = codec.encode(Transcoder.NBT, new TheObject("test", new InnerObject("innerValue")));
         assertEquals(snbt("{name: \"test\", value: \"innerValue\"}"), assertOk(encodeResult));
     }
 
@@ -143,10 +159,10 @@ public class StructCodecTest {
                         InnerObject::new
                 ), TheObject::inner,
                 TheObject::new);
-        var result = codec.decode(TranscoderNbtImpl.INSTANCE, snbt("{name: \"test\", value: \"innerValue\"}"));
+        var result = codec.decode(Transcoder.NBT, snbt("{name: \"test\", value: \"innerValue\"}"));
         assertEquals(new TheObject("test", new InnerObject("innerValue")), assertOk(result));
 
-        var encodeResult = codec.encode(TranscoderNbtImpl.INSTANCE, new TheObject("test", new InnerObject("innerValue")));
+        var encodeResult = codec.encode(Transcoder.NBT, new TheObject("test", new InnerObject("innerValue")));
         assertEquals(snbt("{name: \"test\", value: \"innerValue\"}"), assertOk(encodeResult));
     }
 
