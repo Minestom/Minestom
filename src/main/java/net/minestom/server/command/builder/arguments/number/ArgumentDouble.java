@@ -6,7 +6,7 @@ import net.minestom.server.network.NetworkBuffer;
 public class ArgumentDouble extends ArgumentNumber<Double> {
 
     public ArgumentDouble(String id) {
-        super(id, ArgumentParserType.DOUBLE, Double::parseDouble, (s, radix) -> (double) Long.parseLong(s, radix),
+        super(id, ArgumentParserType.DOUBLE, Double::parseDouble,
                 NetworkBuffer.DOUBLE, Double::compare);
     }
 

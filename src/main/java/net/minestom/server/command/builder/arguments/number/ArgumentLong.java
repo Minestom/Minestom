@@ -6,7 +6,7 @@ import net.minestom.server.network.NetworkBuffer;
 public class ArgumentLong extends ArgumentNumber<Long> {
 
     public ArgumentLong(String id) {
-        super(id, ArgumentParserType.LONG, Long::parseLong, Long::parseLong,
+        super(id, ArgumentParserType.LONG, Long::parseLong,
                 NetworkBuffer.LONG, Long::compare);
     }
 

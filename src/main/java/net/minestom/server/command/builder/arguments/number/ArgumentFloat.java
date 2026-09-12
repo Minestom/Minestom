@@ -6,7 +6,7 @@ import net.minestom.server.network.NetworkBuffer;
 public class ArgumentFloat extends ArgumentNumber<Float> {
 
     public ArgumentFloat(String id) {
-        super(id, ArgumentParserType.FLOAT, Float::parseFloat, (s, radix) -> (float) Integer.parseInt(s, radix),
+        super(id, ArgumentParserType.FLOAT, Float::parseFloat,
                 NetworkBuffer.FLOAT, Float::compare);
     }
 
