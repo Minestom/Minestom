@@ -206,7 +206,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     private @Nullable Instance pendingInstance = null;
     private int dimensionTypeId;
-    private GameMode gameMode;
+    private volatile GameMode gameMode;
     private WorldPos deathLocation;
 
     /**
