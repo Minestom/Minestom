@@ -28,7 +28,7 @@ logback = "1.6.3"
 
 # Gradle plugins
 blossom = "2.2.0"
-nmcp = "1.6.1"
+nmcp = "1.6.2"
 graaltools = "1.1.8"
 jmh-plugin = "0.7.3"
 jcstress-plugin = "0.9.0"
