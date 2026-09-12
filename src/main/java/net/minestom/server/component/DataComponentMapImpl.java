@@ -225,8 +225,11 @@ record DataComponentMapImpl(Int2ObjectMap<@Nullable Object> components) implemen
                 if (isTrusted) {
                     patch.put(type.id(), type.read(buffer));
                 } else {
-                    final byte[] array = buffer.read(NetworkBuffer.BYTE_ARRAY);
-                    final NetworkBuffer tempBuffer = NetworkBuffer.wrap(array, 0, array.length, buffer.registries());
+                    final int length = buffer.read(NetworkBuffer.VAR_INT);
+                    Check.argCondition(length < 0, "Component data length cannot be negative: {0}", length);
+                    buffer.ensureReadable(length);
+                    final long offset = buffer.advanceRead(length);
+                    final NetworkBuffer tempBuffer = buffer.slice(offset, length, 0, length).readOnly();
                     patch.put(type.id(), type.read(tempBuffer));
                 }
             }
