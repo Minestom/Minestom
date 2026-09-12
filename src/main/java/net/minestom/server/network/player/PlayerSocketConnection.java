@@ -3,6 +3,7 @@ package net.minestom.server.network.player;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.adventure.MinestomAdventure;
+import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.ListenerHandle;
@@ -12,6 +13,7 @@ import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.PacketReading;
+import net.minestom.server.network.packet.PacketRegistry;
 import net.minestom.server.network.packet.PacketVanilla;
 import net.minestom.server.network.packet.PacketWriting;
 import net.minestom.server.network.packet.client.ClientPacket;
@@ -25,6 +27,7 @@ import net.minestom.server.network.packet.client.login.ClientEncryptionResponseP
 import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPacket;
 import net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
+import net.minestom.server.network.packet.client.play.ClientCreativeInventoryActionPacket;
 import net.minestom.server.network.packet.client.status.StatusRequestPacket;
 import net.minestom.server.network.packet.server.BufferedPacket;
 import net.minestom.server.network.packet.server.CachedPacket;
@@ -145,11 +148,12 @@ public class PlayerSocketConnection extends PlayerConnection {
         final ConnectionState startingState = getClientState();
         final PacketReading.Result<ClientPacket> result;
         try {
-            result = PacketReading.readPackets(
+            result = PacketReading.<ClientPacket>readPackets(
                     readBuffer,
                     packetParser,
                     startingState, PacketVanilla::nextClientState,
-                    compression()
+                    compression(),
+                    this::readClientPacket
             );
         } catch (DataFormatException e) {
             MinecraftServer.getExceptionManager().handleException(e);
@@ -182,14 +186,26 @@ public class PlayerSocketConnection extends PlayerConnection {
             case PacketReading.Result.Empty<ClientPacket> _ -> {
                 // Empty
             }
+            case PacketReading.Result.Skipped<ClientPacket> _ -> readBuffer.compact();
             case PacketReading.Result.Failure<ClientPacket> failure -> {
-                // Resize for next read
+                readBuffer.compact(); // Discard any complete frames before resize
                 final long requiredCapacity = failure.requiredCapacity();
-                assert requiredCapacity > readBuffer.capacity() :
-                        "New capacity should be greater than the current one: " + requiredCapacity + " <= " + readBuffer.capacity();
-                readBuffer.resize(requiredCapacity);
+                if (requiredCapacity > readBuffer.capacity()) {
+                    readBuffer.resize(requiredCapacity);
+                }
             }
         }
+    }
+
+    @Nullable ClientPacket readClientPacket(PacketRegistry.PacketInfo<? extends ClientPacket> packetInfo,
+                                            NetworkBuffer buffer) {
+        if (packetInfo.packetClass() == ClientCreativeInventoryActionPacket.class) {
+            final Player player = getPlayer();
+            if (player == null || player.getGameMode() != GameMode.CREATIVE) {
+                return null;
+            }
+        }
+        return packetInfo.serializer().read(buffer);
     }
 
     /**
