@@ -6,7 +6,7 @@ metadata.format.version = "1.1"
 data = "26.2-rv3"
 adventure = "5.2.0"
 jetbrainsAnnotations = "26.1.0"
-slf4j = "2.0.18"
+slf4j = "2.0.19"
 
 # Performance / Data Structures
 fastutil = "8.5.19"
