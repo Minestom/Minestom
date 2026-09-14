@@ -10,6 +10,7 @@ import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.thread.Acquirable;
 import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,8 +37,14 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
      */
     @SuppressWarnings("this-escape") // deliberate self registration during construction
     public EntityCreature(EntityType entityType, UUID uuid) {
-        super(entityType, uuid);
+        super(validateEntityType(entityType), uuid);
         heal();
+    }
+
+    private static EntityType validateEntityType(EntityType entityType) {
+        Check.argCondition(!entityType.shouldSendAttributes(),
+                "EntityCreature requires a living entity type, got " + entityType.name());
+        return entityType;
     }
 
     public EntityCreature(EntityType entityType) {
