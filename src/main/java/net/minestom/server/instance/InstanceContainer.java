@@ -73,8 +73,9 @@ public class InstanceContainer extends Instance {
 
     private static final NoopChunkLoaderImpl DEFAULT_LOADER = NoopChunkLoaderImpl.INSTANCE;
 
+    // vanilla's NeighborUpdater.UPDATE_ORDER
     private static final BlockFace[] BLOCK_UPDATE_FACES = new BlockFace[]{
-            BlockFace.WEST, BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.BOTTOM, BlockFace.TOP
+            BlockFace.WEST, BlockFace.EAST, BlockFace.BOTTOM, BlockFace.TOP, BlockFace.NORTH, BlockFace.SOUTH
     };
 
     // the shared instances assigned to this instance
