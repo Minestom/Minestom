@@ -21,6 +21,7 @@ import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.PacketVanilla;
 import net.minestom.server.network.socket.Server;
+import net.minestom.server.property.ServerProperties;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.scoreboard.TeamManager;
@@ -98,7 +99,7 @@ final class ServerProcessImpl implements ServerProcess, Registries.Delegating {
 
         this.server = new Server(packetParser);
 
-        this.dispatcher = ThreadDispatcher.dispatcher(ThreadProvider.counter(), ServerFlag.DISPATCHER_THREADS);
+        this.dispatcher = ThreadDispatcher.dispatcher(ThreadProvider.counter(), ServerProperties.DISPATCHER_THREADS.get());
         this.ticker = new TickerImpl();
     }
 
@@ -234,7 +235,7 @@ final class ServerProcessImpl implements ServerProcess, Registries.Delegating {
         LOGGER.info("{} server started successfully.", brand);
 
         // Stop the server on SIGINT
-        if (ServerFlag.SHUTDOWN_ON_SIGNAL) Runtime.getRuntime().addShutdownHook(new Thread(this::stop));
+        if (ServerProperties.SHUTDOWN_ON_SIGNAL.get()) Runtime.getRuntime().addShutdownHook(new Thread(this::stop));
     }
 
     @Override

@@ -1,10 +1,10 @@
 package net.minestom.server.network.packet;
 
-import net.minestom.server.ServerFlag;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.property.ServerProperties;
 import org.jctools.queues.MessagePassingQueue;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -164,7 +164,7 @@ public final class PacketWriting {
             return tmpBuffer.copy(0, tmpBuffer.writeIndex());
         } catch (IndexOutOfBoundsException _) {
             final long sizeOf = serializer.sizeOf(packet, tmpBuffer.registries());
-            if (sizeOf > ServerFlag.MAX_PACKET_SIZE) {
+            if (sizeOf > ServerProperties.MAX_PACKET_SIZE.get()) {
                 throw new IllegalStateException("Packet too large: " + sizeOf);
             }
             // Add 15 bytes to account for the 3 potential varints in the packet header
@@ -202,7 +202,7 @@ public final class PacketWriting {
                 buffer.writeIndex(index);
                 if (written < minWrite) {
                     // Try again with a bigger buffer
-                    final long newSize = Math.min(buffer.capacity() * 2, ServerFlag.MAX_PACKET_SIZE);
+                    final long newSize = Math.min(buffer.capacity() * 2, ServerProperties.MAX_PACKET_SIZE.get());
                     if (newSize == buffer.capacity()) break; // We reached the maximum size
                     buffer.resize(newSize);
                 } else {

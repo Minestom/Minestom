@@ -23,6 +23,7 @@ import net.minestom.server.item.component.CustomData;
 import net.minestom.server.network.packet.PacketReading;
 import net.minestom.server.network.packet.PacketWriting;
 import net.minestom.server.network.packet.client.play.ClientCreativeInventoryActionPacket;
+import net.minestom.server.property.ServerProperties;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
@@ -39,8 +40,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
 
-import static net.minestom.server.ServerFlag.MAX_PACKET_SIZE;
-import static net.minestom.server.ServerFlag.NBT_MAX_DEPTH;
 import static net.minestom.server.network.BinaryTagTypeImpl.TAG_BYTE_ARRAY;
 import static net.minestom.server.network.BinaryTagTypeImpl.TAG_COMPOUND;
 import static net.minestom.server.network.BinaryTagTypeImpl.TAG_END;
@@ -140,14 +139,14 @@ public class BinaryTagTypeImplIntegrationTest {
 
     @Test
     public void deepNesting() {
-        // NBT_MAX_DEPTH containers is the deepest which round trips, one more must fail either way
-        final BinaryTag deepest = nestedCompounds(NBT_MAX_DEPTH);
+        // ServerProperties.NBT_MAX_DEPTH.get() containers is the deepest which round trips, one more must fail either way
+        final BinaryTag deepest = nestedCompounds(ServerProperties.NBT_MAX_DEPTH.get());
         assertEquals(deepest, read(bytes(deepest)));
 
-        final BinaryTag tooDeep = nestedCompounds(NBT_MAX_DEPTH + 1);
+        final BinaryTag tooDeep = nestedCompounds(ServerProperties.NBT_MAX_DEPTH.get() + 1);
         assertThrows(IllegalArgumentException.class, () -> bytes(tooDeep));
 
-        final byte[] data = nestedCompoundBytes(NBT_MAX_DEPTH + 1);
+        final byte[] data = nestedCompoundBytes(ServerProperties.NBT_MAX_DEPTH.get() + 1);
         assertThrows(IllegalArgumentException.class, () -> read(data));
     }
 
@@ -190,7 +189,7 @@ public class BinaryTagTypeImplIntegrationTest {
         }
 
         assertEquals(2_080_006, buffer.writeIndex());
-        assertTrue(buffer.writeIndex() < MAX_PACKET_SIZE,
+        assertTrue(buffer.writeIndex() < ServerProperties.MAX_PACKET_SIZE.get(),
                 "The encoded NBT fits in one packet despite exceeding its allocation budget");
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> buffer.read(UNTRUSTED_NBT));
@@ -226,7 +225,7 @@ public class BinaryTagTypeImplIntegrationTest {
 
         final NetworkBuffer framed = NetworkBuffer.resizableBuffer();
         PacketWriting.writeFramedPacket(framed, ConnectionState.PLAY, packet, 0);
-        assertTrue(framed.writeIndex() < MAX_PACKET_SIZE,
+        assertTrue(framed.writeIndex() < ServerProperties.MAX_PACKET_SIZE.get(),
                 "The high-object-count NBT fits in one permitted play packet");
 
         final RuntimeException exception = assertThrows(RuntimeException.class,
