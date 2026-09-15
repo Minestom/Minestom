@@ -13,7 +13,8 @@ import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.client.play.ClientCommandChatPacket;
 import net.minestom.server.network.packet.client.play.ClientSignedCommandChatPacket;
 
-import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 public class ChatMessageListener {
     private static final CommandManager COMMAND_MANAGER = MinecraftServer.getCommandManager();
@@ -49,12 +50,12 @@ public class ChatMessageListener {
             return;
         }
 
-        final Collection<Player> players = CONNECTION_MANAGER.getOnlinePlayers();
+        final Set<Player> players = CONNECTION_MANAGER.getOnlinePlayers();
         PlayerChatEvent playerChatEvent = new PlayerChatEvent(player, players, message);
 
         // Call the event
         EventDispatcher.callCancellable(playerChatEvent, () -> {
-            final Collection<Player> recipients = playerChatEvent.getRecipients();
+            final List<Player> recipients = playerChatEvent.getRecipients();
 
             if (!recipients.isEmpty()) {
                 // delegate to the messenger to avoid sending messages we shouldn't be

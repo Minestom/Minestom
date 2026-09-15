@@ -16,9 +16,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public record Status(
         Component description,
@@ -90,7 +90,7 @@ public record Status(
         }
 
         public static PlayerInfo onlineCount() {
-            final Collection<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
+            final Set<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
             return new PlayerInfo(players.size(), players.size() + 1, List.of());
         }
 
@@ -101,7 +101,7 @@ public record Status(
          * @return A {@link PlayerInfo} containing the online count, and a sample of online players.
          */
         public static PlayerInfo online(int maxSamples) {
-            final Collection<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
+            final Set<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
             final List<NamedAndIdentified> samples = new ArrayList<>(Math.min(maxSamples, players.size()));
             for (final Player player : players) {
                 if (!player.getSettings().allowServerListings())
