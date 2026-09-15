@@ -345,20 +345,41 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
             if (!(json instanceof JsonObject root))
                 throw new IllegalStateException("Failed to load registry " + key() + ": expected a JSON object, got " + json);
 
-            final Transcoder<JsonElement> transcoder = registries != null ? new RegistryTranscoder<>(Transcoder.JSON, registries) : Transcoder.JSON;
-            List<Map.Entry<String, JsonElement>> entries = new ArrayList<>(root.entrySet());
-            if (idComparator != null) entries.sort(Map.Entry.comparingByKey(idComparator));
-            for (Map.Entry<String, JsonElement> entry : entries) {
-                final String namespace = entry.getKey();
-                final Result<T> valueResult = codec.decode(transcoder, entry.getValue());
-                if (valueResult instanceof Result.Ok(T value)) {
-                    register(namespace, value, DataPack.MINECRAFT_CORE);
-                } else {
-                    throw new IllegalStateException("Failed to decode registry entry " + namespace + " for registry " + key() + ": " + valueResult);
-                }
-            }
+            loadJsonEntries(registries, idComparator, codec, root);
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Registers every entry of a JSON object as a vanilla pack entry.
+     * <p>
+     * An entry may reference another entry of this registry listed after it, so entries that fail to decode are
+     * retried once the rest of the pass has registered. A pass that registers nothing means the remaining entries
+     * are broken or reference each other in a cycle, and loading fails with the first decode error of that pass.
+     *
+     * @throws IllegalStateException when an entry cannot be decoded
+     */
+    void loadJsonEntries(@Nullable Registries registries, @Nullable Comparator<String> idComparator, Codec<T> codec, JsonObject root) {
+        final Transcoder<JsonElement> transcoder = registries != null ? new RegistryTranscoder<>(Transcoder.JSON, registries) : Transcoder.JSON;
+        List<Map.Entry<String, JsonElement>> pending = new ArrayList<>(root.entrySet());
+        if (idComparator != null) pending.sort(Map.Entry.comparingByKey(idComparator));
+        while (!pending.isEmpty()) {
+            final List<Map.Entry<String, JsonElement>> failed = new ArrayList<>();
+            Result<T> firstFailure = null;
+            for (Map.Entry<String, JsonElement> entry : pending) {
+                final Result<T> valueResult = codec.decode(transcoder, entry.getValue());
+                if (valueResult instanceof Result.Ok(T value)) {
+                    register(entry.getKey(), value, DataPack.MINECRAFT_CORE);
+                } else {
+                    if (firstFailure == null) firstFailure = valueResult;
+                    failed.add(entry);
+                }
+            }
+            if (failed.size() == pending.size()) {
+                throw new IllegalStateException("Failed to decode registry entry " + failed.getFirst().getKey() + " for registry " + key() + ": " + firstFailure);
+            }
+            pending = failed;
         }
     }
 }

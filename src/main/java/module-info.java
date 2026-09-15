@@ -111,8 +111,10 @@ module net.minestom.server {
     exports net.minestom.server.instance.block;
     exports net.minestom.server.instance.block.banner;
     exports net.minestom.server.instance.block.jukebox;
+    exports net.minestom.server.instance.block.pot;
     exports net.minestom.server.instance.block.predicate;
     exports net.minestom.server.instance.block.rule;
+    exports net.minestom.server.instance.block.transformer;
     exports net.minestom.server.instance.fluid;
     exports net.minestom.server.instance.gamerule;
     exports net.minestom.server.instance.generator;
@@ -133,6 +135,7 @@ module net.minestom.server {
     exports net.minestom.server.listener.common;
     exports net.minestom.server.listener.manager;
     exports net.minestom.server.listener.preplay;
+    exports net.minestom.server.loot.number;
     exports net.minestom.server.map;
     exports net.minestom.server.map.framebuffers;
     exports net.minestom.server.message;
@@ -195,6 +198,7 @@ module net.minestom.server {
     exports net.minestom.server.world.biome;
     exports net.minestom.server.world.timeline;
     exports net.minestom.server.world.clock;
+    exports net.minestom.server.world.generation;
 
     provides ComponentLoggerProvider with MinestomComponentLoggerProvider;
     provides ANSIComponentSerializer.Provider with MinestomAnsiComponentSerializerProvider;

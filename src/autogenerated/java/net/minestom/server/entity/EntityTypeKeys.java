@@ -77,6 +77,8 @@ public interface EntityTypeKeys {
 
     RegistryKey<EntityType> CREEPER = RegistryKey.unsafeOf("creeper");
 
+    RegistryKey<EntityType> CUSHION = RegistryKey.unsafeOf("cushion");
+
     RegistryKey<EntityType> DARK_OAK_BOAT = RegistryKey.unsafeOf("dark_oak_boat");
 
     RegistryKey<EntityType> DARK_OAK_CHEST_BOAT = RegistryKey.unsafeOf("dark_oak_chest_boat");
@@ -226,6 +228,10 @@ public interface EntityTypeKeys {
     RegistryKey<EntityType> PLAYER = RegistryKey.unsafeOf("player");
 
     RegistryKey<EntityType> POLAR_BEAR = RegistryKey.unsafeOf("polar_bear");
+
+    RegistryKey<EntityType> POPLAR_BOAT = RegistryKey.unsafeOf("poplar_boat");
+
+    RegistryKey<EntityType> POPLAR_CHEST_BOAT = RegistryKey.unsafeOf("poplar_chest_boat");
 
     RegistryKey<EntityType> PUFFERFISH = RegistryKey.unsafeOf("pufferfish");
 

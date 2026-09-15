@@ -179,9 +179,13 @@ public interface BlockSoundTypeKeys {
 
     RegistryKey<BlockSoundType> POLISHED_TUFF = RegistryKey.unsafeOf("polished_tuff");
 
+    RegistryKey<BlockSoundType> POPLAR_LEAVES = RegistryKey.unsafeOf("poplar_leaves");
+
     RegistryKey<BlockSoundType> POTENT_SULFUR = RegistryKey.unsafeOf("potent_sulfur");
 
     RegistryKey<BlockSoundType> POWDER_SNOW = RegistryKey.unsafeOf("powder_snow");
+
+    RegistryKey<BlockSoundType> RED_SHRUB = RegistryKey.unsafeOf("red_shrub");
 
     RegistryKey<BlockSoundType> RESIN = RegistryKey.unsafeOf("resin");
 
@@ -207,6 +211,8 @@ public interface BlockSoundTypeKeys {
 
     RegistryKey<BlockSoundType> SHELF = RegistryKey.unsafeOf("shelf");
 
+    RegistryKey<BlockSoundType> SHELF_MUSHROOM = RegistryKey.unsafeOf("shelf_mushroom");
+
     RegistryKey<BlockSoundType> SHROOMLIGHT = RegistryKey.unsafeOf("shroomlight");
 
     RegistryKey<BlockSoundType> SLIME_BLOCK = RegistryKey.unsafeOf("slime_block");
@@ -230,6 +236,8 @@ public interface BlockSoundTypeKeys {
     RegistryKey<BlockSoundType> STEM = RegistryKey.unsafeOf("stem");
 
     RegistryKey<BlockSoundType> STONE = RegistryKey.unsafeOf("stone");
+
+    RegistryKey<BlockSoundType> STRAW_BED = RegistryKey.unsafeOf("straw_bed");
 
     RegistryKey<BlockSoundType> SULFUR = RegistryKey.unsafeOf("sulfur");
 

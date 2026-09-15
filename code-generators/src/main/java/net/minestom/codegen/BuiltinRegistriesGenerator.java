@@ -1,6 +1,5 @@
 package net.minestom.codegen;
 
-import com.palantir.javapoet.AnnotationSpec;
 import com.palantir.javapoet.ClassName;
 import com.palantir.javapoet.FieldSpec;
 import com.palantir.javapoet.ParameterizedTypeName;
@@ -53,18 +52,6 @@ record BuiltinRegistriesGenerator(Codegen codegen) {
                             .initializer("$T.unsafeOf($S)", registryKeyClass, codegen.namespaceShort(spec.key()))
                             .addJavadoc("The registry key for {@link $T}.\n", valueClass)
                             .build());
-                    final String compatibilityName = codegen.constantName(spec.key());
-                    if (!constantName.equals(compatibilityName)) {
-                        constants.addField(FieldSpec.builder(typedRegistryKey, compatibilityName)
-                                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                                .addAnnotation(AnnotationSpec.builder(Deprecated.class)
-                                        .addMember("forRemoval", "$L", true)
-                                        .build())
-                                .initializer("$L", constantName)
-                                .addJavadoc("Compatibility alias for {@link #$L}.\n\n", constantName)
-                                .addJavadoc("@deprecated use {@link #$L}\n", constantName)
-                                .build());
-                    }
                 });
 
         addRegistry(constants, registryKeyClass, registryClass,

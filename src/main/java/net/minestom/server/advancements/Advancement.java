@@ -294,7 +294,7 @@ public class Advancement {
 
     protected AdvancementsPacket.DisplayData toDisplayData() {
         return new AdvancementsPacket.DisplayData(title, description, icon,
-                frameType, getFlags(), background, x, y);
+                frameType, getFlags(), background);
     }
 
     /**
@@ -308,7 +308,7 @@ public class Advancement {
         AdvancementsPacket.Advancement adv = new AdvancementsPacket.Advancement(parentIdentifier, toDisplayData(),
                 List.of(new AdvancementsPacket.Requirement(List.of(criteria.criterionIdentifier()))),
                 sendTelemetryData);
-        return new AdvancementsPacket.AdvancementMapping(getIdentifier(), adv);
+        return new AdvancementsPacket.AdvancementMapping(getIdentifier(), adv, x, y);
     }
 
     /**

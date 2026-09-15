@@ -4,19 +4,13 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerHandAnimationEvent;
-import net.minestom.server.network.packet.client.play.ClientAnimationPacket;
+import net.minestom.server.network.packet.client.play.ClientPunchPacket;
 
 public class AnimationListener {
 
-    public static void animationListener(ClientAnimationPacket packet, Player player) {
-        final PlayerHand hand = packet.hand();
-        PlayerHandAnimationEvent handAnimationEvent = new PlayerHandAnimationEvent(player, hand);
-        EventDispatcher.callCancellable(handAnimationEvent, () -> {
-            switch (hand) {
-                case MAIN -> player.swingMainHand(true);
-                case OFF -> player.swingOffHand(true);
-            }
-        });
+    public static void punchListener(ClientPunchPacket packet, Player player) {
+        PlayerHandAnimationEvent handAnimationEvent = new PlayerHandAnimationEvent(player, PlayerHand.MAIN);
+        EventDispatcher.callCancellable(handAnimationEvent, () -> player.swingMainHand(true));
     }
 
 }
