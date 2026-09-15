@@ -61,10 +61,6 @@ public final class ServerFlag {
     // World
     public static final int WORLD_BORDER_SIZE = intProperty("minestom.world-border-size", 29999984);
 
-    // Maps
-    public static final String MAP_RGB_MAPPING = stringProperty("minestom.map.rgbmapping", "lazy");
-    public static final int MAP_RGB_REDUCTION = intProperty("minestom.map.rgbreduction", -1); // Only used if rgb mapping is "approximate"
-
     // Entities
     public static final boolean ENFORCE_INTERACTION_LIMIT = booleanProperty("minestom.enforce-entity-interaction-range", true);
 
