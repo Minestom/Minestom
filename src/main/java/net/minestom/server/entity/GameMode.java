@@ -1,7 +1,7 @@
 package net.minestom.server.entity;
 
 import net.minestom.server.network.NetworkBuffer;
-import org.jspecify.annotations.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import static net.minestom.server.network.NetworkBuffer.OPTIONAL_VAR_INT;
 
