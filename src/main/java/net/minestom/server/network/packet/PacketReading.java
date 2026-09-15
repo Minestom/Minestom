@@ -275,7 +275,7 @@ public final class PacketReading {
                 buffer.readIndex(buffer.writeIndex());
                 return null;
             }
-            if (ServerFlag.WARN_UNREAD_BYTES_PACKET && buffer.readableBytes() != 0) {
+            if (ServerFlag.WARN_PACKET_UNREAD_BYTES && buffer.readableBytes() != 0) {
                 LOGGER.warn("WARNING: Packet ({}) 0x{} not fully read ({})",
                         packetInfo.packetClass().getSimpleName(), Integer.toHexString(packetId), buffer);
             }

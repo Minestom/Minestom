@@ -38,7 +38,7 @@ public final class ServerFlag {
     public static final int SUPPRESS_MISUSED_PACKET_ERROR_LEVEL = intProperty("minestom.suppress-misused-packet-error-level", 0); // Suppress packet handling errors for states with ordinal at or below this level
     public static final boolean REJECT_MALFORMED_PACKET = booleanProperty("minestom.reject-malformed-packet", true);
     public static final boolean REJECT_MISUSED_PACKET = booleanProperty("minestom.reject-misused-packet", false);
-    public static final boolean WARN_UNREAD_BYTES_PACKET = booleanProperty("minestom.warn-unread-bytes-packet", true);
+    public static final boolean WARN_PACKET_UNREAD_BYTES = booleanProperty("minestom.warn-packet-unread-bytes", true);
 
     // Network buffers
     public static final int MAX_PACKET_SIZE = intProperty("minestom.max-packet-size", 2_097_151); // 3 bytes var-int
