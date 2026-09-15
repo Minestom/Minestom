@@ -21,6 +21,7 @@ final class AcquirableImpl<T> implements Acquirable<T> {
     private final T value;
     private final Thread initThread = Thread.currentThread();
     private volatile @Nullable TickThread assignedThread;
+    private volatile @Nullable TickOwner tickOwner;
 
     public AcquirableImpl(T value) {
         this.value = value;
@@ -28,6 +29,8 @@ final class AcquirableImpl<T> implements Acquirable<T> {
 
     @Override
     public Acquired<T> lock() {
+        final TickOwner owner = this.tickOwner;
+        if (owner != null) return new AcquiredImpl<>(unwrap(), enter(owner));
         final TickThread assignedThread = this.assignedThread;
         if (assignedThread == null) {
             assertInitThread();
@@ -40,12 +43,16 @@ final class AcquirableImpl<T> implements Acquirable<T> {
 
     @Override
     public boolean isLocal() {
+        final TickOwner owner = this.tickOwner;
+        if (owner != null) return owner.isCurrentThread();
         final TickThread assignedThread = this.assignedThread;
         return Thread.currentThread() == Objects.requireNonNullElse(assignedThread, initThread);
     }
 
     @Override
     public boolean isOwned() {
+        final TickOwner owner = this.tickOwner;
+        if (owner != null) return isOwnedImpl(owner);
         final TickThread assignedThread = this.assignedThread;
         if (assignedThread == null) return Thread.currentThread() == initThread;
         return AcquirableImpl.isOwnedImpl(assignedThread);
@@ -53,6 +60,16 @@ final class AcquirableImpl<T> implements Acquirable<T> {
 
     @Override
     public void sync(Consumer<T> consumer) {
+        final TickOwner owner = this.tickOwner;
+        if (owner != null) {
+            ReentrantLock lock = enter(owner);
+            try {
+                consumer.accept(unwrap());
+            } finally {
+                leave(lock);
+            }
+            return;
+        }
         final TickThread assignedThread = this.assignedThread;
         if (assignedThread == null) {
             assertInitThread();
@@ -74,16 +91,16 @@ final class AcquirableImpl<T> implements Acquirable<T> {
             consumer.accept(unwrap());
             return true;
         }
-        TickThread assignedThread = this.assignedThread;
-        if (assignedThread != null) {
-            ReentrantLock lock = assignedThread.lock();
-            if (lock.tryLock()) {
-                try {
-                    consumer.accept(unwrap());
-                    return true;
-                } finally {
-                    lock.unlock();
-                }
+        final TickOwner owner = this.tickOwner;
+        final TickThread assignedThread = this.assignedThread;
+        final ReentrantLock lock = owner != null ? owner.lock()
+                : assignedThread != null ? assignedThread.lock() : null;
+        if (lock != null && lock.tryLock()) {
+            try {
+                consumer.accept(unwrap());
+                return true;
+            } finally {
+                lock.unlock();
             }
         }
         return false;
@@ -104,12 +121,18 @@ final class AcquirableImpl<T> implements Acquirable<T> {
     }
 
     @Override
+    public void assignOwner(@Nullable TickOwner owner) {
+        this.tickOwner = owner;
+    }
+
+    @Override
     public void assertOwnership() {
         if (!ASSERTIONS_ENABLED && !ServerFlag.ACQUIRABLE_STRICT) return;
         if (isOwned()) return;
+        TickOwner owner = this.tickOwner;
         TickThread assignedThread = this.assignedThread;
         Thread initThread = this.initThread;
-        if (assignedThread == null && Thread.currentThread() == initThread) return;
+        if (owner == null && assignedThread == null && Thread.currentThread() == initThread) return;
         throw new AcquirableOwnershipException(initThread, assignedThread, unwrap().toString());
     }
 
@@ -123,8 +146,22 @@ final class AcquirableImpl<T> implements Acquirable<T> {
         return elementThread.lock().isHeldByCurrentThread();
     }
 
+    static boolean isOwnedImpl(TickOwner owner) {
+        if (owner.isCurrentThread()) return true;
+        return owner.lock().isHeldByCurrentThread();
+    }
+
     static @Nullable ReentrantLock enter(TickThread elementThread) {
         if (isOwnedImpl(elementThread)) return null; // Nothing to lock, already owned by the current thread.
+        return enterLock(elementThread.lock());
+    }
+
+    static @Nullable ReentrantLock enter(TickOwner owner) {
+        if (isOwnedImpl(owner)) return null;
+        return enterLock(owner.lock());
+    }
+
+    private static ReentrantLock enterLock(ReentrantLock targetLock) {
         final long time = System.nanoTime();
         // Enter the target thread
         if (Thread.currentThread() instanceof TickThread tickThread && tickThread.lock().isHeldByCurrentThread()) {
@@ -135,7 +172,6 @@ final class AcquirableImpl<T> implements Acquirable<T> {
         } else {
             GLOBAL_LOCK.lock();
         }
-        final ReentrantLock targetLock = elementThread.lock();
         targetLock.lock();
         WAIT_COUNTER_NANO.addAndGet(System.nanoTime() - time);
         return targetLock;
