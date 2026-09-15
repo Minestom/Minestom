@@ -13,7 +13,8 @@ import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.client.play.ClientCommandChatPacket;
 import net.minestom.server.network.packet.client.play.ClientSignedCommandChatPacket;
 
-import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 public class ChatMessageListener {
     private static final CommandManager COMMAND_MANAGER = MinecraftServer.getCommandManager();

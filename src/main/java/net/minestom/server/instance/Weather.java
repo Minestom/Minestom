@@ -7,7 +7,6 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
