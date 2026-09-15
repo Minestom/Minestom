@@ -69,7 +69,12 @@ public class DynamicChunk extends Chunk {
         super(instance, chunkX, chunkZ, true);
         // Required to be here because the super call populates the min and max section.
         var sectionsTemp = new Section[maxSection - minSection];
-        Arrays.setAll(sectionsTemp, _ -> new Section());
+        final int biomeId = instance.registries().biome().getId(Biome.PLAINS);
+        Arrays.setAll(sectionsTemp, _ -> {
+            final Section section = new Section();
+            section.biomePalette().fill(biomeId);
+            return section;
+        });
         this.sections = List.of(sectionsTemp);
     }
 
@@ -250,7 +255,11 @@ public class DynamicChunk extends Chunk {
     @Override
     public void reset() {
         assertWriteLock();
-        for (Section section : sections) section.clear();
+        final int biomeId = instance.registries().biome().getId(Biome.PLAINS);
+        for (Section section : sections) {
+            section.blockPalette().fill(0);
+            section.biomePalette().fill(biomeId);
+        }
         this.entries.clear();
     }
 

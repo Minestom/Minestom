@@ -237,6 +237,7 @@ public sealed interface Palette permits PaletteImpl {
             public void write(NetworkBuffer buffer, Palette palette) {
                 PaletteImpl value = (PaletteImpl) palette;
                 // Temporary fix for biome direct bits depending on the number of registered biomes
+                // TODO remove this horrible hack in favor of passing directBits for biomes
                 if (directBits != value.directBits && !value.hasPalette()) {
                     PaletteImpl tmp = new PaletteImpl((byte) dimension, (byte) minIndirect, (byte) maxIndirect, (byte) directBits);
                     tmp.setAll(value::get);
