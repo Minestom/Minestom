@@ -28,12 +28,13 @@ import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.component.AttributeList;
+import net.minestom.server.item.component.SwingAnimation;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.CollectItemPacket;
 import net.minestom.server.network.packet.server.play.DamageEventPacket;
-import net.minestom.server.network.packet.server.play.EntityAnimationPacket;
 import net.minestom.server.network.packet.server.play.EntityAttributesPacket;
+import net.minestom.server.network.packet.server.play.SwingAnimationPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.scoreboard.Team;
@@ -567,50 +568,64 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Sends a {@link EntityAnimationPacket} to swing the main hand
-     * (can be used for attack animation).
+     * Sends a {@link SwingAnimationPacket} to swing the main hand, using the attack animation of the
+     * item held in that hand.
      */
     public void swingMainHand() {
         swingMainHand(false);
     }
 
     /**
-     * Sends a {@link EntityAnimationPacket} to swing the off hand
-     * (can be used for attack animation).
+     * Sends a {@link SwingAnimationPacket} to swing the off hand, using the attack animation of the
+     * item held in that hand.
      */
     public void swingOffHand() {
         swingOffHand(false);
     }
 
     /**
-     * Sends a {@link EntityAnimationPacket} to swing the main hand
-     * (can be used for attack animation).
+     * Sends a {@link SwingAnimationPacket} to viewers and, if this entity is a player, to itself.
+     *
+     * @param hand      the hand to swing
+     * @param animation the animation to play, {@link SwingAnimation#DEFAULT} for the bare hand swing
+     */
+    public void swingHand(PlayerHand hand, SwingAnimation animation) {
+        swingHand(false, hand, animation);
+    }
+
+    /**
+     * Sends a {@link SwingAnimationPacket} to swing the main hand, using the attack animation of the
+     * item held in that hand.
      *
      * @param fromClient if true, broadcast only to viewers
      */
     @ApiStatus.Internal
     public void swingMainHand(boolean fromClient) {
-        swingHand(fromClient, EntityAnimationPacket.Animation.SWING_MAIN_ARM);
+        swingHand(fromClient, PlayerHand.MAIN, attackAnimation(PlayerHand.MAIN));
     }
 
     /**
-     * Sends a {@link EntityAnimationPacket} to swing the off hand
-     * (can be used for attack animation).
+     * Sends a {@link SwingAnimationPacket} to swing the off hand, using the attack animation of the
+     * item held in that hand.
      *
      * @param fromClient if true, broadcast only to viewers
      */
     @ApiStatus.Internal
     public void swingOffHand(boolean fromClient) {
-        swingHand(fromClient, EntityAnimationPacket.Animation.SWING_OFF_HAND);
+        swingHand(fromClient, PlayerHand.OFF, attackAnimation(PlayerHand.OFF));
     }
 
-    private void swingHand(boolean fromClient, EntityAnimationPacket.Animation animation) {
-        EntityAnimationPacket packet = new EntityAnimationPacket(getEntityId(), animation);
+    private void swingHand(boolean fromClient, PlayerHand hand, SwingAnimation animation) {
+        SwingAnimationPacket packet = new SwingAnimationPacket(getEntityId(), hand, animation);
         if (fromClient) {
             sendPacketToViewers(packet);
         } else {
             sendPacketToViewersAndSelf(packet);
         }
+    }
+
+    private SwingAnimation attackAnimation(PlayerHand hand) {
+        return getItemInHand(hand).get(DataComponents.ATTACK_ANIMATION, SwingAnimation.DEFAULT);
     }
 
     public void refreshActiveHand(boolean isHandActive, boolean offHand, boolean riptideSpinAttack) {

@@ -45,7 +45,7 @@ public class PlayerMovementIntegrationTest {
         p1.interpretPacketQueue();
         assertEquals(new Pos(0, 40, 0), p1.getPosition());
         // Confirmation
-        p1.addPacketToQueue(new ClientTeleportConfirmPacket(p1.getLastSentTeleportId()));
+        p1.addPacketToQueue(confirmTeleport(p1));
         p1.addPacketToQueue(new ClientPlayerPositionPacket(new Pos(0.2, 40, 0), true, false));
         p1.interpretPacketQueue();
         assertEquals(new Pos(0.2, 40, 0), p1.getPosition());
@@ -59,7 +59,7 @@ public class PlayerMovementIntegrationTest {
         var p1 = env.createPlayer(instance, new Pos(0, 40, 0));
         connection.connect(instance, new Pos(0, 40, 0));
 
-        p1.addPacketToQueue(new ClientTeleportConfirmPacket(p1.getLastSentTeleportId()));
+        p1.addPacketToQueue(confirmTeleport(p1));
         p1.addPacketToQueue(new ClientPlayerPositionPacket(new Pos(0.2, 40, 0), true, false));
         p1.addPacketToQueue(new ClientPlayerPositionPacket(new Pos(0.4, 40, 0), true, false));
         var tracker = connection.trackIncoming(EntityPositionPacket.class);
@@ -82,7 +82,7 @@ public class PlayerMovementIntegrationTest {
         final Player player = connection.connect(flatInstance, new Pos(0.5, 40, 0.5));
         // Initial join
         chunkDataPacketCollector.assertCount(ChunkRange.chunksCount(player.effectiveViewDistance()));
-        player.addPacketToQueue(new ClientTeleportConfirmPacket(player.getLastSentTeleportId()));
+        player.addPacketToQueue(confirmTeleport(player));
 
         // Move to next chunk
         chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
@@ -141,9 +141,9 @@ public class PlayerMovementIntegrationTest {
         ));
 
         Collector<ChunkDataPacket> chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
-        player.addPacketToQueue(new ClientTeleportConfirmPacket(player.getLastSentTeleportId()));
+        player.addPacketToQueue(confirmTeleport(player));
         player.teleport(new Pos(176, 40, 176)).join();
-        player.addPacketToQueue(new ClientTeleportConfirmPacket(player.getLastSentTeleportId()));
+        player.addPacketToQueue(confirmTeleport(player));
         player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(176.5, 40, 176.5), true, false));
         player.interpretPacketQueue();
         chunkDataPacketCollector.assertCount(ChunkRange.chunksCount(player.effectiveViewDistance()));
@@ -405,5 +405,9 @@ public class PlayerMovementIntegrationTest {
     private static boolean isChunkInView(int chunkX, int chunkZ, Pos viewCenter, int viewDistance) {
         return Math.abs(chunkX - viewCenter.chunkX()) <= viewDistance
                 && Math.abs(chunkZ - viewCenter.chunkZ()) <= viewDistance;
+    }
+
+    private static ClientTeleportConfirmPacket confirmTeleport(Player player) {
+        return new ClientTeleportConfirmPacket(player.getLastSentTeleportId(), player.getPosition());
     }
 }

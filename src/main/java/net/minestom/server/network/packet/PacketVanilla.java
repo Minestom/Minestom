@@ -22,7 +22,6 @@ import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPa
 import net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
 import net.minestom.server.network.packet.client.play.ClientAdvancementTabPacket;
-import net.minestom.server.network.packet.client.play.ClientAnimationPacket;
 import net.minestom.server.network.packet.client.play.ClientAttackPacket;
 import net.minestom.server.network.packet.client.play.ClientChangeDifficultyPacket;
 import net.minestom.server.network.packet.client.play.ClientChangeGameModePacket;
@@ -56,6 +55,7 @@ import net.minestom.server.network.packet.client.play.ClientPlayerPositionAndRot
 import net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket;
 import net.minestom.server.network.packet.client.play.ClientPlayerPositionStatusPacket;
 import net.minestom.server.network.packet.client.play.ClientPlayerRotationPacket;
+import net.minestom.server.network.packet.client.play.ClientPunchPacket;
 import net.minestom.server.network.packet.client.play.ClientQueryBlockNbtPacket;
 import net.minestom.server.network.packet.client.play.ClientQueryEntityNbtPacket;
 import net.minestom.server.network.packet.client.play.ClientRecipeBookSeenRecipePacket;
@@ -93,6 +93,7 @@ import net.minestom.server.network.packet.server.common.KeepAlivePacket;
 import net.minestom.server.network.packet.server.common.PingPacket;
 import net.minestom.server.network.packet.server.common.PingResponsePacket;
 import net.minestom.server.network.packet.server.common.PluginMessagePacket;
+import net.minestom.server.network.packet.server.common.PostEffectsPacket;
 import net.minestom.server.network.packet.server.common.ResourcePackPopPacket;
 import net.minestom.server.network.packet.server.common.ResourcePackPushPacket;
 import net.minestom.server.network.packet.server.common.ServerLinksPacket;
@@ -207,12 +208,14 @@ import net.minestom.server.network.packet.server.play.SetTimePacket;
 import net.minestom.server.network.packet.server.play.SetTitleSubTitlePacket;
 import net.minestom.server.network.packet.server.play.SetTitleTextPacket;
 import net.minestom.server.network.packet.server.play.SetTitleTimePacket;
+import net.minestom.server.network.packet.server.play.SetTransientBlockPacket;
 import net.minestom.server.network.packet.server.play.SoundEffectPacket;
 import net.minestom.server.network.packet.server.play.SpawnEntityPacket;
 import net.minestom.server.network.packet.server.play.SpawnPositionPacket;
 import net.minestom.server.network.packet.server.play.StartConfigurationPacket;
 import net.minestom.server.network.packet.server.play.StatisticsPacket;
 import net.minestom.server.network.packet.server.play.StopSoundPacket;
+import net.minestom.server.network.packet.server.play.SwingAnimationPacket;
 import net.minestom.server.network.packet.server.play.SystemChatPacket;
 import net.minestom.server.network.packet.server.play.TabCompletePacket;
 import net.minestom.server.network.packet.server.play.TeamsPacket;
@@ -361,6 +364,7 @@ public final class PacketVanilla {
             entry(ClientInputPacket.class, ClientInputPacket.SERIALIZER),
             entry(ClientPlayerLoadedPacket.class, ClientPlayerLoadedPacket.SERIALIZER),
             entry(ClientPongPacket.class, ClientPongPacket.SERIALIZER),
+            entry(ClientPunchPacket.class, ClientPunchPacket.SERIALIZER),
             entry(ClientSetRecipeBookStatePacket.class, ClientSetRecipeBookStatePacket.SERIALIZER),
             entry(ClientRecipeBookSeenRecipePacket.class, ClientRecipeBookSeenRecipePacket.SERIALIZER),
             entry(ClientNameItemPacket.class, ClientNameItemPacket.SERIALIZER),
@@ -378,7 +382,6 @@ public final class PacketVanilla {
             entry(ClientSetTestBlockPacket.class, ClientSetTestBlockPacket.SERIALIZER),
             entry(ClientUpdateSignPacket.class, ClientUpdateSignPacket.SERIALIZER),
             entry(ClientSpectatorActionPacket.class, ClientSpectatorActionPacket.SERIALIZER),
-            entry(ClientAnimationPacket.class, ClientAnimationPacket.SERIALIZER),
             entry(ClientTeleportToEntityPacket.class, ClientTeleportToEntityPacket.SERIALIZER),
             entry(ClientTestInstanceBlockActionPacket.class, ClientTestInstanceBlockActionPacket.SERIALIZER),
             entry(ClientPlayerBlockPlacementPacket.class, ClientPlayerBlockPlacementPacket.SERIALIZER),
@@ -413,6 +416,7 @@ public final class PacketVanilla {
             entry(RegistryDataPacket.class, RegistryDataPacket.SERIALIZER),
             entry(ResourcePackPopPacket.class, ResourcePackPopPacket.SERIALIZER),
             entry(ResourcePackPushPacket.class, ResourcePackPushPacket.SERIALIZER),
+            entry(PostEffectsPacket.class, PostEffectsPacket.SERIALIZER),
             entry(CookieStorePacket.class, CookieStorePacket.SERIALIZER),
             entry(TransferPacket.class, TransferPacket.SERIALIZER),
             entry(UpdateEnabledFeaturesPacket.class, UpdateEnabledFeaturesPacket.SERIALIZER),
@@ -463,6 +467,7 @@ public final class PacketVanilla {
             entry(EntityStatusPacket.class, EntityStatusPacket.SERIALIZER),
             entry(EntityPositionSyncPacket.class, EntityPositionSyncPacket.SERIALIZER),
             entry(ExplosionPacket.class, ExplosionPacket.SERIALIZER),
+            entry(SetTransientBlockPacket.class, SetTransientBlockPacket.SERIALIZER),
             entry(UnloadChunkPacket.class, UnloadChunkPacket.SERIALIZER),
             entry(ChangeGameStatePacket.class, ChangeGameStatePacket.SERIALIZER),
             entry(GameRuleValuesPacket.class, GameRuleValuesPacket.SERIALIZER),
@@ -508,6 +513,7 @@ public final class PacketVanilla {
             entry(ResetScorePacket.class, ResetScorePacket.SERIALIZER),
             entry(ResourcePackPopPacket.class, ResourcePackPopPacket.SERIALIZER),
             entry(ResourcePackPushPacket.class, ResourcePackPushPacket.SERIALIZER),
+            entry(PostEffectsPacket.class, PostEffectsPacket.SERIALIZER),
             entry(RespawnPacket.class, RespawnPacket.SERIALIZER),
             entry(EntityHeadLookPacket.class, EntityHeadLookPacket.SERIALIZER),
             entry(MultiBlockChangePacket.class, MultiBlockChangePacket.SERIALIZER),
@@ -547,6 +553,7 @@ public final class PacketVanilla {
             entry(StartConfigurationPacket.class, StartConfigurationPacket.SERIALIZER),
             entry(StopSoundPacket.class, StopSoundPacket.SERIALIZER),
             entry(CookieStorePacket.class, CookieStorePacket.SERIALIZER),
+            entry(SwingAnimationPacket.class, SwingAnimationPacket.SERIALIZER),
             entry(SystemChatPacket.class, SystemChatPacket.SERIALIZER),
             entry(PlayerListHeaderAndFooterPacket.class, PlayerListHeaderAndFooterPacket.SERIALIZER),
             entry(NbtQueryResponsePacket.class, NbtQueryResponsePacket.SERIALIZER),

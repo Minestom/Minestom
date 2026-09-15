@@ -133,6 +133,8 @@ public interface StatisticTypeKeys {
 
     RegistryKey<StatisticType> SLEEP_IN_BED = RegistryKey.unsafeOf("sleep_in_bed");
 
+    RegistryKey<StatisticType> SLEEP_IN_STRAW_BED = RegistryKey.unsafeOf("sleep_in_straw_bed");
+
     RegistryKey<StatisticType> SNEAK_TIME = RegistryKey.unsafeOf("sneak_time");
 
     RegistryKey<StatisticType> SPRINT_ONE_CM = RegistryKey.unsafeOf("sprint_one_cm");
