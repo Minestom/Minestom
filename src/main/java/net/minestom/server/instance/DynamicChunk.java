@@ -1,8 +1,10 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.LongArrayBinaryTag;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
@@ -28,12 +30,14 @@ import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -372,5 +376,28 @@ public class DynamicChunk extends Chunk {
         return new SnapshotImpl.Chunk(minSection, chunkX, chunkZ,
                 clonedSections, entries.clone(), entityIds, updater.reference(instance),
                 instance.registries().biome(), tagHandler().readableCopy());
+    }
+
+    /**
+     * @return a copy of the block entities currently in this chunk
+     */
+    @Override
+    public @Unmodifiable Map<Point, Block> getBlockEntities() {
+        lockReadLock();
+        try {
+            final Map<Point, Block> result = new HashMap<>();
+            for (final Int2ObjectMap.Entry<Block> entry : this.entries.int2ObjectEntrySet()) {
+                final int index = entry.getIntKey();
+                final int x = CoordConversion.chunkBlockIndexGetX(index);
+                final int y = CoordConversion.chunkBlockIndexGetY(index);
+                final int z = CoordConversion.chunkBlockIndexGetZ(index);
+                final BlockVec pos = new BlockVec(x, y, z);
+                final Block block = entry.getValue();
+                result.put(pos, block);
+            }
+            return result;
+        } finally {
+            unlockReadLock();
+        }
     }
 }
