@@ -260,16 +260,6 @@ public interface BuiltinRegistries {
     RegistryKey<Registry<Biome>> BIOME = RegistryKey.unsafeOf("worldgen/biome");
 
     /**
-     * Compatibility alias for {@link #BIOME}.
-     *
-     * @deprecated use {@link #BIOME}
-     */
-    @Deprecated(
-            forRemoval = true
-    )
-    RegistryKey<Registry<Biome>> WORLDGEN_BIOME = BIOME;
-
-    /**
      * The registry key for {@link ZombieNautilusVariant}.
      */
     RegistryKey<Registry<ZombieNautilusVariant>> ZOMBIE_NAUTILUS_VARIANT = RegistryKey.unsafeOf("zombie_nautilus_variant");
