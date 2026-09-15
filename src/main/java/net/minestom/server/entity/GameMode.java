@@ -1,8 +1,9 @@
 package net.minestom.server.entity;
 
 import net.minestom.server.network.NetworkBuffer;
+import org.jspecify.annotations.Nullable;
 
-import static net.minestom.server.network.NetworkBuffer.BYTE;
+import static net.minestom.server.network.NetworkBuffer.OPTIONAL_VAR_INT;
 
 /**
  * Represents the game mode of a player.
@@ -39,13 +40,10 @@ public enum GameMode {
 
     private static final GameMode[] VALUES = values();
 
-    public static final NetworkBuffer.Type<GameMode> NETWORK_TYPE = BYTE.transform(
-            id -> VALUES[id],
-            gameMode -> (byte) gameMode.ordinal()
-    );
+    public static final NetworkBuffer.Type<GameMode> NETWORK_TYPE = NetworkBuffer.Enum(GameMode.class);
 
-    public static final NetworkBuffer.Type<GameMode> OPT_NETWORK_TYPE = BYTE.transform(
-            id -> id != -1 ? VALUES[id] : null,
-            gameMode -> gameMode != null ? (byte) gameMode.ordinal() : -1
+    public static final NetworkBuffer.Type<@Nullable GameMode> OPT_NETWORK_TYPE = OPTIONAL_VAR_INT.transform(
+            id -> id != null ? VALUES[id] : null,
+            gameMode -> gameMode != null ? gameMode.ordinal() : null
     );
 }

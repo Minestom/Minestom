@@ -1,6 +1,7 @@
 package net.minestom.server.entity;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.color.DyeColor;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.animal.ArmadilloMeta;
@@ -213,6 +214,10 @@ public sealed class MetadataDef {
     public static final class ItemFrame extends Hanging {
         public static final Entry<ItemStack> ITEM = index(0, Metadata::ItemStack, ItemStack.AIR);
         public static final Entry<Integer> ROTATION = index(1, Metadata::VarInt, 0);
+    }
+
+    public static final class Cushion extends MetadataDef {
+        public static final Entry<DyeColor> COLOR = index(0, Metadata::DyeColor, DyeColor.WHITE);
     }
 
     public static final class Painting extends Hanging {

@@ -97,6 +97,12 @@ public interface ParticleKeys {
 
     RegistryKey<Particle> PALE_OAK_LEAVES = RegistryKey.unsafeOf("pale_oak_leaves");
 
+    RegistryKey<Particle> RED_POPLAR_LEAVES = RegistryKey.unsafeOf("red_poplar_leaves");
+
+    RegistryKey<Particle> ORANGE_POPLAR_LEAVES = RegistryKey.unsafeOf("orange_poplar_leaves");
+
+    RegistryKey<Particle> YELLOW_POPLAR_LEAVES = RegistryKey.unsafeOf("yellow_poplar_leaves");
+
     RegistryKey<Particle.TintedLeaves> TINTED_LEAVES = RegistryKey.unsafeOf("tinted_leaves");
 
     RegistryKey<Particle> SCULK_SOUL = RegistryKey.unsafeOf("sculk_soul");

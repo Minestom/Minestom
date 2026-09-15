@@ -20,7 +20,7 @@ public class ColorTest extends AbstractItemComponentRegistriesTest<RGBLike> {
     // This is not a test, but it creates a compile error if the component type is changed away from Integer,
     // as a reminder that tests should be added for that new component type.
     private static final List<DataComponent<RGBLike>> SHARED_COMPONENTS = List.of(
-            DataComponents.MAP_COLOR
+            DataComponents.DYED_COLOR
     );
 
     @Override
@@ -37,7 +37,7 @@ public class ColorTest extends AbstractItemComponentRegistriesTest<RGBLike> {
 
     @Test
     void namedTextColor() {
-        var tag = assertOk(DataComponents.MAP_COLOR.encode(Transcoder.NBT, NamedTextColor.YELLOW));
+        var tag = assertOk(DataComponents.DYED_COLOR.encode(Transcoder.NBT, NamedTextColor.YELLOW));
         assertEquals(IntBinaryTag.intBinaryTag(16777045), tag);
     }
 }
