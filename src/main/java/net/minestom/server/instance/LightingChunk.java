@@ -2,7 +2,6 @@ package net.minestom.server.instance;
 
 import net.kyori.adventure.key.Key;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.ServerFlag;
 import net.minestom.server.collision.Shape;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
@@ -15,6 +14,7 @@ import net.minestom.server.instance.light.Light;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.data.LightData;
+import net.minestom.server.property.ServerProperties;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayDeque;
@@ -53,7 +53,6 @@ public class LightingChunk extends DynamicChunk {
 
     private final ReentrantLock packetGenerationLock = new ReentrantLock();
     private final AtomicInteger resendTimer = new AtomicInteger(-1);
-    private static final int resendDelay = ServerFlag.SEND_LIGHT_AFTER_BLOCK_PLACEMENT_DELAY;
 
     private boolean doneInit = false;
 
@@ -156,7 +155,7 @@ public class LightingChunk extends DynamicChunk {
             for (int j = -1; j <= 1; j++) {
                 Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
                 if (neighborChunk instanceof LightingChunk light) {
-                    light.resendTimer.set(resendDelay);
+                    light.resendTimer.set(ServerProperties.SEND_LIGHT_AFTER_BLOCK_PLACEMENT_DELAY.get());
                 }
             }
         }

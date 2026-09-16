@@ -1,6 +1,5 @@
 package net.minestom.server.instance;
 
-import net.minestom.server.ServerFlag;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
@@ -10,6 +9,7 @@ import net.minestom.server.network.packet.server.play.WorldBorderLerpSizePacket;
 import net.minestom.server.network.packet.server.play.WorldBorderSizePacket;
 import net.minestom.server.network.packet.server.play.WorldBorderWarningDelayPacket;
 import net.minestom.server.network.packet.server.play.WorldBorderWarningReachPacket;
+import net.minestom.server.property.ServerProperties;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 
@@ -30,7 +30,7 @@ import org.jetbrains.annotations.Contract;
  */
 public record WorldBorder(double diameter, double centerX, double centerZ, int warningDistance, int warningTime,
                           int dimensionTeleportBoundary) {
-    public static final WorldBorder DEFAULT_BORDER = new WorldBorder(ServerFlag.WORLD_BORDER_SIZE * 2, 0, 0, 5, 15, ServerFlag.WORLD_BORDER_SIZE);
+    public static final WorldBorder DEFAULT_BORDER = new WorldBorder(ServerProperties.WORLD_BORDER_SIZE.get() * 2, 0, 0, 5, 15, ServerProperties.WORLD_BORDER_SIZE.get());
 
     /**
      * @throws IllegalArgumentException if {@code diameter} is less than 0 or NaN, or if a center coordinate is NaN
@@ -41,7 +41,7 @@ public record WorldBorder(double diameter, double centerX, double centerZ, int w
     }
 
     public WorldBorder(double diameter, double centerX, double centerZ, int warningDistance, int warningTime) {
-        this(diameter, centerX, centerZ, warningDistance, warningTime, ServerFlag.WORLD_BORDER_SIZE);
+        this(diameter, centerX, centerZ, warningDistance, warningTime, ServerProperties.WORLD_BORDER_SIZE.get());
     }
 
     @Contract(pure = true)

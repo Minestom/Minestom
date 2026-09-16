@@ -11,7 +11,6 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
 import net.kyori.adventure.text.event.HoverEventSource;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.ServerFlag;
 import net.minestom.server.ServerProcess;
 import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
@@ -72,6 +71,7 @@ import net.minestom.server.network.packet.server.play.SpawnEntityPacket;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
+import net.minestom.server.property.ServerProperties;
 import net.minestom.server.snapshot.EntitySnapshot;
 import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
@@ -221,7 +221,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected EntityType entityType; // UNSAFE to change, modify at your own risk
 
     // Network synchronization, send the absolute position of the entity every n ticks
-    private long synchronizationTicks = ServerFlag.ENTITY_SYNCHRONIZATION_TICKS;
+    private long synchronizationTicks = ServerProperties.ENTITY_SYNCHRONIZATION_TICKS.get();
     private long nextSynchronizationTick = synchronizationTicks;
 
     @SuppressWarnings("this-escape") // deliberate self registration, entities are not usable until spawned
@@ -711,14 +711,14 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         boolean entityIsPlayer = this instanceof Player;
         boolean entityFlying = entityIsPlayer && ((Player) this).isFlying();
         final Block.Getter chunkCache = new ChunkCache(instance, currentChunk, Block.STONE);
-        PhysicsResult physicsResult = PhysicsUtils.simulateMovement(position, velocity.div(ServerFlag.SERVER_TICKS_PER_SECOND), boundingBox,
+        PhysicsResult physicsResult = PhysicsUtils.simulateMovement(position, velocity.div(ServerProperties.SERVER_TICKS_PER_SECOND.get()), boundingBox,
                 instance.getWorldBorder(), chunkCache, aerodynamics, hasNoGravity(), hasPhysics, onGround, entityFlying, previousPhysicsResult);
         this.previousPhysicsResult = physicsResult;
 
         Chunk finalChunk = ChunkUtils.retrieve(instance, currentChunk, physicsResult.newPosition());
         if (!ChunkUtils.isLoaded(finalChunk)) return;
 
-        velocity = physicsResult.newVelocity().mul(ServerFlag.SERVER_TICKS_PER_SECOND);
+        velocity = physicsResult.newVelocity().mul(ServerProperties.SERVER_TICKS_PER_SECOND.get());
         if (!(this instanceof Player)) {
             onGround = physicsResult.isOnGround();
             refreshPosition(physicsResult.newPosition(), true, !SYNCHRONIZE_ONLY_ENTITIES.contains(entityType));
@@ -1689,7 +1689,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     protected Vec getVelocityForPacket() {
-        return this.velocity.div(ServerFlag.SERVER_TICKS_PER_SECOND);
+        return this.velocity.div(ServerProperties.SERVER_TICKS_PER_SECOND.get());
     }
 
     protected SpawnEntityPacket getSpawnPacket() {
@@ -1756,7 +1756,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
-     * Returns the current synchronization interval. The default value is {@link ServerFlag#ENTITY_SYNCHRONIZATION_TICKS}
+     * Returns the current synchronization interval. The default value is {@link ServerProperties#ENTITY_SYNCHRONIZATION_TICKS}
      * but can be overridden per entity with {@link #setSynchronizationTicks(long)}.
      *
      * @return The current synchronization ticks
@@ -1816,9 +1816,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     public void takeKnockback(float strength, final double x, final double z) {
         if (strength > 0) {
             //TODO check possible side effects of unnatural TPS (other than 20TPS)
-            strength *= ServerFlag.SERVER_TICKS_PER_SECOND;
+            strength *= ServerProperties.SERVER_TICKS_PER_SECOND.get();
             final Vec velocityModifier = new Vec(x, z).normalize().mul(strength);
-            final double verticalLimit = .4d * ServerFlag.SERVER_TICKS_PER_SECOND;
+            final double verticalLimit = .4d * ServerProperties.SERVER_TICKS_PER_SECOND.get();
 
             setVelocity(new Vec(velocity.x() / 2d - velocityModifier.x(),
                     onGround ? Math.min(verticalLimit, velocity.y() / 2d + strength) : velocity.y(),

@@ -4,7 +4,7 @@ import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.BinaryTagTypes;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.IntBinaryTag;
-import net.minestom.server.ServerFlag;
+import net.minestom.server.property.ServerProperties;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIf;
 import org.junit.jupiter.api.condition.EnabledIf;
@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 public class TagNbtTest {
 
     static boolean isSerializeEmptyCompoundEnabled() {
-        return ServerFlag.SERIALIZE_EMPTY_COMPOUND;
+        return ServerProperties.SERIALIZE_EMPTY_COMPOUND.get();
     }
 
     @Test

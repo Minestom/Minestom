@@ -1,6 +1,5 @@
 package net.minestom.server.ping;
 
-import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.MainHand;
 import net.minestom.server.listener.preplay.StatusListener;
@@ -13,6 +12,7 @@ import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.status.ResponsePacket;
 import net.minestom.server.network.player.ClientSettings;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.property.ServerProperties;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
@@ -35,11 +35,11 @@ public class StatusIntegrationTest {
 
     @Test
     void statusPacketLengthUsesPreAuthLimit() {
-        assertEquals(ServerFlag.MAX_PACKET_SIZE_PRE_AUTH,
+        assertEquals(ServerProperties.MAX_PACKET_SIZE_PRE_AUTH.get(),
                 PacketReading.maxPacketSize(ConnectionState.STATUS));
 
-        final NetworkBuffer buffer = NetworkBuffer.staticBuffer(ServerFlag.POOLED_BUFFER_SIZE);
-        buffer.write(NetworkBuffer.VAR_INT, ServerFlag.MAX_PACKET_SIZE_PRE_AUTH + 1);
+        final NetworkBuffer buffer = NetworkBuffer.staticBuffer(ServerProperties.POOLED_BUFFER_SIZE.get());
+        buffer.write(NetworkBuffer.VAR_INT, ServerProperties.MAX_PACKET_SIZE_PRE_AUTH.get() + 1);
 
         assertThrows(DataFormatException.class,
                 () -> PacketReading.readClients(buffer, ConnectionState.STATUS, false));
@@ -68,7 +68,7 @@ public class StatusIntegrationTest {
         env.createPlayer(instance, Pos.ZERO);
         var player3 = env.createPlayer(instance, Pos.ZERO);
         player3.refreshSettings(new ClientSettings(
-                Locale.US, (byte) ServerFlag.CHUNK_VIEW_DISTANCE,
+                Locale.US, ServerProperties.CHUNK_VIEW_DISTANCE.get().byteValue(),
                 ChatMessageType.FULL, true,
                 (byte) 0x7F, MainHand.RIGHT,
                 true, false,

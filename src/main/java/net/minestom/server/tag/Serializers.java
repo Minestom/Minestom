@@ -14,10 +14,10 @@ import net.kyori.adventure.nbt.ShortBinaryTag;
 import net.kyori.adventure.nbt.StringBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.ServerFlag;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.property.ServerProperties;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.utils.UUIDUtils;
 import org.jetbrains.annotations.Nullable;
@@ -54,7 +54,7 @@ final class Serializers {
     static <T> Entry<T, CompoundBinaryTag> fromTagSerializer(TagSerializer<T> serializer) {
         return new Serializers.Entry<>(BinaryTagTypes.COMPOUND,
                 (CompoundBinaryTag compound) -> {
-                    if (!ServerFlag.SERIALIZE_EMPTY_COMPOUND && compound.isEmpty()) return null;
+                    if (!ServerProperties.SERIALIZE_EMPTY_COMPOUND.get() && compound.isEmpty()) return null;
                     return serializer.read(TagHandler.fromCompound(compound));
                 },
                 (value) -> {

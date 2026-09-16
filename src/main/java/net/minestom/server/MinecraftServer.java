@@ -41,6 +41,7 @@ import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.server.common.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.network.socket.Server;
+import net.minestom.server.property.ServerProperties;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
@@ -80,7 +81,7 @@ public final class MinecraftServer implements MinecraftConstants {
     // Config
     // Can be modified at performance cost when increased
     @Deprecated
-    public static final int TICK_PER_SECOND = ServerFlag.SERVER_TICKS_PER_SECOND;
+    public static final int TICK_PER_SECOND = ServerProperties.SERVER_TICKS_PER_SECOND.get();
     public static final int TICK_MS = 1000 / TICK_PER_SECOND;
 
     // In-Game Manager
@@ -223,25 +224,25 @@ public final class MinecraftServer implements MinecraftConstants {
     /**
      * Gets the chunk view distance of the server.
      * <p>
-     * Deprecated in favor of {@link ServerFlag#CHUNK_VIEW_DISTANCE}
+     * Deprecated in favor of {@link ServerProperties#CHUNK_VIEW_DISTANCE}
      *
      * @return the chunk view distance
      */
     @Deprecated
     public static int getChunkViewDistance() {
-        return ServerFlag.CHUNK_VIEW_DISTANCE;
+        return ServerProperties.CHUNK_VIEW_DISTANCE.get();
     }
 
     /**
      * Gets the entity view distance of the server.
      * <p>
-     * Deprecated in favor of {@link ServerFlag#ENTITY_VIEW_DISTANCE}
+     * Deprecated in favor of {@link ServerProperties#ENTITY_VIEW_DISTANCE}
      *
      * @return the entity view distance
      */
     @Deprecated
     public static int getEntityViewDistance() {
-        return ServerFlag.ENTITY_VIEW_DISTANCE;
+        return ServerProperties.ENTITY_VIEW_DISTANCE.get();
     }
 
     /**

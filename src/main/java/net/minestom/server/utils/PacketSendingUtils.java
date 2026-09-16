@@ -6,7 +6,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.ServerFlag;
 import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Player;
@@ -18,6 +17,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
+import net.minestom.server.property.ServerProperties;
 
 public final class PacketSendingUtils {
     /**
@@ -87,7 +87,7 @@ public final class PacketSendingUtils {
     }
 
     private static SendablePacket groupedPacket(ServerPacket packet) {
-        return ServerFlag.GROUPED_PACKET && shouldUseCachePacket(packet) ? new CachedPacket(packet) : packet;
+        return ServerProperties.GROUPED_PACKET.get() && shouldUseCachePacket(packet) ? new CachedPacket(packet) : packet;
     }
 
     /**
@@ -97,7 +97,7 @@ public final class PacketSendingUtils {
      * @see CachedPacket#body(ConnectionState)
      */
     private static boolean shouldUseCachePacket(final ServerPacket packet) {
-        if (!ServerFlag.AUTOMATIC_COMPONENT_TRANSLATION) return true;
+        if (!ServerProperties.AUTOMATIC_COMPONENT_TRANSLATION.get()) return true;
         if (!(packet instanceof ServerPacket.ComponentHolding holder)) return true;
         return !containsTranslatableComponents(holder);
     }

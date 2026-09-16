@@ -4,7 +4,6 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.Translator;
-import net.minestom.server.ServerFlag;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
@@ -13,6 +12,7 @@ import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.SystemChatPacket;
 import net.minestom.server.network.packet.server.play.UpdateScorePacket;
+import net.minestom.server.property.ServerProperties;
 import net.minestom.server.scoreboard.Sidebar;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
@@ -50,7 +50,7 @@ public class TranslationIntegrationTest {
 
     @Test
     public void testTranslationEnabled(final Env env) {
-        Assumptions.assumeTrue(ServerFlag.AUTOMATIC_COMPONENT_TRANSLATION);
+        Assumptions.assumeTrue(ServerProperties.AUTOMATIC_COMPONENT_TRANSLATION.get());
         final var instance = env.createFlatInstance();
         final var connection = env.createConnection();
         final var player = connection.connect(instance, new Pos(0, 40, 0));
@@ -67,7 +67,7 @@ public class TranslationIntegrationTest {
 
     @Test
     public void testTranslationDisabled(final Env env) {
-        Assumptions.assumeTrue(ServerFlag.AUTOMATIC_COMPONENT_TRANSLATION);
+        Assumptions.assumeTrue(ServerProperties.AUTOMATIC_COMPONENT_TRANSLATION.get());
         final var instance = env.createFlatInstance();
         final var connection = env.createConnection();
         final var player = connection.connect(instance, new Pos(0, 40, 0));
@@ -82,7 +82,7 @@ public class TranslationIntegrationTest {
 
     @Test
     public void testItemStackTranslation(final Env env) {
-        Assumptions.assumeTrue(ServerFlag.AUTOMATIC_COMPONENT_TRANSLATION);
+        Assumptions.assumeTrue(ServerProperties.AUTOMATIC_COMPONENT_TRANSLATION.get());
         final var instance = env.createFlatInstance();
         final var connection = env.createConnection();
         final var player = connection.connect(instance, new Pos(0, 40, 0));
@@ -103,7 +103,7 @@ public class TranslationIntegrationTest {
 
     @Test
     public void testUpdateScorePacketTranslations(final Env env) {
-        Assumptions.assumeTrue(ServerFlag.AUTOMATIC_COMPONENT_TRANSLATION);
+        Assumptions.assumeTrue(ServerProperties.AUTOMATIC_COMPONENT_TRANSLATION.get());
         final var instance = env.createFlatInstance();
         final var connection = env.createConnection();
         final var player = connection.connect(instance, new Pos(0, 40, 0));

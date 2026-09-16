@@ -1,15 +1,14 @@
 package net.minestom.server.thread;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.ServerFlag;
 import net.minestom.server.ServerProcess;
+import net.minestom.server.property.ServerProperties;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Locale;
 
 @ApiStatus.Internal
 public final class TickSchedulerThread extends MinestomThread {
-    private static final long TICK_TIME_NANOS = 1_000_000_000L / ServerFlag.SERVER_TICKS_PER_SECOND;
     // Windows has an issue with periodically being unable to sleep for < ~16ms at a time
     private static final long SLEEP_THRESHOLD = System.getProperty("os.name", "")
             .toLowerCase(Locale.ROOT).startsWith("windows") ? 17 : 2;
@@ -34,12 +33,13 @@ public final class TickSchedulerThread extends MinestomThread {
             }
 
             ticks++;
-            long nextTickTime = baseTime + ticks * TICK_TIME_NANOS;
+            long tickTimeNanos = 1_000_000_000L / ServerProperties.SERVER_TICKS_PER_SECOND.get();
+            long nextTickTime = baseTime + ticks * tickTimeNanos;
             waitUntilNextTick(nextTickTime);
             // Check if the server can not keep up with the tickrate
             // if it gets too far behind, reset the ticks & baseTime
             // to avoid running too many ticks at once
-            if (System.nanoTime() > nextTickTime + TICK_TIME_NANOS * ServerFlag.SERVER_MAX_TICK_CATCH_UP) {
+            if (System.nanoTime() > nextTickTime + tickTimeNanos * ServerProperties.SERVER_MAX_TICK_CATCH_UP.get()) {
                 baseTime = System.nanoTime();
                 ticks = 0;
             }
