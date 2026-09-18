@@ -226,9 +226,10 @@ public final class InventoryClickProcessor {
             return clickResult;
         }
         final BiFunction<AbstractInventory, ItemStack, ItemStack> func = (inv, rest) -> {
-            var pair = TransactionType.TAKE.process(inv, rest, (index, _) -> {
+            var pair = TransactionType.TAKE.process(inv, rest, (index, item) -> {
                 // Prevent item loss/duplication
-                return index != slot || clickedInventory != inv;
+                return (index != slot || clickedInventory != inv)
+                        && item.amount() < item.maxStackSize();
             });
             final ItemStack itemResult = pair.left();
             var itemChangesMap = pair.right();
