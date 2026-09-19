@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.SuspiciousGravelBlockHandler;
@@ -10,6 +11,8 @@ import net.minestom.testing.EnvTest;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -77,6 +80,37 @@ public class InstanceBlockIntegrationTest {
         // Different block type
         instance.setBlock(point, Block.GRASS_BLOCK.withTag(tag, 8));
         assertEquals(8, instance.getBlock(point).getTag(tag));
+    }
+
+    @Test
+    public void neighborUpdateOrderMatchesVanilla(Env env) {
+        List<Point> updated = new ArrayList<>();
+        env.process().block().registerBlockPlacementRule(new BlockPlacementRule(Block.CACTUS) {
+            @Override
+            public @Nullable Block blockPlace(PlacementState placementState) {
+                return placementState.block();
+            }
+
+            @Override
+            public Block blockUpdate(UpdateState updateState) {
+                updated.add(updateState.blockPosition());
+                return updateState.currentBlock();
+            }
+        });
+        var instance = env.createFlatInstance();
+        instance.loadChunk(0, 0).join();
+        var center = new Vec(8, 50, 8);
+        for (var face : new Vec[]{new Vec(7, 50, 8), new Vec(9, 50, 8), new Vec(8, 49, 8),
+                new Vec(8, 51, 8), new Vec(8, 50, 7), new Vec(8, 50, 9)}) {
+            instance.setBlock(face, Block.CACTUS);
+        }
+        updated.clear();
+
+        instance.setBlock(center, Block.STONE);
+
+        // NeighborUpdater.UPDATE_ORDER
+        assertEquals(List.of(new Vec(7, 50, 8), new Vec(9, 50, 8), new Vec(8, 49, 8),
+                new Vec(8, 51, 8), new Vec(8, 50, 7), new Vec(8, 50, 9)), updated);
     }
 
     @Test
