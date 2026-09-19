@@ -193,7 +193,7 @@ public record Status(
         private Builder() {
             this.description = DEFAULT_DESCRIPTION;
             this.versionInfo = VersionInfo.DEFAULT;
-            this.playerInfo = PlayerInfo.onlineCount();
+            this.playerInfo = MinecraftServer.process() == null ? null : PlayerInfo.onlineCount();
         }
 
         private Builder(Status status) {
