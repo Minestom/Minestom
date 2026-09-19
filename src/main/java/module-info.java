@@ -135,8 +135,6 @@ module net.minestom.server {
     exports net.minestom.server.listener.manager;
     exports net.minestom.server.listener.preplay;
     exports net.minestom.server.loot.number;
-    exports net.minestom.server.map;
-    exports net.minestom.server.map.framebuffers;
     exports net.minestom.server.message;
     exports net.minestom.server.monitoring;
     exports net.minestom.server.network;
