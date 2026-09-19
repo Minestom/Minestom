@@ -9,27 +9,27 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface SulfurCubeArchetypes permits SulfurCubeArchetype {
-    RegistryKey<SulfurCubeArchetype> BOUNCY = RegistryKey.unsafeOf("bouncy");
+    RegistryKey<SulfurCubeArchetype> BOUNCY = RegistryKey.of("bouncy");
 
-    RegistryKey<SulfurCubeArchetype> EXPLOSIVE = RegistryKey.unsafeOf("explosive");
+    RegistryKey<SulfurCubeArchetype> EXPLOSIVE = RegistryKey.of("explosive");
 
-    RegistryKey<SulfurCubeArchetype> FAST_FLAT = RegistryKey.unsafeOf("fast_flat");
+    RegistryKey<SulfurCubeArchetype> FAST_FLAT = RegistryKey.of("fast_flat");
 
-    RegistryKey<SulfurCubeArchetype> FAST_SLIDING = RegistryKey.unsafeOf("fast_sliding");
+    RegistryKey<SulfurCubeArchetype> FAST_SLIDING = RegistryKey.of("fast_sliding");
 
-    RegistryKey<SulfurCubeArchetype> HIGH_RESISTANCE = RegistryKey.unsafeOf("high_resistance");
+    RegistryKey<SulfurCubeArchetype> HIGH_RESISTANCE = RegistryKey.of("high_resistance");
 
-    RegistryKey<SulfurCubeArchetype> HOT = RegistryKey.unsafeOf("hot");
+    RegistryKey<SulfurCubeArchetype> HOT = RegistryKey.of("hot");
 
-    RegistryKey<SulfurCubeArchetype> LIGHT = RegistryKey.unsafeOf("light");
+    RegistryKey<SulfurCubeArchetype> LIGHT = RegistryKey.of("light");
 
-    RegistryKey<SulfurCubeArchetype> REGULAR = RegistryKey.unsafeOf("regular");
+    RegistryKey<SulfurCubeArchetype> REGULAR = RegistryKey.of("regular");
 
-    RegistryKey<SulfurCubeArchetype> SLOW_BOUNCY = RegistryKey.unsafeOf("slow_bouncy");
+    RegistryKey<SulfurCubeArchetype> SLOW_BOUNCY = RegistryKey.of("slow_bouncy");
 
-    RegistryKey<SulfurCubeArchetype> SLOW_FLAT = RegistryKey.unsafeOf("slow_flat");
+    RegistryKey<SulfurCubeArchetype> SLOW_FLAT = RegistryKey.of("slow_flat");
 
-    RegistryKey<SulfurCubeArchetype> SLOW_SLIDING = RegistryKey.unsafeOf("slow_sliding");
+    RegistryKey<SulfurCubeArchetype> SLOW_SLIDING = RegistryKey.of("slow_sliding");
 
-    RegistryKey<SulfurCubeArchetype> STICKY = RegistryKey.unsafeOf("sticky");
+    RegistryKey<SulfurCubeArchetype> STICKY = RegistryKey.of("sticky");
 }

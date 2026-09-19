@@ -197,7 +197,7 @@ public final class RegistryData {
             if (tagString.startsWith("#")) {
                 getTagValues(tag, main, tagString.substring(1));
             } else {
-                tag.add(RegistryKey.unsafeOf(tagString));
+                tag.add(RegistryKey.of(tagString));
             }
         });
     }

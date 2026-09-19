@@ -31,7 +31,7 @@ record PaintingVariantImpl(
 
     @Override
     public RegistryKey<PaintingVariant> asKey() {
-        return RegistryKey.unsafeOf(assetId);
+        return RegistryKey.of(assetId);
     }
 
     @Override

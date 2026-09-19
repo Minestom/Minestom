@@ -5,7 +5,6 @@ import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.key.Keyed;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
-import org.jetbrains.annotations.ApiStatus;
 
 public sealed interface TagKey<T> extends Keyed permits TagKeyImpl {
     static <T> Codec<TagKey<T>> codec(Registries.Selector<T> selector) {
@@ -23,18 +22,28 @@ public sealed interface TagKey<T> extends Keyed permits TagKeyImpl {
     }
 
     /**
-     * Creates a tag key from an unhashed key. Should not be used externally.
+     * Creates a tag key from an unhashed string. The key syntax is validated, tag existence is not. A tag key is only
+     * a typed name. Looking up a tag that does not exist returns {@code null}.
+     *
+     * @param key the tag key without a leading {@code #}
+     * @param <T> the registry entry type
+     * @return the tag key
+     * @throws IllegalArgumentException if {@code key} is invalid
+     * @throws NullPointerException     if {@code key} is {@code null}
      */
-    @ApiStatus.Internal
-    static <T> TagKey<T> unsafeOf(@KeyPattern String key) {
-        return unsafeOf(Key.key(key));
+    static <T> TagKey<T> of(@KeyPattern String key) {
+        return of(Key.key(key));
     }
 
     /**
-     * Creates a tag key from an unhashed key. Should not be used externally.
+     * Creates a tag key from an unhashed key without checking that the tag exists. See {@link #of(String)}.
+     *
+     * @param key the tag key
+     * @param <T> the registry entry type
+     * @return the tag key
+     * @throws NullPointerException if {@code key} is {@code null}
      */
-    @ApiStatus.Internal
-    static <T> TagKey<T> unsafeOf(Key key) {
+    static <T> TagKey<T> of(Key key) {
         return new TagKeyImpl<>(key);
     }
 

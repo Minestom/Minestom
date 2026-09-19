@@ -11,83 +11,83 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("unused")
 @ApiStatus.NonExtendable
 public interface PotionEffectKeys {
-    RegistryKey<PotionEffect> ABSORPTION = RegistryKey.unsafeOf("absorption");
+    RegistryKey<PotionEffect> ABSORPTION = RegistryKey.of("absorption");
 
-    RegistryKey<PotionEffect> BAD_OMEN = RegistryKey.unsafeOf("bad_omen");
+    RegistryKey<PotionEffect> BAD_OMEN = RegistryKey.of("bad_omen");
 
-    RegistryKey<PotionEffect> BLINDNESS = RegistryKey.unsafeOf("blindness");
+    RegistryKey<PotionEffect> BLINDNESS = RegistryKey.of("blindness");
 
-    RegistryKey<PotionEffect> BREATH_OF_THE_NAUTILUS = RegistryKey.unsafeOf("breath_of_the_nautilus");
+    RegistryKey<PotionEffect> BREATH_OF_THE_NAUTILUS = RegistryKey.of("breath_of_the_nautilus");
 
-    RegistryKey<PotionEffect> CONDUIT_POWER = RegistryKey.unsafeOf("conduit_power");
+    RegistryKey<PotionEffect> CONDUIT_POWER = RegistryKey.of("conduit_power");
 
-    RegistryKey<PotionEffect> DARKNESS = RegistryKey.unsafeOf("darkness");
+    RegistryKey<PotionEffect> DARKNESS = RegistryKey.of("darkness");
 
-    RegistryKey<PotionEffect> DOLPHINS_GRACE = RegistryKey.unsafeOf("dolphins_grace");
+    RegistryKey<PotionEffect> DOLPHINS_GRACE = RegistryKey.of("dolphins_grace");
 
-    RegistryKey<PotionEffect> FIRE_RESISTANCE = RegistryKey.unsafeOf("fire_resistance");
+    RegistryKey<PotionEffect> FIRE_RESISTANCE = RegistryKey.of("fire_resistance");
 
-    RegistryKey<PotionEffect> GLOWING = RegistryKey.unsafeOf("glowing");
+    RegistryKey<PotionEffect> GLOWING = RegistryKey.of("glowing");
 
-    RegistryKey<PotionEffect> HASTE = RegistryKey.unsafeOf("haste");
+    RegistryKey<PotionEffect> HASTE = RegistryKey.of("haste");
 
-    RegistryKey<PotionEffect> HEALTH_BOOST = RegistryKey.unsafeOf("health_boost");
+    RegistryKey<PotionEffect> HEALTH_BOOST = RegistryKey.of("health_boost");
 
-    RegistryKey<PotionEffect> HERO_OF_THE_VILLAGE = RegistryKey.unsafeOf("hero_of_the_village");
+    RegistryKey<PotionEffect> HERO_OF_THE_VILLAGE = RegistryKey.of("hero_of_the_village");
 
-    RegistryKey<PotionEffect> HUNGER = RegistryKey.unsafeOf("hunger");
+    RegistryKey<PotionEffect> HUNGER = RegistryKey.of("hunger");
 
-    RegistryKey<PotionEffect> INFESTED = RegistryKey.unsafeOf("infested");
+    RegistryKey<PotionEffect> INFESTED = RegistryKey.of("infested");
 
-    RegistryKey<PotionEffect> INSTANT_DAMAGE = RegistryKey.unsafeOf("instant_damage");
+    RegistryKey<PotionEffect> INSTANT_DAMAGE = RegistryKey.of("instant_damage");
 
-    RegistryKey<PotionEffect> INSTANT_HEALTH = RegistryKey.unsafeOf("instant_health");
+    RegistryKey<PotionEffect> INSTANT_HEALTH = RegistryKey.of("instant_health");
 
-    RegistryKey<PotionEffect> INVISIBILITY = RegistryKey.unsafeOf("invisibility");
+    RegistryKey<PotionEffect> INVISIBILITY = RegistryKey.of("invisibility");
 
-    RegistryKey<PotionEffect> JUMP_BOOST = RegistryKey.unsafeOf("jump_boost");
+    RegistryKey<PotionEffect> JUMP_BOOST = RegistryKey.of("jump_boost");
 
-    RegistryKey<PotionEffect> LEVITATION = RegistryKey.unsafeOf("levitation");
+    RegistryKey<PotionEffect> LEVITATION = RegistryKey.of("levitation");
 
-    RegistryKey<PotionEffect> LUCK = RegistryKey.unsafeOf("luck");
+    RegistryKey<PotionEffect> LUCK = RegistryKey.of("luck");
 
-    RegistryKey<PotionEffect> MINING_FATIGUE = RegistryKey.unsafeOf("mining_fatigue");
+    RegistryKey<PotionEffect> MINING_FATIGUE = RegistryKey.of("mining_fatigue");
 
-    RegistryKey<PotionEffect> NAUSEA = RegistryKey.unsafeOf("nausea");
+    RegistryKey<PotionEffect> NAUSEA = RegistryKey.of("nausea");
 
-    RegistryKey<PotionEffect> NIGHT_VISION = RegistryKey.unsafeOf("night_vision");
+    RegistryKey<PotionEffect> NIGHT_VISION = RegistryKey.of("night_vision");
 
-    RegistryKey<PotionEffect> OOZING = RegistryKey.unsafeOf("oozing");
+    RegistryKey<PotionEffect> OOZING = RegistryKey.of("oozing");
 
-    RegistryKey<PotionEffect> POISON = RegistryKey.unsafeOf("poison");
+    RegistryKey<PotionEffect> POISON = RegistryKey.of("poison");
 
-    RegistryKey<PotionEffect> RAID_OMEN = RegistryKey.unsafeOf("raid_omen");
+    RegistryKey<PotionEffect> RAID_OMEN = RegistryKey.of("raid_omen");
 
-    RegistryKey<PotionEffect> REGENERATION = RegistryKey.unsafeOf("regeneration");
+    RegistryKey<PotionEffect> REGENERATION = RegistryKey.of("regeneration");
 
-    RegistryKey<PotionEffect> RESISTANCE = RegistryKey.unsafeOf("resistance");
+    RegistryKey<PotionEffect> RESISTANCE = RegistryKey.of("resistance");
 
-    RegistryKey<PotionEffect> SATURATION = RegistryKey.unsafeOf("saturation");
+    RegistryKey<PotionEffect> SATURATION = RegistryKey.of("saturation");
 
-    RegistryKey<PotionEffect> SLOW_FALLING = RegistryKey.unsafeOf("slow_falling");
+    RegistryKey<PotionEffect> SLOW_FALLING = RegistryKey.of("slow_falling");
 
-    RegistryKey<PotionEffect> SLOWNESS = RegistryKey.unsafeOf("slowness");
+    RegistryKey<PotionEffect> SLOWNESS = RegistryKey.of("slowness");
 
-    RegistryKey<PotionEffect> SPEED = RegistryKey.unsafeOf("speed");
+    RegistryKey<PotionEffect> SPEED = RegistryKey.of("speed");
 
-    RegistryKey<PotionEffect> STRENGTH = RegistryKey.unsafeOf("strength");
+    RegistryKey<PotionEffect> STRENGTH = RegistryKey.of("strength");
 
-    RegistryKey<PotionEffect> TRIAL_OMEN = RegistryKey.unsafeOf("trial_omen");
+    RegistryKey<PotionEffect> TRIAL_OMEN = RegistryKey.of("trial_omen");
 
-    RegistryKey<PotionEffect> UNLUCK = RegistryKey.unsafeOf("unluck");
+    RegistryKey<PotionEffect> UNLUCK = RegistryKey.of("unluck");
 
-    RegistryKey<PotionEffect> WATER_BREATHING = RegistryKey.unsafeOf("water_breathing");
+    RegistryKey<PotionEffect> WATER_BREATHING = RegistryKey.of("water_breathing");
 
-    RegistryKey<PotionEffect> WEAKNESS = RegistryKey.unsafeOf("weakness");
+    RegistryKey<PotionEffect> WEAKNESS = RegistryKey.of("weakness");
 
-    RegistryKey<PotionEffect> WEAVING = RegistryKey.unsafeOf("weaving");
+    RegistryKey<PotionEffect> WEAVING = RegistryKey.of("weaving");
 
-    RegistryKey<PotionEffect> WIND_CHARGED = RegistryKey.unsafeOf("wind_charged");
+    RegistryKey<PotionEffect> WIND_CHARGED = RegistryKey.of("wind_charged");
 
-    RegistryKey<PotionEffect> WITHER = RegistryKey.unsafeOf("wither");
+    RegistryKey<PotionEffect> WITHER = RegistryKey.of("wither");
 }

@@ -11,121 +11,121 @@ import org.jetbrains.annotations.ApiStatus;
 @ApiStatus.NonExtendable
 @SuppressWarnings("unused")
 public interface GameRuleKeys {
-    RegistryKey<GameRule<Boolean>> ADVANCE_TIME = RegistryKey.unsafeOf("advance_time");
+    RegistryKey<GameRule<Boolean>> ADVANCE_TIME = RegistryKey.of("advance_time");
 
-    RegistryKey<GameRule<Boolean>> ADVANCE_WEATHER = RegistryKey.unsafeOf("advance_weather");
+    RegistryKey<GameRule<Boolean>> ADVANCE_WEATHER = RegistryKey.of("advance_weather");
 
-    RegistryKey<GameRule<Boolean>> ALLOW_ENTERING_NETHER_USING_PORTALS = RegistryKey.unsafeOf("allow_entering_nether_using_portals");
+    RegistryKey<GameRule<Boolean>> ALLOW_ENTERING_NETHER_USING_PORTALS = RegistryKey.of("allow_entering_nether_using_portals");
 
-    RegistryKey<GameRule<Boolean>> BLOCK_DROPS = RegistryKey.unsafeOf("block_drops");
+    RegistryKey<GameRule<Boolean>> BLOCK_DROPS = RegistryKey.of("block_drops");
 
-    RegistryKey<GameRule<Boolean>> BLOCK_EXPLOSION_DROP_DECAY = RegistryKey.unsafeOf("block_explosion_drop_decay");
+    RegistryKey<GameRule<Boolean>> BLOCK_EXPLOSION_DROP_DECAY = RegistryKey.of("block_explosion_drop_decay");
 
-    RegistryKey<GameRule<Boolean>> COMMAND_BLOCKS_WORK = RegistryKey.unsafeOf("command_blocks_work");
+    RegistryKey<GameRule<Boolean>> COMMAND_BLOCKS_WORK = RegistryKey.of("command_blocks_work");
 
-    RegistryKey<GameRule<Boolean>> COMMAND_BLOCK_OUTPUT = RegistryKey.unsafeOf("command_block_output");
+    RegistryKey<GameRule<Boolean>> COMMAND_BLOCK_OUTPUT = RegistryKey.of("command_block_output");
 
-    RegistryKey<GameRule<Boolean>> DROWNING_DAMAGE = RegistryKey.unsafeOf("drowning_damage");
+    RegistryKey<GameRule<Boolean>> DROWNING_DAMAGE = RegistryKey.of("drowning_damage");
 
-    RegistryKey<GameRule<Boolean>> ELYTRA_MOVEMENT_CHECK = RegistryKey.unsafeOf("elytra_movement_check");
+    RegistryKey<GameRule<Boolean>> ELYTRA_MOVEMENT_CHECK = RegistryKey.of("elytra_movement_check");
 
-    RegistryKey<GameRule<Boolean>> ENDER_PEARLS_VANISH_ON_DEATH = RegistryKey.unsafeOf("ender_pearls_vanish_on_death");
+    RegistryKey<GameRule<Boolean>> ENDER_PEARLS_VANISH_ON_DEATH = RegistryKey.of("ender_pearls_vanish_on_death");
 
-    RegistryKey<GameRule<Boolean>> ENTITY_DROPS = RegistryKey.unsafeOf("entity_drops");
+    RegistryKey<GameRule<Boolean>> ENTITY_DROPS = RegistryKey.of("entity_drops");
 
-    RegistryKey<GameRule<Boolean>> FALL_DAMAGE = RegistryKey.unsafeOf("fall_damage");
+    RegistryKey<GameRule<Boolean>> FALL_DAMAGE = RegistryKey.of("fall_damage");
 
-    RegistryKey<GameRule<Boolean>> FIRE_DAMAGE = RegistryKey.unsafeOf("fire_damage");
+    RegistryKey<GameRule<Boolean>> FIRE_DAMAGE = RegistryKey.of("fire_damage");
 
-    RegistryKey<GameRule<Integer>> FIRE_SPREAD_RADIUS_AROUND_PLAYER = RegistryKey.unsafeOf("fire_spread_radius_around_player");
+    RegistryKey<GameRule<Integer>> FIRE_SPREAD_RADIUS_AROUND_PLAYER = RegistryKey.of("fire_spread_radius_around_player");
 
-    RegistryKey<GameRule<Boolean>> FORGIVE_DEAD_PLAYERS = RegistryKey.unsafeOf("forgive_dead_players");
+    RegistryKey<GameRule<Boolean>> FORGIVE_DEAD_PLAYERS = RegistryKey.of("forgive_dead_players");
 
-    RegistryKey<GameRule<Boolean>> FREEZE_DAMAGE = RegistryKey.unsafeOf("freeze_damage");
+    RegistryKey<GameRule<Boolean>> FREEZE_DAMAGE = RegistryKey.of("freeze_damage");
 
-    RegistryKey<GameRule<Boolean>> GLOBAL_SOUND_EVENTS = RegistryKey.unsafeOf("global_sound_events");
+    RegistryKey<GameRule<Boolean>> GLOBAL_SOUND_EVENTS = RegistryKey.of("global_sound_events");
 
-    RegistryKey<GameRule<Boolean>> IMMEDIATE_RESPAWN = RegistryKey.unsafeOf("immediate_respawn");
+    RegistryKey<GameRule<Boolean>> IMMEDIATE_RESPAWN = RegistryKey.of("immediate_respawn");
 
-    RegistryKey<GameRule<Boolean>> KEEP_INVENTORY = RegistryKey.unsafeOf("keep_inventory");
+    RegistryKey<GameRule<Boolean>> KEEP_INVENTORY = RegistryKey.of("keep_inventory");
 
-    RegistryKey<GameRule<Boolean>> LAVA_SOURCE_CONVERSION = RegistryKey.unsafeOf("lava_source_conversion");
+    RegistryKey<GameRule<Boolean>> LAVA_SOURCE_CONVERSION = RegistryKey.of("lava_source_conversion");
 
-    RegistryKey<GameRule<Boolean>> LIMITED_CRAFTING = RegistryKey.unsafeOf("limited_crafting");
+    RegistryKey<GameRule<Boolean>> LIMITED_CRAFTING = RegistryKey.of("limited_crafting");
 
-    RegistryKey<GameRule<Boolean>> LOCATOR_BAR = RegistryKey.unsafeOf("locator_bar");
+    RegistryKey<GameRule<Boolean>> LOCATOR_BAR = RegistryKey.of("locator_bar");
 
-    RegistryKey<GameRule<Boolean>> LOG_ADMIN_COMMANDS = RegistryKey.unsafeOf("log_admin_commands");
+    RegistryKey<GameRule<Boolean>> LOG_ADMIN_COMMANDS = RegistryKey.of("log_admin_commands");
 
-    RegistryKey<GameRule<Integer>> MAX_BLOCK_MODIFICATIONS = RegistryKey.unsafeOf("max_block_modifications");
+    RegistryKey<GameRule<Integer>> MAX_BLOCK_MODIFICATIONS = RegistryKey.of("max_block_modifications");
 
-    RegistryKey<GameRule<Integer>> MAX_COMMAND_FORKS = RegistryKey.unsafeOf("max_command_forks");
+    RegistryKey<GameRule<Integer>> MAX_COMMAND_FORKS = RegistryKey.of("max_command_forks");
 
-    RegistryKey<GameRule<Integer>> MAX_COMMAND_SEQUENCE_LENGTH = RegistryKey.unsafeOf("max_command_sequence_length");
+    RegistryKey<GameRule<Integer>> MAX_COMMAND_SEQUENCE_LENGTH = RegistryKey.of("max_command_sequence_length");
 
-    RegistryKey<GameRule<Integer>> MAX_ENTITY_CRAMMING = RegistryKey.unsafeOf("max_entity_cramming");
+    RegistryKey<GameRule<Integer>> MAX_ENTITY_CRAMMING = RegistryKey.of("max_entity_cramming");
 
-    RegistryKey<GameRule<Integer>> MAX_MINECART_SPEED = RegistryKey.unsafeOf("max_minecart_speed");
+    RegistryKey<GameRule<Integer>> MAX_MINECART_SPEED = RegistryKey.of("max_minecart_speed");
 
-    RegistryKey<GameRule<Integer>> MAX_SNOW_ACCUMULATION_HEIGHT = RegistryKey.unsafeOf("max_snow_accumulation_height");
+    RegistryKey<GameRule<Integer>> MAX_SNOW_ACCUMULATION_HEIGHT = RegistryKey.of("max_snow_accumulation_height");
 
-    RegistryKey<GameRule<Boolean>> MOB_DROPS = RegistryKey.unsafeOf("mob_drops");
+    RegistryKey<GameRule<Boolean>> MOB_DROPS = RegistryKey.of("mob_drops");
 
-    RegistryKey<GameRule<Boolean>> MOB_EXPLOSION_DROP_DECAY = RegistryKey.unsafeOf("mob_explosion_drop_decay");
+    RegistryKey<GameRule<Boolean>> MOB_EXPLOSION_DROP_DECAY = RegistryKey.of("mob_explosion_drop_decay");
 
-    RegistryKey<GameRule<Boolean>> MOB_GRIEFING = RegistryKey.unsafeOf("mob_griefing");
+    RegistryKey<GameRule<Boolean>> MOB_GRIEFING = RegistryKey.of("mob_griefing");
 
-    RegistryKey<GameRule<Boolean>> NATURAL_HEALTH_REGENERATION = RegistryKey.unsafeOf("natural_health_regeneration");
+    RegistryKey<GameRule<Boolean>> NATURAL_HEALTH_REGENERATION = RegistryKey.of("natural_health_regeneration");
 
-    RegistryKey<GameRule<Boolean>> PLAYER_MOVEMENT_CHECK = RegistryKey.unsafeOf("player_movement_check");
+    RegistryKey<GameRule<Boolean>> PLAYER_MOVEMENT_CHECK = RegistryKey.of("player_movement_check");
 
-    RegistryKey<GameRule<Integer>> PLAYERS_NETHER_PORTAL_CREATIVE_DELAY = RegistryKey.unsafeOf("players_nether_portal_creative_delay");
+    RegistryKey<GameRule<Integer>> PLAYERS_NETHER_PORTAL_CREATIVE_DELAY = RegistryKey.of("players_nether_portal_creative_delay");
 
-    RegistryKey<GameRule<Integer>> PLAYERS_NETHER_PORTAL_DEFAULT_DELAY = RegistryKey.unsafeOf("players_nether_portal_default_delay");
+    RegistryKey<GameRule<Integer>> PLAYERS_NETHER_PORTAL_DEFAULT_DELAY = RegistryKey.of("players_nether_portal_default_delay");
 
-    RegistryKey<GameRule<Integer>> PLAYERS_SLEEPING_PERCENTAGE = RegistryKey.unsafeOf("players_sleeping_percentage");
+    RegistryKey<GameRule<Integer>> PLAYERS_SLEEPING_PERCENTAGE = RegistryKey.of("players_sleeping_percentage");
 
-    RegistryKey<GameRule<Boolean>> PROJECTILES_CAN_BREAK_BLOCKS = RegistryKey.unsafeOf("projectiles_can_break_blocks");
+    RegistryKey<GameRule<Boolean>> PROJECTILES_CAN_BREAK_BLOCKS = RegistryKey.of("projectiles_can_break_blocks");
 
-    RegistryKey<GameRule<Boolean>> PVP = RegistryKey.unsafeOf("pvp");
+    RegistryKey<GameRule<Boolean>> PVP = RegistryKey.of("pvp");
 
-    RegistryKey<GameRule<Boolean>> RAIDS = RegistryKey.unsafeOf("raids");
+    RegistryKey<GameRule<Boolean>> RAIDS = RegistryKey.of("raids");
 
-    RegistryKey<GameRule<Integer>> RANDOM_TICK_SPEED = RegistryKey.unsafeOf("random_tick_speed");
+    RegistryKey<GameRule<Integer>> RANDOM_TICK_SPEED = RegistryKey.of("random_tick_speed");
 
-    RegistryKey<GameRule<Boolean>> REDUCED_DEBUG_INFO = RegistryKey.unsafeOf("reduced_debug_info");
+    RegistryKey<GameRule<Boolean>> REDUCED_DEBUG_INFO = RegistryKey.of("reduced_debug_info");
 
-    RegistryKey<GameRule<Integer>> RESPAWN_RADIUS = RegistryKey.unsafeOf("respawn_radius");
+    RegistryKey<GameRule<Integer>> RESPAWN_RADIUS = RegistryKey.of("respawn_radius");
 
-    RegistryKey<GameRule<Boolean>> SEND_COMMAND_FEEDBACK = RegistryKey.unsafeOf("send_command_feedback");
+    RegistryKey<GameRule<Boolean>> SEND_COMMAND_FEEDBACK = RegistryKey.of("send_command_feedback");
 
-    RegistryKey<GameRule<Boolean>> SHOW_ADVANCEMENT_MESSAGES = RegistryKey.unsafeOf("show_advancement_messages");
+    RegistryKey<GameRule<Boolean>> SHOW_ADVANCEMENT_MESSAGES = RegistryKey.of("show_advancement_messages");
 
-    RegistryKey<GameRule<Boolean>> SHOW_DEATH_MESSAGES = RegistryKey.unsafeOf("show_death_messages");
+    RegistryKey<GameRule<Boolean>> SHOW_DEATH_MESSAGES = RegistryKey.of("show_death_messages");
 
-    RegistryKey<GameRule<Boolean>> SPAWNER_BLOCKS_WORK = RegistryKey.unsafeOf("spawner_blocks_work");
+    RegistryKey<GameRule<Boolean>> SPAWNER_BLOCKS_WORK = RegistryKey.of("spawner_blocks_work");
 
-    RegistryKey<GameRule<Boolean>> SPAWN_MOBS = RegistryKey.unsafeOf("spawn_mobs");
+    RegistryKey<GameRule<Boolean>> SPAWN_MOBS = RegistryKey.of("spawn_mobs");
 
-    RegistryKey<GameRule<Boolean>> SPAWN_MONSTERS = RegistryKey.unsafeOf("spawn_monsters");
+    RegistryKey<GameRule<Boolean>> SPAWN_MONSTERS = RegistryKey.of("spawn_monsters");
 
-    RegistryKey<GameRule<Boolean>> SPAWN_PATROLS = RegistryKey.unsafeOf("spawn_patrols");
+    RegistryKey<GameRule<Boolean>> SPAWN_PATROLS = RegistryKey.of("spawn_patrols");
 
-    RegistryKey<GameRule<Boolean>> SPAWN_PHANTOMS = RegistryKey.unsafeOf("spawn_phantoms");
+    RegistryKey<GameRule<Boolean>> SPAWN_PHANTOMS = RegistryKey.of("spawn_phantoms");
 
-    RegistryKey<GameRule<Boolean>> SPAWN_WANDERING_TRADERS = RegistryKey.unsafeOf("spawn_wandering_traders");
+    RegistryKey<GameRule<Boolean>> SPAWN_WANDERING_TRADERS = RegistryKey.of("spawn_wandering_traders");
 
-    RegistryKey<GameRule<Boolean>> SPAWN_WARDENS = RegistryKey.unsafeOf("spawn_wardens");
+    RegistryKey<GameRule<Boolean>> SPAWN_WARDENS = RegistryKey.of("spawn_wardens");
 
-    RegistryKey<GameRule<Boolean>> SPECTATORS_GENERATE_CHUNKS = RegistryKey.unsafeOf("spectators_generate_chunks");
+    RegistryKey<GameRule<Boolean>> SPECTATORS_GENERATE_CHUNKS = RegistryKey.of("spectators_generate_chunks");
 
-    RegistryKey<GameRule<Boolean>> SPREAD_VINES = RegistryKey.unsafeOf("spread_vines");
+    RegistryKey<GameRule<Boolean>> SPREAD_VINES = RegistryKey.of("spread_vines");
 
-    RegistryKey<GameRule<Boolean>> TNT_EXPLODES = RegistryKey.unsafeOf("tnt_explodes");
+    RegistryKey<GameRule<Boolean>> TNT_EXPLODES = RegistryKey.of("tnt_explodes");
 
-    RegistryKey<GameRule<Boolean>> TNT_EXPLOSION_DROP_DECAY = RegistryKey.unsafeOf("tnt_explosion_drop_decay");
+    RegistryKey<GameRule<Boolean>> TNT_EXPLOSION_DROP_DECAY = RegistryKey.of("tnt_explosion_drop_decay");
 
-    RegistryKey<GameRule<Boolean>> UNIVERSAL_ANGER = RegistryKey.unsafeOf("universal_anger");
+    RegistryKey<GameRule<Boolean>> UNIVERSAL_ANGER = RegistryKey.of("universal_anger");
 
-    RegistryKey<GameRule<Boolean>> WATER_SOURCE_CONVERSION = RegistryKey.unsafeOf("water_source_conversion");
+    RegistryKey<GameRule<Boolean>> WATER_SOURCE_CONVERSION = RegistryKey.of("water_source_conversion");
 }

@@ -42,7 +42,7 @@ record RegistryGenerator(Codegen codegen) {
                 typeClass,
                 ClassName.get(spec.packageName(), spec.generatedName()),
                 ParameterizedTypeName.get(registryKeyClass, typeClass),
-                namespace -> CodeBlock.of("$T.unsafeOf($S)", registryKeyClass, codegen.namespaceShort(namespace)),
+                namespace -> CodeBlock.of("$T.of($S)", registryKeyClass, codegen.namespaceShort(namespace)),
                 FieldOrder.NATURAL
         );
         generateTags(spec.key(), typeClass);
@@ -53,7 +53,7 @@ record RegistryGenerator(Codegen codegen) {
         final TypeSpec.Builder constants = constantsBuilder(typeClass, generatedClass, publicKeys);
         addFields(codegen.objectResource(key), constants,
                 ParameterizedTypeName.get(registryKeyClass, typeClass),
-                namespace -> CodeBlock.of("$T.unsafeOf($S)", registryKeyClass, codegen.namespaceShort(namespace)),
+                namespace -> CodeBlock.of("$T.of($S)", registryKeyClass, codegen.namespaceShort(namespace)),
                 FieldOrder.NATURAL);
         codegen.write(codegen.javaFile(generatedClass.packageName(), constants.build()));
     }
@@ -67,7 +67,7 @@ record RegistryGenerator(Codegen codegen) {
         final TypeSpec.Builder constants = constantsBuilder(typeClass, generatedClass, true);
         final ParameterizedTypeName fieldType = ParameterizedTypeName.get(tagKeyClass, typeClass);
         addFields(tags, constants, fieldType,
-                namespace -> CodeBlock.of("$T.unsafeOf($S)", tagKeyClass, codegen.namespaceShort(namespace)),
+                namespace -> CodeBlock.of("$T.of($S)", tagKeyClass, codegen.namespaceShort(namespace)),
                 FieldOrder.NATURAL);
         codegen.write(codegen.javaFile(generatedClass.packageName(), constants.build()));
     }

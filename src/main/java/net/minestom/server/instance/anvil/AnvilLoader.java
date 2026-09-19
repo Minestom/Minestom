@@ -303,7 +303,7 @@ public class AnvilLoader implements ChunkLoader {
         int[] convertedPalette = new int[length];
         for (int i = 0; i < length; i++) {
             final String name = paletteTag.getString(i);
-            int biomeId = biomeRegistry.getId(RegistryKey.unsafeOf(name));
+            int biomeId = biomeRegistry.getId(RegistryKey.of(name));
             if (biomeId == -1) biomeId = biomeRegistry.getId(Biome.PLAINS);
             convertedPalette[i] = biomeId;
         }
