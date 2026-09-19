@@ -2,7 +2,9 @@ package net.minestom.server.instance.palette;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.utils.MathUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -1041,6 +1043,13 @@ public class PaletteTest {
         long[] values = new long[] { 0x01230123, 0x00130013, 0x33333333, 0x22222222 };
         testPalette.load(palette, values);
         assertEquals(testPalette.maxSize() - 12, testPalette.count());
+    }
+
+    @Test
+    public void blockDirectBitsFitAllStates() {
+        //noinspection MisorderedAssertEqualsArguments
+        assertEquals(MathUtils.bitsToRepresent(Block.statesCount() - 1), Palette.BLOCK_PALETTE_DIRECT_BITS,
+                     "direct palette cannot fit all block states");
     }
 
 }

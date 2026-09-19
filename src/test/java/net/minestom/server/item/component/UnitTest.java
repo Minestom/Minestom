@@ -21,7 +21,8 @@ public class UnitTest extends AbstractItemComponentRegistriesTest<Unit> {
             DataComponents.CREATIVE_SLOT_LOCK,
             DataComponents.INTANGIBLE_PROJECTILE,
             DataComponents.GLIDER,
-            DataComponents.UNBREAKABLE
+            DataComponents.UNBREAKABLE,
+            DataComponents.WAXED
     );
 
     @Override

@@ -234,7 +234,6 @@ public final class RegistryData {
         private final float jumpFactor;
         private final int mapColorId;
         private final short packedFlags;
-        private final boolean blocksMotion;
         private final byte lightEmission;
         private final byte lightBlocked;
         private final @Nullable BlockEntityType blockEntityType;
@@ -260,7 +259,6 @@ public final class RegistryData {
             this.mapColorId = fromParent(parent, BlockEntry::mapColorId, main, "mapColorId", Properties::getInt, 0);
             boolean air = fromParent(parent, BlockEntry::isAir, main, "air", Properties::getBoolean, false);
             boolean solid = fromParent(parent, BlockEntry::isSolid, main, "solid", Properties::getBoolean, null);
-            this.blocksMotion = fromParent(parent, BlockEntry::blocksMotion, main, "blocksMotion", Properties::getBoolean, false);
             boolean liquid = fromParent(parent, BlockEntry::isLiquid, main, "liquid", Properties::getBoolean, false);
             boolean fluid = fromParent(parent, BlockEntry::isFluid, main, "fluid", Properties::getBoolean, false);
             boolean occludes = fromParent(parent, BlockEntry::occludes, main, "occludes", Properties::getBoolean, true);
@@ -398,10 +396,6 @@ public final class RegistryData {
 
         public boolean isSolid() {
             return (packedFlags & SOLID_OFFSET) != 0;
-        }
-
-        public boolean blocksMotion() {
-            return blocksMotion;
         }
 
         public boolean isLiquid() {
