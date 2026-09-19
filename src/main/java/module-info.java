@@ -128,6 +128,7 @@ module net.minestom.server {
     exports net.minestom.server.item.crossbow;
     exports net.minestom.server.item.enchant;
     exports net.minestom.server.item.instrument;
+    exports net.minestom.server.item.predicate;
     exports net.minestom.server.listener;
     exports net.minestom.server.listener.common;
     exports net.minestom.server.listener.manager;
