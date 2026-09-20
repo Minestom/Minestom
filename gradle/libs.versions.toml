@@ -21,7 +21,7 @@ jcstress = "0.16"
 errorprone = "2.50.0"
 
 # Code Generation
-javaPoet = "0.19.0"
+javaPoet = "0.20.0"
 
 # Log impl (for demo)
 logback = "1.6.3"
