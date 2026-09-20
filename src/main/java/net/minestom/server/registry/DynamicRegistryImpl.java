@@ -4,7 +4,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Result;
@@ -283,7 +282,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         }
         List<RegistryDataPacket.Entry> entries = new ArrayList<>(idToValue.size());
         for (int i = 0; i < idToValue.size(); i++) {
-            CompoundBinaryTag data = null;
+            BinaryTag data = null;
             // sorta todo, sorta just a note:
             // Right now we very much only support the minecraft:core (vanilla) 'pack'. Any entry which was not loaded
             // from static data will be treated as non vanilla and always sent completely. However, we really should
@@ -297,7 +296,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
             if (!excludeVanilla || pack != DataPack.MINECRAFT_CORE) {
                 final Result<BinaryTag> entryResult = codec.encode(transcoder, entry);
                 if (entryResult instanceof Result.Ok(BinaryTag tag)) {
-                    data = (CompoundBinaryTag) tag;
+                    data = tag;
                 } else {
                     throw new IllegalStateException("Failed to encode registry entry " + i + " (" + getKey(i) + ") for registry " + key);
                 }
