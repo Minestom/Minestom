@@ -3,12 +3,14 @@ package net.minestom.server.entity.player;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.GameMode;
+import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.player.PlayerBlockInteractEvent;
 import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.instance.block.BlockKeys;
 import net.minestom.server.instance.block.predicate.BlockPredicate;
 import net.minestom.server.instance.block.predicate.PropertiesPredicate;
@@ -125,6 +127,64 @@ public class PlayerBlockPlacementIntegrationTest {
         player.interpretPacketQueue();
 
         assertEquals("minecraft:white_wool", instance.getBlock(2, 41, 0).name());
+    }
+
+    @Test
+    public void replaceableReplacedInPlace(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+        player.setItemInMainHand(ItemStack.of(Material.WHITE_WOOL, 64));
+        instance.setBlock(2, 41, 0, Block.SHORT_GRASS);
+
+        placeAgainst(player, new Pos(2, 41, 0), BlockFace.WEST);
+        assertEquals(Block.WHITE_WOOL, instance.getBlock(2, 41, 0));
+        assertTrue(instance.getBlock(1, 41, 0).air());
+
+        placeAgainst(player, new Pos(2, 41, 0), BlockFace.WEST);
+        assertEquals(Block.WHITE_WOOL, instance.getBlock(1, 41, 0));
+    }
+
+    @Test
+    public void ownItemPlacesAgainst(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+        player.setItemInMainHand(ItemStack.of(Material.SHORT_GRASS, 64));
+        instance.setBlock(2, 41, 0, Block.SHORT_GRASS);
+
+        placeAgainst(player, new Pos(2, 41, 0), BlockFace.WEST);
+        assertEquals(Block.SHORT_GRASS, instance.getBlock(2, 41, 0));
+        assertEquals(Block.SHORT_GRASS, instance.getBlock(1, 41, 0));
+    }
+
+    @Test
+    public void ruleDecidesReplacement(Env env) {
+        env.process().block().registerBlockPlacementRule(new BlockPlacementRule(Block.SHORT_GRASS) {
+            @Override
+            public Block blockPlace(PlacementState placementState) {
+                return placementState.block();
+            }
+
+            @Override
+            public boolean isSelfReplaceable(Replacement replacement) {
+                return false;
+            }
+        });
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+        player.setItemInMainHand(ItemStack.of(Material.WHITE_WOOL, 64));
+        instance.setBlock(2, 41, 0, Block.SHORT_GRASS);
+
+        placeAgainst(player, new Pos(2, 41, 0), BlockFace.WEST);
+        assertEquals(Block.SHORT_GRASS, instance.getBlock(2, 41, 0));
+        assertEquals(Block.WHITE_WOOL, instance.getBlock(1, 41, 0));
+    }
+
+    private static void placeAgainst(Player player, Pos clicked, BlockFace face) {
+        player.addPacketToQueue(new ClientPlayerBlockPlacementPacket(PlayerHand.MAIN, clicked, face, 1f, 1f, 1f, false, false, 0));
+        player.interpretPacketQueue();
     }
 
     private static Stream<Arguments> placeBlockFromAdventureModeParams() {
