@@ -68,12 +68,19 @@ public record AdvancementsPacket(
 
     /**
      * AdvancementMapping maps the namespaced ID to the Advancement.
+     *
+     * @param key   the namespaced ID of the advancement
+     * @param value the advancement
+     * @param x     the horizontal position of the advancement in its tab
+     * @param y     the vertical position of the advancement in its tab
      */
-    public record AdvancementMapping(String key,
-                                     Advancement value) implements ComponentHolder<AdvancementMapping> {
+    public record AdvancementMapping(String key, Advancement value,
+                                     float x, float y) implements ComponentHolder<AdvancementMapping> {
         public static final NetworkBuffer.Type<AdvancementMapping> SERIALIZER = NetworkBufferTemplate.template(
                 NetworkBuffer.STRING, AdvancementMapping::key,
                 Advancement.SERIALIZER, AdvancementMapping::value,
+                NetworkBuffer.FLOAT, AdvancementMapping::x,
+                NetworkBuffer.FLOAT, AdvancementMapping::y,
                 AdvancementMapping::new
         );
 
@@ -84,7 +91,8 @@ public record AdvancementsPacket(
 
         @Override
         public AdvancementMapping copyWithOperator(UnaryOperator<Component> operator) {
-            return this.value.displayData == null ? this : new AdvancementMapping(this.key, this.value.copyWithOperator(operator));
+            return this.value.displayData == null ? this
+                    : new AdvancementMapping(this.key, this.value.copyWithOperator(operator), this.x, this.y);
         }
     }
 
@@ -127,8 +135,7 @@ public record AdvancementsPacket(
 
     public record DisplayData(Component title, Component description,
                               ItemStack icon, FrameType frameType,
-                              int flags, @Nullable String backgroundTexture,
-                              float x, float y) implements ComponentHolder<DisplayData> {
+                              int flags, @Nullable String backgroundTexture) implements ComponentHolder<DisplayData> {
 
         public static final NetworkBuffer.Type<DisplayData> SERIALIZER = new NetworkBuffer.Type<>() {
             @Override
@@ -142,8 +149,6 @@ public record AdvancementsPacket(
                     assert value.backgroundTexture != null;
                     buffer.write(NetworkBuffer.STRING, value.backgroundTexture);
                 }
-                buffer.write(NetworkBuffer.FLOAT, value.x);
-                buffer.write(NetworkBuffer.FLOAT, value.y);
             }
 
             @Override
@@ -154,12 +159,9 @@ public record AdvancementsPacket(
                 var frameType = FrameType.values()[buffer.read(NetworkBuffer.VAR_INT)];
                 var flags = buffer.read(NetworkBuffer.INT);
                 var backgroundTexture = (flags & 0x1) != 0 ? buffer.read(NetworkBuffer.STRING) : null;
-                var x = buffer.read(NetworkBuffer.FLOAT);
-                var y = buffer.read(NetworkBuffer.FLOAT);
                 return new DisplayData(title, description,
                         icon, frameType,
-                        flags, backgroundTexture,
-                        x, y);
+                        flags, backgroundTexture);
             }
         };
 
@@ -170,7 +172,7 @@ public record AdvancementsPacket(
 
         @Override
         public DisplayData copyWithOperator(UnaryOperator<Component> operator) {
-            return new DisplayData(operator.apply(this.title), operator.apply(this.description), this.icon, this.frameType, this.flags, this.backgroundTexture, this.x, this.y);
+            return new DisplayData(operator.apply(this.title), operator.apply(this.description), this.icon, this.frameType, this.flags, this.backgroundTexture);
         }
     }
 

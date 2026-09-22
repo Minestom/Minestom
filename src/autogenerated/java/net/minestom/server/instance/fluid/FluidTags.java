@@ -11,7 +11,15 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("unused")
 @ApiStatus.NonExtendable
 public interface FluidTags {
+    TagKey<Fluid> AXOLOTL_TRIES_TO_FIND = TagKey.unsafeOf("axolotl_tries_to_find");
+
     TagKey<Fluid> BUBBLE_COLUMN_CAN_OCCUPY = TagKey.unsafeOf("bubble_column_can_occupy");
+
+    TagKey<Fluid> DOLPHIN_TRIES_TO_FIND = TagKey.unsafeOf("dolphin_tries_to_find");
+
+    TagKey<Fluid> ENTITY_FLOATABLE = TagKey.unsafeOf("entity_floatable");
+
+    TagKey<Fluid> FROG_TRIES_TO_FIND_LAND_NEAR = TagKey.unsafeOf("frog_tries_to_find_land_near");
 
     TagKey<Fluid> LAVA = TagKey.unsafeOf("lava");
 

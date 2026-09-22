@@ -14,10 +14,7 @@ public record EntityAnimationPacket(int entityId, Animation animation) implement
     );
 
     public enum Animation {
-        SWING_MAIN_ARM,
-        TAKE_DAMAGE,
         LEAVE_BED,
-        SWING_OFF_HAND,
         CRITICAL_EFFECT,
         MAGICAL_CRITICAL_EFFECT
     }

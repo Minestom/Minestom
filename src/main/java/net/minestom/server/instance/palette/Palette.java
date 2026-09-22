@@ -34,7 +34,7 @@ public sealed interface Palette permits PaletteImpl {
     int BLOCK_DIMENSION = 16;
     int BLOCK_PALETTE_MIN_BITS = 4;
     int BLOCK_PALETTE_MAX_BITS = 8;
-    int BLOCK_PALETTE_DIRECT_BITS = 15;
+    int BLOCK_PALETTE_DIRECT_BITS = 16;
 
     int BIOME_DIMENSION = 4;
     int BIOME_PALETTE_MIN_BITS = 1;

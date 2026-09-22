@@ -26,7 +26,7 @@ public class DynamicRegistryGetIdBenchmark {
 
     @Setup
     public void setup() {
-        registry = Biome.createDefaultRegistry();
+        registry = Biome.createDefaultRegistry(Registries.vanilla());
     }
 
     @Benchmark
