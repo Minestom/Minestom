@@ -765,24 +765,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             // Player instance changed, clear current viewable collections
             if (updateChunks) {
                 final int oldViewDistance = effectiveViewDistance();
-                final int newViewDistance = effectiveViewDistance(instance);
-                final int newChunkX = spawnPosition.chunkX();
-                final int newChunkZ = spawnPosition.chunkZ();
                 ChunkRange.chunksInRange(
-                        (int) this.chunksLoadedByClient.x(), (int) this.chunksLoadedByClient.z(), oldViewDistance,
-                        (x, z) -> {
-                            boolean inNewView = Math.abs(x - newChunkX) <= newViewDistance
-                                    && Math.abs(z - newChunkZ) <= newViewDistance;
-                            if (!inNewView) {
-                                // Only send UnloadChunkPacket for chunks no longer in the new view.
-                                // This alleviates a 26.2 client bug where, if it processes an UnloadChunkPacket
-                                // and a ChunkDataPacket for the same chunk in the same frame, the chunk disappears.
-                                // https://bugs.mojang.com/browse/MC/issues/MC-310041
-                                // TODO(26.3): Revert this change; the client bug is fixed in 26.3-snapshot5
-                                sendPacket(new UnloadChunkPacket(x, z));
-                            }
-                            EventDispatcher.call(new PlayerChunkUnloadEvent(this, x, z));
-                        }
+                        (int) this.chunksLoadedByClient.x(), (int) this.chunksLoadedByClient.z(),
+                        oldViewDistance, chunkRemover
                 );
             }
         }
