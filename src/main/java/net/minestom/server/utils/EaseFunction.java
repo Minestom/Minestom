@@ -1,8 +1,8 @@
 package net.minestom.server.utils;
 
 import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.Result;
 import net.minestom.server.codec.StructCodec;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.utils.validate.Check;
 
 import java.util.List;
@@ -80,43 +80,66 @@ public interface EaseFunction {
 
     float sample(float value);
 
-    final class CubicBezier implements EaseFunction {
+    /// A cubic bezier ease from (0, 0) to (1, 1), shaped by the control points (x1, y1) and (x2, y2).
+    ///
+    /// Sampling treats the input as an x coordinate, finds the point of the curve with that x, and returns its
+    /// y coordinate. Both x coordinates must be between 0 and 1 inclusive, which keeps x from decreasing along the
+    /// curve so that each input has one output. The y coordinates are unbounded, and values outside 0 to 1 make
+    /// the ease overshoot.
+    ///
+    /// [#CODEC] reads and writes the control points as `{"cubic_bezier": [x1, y1, x2, y2]}`. Decoding returns a
+    /// [Result.Error] when x1 or x2 is outside 0 to 1.
+    ///
+    /// @param x1 the x coordinate of the first control point, between 0 and 1 inclusive
+    /// @param y1 the y coordinate of the first control point
+    /// @param x2 the x coordinate of the second control point, between 0 and 1 inclusive
+    /// @param y2 the y coordinate of the second control point
+    record CubicBezier(float x1, float y1, float x2, float y2) implements EaseFunction {
         private static final int NEWTON_RAPHSON_ITERATIONS = 4;
+        private static final float MAX_NEWTON_STEP = 0.25F;
+        private static final float EPSILON = 1.0E-5F;
 
-        private static final Codec<float[]> CONTROL_POINTS_CODEC = Codec.FLOAT.list(4).transform(
-                floats -> new float[]{floats.get(0), floats.get(1), floats.get(2), floats.get(3)},
-                array -> List.of(array[0], array[1], array[2], array[3]));
+        private static final Codec<CubicBezier> CONTROL_POINTS_CODEC = Codec.FLOAT.list(4).transform(
+                floats -> new CubicBezier(floats.get(0), floats.get(1), floats.get(2), floats.get(3)),
+                bezier -> List.of(bezier.x1(), bezier.y1(), bezier.x2(), bezier.y2()));
         public static final Codec<CubicBezier> CODEC = StructCodec.struct(
-                "cubic_bezier", CONTROL_POINTS_CODEC, CubicBezier::controlPoints,
-                CubicBezier::new);
+                "cubic_bezier", CONTROL_POINTS_CODEC, bezier -> bezier,
+                bezier -> bezier);
 
-        private final float[] controlPoints;
-        private final Curve x, y;
+        /// Creates a cubic bezier ease from its control points.
+        ///
+        /// @throws IllegalArgumentException if x1 or x2 is outside 0 to 1
+        public CubicBezier {
+            if (x1 < 0.0F || x1 > 1.0F) throw new IllegalArgumentException("x1 must be between 0 and 1, got " + x1);
+            if (x2 < 0.0F || x2 > 1.0F) throw new IllegalArgumentException("x2 must be between 0 and 1, got " + x2);
+        }
 
+        /// Creates a cubic bezier ease from an array holding x1, y1, x2, and y2 in that order.
+        ///
+        /// @param controlPoints the control points, must have a length of 4
+        /// @throws IllegalArgumentException if the array length is not 4, or if x1 or x2 is outside 0 to 1
+        /// @deprecated use [#CubicBezier(float, float, float, float)] instead
+        @Deprecated
         public CubicBezier(float[] controlPoints) {
             Objects.requireNonNull(controlPoints, "controlPoints");
             Check.argCondition(controlPoints.length != 4, "CubicBezier requires 4 control points");
-            this.controlPoints = controlPoints;
-            this.x = new Curve(controlPoints[0], controlPoints[1]);
-            this.y = new Curve(controlPoints[2], controlPoints[3]);
+            this(controlPoints[0], controlPoints[1], controlPoints[2], controlPoints[3]);
         }
 
+        /// Returns the control points as a new array holding x1, y1, x2, and y2 in that order.
+        ///
+        /// @return a new array of the control points
+        /// @deprecated use [#x1()], [#y1()], [#x2()], and [#y2()] instead
+        @Deprecated
         public float[] controlPoints() {
-            return this.controlPoints;
+            return new float[]{x1, y1, x2, y2};
         }
 
         @Override
-        public float sample(float t) {
-            float currentT = t;
-            for (int i = 0; i < NEWTON_RAPHSON_ITERATIONS; i++) {
-                float slope = this.x.sampleGradient(currentT);
-                if (slope < Vec.EPSILON) break;
-
-                float error = this.x.sample(currentT) - t;
-                currentT -= error / slope;
-            }
-
-            return this.y.sample(currentT);
+        public float sample(float x) {
+            final Curve xCurve = new Curve(x1, x2);
+            final Curve yCurve = new Curve(y1, y2);
+            return yCurve.sample(xCurve.solve(x));
         }
 
         private record Curve(float a, float b, float c) {
@@ -129,7 +152,33 @@ public interface EaseFunction {
             }
 
             float sampleGradient(float t) {
-                return 3 * a * t * t + 2 * b * t + c;
+                return (3.0F * a * t + 2.0F * b) * t + c;
+            }
+
+            // Finds the t where the curve reaches value. Newton steps run first, and bisection takes
+            // over when they do not converge or the gradient is too flat to follow.
+            float solve(float value) {
+                float t = value;
+                for (int i = 0; i < NEWTON_RAPHSON_ITERATIONS; i++) {
+                    final float error = sample(t) - value;
+                    if (Math.abs(error) < EPSILON) return t;
+                    final float gradient = sampleGradient(t);
+                    if (gradient < EPSILON) break;
+                    t -= Math.clamp(error / gradient, -MAX_NEWTON_STEP, MAX_NEWTON_STEP);
+                }
+                return bisect(value, t);
+            }
+
+            float bisect(float value, float t) {
+                float low = 0.0F, high = 1.0F;
+                while (low < high) {
+                    final float error = sample(t) - value;
+                    if (Math.abs(error) < EPSILON) return t;
+                    if (error < 0.0F) low = t;
+                    else high = t;
+                    t = (low + high) / 2.0F;
+                }
+                return t;
             }
         }
     }
