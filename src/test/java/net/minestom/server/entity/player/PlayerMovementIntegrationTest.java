@@ -339,17 +339,12 @@ public class PlayerMovementIntegrationTest {
     }
 
     @Test
-    public void testInstanceSwitchSameViewDoesNotUnloadOverlappingChunks(Env env) {
-        assertInstanceSwitchChunkUnloads(env, 8, new Pos(0, 42, 0), 8, new Pos(0, 42, 0));
-    }
-
-    @Test
-    public void testInstanceSwitchShrinkingViewUnloadsOldRing(Env env) {
+    public void testInstanceSwitchShrinkingViewUnloadsAllOldChunks(Env env) {
         assertInstanceSwitchChunkUnloads(env, 8, new Pos(0, 42, 0), 3, new Pos(0, 42, 0));
     }
 
     @Test
-    public void testInstanceSwitchExpandingViewDoesNotUnloadDestinationChunks(Env env) {
+    public void testInstanceSwitchExpandingViewUnloadsAllOldChunks(Env env) {
         assertInstanceSwitchChunkUnloads(env, 3, new Pos(0, 42, 0), 8, new Pos(80, 42, 0));
     }
 
@@ -366,9 +361,7 @@ public class PlayerMovementIntegrationTest {
 
         final Set<Long> expectedUnloads = new HashSet<>();
         ChunkRange.chunksInRange(oldPosition.chunkX(), oldPosition.chunkZ(), oldViewDistance, (chunkX, chunkZ) -> {
-            if (!isChunkInView(chunkX, chunkZ, newPosition, newViewDistance)) {
-                expectedUnloads.add(CoordConversion.chunkIndex(chunkX, chunkZ));
-            }
+            expectedUnloads.add(CoordConversion.chunkIndex(chunkX, chunkZ));
         });
 
         final Collector<UnloadChunkPacket> removed = connection.trackIncoming(UnloadChunkPacket.class);
@@ -400,11 +393,6 @@ public class PlayerMovementIntegrationTest {
             // Must reset velocity or the player will keep moving and create a loop of teleport cancel teleport.
             assertEquals(Vec.ZERO, packet.delta());
         });
-    }
-
-    private static boolean isChunkInView(int chunkX, int chunkZ, Pos viewCenter, int viewDistance) {
-        return Math.abs(chunkX - viewCenter.chunkX()) <= viewDistance
-                && Math.abs(chunkZ - viewCenter.chunkZ()) <= viewDistance;
     }
 
     private static ClientTeleportConfirmPacket confirmTeleport(Player player) {
