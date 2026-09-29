@@ -23,6 +23,29 @@ public final class UUIDUtils {
         return UNIQUE_ID_PATTERN.matcher(input).matches();
     }
 
+    /**
+     * Parses a {@link UUID} from its hexadecimal string, accepting both the dashed canonical
+     * form and the dashless form (e.g. as returned by the Mojang session server).
+     *
+     * @throws IllegalArgumentException if the input does not contain exactly 32 hex digits
+     */
+    public static UUID fromString(String input) {
+        long most = 0, least = 0;
+        int count = 0;
+        for (int i = 0, length = input.length(); i < length; i++) {
+            final char c = input.charAt(i);
+            if (c == '-') continue;
+            final int digit = Character.digit(c, 16);
+            if (digit < 0 || count >= 32)
+                throw new IllegalArgumentException("Invalid UUID string: " + input);
+            if (count < 16) most = most << 4 | digit;
+            else least = least << 4 | digit;
+            count++;
+        }
+        if (count != 32) throw new IllegalArgumentException("Invalid UUID string: " + input);
+        return new UUID(most, least);
+    }
+
     public static UUID fromNbt(IntArrayBinaryTag tag) {
         return intArrayToUuid(tag.value());
     }
