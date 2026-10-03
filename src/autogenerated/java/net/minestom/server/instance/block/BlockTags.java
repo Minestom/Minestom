@@ -63,6 +63,20 @@ public interface BlockTags {
 
     TagKey<Block> BIRCH_LOGS = TagKey.unsafeOf("birch_logs");
 
+    TagKey<Block> BLOCKS_DOLPHIN_JUMP = TagKey.unsafeOf("blocks_dolphin_jump");
+
+    TagKey<Block> BLOCKS_FLUID_FLOW = TagKey.unsafeOf("blocks_fluid_flow");
+
+    TagKey<Block> BLOCKS_LAVA_FIRE_SPREAD = TagKey.unsafeOf("blocks_lava_fire_spread");
+
+    TagKey<Block> BLOCKS_MOTION = TagKey.unsafeOf("blocks_motion");
+
+    TagKey<Block> BLOCKS_MOTION_IN_HEIGHTMAP = TagKey.unsafeOf("blocks_motion_in_heightmap");
+
+    TagKey<Block> BLOCKS_MOTION_IN_HEIGHTMAP_NO_LEAVES = TagKey.unsafeOf("blocks_motion_in_heightmap_no_leaves");
+
+    TagKey<Block> BLOCKS_MOTION_NO_LEAVES = TagKey.unsafeOf("blocks_motion_no_leaves");
+
     TagKey<Block> BLOCKS_WIND_CHARGE_EXPLOSIONS = TagKey.unsafeOf("blocks_wind_charge_explosions");
 
     TagKey<Block> BUTTONS = TagKey.unsafeOf("buttons");
@@ -79,6 +93,8 @@ public interface BlockTags {
 
     TagKey<Block> CANDLES = TagKey.unsafeOf("candles");
 
+    TagKey<Block> CANNOT_PLACE_BASALT_PILLAR_ON = TagKey.unsafeOf("cannot_place_basalt_pillar_on");
+
     TagKey<Block> CANNOT_REPLACE_BELOW_TREE_TRUNK = TagKey.unsafeOf("cannot_replace_below_tree_trunk");
 
     TagKey<Block> CANNOT_SUPPORT_KELP = TagKey.unsafeOf("cannot_support_kelp");
@@ -87,11 +103,19 @@ public interface BlockTags {
 
     TagKey<Block> CANNOT_SUPPORT_SNOW_LAYER = TagKey.unsafeOf("cannot_support_snow_layer");
 
+    TagKey<Block> CAT_DOES_NOT_TELEPORT_TO = TagKey.unsafeOf("cat_does_not_teleport_to");
+
+    TagKey<Block> CATS_CAN_LIE_ON = TagKey.unsafeOf("cats_can_lie_on");
+
+    TagKey<Block> CATS_CAN_SIT_ON = TagKey.unsafeOf("cats_can_sit_on");
+
     TagKey<Block> CAULDRONS = TagKey.unsafeOf("cauldrons");
 
     TagKey<Block> CAUSES_CONTINUOUS_GEYSER_ERUPTIONS = TagKey.unsafeOf("causes_continuous_geyser_eruptions");
 
     TagKey<Block> CAUSES_PERIODIC_GEYSER_ERUPTIONS = TagKey.unsafeOf("causes_periodic_geyser_eruptions");
+
+    TagKey<Block> CAUSES_SUFFOCATION = TagKey.unsafeOf("causes_suffocation");
 
     TagKey<Block> CAVE_VINES = TagKey.unsafeOf("cave_vines");
 
@@ -113,7 +137,13 @@ public interface BlockTags {
 
     TagKey<Block> CONCRETE_POWDERS = TagKey.unsafeOf("concrete_powders");
 
-    TagKey<Block> CONVERTABLE_TO_MUD = TagKey.unsafeOf("convertable_to_mud");
+    TagKey<Block> CONCRETE_SLABS = TagKey.unsafeOf("concrete_slabs");
+
+    TagKey<Block> CONCRETE_STAIRS = TagKey.unsafeOf("concrete_stairs");
+
+    TagKey<Block> CONDUIT_EFFECT_BLOCK = TagKey.unsafeOf("conduit_effect_block");
+
+    TagKey<Block> CONVERTIBLE_TO_MUD = TagKey.unsafeOf("convertible_to_mud");
 
     TagKey<Block> COPPER = TagKey.unsafeOf("copper");
 
@@ -135,7 +165,11 @@ public interface BlockTags {
 
     TagKey<Block> CRYSTAL_SOUND_BLOCKS = TagKey.unsafeOf("crystal_sound_blocks");
 
+    TagKey<Block> CUSHION_USES_COLLISION_SHAPE = TagKey.unsafeOf("cushion_uses_collision_shape");
+
     TagKey<Block> DAMPENS_VIBRATIONS = TagKey.unsafeOf("dampens_vibrations");
+
+    TagKey<Block> DANGEROUS_FOR_TELEPORTATION = TagKey.unsafeOf("dangerous_for_teleportation");
 
     TagKey<Block> DARK_OAK_LOGS = TagKey.unsafeOf("dark_oak_logs");
 
@@ -169,7 +203,11 @@ public interface BlockTags {
 
     TagKey<Block> ENCHANTMENT_POWER_TRANSMITTER = TagKey.unsafeOf("enchantment_power_transmitter");
 
+    TagKey<Block> ENDERMAN_DOES_NOT_TELEPORT_TO = TagKey.unsafeOf("enderman_does_not_teleport_to");
+
     TagKey<Block> ENDERMAN_HOLDABLE = TagKey.unsafeOf("enderman_holdable");
+
+    TagKey<Block> ENTITIES_CAN_TELEPORT_TO = TagKey.unsafeOf("entities_can_teleport_to");
 
     TagKey<Block> FALL_DAMAGE_RESETTING = TagKey.unsafeOf("fall_damage_resetting");
 
@@ -211,6 +249,8 @@ public interface BlockTags {
 
     TagKey<Block> HAPPY_GHAST_AVOIDS = TagKey.unsafeOf("happy_ghast_avoids");
 
+    TagKey<Block> HEIGHT_SPECIFIC_ORE_REPLACEABLES = TagKey.unsafeOf("height_specific_ore_replaceables");
+
     TagKey<Block> HOGLIN_REPELLENTS = TagKey.unsafeOf("hoglin_repellents");
 
     TagKey<Block> HUGE_BROWN_MUSHROOM_CAN_PLACE_ON = TagKey.unsafeOf("huge_brown_mushroom_can_place_on");
@@ -218,6 +258,8 @@ public interface BlockTags {
     TagKey<Block> HUGE_RED_MUSHROOM_CAN_PLACE_ON = TagKey.unsafeOf("huge_red_mushroom_can_place_on");
 
     TagKey<Block> ICE = TagKey.unsafeOf("ice");
+
+    TagKey<Block> ICE_MELTS_WHEN_DESTROYED_ABOVE = TagKey.unsafeOf("ice_melts_when_destroyed_above");
 
     TagKey<Block> ICE_SPIKE_REPLACEABLE = TagKey.unsafeOf("ice_spike_replaceable");
 
@@ -299,7 +341,7 @@ public interface BlockTags {
 
     TagKey<Block> NEEDS_STONE_TOOL = TagKey.unsafeOf("needs_stone_tool");
 
-    TagKey<Block> NETHER_CARVER_REPLACEABLES = TagKey.unsafeOf("nether_carver_replaceables");
+    TagKey<Block> NETHER_PORTAL_FRAME = TagKey.unsafeOf("nether_portal_frame");
 
     TagKey<Block> NYLIUM = TagKey.unsafeOf("nylium");
 
@@ -307,9 +349,9 @@ public interface BlockTags {
 
     TagKey<Block> OCCLUDES_VIBRATION_SIGNALS = TagKey.unsafeOf("occludes_vibration_signals");
 
-    TagKey<Block> OVERRIDES_MUSHROOM_LIGHT_REQUIREMENT = TagKey.unsafeOf("overrides_mushroom_light_requirement");
+    TagKey<Block> ORES = TagKey.unsafeOf("ores");
 
-    TagKey<Block> OVERWORLD_CARVER_REPLACEABLES = TagKey.unsafeOf("overworld_carver_replaceables");
+    TagKey<Block> OVERRIDES_MUSHROOM_LIGHT_REQUIREMENT = TagKey.unsafeOf("overrides_mushroom_light_requirement");
 
     TagKey<Block> OVERWORLD_NATURAL_LOGS = TagKey.unsafeOf("overworld_natural_logs");
 
@@ -324,6 +366,8 @@ public interface BlockTags {
     TagKey<Block> POLAR_BEAR_IMMUNE_TO = TagKey.unsafeOf("polar_bear_immune_to");
 
     TagKey<Block> POLAR_BEARS_SPAWNABLE_ON_ALTERNATE = TagKey.unsafeOf("polar_bears_spawnable_on_alternate");
+
+    TagKey<Block> POPLAR_LOGS = TagKey.unsafeOf("poplar_logs");
 
     TagKey<Block> PORTALS = TagKey.unsafeOf("portals");
 
@@ -345,9 +389,13 @@ public interface BlockTags {
 
     TagKey<Block> REPLACEABLE_BY_TREES = TagKey.unsafeOf("replaceable_by_trees");
 
+    TagKey<Block> REQUIRED_FOR_POPLAR_LEAF_AMBIENCE = TagKey.unsafeOf("required_for_poplar_leaf_ambience");
+
     TagKey<Block> SAND = TagKey.unsafeOf("sand");
 
     TagKey<Block> SAPLINGS = TagKey.unsafeOf("saplings");
+
+    TagKey<Block> SCULK_GROWTH_INHIBITORS = TagKey.unsafeOf("sculk_growth_inhibitors");
 
     TagKey<Block> SCULK_REPLACEABLE = TagKey.unsafeOf("sculk_replaceable");
 
@@ -361,7 +409,11 @@ public interface BlockTags {
 
     TagKey<Block> SHULKER_BOXES = TagKey.unsafeOf("shulker_boxes");
 
+    TagKey<Block> SHULKER_DOES_NOT_TELEPORT_TO = TagKey.unsafeOf("shulker_does_not_teleport_to");
+
     TagKey<Block> SIGNS = TagKey.unsafeOf("signs");
+
+    TagKey<Block> SKULLS = TagKey.unsafeOf("skulls");
 
     TagKey<Block> SLABS = TagKey.unsafeOf("slabs");
 
@@ -382,6 +434,8 @@ public interface BlockTags {
     TagKey<Block> SOUL_FIRE_BASE_BLOCKS = TagKey.unsafeOf("soul_fire_base_blocks");
 
     TagKey<Block> SOUL_SPEED_BLOCKS = TagKey.unsafeOf("soul_speed_blocks");
+
+    TagKey<Block> SPEEDS_UP_ZOMBIE_VILLAGER_CURING = TagKey.unsafeOf("speeds_up_zombie_villager_curing");
 
     TagKey<Block> SPELEOTHEMS = TagKey.unsafeOf("speleothems");
 
@@ -489,6 +543,12 @@ public interface BlockTags {
 
     TagKey<Block> TRIGGERS_AMBIENT_DRIED_GHAST_BLOCK_SOUNDS = TagKey.unsafeOf("triggers_ambient_dried_ghast_block_sounds");
 
+    TagKey<Block> TURNS_INTO_DIRT_PATH = TagKey.unsafeOf("turns_into_dirt_path");
+
+    TagKey<Block> TURNS_INTO_FARMLAND = TagKey.unsafeOf("turns_into_farmland");
+
+    TagKey<Block> UNCARVABLE = TagKey.unsafeOf("uncarvable");
+
     TagKey<Block> UNDERWATER_BONEMEALS = TagKey.unsafeOf("underwater_bonemeals");
 
     TagKey<Block> UNSTABLE_BOTTOM_CENTER = TagKey.unsafeOf("unstable_bottom_center");
@@ -496,6 +556,10 @@ public interface BlockTags {
     TagKey<Block> VALID_SPAWN = TagKey.unsafeOf("valid_spawn");
 
     TagKey<Block> VIBRATION_RESONATORS = TagKey.unsafeOf("vibration_resonators");
+
+    TagKey<Block> VILLAGER_BABIES_CAN_JUMP_ON_BED = TagKey.unsafeOf("villager_babies_can_jump_on_bed");
+
+    TagKey<Block> VILLAGERS_CAN_SLEEP_ON_BED = TagKey.unsafeOf("villagers_can_sleep_on_bed");
 
     TagKey<Block> WALL_CORALS = TagKey.unsafeOf("wall_corals");
 
@@ -510,6 +574,8 @@ public interface BlockTags {
     TagKey<Block> WARPED_STEMS = TagKey.unsafeOf("warped_stems");
 
     TagKey<Block> WART_BLOCKS = TagKey.unsafeOf("wart_blocks");
+
+    TagKey<Block> WASHED_AWAY_BY_FLUIDS = TagKey.unsafeOf("washed_away_by_fluids");
 
     TagKey<Block> WITHER_IMMUNE = TagKey.unsafeOf("wither_immune");
 
@@ -540,4 +606,8 @@ public interface BlockTags {
     TagKey<Block> WOOL = TagKey.unsafeOf("wool");
 
     TagKey<Block> WOOL_CARPETS = TagKey.unsafeOf("wool_carpets");
+
+    TagKey<Block> WOOL_SLABS = TagKey.unsafeOf("wool_slabs");
+
+    TagKey<Block> WOOL_STAIRS = TagKey.unsafeOf("wool_stairs");
 }

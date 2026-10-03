@@ -47,6 +47,8 @@ public interface EntityTypeTags {
 
     TagKey<EntityType> CANNOT_BE_AGE_LOCKED = TagKey.unsafeOf("cannot_be_age_locked");
 
+    TagKey<EntityType> CANNOT_BE_DISMOUNTED_BY_ITEM_USAGE = TagKey.unsafeOf("cannot_be_dismounted_by_item_usage");
+
     TagKey<EntityType> CANNOT_BE_PUSHED_ONTO_BOATS = TagKey.unsafeOf("cannot_be_pushed_onto_boats");
 
     TagKey<EntityType> DEFLECTS_PROJECTILES = TagKey.unsafeOf("deflects_projectiles");

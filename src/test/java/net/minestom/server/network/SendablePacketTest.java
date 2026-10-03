@@ -2,11 +2,10 @@ package net.minestom.server.network;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.network.packet.PacketReading;
 import net.minestom.server.network.packet.PacketWriting;
 import net.minestom.server.network.packet.client.ClientPacket;
-import net.minestom.server.network.packet.client.play.ClientAnimationPacket;
+import net.minestom.server.network.packet.client.play.ClientPunchPacket;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.SystemChatPacket;
 import org.junit.jupiter.api.Test;
@@ -40,7 +39,7 @@ public class SendablePacketTest {
 
     @Test
     public void trimmed() throws DataFormatException {
-        var packet = new ClientAnimationPacket(PlayerHand.MAIN);
+        var packet = new ClientPunchPacket();
 
         var buffer = PacketWriting.allocateTrimmedPacket(ConnectionState.PLAY, packet, 0);
 

@@ -15,6 +15,42 @@ public interface BiomeTags {
 
     TagKey<Biome> ALLOWS_TROPICAL_FISH_SPAWNS_AT_ANY_HEIGHT = TagKey.unsafeOf("allows_tropical_fish_spawns_at_any_height");
 
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_BAMBOO_JUNGLE = TagKey.unsafeOf("has_structure/abandoned_camp_bamboo_jungle");
+
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_BIRCH_FOREST = TagKey.unsafeOf("has_structure/abandoned_camp_birch_forest");
+
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_CHERRY_GROVE = TagKey.unsafeOf("has_structure/abandoned_camp_cherry_grove");
+
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_DAPPLED_FOREST = TagKey.unsafeOf("has_structure/abandoned_camp_dappled_forest");
+
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_FLOWER_FOREST = TagKey.unsafeOf("has_structure/abandoned_camp_flower_forest");
+
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_FOREST = TagKey.unsafeOf("has_structure/abandoned_camp_forest");
+
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_MEADOW = TagKey.unsafeOf("has_structure/abandoned_camp_meadow");
+
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_OLD_GROWTH_BIRCH_FOREST = TagKey.unsafeOf("has_structure/abandoned_camp_old_growth_birch_forest");
+
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_OLD_GROWTH_PINE_TAIGA = TagKey.unsafeOf("has_structure/abandoned_camp_old_growth_pine_taiga");
+
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_OLD_GROWTH_SPRUCE_TAIGA = TagKey.unsafeOf("has_structure/abandoned_camp_old_growth_spruce_taiga");
+
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_PALE_GARDEN = TagKey.unsafeOf("has_structure/abandoned_camp_pale_garden");
+
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_SAVANNA = TagKey.unsafeOf("has_structure/abandoned_camp_savanna");
+
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_SNOWY_TAIGA = TagKey.unsafeOf("has_structure/abandoned_camp_snowy_taiga");
+
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_SPARSE_JUNGLE = TagKey.unsafeOf("has_structure/abandoned_camp_sparse_jungle");
+
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_SWAMP = TagKey.unsafeOf("has_structure/abandoned_camp_swamp");
+
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_TAIGA = TagKey.unsafeOf("has_structure/abandoned_camp_taiga");
+
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_WINDSWEPT_FOREST = TagKey.unsafeOf("has_structure/abandoned_camp_windswept_forest");
+
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_WOODED_BADLANDS = TagKey.unsafeOf("has_structure/abandoned_camp_wooded_badlands");
+
     TagKey<Biome> HAS_STRUCTURE_ANCIENT_CITY = TagKey.unsafeOf("has_structure/ancient_city");
 
     TagKey<Biome> HAS_STRUCTURE_BASTION_REMNANT = TagKey.unsafeOf("has_structure/bastion_remnant");

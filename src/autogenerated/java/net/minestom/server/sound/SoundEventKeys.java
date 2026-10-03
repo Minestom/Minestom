@@ -1159,6 +1159,18 @@ public interface SoundEventKeys {
 
     RegistryKey<SoundEvent> BLOCK_POLISHED_TUFF_STEP = RegistryKey.unsafeOf("block.polished_tuff.step");
 
+    RegistryKey<SoundEvent> BLOCK_POPLAR_LEAVES_AMBIENT = RegistryKey.unsafeOf("block.poplar_leaves.ambient");
+
+    RegistryKey<SoundEvent> BLOCK_POPLAR_LEAVES_BREAK = RegistryKey.unsafeOf("block.poplar_leaves.break");
+
+    RegistryKey<SoundEvent> BLOCK_POPLAR_LEAVES_FALL = RegistryKey.unsafeOf("block.poplar_leaves.fall");
+
+    RegistryKey<SoundEvent> BLOCK_POPLAR_LEAVES_HIT = RegistryKey.unsafeOf("block.poplar_leaves.hit");
+
+    RegistryKey<SoundEvent> BLOCK_POPLAR_LEAVES_PLACE = RegistryKey.unsafeOf("block.poplar_leaves.place");
+
+    RegistryKey<SoundEvent> BLOCK_POPLAR_LEAVES_STEP = RegistryKey.unsafeOf("block.poplar_leaves.step");
+
     RegistryKey<SoundEvent> BLOCK_PORTAL_AMBIENT = RegistryKey.unsafeOf("block.portal.ambient");
 
     RegistryKey<SoundEvent> BLOCK_PORTAL_TRAVEL = RegistryKey.unsafeOf("block.portal.travel");
@@ -1196,6 +1208,10 @@ public interface SoundEventKeys {
     RegistryKey<SoundEvent> BLOCK_POWDER_SNOW_STEP = RegistryKey.unsafeOf("block.powder_snow.step");
 
     RegistryKey<SoundEvent> BLOCK_PUMPKIN_CARVE = RegistryKey.unsafeOf("block.pumpkin.carve");
+
+    RegistryKey<SoundEvent> BLOCK_RED_SHRUB_BREAK = RegistryKey.unsafeOf("block.red_shrub.break");
+
+    RegistryKey<SoundEvent> BLOCK_RED_SHRUB_PLACE = RegistryKey.unsafeOf("block.red_shrub.place");
 
     RegistryKey<SoundEvent> BLOCK_REDSTONE_TORCH_BURNOUT = RegistryKey.unsafeOf("block.redstone_torch.burnout");
 
@@ -1351,6 +1367,16 @@ public interface SoundEventKeys {
 
     RegistryKey<SoundEvent> BLOCK_SHELF_TAKE_ITEM = RegistryKey.unsafeOf("block.shelf.take_item");
 
+    RegistryKey<SoundEvent> BLOCK_SHELF_MUSHROOM_BOUNCE = RegistryKey.unsafeOf("block.shelf_mushroom.bounce");
+
+    RegistryKey<SoundEvent> BLOCK_SHELF_MUSHROOM_BREAK = RegistryKey.unsafeOf("block.shelf_mushroom.break");
+
+    RegistryKey<SoundEvent> BLOCK_SHELF_MUSHROOM_FALL = RegistryKey.unsafeOf("block.shelf_mushroom.fall");
+
+    RegistryKey<SoundEvent> BLOCK_SHELF_MUSHROOM_PLACE = RegistryKey.unsafeOf("block.shelf_mushroom.place");
+
+    RegistryKey<SoundEvent> BLOCK_SHELF_MUSHROOM_STEP = RegistryKey.unsafeOf("block.shelf_mushroom.step");
+
     RegistryKey<SoundEvent> BLOCK_SHROOMLIGHT_BREAK = RegistryKey.unsafeOf("block.shroomlight.break");
 
     RegistryKey<SoundEvent> BLOCK_SHROOMLIGHT_FALL = RegistryKey.unsafeOf("block.shroomlight.fall");
@@ -1490,6 +1516,18 @@ public interface SoundEventKeys {
     RegistryKey<SoundEvent> BLOCK_STONE_PRESSURE_PLATE_CLICK_OFF = RegistryKey.unsafeOf("block.stone_pressure_plate.click_off");
 
     RegistryKey<SoundEvent> BLOCK_STONE_PRESSURE_PLATE_CLICK_ON = RegistryKey.unsafeOf("block.stone_pressure_plate.click_on");
+
+    RegistryKey<SoundEvent> BLOCK_STRAW_BED_BREAK = RegistryKey.unsafeOf("block.straw_bed.break");
+
+    RegistryKey<SoundEvent> BLOCK_STRAW_BED_BREAK_LEAVE = RegistryKey.unsafeOf("block.straw_bed.break_leave");
+
+    RegistryKey<SoundEvent> BLOCK_STRAW_BED_FALL = RegistryKey.unsafeOf("block.straw_bed.fall");
+
+    RegistryKey<SoundEvent> BLOCK_STRAW_BED_HIT = RegistryKey.unsafeOf("block.straw_bed.hit");
+
+    RegistryKey<SoundEvent> BLOCK_STRAW_BED_PLACE = RegistryKey.unsafeOf("block.straw_bed.place");
+
+    RegistryKey<SoundEvent> BLOCK_STRAW_BED_STEP = RegistryKey.unsafeOf("block.straw_bed.step");
 
     RegistryKey<SoundEvent> BLOCK_SULFUR_BREAK = RegistryKey.unsafeOf("block.sulfur.break");
 
@@ -2128,6 +2166,14 @@ public interface SoundEventKeys {
     RegistryKey<SoundEvent> ENTITY_CREEPER_HURT = RegistryKey.unsafeOf("entity.creeper.hurt");
 
     RegistryKey<SoundEvent> ENTITY_CREEPER_PRIMED = RegistryKey.unsafeOf("entity.creeper.primed");
+
+    RegistryKey<SoundEvent> ENTITY_CUSHION_BREAK = RegistryKey.unsafeOf("entity.cushion.break");
+
+    RegistryKey<SoundEvent> ENTITY_CUSHION_GET_UP = RegistryKey.unsafeOf("entity.cushion.get_up");
+
+    RegistryKey<SoundEvent> ENTITY_CUSHION_PLACE = RegistryKey.unsafeOf("entity.cushion.place");
+
+    RegistryKey<SoundEvent> ENTITY_CUSHION_SIT = RegistryKey.unsafeOf("entity.cushion.sit");
 
     RegistryKey<SoundEvent> ENTITY_DOLPHIN_AMBIENT = RegistryKey.unsafeOf("entity.dolphin.ambient");
 

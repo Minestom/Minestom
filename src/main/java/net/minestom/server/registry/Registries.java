@@ -23,7 +23,9 @@ import net.minestom.server.game.GameEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
+import net.minestom.server.instance.block.pot.DecoratedPotPattern;
 import net.minestom.server.instance.block.predicate.DataComponentPredicate;
+import net.minestom.server.instance.block.transformer.BlockTransformer;
 import net.minestom.server.instance.fluid.Fluid;
 import net.minestom.server.instance.gamerule.GameRule;
 import net.minestom.server.item.Material;
@@ -43,6 +45,7 @@ import net.minestom.server.potion.PotionType;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import net.minestom.server.world.clock.WorldClock;
+import net.minestom.server.world.generation.BlockStateProvider;
 import net.minestom.server.world.timeline.Timeline;
 
 import java.util.List;
@@ -156,6 +159,12 @@ public interface Registries {
     DynamicRegistry<WorldClock> worldClock();
 
     DynamicRegistry<SulfurCubeArchetype> sulfurCubeArchetype();
+
+    DynamicRegistry<DecoratedPotPattern> decoratedPotPattern();
+
+    DynamicRegistry<BlockTransformer> blockTransformer();
+
+    DynamicRegistry<BlockStateProvider> blockStateProvider();
 
     // The following are _not_ sent to the client.
 
@@ -346,6 +355,21 @@ public interface Registries {
         @Override
         default DynamicRegistry<SulfurCubeArchetype> sulfurCubeArchetype() {
             return registries().sulfurCubeArchetype();
+        }
+
+        @Override
+        default DynamicRegistry<DecoratedPotPattern> decoratedPotPattern() {
+            return registries().decoratedPotPattern();
+        }
+
+        @Override
+        default DynamicRegistry<BlockTransformer> blockTransformer() {
+            return registries().blockTransformer();
+        }
+
+        @Override
+        default DynamicRegistry<BlockStateProvider> blockStateProvider() {
+            return registries().blockStateProvider();
         }
 
         @Override

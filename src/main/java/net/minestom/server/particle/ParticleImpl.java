@@ -1,6 +1,7 @@
 package net.minestom.server.particle;
 
 import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.color.AlphaColor;
 import net.minestom.server.color.Color;
 import net.minestom.server.coordinate.Vec;
@@ -12,8 +13,16 @@ import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.UnknownNullability;
 
+import java.util.Objects;
+
 @SuppressWarnings("removal")
 final class ParticleImpl {
+    // The registry below builds the particle codecs, so this must be initialized first.
+    // Block particles read either a block state map or a bare block name, and always write the map.
+    static final Codec<Block> BLOCK_STATE_CODEC = Block.STATE_STRUCT_CODEC.orElse(Codec.KEY.transform(
+            key -> Objects.requireNonNull(Block.fromKey(key), () -> "not a block: " + key),
+            Block::key));
+
     static final Registry<Particle> REGISTRY = RegistryData.createStaticRegistry(BuiltinRegistries.PARTICLE_TYPE,
             (namespace, properties) -> defaultParticle(Key.key(namespace), properties.getInt("id")));
 

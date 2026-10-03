@@ -263,7 +263,7 @@ public class InstanceContainer extends Instance {
                     new BlockHandler.PlayerDestroy(block, resultBlock, this, blockPosition, player), doBlockUpdates, 0);
             // Send the block break effect packet
             PacketSendingUtils.sendGroupedPacket(chunk.getViewers(),
-                    new WorldEventPacket(WorldEvent.PARTICLES_DESTROY_BLOCK.id(), blockPosition, block.stateId(), false),
+                    new WorldEventPacket(WorldEvent.PARTICLES_AND_SOUND_DESTROY_BLOCK.id(), blockPosition, block.stateId(), false),
                     // Prevent the block breaker to play the particles and sound two times
                     (viewer) -> !viewer.equals(player));
         }

@@ -53,6 +53,8 @@ sealed interface Blocks permits Block {
 
     Block MANGROVE_PLANKS = BlockImpl.get(BlockKeys.MANGROVE_PLANKS);
 
+    Block POPLAR_PLANKS = BlockImpl.get(BlockKeys.POPLAR_PLANKS);
+
     Block BAMBOO_PLANKS = BlockImpl.get(BlockKeys.BAMBOO_PLANKS);
 
     Block BAMBOO_MOSAIC = BlockImpl.get(BlockKeys.BAMBOO_MOSAIC);
@@ -74,6 +76,8 @@ sealed interface Blocks permits Block {
     Block PALE_OAK_SAPLING = BlockImpl.get(BlockKeys.PALE_OAK_SAPLING);
 
     Block MANGROVE_PROPAGULE = BlockImpl.get(BlockKeys.MANGROVE_PROPAGULE);
+
+    Block POPLAR_SAPLING = BlockImpl.get(BlockKeys.POPLAR_SAPLING);
 
     Block BEDROCK = BlockImpl.get(BlockKeys.BEDROCK);
 
@@ -123,6 +127,8 @@ sealed interface Blocks permits Block {
 
     Block MANGROVE_LOG = BlockImpl.get(BlockKeys.MANGROVE_LOG);
 
+    Block POPLAR_LOG = BlockImpl.get(BlockKeys.POPLAR_LOG);
+
     Block MANGROVE_ROOTS = BlockImpl.get(BlockKeys.MANGROVE_ROOTS);
 
     Block MUDDY_MANGROVE_ROOTS = BlockImpl.get(BlockKeys.MUDDY_MANGROVE_ROOTS);
@@ -147,6 +153,8 @@ sealed interface Blocks permits Block {
 
     Block STRIPPED_MANGROVE_LOG = BlockImpl.get(BlockKeys.STRIPPED_MANGROVE_LOG);
 
+    Block STRIPPED_POPLAR_LOG = BlockImpl.get(BlockKeys.STRIPPED_POPLAR_LOG);
+
     Block STRIPPED_BAMBOO_BLOCK = BlockImpl.get(BlockKeys.STRIPPED_BAMBOO_BLOCK);
 
     Block OAK_WOOD = BlockImpl.get(BlockKeys.OAK_WOOD);
@@ -164,6 +172,8 @@ sealed interface Blocks permits Block {
     Block DARK_OAK_WOOD = BlockImpl.get(BlockKeys.DARK_OAK_WOOD);
 
     Block MANGROVE_WOOD = BlockImpl.get(BlockKeys.MANGROVE_WOOD);
+
+    Block POPLAR_WOOD = BlockImpl.get(BlockKeys.POPLAR_WOOD);
 
     Block STRIPPED_OAK_WOOD = BlockImpl.get(BlockKeys.STRIPPED_OAK_WOOD);
 
@@ -183,6 +193,8 @@ sealed interface Blocks permits Block {
 
     Block STRIPPED_MANGROVE_WOOD = BlockImpl.get(BlockKeys.STRIPPED_MANGROVE_WOOD);
 
+    Block STRIPPED_POPLAR_WOOD = BlockImpl.get(BlockKeys.STRIPPED_POPLAR_WOOD);
+
     Block OAK_LEAVES = BlockImpl.get(BlockKeys.OAK_LEAVES);
 
     Block SPRUCE_LEAVES = BlockImpl.get(BlockKeys.SPRUCE_LEAVES);
@@ -200,6 +212,12 @@ sealed interface Blocks permits Block {
     Block PALE_OAK_LEAVES = BlockImpl.get(BlockKeys.PALE_OAK_LEAVES);
 
     Block MANGROVE_LEAVES = BlockImpl.get(BlockKeys.MANGROVE_LEAVES);
+
+    Block RED_POPLAR_LEAVES = BlockImpl.get(BlockKeys.RED_POPLAR_LEAVES);
+
+    Block ORANGE_POPLAR_LEAVES = BlockImpl.get(BlockKeys.ORANGE_POPLAR_LEAVES);
+
+    Block YELLOW_POPLAR_LEAVES = BlockImpl.get(BlockKeys.YELLOW_POPLAR_LEAVES);
 
     Block AZALEA_LEAVES = BlockImpl.get(BlockKeys.AZALEA_LEAVES);
 
@@ -259,6 +277,8 @@ sealed interface Blocks permits Block {
 
     Block BLACK_BED = BlockImpl.get(BlockKeys.BLACK_BED);
 
+    Block STRAW_BED = BlockImpl.get(BlockKeys.STRAW_BED);
+
     Block POWERED_RAIL = BlockImpl.get(BlockKeys.POWERED_RAIL);
 
     Block DETECTOR_RAIL = BlockImpl.get(BlockKeys.DETECTOR_RAIL);
@@ -274,6 +294,8 @@ sealed interface Blocks permits Block {
     Block DEAD_BUSH = BlockImpl.get(BlockKeys.DEAD_BUSH);
 
     Block BUSH = BlockImpl.get(BlockKeys.BUSH);
+
+    Block RED_SHRUB = BlockImpl.get(BlockKeys.RED_SHRUB);
 
     Block SHORT_DRY_GRASS = BlockImpl.get(BlockKeys.SHORT_DRY_GRASS);
 
@@ -318,6 +340,70 @@ sealed interface Blocks permits Block {
     Block RED_WOOL = BlockImpl.get(BlockKeys.RED_WOOL);
 
     Block BLACK_WOOL = BlockImpl.get(BlockKeys.BLACK_WOOL);
+
+    Block WHITE_WOOL_STAIRS = BlockImpl.get(BlockKeys.WHITE_WOOL_STAIRS);
+
+    Block ORANGE_WOOL_STAIRS = BlockImpl.get(BlockKeys.ORANGE_WOOL_STAIRS);
+
+    Block MAGENTA_WOOL_STAIRS = BlockImpl.get(BlockKeys.MAGENTA_WOOL_STAIRS);
+
+    Block LIGHT_BLUE_WOOL_STAIRS = BlockImpl.get(BlockKeys.LIGHT_BLUE_WOOL_STAIRS);
+
+    Block YELLOW_WOOL_STAIRS = BlockImpl.get(BlockKeys.YELLOW_WOOL_STAIRS);
+
+    Block LIME_WOOL_STAIRS = BlockImpl.get(BlockKeys.LIME_WOOL_STAIRS);
+
+    Block PINK_WOOL_STAIRS = BlockImpl.get(BlockKeys.PINK_WOOL_STAIRS);
+
+    Block GRAY_WOOL_STAIRS = BlockImpl.get(BlockKeys.GRAY_WOOL_STAIRS);
+
+    Block LIGHT_GRAY_WOOL_STAIRS = BlockImpl.get(BlockKeys.LIGHT_GRAY_WOOL_STAIRS);
+
+    Block CYAN_WOOL_STAIRS = BlockImpl.get(BlockKeys.CYAN_WOOL_STAIRS);
+
+    Block PURPLE_WOOL_STAIRS = BlockImpl.get(BlockKeys.PURPLE_WOOL_STAIRS);
+
+    Block BLUE_WOOL_STAIRS = BlockImpl.get(BlockKeys.BLUE_WOOL_STAIRS);
+
+    Block BROWN_WOOL_STAIRS = BlockImpl.get(BlockKeys.BROWN_WOOL_STAIRS);
+
+    Block GREEN_WOOL_STAIRS = BlockImpl.get(BlockKeys.GREEN_WOOL_STAIRS);
+
+    Block RED_WOOL_STAIRS = BlockImpl.get(BlockKeys.RED_WOOL_STAIRS);
+
+    Block BLACK_WOOL_STAIRS = BlockImpl.get(BlockKeys.BLACK_WOOL_STAIRS);
+
+    Block WHITE_WOOL_SLAB = BlockImpl.get(BlockKeys.WHITE_WOOL_SLAB);
+
+    Block ORANGE_WOOL_SLAB = BlockImpl.get(BlockKeys.ORANGE_WOOL_SLAB);
+
+    Block MAGENTA_WOOL_SLAB = BlockImpl.get(BlockKeys.MAGENTA_WOOL_SLAB);
+
+    Block LIGHT_BLUE_WOOL_SLAB = BlockImpl.get(BlockKeys.LIGHT_BLUE_WOOL_SLAB);
+
+    Block YELLOW_WOOL_SLAB = BlockImpl.get(BlockKeys.YELLOW_WOOL_SLAB);
+
+    Block LIME_WOOL_SLAB = BlockImpl.get(BlockKeys.LIME_WOOL_SLAB);
+
+    Block PINK_WOOL_SLAB = BlockImpl.get(BlockKeys.PINK_WOOL_SLAB);
+
+    Block GRAY_WOOL_SLAB = BlockImpl.get(BlockKeys.GRAY_WOOL_SLAB);
+
+    Block LIGHT_GRAY_WOOL_SLAB = BlockImpl.get(BlockKeys.LIGHT_GRAY_WOOL_SLAB);
+
+    Block CYAN_WOOL_SLAB = BlockImpl.get(BlockKeys.CYAN_WOOL_SLAB);
+
+    Block PURPLE_WOOL_SLAB = BlockImpl.get(BlockKeys.PURPLE_WOOL_SLAB);
+
+    Block BLUE_WOOL_SLAB = BlockImpl.get(BlockKeys.BLUE_WOOL_SLAB);
+
+    Block BROWN_WOOL_SLAB = BlockImpl.get(BlockKeys.BROWN_WOOL_SLAB);
+
+    Block GREEN_WOOL_SLAB = BlockImpl.get(BlockKeys.GREEN_WOOL_SLAB);
+
+    Block RED_WOOL_SLAB = BlockImpl.get(BlockKeys.RED_WOOL_SLAB);
+
+    Block BLACK_WOOL_SLAB = BlockImpl.get(BlockKeys.BLACK_WOOL_SLAB);
 
     Block MOVING_PISTON = BlockImpl.get(BlockKeys.MOVING_PISTON);
 
@@ -387,6 +473,8 @@ sealed interface Blocks permits Block {
 
     Block PALE_OAK_SHELF = BlockImpl.get(BlockKeys.PALE_OAK_SHELF);
 
+    Block POPLAR_SHELF = BlockImpl.get(BlockKeys.POPLAR_SHELF);
+
     Block SPRUCE_SHELF = BlockImpl.get(BlockKeys.SPRUCE_SHELF);
 
     Block WARPED_SHELF = BlockImpl.get(BlockKeys.WARPED_SHELF);
@@ -445,6 +533,8 @@ sealed interface Blocks permits Block {
 
     Block MANGROVE_SIGN = BlockImpl.get(BlockKeys.MANGROVE_SIGN);
 
+    Block POPLAR_SIGN = BlockImpl.get(BlockKeys.POPLAR_SIGN);
+
     Block BAMBOO_SIGN = BlockImpl.get(BlockKeys.BAMBOO_SIGN);
 
     Block OAK_DOOR = BlockImpl.get(BlockKeys.OAK_DOOR);
@@ -473,6 +563,8 @@ sealed interface Blocks permits Block {
 
     Block MANGROVE_WALL_SIGN = BlockImpl.get(BlockKeys.MANGROVE_WALL_SIGN);
 
+    Block POPLAR_WALL_SIGN = BlockImpl.get(BlockKeys.POPLAR_WALL_SIGN);
+
     Block BAMBOO_WALL_SIGN = BlockImpl.get(BlockKeys.BAMBOO_WALL_SIGN);
 
     Block OAK_HANGING_SIGN = BlockImpl.get(BlockKeys.OAK_HANGING_SIGN);
@@ -497,6 +589,8 @@ sealed interface Blocks permits Block {
 
     Block MANGROVE_HANGING_SIGN = BlockImpl.get(BlockKeys.MANGROVE_HANGING_SIGN);
 
+    Block POPLAR_HANGING_SIGN = BlockImpl.get(BlockKeys.POPLAR_HANGING_SIGN);
+
     Block BAMBOO_HANGING_SIGN = BlockImpl.get(BlockKeys.BAMBOO_HANGING_SIGN);
 
     Block OAK_WALL_HANGING_SIGN = BlockImpl.get(BlockKeys.OAK_WALL_HANGING_SIGN);
@@ -516,6 +610,8 @@ sealed interface Blocks permits Block {
     Block PALE_OAK_WALL_HANGING_SIGN = BlockImpl.get(BlockKeys.PALE_OAK_WALL_HANGING_SIGN);
 
     Block MANGROVE_WALL_HANGING_SIGN = BlockImpl.get(BlockKeys.MANGROVE_WALL_HANGING_SIGN);
+
+    Block POPLAR_WALL_HANGING_SIGN = BlockImpl.get(BlockKeys.POPLAR_WALL_HANGING_SIGN);
 
     Block CRIMSON_WALL_HANGING_SIGN = BlockImpl.get(BlockKeys.CRIMSON_WALL_HANGING_SIGN);
 
@@ -546,6 +642,8 @@ sealed interface Blocks permits Block {
     Block PALE_OAK_PRESSURE_PLATE = BlockImpl.get(BlockKeys.PALE_OAK_PRESSURE_PLATE);
 
     Block MANGROVE_PRESSURE_PLATE = BlockImpl.get(BlockKeys.MANGROVE_PRESSURE_PLATE);
+
+    Block POPLAR_PRESSURE_PLATE = BlockImpl.get(BlockKeys.POPLAR_PRESSURE_PLATE);
 
     Block BAMBOO_PRESSURE_PLATE = BlockImpl.get(BlockKeys.BAMBOO_PRESSURE_PLATE);
 
@@ -656,6 +754,8 @@ sealed interface Blocks permits Block {
     Block PALE_OAK_TRAPDOOR = BlockImpl.get(BlockKeys.PALE_OAK_TRAPDOOR);
 
     Block MANGROVE_TRAPDOOR = BlockImpl.get(BlockKeys.MANGROVE_TRAPDOOR);
+
+    Block POPLAR_TRAPDOOR = BlockImpl.get(BlockKeys.POPLAR_TRAPDOOR);
 
     Block BAMBOO_TRAPDOOR = BlockImpl.get(BlockKeys.BAMBOO_TRAPDOOR);
 
@@ -801,6 +901,8 @@ sealed interface Blocks permits Block {
 
     Block COCOA = BlockImpl.get(BlockKeys.COCOA);
 
+    Block SHELF_MUSHROOM = BlockImpl.get(BlockKeys.SHELF_MUSHROOM);
+
     Block SANDSTONE_STAIRS = BlockImpl.get(BlockKeys.SANDSTONE_STAIRS);
 
     Block EMERALD_ORE = BlockImpl.get(BlockKeys.EMERALD_ORE);
@@ -848,6 +950,8 @@ sealed interface Blocks permits Block {
     Block POTTED_DARK_OAK_SAPLING = BlockImpl.get(BlockKeys.POTTED_DARK_OAK_SAPLING);
 
     Block POTTED_PALE_OAK_SAPLING = BlockImpl.get(BlockKeys.POTTED_PALE_OAK_SAPLING);
+
+    Block POTTED_POPLAR_SAPLING = BlockImpl.get(BlockKeys.POTTED_POPLAR_SAPLING);
 
     Block POTTED_MANGROVE_PROPAGULE = BlockImpl.get(BlockKeys.POTTED_MANGROVE_PROPAGULE);
 
@@ -910,6 +1014,8 @@ sealed interface Blocks permits Block {
     Block PALE_OAK_BUTTON = BlockImpl.get(BlockKeys.PALE_OAK_BUTTON);
 
     Block MANGROVE_BUTTON = BlockImpl.get(BlockKeys.MANGROVE_BUTTON);
+
+    Block POPLAR_BUTTON = BlockImpl.get(BlockKeys.POPLAR_BUTTON);
 
     Block BAMBOO_BUTTON = BlockImpl.get(BlockKeys.BAMBOO_BUTTON);
 
@@ -1048,6 +1154,8 @@ sealed interface Blocks permits Block {
     Block PALE_OAK_STAIRS = BlockImpl.get(BlockKeys.PALE_OAK_STAIRS);
 
     Block MANGROVE_STAIRS = BlockImpl.get(BlockKeys.MANGROVE_STAIRS);
+
+    Block POPLAR_STAIRS = BlockImpl.get(BlockKeys.POPLAR_STAIRS);
 
     Block BAMBOO_STAIRS = BlockImpl.get(BlockKeys.BAMBOO_STAIRS);
 
@@ -1223,13 +1331,13 @@ sealed interface Blocks permits Block {
 
     Block MANGROVE_SLAB = BlockImpl.get(BlockKeys.MANGROVE_SLAB);
 
+    Block POPLAR_SLAB = BlockImpl.get(BlockKeys.POPLAR_SLAB);
+
     Block BAMBOO_SLAB = BlockImpl.get(BlockKeys.BAMBOO_SLAB);
 
     Block BAMBOO_MOSAIC_SLAB = BlockImpl.get(BlockKeys.BAMBOO_MOSAIC_SLAB);
 
     Block STONE_SLAB = BlockImpl.get(BlockKeys.STONE_SLAB);
-
-    Block SMOOTH_STONE_SLAB = BlockImpl.get(BlockKeys.SMOOTH_STONE_SLAB);
 
     Block SANDSTONE_SLAB = BlockImpl.get(BlockKeys.SANDSTONE_SLAB);
 
@@ -1253,9 +1361,9 @@ sealed interface Blocks permits Block {
 
     Block CUT_RED_SANDSTONE_SLAB = BlockImpl.get(BlockKeys.CUT_RED_SANDSTONE_SLAB);
 
-    Block PURPUR_SLAB = BlockImpl.get(BlockKeys.PURPUR_SLAB);
-
     Block SMOOTH_STONE = BlockImpl.get(BlockKeys.SMOOTH_STONE);
+
+    Block SMOOTH_STONE_SLAB = BlockImpl.get(BlockKeys.SMOOTH_STONE_SLAB);
 
     Block SMOOTH_SANDSTONE = BlockImpl.get(BlockKeys.SMOOTH_SANDSTONE);
 
@@ -1279,6 +1387,8 @@ sealed interface Blocks permits Block {
 
     Block MANGROVE_FENCE_GATE = BlockImpl.get(BlockKeys.MANGROVE_FENCE_GATE);
 
+    Block POPLAR_FENCE_GATE = BlockImpl.get(BlockKeys.POPLAR_FENCE_GATE);
+
     Block BAMBOO_FENCE_GATE = BlockImpl.get(BlockKeys.BAMBOO_FENCE_GATE);
 
     Block SPRUCE_FENCE = BlockImpl.get(BlockKeys.SPRUCE_FENCE);
@@ -1296,6 +1406,8 @@ sealed interface Blocks permits Block {
     Block PALE_OAK_FENCE = BlockImpl.get(BlockKeys.PALE_OAK_FENCE);
 
     Block MANGROVE_FENCE = BlockImpl.get(BlockKeys.MANGROVE_FENCE);
+
+    Block POPLAR_FENCE = BlockImpl.get(BlockKeys.POPLAR_FENCE);
 
     Block BAMBOO_FENCE = BlockImpl.get(BlockKeys.BAMBOO_FENCE);
 
@@ -1315,6 +1427,8 @@ sealed interface Blocks permits Block {
 
     Block MANGROVE_DOOR = BlockImpl.get(BlockKeys.MANGROVE_DOOR);
 
+    Block POPLAR_DOOR = BlockImpl.get(BlockKeys.POPLAR_DOOR);
+
     Block BAMBOO_DOOR = BlockImpl.get(BlockKeys.BAMBOO_DOOR);
 
     Block END_ROD = BlockImpl.get(BlockKeys.END_ROD);
@@ -1324,6 +1438,8 @@ sealed interface Blocks permits Block {
     Block CHORUS_FLOWER = BlockImpl.get(BlockKeys.CHORUS_FLOWER);
 
     Block PURPUR_BLOCK = BlockImpl.get(BlockKeys.PURPUR_BLOCK);
+
+    Block PURPUR_SLAB = BlockImpl.get(BlockKeys.PURPUR_SLAB);
 
     Block PURPUR_PILLAR = BlockImpl.get(BlockKeys.PURPUR_PILLAR);
 
@@ -1458,6 +1574,70 @@ sealed interface Blocks permits Block {
     Block RED_CONCRETE = BlockImpl.get(BlockKeys.RED_CONCRETE);
 
     Block BLACK_CONCRETE = BlockImpl.get(BlockKeys.BLACK_CONCRETE);
+
+    Block WHITE_CONCRETE_STAIRS = BlockImpl.get(BlockKeys.WHITE_CONCRETE_STAIRS);
+
+    Block ORANGE_CONCRETE_STAIRS = BlockImpl.get(BlockKeys.ORANGE_CONCRETE_STAIRS);
+
+    Block MAGENTA_CONCRETE_STAIRS = BlockImpl.get(BlockKeys.MAGENTA_CONCRETE_STAIRS);
+
+    Block LIGHT_BLUE_CONCRETE_STAIRS = BlockImpl.get(BlockKeys.LIGHT_BLUE_CONCRETE_STAIRS);
+
+    Block YELLOW_CONCRETE_STAIRS = BlockImpl.get(BlockKeys.YELLOW_CONCRETE_STAIRS);
+
+    Block LIME_CONCRETE_STAIRS = BlockImpl.get(BlockKeys.LIME_CONCRETE_STAIRS);
+
+    Block PINK_CONCRETE_STAIRS = BlockImpl.get(BlockKeys.PINK_CONCRETE_STAIRS);
+
+    Block GRAY_CONCRETE_STAIRS = BlockImpl.get(BlockKeys.GRAY_CONCRETE_STAIRS);
+
+    Block LIGHT_GRAY_CONCRETE_STAIRS = BlockImpl.get(BlockKeys.LIGHT_GRAY_CONCRETE_STAIRS);
+
+    Block CYAN_CONCRETE_STAIRS = BlockImpl.get(BlockKeys.CYAN_CONCRETE_STAIRS);
+
+    Block PURPLE_CONCRETE_STAIRS = BlockImpl.get(BlockKeys.PURPLE_CONCRETE_STAIRS);
+
+    Block BLUE_CONCRETE_STAIRS = BlockImpl.get(BlockKeys.BLUE_CONCRETE_STAIRS);
+
+    Block BROWN_CONCRETE_STAIRS = BlockImpl.get(BlockKeys.BROWN_CONCRETE_STAIRS);
+
+    Block GREEN_CONCRETE_STAIRS = BlockImpl.get(BlockKeys.GREEN_CONCRETE_STAIRS);
+
+    Block RED_CONCRETE_STAIRS = BlockImpl.get(BlockKeys.RED_CONCRETE_STAIRS);
+
+    Block BLACK_CONCRETE_STAIRS = BlockImpl.get(BlockKeys.BLACK_CONCRETE_STAIRS);
+
+    Block WHITE_CONCRETE_SLAB = BlockImpl.get(BlockKeys.WHITE_CONCRETE_SLAB);
+
+    Block ORANGE_CONCRETE_SLAB = BlockImpl.get(BlockKeys.ORANGE_CONCRETE_SLAB);
+
+    Block MAGENTA_CONCRETE_SLAB = BlockImpl.get(BlockKeys.MAGENTA_CONCRETE_SLAB);
+
+    Block LIGHT_BLUE_CONCRETE_SLAB = BlockImpl.get(BlockKeys.LIGHT_BLUE_CONCRETE_SLAB);
+
+    Block YELLOW_CONCRETE_SLAB = BlockImpl.get(BlockKeys.YELLOW_CONCRETE_SLAB);
+
+    Block LIME_CONCRETE_SLAB = BlockImpl.get(BlockKeys.LIME_CONCRETE_SLAB);
+
+    Block PINK_CONCRETE_SLAB = BlockImpl.get(BlockKeys.PINK_CONCRETE_SLAB);
+
+    Block GRAY_CONCRETE_SLAB = BlockImpl.get(BlockKeys.GRAY_CONCRETE_SLAB);
+
+    Block LIGHT_GRAY_CONCRETE_SLAB = BlockImpl.get(BlockKeys.LIGHT_GRAY_CONCRETE_SLAB);
+
+    Block CYAN_CONCRETE_SLAB = BlockImpl.get(BlockKeys.CYAN_CONCRETE_SLAB);
+
+    Block PURPLE_CONCRETE_SLAB = BlockImpl.get(BlockKeys.PURPLE_CONCRETE_SLAB);
+
+    Block BLUE_CONCRETE_SLAB = BlockImpl.get(BlockKeys.BLUE_CONCRETE_SLAB);
+
+    Block BROWN_CONCRETE_SLAB = BlockImpl.get(BlockKeys.BROWN_CONCRETE_SLAB);
+
+    Block GREEN_CONCRETE_SLAB = BlockImpl.get(BlockKeys.GREEN_CONCRETE_SLAB);
+
+    Block RED_CONCRETE_SLAB = BlockImpl.get(BlockKeys.RED_CONCRETE_SLAB);
+
+    Block BLACK_CONCRETE_SLAB = BlockImpl.get(BlockKeys.BLACK_CONCRETE_SLAB);
 
     Block WHITE_CONCRETE_POWDER = BlockImpl.get(BlockKeys.WHITE_CONCRETE_POWDER);
 

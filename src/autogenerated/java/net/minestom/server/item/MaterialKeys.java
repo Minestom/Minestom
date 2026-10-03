@@ -11,6 +11,8 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("unused")
 @ApiStatus.NonExtendable
 public interface MaterialKeys {
+    RegistryKey<Material> ABANDONED_CAMP_MAP = RegistryKey.unsafeOf("abandoned_camp_map");
+
     RegistryKey<Material> ACACIA_BOAT = RegistryKey.unsafeOf("acacia_boat");
 
     RegistryKey<Material> ACACIA_BUTTON = RegistryKey.unsafeOf("acacia_button");
@@ -219,6 +221,12 @@ public interface MaterialKeys {
 
     RegistryKey<Material> BLACK_CONCRETE_POWDER = RegistryKey.unsafeOf("black_concrete_powder");
 
+    RegistryKey<Material> BLACK_CONCRETE_SLAB = RegistryKey.unsafeOf("black_concrete_slab");
+
+    RegistryKey<Material> BLACK_CONCRETE_STAIRS = RegistryKey.unsafeOf("black_concrete_stairs");
+
+    RegistryKey<Material> BLACK_CUSHION = RegistryKey.unsafeOf("black_cushion");
+
     RegistryKey<Material> BLACK_DYE = RegistryKey.unsafeOf("black_dye");
 
     RegistryKey<Material> BLACK_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("black_glazed_terracotta");
@@ -234,6 +242,10 @@ public interface MaterialKeys {
     RegistryKey<Material> BLACK_TERRACOTTA = RegistryKey.unsafeOf("black_terracotta");
 
     RegistryKey<Material> BLACK_WOOL = RegistryKey.unsafeOf("black_wool");
+
+    RegistryKey<Material> BLACK_WOOL_SLAB = RegistryKey.unsafeOf("black_wool_slab");
+
+    RegistryKey<Material> BLACK_WOOL_STAIRS = RegistryKey.unsafeOf("black_wool_stairs");
 
     RegistryKey<Material> BLACKSTONE = RegistryKey.unsafeOf("blackstone");
 
@@ -267,6 +279,12 @@ public interface MaterialKeys {
 
     RegistryKey<Material> BLUE_CONCRETE_POWDER = RegistryKey.unsafeOf("blue_concrete_powder");
 
+    RegistryKey<Material> BLUE_CONCRETE_SLAB = RegistryKey.unsafeOf("blue_concrete_slab");
+
+    RegistryKey<Material> BLUE_CONCRETE_STAIRS = RegistryKey.unsafeOf("blue_concrete_stairs");
+
+    RegistryKey<Material> BLUE_CUSHION = RegistryKey.unsafeOf("blue_cushion");
+
     RegistryKey<Material> BLUE_DYE = RegistryKey.unsafeOf("blue_dye");
 
     RegistryKey<Material> BLUE_EGG = RegistryKey.unsafeOf("blue_egg");
@@ -288,6 +306,10 @@ public interface MaterialKeys {
     RegistryKey<Material> BLUE_TERRACOTTA = RegistryKey.unsafeOf("blue_terracotta");
 
     RegistryKey<Material> BLUE_WOOL = RegistryKey.unsafeOf("blue_wool");
+
+    RegistryKey<Material> BLUE_WOOL_SLAB = RegistryKey.unsafeOf("blue_wool_slab");
+
+    RegistryKey<Material> BLUE_WOOL_STAIRS = RegistryKey.unsafeOf("blue_wool_stairs");
 
     RegistryKey<Material> BOGGED_SPAWN_EGG = RegistryKey.unsafeOf("bogged_spawn_egg");
 
@@ -349,6 +371,12 @@ public interface MaterialKeys {
 
     RegistryKey<Material> BROWN_CONCRETE_POWDER = RegistryKey.unsafeOf("brown_concrete_powder");
 
+    RegistryKey<Material> BROWN_CONCRETE_SLAB = RegistryKey.unsafeOf("brown_concrete_slab");
+
+    RegistryKey<Material> BROWN_CONCRETE_STAIRS = RegistryKey.unsafeOf("brown_concrete_stairs");
+
+    RegistryKey<Material> BROWN_CUSHION = RegistryKey.unsafeOf("brown_cushion");
+
     RegistryKey<Material> BROWN_DYE = RegistryKey.unsafeOf("brown_dye");
 
     RegistryKey<Material> BROWN_EGG = RegistryKey.unsafeOf("brown_egg");
@@ -371,6 +399,10 @@ public interface MaterialKeys {
 
     RegistryKey<Material> BROWN_WOOL = RegistryKey.unsafeOf("brown_wool");
 
+    RegistryKey<Material> BROWN_WOOL_SLAB = RegistryKey.unsafeOf("brown_wool_slab");
+
+    RegistryKey<Material> BROWN_WOOL_STAIRS = RegistryKey.unsafeOf("brown_wool_stairs");
+
     RegistryKey<Material> BRUSH = RegistryKey.unsafeOf("brush");
 
     RegistryKey<Material> BUBBLE_CORAL = RegistryKey.unsafeOf("bubble_coral");
@@ -384,6 +416,14 @@ public interface MaterialKeys {
     RegistryKey<Material> BUDDING_AMETHYST = RegistryKey.unsafeOf("budding_amethyst");
 
     RegistryKey<Material> BUNDLE = RegistryKey.unsafeOf("bundle");
+
+    RegistryKey<Material> BURIED_ANCIENT_CITY_MAP = RegistryKey.unsafeOf("buried_ancient_city_map");
+
+    RegistryKey<Material> BURIED_MINESHAFT_MAP = RegistryKey.unsafeOf("buried_mineshaft_map");
+
+    RegistryKey<Material> BURIED_TREASURE_MAP = RegistryKey.unsafeOf("buried_treasure_map");
+
+    RegistryKey<Material> BURIED_TRIAL_CHAMBERS_MAP = RegistryKey.unsafeOf("buried_trial_chambers_map");
 
     RegistryKey<Material> BURN_POTTERY_SHERD = RegistryKey.unsafeOf("burn_pottery_sherd");
 
@@ -749,6 +789,12 @@ public interface MaterialKeys {
 
     RegistryKey<Material> CYAN_CONCRETE_POWDER = RegistryKey.unsafeOf("cyan_concrete_powder");
 
+    RegistryKey<Material> CYAN_CONCRETE_SLAB = RegistryKey.unsafeOf("cyan_concrete_slab");
+
+    RegistryKey<Material> CYAN_CONCRETE_STAIRS = RegistryKey.unsafeOf("cyan_concrete_stairs");
+
+    RegistryKey<Material> CYAN_CUSHION = RegistryKey.unsafeOf("cyan_cushion");
+
     RegistryKey<Material> CYAN_DYE = RegistryKey.unsafeOf("cyan_dye");
 
     RegistryKey<Material> CYAN_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("cyan_glazed_terracotta");
@@ -764,6 +810,10 @@ public interface MaterialKeys {
     RegistryKey<Material> CYAN_TERRACOTTA = RegistryKey.unsafeOf("cyan_terracotta");
 
     RegistryKey<Material> CYAN_WOOL = RegistryKey.unsafeOf("cyan_wool");
+
+    RegistryKey<Material> CYAN_WOOL_SLAB = RegistryKey.unsafeOf("cyan_wool_slab");
+
+    RegistryKey<Material> CYAN_WOOL_STAIRS = RegistryKey.unsafeOf("cyan_wool_stairs");
 
     RegistryKey<Material> DAMAGED_ANVIL = RegistryKey.unsafeOf("damaged_anvil");
 
@@ -884,6 +934,10 @@ public interface MaterialKeys {
     RegistryKey<Material> DEEPSLATE_TILE_WALL = RegistryKey.unsafeOf("deepslate_tile_wall");
 
     RegistryKey<Material> DEEPSLATE_TILES = RegistryKey.unsafeOf("deepslate_tiles");
+
+    RegistryKey<Material> DESERT_PYRAMID_MAP = RegistryKey.unsafeOf("desert_pyramid_map");
+
+    RegistryKey<Material> DESERT_VILLAGE_MAP = RegistryKey.unsafeOf("desert_village_map");
 
     RegistryKey<Material> DETECTOR_RAIL = RegistryKey.unsafeOf("detector_rail");
 
@@ -1201,6 +1255,12 @@ public interface MaterialKeys {
 
     RegistryKey<Material> GRAY_CONCRETE_POWDER = RegistryKey.unsafeOf("gray_concrete_powder");
 
+    RegistryKey<Material> GRAY_CONCRETE_SLAB = RegistryKey.unsafeOf("gray_concrete_slab");
+
+    RegistryKey<Material> GRAY_CONCRETE_STAIRS = RegistryKey.unsafeOf("gray_concrete_stairs");
+
+    RegistryKey<Material> GRAY_CUSHION = RegistryKey.unsafeOf("gray_cushion");
+
     RegistryKey<Material> GRAY_DYE = RegistryKey.unsafeOf("gray_dye");
 
     RegistryKey<Material> GRAY_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("gray_glazed_terracotta");
@@ -1217,6 +1277,10 @@ public interface MaterialKeys {
 
     RegistryKey<Material> GRAY_WOOL = RegistryKey.unsafeOf("gray_wool");
 
+    RegistryKey<Material> GRAY_WOOL_SLAB = RegistryKey.unsafeOf("gray_wool_slab");
+
+    RegistryKey<Material> GRAY_WOOL_STAIRS = RegistryKey.unsafeOf("gray_wool_stairs");
+
     RegistryKey<Material> GREEN_BANNER = RegistryKey.unsafeOf("green_banner");
 
     RegistryKey<Material> GREEN_BED = RegistryKey.unsafeOf("green_bed");
@@ -1230,6 +1294,12 @@ public interface MaterialKeys {
     RegistryKey<Material> GREEN_CONCRETE = RegistryKey.unsafeOf("green_concrete");
 
     RegistryKey<Material> GREEN_CONCRETE_POWDER = RegistryKey.unsafeOf("green_concrete_powder");
+
+    RegistryKey<Material> GREEN_CONCRETE_SLAB = RegistryKey.unsafeOf("green_concrete_slab");
+
+    RegistryKey<Material> GREEN_CONCRETE_STAIRS = RegistryKey.unsafeOf("green_concrete_stairs");
+
+    RegistryKey<Material> GREEN_CUSHION = RegistryKey.unsafeOf("green_cushion");
 
     RegistryKey<Material> GREEN_DYE = RegistryKey.unsafeOf("green_dye");
 
@@ -1246,6 +1316,10 @@ public interface MaterialKeys {
     RegistryKey<Material> GREEN_TERRACOTTA = RegistryKey.unsafeOf("green_terracotta");
 
     RegistryKey<Material> GREEN_WOOL = RegistryKey.unsafeOf("green_wool");
+
+    RegistryKey<Material> GREEN_WOOL_SLAB = RegistryKey.unsafeOf("green_wool_slab");
+
+    RegistryKey<Material> GREEN_WOOL_STAIRS = RegistryKey.unsafeOf("green_wool_stairs");
 
     RegistryKey<Material> GRINDSTONE = RegistryKey.unsafeOf("grindstone");
 
@@ -1391,6 +1465,8 @@ public interface MaterialKeys {
 
     RegistryKey<Material> JUNGLE_PRESSURE_PLATE = RegistryKey.unsafeOf("jungle_pressure_plate");
 
+    RegistryKey<Material> JUNGLE_PYRAMID_MAP = RegistryKey.unsafeOf("jungle_pyramid_map");
+
     RegistryKey<Material> JUNGLE_SAPLING = RegistryKey.unsafeOf("jungle_sapling");
 
     RegistryKey<Material> JUNGLE_SHELF = RegistryKey.unsafeOf("jungle_shelf");
@@ -1461,6 +1537,12 @@ public interface MaterialKeys {
 
     RegistryKey<Material> LIGHT_BLUE_CONCRETE_POWDER = RegistryKey.unsafeOf("light_blue_concrete_powder");
 
+    RegistryKey<Material> LIGHT_BLUE_CONCRETE_SLAB = RegistryKey.unsafeOf("light_blue_concrete_slab");
+
+    RegistryKey<Material> LIGHT_BLUE_CONCRETE_STAIRS = RegistryKey.unsafeOf("light_blue_concrete_stairs");
+
+    RegistryKey<Material> LIGHT_BLUE_CUSHION = RegistryKey.unsafeOf("light_blue_cushion");
+
     RegistryKey<Material> LIGHT_BLUE_DYE = RegistryKey.unsafeOf("light_blue_dye");
 
     RegistryKey<Material> LIGHT_BLUE_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("light_blue_glazed_terracotta");
@@ -1477,6 +1559,10 @@ public interface MaterialKeys {
 
     RegistryKey<Material> LIGHT_BLUE_WOOL = RegistryKey.unsafeOf("light_blue_wool");
 
+    RegistryKey<Material> LIGHT_BLUE_WOOL_SLAB = RegistryKey.unsafeOf("light_blue_wool_slab");
+
+    RegistryKey<Material> LIGHT_BLUE_WOOL_STAIRS = RegistryKey.unsafeOf("light_blue_wool_stairs");
+
     RegistryKey<Material> LIGHT_GRAY_BANNER = RegistryKey.unsafeOf("light_gray_banner");
 
     RegistryKey<Material> LIGHT_GRAY_BED = RegistryKey.unsafeOf("light_gray_bed");
@@ -1490,6 +1576,12 @@ public interface MaterialKeys {
     RegistryKey<Material> LIGHT_GRAY_CONCRETE = RegistryKey.unsafeOf("light_gray_concrete");
 
     RegistryKey<Material> LIGHT_GRAY_CONCRETE_POWDER = RegistryKey.unsafeOf("light_gray_concrete_powder");
+
+    RegistryKey<Material> LIGHT_GRAY_CONCRETE_SLAB = RegistryKey.unsafeOf("light_gray_concrete_slab");
+
+    RegistryKey<Material> LIGHT_GRAY_CONCRETE_STAIRS = RegistryKey.unsafeOf("light_gray_concrete_stairs");
+
+    RegistryKey<Material> LIGHT_GRAY_CUSHION = RegistryKey.unsafeOf("light_gray_cushion");
 
     RegistryKey<Material> LIGHT_GRAY_DYE = RegistryKey.unsafeOf("light_gray_dye");
 
@@ -1506,6 +1598,10 @@ public interface MaterialKeys {
     RegistryKey<Material> LIGHT_GRAY_TERRACOTTA = RegistryKey.unsafeOf("light_gray_terracotta");
 
     RegistryKey<Material> LIGHT_GRAY_WOOL = RegistryKey.unsafeOf("light_gray_wool");
+
+    RegistryKey<Material> LIGHT_GRAY_WOOL_SLAB = RegistryKey.unsafeOf("light_gray_wool_slab");
+
+    RegistryKey<Material> LIGHT_GRAY_WOOL_STAIRS = RegistryKey.unsafeOf("light_gray_wool_stairs");
 
     RegistryKey<Material> LIGHT_WEIGHTED_PRESSURE_PLATE = RegistryKey.unsafeOf("light_weighted_pressure_plate");
 
@@ -1531,6 +1627,12 @@ public interface MaterialKeys {
 
     RegistryKey<Material> LIME_CONCRETE_POWDER = RegistryKey.unsafeOf("lime_concrete_powder");
 
+    RegistryKey<Material> LIME_CONCRETE_SLAB = RegistryKey.unsafeOf("lime_concrete_slab");
+
+    RegistryKey<Material> LIME_CONCRETE_STAIRS = RegistryKey.unsafeOf("lime_concrete_stairs");
+
+    RegistryKey<Material> LIME_CUSHION = RegistryKey.unsafeOf("lime_cushion");
+
     RegistryKey<Material> LIME_DYE = RegistryKey.unsafeOf("lime_dye");
 
     RegistryKey<Material> LIME_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("lime_glazed_terracotta");
@@ -1546,6 +1648,10 @@ public interface MaterialKeys {
     RegistryKey<Material> LIME_TERRACOTTA = RegistryKey.unsafeOf("lime_terracotta");
 
     RegistryKey<Material> LIME_WOOL = RegistryKey.unsafeOf("lime_wool");
+
+    RegistryKey<Material> LIME_WOOL_SLAB = RegistryKey.unsafeOf("lime_wool_slab");
+
+    RegistryKey<Material> LIME_WOOL_STAIRS = RegistryKey.unsafeOf("lime_wool_stairs");
 
     RegistryKey<Material> LINGERING_POTION = RegistryKey.unsafeOf("lingering_potion");
 
@@ -1571,6 +1677,12 @@ public interface MaterialKeys {
 
     RegistryKey<Material> MAGENTA_CONCRETE_POWDER = RegistryKey.unsafeOf("magenta_concrete_powder");
 
+    RegistryKey<Material> MAGENTA_CONCRETE_SLAB = RegistryKey.unsafeOf("magenta_concrete_slab");
+
+    RegistryKey<Material> MAGENTA_CONCRETE_STAIRS = RegistryKey.unsafeOf("magenta_concrete_stairs");
+
+    RegistryKey<Material> MAGENTA_CUSHION = RegistryKey.unsafeOf("magenta_cushion");
+
     RegistryKey<Material> MAGENTA_DYE = RegistryKey.unsafeOf("magenta_dye");
 
     RegistryKey<Material> MAGENTA_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("magenta_glazed_terracotta");
@@ -1586,6 +1698,10 @@ public interface MaterialKeys {
     RegistryKey<Material> MAGENTA_TERRACOTTA = RegistryKey.unsafeOf("magenta_terracotta");
 
     RegistryKey<Material> MAGENTA_WOOL = RegistryKey.unsafeOf("magenta_wool");
+
+    RegistryKey<Material> MAGENTA_WOOL_SLAB = RegistryKey.unsafeOf("magenta_wool_slab");
+
+    RegistryKey<Material> MAGENTA_WOOL_STAIRS = RegistryKey.unsafeOf("magenta_wool_stairs");
 
     RegistryKey<Material> MAGMA_BLOCK = RegistryKey.unsafeOf("magma_block");
 
@@ -1845,6 +1961,8 @@ public interface MaterialKeys {
 
     RegistryKey<Material> OBSIDIAN = RegistryKey.unsafeOf("obsidian");
 
+    RegistryKey<Material> OCEAN_MONUMENT_MAP = RegistryKey.unsafeOf("ocean_monument_map");
+
     RegistryKey<Material> OCELOT_SPAWN_EGG = RegistryKey.unsafeOf("ocelot_spawn_egg");
 
     RegistryKey<Material> OCHRE_FROGLIGHT = RegistryKey.unsafeOf("ochre_froglight");
@@ -1869,11 +1987,19 @@ public interface MaterialKeys {
 
     RegistryKey<Material> ORANGE_CONCRETE_POWDER = RegistryKey.unsafeOf("orange_concrete_powder");
 
+    RegistryKey<Material> ORANGE_CONCRETE_SLAB = RegistryKey.unsafeOf("orange_concrete_slab");
+
+    RegistryKey<Material> ORANGE_CONCRETE_STAIRS = RegistryKey.unsafeOf("orange_concrete_stairs");
+
+    RegistryKey<Material> ORANGE_CUSHION = RegistryKey.unsafeOf("orange_cushion");
+
     RegistryKey<Material> ORANGE_DYE = RegistryKey.unsafeOf("orange_dye");
 
     RegistryKey<Material> ORANGE_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("orange_glazed_terracotta");
 
     RegistryKey<Material> ORANGE_HARNESS = RegistryKey.unsafeOf("orange_harness");
+
+    RegistryKey<Material> ORANGE_POPLAR_LEAVES = RegistryKey.unsafeOf("orange_poplar_leaves");
 
     RegistryKey<Material> ORANGE_SHULKER_BOX = RegistryKey.unsafeOf("orange_shulker_box");
 
@@ -1886,6 +2012,10 @@ public interface MaterialKeys {
     RegistryKey<Material> ORANGE_TULIP = RegistryKey.unsafeOf("orange_tulip");
 
     RegistryKey<Material> ORANGE_WOOL = RegistryKey.unsafeOf("orange_wool");
+
+    RegistryKey<Material> ORANGE_WOOL_SLAB = RegistryKey.unsafeOf("orange_wool_slab");
+
+    RegistryKey<Material> ORANGE_WOOL_STAIRS = RegistryKey.unsafeOf("orange_wool_stairs");
 
     RegistryKey<Material> OXEYE_DAISY = RegistryKey.unsafeOf("oxeye_daisy");
 
@@ -2011,6 +2141,12 @@ public interface MaterialKeys {
 
     RegistryKey<Material> PINK_CONCRETE_POWDER = RegistryKey.unsafeOf("pink_concrete_powder");
 
+    RegistryKey<Material> PINK_CONCRETE_SLAB = RegistryKey.unsafeOf("pink_concrete_slab");
+
+    RegistryKey<Material> PINK_CONCRETE_STAIRS = RegistryKey.unsafeOf("pink_concrete_stairs");
+
+    RegistryKey<Material> PINK_CUSHION = RegistryKey.unsafeOf("pink_cushion");
+
     RegistryKey<Material> PINK_DYE = RegistryKey.unsafeOf("pink_dye");
 
     RegistryKey<Material> PINK_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("pink_glazed_terracotta");
@@ -2031,11 +2167,17 @@ public interface MaterialKeys {
 
     RegistryKey<Material> PINK_WOOL = RegistryKey.unsafeOf("pink_wool");
 
+    RegistryKey<Material> PINK_WOOL_SLAB = RegistryKey.unsafeOf("pink_wool_slab");
+
+    RegistryKey<Material> PINK_WOOL_STAIRS = RegistryKey.unsafeOf("pink_wool_stairs");
+
     RegistryKey<Material> PISTON = RegistryKey.unsafeOf("piston");
 
     RegistryKey<Material> PITCHER_PLANT = RegistryKey.unsafeOf("pitcher_plant");
 
     RegistryKey<Material> PITCHER_POD = RegistryKey.unsafeOf("pitcher_pod");
+
+    RegistryKey<Material> PLAINS_VILLAGE_MAP = RegistryKey.unsafeOf("plains_village_map");
 
     RegistryKey<Material> PLAYER_HEAD = RegistryKey.unsafeOf("player_head");
 
@@ -2121,6 +2263,40 @@ public interface MaterialKeys {
 
     RegistryKey<Material> POLISHED_TUFF_WALL = RegistryKey.unsafeOf("polished_tuff_wall");
 
+    RegistryKey<Material> POPLAR_BOAT = RegistryKey.unsafeOf("poplar_boat");
+
+    RegistryKey<Material> POPLAR_BUTTON = RegistryKey.unsafeOf("poplar_button");
+
+    RegistryKey<Material> POPLAR_CHEST_BOAT = RegistryKey.unsafeOf("poplar_chest_boat");
+
+    RegistryKey<Material> POPLAR_DOOR = RegistryKey.unsafeOf("poplar_door");
+
+    RegistryKey<Material> POPLAR_FENCE = RegistryKey.unsafeOf("poplar_fence");
+
+    RegistryKey<Material> POPLAR_FENCE_GATE = RegistryKey.unsafeOf("poplar_fence_gate");
+
+    RegistryKey<Material> POPLAR_HANGING_SIGN = RegistryKey.unsafeOf("poplar_hanging_sign");
+
+    RegistryKey<Material> POPLAR_LOG = RegistryKey.unsafeOf("poplar_log");
+
+    RegistryKey<Material> POPLAR_PLANKS = RegistryKey.unsafeOf("poplar_planks");
+
+    RegistryKey<Material> POPLAR_PRESSURE_PLATE = RegistryKey.unsafeOf("poplar_pressure_plate");
+
+    RegistryKey<Material> POPLAR_SAPLING = RegistryKey.unsafeOf("poplar_sapling");
+
+    RegistryKey<Material> POPLAR_SHELF = RegistryKey.unsafeOf("poplar_shelf");
+
+    RegistryKey<Material> POPLAR_SIGN = RegistryKey.unsafeOf("poplar_sign");
+
+    RegistryKey<Material> POPLAR_SLAB = RegistryKey.unsafeOf("poplar_slab");
+
+    RegistryKey<Material> POPLAR_STAIRS = RegistryKey.unsafeOf("poplar_stairs");
+
+    RegistryKey<Material> POPLAR_TRAPDOOR = RegistryKey.unsafeOf("poplar_trapdoor");
+
+    RegistryKey<Material> POPLAR_WOOD = RegistryKey.unsafeOf("poplar_wood");
+
     RegistryKey<Material> POPPED_CHORUS_FRUIT = RegistryKey.unsafeOf("popped_chorus_fruit");
 
     RegistryKey<Material> POPPY = RegistryKey.unsafeOf("poppy");
@@ -2183,6 +2359,12 @@ public interface MaterialKeys {
 
     RegistryKey<Material> PURPLE_CONCRETE_POWDER = RegistryKey.unsafeOf("purple_concrete_powder");
 
+    RegistryKey<Material> PURPLE_CONCRETE_SLAB = RegistryKey.unsafeOf("purple_concrete_slab");
+
+    RegistryKey<Material> PURPLE_CONCRETE_STAIRS = RegistryKey.unsafeOf("purple_concrete_stairs");
+
+    RegistryKey<Material> PURPLE_CUSHION = RegistryKey.unsafeOf("purple_cushion");
+
     RegistryKey<Material> PURPLE_DYE = RegistryKey.unsafeOf("purple_dye");
 
     RegistryKey<Material> PURPLE_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("purple_glazed_terracotta");
@@ -2198,6 +2380,10 @@ public interface MaterialKeys {
     RegistryKey<Material> PURPLE_TERRACOTTA = RegistryKey.unsafeOf("purple_terracotta");
 
     RegistryKey<Material> PURPLE_WOOL = RegistryKey.unsafeOf("purple_wool");
+
+    RegistryKey<Material> PURPLE_WOOL_SLAB = RegistryKey.unsafeOf("purple_wool_slab");
+
+    RegistryKey<Material> PURPLE_WOOL_STAIRS = RegistryKey.unsafeOf("purple_wool_stairs");
 
     RegistryKey<Material> PURPUR_BLOCK = RegistryKey.unsafeOf("purpur_block");
 
@@ -2263,6 +2449,12 @@ public interface MaterialKeys {
 
     RegistryKey<Material> RED_CONCRETE_POWDER = RegistryKey.unsafeOf("red_concrete_powder");
 
+    RegistryKey<Material> RED_CONCRETE_SLAB = RegistryKey.unsafeOf("red_concrete_slab");
+
+    RegistryKey<Material> RED_CONCRETE_STAIRS = RegistryKey.unsafeOf("red_concrete_stairs");
+
+    RegistryKey<Material> RED_CUSHION = RegistryKey.unsafeOf("red_cushion");
+
     RegistryKey<Material> RED_DYE = RegistryKey.unsafeOf("red_dye");
 
     RegistryKey<Material> RED_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("red_glazed_terracotta");
@@ -2281,6 +2473,8 @@ public interface MaterialKeys {
 
     RegistryKey<Material> RED_NETHER_BRICKS = RegistryKey.unsafeOf("red_nether_bricks");
 
+    RegistryKey<Material> RED_POPLAR_LEAVES = RegistryKey.unsafeOf("red_poplar_leaves");
+
     RegistryKey<Material> RED_SAND = RegistryKey.unsafeOf("red_sand");
 
     RegistryKey<Material> RED_SANDSTONE = RegistryKey.unsafeOf("red_sandstone");
@@ -2290,6 +2484,8 @@ public interface MaterialKeys {
     RegistryKey<Material> RED_SANDSTONE_STAIRS = RegistryKey.unsafeOf("red_sandstone_stairs");
 
     RegistryKey<Material> RED_SANDSTONE_WALL = RegistryKey.unsafeOf("red_sandstone_wall");
+
+    RegistryKey<Material> RED_SHRUB = RegistryKey.unsafeOf("red_shrub");
 
     RegistryKey<Material> RED_SHULKER_BOX = RegistryKey.unsafeOf("red_shulker_box");
 
@@ -2302,6 +2498,10 @@ public interface MaterialKeys {
     RegistryKey<Material> RED_TULIP = RegistryKey.unsafeOf("red_tulip");
 
     RegistryKey<Material> RED_WOOL = RegistryKey.unsafeOf("red_wool");
+
+    RegistryKey<Material> RED_WOOL_SLAB = RegistryKey.unsafeOf("red_wool_slab");
+
+    RegistryKey<Material> RED_WOOL_STAIRS = RegistryKey.unsafeOf("red_wool_stairs");
 
     RegistryKey<Material> REDSTONE = RegistryKey.unsafeOf("redstone");
 
@@ -2361,6 +2561,8 @@ public interface MaterialKeys {
 
     RegistryKey<Material> SANDSTONE_WALL = RegistryKey.unsafeOf("sandstone_wall");
 
+    RegistryKey<Material> SAVANNA_VILLAGE_MAP = RegistryKey.unsafeOf("savanna_village_map");
+
     RegistryKey<Material> SCAFFOLDING = RegistryKey.unsafeOf("scaffolding");
 
     RegistryKey<Material> SCRAPE_POTTERY_SHERD = RegistryKey.unsafeOf("scrape_pottery_sherd");
@@ -2390,6 +2592,8 @@ public interface MaterialKeys {
     RegistryKey<Material> SHEARS = RegistryKey.unsafeOf("shears");
 
     RegistryKey<Material> SHEEP_SPAWN_EGG = RegistryKey.unsafeOf("sheep_spawn_egg");
+
+    RegistryKey<Material> SHELF_MUSHROOM = RegistryKey.unsafeOf("shelf_mushroom");
 
     RegistryKey<Material> SHELTER_POTTERY_SHERD = RegistryKey.unsafeOf("shelter_pottery_sherd");
 
@@ -2474,6 +2678,8 @@ public interface MaterialKeys {
     RegistryKey<Material> SNOW_GOLEM_SPAWN_EGG = RegistryKey.unsafeOf("snow_golem_spawn_egg");
 
     RegistryKey<Material> SNOWBALL = RegistryKey.unsafeOf("snowball");
+
+    RegistryKey<Material> SNOWY_VILLAGE_MAP = RegistryKey.unsafeOf("snowy_village_map");
 
     RegistryKey<Material> SOUL_CAMPFIRE = RegistryKey.unsafeOf("soul_campfire");
 
@@ -2577,6 +2783,8 @@ public interface MaterialKeys {
 
     RegistryKey<Material> STONECUTTER = RegistryKey.unsafeOf("stonecutter");
 
+    RegistryKey<Material> STRAW_BED = RegistryKey.unsafeOf("straw_bed");
+
     RegistryKey<Material> STRAY_SPAWN_EGG = RegistryKey.unsafeOf("stray_spawn_egg");
 
     RegistryKey<Material> STRIDER_SPAWN_EGG = RegistryKey.unsafeOf("strider_spawn_egg");
@@ -2620,6 +2828,10 @@ public interface MaterialKeys {
     RegistryKey<Material> STRIPPED_PALE_OAK_LOG = RegistryKey.unsafeOf("stripped_pale_oak_log");
 
     RegistryKey<Material> STRIPPED_PALE_OAK_WOOD = RegistryKey.unsafeOf("stripped_pale_oak_wood");
+
+    RegistryKey<Material> STRIPPED_POPLAR_LOG = RegistryKey.unsafeOf("stripped_poplar_log");
+
+    RegistryKey<Material> STRIPPED_POPLAR_WOOD = RegistryKey.unsafeOf("stripped_poplar_wood");
 
     RegistryKey<Material> STRIPPED_SPRUCE_LOG = RegistryKey.unsafeOf("stripped_spruce_log");
 
@@ -2667,11 +2879,15 @@ public interface MaterialKeys {
 
     RegistryKey<Material> SUSPICIOUS_STEW = RegistryKey.unsafeOf("suspicious_stew");
 
+    RegistryKey<Material> SWAMP_HUT_MAP = RegistryKey.unsafeOf("swamp_hut_map");
+
     RegistryKey<Material> SWEET_BERRIES = RegistryKey.unsafeOf("sweet_berries");
 
     RegistryKey<Material> TADPOLE_BUCKET = RegistryKey.unsafeOf("tadpole_bucket");
 
     RegistryKey<Material> TADPOLE_SPAWN_EGG = RegistryKey.unsafeOf("tadpole_spawn_egg");
+
+    RegistryKey<Material> TAIGA_VILLAGE_MAP = RegistryKey.unsafeOf("taiga_village_map");
 
     RegistryKey<Material> TALL_DRY_GRASS = RegistryKey.unsafeOf("tall_dry_grass");
 
@@ -2772,6 +2988,8 @@ public interface MaterialKeys {
     RegistryKey<Material> WARD_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.unsafeOf("ward_armor_trim_smithing_template");
 
     RegistryKey<Material> WARDEN_SPAWN_EGG = RegistryKey.unsafeOf("warden_spawn_egg");
+
+    RegistryKey<Material> WARM_OCEAN_RUINS_MAP = RegistryKey.unsafeOf("warm_ocean_ruins_map");
 
     RegistryKey<Material> WARPED_BUTTON = RegistryKey.unsafeOf("warped_button");
 
@@ -2987,6 +3205,12 @@ public interface MaterialKeys {
 
     RegistryKey<Material> WHITE_CONCRETE_POWDER = RegistryKey.unsafeOf("white_concrete_powder");
 
+    RegistryKey<Material> WHITE_CONCRETE_SLAB = RegistryKey.unsafeOf("white_concrete_slab");
+
+    RegistryKey<Material> WHITE_CONCRETE_STAIRS = RegistryKey.unsafeOf("white_concrete_stairs");
+
+    RegistryKey<Material> WHITE_CUSHION = RegistryKey.unsafeOf("white_cushion");
+
     RegistryKey<Material> WHITE_DYE = RegistryKey.unsafeOf("white_dye");
 
     RegistryKey<Material> WHITE_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("white_glazed_terracotta");
@@ -3004,6 +3228,10 @@ public interface MaterialKeys {
     RegistryKey<Material> WHITE_TULIP = RegistryKey.unsafeOf("white_tulip");
 
     RegistryKey<Material> WHITE_WOOL = RegistryKey.unsafeOf("white_wool");
+
+    RegistryKey<Material> WHITE_WOOL_SLAB = RegistryKey.unsafeOf("white_wool_slab");
+
+    RegistryKey<Material> WHITE_WOOL_STAIRS = RegistryKey.unsafeOf("white_wool_stairs");
 
     RegistryKey<Material> WILD_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.unsafeOf("wild_armor_trim_smithing_template");
 
@@ -3037,6 +3265,8 @@ public interface MaterialKeys {
 
     RegistryKey<Material> WOODEN_SWORD = RegistryKey.unsafeOf("wooden_sword");
 
+    RegistryKey<Material> WOODLAND_MANSION_MAP = RegistryKey.unsafeOf("woodland_mansion_map");
+
     RegistryKey<Material> WRITABLE_BOOK = RegistryKey.unsafeOf("writable_book");
 
     RegistryKey<Material> WRITTEN_BOOK = RegistryKey.unsafeOf("written_book");
@@ -3055,11 +3285,19 @@ public interface MaterialKeys {
 
     RegistryKey<Material> YELLOW_CONCRETE_POWDER = RegistryKey.unsafeOf("yellow_concrete_powder");
 
+    RegistryKey<Material> YELLOW_CONCRETE_SLAB = RegistryKey.unsafeOf("yellow_concrete_slab");
+
+    RegistryKey<Material> YELLOW_CONCRETE_STAIRS = RegistryKey.unsafeOf("yellow_concrete_stairs");
+
+    RegistryKey<Material> YELLOW_CUSHION = RegistryKey.unsafeOf("yellow_cushion");
+
     RegistryKey<Material> YELLOW_DYE = RegistryKey.unsafeOf("yellow_dye");
 
     RegistryKey<Material> YELLOW_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("yellow_glazed_terracotta");
 
     RegistryKey<Material> YELLOW_HARNESS = RegistryKey.unsafeOf("yellow_harness");
+
+    RegistryKey<Material> YELLOW_POPLAR_LEAVES = RegistryKey.unsafeOf("yellow_poplar_leaves");
 
     RegistryKey<Material> YELLOW_SHULKER_BOX = RegistryKey.unsafeOf("yellow_shulker_box");
 
@@ -3070,6 +3308,10 @@ public interface MaterialKeys {
     RegistryKey<Material> YELLOW_TERRACOTTA = RegistryKey.unsafeOf("yellow_terracotta");
 
     RegistryKey<Material> YELLOW_WOOL = RegistryKey.unsafeOf("yellow_wool");
+
+    RegistryKey<Material> YELLOW_WOOL_SLAB = RegistryKey.unsafeOf("yellow_wool_slab");
+
+    RegistryKey<Material> YELLOW_WOOL_STAIRS = RegistryKey.unsafeOf("yellow_wool_stairs");
 
     RegistryKey<Material> ZOGLIN_SPAWN_EGG = RegistryKey.unsafeOf("zoglin_spawn_egg");
 

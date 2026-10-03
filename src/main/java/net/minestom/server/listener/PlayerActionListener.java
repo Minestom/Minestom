@@ -10,6 +10,7 @@ import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.item.PlayerCancelItemUseEvent;
 import net.minestom.server.event.player.PlayerCancelDiggingEvent;
+import net.minestom.server.event.player.PlayerChangeDiggingDirectionEvent;
 import net.minestom.server.event.player.PlayerFinishDiggingEvent;
 import net.minestom.server.event.player.PlayerStabEvent;
 import net.minestom.server.event.player.PlayerStartDiggingEvent;
@@ -38,6 +39,9 @@ public final class PlayerActionListener {
         if (status == ClientPlayerActionPacket.Status.STARTED_DIGGING) {
             if (!instance.isChunkLoaded(blockPosition)) return;
             diggingResult = startDigging(player, instance, blockPosition, packet.blockFace());
+        } else if (status == ClientPlayerActionPacket.Status.CHANGED_DIGGING_DIRECTION) {
+            if (!instance.isChunkLoaded(blockPosition)) return;
+            diggingResult = changeDiggingDirection(player, instance, blockPosition, packet.blockFace());
         } else if (status == ClientPlayerActionPacket.Status.CANCELLED_DIGGING) {
             if (!instance.isChunkLoaded(blockPosition)) return;
             diggingResult = cancelDigging(player, instance, blockPosition);
@@ -55,7 +59,7 @@ public final class PlayerActionListener {
         } else if (status == ClientPlayerActionPacket.Status.STAB) {
             stab(player);
         }
-        // Acknowledge start/cancel/finish digging status
+        // Acknowledge start/change/cancel/finish digging status
         if (diggingResult != null) {
             player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
             if (!diggingResult.success()) {
@@ -86,6 +90,14 @@ public final class PlayerActionListener {
         }
         // Client only sends a single STARTED_DIGGING when insta-break is enabled
         return breakBlock(instance, player, blockPosition, block, blockFace);
+    }
+
+    private static DiggingResult changeDiggingDirection(Player player, Instance instance, Point blockPosition, BlockFace blockFace) {
+        final Block block = instance.getBlock(blockPosition);
+
+        PlayerChangeDiggingDirectionEvent event = new PlayerChangeDiggingDirectionEvent(player, instance, block, blockPosition.asBlockVec(), blockFace);
+        EventDispatcher.call(event);
+        return new DiggingResult(block, true);
     }
 
     private static DiggingResult cancelDigging(Player player, Instance instance, Point blockPosition) {

@@ -22,6 +22,7 @@ import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
+import net.minestom.server.utils.Either;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
@@ -53,15 +54,15 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
 
     /**
      * Codec for block states as a map.
-     * Format: <code>{Name:"minecraft:x",Properties:{a:"y",b:"z"}}</code>
+     * Format: <code>{id:"minecraft:x",properties:{a:"y",b:"z"}}</code>
      */
     Codec<Block> STATE_STRUCT_CODEC = new StructCodec<>() {
         @Override
         public <D> Result<Block> decodeFromMap(Transcoder<D> coder, Transcoder.MapLike<D> map) {
-            Result<Block> blockResult = map.getValue("Name").map(coder::getString).mapResult(Block::fromKey);
+            Result<Block> blockResult = map.getValue("id").map(coder::getString).mapResult(Block::fromKey);
             if (!(blockResult instanceof Result.Ok(Block block)))
                 return blockResult.cast();
-            Result<Transcoder.MapLike<D>> propertiesResult = map.getValue("Properties").map(coder::getMap);
+            Result<Transcoder.MapLike<D>> propertiesResult = map.getValue("properties").map(coder::getMap);
             if (!(propertiesResult instanceof Result.Ok(Transcoder.MapLike<D> properties)))
                 // properties are optional
                 return new Result.Ok<>(block);
@@ -78,7 +79,7 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
         @Override
         public <D> Result<D> encodeToMap(Transcoder<D> coder, Block value, Transcoder.MapBuilder<D> map) {
             if (value == null) return new Result.Error<>("null");
-            map.put("Name", coder.createString(value.key().asMinimalString()));
+            map.put("id", coder.createString(value.key().asMinimalString()));
             final var properties = value.properties();
             if (properties.isEmpty()) {
                 return new Result.Ok<>(map.build());
@@ -93,11 +94,21 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
                 nonDefaultPropertyExists = true;
             }
             if (nonDefaultPropertyExists) {
-                map.put("Properties", propertiesBuilder.build());
+                map.put("properties", propertiesBuilder.build());
             }
             return new Result.Ok<>(map.build());
         }
     };
+
+    /**
+     * Codec for block states as a block name when the block is in its default state, and as the map form of
+     * {@link #STATE_STRUCT_CODEC} otherwise.
+     * Format: <code>"minecraft:x"</code> or <code>{id:"minecraft:x",properties:{a:"y",b:"z"}}</code>
+     */
+    Codec<Block> COMPACT_STATE_CODEC = Codec.Either(
+            Codec.KEY.transform(key -> Objects.requireNonNull(Block.fromKey(key), () -> "not a block: " + key), Block::key),
+            STATE_STRUCT_CODEC
+    ).transform(Either::identity, block -> block.equals(block.defaultState()) ? Either.left(block) : Either.right(block));
 
     /**
      * Creates a new block with the the property {@code property} sets to {@code value}.
@@ -280,8 +291,8 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
      * Returns the vanilla solid-state classification for this block state.
      * <p>
      * This is not a collision or motion-blocking check. For example, cobweb and bamboo sapling are classified as
-     * solid while {@link #blocksMotion()} is {@code false}. Use {@link #collisionShape()} for physical collisions
-     * and {@link #blocksMotion()} for the vanilla motion-blocking classification.
+     * solid while not blocking motion. Use {@link #collisionShape()} for physical collisions and the
+     * {@link BlockTags#BLOCKS_MOTION} tag for the motion-blocking classification.
      *
      * @return {@code true} if vanilla classifies this block state as solid
      */
@@ -297,19 +308,6 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
     @Contract(pure = true)
     default boolean isSolid() {
         return solid();
-    }
-
-    /**
-     * Returns whether vanilla classifies this block state as blocking motion.
-     * <p>
-     * This flag is independent of {@link #solid()} and does not replace an exact {@link #collisionShape()} check.
-     * For example, cobweb is solid but does not block motion.
-     *
-     * @return {@code true} if this block state is classified as blocking motion
-     */
-    @Contract(pure = true)
-    default boolean blocksMotion() {
-        return registry().blocksMotion();
     }
 
     /**

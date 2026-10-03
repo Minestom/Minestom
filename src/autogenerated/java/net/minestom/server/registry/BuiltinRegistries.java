@@ -26,6 +26,8 @@ import net.minestom.server.instance.block.BlockEntityType;
 import net.minestom.server.instance.block.BlockSoundType;
 import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
+import net.minestom.server.instance.block.pot.DecoratedPotPattern;
+import net.minestom.server.instance.block.transformer.BlockTransformer;
 import net.minestom.server.instance.fluid.Fluid;
 import net.minestom.server.instance.gamerule.GameRule;
 import net.minestom.server.item.Material;
@@ -43,6 +45,7 @@ import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import net.minestom.server.world.clock.ClockTimeMarker;
 import net.minestom.server.world.clock.WorldClock;
+import net.minestom.server.world.generation.BlockStateProvider;
 import net.minestom.server.world.timeline.Timeline;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -78,6 +81,11 @@ public interface BuiltinRegistries {
      * The registry key for {@link BlockSoundType}.
      */
     RegistryKey<Registry<BlockSoundType>> BLOCK_SOUND_TYPE = RegistryKey.unsafeOf("block_sound_type");
+
+    /**
+     * The registry key for {@link BlockTransformer}.
+     */
+    RegistryKey<Registry<BlockTransformer>> BLOCK_TRANSFORMER = RegistryKey.unsafeOf("block_transformer");
 
     /**
      * The registry key for {@link CatSoundVariant}.
@@ -128,6 +136,11 @@ public interface BuiltinRegistries {
      * The registry key for {@link DamageType}.
      */
     RegistryKey<Registry<DamageType>> DAMAGE_TYPE = RegistryKey.unsafeOf("damage_type");
+
+    /**
+     * The registry key for {@link DecoratedPotPattern}.
+     */
+    RegistryKey<Registry<DecoratedPotPattern>> DECORATED_POT_PATTERN = RegistryKey.unsafeOf("decorated_pot_pattern");
 
     /**
      * The registry key for {@link Dialog}.
@@ -258,6 +271,11 @@ public interface BuiltinRegistries {
      * The registry key for {@link Biome}.
      */
     RegistryKey<Registry<Biome>> BIOME = RegistryKey.unsafeOf("worldgen/biome");
+
+    /**
+     * The registry key for {@link BlockStateProvider}.
+     */
+    RegistryKey<Registry<BlockStateProvider>> BLOCK_STATE_PROVIDER = RegistryKey.unsafeOf("worldgen/block_state_provider");
 
     /**
      * The registry key for {@link ZombieNautilusVariant}.
