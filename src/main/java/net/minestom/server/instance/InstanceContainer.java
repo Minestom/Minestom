@@ -614,13 +614,15 @@ public class InstanceContainer extends Instance {
      * Copies all the chunks of this instance and create a new instance container with all of them.
      * <p>
      * Chunks are copied with {@link Chunk#copy(Instance, int, int)},
-     * {@link UUID} is randomized and {@link DimensionType} is passed over.
+     * {@link UUID} is randomized, and the registries, {@link DimensionType}, and dimension name are passed over.
      *
      * @return an {@link InstanceContainer} with the exact same chunks as 'this'
      * @see #getSrcInstance() to retrieve the "creation source" of the copied instance
      */
     public synchronized InstanceContainer copy() {
-        InstanceContainer copiedInstance = new InstanceContainer(UUID.randomUUID(), getDimensionType());
+        InstanceContainer copiedInstance = new InstanceContainer(
+                registries(), UUID.randomUUID(),
+                getDimensionType(), null, Key.key(getDimensionName()));
         copiedInstance.srcInstance = this;
         copiedInstance.tagHandler = this.tagHandler.copy();
         copiedInstance.lastBlockChangeTime = this.lastBlockChangeTime;
