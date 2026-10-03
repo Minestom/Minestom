@@ -26,9 +26,10 @@ public record MoveMinecartPacket(int entityId, List<LerpStep> lerpSteps) impleme
         public static final NetworkBuffer.Type<LerpStep> SERIALIZER = NetworkBufferTemplate.template(
                 VECTOR3D, LerpStep::position,
                 VECTOR3D, LerpStep::velocity,
-                NetworkBuffer.FLOAT, LerpStep::yaw,
-                NetworkBuffer.FLOAT, LerpStep::pitch,
+                NetworkBuffer.BYTE, value -> (byte) (value.yaw * 256f / 360f),
+                NetworkBuffer.BYTE, value -> (byte) (value.pitch * 256f / 360f),
                 NetworkBuffer.FLOAT, LerpStep::weight,
-                LerpStep::new);
+                (position, velocity, yaw, pitch, weight) -> new LerpStep(position, velocity,
+                        yaw * 360f / 256f, pitch * 360f / 256f, weight));
     }
 }
