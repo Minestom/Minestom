@@ -28,7 +28,6 @@ public sealed interface GameEvent extends StaticProtocolObject<GameEvent>, GameE
      */
     @Deprecated(forRemoval = true)
     @SuppressWarnings("removal")
-    @Override
     @Contract(pure = true)
     @Nullable
     RegistryData.GameEventEntry registry();

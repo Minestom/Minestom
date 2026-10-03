@@ -50,18 +50,6 @@ public record Tool(List<Rule> rules, float defaultMiningSpeed, int damagePerBloc
     }
 
     /**
-     * Returns whether this tool is correct for drops from the given block.
-     *
-     * @param block the block to test
-     * @return whether the first matching rule marks this tool as correct for drops
-     * @deprecated use {@link #isCorrectForDrops(RegistryKey)}
-     */
-    @Deprecated(forRemoval = true)
-    public boolean isCorrectForDrops(Block block) {
-        return isCorrectForDrops(block.registryKey());
-    }
-
-    /**
      * Returns whether this tool is correct for drops from the given block key.
      *
      * @param block the block key to test
@@ -75,18 +63,6 @@ public record Tool(List<Rule> rules, float defaultMiningSpeed, int damagePerBloc
             }
         }
         return false;
-    }
-
-    /**
-     * Returns this tool's mining speed for the given block.
-     *
-     * @param block the block to test
-     * @return the first matching rule's speed, or {@link #defaultMiningSpeed()} when none match
-     * @deprecated use {@link #getSpeed(RegistryKey)}
-     */
-    @Deprecated(forRemoval = true)
-    public float getSpeed(Block block) {
-        return getSpeed(block.registryKey());
     }
 
     /**
