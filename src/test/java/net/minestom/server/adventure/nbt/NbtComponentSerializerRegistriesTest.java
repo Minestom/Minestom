@@ -4,6 +4,8 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.ListBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
+import net.minestom.server.registry.Registries;
+import net.minestom.testing.RegistriesTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -11,10 +13,11 @@ import java.util.List;
 import static net.kyori.adventure.nbt.StringBinaryTag.stringBinaryTag;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TestNbtComponentSerializer {
+@RegistriesTest
+public class NbtComponentSerializerRegistriesTest {
 
     @Test
-    void testReadStringChildren() {
+    void testReadStringChildren(Registries registries) {
         var tag = CompoundBinaryTag.builder()
                 .putString("text", "Hello")
                 .put("extra", ListBinaryTag.from(List.of(
@@ -22,15 +25,15 @@ public class TestNbtComponentSerializer {
                         stringBinaryTag("World!")
                 )))
                 .build();
-        var deserialized = NbtComponentSerializer.nbt().deserialize(tag);
+        var deserialized = NbtComponentSerializer.nbt(registries).deserialize(tag);
 
         var expected = Component.text("Hello").appendSpace().append(Component.text("World!"));
         assertEquals(expected, deserialized);
     }
 
     @Test
-    void testWriteRead() {
-        var serializer = NbtComponentSerializer.nbt();
+    void testWriteRead(Registries registries) {
+        var serializer = NbtComponentSerializer.nbt(registries);
         var comp = Component.text("Hello").appendSpace().append(Component.text("World!"));
 
         var tag = serializer.serialize(comp);
