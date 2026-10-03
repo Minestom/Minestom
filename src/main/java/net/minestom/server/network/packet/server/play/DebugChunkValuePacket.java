@@ -5,9 +5,11 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.debug.DebugSubscription;
 import net.minestom.server.network.packet.server.ServerPacket;
 
-public record DebugChunkValuePacket(long chunkPos, DebugSubscription.Update<?> update) implements ServerPacket.Play {
+public record DebugChunkValuePacket(int chunkX, int chunkZ, DebugSubscription.Update<?> update) implements ServerPacket.Play {
+    // The client reads the chunk position as one big endian long with x in the low bits
     public static final NetworkBuffer.Type<DebugChunkValuePacket> SERIALIZER = NetworkBufferTemplate.template(
-            NetworkBuffer.LONG, DebugChunkValuePacket::chunkPos,
+            NetworkBuffer.INT, DebugChunkValuePacket::chunkZ,
+            NetworkBuffer.INT, DebugChunkValuePacket::chunkX,
             DebugSubscription.Update.NETWORK_TYPE, DebugChunkValuePacket::update,
-            DebugChunkValuePacket::new);
+            (chunkZ, chunkX, update) -> new DebugChunkValuePacket(chunkX, chunkZ, update));
 }

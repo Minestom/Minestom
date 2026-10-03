@@ -1,9 +1,11 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
+import net.minestom.server.network.packet.server.play.WorldBorderLerpSizePacket;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
@@ -53,6 +55,23 @@ public class WorldBorderIntegrationTest {
             assertEquals(25, instance.getWorldBorder().diameter());
             instance.tick(0);
         }
+    }
+
+    @Test
+    public void transitionTimeIsSentInTicks(Env env) {
+        Instance instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        connection.connect(instance, new Pos(0, 42, 0));
+
+        final long ticksPerSecond = 1000 / MinecraftServer.TICK_MS;
+        WorldBorder border = instance.getWorldBorder();
+        instance.setWorldBorder(border.withDiameter(30));
+        var lerp = connection.trackIncoming(WorldBorderLerpSizePacket.class);
+        instance.setWorldBorder(border.withDiameter(10), 1);
+        lerp.assertSingle(packet -> assertEquals(ticksPerSecond, packet.speed()));
+
+        for (int i = 0; i < 5; i++) instance.tick(0);
+        assertEquals(ticksPerSecond - 5, instance.createInitializeWorldBorderPacket().speed());
     }
 
     @Test

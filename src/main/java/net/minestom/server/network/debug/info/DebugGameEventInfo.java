@@ -8,6 +8,6 @@ import net.minestom.server.network.NetworkBufferTemplate;
 public record DebugGameEventInfo(GameEvent event, Point position) {
     public static final NetworkBuffer.Type<DebugGameEventInfo> SERIALIZER = NetworkBufferTemplate.template(
             GameEvent.NETWORK_TYPE, DebugGameEventInfo::event,
-            NetworkBuffer.VECTOR3, DebugGameEventInfo::position,
+            NetworkBuffer.VECTOR3D, DebugGameEventInfo::position,
             DebugGameEventInfo::new);
 }

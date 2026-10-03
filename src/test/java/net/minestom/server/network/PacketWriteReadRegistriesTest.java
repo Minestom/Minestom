@@ -293,7 +293,6 @@ import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
-import net.minestom.server.potion.PotionType;
 import net.minestom.server.recipe.Ingredient;
 import net.minestom.server.recipe.RecipeBookCategory;
 import net.minestom.server.recipe.RecipeProperty;
@@ -677,16 +676,16 @@ public class PacketWriteReadRegistriesTest {
         addServerPackets(new DeclareCommandsPacket(List.of(), 0));
         addServerPackets(new BundlePacket());
         addServerPackets(new DebugBlockValuePacket(Vec.ONE, new DebugSubscription.Update<>(DebugSubscription.BEE_HIVES, new DebugHiveInfo(Block.BEEHIVE, 1, 0, true))));
-        addServerPackets(new DebugChunkValuePacket(1, new DebugSubscription.Update<>(DebugSubscription.POIS, new DebugPoiInfo(BLOCK_VEC, DebugPoiInfo.Type.BUTCHER, 1))));
+        addServerPackets(new DebugChunkValuePacket(1, -2, new DebugSubscription.Update<>(DebugSubscription.POIS, new DebugPoiInfo(BLOCK_VEC, DebugPoiInfo.Type.BUTCHER, 1))));
         addServerPackets(new DebugEntityValuePacket(0, new DebugSubscription.Update<>(DebugSubscription.ENTITY_PATHS, new DebugPathInfo(new DebugPathInfo.Path(true, 0, BLOCK_VEC, List.of(), new DebugPathInfo.Data(Set.of(), List.of(), List.of())), 1))));
         addServerPackets(new DebugEventPacket(new DebugSubscription.Event<>(DebugSubscription.NEIGHBOR_UPDATES, Vec.ZERO)));
         addServerPackets(new DebugSamplePacket(new long[0], DebugSamplePacket.Type.TICK_TIME)); // Legacy debug wrapper, maybe it will change.
-        addServerPackets(new DeleteChatPacket(new MessageSignature(new byte[256])));
+        addServerPackets(new DeleteChatPacket(new MessageSignature(new byte[256])), new DeleteChatPacket(new MessageSignature.Packed(5, null)));
         addServerPackets(new DisguisedChatPacket(Component.text("Hey"), 0, Component.text("Message"), null));
         addServerPackets(new EntityPositionSyncPacket(1, VEC, VEC, 1f, 1f, false));
         addServerPackets(new GameTestHighlightPosPacket(BLOCK_VEC, BLOCK_VEC));
         addServerPackets(new UpdateLightPacket(0, 0, new LightData(new BitSet(), new BitSet(), new BitSet(), new BitSet(), List.of(), List.of())));
-        addServerPackets(new MoveMinecartPacket(1, List.of(new MoveMinecartPacket.LerpStep(VEC, Vec.ZERO, 1f, 1f, 1f))));
+        addServerPackets(new MoveMinecartPacket(1, List.of(new MoveMinecartPacket.LerpStep(VEC, Vec.ZERO, 90f, -45f, 1f))));
         addServerPackets(new PlayerChatMessagePacket(0, UUID.randomUUID(), 0, new MessageSignature(new byte[256]), new SignedMessageBody.Packed("hey", Instant.EPOCH, 0L, new LastSeenMessages.Packed(List.of())), null, new FilterMask(FilterMask.Type.FULLY_FILTERED, new BitSet()), 1, Component.text("hey"), null));
         addServerPackets(new RecipeBookSettingsPacket(false, false, true, false, false, false, false, false));
         addServerPackets(new RemoveEntityEffectPacket(0, PotionEffect.BAD_OMEN));
@@ -815,7 +814,7 @@ public class PacketWriteReadRegistriesTest {
         addClientPackets(new ClientTeleportConfirmPacket(325626), new ClientTeleportConfirmPacket(Integer.MAX_VALUE), new ClientTeleportConfirmPacket(Integer.MIN_VALUE));
         addClientPackets(new ClientQueryBlockNbtPacket(1325, BLOCK_VEC), new ClientQueryBlockNbtPacket(-15, Vec.ONE));
         addClientPackets(new ClientSelectBundleItemPacket(32, 65), new ClientSelectBundleItemPacket(Integer.MAX_VALUE, Integer.MAX_VALUE));
-        addClientPackets(new ClientChangeDifficultyPacket(Difficulty.EASY, false), new ClientChangeDifficultyPacket(Difficulty.HARD, true), new ClientChangeDifficultyPacket(Difficulty.PEACEFUL, true));
+        addClientPackets(new ClientChangeDifficultyPacket(Difficulty.EASY), new ClientChangeDifficultyPacket(Difficulty.HARD), new ClientChangeDifficultyPacket(Difficulty.PEACEFUL));
         addClientPackets(new ClientChangeGameModePacket(GameMode.ADVENTURE), new ClientChangeGameModePacket(GameMode.SURVIVAL), new ClientChangeGameModePacket(GameMode.CREATIVE), new ClientChangeGameModePacket(GameMode.SPECTATOR));
         addClientPackets(new ClientChatAckPacket(12549581), new ClientChatAckPacket(Integer.MIN_VALUE), new ClientChatAckPacket(Integer.MAX_VALUE));
         addClientPackets(new ClientCommandChatPacket("l".repeat(256)), new ClientCommandChatPacket("helloworld"));
@@ -872,7 +871,7 @@ public class PacketWriteReadRegistriesTest {
         addClientPackets(new ClientResourcePackStatusPacket(UUID.randomUUID(), ResourcePackStatus.ACCEPTED), new ClientResourcePackStatusPacket(UUID.randomUUID(), ResourcePackStatus.DECLINED));
         addClientPackets(new ClientAdvancementTabPacket(AdvancementAction.OPENED_TAB, "minecraft:story/root"), new ClientAdvancementTabPacket(AdvancementAction.CLOSED_SCREEN, null));
         addClientPackets(new ClientSelectTradePacket(0), new ClientSelectTradePacket(5), new ClientSelectTradePacket(Integer.MAX_VALUE));
-        addClientPackets(new ClientSetBeaconEffectPacket(PotionType.STRENGTH, PotionType.REGENERATION), new ClientSetBeaconEffectPacket(null, null), new ClientSetBeaconEffectPacket(PotionType.fromKey("strength"), null));
+        addClientPackets(new ClientSetBeaconEffectPacket(PotionEffect.SPEED, PotionEffect.REGENERATION), new ClientSetBeaconEffectPacket(null, null), new ClientSetBeaconEffectPacket(PotionEffect.fromKey("strength"), null));
         addClientPackets(new ClientHeldItemChangePacket((short) 0), new ClientHeldItemChangePacket((short) 8), new ClientHeldItemChangePacket((short) 4));
         addClientPackets(new ClientUpdateCommandBlockPacket(Vec.ONE, "/say hello", ClientUpdateCommandBlockPacket.Mode.REDSTONE, (byte) 0), new ClientUpdateCommandBlockPacket(Vec.ZERO, "/tp @p 0 100 0", ClientUpdateCommandBlockPacket.Mode.AUTO, (byte) 0x01));
         addClientPackets(new ClientUpdateCommandBlockMinecartPacket(100, "/say minecart", true), new ClientUpdateCommandBlockMinecartPacket(Integer.MAX_VALUE, "", false));

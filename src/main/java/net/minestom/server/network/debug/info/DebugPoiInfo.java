@@ -12,7 +12,7 @@ public record DebugPoiInfo(
     public static final NetworkBuffer.Type<DebugPoiInfo> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.BLOCK_POSITION, DebugPoiInfo::position,
             Type.SERIALIZER, DebugPoiInfo::type,
-            NetworkBuffer.INT, DebugPoiInfo::freeTicketCount,
+            NetworkBuffer.VAR_INT, DebugPoiInfo::freeTicketCount,
             DebugPoiInfo::new);
 
     public enum Type {
