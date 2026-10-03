@@ -610,11 +610,10 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
      */
     public void setWorldBorder(WorldBorder worldBorder, double transitionTime) {
         Check.stateCondition(transitionTime < 0, "Transition time cannot be lower than 0");
-        long transitionMilliseconds = (long) (transitionTime * 1000);
-        sendNewWorldBorderPackets(worldBorder, transitionMilliseconds);
+        long transitionTicks = (long) (transitionTime * 1000) / MinecraftServer.TICK_MS;
+        sendNewWorldBorderPackets(worldBorder, transitionTicks);
 
         this.targetBorderDiameter = worldBorder.diameter();
-        long transitionTicks = transitionMilliseconds / MinecraftServer.TICK_MS;
         remainingWorldBorderTransitionTicks = transitionTicks;
         if (transitionTicks == 0) this.worldBorder = worldBorder;
         else this.worldBorder = worldBorder.withDiameter(this.worldBorder.diameter());
@@ -632,14 +631,14 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
      * Creates the {@link InitializeWorldBorderPacket} sent to players who join this instance.
      */
     public InitializeWorldBorderPacket createInitializeWorldBorderPacket() {
-        return worldBorder.createInitializePacket(targetBorderDiameter, remainingWorldBorderTransitionTicks * MinecraftServer.TICK_MS);
+        return worldBorder.createInitializePacket(targetBorderDiameter, remainingWorldBorderTransitionTicks);
     }
 
-    private void sendNewWorldBorderPackets(WorldBorder newBorder, long transitionMilliseconds) {
+    private void sendNewWorldBorderPackets(WorldBorder newBorder, long transitionTicks) {
         // Only send the relevant border packets
         if (this.worldBorder.diameter() != newBorder.diameter()) {
-            if (transitionMilliseconds == 0) sendGroupedPacket(newBorder.createSizePacket());
-            else sendGroupedPacket(this.worldBorder.createLerpSizePacket(newBorder.diameter(), transitionMilliseconds));
+            if (transitionTicks == 0) sendGroupedPacket(newBorder.createSizePacket());
+            else sendGroupedPacket(this.worldBorder.createLerpSizePacket(newBorder.diameter(), transitionTicks));
         }
         if (this.worldBorder.centerX() != newBorder.centerX() || this.worldBorder.centerZ() != newBorder.centerZ()) {
             sendGroupedPacket(newBorder.createCenterPacket());

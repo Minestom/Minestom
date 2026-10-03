@@ -12,8 +12,8 @@ public record DebugHiveInfo(
 ) {
     public static final NetworkBuffer.Type<DebugHiveInfo> SERIALIZER = NetworkBufferTemplate.template(
             Block.ID_NETWORK_TYPE, DebugHiveInfo::type,
-            NetworkBuffer.INT, DebugHiveInfo::occupantCount,
-            NetworkBuffer.INT, DebugHiveInfo::honeyLevel,
+            NetworkBuffer.VAR_INT, DebugHiveInfo::occupantCount,
+            NetworkBuffer.VAR_INT, DebugHiveInfo::honeyLevel,
             NetworkBuffer.BOOLEAN, DebugHiveInfo::sedated,
             DebugHiveInfo::new);
 }

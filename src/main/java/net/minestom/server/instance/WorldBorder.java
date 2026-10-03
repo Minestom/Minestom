@@ -117,14 +117,14 @@ public record WorldBorder(double diameter, double centerX, double centerZ, int w
      * Creates a {@link InitializeWorldBorderPacket} which dictates every property
      * of the world border.
      *
-     * @param targetDiameter the target diameter if there is a current lerp in progress
-     * @param transitionTime the transition time in milliseconds of the current
-     *                       lerp in progress
+     * @param targetDiameter  the target diameter if there is a current lerp in progress
+     * @param transitionTicks the remaining transition time in ticks of the current
+     *                        lerp in progress
      * @return an {@link InitializeWorldBorderPacket} reflecting the
      * properties of this border
      */
-    public InitializeWorldBorderPacket createInitializePacket(double targetDiameter, long transitionTime) {
-        return new InitializeWorldBorderPacket(centerX, centerZ, diameter, targetDiameter, transitionTime, dimensionTeleportBoundary, warningTime, warningDistance);
+    public InitializeWorldBorderPacket createInitializePacket(double targetDiameter, long transitionTicks) {
+        return new InitializeWorldBorderPacket(centerX, centerZ, diameter, targetDiameter, transitionTicks, dimensionTeleportBoundary, warningTime, warningDistance);
     }
 
     /**
@@ -140,12 +140,12 @@ public record WorldBorder(double diameter, double centerX, double centerZ, int w
      * Creates a {@link WorldBorderLerpSizePacket} which lerps the border from its current
      * diameter to the target diameter over the given transition time.
      *
-     * @param targetDiameter the final diameter of the border after this transition
-     * @param transitionTime the transition time in milliseconds for this lerp
+     * @param targetDiameter  the final diameter of the border after this transition
+     * @param transitionTicks the transition time in ticks for this lerp
      * @return the {@link WorldBorderLerpSizePacket} representing this lerp
      */
-    public WorldBorderLerpSizePacket createLerpSizePacket(double targetDiameter, long transitionTime) {
-        return new WorldBorderLerpSizePacket(diameter, targetDiameter, transitionTime);
+    public WorldBorderLerpSizePacket createLerpSizePacket(double targetDiameter, long transitionTicks) {
+        return new WorldBorderLerpSizePacket(diameter, targetDiameter, transitionTicks);
     }
 
     /**
