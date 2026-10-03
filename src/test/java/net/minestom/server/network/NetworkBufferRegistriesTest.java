@@ -2,6 +2,7 @@ package net.minestom.server.network;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -798,6 +799,16 @@ public class NetworkBufferRegistriesTest {
 
         assertEquals(List.of(1), buffer.read(INT.list().maxLength(9)));
         assertEquals(List.of(1, 2), buffer.read(INT.list().maxLength(14)));
+    }
+
+    @Test
+    public void maxLengthUsesBufferRegistries(Registries registries) {
+        var buffer = NetworkBuffer.resizableBuffer(registries);
+        var type = NetworkBuffer.TypedNBT(Codec.STRING);
+
+        assertThrows(IllegalArgumentException.class, () -> buffer.write(type.maxLength(1), "value"));
+        buffer.write(type.maxLength(64), "value");
+        assertEquals("value", buffer.read(type.maxLength(64)));
     }
 
     @Test
