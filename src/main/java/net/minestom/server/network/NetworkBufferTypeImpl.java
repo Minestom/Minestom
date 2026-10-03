@@ -926,7 +926,7 @@ interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends Ne
     record MaxLength<T>(NetworkBuffer.Type<T> parent, long maxLength) implements NetworkBufferTypeImpl<T> {
         @Override
         public void write(NetworkBuffer buffer, T value) {
-            final long length = parent.sizeOf(value);
+            final long length = parent.sizeOf(value, buffer.registries());
             Check.argCondition(length > maxLength, "Value is too long (length: {0}, max: {1})", length, maxLength);
             buffer.write(parent, value);
         }
