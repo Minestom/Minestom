@@ -373,7 +373,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
                 .build();
     }
 
-    static NetworkBuffer resizableBuffer(int initialSize) {
+    static NetworkBuffer resizableBuffer(long initialSize) {
         return builder(initialSize)
                 .autoResize(AutoResize.DOUBLE)
                 .build();
