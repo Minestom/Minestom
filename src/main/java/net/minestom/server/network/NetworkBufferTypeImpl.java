@@ -19,6 +19,7 @@ import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.json.JsonUtil;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.io.DataInputStream;
 import java.io.UTFDataFormatException;
@@ -57,7 +58,7 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 import static net.minestom.server.network.NetworkBuffer.VAR_LONG;
 import static net.minestom.server.network.NetworkBufferImpl.impl;
 
-interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
+interface NetworkBufferTypeImpl<T extends @UnknownNullability Object> extends NetworkBuffer.Type<T> {
     int SEGMENT_BITS = 0x7F;
     int CONTINUE_BIT = 0x80;
     int MAX_INITIAL_COLLECTION_SIZE = 65_536;
@@ -889,13 +890,13 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record OptionalType<T>(NetworkBuffer.Type<T> parent) implements NetworkBufferTypeImpl<@Nullable T> {
         @Override
-        public void write(NetworkBuffer buffer, T value) {
+        public void write(NetworkBuffer buffer, @Nullable T value) {
             buffer.write(BOOLEAN, value != null);
             if (value != null) buffer.write(parent, value);
         }
 
         @Override
-        public T read(NetworkBuffer buffer) {
+        public @Nullable T read(NetworkBuffer buffer) {
             return buffer.read(BOOLEAN) ? buffer.read(parent) : null;
         }
     }
@@ -940,9 +941,9 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    final class LazyType<T> implements NetworkBufferTypeImpl<T> {
+    final class LazyType<T extends @UnknownNullability Object> implements NetworkBufferTypeImpl<T> {
         private final Supplier<NetworkBuffer.Type<T>> supplier;
-        private NetworkBuffer.Type<T> type;
+        private @Nullable NetworkBuffer.Type<T> type;
 
         public LazyType(Supplier<NetworkBuffer.Type<T>> supplier) {
             this.supplier = supplier;
@@ -957,14 +958,14 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         @Override
         public T read(NetworkBuffer buffer) {
             if (type == null) type = supplier.get();
-            return null;
+            return type.read(buffer);
         }
     }
 
-    final class RecursiveType<T> implements NetworkBufferTypeImpl<T> {
+    final class RecursiveType<T extends @UnknownNullability Object> implements NetworkBufferTypeImpl<T> {
         final NetworkBuffer.Type<T> delegate;
 
-        public RecursiveType(Function<NetworkBuffer.Type<T>, NetworkBuffer.Type<T>> self) {
+        public RecursiveType(Function<? super NetworkBuffer.Type<T>, ? extends NetworkBuffer.Type<T>> self) {
             Objects.requireNonNull(self, "self");
             this.delegate = Objects.requireNonNull(self.apply(this), "delegate");
         }
@@ -980,7 +981,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record TypedNbtType<T>(Codec<T> nbtType) implements NetworkBufferTypeImpl<T> {
+    record TypedNbtType<T extends @UnknownNullability Object>(Codec<T> nbtType) implements NetworkBufferTypeImpl<T> {
         @Override
         public void write(NetworkBuffer buffer, T value) {
             final Registries registries = buffer.registries();
@@ -1030,8 +1031,8 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record TransformType<T, S>(NetworkBuffer.Type<T> parent, Function<T, S> to,
-                               Function<S, T> from) implements NetworkBufferTypeImpl<S> {
+    record TransformType<T, S>(NetworkBuffer.Type<T> parent, Function<? super T, ? extends S> to,
+                               Function<? super S, ? extends T> from) implements NetworkBufferTypeImpl<S> {
         @Override
         public void write(NetworkBuffer buffer, S value) {
             parent.write(buffer, from.apply(value));
@@ -1076,9 +1077,9 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record ListType<T>(NetworkBuffer.Type<T> parent, int maxSize) implements NetworkBufferTypeImpl<List<T>> {
+    record ListType<T>(NetworkBuffer.Type<T> parent, int maxSize) implements NetworkBufferTypeImpl<@UnknownNullability List<T>> {
         @Override
-        public void write(NetworkBuffer buffer, List<T> values) {
+        public void write(NetworkBuffer buffer, @UnknownNullability List<T> values) {
             if (values == null) {
                 buffer.write(BYTE, (byte) 0);
                 return;
@@ -1105,9 +1106,9 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record SetType<T>(NetworkBuffer.Type<T> parent, int maxSize) implements NetworkBufferTypeImpl<Set<T>> {
+    record SetType<T>(NetworkBuffer.Type<T> parent, int maxSize) implements NetworkBufferTypeImpl<@UnknownNullability Set<T>> {
         @Override
-        public void write(NetworkBuffer buffer, Set<T> values) {
+        public void write(NetworkBuffer buffer, @UnknownNullability Set<T> values) {
             if (values == null) {
                 buffer.write(BYTE, (byte) 0);
                 return;
@@ -1134,9 +1135,9 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record UnionType<T, K, TR extends T>(
-            NetworkBuffer.Type<K> keyType, Function<T, ? extends K> keyFunc,
-            Function<K, NetworkBuffer.Type<TR>> serializers
+    record UnionType<T, K>(
+            NetworkBuffer.Type<K> keyType, Function<? super T, ? extends K> keyFunc,
+            Function<? super K, NetworkBuffer.Type<? extends T>> serializers
     ) implements NetworkBufferTypeImpl<T> {
 
         @SuppressWarnings("unchecked")
@@ -1148,7 +1149,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             var serializer = serializers.apply(key);
             if (serializer == null)
                 throw new UnsupportedOperationException("Unrecognized type: " + key);
-            serializer.write(buffer, (TR) value);
+            ((NetworkBuffer.Type<T>) serializer).write(buffer, value);
         }
 
         @Override
@@ -1160,7 +1161,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record TaggedType<T, D>(
+    record TaggedType<T extends @UnknownNullability Object, D>(
             NetworkBuffer.Type<D> discriminatorType, Function<? super T, ? extends D> discriminatorFromValue,
             Map<? super D, NetworkBuffer.Type<? extends T>> serializerMap, @Nullable NetworkBuffer.Type<? extends T> fallback
     ) implements NetworkBufferTypeImpl<T> {
@@ -1175,7 +1176,8 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         public void write(NetworkBuffer buffer, T value) {
             final D key = discriminatorFromValue.apply(value);
             buffer.write(discriminatorType, key);
-            var serializer = serializerMap.getOrDefault(key, fallback);
+            var serializer = serializerMap.get(key);
+            if (serializer == null) serializer = fallback;
             if (serializer == null)
                 throw new UnsupportedOperationException("Unrecognized type: " + key);
             ((NetworkBuffer.Type<T>) serializer).write(buffer, value);
@@ -1184,7 +1186,8 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         @Override
         public T read(NetworkBuffer buffer) {
             final D key = buffer.read(discriminatorType);
-            var serializer = serializerMap.getOrDefault(key, fallback);
+            var serializer = serializerMap.get(key);
+            if (serializer == null) serializer = fallback;
             if (serializer == null) throw new UnsupportedOperationException("Unrecognized type: " + key);
             return serializer.read(buffer);
         }
