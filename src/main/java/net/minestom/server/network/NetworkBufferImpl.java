@@ -98,7 +98,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     @Override
-    public byte[] extractBytes(Consumer<NetworkBuffer> extractor) {
+    public byte[] extractBytes(Consumer<? super NetworkBuffer> extractor) {
         final MemorySegment segment = this.segment;
         assertDummy(segment);
         final long startingPosition = readIndex();

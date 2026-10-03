@@ -18,6 +18,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
+import org.jetbrains.annotations.Unmodifiable;
 
 import javax.crypto.Cipher;
 import java.io.IOException;
@@ -183,11 +184,11 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return new NetworkBufferTypeImpl.RawDoublesType(length);
     }
 
-    static <T> Type<T> Lazy(Supplier<Type<T>> supplier) {
+    static <T extends @UnknownNullability Object> Type<T> Lazy(Supplier<Type<T>> supplier) {
         return new NetworkBufferTypeImpl.LazyType<>(supplier);
     }
 
-    static <T> Type<T> TypedNBT(Codec<T> serializer) {
+    static <T extends @UnknownNullability Object> Type<T> TypedNBT(Codec<T> serializer) {
         return new NetworkBufferTypeImpl.TypedNbtType<>(serializer);
     }
 
@@ -195,18 +196,18 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return new NetworkBufferTypeImpl.EitherType<>(left, right);
     }
 
-    static <T> Type<T> Recursive(Function<Type<T>, Type<T>> func) {
+    static <T extends @UnknownNullability Object> Type<T> Recursive(Function<? super Type<T>, ? extends Type<T>> func) {
         return new NetworkBufferTypeImpl.RecursiveType<>(func).delegate;
     }
 
-    static <T, D> Type<T> Tagged(Type<D> discriminator, Function<? super T, ? extends D> discriminatorFromValue,
-                                 Map<? super D, ? extends Type<? extends T>> serializerMap, @Nullable Type<? extends T> fallback) {
+    static <T extends @UnknownNullability Object, D> Type<T> Tagged(Type<D> discriminator, Function<? super T, ? extends D> discriminatorFromValue,
+                                                                    Map<? super D, ? extends Type<? extends T>> serializerMap, @Nullable Type<? extends T> fallback) {
         // Map.copyOf does some trickery with the generic bounds here.
         return new NetworkBufferTypeImpl.TaggedType<>(discriminator, discriminatorFromValue, Map.copyOf(serializerMap), fallback);
     }
 
-    static <T, D> Type<T> Tagged(Type<D> discriminator, Function<? super T, ? extends D> discriminatorFromValue,
-                                 Map<? super D, ? extends Type<? extends T>> serializerMap) {
+    static <T extends @UnknownNullability Object, D> Type<T> Tagged(Type<D> discriminator, Function<? super T, ? extends D> discriminatorFromValue,
+                                                                    Map<? super D, ? extends Type<? extends T>> serializerMap) {
         return Tagged(discriminator, discriminatorFromValue, serializerMap, null);
     }
 
@@ -222,7 +223,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     void copyTo(long srcOffset, MemorySegment dest, long destOffset, long length);
 
-    byte[] extractBytes(Consumer<NetworkBuffer> extractor);
+    byte[] extractBytes(Consumer<? super NetworkBuffer> extractor);
 
     NetworkBuffer clear();
 
@@ -308,31 +309,31 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
             return sizeOf(value, null);
         }
 
-        default <S> Type<S> transform(Function<T, S> to, Function<S, T> from) {
+        default <S extends @UnknownNullability Object> Type<S> transform(Function<? super T, ? extends S> to, Function<? super S, ? extends T> from) {
             return new NetworkBufferTypeImpl.TransformType<>(this, to, from);
         }
 
-        default <V> Type<Map<T, V>> mapValue(Type<V> valueType, int maxSize) {
+        default <V extends @UnknownNullability Object> Type<@Unmodifiable @UnknownNullability Map<T, V>> mapValue(Type<V> valueType, int maxSize) {
             return new NetworkBufferTypeImpl.MapType<>(this, valueType, maxSize);
         }
 
-        default <V> Type<Map<T, V>> mapValue(Type<V> valueType) {
+        default <V extends @UnknownNullability Object> Type<@Unmodifiable @UnknownNullability Map<T, V>> mapValue(Type<V> valueType) {
             return mapValue(valueType, Integer.MAX_VALUE);
         }
 
-        default Type<List<T>> list(int maxSize) {
+        default Type<@Unmodifiable @UnknownNullability List<T>> list(int maxSize) {
             return new NetworkBufferTypeImpl.ListType<>(this, maxSize);
         }
 
-        default Type<List<T>> list() {
+        default Type<@Unmodifiable @UnknownNullability List<T>> list() {
             return list(Integer.MAX_VALUE);
         }
 
-        default Type<Set<T>> set(int maxSize) {
+        default Type<@Unmodifiable @UnknownNullability Set<T>> set(int maxSize) {
             return new NetworkBufferTypeImpl.SetType<>(this, maxSize);
         }
 
-        default Type<Set<T>> set() {
+        default Type<@Unmodifiable @UnknownNullability Set<T>> set() {
             return set(Integer.MAX_VALUE);
         }
 
@@ -340,7 +341,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
             return new NetworkBufferTypeImpl.OptionalType<>(this);
         }
 
-        default <R, TR extends R> Type<R> unionType(Function<T, NetworkBuffer.Type<TR>> serializers, Function<R, ? extends T> keyFunc) {
+        default <R extends @UnknownNullability Object> Type<R> unionType(Function<? super T, NetworkBuffer.Type<? extends R>> serializers, Function<? super R, ? extends T> keyFunc) {
             return new NetworkBufferTypeImpl.UnionType<>(this, keyFunc, serializers);
         }
 
@@ -417,21 +418,21 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         long resize(long capacity, long targetSize);
     }
 
-    static byte[] makeArray(Consumer<NetworkBuffer> writing, @Nullable Registries registries) {
+    static byte[] makeArray(Consumer<? super NetworkBuffer> writing, @Nullable Registries registries) {
         NetworkBuffer buffer = resizableBuffer(256, registries);
         writing.accept(buffer);
         return buffer.read(RAW_BYTES);
     }
 
-    static byte[] makeArray(Consumer<NetworkBuffer> writing) {
+    static byte[] makeArray(Consumer<? super NetworkBuffer> writing) {
         return makeArray(writing, null);
     }
 
-    static <T> byte[] makeArray(Type<T> type, T value, @Nullable Registries registries) {
+    static <T extends @UnknownNullability Object> byte[] makeArray(Type<T> type, T value, @Nullable Registries registries) {
         return makeArray(buffer -> buffer.write(type, value), registries);
     }
 
-    static <T> byte[] makeArray(Type<T> type, T value) {
+    static <T extends @UnknownNullability Object> byte[] makeArray(Type<T> type, T value) {
         return makeArray(type, value, null);
     }
 
