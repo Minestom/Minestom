@@ -907,7 +907,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * @param initialSize the initial capacity
      * @return the new buffer
      */
-    static NetworkBuffer resizableBuffer(int initialSize) {
+    static NetworkBuffer resizableBuffer(long initialSize) {
         return builder(initialSize)
                 .autoResize(AutoResize.DOUBLE)
                 .build();

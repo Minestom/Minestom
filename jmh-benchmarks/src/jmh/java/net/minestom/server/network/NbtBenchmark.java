@@ -49,8 +49,8 @@ public class NbtBenchmark {
             default -> throw new IllegalArgumentException("Unknown payload: " + payload);
         };
         final long size = NBT.sizeOf(tag);
-        writeBuffer = NetworkBuffer.resizableBuffer((int) size);
-        readBuffer = NetworkBuffer.resizableBuffer((int) size);
+        writeBuffer = NetworkBuffer.resizableBuffer(size);
+        readBuffer = NetworkBuffer.resizableBuffer(size);
         readBuffer.write(NBT, tag);
     }
 
