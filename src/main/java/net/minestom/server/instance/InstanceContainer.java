@@ -73,9 +73,11 @@ public class InstanceContainer extends Instance {
 
     private static final NoopChunkLoaderImpl DEFAULT_LOADER = NoopChunkLoaderImpl.INSTANCE;
 
+    // vanilla Block.UPDATE_SHAPE_ORDER
     private static final BlockFace[] BLOCK_UPDATE_FACES = new BlockFace[]{
             BlockFace.WEST, BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.BOTTOM, BlockFace.TOP
     };
+    private final BlockNeighborUpdates neighborUpdates = new BlockNeighborUpdates(this);
 
     // the shared instances assigned to this instance
     private final List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
@@ -205,10 +207,12 @@ public class InstanceContainer extends Instance {
             }
 
             // Set the block
+            final Block previousBlock = doBlockUpdates ? chunk.getBlock(x, y, z) : null;
             chunk.setBlock(x, y, z, block, placement, destroy);
 
             // Refresh neighbors since a new block has been placed
             if (doBlockUpdates) {
+                neighborUpdates.run(blockPosition, previousBlock, block);
                 executeNeighboursBlockPlacementRule(blockPosition, updateDistance);
             }
 
