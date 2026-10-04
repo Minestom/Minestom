@@ -25,7 +25,6 @@ public sealed interface BlockSoundType extends StaticProtocolObject<BlockSoundTy
      */
     @Deprecated(forRemoval = true)
     @SuppressWarnings("removal")
-    @Override
     @Contract(pure = true)
     RegistryData.BlockSoundTypeEntry registry();
 

@@ -18,7 +18,6 @@ public sealed interface Fluid extends StaticProtocolObject<Fluid>, Fluids permit
      * @return the legacy registry data
      * @deprecated registry data will no longer be exposed
     */
-    @Override
     @Deprecated(forRemoval = true)
     @SuppressWarnings("removal")
     @Contract(pure = true)

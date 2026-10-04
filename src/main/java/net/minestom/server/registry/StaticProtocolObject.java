@@ -3,7 +3,6 @@ package net.minestom.server.registry;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents a value from a static protocol registry.
@@ -38,16 +37,4 @@ public interface StaticProtocolObject<T> extends RegistryKey<T> {
 
     @Contract(pure = true)
     int id();
-
-    /**
-     * Returns the legacy registry data backing this object.
-     *
-     * @return the legacy registry data, or {@code null} when none is exposed
-     * @deprecated registry values are exposed directly by each protocol object
-     */
-    @Deprecated(forRemoval = true)
-    @Contract(pure = true)
-    default @Nullable Object registry() {
-        return null;
-    }
 }

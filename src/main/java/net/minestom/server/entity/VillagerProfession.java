@@ -35,7 +35,6 @@ public sealed interface VillagerProfession extends StaticProtocolObject<Villager
      */
     @Deprecated(forRemoval = true)
     @SuppressWarnings("removal")
-    @Override
     @Contract(pure = true)
     RegistryData.VillagerProfessionEntry registry();
 

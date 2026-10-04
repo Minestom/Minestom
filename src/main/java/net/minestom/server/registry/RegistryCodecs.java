@@ -84,7 +84,7 @@ final class RegistryCodecs {
         }
     }
 
-    record TagKeyImpl<T>(Registries.Selector<T> selector, boolean hash) implements Codec<TagKey<T>> {
+    record TagKeyImpl<T>(Registries.Selector<T> selector) implements Codec<TagKey<T>> {
         TagKeyImpl {
             Objects.requireNonNull(selector, "selector");
         }
@@ -97,11 +97,6 @@ final class RegistryCodecs {
             final var result = coder.getString(value);
             if (!(result instanceof Result.Ok(@Subst("a")String reference)))
                 return result.cast();
-            if (hash) {
-                if (reference.length() < 2 || reference.charAt(0) != '#')
-                    return new Result.Error<>("Invalid tag hash: " + reference);
-                reference = reference.substring(1);
-            }
             final TagKey<T> tagKey = new net.minestom.server.registry.TagKeyImpl<>(Key.key(reference));
             if (registry.getTag(tagKey) == null)
                 return new Result.Error<>("Unknown tag " + reference + " for registry " + registry.key());
@@ -113,7 +108,7 @@ final class RegistryCodecs {
             if (value == null) return new Result.Error<>("null");
             if (!(coder instanceof RegistryTranscoder<D>))
                 return new Result.Error<>("Missing registries in transcoder");
-            return new Result.Ok<>(coder.createString(hash ? value.hashedKey() : value.key().asString()));
+            return new Result.Ok<>(coder.createString(value.key().asString()));
         }
     }
 
