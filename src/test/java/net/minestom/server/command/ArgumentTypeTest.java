@@ -183,6 +183,7 @@ public class ArgumentTypeTest {
         assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(DataComponents.REPAIR_COST, 5).withTag(Tag.String("tag"), "value"), "glass_pane[repair_cost=5]{tag:value}");
         assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(DataComponents.REPAIR_COST, 5).with(DataComponents.CUSTOM_DATA, new CustomData(CompoundBinaryTag.builder().putInt("hi", 232).build())).withTag(Tag.String("tag"), "value"),
                 "glass_pane[repair_cost=5,minecraft:custom_data={hi:232}]{tag:value}");
+        assertInvalidArg(arg, "glass_pane[damage_type=\"minestom:missing\"]");
     }
 
     @Test
