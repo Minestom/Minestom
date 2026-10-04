@@ -24,7 +24,7 @@ errorprone = "2.50.0"
 javaPoet = "0.20.0"
 
 # Log impl (for demo)
-logback = "1.6.3"
+logback = "1.6.5"
 
 # Gradle plugins
 blossom = "2.2.0"
