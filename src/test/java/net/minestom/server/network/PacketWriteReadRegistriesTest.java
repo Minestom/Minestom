@@ -671,8 +671,9 @@ public class PacketWriteReadRegistriesTest {
         addServerPackets(new ChunkDataPacket(0, 0, new ChunkData(Map.of(), new byte[0], Map.of()), new LightData(new BitSet(), new BitSet(), new BitSet(), new BitSet(), List.of(), List.of())));
         addServerPackets(new ChunkBiomesPacket(List.of()), new ChunkBiomesPacket(List.of(new ChunkBiomesPacket.ChunkBiomeData(0, 0, new byte[0]))));
         addServerPackets(new CustomChatCompletionPacket(CustomChatCompletionPacket.Action.ADD, List.of("entry1", "entry2")));
-        addServerPackets(new DamageEventPacket(5, registries.damageType().getId(DamageType.ARROW), 2, 3, VEC),
-                new DamageEventPacket(50, registries.damageType().getId(DamageType.WITHER), 0, 0, null));
+        addServerPackets(new DamageEventPacket(5, DamageType.ARROW, 2, 3, VEC),
+                new DamageEventPacket(50, DamageType.WITHER, null, null, null),
+                new DamageEventPacket(7, DamageType.CACTUS, 0, 0, null));
         addServerPackets(new DeclareCommandsPacket(List.of(), 0));
         addServerPackets(new BundlePacket());
         addServerPackets(new DebugBlockValuePacket(Vec.ONE, new DebugSubscription.Update<>(DebugSubscription.BEE_HIVES, new DebugHiveInfo(Block.BEEHIVE, 1, 0, true))));
