@@ -37,13 +37,16 @@ final class CodecImpl {
         RawValueImpl {
             Objects.requireNonNull(coder, "coder");
             Objects.requireNonNull(value, "value");
+            // Only the data format matters here. Keeping a proxy would retain its context, such as a registry context
+            // that is still loading, and make equal values from different contexts compare unequal.
+            coder = TranscoderProxy.extractDelegate(coder);
         }
 
         @Override
         @SuppressWarnings("unchecked")
         public <D1> Result<D1> convertTo(Transcoder<D1> coder) {
             // If the two transcoders are the same instance, we can immediately return the value.
-            if (TranscoderProxy.extractDelegate(this.coder) == TranscoderProxy.extractDelegate(coder))
+            if (this.coder == TranscoderProxy.extractDelegate(coder))
                 return new Result.Ok<>((D1) value);
             return this.coder.convertTo(coder, value);
         }

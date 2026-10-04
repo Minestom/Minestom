@@ -1,5 +1,6 @@
 package net.minestom.server.codec;
 
+import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.ListBinaryTag;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -112,6 +113,16 @@ public final class CodecTest {
         var codec = Codec.INT.listOrSingle();
         var value = codec.encode(Transcoder.NBT, List.of(42)).orElseThrow();
         assertEquals(intBinaryTag(42), value);
+    }
+
+    @Test
+    void rawValueDoesNotKeepTranscoderProxy() {
+        final TranscoderProxy<BinaryTag> proxy = () -> Transcoder.NBT;
+        final Codec.RawValue proxied = Codec.RAW_VALUE.decode(proxy, intBinaryTag(42)).orElseThrow();
+        final Codec.RawValue direct = Codec.RAW_VALUE.decode(Transcoder.NBT, intBinaryTag(42)).orElseThrow();
+        assertEquals(direct, proxied);
+        assertEquals(direct.hashCode(), proxied.hashCode());
+        assertEquals(intBinaryTag(42), proxied.convertTo(Transcoder.NBT).orElseThrow());
     }
 
     @Test
