@@ -12,6 +12,7 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.TranslationArgument;
 import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.DataComponentValue;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.ShadowColor;
@@ -20,13 +21,17 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.object.PlayerHeadObjectContents;
 import net.kyori.adventure.text.object.SpriteObjectContents;
+import net.kyori.adventure.text.serializer.gson.GsonDataComponentValue;
 import net.minestom.server.adventure.MinestomAdventure;
+import net.minestom.server.adventure.MinestomDataComponentValue;
 import net.minestom.server.adventure.serializer.nbt.NbtDataComponentValue;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Transcoder;
+import net.minestom.server.component.DataComponent;
 import net.minestom.server.dialog.Dialog;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTranscoder;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Locale;
@@ -426,15 +431,15 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
 
             buffer.write(BYTE, TAG_COMPOUND);
             buffer.write(STRING_IO_UTF8, "components");
-            final Map<Key, NbtDataComponentValue> dataComponents = value.dataComponentsAs(NbtDataComponentValue.class);
-            for (final Map.Entry<Key, NbtDataComponentValue> entry : dataComponents.entrySet()) {
-                final BinaryTag dataComponentValue = entry.getValue().value();
+            for (final Map.Entry<Key, DataComponentValue> entry : value.dataComponents().entrySet()) {
+                final Key key = entry.getKey();
+                final BinaryTag dataComponentValue = hoverDataComponentValue(buffer, key, entry.getValue());
                 if (dataComponentValue == null) {
                     buffer.write(BYTE, TAG_COMPOUND);
-                    buffer.write(STRING_IO_UTF8, "!" + entry.getKey().asString());
+                    buffer.write(STRING_IO_UTF8, "!" + key.asString());
                     buffer.write(BYTE, TAG_END);
                 } else {
-                    BinaryTagTypeImpl.writeNamed(buffer, entry.getKey().asString(), dataComponentValue);
+                    BinaryTagTypeImpl.writeNamed(buffer, key.asString(), dataComponentValue);
                 }
             }
             buffer.write(BYTE, TAG_END);
@@ -460,5 +465,27 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
         }
 
         buffer.write(BYTE, TAG_END);
+    }
+
+    // Adventures provider doesn't inherent the registries from the buffer
+    @SuppressWarnings("unchecked")
+    private static @Nullable BinaryTag hoverDataComponentValue(NetworkBuffer buffer, Key key,
+                                                               DataComponentValue value) {
+        if (value instanceof DataComponentValue.Removed) return null;
+        if (value instanceof NbtDataComponentValue nbtValue) return nbtValue.value();
+        final Registries registries = Objects.requireNonNull(buffer.registries(),
+                "Registries required to convert hover item data components");
+        final DataComponent<Object> component = (DataComponent<Object>) DataComponent.fromKey(key);
+        if (component == null) throw new IllegalArgumentException("Unknown data component: " + key);
+        final Object decoded = switch (value) {
+            case MinestomDataComponentValue minestomValue -> minestomValue.value();
+            case GsonDataComponentValue gsonValue -> component.decode(
+                    new RegistryTranscoder<>(Transcoder.JSON, registries), gsonValue.element())
+                    .orElseThrow("failed to decode " + key);
+            default -> throw new IllegalArgumentException(
+                    "Unsupported hover item data component value: " + value.getClass().getName());
+        };
+        return component.encode(new RegistryTranscoder<>(Transcoder.NBT, registries), decoded)
+                .orElseThrow("failed to encode " + key);
     }
 }

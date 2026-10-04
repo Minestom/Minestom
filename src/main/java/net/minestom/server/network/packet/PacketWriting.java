@@ -1,13 +1,16 @@
 package net.minestom.server.network.packet;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.property.ServerProperties;
+import net.minestom.server.registry.Registries;
 import org.jctools.queues.MessagePassingQueue;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.Objects;
 import java.util.function.BiPredicate;
 
 /**
@@ -118,13 +121,31 @@ public final class PacketWriting {
     public static NetworkBuffer allocateTrimmedPacket(ConnectionState state,
                                                       ClientPacket packet,
                                                       int compressionThreshold) {
-        return allocateTrimmedPacket(PacketVanilla.CLIENT_PACKET_PARSER, state, packet, compressionThreshold);
+        return allocateTrimmedPacket(state, packet, compressionThreshold, MinecraftServer.getRegistries());
+    }
+
+    public static NetworkBuffer allocateTrimmedPacket(ConnectionState state,
+                                                      ClientPacket packet,
+                                                      int compressionThreshold,
+                                                      Registries registries) {
+        return allocateTrimmedPacket(
+                PacketVanilla.CLIENT_PACKET_PARSER, state, packet,
+                compressionThreshold, registries);
     }
 
     public static NetworkBuffer allocateTrimmedPacket(ConnectionState state,
                                                       ServerPacket packet,
                                                       int compressionThreshold) {
-        return allocateTrimmedPacket(PacketVanilla.SERVER_PACKET_PARSER, state, packet, compressionThreshold);
+        return allocateTrimmedPacket(state, packet, compressionThreshold, MinecraftServer.getRegistries());
+    }
+
+    public static NetworkBuffer allocateTrimmedPacket(ConnectionState state,
+                                                      ServerPacket packet,
+                                                      int compressionThreshold,
+                                                      Registries registries) {
+        return allocateTrimmedPacket(
+                PacketVanilla.SERVER_PACKET_PARSER, state, packet,
+                compressionThreshold, registries);
     }
 
     public static <T> NetworkBuffer allocateTrimmedPacket(
@@ -132,8 +153,19 @@ public final class PacketWriting {
             ConnectionState state,
             T packet,
             int compressionThreshold) {
+        return allocateTrimmedPacket(parser, state, packet, compressionThreshold, MinecraftServer.getRegistries());
+    }
+
+    public static <T> NetworkBuffer allocateTrimmedPacket(
+            PacketParser<T> parser,
+            ConnectionState state,
+            T packet,
+            int compressionThreshold,
+            Registries registries) {
+        Objects.requireNonNull(registries, "registries");
         NetworkBuffer buffer = PacketVanilla.PACKET_POOL.get();
         try {
+            buffer.registries(registries);
             return allocateTrimmedPacket(buffer, parser, state, packet, compressionThreshold);
         } finally {
             PacketVanilla.PACKET_POOL.add(buffer);

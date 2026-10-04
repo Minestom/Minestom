@@ -30,7 +30,6 @@ public sealed interface Material extends StaticProtocolObject<Material>, Materia
      */
     @Deprecated(forRemoval = true)
     @SuppressWarnings("removal")
-    @Override
     @Contract(pure = true)
     RegistryData.MaterialEntry registry();
 
@@ -42,15 +41,6 @@ public sealed interface Material extends StaticProtocolObject<Material>, Materia
     @Override
     default int id() {
         return registry().id();
-    }
-
-    /**
-     * @deprecated use {@code block() != null}
-     */
-    @Deprecated(forRemoval = true)
-    @Contract(pure = true)
-    default boolean isBlock() {
-        return block() != null;
     }
 
     /**
@@ -82,15 +72,6 @@ public sealed interface Material extends StaticProtocolObject<Material>, Materia
     @Contract(pure = true)
     default boolean armor() {
         return registry().isArmor();
-    }
-
-    /**
-     * @deprecated use {@link #armor()}
-     */
-    @Deprecated(forRemoval = true)
-    @Contract(pure = true)
-    default boolean isArmor() {
-        return armor();
     }
 
     /**

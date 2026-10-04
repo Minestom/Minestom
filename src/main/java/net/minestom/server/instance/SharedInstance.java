@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
@@ -22,7 +23,8 @@ public class SharedInstance extends Instance {
     private final InstanceContainer instanceContainer;
 
     public SharedInstance(UUID uuid, InstanceContainer instanceContainer) {
-        super(uuid, instanceContainer.getDimensionType());
+        super(instanceContainer.registries(), uuid,
+                instanceContainer.getDimensionType(), Key.key(instanceContainer.getDimensionName()));
         this.instanceContainer = instanceContainer;
     }
 

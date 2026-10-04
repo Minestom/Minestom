@@ -32,7 +32,6 @@ public sealed interface EntityType extends StaticProtocolObject<EntityType>, Ent
      */
     @Deprecated(forRemoval = true)
     @SuppressWarnings("removal")
-    @Override
     @Contract(pure = true)
     RegistryData.EntityEntry registry();
 

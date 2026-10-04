@@ -25,7 +25,6 @@ public sealed interface Attribute extends StaticProtocolObject<Attribute>, Attri
      */
     @Deprecated(forRemoval = true)
     @SuppressWarnings("removal")
-    @Override
     @Contract(pure = true)
     RegistryData.AttributeEntry registry();
 
@@ -77,15 +76,6 @@ public sealed interface Attribute extends StaticProtocolObject<Attribute>, Attri
     @Contract(pure = true)
     default boolean synced() {
         return registry().clientSync();
-    }
-
-    /**
-     * @deprecated use {@link #synced()}
-     */
-    @Deprecated(forRemoval = true)
-    @Contract(pure = true)
-    default boolean isSynced() {
-        return synced();
     }
 
     @Override

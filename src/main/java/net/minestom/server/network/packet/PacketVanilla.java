@@ -1,6 +1,5 @@
 package net.minestom.server.network.packet;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
@@ -258,8 +257,12 @@ public final class PacketVanilla {
      * Size starts with {@link ServerProperties#POOLED_BUFFER_SIZE} and doubles until {@link ServerProperties#MAX_PACKET_SIZE}.
      */
     public static final ObjectPool<NetworkBuffer> PACKET_POOL = ObjectPool.pool(
-            () -> NetworkBuffer.staticBuffer(ServerProperties.POOLED_BUFFER_SIZE.get(), MinecraftServer.getRegistries()),
-            NetworkBuffer::clear);
+            () -> NetworkBuffer.staticBuffer(ServerProperties.POOLED_BUFFER_SIZE.get()),
+            buffer -> {
+                buffer.clear();
+                buffer.registries(null);
+                return buffer;
+            });
 
     public static ConnectionState nextClientState(ClientPacket packet, ConnectionState currentState) {
         return switch (packet) {
