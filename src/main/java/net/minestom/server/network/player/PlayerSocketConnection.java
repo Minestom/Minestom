@@ -480,6 +480,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         }
         if (!channel.isConnected()) throw new EOFException("Channel is closed");
         NetworkBuffer buffer = PacketVanilla.PACKET_POOL.get();
+        buffer.registries(MinecraftServer.getRegistries());
         // Write to buffer
         PacketWriting.writeQueue(buffer, packetQueue, 1, (b, packet) -> {
             final boolean compressed = sentPacketCounter.get() > compressionStart;
