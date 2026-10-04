@@ -1,12 +1,15 @@
 package net.minestom.server.inventory;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.OpenWindowPacket;
 import net.minestom.server.network.packet.server.play.WindowPropertyPacket;
+import net.minestom.server.recipe.RecipeProperty;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 
 import java.util.List;
@@ -198,6 +201,11 @@ public non-sealed class Inventory extends AbstractInventory {
         final ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot);
         final ItemStack cursor = playerInventory.getCursorItem(); // Isn't used in the algorithm
 
+        final InventoryType type = this.getInventoryType();
+        final boolean isFurnace = type == InventoryType.FURNACE
+                || type == InventoryType.BLAST_FURNACE
+                || type == InventoryType.SMOKER;
+
         InventoryClickResult clickResult;
         if (isInWindow) {
             // The player shift-clicked an item in this GUI into their inventory.
@@ -214,10 +222,19 @@ public non-sealed class Inventory extends AbstractInventory {
                         player, clickSlot, clicked, cursor);
             }
         } else {
-            clickResult = clickProcessor.shiftClick(
-                    playerInventory, this,
-                    0, getInnerSize(), 1,
-                    player, clickSlot, clicked, cursor);
+            if (isFurnace) {
+                clickResult = furnaceShiftClick(
+                        clicked,
+                        cursor,
+                        player,
+                        clickSlot
+                );
+            } else {
+                clickResult = clickProcessor.shiftClick(
+                        playerInventory, this,
+                        0, getInnerSize(), 1,
+                        player, clickSlot, clicked, cursor);
+            }
         }
 
         if (clickResult.isCancel()) {
@@ -234,6 +251,57 @@ public non-sealed class Inventory extends AbstractInventory {
         updateAll(player); // FIXME: currently not properly client-predicted
         playerInventory.setCursorItem(clickResult.getCursor());
         return true;
+    }
+
+    private InventoryClickResult furnaceShiftClick(ItemStack clicked, ItemStack cursor, Player player, int clickSlot) {
+        PlayerInventory playerInventory = player.getInventory();
+
+        var property = switch (inventoryType) {
+            case FURNACE -> RecipeProperty.FURNACE_INPUT;
+            case BLAST_FURNACE -> RecipeProperty.BLAST_FURNACE_INPUT;
+            case SMOKER -> RecipeProperty.SMOKER_INPUT;
+            default -> throw new IllegalStateException("Unexpected inventory type: " + inventoryType);
+        };
+
+        boolean isValidInput = false;
+
+        for (var recipe : MinecraftServer.getRecipeManager().getRecipes()) {
+            var materials = recipe.itemProperties().get(property);
+
+            if (materials != null && materials.contains(clicked.material())) {
+                isValidInput = true;
+                break;
+            }
+        }
+
+        // Prefer shifting in valid inputs
+        if (isValidInput && canAddItemTo(itemStacks[0], clicked)) {
+            return clickProcessor.shiftClick(
+                    playerInventory, this,
+                    0, 1, 1,
+                    player, clickSlot, clicked, cursor);
+        }
+
+        // Then try fuel
+        if (clicked.has(DataComponents.COOKING_FUEL) && canAddItemTo(itemStacks[1], clicked)) {
+            return clickProcessor.shiftClick(
+                    playerInventory, this,
+                    1, 2, 1,
+                    player, clickSlot, clicked, cursor);
+        }
+
+        // else: apply the regular in-inventory rules
+        final boolean hotBarClick = clickSlot < 9;
+        return clickProcessor.shiftClick(
+                this, playerInventory,
+                (hotBarClick ? 9 : 0), (hotBarClick ? PlayerInventory.INNER_INVENTORY_SIZE : 9), 1,
+                player, clickSlot, clicked, cursor
+        );
+
+    }
+
+    private static boolean canAddItemTo(ItemStack slot, ItemStack item) {
+        return slot.isAir() || (slot.amount() < item.maxStackSize() && slot.isSimilar(item));
     }
 
     @Override

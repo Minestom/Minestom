@@ -1,25 +1,37 @@
 package net.minestom.server.inventory;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.inventory.InventoryBundleItemSelectEvent;
 import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.network.packet.client.play.ClientSelectBundleItemPacket;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.network.packet.server.play.SetCursorItemPacket;
 import net.minestom.server.network.packet.server.play.SetPlayerInventorySlotPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
+import net.minestom.server.recipe.Recipe;
+import net.minestom.server.recipe.RecipeProperty;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -339,5 +351,275 @@ public class InventoryIntegrationTest {
             assertEquals(player.getInventory().getSize(), event.getSlot());
             assertEquals(player.getInventory(), event.getInventory());
         });
+    }
+
+    @ParameterizedTest
+    @MethodSource("furnaceTypes")
+    public void anyFurnaceShiftClickMovesValidInputIntoInputSlot(
+            InventoryType inventoryType,
+            RecipeProperty property,
+            Env env
+    ) {
+        var context = createFurnaceContext(env, inventoryType);
+
+        registerRecipe(
+                property,
+                Material.BEEF
+        );
+
+        shiftClick(context.player(), context.inventory(), 0, 30, Material.BEEF);
+
+        assertEquals(ItemStack.of(Material.BEEF), context.inventory().getItemStack(0));
+    }
+
+    private static Stream<Arguments> furnaceTypes() {
+        return Stream.of(
+                Arguments.of(
+                        InventoryType.FURNACE,
+                        RecipeProperty.FURNACE_INPUT
+                ),
+                Arguments.of(
+                        InventoryType.BLAST_FURNACE,
+                        RecipeProperty.BLAST_FURNACE_INPUT
+                ),
+                Arguments.of(
+                        InventoryType.SMOKER,
+                        RecipeProperty.SMOKER_INPUT
+                )
+        );
+    }
+
+    @Test
+    public void furnaceShiftClickMovesFuelIntoFuelSlot(Env env) {
+        var context = createFurnaceContext(env, InventoryType.FURNACE);
+
+        shiftClick(context.player(), context.inventory(), 0, 30, Material.COAL);
+
+        assertEquals(ItemStack.AIR, context.inventory().getItemStack(0));
+        assertEquals(ItemStack.of(Material.COAL), context.inventory().getItemStack(1));
+        assertEquals(ItemStack.AIR, context.inventory().getItemStack(2));
+    }
+
+    @Test
+    public void furnaceShiftClickPrefersInputOverFuel(Env env) {
+        var context = createFurnaceContext(env, InventoryType.FURNACE);
+
+        // Coal is fuel, but explicitly make it a valid furnace input as well.
+        registerRecipe(
+                RecipeProperty.FURNACE_INPUT,
+                Material.COAL
+        );
+
+        shiftClick(context.player(), context.inventory(), 0, 30, Material.COAL);
+
+        assertEquals(ItemStack.of(Material.COAL), context.inventory().getItemStack(0));
+        assertEquals(ItemStack.AIR, context.inventory().getItemStack(1));
+    }
+
+    @Test
+    public void furnaceShiftClickFallsBackToFuelWhenInputSlotIsFull(Env env) {
+        var context = createFurnaceContext(env, InventoryType.FURNACE);
+
+        registerRecipe(
+                RecipeProperty.FURNACE_INPUT,
+                Material.COAL
+        );
+
+        context.inventory().setItemStack(
+                0,
+                ItemStack.of(Material.COAL, 64)
+        );
+
+        shiftClick(context.player(), context.inventory(), 0, 30, Material.COAL);
+
+        assertEquals(ItemStack.of(Material.COAL, 64), context.inventory().getItemStack(0));
+        assertEquals(ItemStack.of(Material.COAL), context.inventory().getItemStack(1));
+    }
+
+    @Test
+    public void furnaceShiftClickFallsBackToPlayerInventoryWhenInputSlotIsFull(Env env) {
+        var context = createFurnaceContext(env, InventoryType.FURNACE);
+
+        registerRecipe(
+                RecipeProperty.FURNACE_INPUT,
+                Material.COBBLESTONE
+        );
+
+        context.inventory().setItemStack(
+                0,
+                ItemStack.of(Material.COBBLESTONE, 64)
+        );
+
+        shiftClick(context.player(), context.inventory(), 0, 30, Material.COBBLESTONE);
+
+        // Hotbar -> main inventory fallback
+        assertEquals(ItemStack.AIR, context.player().getInventory().getItemStack(0));
+        assertEquals(
+                ItemStack.of(Material.COBBLESTONE),
+                context.player().getInventory().getItemStack(9)
+        );
+
+        assertEquals(ItemStack.of(Material.COBBLESTONE, 64), context.inventory().getItemStack(0));
+        assertEquals(ItemStack.AIR, context.inventory().getItemStack(1));
+    }
+
+    @Test
+    public void furnaceShiftClickFallsBackToPlayerInventoryWhenFuelSlotIsFull(Env env) {
+        var context = createFurnaceContext(env, InventoryType.FURNACE);
+
+        context.inventory().setItemStack(
+                1,
+                ItemStack.of(Material.COAL, 64)
+        );
+
+        shiftClick(context.player(), context.inventory(), 0, 30, Material.COAL);
+
+        // Hotbar -> main inventory fallback
+        assertEquals(ItemStack.AIR, context.player().getInventory().getItemStack(0));
+        assertEquals(
+                ItemStack.of(Material.COAL),
+                context.player().getInventory().getItemStack(9)
+        );
+
+        assertEquals(ItemStack.of(Material.COAL, 64), context.inventory().getItemStack(1));
+    }
+
+    @Test
+    public void furnaceShiftClickMovesNonInputFromHotbarToMainInventory(Env env) {
+        var context = createFurnaceContext(env, InventoryType.FURNACE);
+
+        shiftClick(context.player(), context.inventory(), 0, 30, Material.DIAMOND);
+
+        assertEquals(ItemStack.AIR, context.player().getInventory().getItemStack(0));
+        assertEquals(
+                ItemStack.of(Material.DIAMOND),
+                context.player().getInventory().getItemStack(9)
+        );
+
+        assertEquals(ItemStack.AIR, context.inventory().getItemStack(0));
+        assertEquals(ItemStack.AIR, context.inventory().getItemStack(1));
+        assertEquals(ItemStack.AIR, context.inventory().getItemStack(2));
+    }
+
+    @Test
+    public void furnaceShiftClickMovesNonInputFromMainInventoryToHotbar(Env env) {
+        var context = createFurnaceContext(env, InventoryType.FURNACE);
+
+        // Player inventory slot 9 is the first main-inventory slot.
+        // In a furnace window it corresponds to window slot 3.
+        shiftClick(context.player(), context.inventory(), 9, 3, Material.DIAMOND);
+
+        assertEquals(ItemStack.AIR, context.player().getInventory().getItemStack(9));
+        assertEquals(
+                ItemStack.of(Material.DIAMOND),
+                context.player().getInventory().getItemStack(0)
+        );
+
+        assertEquals(ItemStack.AIR, context.inventory().getItemStack(0));
+        assertEquals(ItemStack.AIR, context.inventory().getItemStack(1));
+        assertEquals(ItemStack.AIR, context.inventory().getItemStack(2));
+    }
+
+    @Test
+    public void furnaceShiftClickIgnoresRecipesWithoutFurnaceInputProperty(Env env) {
+        var context = createFurnaceContext(env, InventoryType.FURNACE);
+
+        MinecraftServer.getRecipeManager().addRecipe(new Recipe() {
+            @Override
+            public @NotNull Map<RecipeProperty, List<Material>> itemProperties() {
+                return Map.of(
+                        RecipeProperty.SMOKER_INPUT,
+                        List.of(Material.COBBLESTONE)
+                );
+            }
+        });
+
+        shiftClick(context.player(), context.inventory(), 0, 30, Material.COBBLESTONE);
+
+        assertEquals(ItemStack.AIR, context.inventory().getItemStack(0));
+
+        // Falls back from hotbar into the regular inventory.
+        assertEquals(
+                ItemStack.of(Material.COBBLESTONE),
+                context.player().getInventory().getItemStack(9)
+        );
+    }
+
+    @Test
+    public void furnaceShiftClickFindsInputAfterRecipeWithoutMatchingProperty(Env env) {
+        var context = createFurnaceContext(env, InventoryType.FURNACE);
+
+        MinecraftServer.getRecipeManager().addRecipe(new Recipe() {
+            @Override
+            public @NotNull Map<RecipeProperty, List<Material>> itemProperties() {
+                return Map.of(
+                        RecipeProperty.SMOKER_INPUT,
+                        List.of(Material.COBBLESTONE)
+                );
+            }
+        });
+
+        registerRecipe(
+                RecipeProperty.FURNACE_INPUT,
+                Material.COBBLESTONE
+        );
+
+        shiftClick(context.player(), context.inventory(), 0, 30, Material.COBBLESTONE);
+
+        assertEquals(
+                ItemStack.of(Material.COBBLESTONE),
+                context.inventory().getItemStack(0)
+        );
+    }
+
+
+    private static FurnaceContext createFurnaceContext(Env env, InventoryType inventoryType) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+        var inventory = new Inventory(inventoryType, "title");
+
+        player.openInventory(inventory);
+
+        return new FurnaceContext(player, inventory);
+    }
+
+    private static void registerRecipe(RecipeProperty property, Material material) {
+        MinecraftServer.getRecipeManager().addRecipe(new Recipe() {
+            @Override
+            public @NotNull Map<RecipeProperty, List<Material>> itemProperties() {
+                return Map.of(property, List.of(material));
+            }
+        });
+    }
+
+    private static void shiftClick(
+            Player player,
+            Inventory inventory,
+            int playerSlot,
+            int windowSlot,
+            Material material
+    ) {
+        var item = ItemStack.of(material);
+
+        player.getInventory().setItemStack(playerSlot, item);
+
+        player.addPacketToQueue(new ClientClickWindowPacket(
+                inventory.getWindowId(),
+                0,
+                (short) windowSlot,
+                (byte) 0,
+                ClientClickWindowPacket.ClickType.QUICK_MOVE,
+                Map.of(),
+                ItemStack.Hash.of(item, MinecraftServer.getRegistries())
+        ));
+
+        player.interpretPacketQueue();
+    }
+
+    private record FurnaceContext(
+            Player player,
+            Inventory inventory
+    ) {
     }
 }
