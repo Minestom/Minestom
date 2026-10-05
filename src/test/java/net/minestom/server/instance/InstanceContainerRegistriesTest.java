@@ -18,9 +18,7 @@ public class InstanceContainerRegistriesTest {
     @Test
     public void copyPreservesTag(Registries registries) {
         var tag = Tag.String("test");
-        var instance = new InstanceContainer(
-                registries, UUID.randomUUID(),
-                DimensionType.OVERWORLD, null, DimensionType.OVERWORLD.key());
+        var instance = new InstanceContainer(registries, UUID.randomUUID(), DimensionType.OVERWORLD);
         instance.setTag(tag, "123");
 
         var copyInstance = instance.copy();
