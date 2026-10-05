@@ -59,7 +59,7 @@ record GameRuleGenerator(Codegen codegen) {
                     .initializer("$T.get($T.$L)", GAME_RULE_IMPL_CN, GAME_RULE_KEYS_CN, fieldName).build());
             gameRuleKeysInterface.addField(FieldSpec.builder(registryKeyType, fieldName)
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                    .initializer("$T.unsafeOf($S)", registryKeyClass, namespacedName).build());
+                    .initializer("$T.of($S)", registryKeyClass, namespacedName).build());
         }
 
         codegen.write(codegen.javaFile(PACKAGE, gameRulesInterface.build()),

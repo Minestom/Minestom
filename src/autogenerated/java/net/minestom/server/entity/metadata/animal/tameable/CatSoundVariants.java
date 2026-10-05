@@ -9,7 +9,7 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface CatSoundVariants permits CatSoundVariant {
-    RegistryKey<CatSoundVariant> CLASSIC = RegistryKey.unsafeOf("classic");
+    RegistryKey<CatSoundVariant> CLASSIC = RegistryKey.of("classic");
 
-    RegistryKey<CatSoundVariant> ROYAL = RegistryKey.unsafeOf("royal");
+    RegistryKey<CatSoundVariant> ROYAL = RegistryKey.of("royal");
 }

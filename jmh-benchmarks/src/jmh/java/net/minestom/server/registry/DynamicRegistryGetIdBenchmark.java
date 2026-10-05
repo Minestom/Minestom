@@ -31,6 +31,6 @@ public class DynamicRegistryGetIdBenchmark {
 
     @Benchmark
     public void getId(Blackhole blackhole) {
-        blackhole.consume(registry.getId(RegistryKey.unsafeOf("pale_garden")));
+        blackhole.consume(registry.getId(RegistryKey.of("pale_garden")));
     }
 }

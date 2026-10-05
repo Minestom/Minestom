@@ -130,7 +130,7 @@ final class RegistryCodecs {
                     return tag != null ? new Result.Ok<>(tag)
                             : new Result.Error<>("Unknown tag " + tagKey + " for registry " + registry.key());
                 }
-                return new Result.Ok<>(RegistryTag.direct(RegistryKey.unsafeOf(tagKeyStr)));
+                return new Result.Ok<>(RegistryTag.direct(RegistryKey.of(tagKeyStr)));
             }
             final Result<List<D>> entriesResult = coder.getList(value);
             if (entriesResult instanceof Result.Ok(List<D> entries)) {
@@ -139,7 +139,7 @@ final class RegistryCodecs {
                     final Result<String> keyResult = coder.getString(entry);
                     if (!(keyResult instanceof Result.Ok(@Subst("a")String key)))
                         return keyResult.mapError(e -> "Invalid tag entry: " + e).cast();
-                    final RegistryKey<T> registryKey = registry != null ? registry.getKey(Key.key(key)) : RegistryKey.unsafeOf(key);
+                    final RegistryKey<T> registryKey = registry != null ? registry.getKey(Key.key(key)) : RegistryKey.of(key);
                     if (registryKey == null)
                         return new Result.Error<>("Unknown key " + key + " for registry " + registry.key());
                     keys.add(registryKey);

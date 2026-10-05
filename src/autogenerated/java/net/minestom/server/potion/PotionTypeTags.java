@@ -11,5 +11,5 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("unused")
 @ApiStatus.NonExtendable
 public interface PotionTypeTags {
-    TagKey<PotionType> TRADEABLE = TagKey.unsafeOf("tradeable");
+    TagKey<PotionType> TRADEABLE = TagKey.of("tradeable");
 }

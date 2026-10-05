@@ -9,21 +9,21 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface WolfVariants permits WolfVariant {
-    RegistryKey<WolfVariant> ASHEN = RegistryKey.unsafeOf("ashen");
+    RegistryKey<WolfVariant> ASHEN = RegistryKey.of("ashen");
 
-    RegistryKey<WolfVariant> BLACK = RegistryKey.unsafeOf("black");
+    RegistryKey<WolfVariant> BLACK = RegistryKey.of("black");
 
-    RegistryKey<WolfVariant> CHESTNUT = RegistryKey.unsafeOf("chestnut");
+    RegistryKey<WolfVariant> CHESTNUT = RegistryKey.of("chestnut");
 
-    RegistryKey<WolfVariant> PALE = RegistryKey.unsafeOf("pale");
+    RegistryKey<WolfVariant> PALE = RegistryKey.of("pale");
 
-    RegistryKey<WolfVariant> RUSTY = RegistryKey.unsafeOf("rusty");
+    RegistryKey<WolfVariant> RUSTY = RegistryKey.of("rusty");
 
-    RegistryKey<WolfVariant> SNOWY = RegistryKey.unsafeOf("snowy");
+    RegistryKey<WolfVariant> SNOWY = RegistryKey.of("snowy");
 
-    RegistryKey<WolfVariant> SPOTTED = RegistryKey.unsafeOf("spotted");
+    RegistryKey<WolfVariant> SPOTTED = RegistryKey.of("spotted");
 
-    RegistryKey<WolfVariant> STRIPED = RegistryKey.unsafeOf("striped");
+    RegistryKey<WolfVariant> STRIPED = RegistryKey.of("striped");
 
-    RegistryKey<WolfVariant> WOODS = RegistryKey.unsafeOf("woods");
+    RegistryKey<WolfVariant> WOODS = RegistryKey.of("woods");
 }

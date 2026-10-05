@@ -1,6 +1,7 @@
 package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.key.Keyed;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
@@ -31,20 +32,29 @@ public non-sealed interface RegistryKey<T> extends Holder<T>, Keyed {
     }
 
     /**
-     * Creates a new {@link RegistryKey} from the given raw string. Should not be used externally.
-     * Registry keys are returned from {@link DynamicRegistry#register(Key, Object)}.
+     * Creates a typed key from a string. The key syntax is validated, registry membership is not. A key is only a
+     * typed name: the same key can name a registered entry in one registry and nothing in another. Lookups with a
+     * key that has no entry return {@code null} or {@code -1}.
+     *
+     * @param key the entry key
+     * @param <T> the registry entry type
+     * @return the typed registry key
+     * @throws IllegalArgumentException if {@code key} is not valid
+     * @throws NullPointerException     if {@code key} is {@code null}
      */
-    @ApiStatus.Internal
-    static <T> RegistryKey<T> unsafeOf(String key) {
-        return unsafeOf(Key.key(key));
+    static <T> RegistryKey<T> of(@KeyPattern String key) {
+        return of(Key.key(key));
     }
 
     /**
-     * Creates a new {@link RegistryKey} from the given raw string. Should not be used externally.
-     * Registry keys are returned from {@link DynamicRegistry#register(Key, Object)}.
+     * Creates a typed key without checking registry membership. See {@link #of(String)}.
+     *
+     * @param key the entry key
+     * @param <T> the registry entry type
+     * @return the typed registry key
+     * @throws NullPointerException if {@code key} is {@code null}
      */
-    @ApiStatus.Internal
-    static <T> RegistryKey<T> unsafeOf(Key key) {
+    static <T> RegistryKey<T> of(Key key) {
         return new RegistryKeyImpl<>(key);
     }
 

@@ -11,257 +11,257 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("unused")
 @ApiStatus.NonExtendable
 public interface BlockSoundTypeKeys {
-    RegistryKey<BlockSoundType> AMETHYST = RegistryKey.unsafeOf("amethyst");
+    RegistryKey<BlockSoundType> AMETHYST = RegistryKey.of("amethyst");
 
-    RegistryKey<BlockSoundType> AMETHYST_CLUSTER = RegistryKey.unsafeOf("amethyst_cluster");
+    RegistryKey<BlockSoundType> AMETHYST_CLUSTER = RegistryKey.of("amethyst_cluster");
 
-    RegistryKey<BlockSoundType> ANCIENT_DEBRIS = RegistryKey.unsafeOf("ancient_debris");
+    RegistryKey<BlockSoundType> ANCIENT_DEBRIS = RegistryKey.of("ancient_debris");
 
-    RegistryKey<BlockSoundType> ANVIL = RegistryKey.unsafeOf("anvil");
+    RegistryKey<BlockSoundType> ANVIL = RegistryKey.of("anvil");
 
-    RegistryKey<BlockSoundType> AZALEA = RegistryKey.unsafeOf("azalea");
+    RegistryKey<BlockSoundType> AZALEA = RegistryKey.of("azalea");
 
-    RegistryKey<BlockSoundType> AZALEA_LEAVES = RegistryKey.unsafeOf("azalea_leaves");
+    RegistryKey<BlockSoundType> AZALEA_LEAVES = RegistryKey.of("azalea_leaves");
 
-    RegistryKey<BlockSoundType> BAMBOO = RegistryKey.unsafeOf("bamboo");
+    RegistryKey<BlockSoundType> BAMBOO = RegistryKey.of("bamboo");
 
-    RegistryKey<BlockSoundType> BAMBOO_SAPLING = RegistryKey.unsafeOf("bamboo_sapling");
+    RegistryKey<BlockSoundType> BAMBOO_SAPLING = RegistryKey.of("bamboo_sapling");
 
-    RegistryKey<BlockSoundType> BAMBOO_WOOD = RegistryKey.unsafeOf("bamboo_wood");
+    RegistryKey<BlockSoundType> BAMBOO_WOOD = RegistryKey.of("bamboo_wood");
 
-    RegistryKey<BlockSoundType> BAMBOO_WOOD_HANGING_SIGN = RegistryKey.unsafeOf("bamboo_wood_hanging_sign");
+    RegistryKey<BlockSoundType> BAMBOO_WOOD_HANGING_SIGN = RegistryKey.of("bamboo_wood_hanging_sign");
 
-    RegistryKey<BlockSoundType> BASALT = RegistryKey.unsafeOf("basalt");
+    RegistryKey<BlockSoundType> BASALT = RegistryKey.of("basalt");
 
-    RegistryKey<BlockSoundType> BIG_DRIPLEAF = RegistryKey.unsafeOf("big_dripleaf");
+    RegistryKey<BlockSoundType> BIG_DRIPLEAF = RegistryKey.of("big_dripleaf");
 
-    RegistryKey<BlockSoundType> BONE_BLOCK = RegistryKey.unsafeOf("bone_block");
+    RegistryKey<BlockSoundType> BONE_BLOCK = RegistryKey.of("bone_block");
 
-    RegistryKey<BlockSoundType> CACTUS_FLOWER = RegistryKey.unsafeOf("cactus_flower");
+    RegistryKey<BlockSoundType> CACTUS_FLOWER = RegistryKey.of("cactus_flower");
 
-    RegistryKey<BlockSoundType> CALCITE = RegistryKey.unsafeOf("calcite");
+    RegistryKey<BlockSoundType> CALCITE = RegistryKey.of("calcite");
 
-    RegistryKey<BlockSoundType> CANDLE = RegistryKey.unsafeOf("candle");
+    RegistryKey<BlockSoundType> CANDLE = RegistryKey.of("candle");
 
-    RegistryKey<BlockSoundType> CAVE_VINES = RegistryKey.unsafeOf("cave_vines");
+    RegistryKey<BlockSoundType> CAVE_VINES = RegistryKey.of("cave_vines");
 
-    RegistryKey<BlockSoundType> CHAIN = RegistryKey.unsafeOf("chain");
+    RegistryKey<BlockSoundType> CHAIN = RegistryKey.of("chain");
 
-    RegistryKey<BlockSoundType> CHERRY_LEAVES = RegistryKey.unsafeOf("cherry_leaves");
+    RegistryKey<BlockSoundType> CHERRY_LEAVES = RegistryKey.of("cherry_leaves");
 
-    RegistryKey<BlockSoundType> CHERRY_SAPLING = RegistryKey.unsafeOf("cherry_sapling");
+    RegistryKey<BlockSoundType> CHERRY_SAPLING = RegistryKey.of("cherry_sapling");
 
-    RegistryKey<BlockSoundType> CHERRY_WOOD = RegistryKey.unsafeOf("cherry_wood");
+    RegistryKey<BlockSoundType> CHERRY_WOOD = RegistryKey.of("cherry_wood");
 
-    RegistryKey<BlockSoundType> CHERRY_WOOD_HANGING_SIGN = RegistryKey.unsafeOf("cherry_wood_hanging_sign");
+    RegistryKey<BlockSoundType> CHERRY_WOOD_HANGING_SIGN = RegistryKey.of("cherry_wood_hanging_sign");
 
-    RegistryKey<BlockSoundType> CHISELED_BOOKSHELF = RegistryKey.unsafeOf("chiseled_bookshelf");
+    RegistryKey<BlockSoundType> CHISELED_BOOKSHELF = RegistryKey.of("chiseled_bookshelf");
 
-    RegistryKey<BlockSoundType> CINNABAR = RegistryKey.unsafeOf("cinnabar");
+    RegistryKey<BlockSoundType> CINNABAR = RegistryKey.of("cinnabar");
 
-    RegistryKey<BlockSoundType> COBWEB = RegistryKey.unsafeOf("cobweb");
+    RegistryKey<BlockSoundType> COBWEB = RegistryKey.of("cobweb");
 
-    RegistryKey<BlockSoundType> COPPER = RegistryKey.unsafeOf("copper");
+    RegistryKey<BlockSoundType> COPPER = RegistryKey.of("copper");
 
-    RegistryKey<BlockSoundType> COPPER_BULB = RegistryKey.unsafeOf("copper_bulb");
+    RegistryKey<BlockSoundType> COPPER_BULB = RegistryKey.of("copper_bulb");
 
-    RegistryKey<BlockSoundType> COPPER_GOLEM_STATUE = RegistryKey.unsafeOf("copper_golem_statue");
+    RegistryKey<BlockSoundType> COPPER_GOLEM_STATUE = RegistryKey.of("copper_golem_statue");
 
-    RegistryKey<BlockSoundType> COPPER_GRATE = RegistryKey.unsafeOf("copper_grate");
+    RegistryKey<BlockSoundType> COPPER_GRATE = RegistryKey.of("copper_grate");
 
-    RegistryKey<BlockSoundType> CORAL_BLOCK = RegistryKey.unsafeOf("coral_block");
+    RegistryKey<BlockSoundType> CORAL_BLOCK = RegistryKey.of("coral_block");
 
-    RegistryKey<BlockSoundType> CREAKING_HEART = RegistryKey.unsafeOf("creaking_heart");
+    RegistryKey<BlockSoundType> CREAKING_HEART = RegistryKey.of("creaking_heart");
 
-    RegistryKey<BlockSoundType> CROP = RegistryKey.unsafeOf("crop");
+    RegistryKey<BlockSoundType> CROP = RegistryKey.of("crop");
 
-    RegistryKey<BlockSoundType> DECORATED_POT = RegistryKey.unsafeOf("decorated_pot");
+    RegistryKey<BlockSoundType> DECORATED_POT = RegistryKey.of("decorated_pot");
 
-    RegistryKey<BlockSoundType> DECORATED_POT_CRACKED = RegistryKey.unsafeOf("decorated_pot_cracked");
+    RegistryKey<BlockSoundType> DECORATED_POT_CRACKED = RegistryKey.of("decorated_pot_cracked");
 
-    RegistryKey<BlockSoundType> DEEPSLATE = RegistryKey.unsafeOf("deepslate");
+    RegistryKey<BlockSoundType> DEEPSLATE = RegistryKey.of("deepslate");
 
-    RegistryKey<BlockSoundType> DEEPSLATE_BRICKS = RegistryKey.unsafeOf("deepslate_bricks");
+    RegistryKey<BlockSoundType> DEEPSLATE_BRICKS = RegistryKey.of("deepslate_bricks");
 
-    RegistryKey<BlockSoundType> DEEPSLATE_TILES = RegistryKey.unsafeOf("deepslate_tiles");
+    RegistryKey<BlockSoundType> DEEPSLATE_TILES = RegistryKey.of("deepslate_tiles");
 
-    RegistryKey<BlockSoundType> DRIED_GHAST = RegistryKey.unsafeOf("dried_ghast");
+    RegistryKey<BlockSoundType> DRIED_GHAST = RegistryKey.of("dried_ghast");
 
-    RegistryKey<BlockSoundType> DRIPSTONE_BLOCK = RegistryKey.unsafeOf("dripstone_block");
+    RegistryKey<BlockSoundType> DRIPSTONE_BLOCK = RegistryKey.of("dripstone_block");
 
-    RegistryKey<BlockSoundType> EMPTY = RegistryKey.unsafeOf("empty");
+    RegistryKey<BlockSoundType> EMPTY = RegistryKey.of("empty");
 
-    RegistryKey<BlockSoundType> FLOWERING_AZALEA = RegistryKey.unsafeOf("flowering_azalea");
+    RegistryKey<BlockSoundType> FLOWERING_AZALEA = RegistryKey.of("flowering_azalea");
 
-    RegistryKey<BlockSoundType> FROGLIGHT = RegistryKey.unsafeOf("froglight");
+    RegistryKey<BlockSoundType> FROGLIGHT = RegistryKey.of("froglight");
 
-    RegistryKey<BlockSoundType> FROGSPAWN = RegistryKey.unsafeOf("frogspawn");
+    RegistryKey<BlockSoundType> FROGSPAWN = RegistryKey.of("frogspawn");
 
-    RegistryKey<BlockSoundType> FUNGUS = RegistryKey.unsafeOf("fungus");
+    RegistryKey<BlockSoundType> FUNGUS = RegistryKey.of("fungus");
 
-    RegistryKey<BlockSoundType> GILDED_BLACKSTONE = RegistryKey.unsafeOf("gilded_blackstone");
+    RegistryKey<BlockSoundType> GILDED_BLACKSTONE = RegistryKey.of("gilded_blackstone");
 
-    RegistryKey<BlockSoundType> GLASS = RegistryKey.unsafeOf("glass");
+    RegistryKey<BlockSoundType> GLASS = RegistryKey.of("glass");
 
-    RegistryKey<BlockSoundType> GLOW_LICHEN = RegistryKey.unsafeOf("glow_lichen");
+    RegistryKey<BlockSoundType> GLOW_LICHEN = RegistryKey.of("glow_lichen");
 
-    RegistryKey<BlockSoundType> GRASS = RegistryKey.unsafeOf("grass");
+    RegistryKey<BlockSoundType> GRASS = RegistryKey.of("grass");
 
-    RegistryKey<BlockSoundType> GRAVEL = RegistryKey.unsafeOf("gravel");
+    RegistryKey<BlockSoundType> GRAVEL = RegistryKey.of("gravel");
 
-    RegistryKey<BlockSoundType> HANGING_ROOTS = RegistryKey.unsafeOf("hanging_roots");
+    RegistryKey<BlockSoundType> HANGING_ROOTS = RegistryKey.of("hanging_roots");
 
-    RegistryKey<BlockSoundType> HANGING_SIGN = RegistryKey.unsafeOf("hanging_sign");
+    RegistryKey<BlockSoundType> HANGING_SIGN = RegistryKey.of("hanging_sign");
 
-    RegistryKey<BlockSoundType> HARD_CROP = RegistryKey.unsafeOf("hard_crop");
+    RegistryKey<BlockSoundType> HARD_CROP = RegistryKey.of("hard_crop");
 
-    RegistryKey<BlockSoundType> HEAVY_CORE = RegistryKey.unsafeOf("heavy_core");
+    RegistryKey<BlockSoundType> HEAVY_CORE = RegistryKey.of("heavy_core");
 
-    RegistryKey<BlockSoundType> HONEY_BLOCK = RegistryKey.unsafeOf("honey_block");
+    RegistryKey<BlockSoundType> HONEY_BLOCK = RegistryKey.of("honey_block");
 
-    RegistryKey<BlockSoundType> IRON = RegistryKey.unsafeOf("iron");
+    RegistryKey<BlockSoundType> IRON = RegistryKey.of("iron");
 
-    RegistryKey<BlockSoundType> LADDER = RegistryKey.unsafeOf("ladder");
+    RegistryKey<BlockSoundType> LADDER = RegistryKey.of("ladder");
 
-    RegistryKey<BlockSoundType> LANTERN = RegistryKey.unsafeOf("lantern");
+    RegistryKey<BlockSoundType> LANTERN = RegistryKey.of("lantern");
 
-    RegistryKey<BlockSoundType> LARGE_AMETHYST_BUD = RegistryKey.unsafeOf("large_amethyst_bud");
+    RegistryKey<BlockSoundType> LARGE_AMETHYST_BUD = RegistryKey.of("large_amethyst_bud");
 
-    RegistryKey<BlockSoundType> LEAF_LITTER = RegistryKey.unsafeOf("leaf_litter");
+    RegistryKey<BlockSoundType> LEAF_LITTER = RegistryKey.of("leaf_litter");
 
-    RegistryKey<BlockSoundType> LILY_PAD = RegistryKey.unsafeOf("lily_pad");
+    RegistryKey<BlockSoundType> LILY_PAD = RegistryKey.of("lily_pad");
 
-    RegistryKey<BlockSoundType> LODESTONE = RegistryKey.unsafeOf("lodestone");
+    RegistryKey<BlockSoundType> LODESTONE = RegistryKey.of("lodestone");
 
-    RegistryKey<BlockSoundType> MANGROVE_ROOTS = RegistryKey.unsafeOf("mangrove_roots");
+    RegistryKey<BlockSoundType> MANGROVE_ROOTS = RegistryKey.of("mangrove_roots");
 
-    RegistryKey<BlockSoundType> MEDIUM_AMETHYST_BUD = RegistryKey.unsafeOf("medium_amethyst_bud");
+    RegistryKey<BlockSoundType> MEDIUM_AMETHYST_BUD = RegistryKey.of("medium_amethyst_bud");
 
-    RegistryKey<BlockSoundType> METAL = RegistryKey.unsafeOf("metal");
+    RegistryKey<BlockSoundType> METAL = RegistryKey.of("metal");
 
-    RegistryKey<BlockSoundType> MOSS = RegistryKey.unsafeOf("moss");
+    RegistryKey<BlockSoundType> MOSS = RegistryKey.of("moss");
 
-    RegistryKey<BlockSoundType> MOSS_CARPET = RegistryKey.unsafeOf("moss_carpet");
+    RegistryKey<BlockSoundType> MOSS_CARPET = RegistryKey.of("moss_carpet");
 
-    RegistryKey<BlockSoundType> MUD = RegistryKey.unsafeOf("mud");
+    RegistryKey<BlockSoundType> MUD = RegistryKey.of("mud");
 
-    RegistryKey<BlockSoundType> MUD_BRICKS = RegistryKey.unsafeOf("mud_bricks");
+    RegistryKey<BlockSoundType> MUD_BRICKS = RegistryKey.of("mud_bricks");
 
-    RegistryKey<BlockSoundType> MUDDY_MANGROVE_ROOTS = RegistryKey.unsafeOf("muddy_mangrove_roots");
+    RegistryKey<BlockSoundType> MUDDY_MANGROVE_ROOTS = RegistryKey.of("muddy_mangrove_roots");
 
-    RegistryKey<BlockSoundType> NETHER_BRICKS = RegistryKey.unsafeOf("nether_bricks");
+    RegistryKey<BlockSoundType> NETHER_BRICKS = RegistryKey.of("nether_bricks");
 
-    RegistryKey<BlockSoundType> NETHER_GOLD_ORE = RegistryKey.unsafeOf("nether_gold_ore");
+    RegistryKey<BlockSoundType> NETHER_GOLD_ORE = RegistryKey.of("nether_gold_ore");
 
-    RegistryKey<BlockSoundType> NETHER_ORE = RegistryKey.unsafeOf("nether_ore");
+    RegistryKey<BlockSoundType> NETHER_ORE = RegistryKey.of("nether_ore");
 
-    RegistryKey<BlockSoundType> NETHER_SPROUTS = RegistryKey.unsafeOf("nether_sprouts");
+    RegistryKey<BlockSoundType> NETHER_SPROUTS = RegistryKey.of("nether_sprouts");
 
-    RegistryKey<BlockSoundType> NETHER_WART = RegistryKey.unsafeOf("nether_wart");
+    RegistryKey<BlockSoundType> NETHER_WART = RegistryKey.of("nether_wart");
 
-    RegistryKey<BlockSoundType> NETHER_WOOD = RegistryKey.unsafeOf("nether_wood");
+    RegistryKey<BlockSoundType> NETHER_WOOD = RegistryKey.of("nether_wood");
 
-    RegistryKey<BlockSoundType> NETHER_WOOD_HANGING_SIGN = RegistryKey.unsafeOf("nether_wood_hanging_sign");
+    RegistryKey<BlockSoundType> NETHER_WOOD_HANGING_SIGN = RegistryKey.of("nether_wood_hanging_sign");
 
-    RegistryKey<BlockSoundType> NETHERITE_BLOCK = RegistryKey.unsafeOf("netherite_block");
+    RegistryKey<BlockSoundType> NETHERITE_BLOCK = RegistryKey.of("netherite_block");
 
-    RegistryKey<BlockSoundType> NETHERRACK = RegistryKey.unsafeOf("netherrack");
+    RegistryKey<BlockSoundType> NETHERRACK = RegistryKey.of("netherrack");
 
-    RegistryKey<BlockSoundType> NYLIUM = RegistryKey.unsafeOf("nylium");
+    RegistryKey<BlockSoundType> NYLIUM = RegistryKey.of("nylium");
 
-    RegistryKey<BlockSoundType> PACKED_MUD = RegistryKey.unsafeOf("packed_mud");
+    RegistryKey<BlockSoundType> PACKED_MUD = RegistryKey.of("packed_mud");
 
-    RegistryKey<BlockSoundType> PINK_PETALS = RegistryKey.unsafeOf("pink_petals");
+    RegistryKey<BlockSoundType> PINK_PETALS = RegistryKey.of("pink_petals");
 
-    RegistryKey<BlockSoundType> POINTED_DRIPSTONE = RegistryKey.unsafeOf("pointed_dripstone");
+    RegistryKey<BlockSoundType> POINTED_DRIPSTONE = RegistryKey.of("pointed_dripstone");
 
-    RegistryKey<BlockSoundType> POLISHED_DEEPSLATE = RegistryKey.unsafeOf("polished_deepslate");
+    RegistryKey<BlockSoundType> POLISHED_DEEPSLATE = RegistryKey.of("polished_deepslate");
 
-    RegistryKey<BlockSoundType> POLISHED_TUFF = RegistryKey.unsafeOf("polished_tuff");
+    RegistryKey<BlockSoundType> POLISHED_TUFF = RegistryKey.of("polished_tuff");
 
-    RegistryKey<BlockSoundType> POTENT_SULFUR = RegistryKey.unsafeOf("potent_sulfur");
+    RegistryKey<BlockSoundType> POTENT_SULFUR = RegistryKey.of("potent_sulfur");
 
-    RegistryKey<BlockSoundType> POWDER_SNOW = RegistryKey.unsafeOf("powder_snow");
+    RegistryKey<BlockSoundType> POWDER_SNOW = RegistryKey.of("powder_snow");
 
-    RegistryKey<BlockSoundType> RESIN = RegistryKey.unsafeOf("resin");
+    RegistryKey<BlockSoundType> RESIN = RegistryKey.of("resin");
 
-    RegistryKey<BlockSoundType> RESIN_BRICKS = RegistryKey.unsafeOf("resin_bricks");
+    RegistryKey<BlockSoundType> RESIN_BRICKS = RegistryKey.of("resin_bricks");
 
-    RegistryKey<BlockSoundType> ROOTED_DIRT = RegistryKey.unsafeOf("rooted_dirt");
+    RegistryKey<BlockSoundType> ROOTED_DIRT = RegistryKey.of("rooted_dirt");
 
-    RegistryKey<BlockSoundType> ROOTS = RegistryKey.unsafeOf("roots");
+    RegistryKey<BlockSoundType> ROOTS = RegistryKey.of("roots");
 
-    RegistryKey<BlockSoundType> SAND = RegistryKey.unsafeOf("sand");
+    RegistryKey<BlockSoundType> SAND = RegistryKey.of("sand");
 
-    RegistryKey<BlockSoundType> SCAFFOLDING = RegistryKey.unsafeOf("scaffolding");
+    RegistryKey<BlockSoundType> SCAFFOLDING = RegistryKey.of("scaffolding");
 
-    RegistryKey<BlockSoundType> SCULK = RegistryKey.unsafeOf("sculk");
+    RegistryKey<BlockSoundType> SCULK = RegistryKey.of("sculk");
 
-    RegistryKey<BlockSoundType> SCULK_CATALYST = RegistryKey.unsafeOf("sculk_catalyst");
+    RegistryKey<BlockSoundType> SCULK_CATALYST = RegistryKey.of("sculk_catalyst");
 
-    RegistryKey<BlockSoundType> SCULK_SENSOR = RegistryKey.unsafeOf("sculk_sensor");
+    RegistryKey<BlockSoundType> SCULK_SENSOR = RegistryKey.of("sculk_sensor");
 
-    RegistryKey<BlockSoundType> SCULK_SHRIEKER = RegistryKey.unsafeOf("sculk_shrieker");
+    RegistryKey<BlockSoundType> SCULK_SHRIEKER = RegistryKey.of("sculk_shrieker");
 
-    RegistryKey<BlockSoundType> SCULK_VEIN = RegistryKey.unsafeOf("sculk_vein");
+    RegistryKey<BlockSoundType> SCULK_VEIN = RegistryKey.of("sculk_vein");
 
-    RegistryKey<BlockSoundType> SHELF = RegistryKey.unsafeOf("shelf");
+    RegistryKey<BlockSoundType> SHELF = RegistryKey.of("shelf");
 
-    RegistryKey<BlockSoundType> SHROOMLIGHT = RegistryKey.unsafeOf("shroomlight");
+    RegistryKey<BlockSoundType> SHROOMLIGHT = RegistryKey.of("shroomlight");
 
-    RegistryKey<BlockSoundType> SLIME_BLOCK = RegistryKey.unsafeOf("slime_block");
+    RegistryKey<BlockSoundType> SLIME_BLOCK = RegistryKey.of("slime_block");
 
-    RegistryKey<BlockSoundType> SMALL_AMETHYST_BUD = RegistryKey.unsafeOf("small_amethyst_bud");
+    RegistryKey<BlockSoundType> SMALL_AMETHYST_BUD = RegistryKey.of("small_amethyst_bud");
 
-    RegistryKey<BlockSoundType> SMALL_DRIPLEAF = RegistryKey.unsafeOf("small_dripleaf");
+    RegistryKey<BlockSoundType> SMALL_DRIPLEAF = RegistryKey.of("small_dripleaf");
 
-    RegistryKey<BlockSoundType> SNOW = RegistryKey.unsafeOf("snow");
+    RegistryKey<BlockSoundType> SNOW = RegistryKey.of("snow");
 
-    RegistryKey<BlockSoundType> SOUL_SAND = RegistryKey.unsafeOf("soul_sand");
+    RegistryKey<BlockSoundType> SOUL_SAND = RegistryKey.of("soul_sand");
 
-    RegistryKey<BlockSoundType> SOUL_SOIL = RegistryKey.unsafeOf("soul_soil");
+    RegistryKey<BlockSoundType> SOUL_SOIL = RegistryKey.of("soul_soil");
 
-    RegistryKey<BlockSoundType> SPAWNER = RegistryKey.unsafeOf("spawner");
+    RegistryKey<BlockSoundType> SPAWNER = RegistryKey.of("spawner");
 
-    RegistryKey<BlockSoundType> SPONGE = RegistryKey.unsafeOf("sponge");
+    RegistryKey<BlockSoundType> SPONGE = RegistryKey.of("sponge");
 
-    RegistryKey<BlockSoundType> SPORE_BLOSSOM = RegistryKey.unsafeOf("spore_blossom");
+    RegistryKey<BlockSoundType> SPORE_BLOSSOM = RegistryKey.of("spore_blossom");
 
-    RegistryKey<BlockSoundType> STEM = RegistryKey.unsafeOf("stem");
+    RegistryKey<BlockSoundType> STEM = RegistryKey.of("stem");
 
-    RegistryKey<BlockSoundType> STONE = RegistryKey.unsafeOf("stone");
+    RegistryKey<BlockSoundType> STONE = RegistryKey.of("stone");
 
-    RegistryKey<BlockSoundType> SULFUR = RegistryKey.unsafeOf("sulfur");
+    RegistryKey<BlockSoundType> SULFUR = RegistryKey.of("sulfur");
 
-    RegistryKey<BlockSoundType> SULFUR_SPIKE = RegistryKey.unsafeOf("sulfur_spike");
+    RegistryKey<BlockSoundType> SULFUR_SPIKE = RegistryKey.of("sulfur_spike");
 
-    RegistryKey<BlockSoundType> SUSPICIOUS_GRAVEL = RegistryKey.unsafeOf("suspicious_gravel");
+    RegistryKey<BlockSoundType> SUSPICIOUS_GRAVEL = RegistryKey.of("suspicious_gravel");
 
-    RegistryKey<BlockSoundType> SUSPICIOUS_SAND = RegistryKey.unsafeOf("suspicious_sand");
+    RegistryKey<BlockSoundType> SUSPICIOUS_SAND = RegistryKey.of("suspicious_sand");
 
-    RegistryKey<BlockSoundType> SWEET_BERRY_BUSH = RegistryKey.unsafeOf("sweet_berry_bush");
+    RegistryKey<BlockSoundType> SWEET_BERRY_BUSH = RegistryKey.of("sweet_berry_bush");
 
-    RegistryKey<BlockSoundType> TRIAL_SPAWNER = RegistryKey.unsafeOf("trial_spawner");
+    RegistryKey<BlockSoundType> TRIAL_SPAWNER = RegistryKey.of("trial_spawner");
 
-    RegistryKey<BlockSoundType> TUFF = RegistryKey.unsafeOf("tuff");
+    RegistryKey<BlockSoundType> TUFF = RegistryKey.of("tuff");
 
-    RegistryKey<BlockSoundType> TUFF_BRICKS = RegistryKey.unsafeOf("tuff_bricks");
+    RegistryKey<BlockSoundType> TUFF_BRICKS = RegistryKey.of("tuff_bricks");
 
-    RegistryKey<BlockSoundType> TWISTING_VINES = RegistryKey.unsafeOf("twisting_vines");
+    RegistryKey<BlockSoundType> TWISTING_VINES = RegistryKey.of("twisting_vines");
 
-    RegistryKey<BlockSoundType> VAULT = RegistryKey.unsafeOf("vault");
+    RegistryKey<BlockSoundType> VAULT = RegistryKey.of("vault");
 
-    RegistryKey<BlockSoundType> VINE = RegistryKey.unsafeOf("vine");
+    RegistryKey<BlockSoundType> VINE = RegistryKey.of("vine");
 
-    RegistryKey<BlockSoundType> WART_BLOCK = RegistryKey.unsafeOf("wart_block");
+    RegistryKey<BlockSoundType> WART_BLOCK = RegistryKey.of("wart_block");
 
-    RegistryKey<BlockSoundType> WEEPING_VINES = RegistryKey.unsafeOf("weeping_vines");
+    RegistryKey<BlockSoundType> WEEPING_VINES = RegistryKey.of("weeping_vines");
 
-    RegistryKey<BlockSoundType> WET_GRASS = RegistryKey.unsafeOf("wet_grass");
+    RegistryKey<BlockSoundType> WET_GRASS = RegistryKey.of("wet_grass");
 
-    RegistryKey<BlockSoundType> WET_SPONGE = RegistryKey.unsafeOf("wet_sponge");
+    RegistryKey<BlockSoundType> WET_SPONGE = RegistryKey.of("wet_sponge");
 
-    RegistryKey<BlockSoundType> WOOD = RegistryKey.unsafeOf("wood");
+    RegistryKey<BlockSoundType> WOOD = RegistryKey.of("wood");
 
-    RegistryKey<BlockSoundType> WOOL = RegistryKey.unsafeOf("wool");
+    RegistryKey<BlockSoundType> WOOL = RegistryKey.of("wool");
 }

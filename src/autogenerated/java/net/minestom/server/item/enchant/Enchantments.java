@@ -9,89 +9,89 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface Enchantments permits Enchantment {
-    RegistryKey<Enchantment> AQUA_AFFINITY = RegistryKey.unsafeOf("aqua_affinity");
+    RegistryKey<Enchantment> AQUA_AFFINITY = RegistryKey.of("aqua_affinity");
 
-    RegistryKey<Enchantment> BANE_OF_ARTHROPODS = RegistryKey.unsafeOf("bane_of_arthropods");
+    RegistryKey<Enchantment> BANE_OF_ARTHROPODS = RegistryKey.of("bane_of_arthropods");
 
-    RegistryKey<Enchantment> BINDING_CURSE = RegistryKey.unsafeOf("binding_curse");
+    RegistryKey<Enchantment> BINDING_CURSE = RegistryKey.of("binding_curse");
 
-    RegistryKey<Enchantment> BLAST_PROTECTION = RegistryKey.unsafeOf("blast_protection");
+    RegistryKey<Enchantment> BLAST_PROTECTION = RegistryKey.of("blast_protection");
 
-    RegistryKey<Enchantment> BREACH = RegistryKey.unsafeOf("breach");
+    RegistryKey<Enchantment> BREACH = RegistryKey.of("breach");
 
-    RegistryKey<Enchantment> CHANNELING = RegistryKey.unsafeOf("channeling");
+    RegistryKey<Enchantment> CHANNELING = RegistryKey.of("channeling");
 
-    RegistryKey<Enchantment> DENSITY = RegistryKey.unsafeOf("density");
+    RegistryKey<Enchantment> DENSITY = RegistryKey.of("density");
 
-    RegistryKey<Enchantment> DEPTH_STRIDER = RegistryKey.unsafeOf("depth_strider");
+    RegistryKey<Enchantment> DEPTH_STRIDER = RegistryKey.of("depth_strider");
 
-    RegistryKey<Enchantment> EFFICIENCY = RegistryKey.unsafeOf("efficiency");
+    RegistryKey<Enchantment> EFFICIENCY = RegistryKey.of("efficiency");
 
-    RegistryKey<Enchantment> FEATHER_FALLING = RegistryKey.unsafeOf("feather_falling");
+    RegistryKey<Enchantment> FEATHER_FALLING = RegistryKey.of("feather_falling");
 
-    RegistryKey<Enchantment> FIRE_ASPECT = RegistryKey.unsafeOf("fire_aspect");
+    RegistryKey<Enchantment> FIRE_ASPECT = RegistryKey.of("fire_aspect");
 
-    RegistryKey<Enchantment> FIRE_PROTECTION = RegistryKey.unsafeOf("fire_protection");
+    RegistryKey<Enchantment> FIRE_PROTECTION = RegistryKey.of("fire_protection");
 
-    RegistryKey<Enchantment> FLAME = RegistryKey.unsafeOf("flame");
+    RegistryKey<Enchantment> FLAME = RegistryKey.of("flame");
 
-    RegistryKey<Enchantment> FORTUNE = RegistryKey.unsafeOf("fortune");
+    RegistryKey<Enchantment> FORTUNE = RegistryKey.of("fortune");
 
-    RegistryKey<Enchantment> FROST_WALKER = RegistryKey.unsafeOf("frost_walker");
+    RegistryKey<Enchantment> FROST_WALKER = RegistryKey.of("frost_walker");
 
-    RegistryKey<Enchantment> IMPALING = RegistryKey.unsafeOf("impaling");
+    RegistryKey<Enchantment> IMPALING = RegistryKey.of("impaling");
 
-    RegistryKey<Enchantment> INFINITY = RegistryKey.unsafeOf("infinity");
+    RegistryKey<Enchantment> INFINITY = RegistryKey.of("infinity");
 
-    RegistryKey<Enchantment> KNOCKBACK = RegistryKey.unsafeOf("knockback");
+    RegistryKey<Enchantment> KNOCKBACK = RegistryKey.of("knockback");
 
-    RegistryKey<Enchantment> LOOTING = RegistryKey.unsafeOf("looting");
+    RegistryKey<Enchantment> LOOTING = RegistryKey.of("looting");
 
-    RegistryKey<Enchantment> LOYALTY = RegistryKey.unsafeOf("loyalty");
+    RegistryKey<Enchantment> LOYALTY = RegistryKey.of("loyalty");
 
-    RegistryKey<Enchantment> LUCK_OF_THE_SEA = RegistryKey.unsafeOf("luck_of_the_sea");
+    RegistryKey<Enchantment> LUCK_OF_THE_SEA = RegistryKey.of("luck_of_the_sea");
 
-    RegistryKey<Enchantment> LUNGE = RegistryKey.unsafeOf("lunge");
+    RegistryKey<Enchantment> LUNGE = RegistryKey.of("lunge");
 
-    RegistryKey<Enchantment> LURE = RegistryKey.unsafeOf("lure");
+    RegistryKey<Enchantment> LURE = RegistryKey.of("lure");
 
-    RegistryKey<Enchantment> MENDING = RegistryKey.unsafeOf("mending");
+    RegistryKey<Enchantment> MENDING = RegistryKey.of("mending");
 
-    RegistryKey<Enchantment> MULTISHOT = RegistryKey.unsafeOf("multishot");
+    RegistryKey<Enchantment> MULTISHOT = RegistryKey.of("multishot");
 
-    RegistryKey<Enchantment> PIERCING = RegistryKey.unsafeOf("piercing");
+    RegistryKey<Enchantment> PIERCING = RegistryKey.of("piercing");
 
-    RegistryKey<Enchantment> POWER = RegistryKey.unsafeOf("power");
+    RegistryKey<Enchantment> POWER = RegistryKey.of("power");
 
-    RegistryKey<Enchantment> PROJECTILE_PROTECTION = RegistryKey.unsafeOf("projectile_protection");
+    RegistryKey<Enchantment> PROJECTILE_PROTECTION = RegistryKey.of("projectile_protection");
 
-    RegistryKey<Enchantment> PROTECTION = RegistryKey.unsafeOf("protection");
+    RegistryKey<Enchantment> PROTECTION = RegistryKey.of("protection");
 
-    RegistryKey<Enchantment> PUNCH = RegistryKey.unsafeOf("punch");
+    RegistryKey<Enchantment> PUNCH = RegistryKey.of("punch");
 
-    RegistryKey<Enchantment> QUICK_CHARGE = RegistryKey.unsafeOf("quick_charge");
+    RegistryKey<Enchantment> QUICK_CHARGE = RegistryKey.of("quick_charge");
 
-    RegistryKey<Enchantment> RESPIRATION = RegistryKey.unsafeOf("respiration");
+    RegistryKey<Enchantment> RESPIRATION = RegistryKey.of("respiration");
 
-    RegistryKey<Enchantment> RIPTIDE = RegistryKey.unsafeOf("riptide");
+    RegistryKey<Enchantment> RIPTIDE = RegistryKey.of("riptide");
 
-    RegistryKey<Enchantment> SHARPNESS = RegistryKey.unsafeOf("sharpness");
+    RegistryKey<Enchantment> SHARPNESS = RegistryKey.of("sharpness");
 
-    RegistryKey<Enchantment> SILK_TOUCH = RegistryKey.unsafeOf("silk_touch");
+    RegistryKey<Enchantment> SILK_TOUCH = RegistryKey.of("silk_touch");
 
-    RegistryKey<Enchantment> SMITE = RegistryKey.unsafeOf("smite");
+    RegistryKey<Enchantment> SMITE = RegistryKey.of("smite");
 
-    RegistryKey<Enchantment> SOUL_SPEED = RegistryKey.unsafeOf("soul_speed");
+    RegistryKey<Enchantment> SOUL_SPEED = RegistryKey.of("soul_speed");
 
-    RegistryKey<Enchantment> SWEEPING_EDGE = RegistryKey.unsafeOf("sweeping_edge");
+    RegistryKey<Enchantment> SWEEPING_EDGE = RegistryKey.of("sweeping_edge");
 
-    RegistryKey<Enchantment> SWIFT_SNEAK = RegistryKey.unsafeOf("swift_sneak");
+    RegistryKey<Enchantment> SWIFT_SNEAK = RegistryKey.of("swift_sneak");
 
-    RegistryKey<Enchantment> THORNS = RegistryKey.unsafeOf("thorns");
+    RegistryKey<Enchantment> THORNS = RegistryKey.of("thorns");
 
-    RegistryKey<Enchantment> UNBREAKING = RegistryKey.unsafeOf("unbreaking");
+    RegistryKey<Enchantment> UNBREAKING = RegistryKey.of("unbreaking");
 
-    RegistryKey<Enchantment> VANISHING_CURSE = RegistryKey.unsafeOf("vanishing_curse");
+    RegistryKey<Enchantment> VANISHING_CURSE = RegistryKey.of("vanishing_curse");
 
-    RegistryKey<Enchantment> WIND_BURST = RegistryKey.unsafeOf("wind_burst");
+    RegistryKey<Enchantment> WIND_BURST = RegistryKey.of("wind_burst");
 }

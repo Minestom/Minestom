@@ -9,47 +9,47 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface JukeboxSongs permits JukeboxSong {
-    RegistryKey<JukeboxSong> _11 = RegistryKey.unsafeOf("11");
+    RegistryKey<JukeboxSong> _11 = RegistryKey.of("11");
 
-    RegistryKey<JukeboxSong> _13 = RegistryKey.unsafeOf("13");
+    RegistryKey<JukeboxSong> _13 = RegistryKey.of("13");
 
-    RegistryKey<JukeboxSong> _5 = RegistryKey.unsafeOf("5");
+    RegistryKey<JukeboxSong> _5 = RegistryKey.of("5");
 
-    RegistryKey<JukeboxSong> BLOCKS = RegistryKey.unsafeOf("blocks");
+    RegistryKey<JukeboxSong> BLOCKS = RegistryKey.of("blocks");
 
-    RegistryKey<JukeboxSong> BOUNCE = RegistryKey.unsafeOf("bounce");
+    RegistryKey<JukeboxSong> BOUNCE = RegistryKey.of("bounce");
 
-    RegistryKey<JukeboxSong> CAT = RegistryKey.unsafeOf("cat");
+    RegistryKey<JukeboxSong> CAT = RegistryKey.of("cat");
 
-    RegistryKey<JukeboxSong> CHIRP = RegistryKey.unsafeOf("chirp");
+    RegistryKey<JukeboxSong> CHIRP = RegistryKey.of("chirp");
 
-    RegistryKey<JukeboxSong> CREATOR = RegistryKey.unsafeOf("creator");
+    RegistryKey<JukeboxSong> CREATOR = RegistryKey.of("creator");
 
-    RegistryKey<JukeboxSong> CREATOR_MUSIC_BOX = RegistryKey.unsafeOf("creator_music_box");
+    RegistryKey<JukeboxSong> CREATOR_MUSIC_BOX = RegistryKey.of("creator_music_box");
 
-    RegistryKey<JukeboxSong> FAR = RegistryKey.unsafeOf("far");
+    RegistryKey<JukeboxSong> FAR = RegistryKey.of("far");
 
-    RegistryKey<JukeboxSong> LAVA_CHICKEN = RegistryKey.unsafeOf("lava_chicken");
+    RegistryKey<JukeboxSong> LAVA_CHICKEN = RegistryKey.of("lava_chicken");
 
-    RegistryKey<JukeboxSong> MALL = RegistryKey.unsafeOf("mall");
+    RegistryKey<JukeboxSong> MALL = RegistryKey.of("mall");
 
-    RegistryKey<JukeboxSong> MELLOHI = RegistryKey.unsafeOf("mellohi");
+    RegistryKey<JukeboxSong> MELLOHI = RegistryKey.of("mellohi");
 
-    RegistryKey<JukeboxSong> OTHERSIDE = RegistryKey.unsafeOf("otherside");
+    RegistryKey<JukeboxSong> OTHERSIDE = RegistryKey.of("otherside");
 
-    RegistryKey<JukeboxSong> PIGSTEP = RegistryKey.unsafeOf("pigstep");
+    RegistryKey<JukeboxSong> PIGSTEP = RegistryKey.of("pigstep");
 
-    RegistryKey<JukeboxSong> PRECIPICE = RegistryKey.unsafeOf("precipice");
+    RegistryKey<JukeboxSong> PRECIPICE = RegistryKey.of("precipice");
 
-    RegistryKey<JukeboxSong> RELIC = RegistryKey.unsafeOf("relic");
+    RegistryKey<JukeboxSong> RELIC = RegistryKey.of("relic");
 
-    RegistryKey<JukeboxSong> STAL = RegistryKey.unsafeOf("stal");
+    RegistryKey<JukeboxSong> STAL = RegistryKey.of("stal");
 
-    RegistryKey<JukeboxSong> STRAD = RegistryKey.unsafeOf("strad");
+    RegistryKey<JukeboxSong> STRAD = RegistryKey.of("strad");
 
-    RegistryKey<JukeboxSong> TEARS = RegistryKey.unsafeOf("tears");
+    RegistryKey<JukeboxSong> TEARS = RegistryKey.of("tears");
 
-    RegistryKey<JukeboxSong> WAIT = RegistryKey.unsafeOf("wait");
+    RegistryKey<JukeboxSong> WAIT = RegistryKey.of("wait");
 
-    RegistryKey<JukeboxSong> WARD = RegistryKey.unsafeOf("ward");
+    RegistryKey<JukeboxSong> WARD = RegistryKey.of("ward");
 }

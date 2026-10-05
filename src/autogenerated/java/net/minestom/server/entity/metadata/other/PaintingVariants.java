@@ -9,105 +9,105 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface PaintingVariants permits PaintingVariant {
-    RegistryKey<PaintingVariant> ALBAN = RegistryKey.unsafeOf("alban");
+    RegistryKey<PaintingVariant> ALBAN = RegistryKey.of("alban");
 
-    RegistryKey<PaintingVariant> AZTEC = RegistryKey.unsafeOf("aztec");
+    RegistryKey<PaintingVariant> AZTEC = RegistryKey.of("aztec");
 
-    RegistryKey<PaintingVariant> AZTEC2 = RegistryKey.unsafeOf("aztec2");
+    RegistryKey<PaintingVariant> AZTEC2 = RegistryKey.of("aztec2");
 
-    RegistryKey<PaintingVariant> BACKYARD = RegistryKey.unsafeOf("backyard");
+    RegistryKey<PaintingVariant> BACKYARD = RegistryKey.of("backyard");
 
-    RegistryKey<PaintingVariant> BAROQUE = RegistryKey.unsafeOf("baroque");
+    RegistryKey<PaintingVariant> BAROQUE = RegistryKey.of("baroque");
 
-    RegistryKey<PaintingVariant> BOMB = RegistryKey.unsafeOf("bomb");
+    RegistryKey<PaintingVariant> BOMB = RegistryKey.of("bomb");
 
-    RegistryKey<PaintingVariant> BOUQUET = RegistryKey.unsafeOf("bouquet");
+    RegistryKey<PaintingVariant> BOUQUET = RegistryKey.of("bouquet");
 
-    RegistryKey<PaintingVariant> BURNING_SKULL = RegistryKey.unsafeOf("burning_skull");
+    RegistryKey<PaintingVariant> BURNING_SKULL = RegistryKey.of("burning_skull");
 
-    RegistryKey<PaintingVariant> BUST = RegistryKey.unsafeOf("bust");
+    RegistryKey<PaintingVariant> BUST = RegistryKey.of("bust");
 
-    RegistryKey<PaintingVariant> CAVEBIRD = RegistryKey.unsafeOf("cavebird");
+    RegistryKey<PaintingVariant> CAVEBIRD = RegistryKey.of("cavebird");
 
-    RegistryKey<PaintingVariant> CHANGING = RegistryKey.unsafeOf("changing");
+    RegistryKey<PaintingVariant> CHANGING = RegistryKey.of("changing");
 
-    RegistryKey<PaintingVariant> COTAN = RegistryKey.unsafeOf("cotan");
+    RegistryKey<PaintingVariant> COTAN = RegistryKey.of("cotan");
 
-    RegistryKey<PaintingVariant> COURBET = RegistryKey.unsafeOf("courbet");
+    RegistryKey<PaintingVariant> COURBET = RegistryKey.of("courbet");
 
-    RegistryKey<PaintingVariant> CREEBET = RegistryKey.unsafeOf("creebet");
+    RegistryKey<PaintingVariant> CREEBET = RegistryKey.of("creebet");
 
-    RegistryKey<PaintingVariant> DENNIS = RegistryKey.unsafeOf("dennis");
+    RegistryKey<PaintingVariant> DENNIS = RegistryKey.of("dennis");
 
-    RegistryKey<PaintingVariant> DONKEY_KONG = RegistryKey.unsafeOf("donkey_kong");
+    RegistryKey<PaintingVariant> DONKEY_KONG = RegistryKey.of("donkey_kong");
 
-    RegistryKey<PaintingVariant> EARTH = RegistryKey.unsafeOf("earth");
+    RegistryKey<PaintingVariant> EARTH = RegistryKey.of("earth");
 
-    RegistryKey<PaintingVariant> ENDBOSS = RegistryKey.unsafeOf("endboss");
+    RegistryKey<PaintingVariant> ENDBOSS = RegistryKey.of("endboss");
 
-    RegistryKey<PaintingVariant> FERN = RegistryKey.unsafeOf("fern");
+    RegistryKey<PaintingVariant> FERN = RegistryKey.of("fern");
 
-    RegistryKey<PaintingVariant> FIGHTERS = RegistryKey.unsafeOf("fighters");
+    RegistryKey<PaintingVariant> FIGHTERS = RegistryKey.of("fighters");
 
-    RegistryKey<PaintingVariant> FINDING = RegistryKey.unsafeOf("finding");
+    RegistryKey<PaintingVariant> FINDING = RegistryKey.of("finding");
 
-    RegistryKey<PaintingVariant> FIRE = RegistryKey.unsafeOf("fire");
+    RegistryKey<PaintingVariant> FIRE = RegistryKey.of("fire");
 
-    RegistryKey<PaintingVariant> GRAHAM = RegistryKey.unsafeOf("graham");
+    RegistryKey<PaintingVariant> GRAHAM = RegistryKey.of("graham");
 
-    RegistryKey<PaintingVariant> HUMBLE = RegistryKey.unsafeOf("humble");
+    RegistryKey<PaintingVariant> HUMBLE = RegistryKey.of("humble");
 
-    RegistryKey<PaintingVariant> KEBAB = RegistryKey.unsafeOf("kebab");
+    RegistryKey<PaintingVariant> KEBAB = RegistryKey.of("kebab");
 
-    RegistryKey<PaintingVariant> LOWMIST = RegistryKey.unsafeOf("lowmist");
+    RegistryKey<PaintingVariant> LOWMIST = RegistryKey.of("lowmist");
 
-    RegistryKey<PaintingVariant> MATCH = RegistryKey.unsafeOf("match");
+    RegistryKey<PaintingVariant> MATCH = RegistryKey.of("match");
 
-    RegistryKey<PaintingVariant> MEDITATIVE = RegistryKey.unsafeOf("meditative");
+    RegistryKey<PaintingVariant> MEDITATIVE = RegistryKey.of("meditative");
 
-    RegistryKey<PaintingVariant> ORB = RegistryKey.unsafeOf("orb");
+    RegistryKey<PaintingVariant> ORB = RegistryKey.of("orb");
 
-    RegistryKey<PaintingVariant> OWLEMONS = RegistryKey.unsafeOf("owlemons");
+    RegistryKey<PaintingVariant> OWLEMONS = RegistryKey.of("owlemons");
 
-    RegistryKey<PaintingVariant> PASSAGE = RegistryKey.unsafeOf("passage");
+    RegistryKey<PaintingVariant> PASSAGE = RegistryKey.of("passage");
 
-    RegistryKey<PaintingVariant> PIGSCENE = RegistryKey.unsafeOf("pigscene");
+    RegistryKey<PaintingVariant> PIGSCENE = RegistryKey.of("pigscene");
 
-    RegistryKey<PaintingVariant> PLANT = RegistryKey.unsafeOf("plant");
+    RegistryKey<PaintingVariant> PLANT = RegistryKey.of("plant");
 
-    RegistryKey<PaintingVariant> POINTER = RegistryKey.unsafeOf("pointer");
+    RegistryKey<PaintingVariant> POINTER = RegistryKey.of("pointer");
 
-    RegistryKey<PaintingVariant> POND = RegistryKey.unsafeOf("pond");
+    RegistryKey<PaintingVariant> POND = RegistryKey.of("pond");
 
-    RegistryKey<PaintingVariant> POOL = RegistryKey.unsafeOf("pool");
+    RegistryKey<PaintingVariant> POOL = RegistryKey.of("pool");
 
-    RegistryKey<PaintingVariant> PRAIRIE_RIDE = RegistryKey.unsafeOf("prairie_ride");
+    RegistryKey<PaintingVariant> PRAIRIE_RIDE = RegistryKey.of("prairie_ride");
 
-    RegistryKey<PaintingVariant> SEA = RegistryKey.unsafeOf("sea");
+    RegistryKey<PaintingVariant> SEA = RegistryKey.of("sea");
 
-    RegistryKey<PaintingVariant> SKELETON = RegistryKey.unsafeOf("skeleton");
+    RegistryKey<PaintingVariant> SKELETON = RegistryKey.of("skeleton");
 
-    RegistryKey<PaintingVariant> SKULL_AND_ROSES = RegistryKey.unsafeOf("skull_and_roses");
+    RegistryKey<PaintingVariant> SKULL_AND_ROSES = RegistryKey.of("skull_and_roses");
 
-    RegistryKey<PaintingVariant> STAGE = RegistryKey.unsafeOf("stage");
+    RegistryKey<PaintingVariant> STAGE = RegistryKey.of("stage");
 
-    RegistryKey<PaintingVariant> SUNFLOWERS = RegistryKey.unsafeOf("sunflowers");
+    RegistryKey<PaintingVariant> SUNFLOWERS = RegistryKey.of("sunflowers");
 
-    RegistryKey<PaintingVariant> SUNSET = RegistryKey.unsafeOf("sunset");
+    RegistryKey<PaintingVariant> SUNSET = RegistryKey.of("sunset");
 
-    RegistryKey<PaintingVariant> TIDES = RegistryKey.unsafeOf("tides");
+    RegistryKey<PaintingVariant> TIDES = RegistryKey.of("tides");
 
-    RegistryKey<PaintingVariant> UNPACKED = RegistryKey.unsafeOf("unpacked");
+    RegistryKey<PaintingVariant> UNPACKED = RegistryKey.of("unpacked");
 
-    RegistryKey<PaintingVariant> VOID = RegistryKey.unsafeOf("void");
+    RegistryKey<PaintingVariant> VOID = RegistryKey.of("void");
 
-    RegistryKey<PaintingVariant> WANDERER = RegistryKey.unsafeOf("wanderer");
+    RegistryKey<PaintingVariant> WANDERER = RegistryKey.of("wanderer");
 
-    RegistryKey<PaintingVariant> WASTELAND = RegistryKey.unsafeOf("wasteland");
+    RegistryKey<PaintingVariant> WASTELAND = RegistryKey.of("wasteland");
 
-    RegistryKey<PaintingVariant> WATER = RegistryKey.unsafeOf("water");
+    RegistryKey<PaintingVariant> WATER = RegistryKey.of("water");
 
-    RegistryKey<PaintingVariant> WIND = RegistryKey.unsafeOf("wind");
+    RegistryKey<PaintingVariant> WIND = RegistryKey.of("wind");
 
-    RegistryKey<PaintingVariant> WITHER = RegistryKey.unsafeOf("wither");
+    RegistryKey<PaintingVariant> WITHER = RegistryKey.of("wither");
 }

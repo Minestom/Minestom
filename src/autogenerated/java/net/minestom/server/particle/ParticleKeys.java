@@ -11,253 +11,253 @@ import org.jetbrains.annotations.ApiStatus;
 @ApiStatus.NonExtendable
 @SuppressWarnings("unused")
 public interface ParticleKeys {
-    RegistryKey<Particle> ANGRY_VILLAGER = RegistryKey.unsafeOf("angry_villager");
+    RegistryKey<Particle> ANGRY_VILLAGER = RegistryKey.of("angry_villager");
 
-    RegistryKey<Particle.Block> BLOCK = RegistryKey.unsafeOf("block");
+    RegistryKey<Particle.Block> BLOCK = RegistryKey.of("block");
 
-    RegistryKey<Particle.BlockMarker> BLOCK_MARKER = RegistryKey.unsafeOf("block_marker");
+    RegistryKey<Particle.BlockMarker> BLOCK_MARKER = RegistryKey.of("block_marker");
 
-    RegistryKey<Particle> BUBBLE = RegistryKey.unsafeOf("bubble");
+    RegistryKey<Particle> BUBBLE = RegistryKey.of("bubble");
 
-    RegistryKey<Particle> SULFUR_BUBBLES = RegistryKey.unsafeOf("sulfur_bubbles");
+    RegistryKey<Particle> SULFUR_BUBBLES = RegistryKey.of("sulfur_bubbles");
 
-    RegistryKey<Particle> NOXIOUS_GAS = RegistryKey.unsafeOf("noxious_gas");
+    RegistryKey<Particle> NOXIOUS_GAS = RegistryKey.of("noxious_gas");
 
-    RegistryKey<Particle> NOXIOUS_GAS_CLOUD = RegistryKey.unsafeOf("noxious_gas_cloud");
+    RegistryKey<Particle> NOXIOUS_GAS_CLOUD = RegistryKey.of("noxious_gas_cloud");
 
-    RegistryKey<Particle.Geyser> GEYSER = RegistryKey.unsafeOf("geyser");
+    RegistryKey<Particle.Geyser> GEYSER = RegistryKey.of("geyser");
 
-    RegistryKey<Particle.GeyserBase> GEYSER_BASE = RegistryKey.unsafeOf("geyser_base");
+    RegistryKey<Particle.GeyserBase> GEYSER_BASE = RegistryKey.of("geyser_base");
 
-    RegistryKey<Particle.GeyserPoof> GEYSER_POOF = RegistryKey.unsafeOf("geyser_poof");
+    RegistryKey<Particle.GeyserPoof> GEYSER_POOF = RegistryKey.of("geyser_poof");
 
-    RegistryKey<Particle.GeyserPlume> GEYSER_PLUME = RegistryKey.unsafeOf("geyser_plume");
+    RegistryKey<Particle.GeyserPlume> GEYSER_PLUME = RegistryKey.of("geyser_plume");
 
-    RegistryKey<Particle> CLOUD = RegistryKey.unsafeOf("cloud");
+    RegistryKey<Particle> CLOUD = RegistryKey.of("cloud");
 
-    RegistryKey<Particle> COPPER_FIRE_FLAME = RegistryKey.unsafeOf("copper_fire_flame");
+    RegistryKey<Particle> COPPER_FIRE_FLAME = RegistryKey.of("copper_fire_flame");
 
-    RegistryKey<Particle> CRIT = RegistryKey.unsafeOf("crit");
+    RegistryKey<Particle> CRIT = RegistryKey.of("crit");
 
-    RegistryKey<Particle> DAMAGE_INDICATOR = RegistryKey.unsafeOf("damage_indicator");
+    RegistryKey<Particle> DAMAGE_INDICATOR = RegistryKey.of("damage_indicator");
 
-    RegistryKey<Particle.DragonBreath> DRAGON_BREATH = RegistryKey.unsafeOf("dragon_breath");
+    RegistryKey<Particle.DragonBreath> DRAGON_BREATH = RegistryKey.of("dragon_breath");
 
-    RegistryKey<Particle> DRIPPING_LAVA = RegistryKey.unsafeOf("dripping_lava");
+    RegistryKey<Particle> DRIPPING_LAVA = RegistryKey.of("dripping_lava");
 
-    RegistryKey<Particle> FALLING_LAVA = RegistryKey.unsafeOf("falling_lava");
+    RegistryKey<Particle> FALLING_LAVA = RegistryKey.of("falling_lava");
 
-    RegistryKey<Particle> LANDING_LAVA = RegistryKey.unsafeOf("landing_lava");
+    RegistryKey<Particle> LANDING_LAVA = RegistryKey.of("landing_lava");
 
-    RegistryKey<Particle> DRIPPING_WATER = RegistryKey.unsafeOf("dripping_water");
+    RegistryKey<Particle> DRIPPING_WATER = RegistryKey.of("dripping_water");
 
-    RegistryKey<Particle> FALLING_WATER = RegistryKey.unsafeOf("falling_water");
+    RegistryKey<Particle> FALLING_WATER = RegistryKey.of("falling_water");
 
-    RegistryKey<Particle.Dust> DUST = RegistryKey.unsafeOf("dust");
+    RegistryKey<Particle.Dust> DUST = RegistryKey.of("dust");
 
-    RegistryKey<Particle.DustColorTransition> DUST_COLOR_TRANSITION = RegistryKey.unsafeOf("dust_color_transition");
+    RegistryKey<Particle.DustColorTransition> DUST_COLOR_TRANSITION = RegistryKey.of("dust_color_transition");
 
-    RegistryKey<Particle.Effect> EFFECT = RegistryKey.unsafeOf("effect");
+    RegistryKey<Particle.Effect> EFFECT = RegistryKey.of("effect");
 
-    RegistryKey<Particle> ELDER_GUARDIAN = RegistryKey.unsafeOf("elder_guardian");
+    RegistryKey<Particle> ELDER_GUARDIAN = RegistryKey.of("elder_guardian");
 
-    RegistryKey<Particle> ENCHANTED_HIT = RegistryKey.unsafeOf("enchanted_hit");
+    RegistryKey<Particle> ENCHANTED_HIT = RegistryKey.of("enchanted_hit");
 
-    RegistryKey<Particle> ENCHANT = RegistryKey.unsafeOf("enchant");
+    RegistryKey<Particle> ENCHANT = RegistryKey.of("enchant");
 
-    RegistryKey<Particle> END_ROD = RegistryKey.unsafeOf("end_rod");
+    RegistryKey<Particle> END_ROD = RegistryKey.of("end_rod");
 
-    RegistryKey<Particle.EntityEffect> ENTITY_EFFECT = RegistryKey.unsafeOf("entity_effect");
+    RegistryKey<Particle.EntityEffect> ENTITY_EFFECT = RegistryKey.of("entity_effect");
 
-    RegistryKey<Particle> EXPLOSION_EMITTER = RegistryKey.unsafeOf("explosion_emitter");
+    RegistryKey<Particle> EXPLOSION_EMITTER = RegistryKey.of("explosion_emitter");
 
-    RegistryKey<Particle> EXPLOSION = RegistryKey.unsafeOf("explosion");
+    RegistryKey<Particle> EXPLOSION = RegistryKey.of("explosion");
 
-    RegistryKey<Particle> GUST = RegistryKey.unsafeOf("gust");
+    RegistryKey<Particle> GUST = RegistryKey.of("gust");
 
-    RegistryKey<Particle> SMALL_GUST = RegistryKey.unsafeOf("small_gust");
+    RegistryKey<Particle> SMALL_GUST = RegistryKey.of("small_gust");
 
-    RegistryKey<Particle> GUST_EMITTER_LARGE = RegistryKey.unsafeOf("gust_emitter_large");
+    RegistryKey<Particle> GUST_EMITTER_LARGE = RegistryKey.of("gust_emitter_large");
 
-    RegistryKey<Particle> GUST_EMITTER_SMALL = RegistryKey.unsafeOf("gust_emitter_small");
+    RegistryKey<Particle> GUST_EMITTER_SMALL = RegistryKey.of("gust_emitter_small");
 
-    RegistryKey<Particle> SONIC_BOOM = RegistryKey.unsafeOf("sonic_boom");
+    RegistryKey<Particle> SONIC_BOOM = RegistryKey.of("sonic_boom");
 
-    RegistryKey<Particle.FallingDust> FALLING_DUST = RegistryKey.unsafeOf("falling_dust");
+    RegistryKey<Particle.FallingDust> FALLING_DUST = RegistryKey.of("falling_dust");
 
-    RegistryKey<Particle> FIREWORK = RegistryKey.unsafeOf("firework");
+    RegistryKey<Particle> FIREWORK = RegistryKey.of("firework");
 
-    RegistryKey<Particle> FISHING = RegistryKey.unsafeOf("fishing");
+    RegistryKey<Particle> FISHING = RegistryKey.of("fishing");
 
-    RegistryKey<Particle> FLAME = RegistryKey.unsafeOf("flame");
+    RegistryKey<Particle> FLAME = RegistryKey.of("flame");
 
-    RegistryKey<Particle> INFESTED = RegistryKey.unsafeOf("infested");
+    RegistryKey<Particle> INFESTED = RegistryKey.of("infested");
 
-    RegistryKey<Particle> CHERRY_LEAVES = RegistryKey.unsafeOf("cherry_leaves");
+    RegistryKey<Particle> CHERRY_LEAVES = RegistryKey.of("cherry_leaves");
 
-    RegistryKey<Particle> PALE_OAK_LEAVES = RegistryKey.unsafeOf("pale_oak_leaves");
+    RegistryKey<Particle> PALE_OAK_LEAVES = RegistryKey.of("pale_oak_leaves");
 
-    RegistryKey<Particle.TintedLeaves> TINTED_LEAVES = RegistryKey.unsafeOf("tinted_leaves");
+    RegistryKey<Particle.TintedLeaves> TINTED_LEAVES = RegistryKey.of("tinted_leaves");
 
-    RegistryKey<Particle> SCULK_SOUL = RegistryKey.unsafeOf("sculk_soul");
+    RegistryKey<Particle> SCULK_SOUL = RegistryKey.of("sculk_soul");
 
-    RegistryKey<Particle.SculkCharge> SCULK_CHARGE = RegistryKey.unsafeOf("sculk_charge");
+    RegistryKey<Particle.SculkCharge> SCULK_CHARGE = RegistryKey.of("sculk_charge");
 
-    RegistryKey<Particle> SCULK_CHARGE_POP = RegistryKey.unsafeOf("sculk_charge_pop");
+    RegistryKey<Particle> SCULK_CHARGE_POP = RegistryKey.of("sculk_charge_pop");
 
-    RegistryKey<Particle> SOUL_FIRE_FLAME = RegistryKey.unsafeOf("soul_fire_flame");
+    RegistryKey<Particle> SOUL_FIRE_FLAME = RegistryKey.of("soul_fire_flame");
 
-    RegistryKey<Particle> SOUL = RegistryKey.unsafeOf("soul");
+    RegistryKey<Particle> SOUL = RegistryKey.of("soul");
 
-    RegistryKey<Particle.Flash> FLASH = RegistryKey.unsafeOf("flash");
+    RegistryKey<Particle.Flash> FLASH = RegistryKey.of("flash");
 
-    RegistryKey<Particle> HAPPY_VILLAGER = RegistryKey.unsafeOf("happy_villager");
+    RegistryKey<Particle> HAPPY_VILLAGER = RegistryKey.of("happy_villager");
 
-    RegistryKey<Particle> COMPOSTER = RegistryKey.unsafeOf("composter");
+    RegistryKey<Particle> COMPOSTER = RegistryKey.of("composter");
 
-    RegistryKey<Particle> HEART = RegistryKey.unsafeOf("heart");
+    RegistryKey<Particle> HEART = RegistryKey.of("heart");
 
-    RegistryKey<Particle.InstantEffect> INSTANT_EFFECT = RegistryKey.unsafeOf("instant_effect");
+    RegistryKey<Particle.InstantEffect> INSTANT_EFFECT = RegistryKey.of("instant_effect");
 
-    RegistryKey<Particle.Item> ITEM = RegistryKey.unsafeOf("item");
+    RegistryKey<Particle.Item> ITEM = RegistryKey.of("item");
 
-    RegistryKey<Particle.Vibration> VIBRATION = RegistryKey.unsafeOf("vibration");
+    RegistryKey<Particle.Vibration> VIBRATION = RegistryKey.of("vibration");
 
-    RegistryKey<Particle.Trail> TRAIL = RegistryKey.unsafeOf("trail");
+    RegistryKey<Particle.Trail> TRAIL = RegistryKey.of("trail");
 
-    RegistryKey<Particle> PAUSE_MOB_GROWTH = RegistryKey.unsafeOf("pause_mob_growth");
+    RegistryKey<Particle> PAUSE_MOB_GROWTH = RegistryKey.of("pause_mob_growth");
 
-    RegistryKey<Particle> RESET_MOB_GROWTH = RegistryKey.unsafeOf("reset_mob_growth");
+    RegistryKey<Particle> RESET_MOB_GROWTH = RegistryKey.of("reset_mob_growth");
 
-    RegistryKey<Particle> ITEM_SLIME = RegistryKey.unsafeOf("item_slime");
+    RegistryKey<Particle> ITEM_SLIME = RegistryKey.of("item_slime");
 
-    RegistryKey<Particle> ITEM_COBWEB = RegistryKey.unsafeOf("item_cobweb");
+    RegistryKey<Particle> ITEM_COBWEB = RegistryKey.of("item_cobweb");
 
-    RegistryKey<Particle> ITEM_SNOWBALL = RegistryKey.unsafeOf("item_snowball");
+    RegistryKey<Particle> ITEM_SNOWBALL = RegistryKey.of("item_snowball");
 
-    RegistryKey<Particle> LARGE_SMOKE = RegistryKey.unsafeOf("large_smoke");
+    RegistryKey<Particle> LARGE_SMOKE = RegistryKey.of("large_smoke");
 
-    RegistryKey<Particle> LAVA = RegistryKey.unsafeOf("lava");
+    RegistryKey<Particle> LAVA = RegistryKey.of("lava");
 
-    RegistryKey<Particle> MYCELIUM = RegistryKey.unsafeOf("mycelium");
+    RegistryKey<Particle> MYCELIUM = RegistryKey.of("mycelium");
 
-    RegistryKey<Particle> NOTE = RegistryKey.unsafeOf("note");
+    RegistryKey<Particle> NOTE = RegistryKey.of("note");
 
-    RegistryKey<Particle> POOF = RegistryKey.unsafeOf("poof");
+    RegistryKey<Particle> POOF = RegistryKey.of("poof");
 
-    RegistryKey<Particle> PORTAL = RegistryKey.unsafeOf("portal");
+    RegistryKey<Particle> PORTAL = RegistryKey.of("portal");
 
-    RegistryKey<Particle> RAIN = RegistryKey.unsafeOf("rain");
+    RegistryKey<Particle> RAIN = RegistryKey.of("rain");
 
-    RegistryKey<Particle> SMOKE = RegistryKey.unsafeOf("smoke");
+    RegistryKey<Particle> SMOKE = RegistryKey.of("smoke");
 
-    RegistryKey<Particle> WHITE_SMOKE = RegistryKey.unsafeOf("white_smoke");
+    RegistryKey<Particle> WHITE_SMOKE = RegistryKey.of("white_smoke");
 
-    RegistryKey<Particle> SNEEZE = RegistryKey.unsafeOf("sneeze");
+    RegistryKey<Particle> SNEEZE = RegistryKey.of("sneeze");
 
-    RegistryKey<Particle> SPIT = RegistryKey.unsafeOf("spit");
+    RegistryKey<Particle> SPIT = RegistryKey.of("spit");
 
-    RegistryKey<Particle> SQUID_INK = RegistryKey.unsafeOf("squid_ink");
+    RegistryKey<Particle> SQUID_INK = RegistryKey.of("squid_ink");
 
-    RegistryKey<Particle> SWEEP_ATTACK = RegistryKey.unsafeOf("sweep_attack");
+    RegistryKey<Particle> SWEEP_ATTACK = RegistryKey.of("sweep_attack");
 
-    RegistryKey<Particle> TOTEM_OF_UNDYING = RegistryKey.unsafeOf("totem_of_undying");
+    RegistryKey<Particle> TOTEM_OF_UNDYING = RegistryKey.of("totem_of_undying");
 
-    RegistryKey<Particle> UNDERWATER = RegistryKey.unsafeOf("underwater");
+    RegistryKey<Particle> UNDERWATER = RegistryKey.of("underwater");
 
-    RegistryKey<Particle> SPLASH = RegistryKey.unsafeOf("splash");
+    RegistryKey<Particle> SPLASH = RegistryKey.of("splash");
 
-    RegistryKey<Particle> WITCH = RegistryKey.unsafeOf("witch");
+    RegistryKey<Particle> WITCH = RegistryKey.of("witch");
 
-    RegistryKey<Particle> BUBBLE_POP = RegistryKey.unsafeOf("bubble_pop");
+    RegistryKey<Particle> BUBBLE_POP = RegistryKey.of("bubble_pop");
 
-    RegistryKey<Particle> CURRENT_DOWN = RegistryKey.unsafeOf("current_down");
+    RegistryKey<Particle> CURRENT_DOWN = RegistryKey.of("current_down");
 
-    RegistryKey<Particle> BUBBLE_COLUMN_UP = RegistryKey.unsafeOf("bubble_column_up");
+    RegistryKey<Particle> BUBBLE_COLUMN_UP = RegistryKey.of("bubble_column_up");
 
-    RegistryKey<Particle> NAUTILUS = RegistryKey.unsafeOf("nautilus");
+    RegistryKey<Particle> NAUTILUS = RegistryKey.of("nautilus");
 
-    RegistryKey<Particle> DOLPHIN = RegistryKey.unsafeOf("dolphin");
+    RegistryKey<Particle> DOLPHIN = RegistryKey.of("dolphin");
 
-    RegistryKey<Particle> CAMPFIRE_COSY_SMOKE = RegistryKey.unsafeOf("campfire_cosy_smoke");
+    RegistryKey<Particle> CAMPFIRE_COSY_SMOKE = RegistryKey.of("campfire_cosy_smoke");
 
-    RegistryKey<Particle> CAMPFIRE_SIGNAL_SMOKE = RegistryKey.unsafeOf("campfire_signal_smoke");
+    RegistryKey<Particle> CAMPFIRE_SIGNAL_SMOKE = RegistryKey.of("campfire_signal_smoke");
 
-    RegistryKey<Particle> DRIPPING_HONEY = RegistryKey.unsafeOf("dripping_honey");
+    RegistryKey<Particle> DRIPPING_HONEY = RegistryKey.of("dripping_honey");
 
-    RegistryKey<Particle> FALLING_HONEY = RegistryKey.unsafeOf("falling_honey");
+    RegistryKey<Particle> FALLING_HONEY = RegistryKey.of("falling_honey");
 
-    RegistryKey<Particle> LANDING_HONEY = RegistryKey.unsafeOf("landing_honey");
+    RegistryKey<Particle> LANDING_HONEY = RegistryKey.of("landing_honey");
 
-    RegistryKey<Particle> FALLING_NECTAR = RegistryKey.unsafeOf("falling_nectar");
+    RegistryKey<Particle> FALLING_NECTAR = RegistryKey.of("falling_nectar");
 
-    RegistryKey<Particle> FALLING_SPORE_BLOSSOM = RegistryKey.unsafeOf("falling_spore_blossom");
+    RegistryKey<Particle> FALLING_SPORE_BLOSSOM = RegistryKey.of("falling_spore_blossom");
 
-    RegistryKey<Particle> ASH = RegistryKey.unsafeOf("ash");
+    RegistryKey<Particle> ASH = RegistryKey.of("ash");
 
-    RegistryKey<Particle> CRIMSON_SPORE = RegistryKey.unsafeOf("crimson_spore");
+    RegistryKey<Particle> CRIMSON_SPORE = RegistryKey.of("crimson_spore");
 
-    RegistryKey<Particle> WARPED_SPORE = RegistryKey.unsafeOf("warped_spore");
+    RegistryKey<Particle> WARPED_SPORE = RegistryKey.of("warped_spore");
 
-    RegistryKey<Particle> SPORE_BLOSSOM_AIR = RegistryKey.unsafeOf("spore_blossom_air");
+    RegistryKey<Particle> SPORE_BLOSSOM_AIR = RegistryKey.of("spore_blossom_air");
 
-    RegistryKey<Particle> DRIPPING_OBSIDIAN_TEAR = RegistryKey.unsafeOf("dripping_obsidian_tear");
+    RegistryKey<Particle> DRIPPING_OBSIDIAN_TEAR = RegistryKey.of("dripping_obsidian_tear");
 
-    RegistryKey<Particle> FALLING_OBSIDIAN_TEAR = RegistryKey.unsafeOf("falling_obsidian_tear");
+    RegistryKey<Particle> FALLING_OBSIDIAN_TEAR = RegistryKey.of("falling_obsidian_tear");
 
-    RegistryKey<Particle> LANDING_OBSIDIAN_TEAR = RegistryKey.unsafeOf("landing_obsidian_tear");
+    RegistryKey<Particle> LANDING_OBSIDIAN_TEAR = RegistryKey.of("landing_obsidian_tear");
 
-    RegistryKey<Particle> REVERSE_PORTAL = RegistryKey.unsafeOf("reverse_portal");
+    RegistryKey<Particle> REVERSE_PORTAL = RegistryKey.of("reverse_portal");
 
-    RegistryKey<Particle> WHITE_ASH = RegistryKey.unsafeOf("white_ash");
+    RegistryKey<Particle> WHITE_ASH = RegistryKey.of("white_ash");
 
-    RegistryKey<Particle> SMALL_FLAME = RegistryKey.unsafeOf("small_flame");
+    RegistryKey<Particle> SMALL_FLAME = RegistryKey.of("small_flame");
 
-    RegistryKey<Particle> SNOWFLAKE = RegistryKey.unsafeOf("snowflake");
+    RegistryKey<Particle> SNOWFLAKE = RegistryKey.of("snowflake");
 
-    RegistryKey<Particle> DRIPPING_DRIPSTONE_LAVA = RegistryKey.unsafeOf("dripping_dripstone_lava");
+    RegistryKey<Particle> DRIPPING_DRIPSTONE_LAVA = RegistryKey.of("dripping_dripstone_lava");
 
-    RegistryKey<Particle> FALLING_DRIPSTONE_LAVA = RegistryKey.unsafeOf("falling_dripstone_lava");
+    RegistryKey<Particle> FALLING_DRIPSTONE_LAVA = RegistryKey.of("falling_dripstone_lava");
 
-    RegistryKey<Particle> DRIPPING_DRIPSTONE_WATER = RegistryKey.unsafeOf("dripping_dripstone_water");
+    RegistryKey<Particle> DRIPPING_DRIPSTONE_WATER = RegistryKey.of("dripping_dripstone_water");
 
-    RegistryKey<Particle> FALLING_DRIPSTONE_WATER = RegistryKey.unsafeOf("falling_dripstone_water");
+    RegistryKey<Particle> FALLING_DRIPSTONE_WATER = RegistryKey.of("falling_dripstone_water");
 
-    RegistryKey<Particle> GLOW_SQUID_INK = RegistryKey.unsafeOf("glow_squid_ink");
+    RegistryKey<Particle> GLOW_SQUID_INK = RegistryKey.of("glow_squid_ink");
 
-    RegistryKey<Particle> GLOW = RegistryKey.unsafeOf("glow");
+    RegistryKey<Particle> GLOW = RegistryKey.of("glow");
 
-    RegistryKey<Particle> WAX_ON = RegistryKey.unsafeOf("wax_on");
+    RegistryKey<Particle> WAX_ON = RegistryKey.of("wax_on");
 
-    RegistryKey<Particle> WAX_OFF = RegistryKey.unsafeOf("wax_off");
+    RegistryKey<Particle> WAX_OFF = RegistryKey.of("wax_off");
 
-    RegistryKey<Particle> ELECTRIC_SPARK = RegistryKey.unsafeOf("electric_spark");
+    RegistryKey<Particle> ELECTRIC_SPARK = RegistryKey.of("electric_spark");
 
-    RegistryKey<Particle> SCRAPE = RegistryKey.unsafeOf("scrape");
+    RegistryKey<Particle> SCRAPE = RegistryKey.of("scrape");
 
-    RegistryKey<Particle.Shriek> SHRIEK = RegistryKey.unsafeOf("shriek");
+    RegistryKey<Particle.Shriek> SHRIEK = RegistryKey.of("shriek");
 
-    RegistryKey<Particle> EGG_CRACK = RegistryKey.unsafeOf("egg_crack");
+    RegistryKey<Particle> EGG_CRACK = RegistryKey.of("egg_crack");
 
-    RegistryKey<Particle> DUST_PLUME = RegistryKey.unsafeOf("dust_plume");
+    RegistryKey<Particle> DUST_PLUME = RegistryKey.of("dust_plume");
 
-    RegistryKey<Particle> TRIAL_SPAWNER_DETECTION = RegistryKey.unsafeOf("trial_spawner_detection");
+    RegistryKey<Particle> TRIAL_SPAWNER_DETECTION = RegistryKey.of("trial_spawner_detection");
 
-    RegistryKey<Particle> TRIAL_SPAWNER_DETECTION_OMINOUS = RegistryKey.unsafeOf("trial_spawner_detection_ominous");
+    RegistryKey<Particle> TRIAL_SPAWNER_DETECTION_OMINOUS = RegistryKey.of("trial_spawner_detection_ominous");
 
-    RegistryKey<Particle> VAULT_CONNECTION = RegistryKey.unsafeOf("vault_connection");
+    RegistryKey<Particle> VAULT_CONNECTION = RegistryKey.of("vault_connection");
 
-    RegistryKey<Particle.DustPillar> DUST_PILLAR = RegistryKey.unsafeOf("dust_pillar");
+    RegistryKey<Particle.DustPillar> DUST_PILLAR = RegistryKey.of("dust_pillar");
 
-    RegistryKey<Particle> OMINOUS_SPAWNING = RegistryKey.unsafeOf("ominous_spawning");
+    RegistryKey<Particle> OMINOUS_SPAWNING = RegistryKey.of("ominous_spawning");
 
-    RegistryKey<Particle> RAID_OMEN = RegistryKey.unsafeOf("raid_omen");
+    RegistryKey<Particle> RAID_OMEN = RegistryKey.of("raid_omen");
 
-    RegistryKey<Particle> TRIAL_OMEN = RegistryKey.unsafeOf("trial_omen");
+    RegistryKey<Particle> TRIAL_OMEN = RegistryKey.of("trial_omen");
 
-    RegistryKey<Particle.BlockCrumble> BLOCK_CRUMBLE = RegistryKey.unsafeOf("block_crumble");
+    RegistryKey<Particle.BlockCrumble> BLOCK_CRUMBLE = RegistryKey.of("block_crumble");
 
-    RegistryKey<Particle> FIREFLY = RegistryKey.unsafeOf("firefly");
+    RegistryKey<Particle> FIREFLY = RegistryKey.of("firefly");
 
-    RegistryKey<Particle> SULFUR_CUBE_GOO = RegistryKey.unsafeOf("sulfur_cube_goo");
+    RegistryKey<Particle> SULFUR_CUBE_GOO = RegistryKey.of("sulfur_cube_goo");
 }

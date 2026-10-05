@@ -9,135 +9,135 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface Biomes permits Biome {
-    RegistryKey<Biome> BADLANDS = RegistryKey.unsafeOf("badlands");
+    RegistryKey<Biome> BADLANDS = RegistryKey.of("badlands");
 
-    RegistryKey<Biome> BAMBOO_JUNGLE = RegistryKey.unsafeOf("bamboo_jungle");
+    RegistryKey<Biome> BAMBOO_JUNGLE = RegistryKey.of("bamboo_jungle");
 
-    RegistryKey<Biome> BASALT_DELTAS = RegistryKey.unsafeOf("basalt_deltas");
+    RegistryKey<Biome> BASALT_DELTAS = RegistryKey.of("basalt_deltas");
 
-    RegistryKey<Biome> BEACH = RegistryKey.unsafeOf("beach");
+    RegistryKey<Biome> BEACH = RegistryKey.of("beach");
 
-    RegistryKey<Biome> BIRCH_FOREST = RegistryKey.unsafeOf("birch_forest");
+    RegistryKey<Biome> BIRCH_FOREST = RegistryKey.of("birch_forest");
 
-    RegistryKey<Biome> CHERRY_GROVE = RegistryKey.unsafeOf("cherry_grove");
+    RegistryKey<Biome> CHERRY_GROVE = RegistryKey.of("cherry_grove");
 
-    RegistryKey<Biome> COLD_OCEAN = RegistryKey.unsafeOf("cold_ocean");
+    RegistryKey<Biome> COLD_OCEAN = RegistryKey.of("cold_ocean");
 
-    RegistryKey<Biome> CRIMSON_FOREST = RegistryKey.unsafeOf("crimson_forest");
+    RegistryKey<Biome> CRIMSON_FOREST = RegistryKey.of("crimson_forest");
 
-    RegistryKey<Biome> DARK_FOREST = RegistryKey.unsafeOf("dark_forest");
+    RegistryKey<Biome> DARK_FOREST = RegistryKey.of("dark_forest");
 
-    RegistryKey<Biome> DEEP_COLD_OCEAN = RegistryKey.unsafeOf("deep_cold_ocean");
+    RegistryKey<Biome> DEEP_COLD_OCEAN = RegistryKey.of("deep_cold_ocean");
 
-    RegistryKey<Biome> DEEP_DARK = RegistryKey.unsafeOf("deep_dark");
+    RegistryKey<Biome> DEEP_DARK = RegistryKey.of("deep_dark");
 
-    RegistryKey<Biome> DEEP_FROZEN_OCEAN = RegistryKey.unsafeOf("deep_frozen_ocean");
+    RegistryKey<Biome> DEEP_FROZEN_OCEAN = RegistryKey.of("deep_frozen_ocean");
 
-    RegistryKey<Biome> DEEP_LUKEWARM_OCEAN = RegistryKey.unsafeOf("deep_lukewarm_ocean");
+    RegistryKey<Biome> DEEP_LUKEWARM_OCEAN = RegistryKey.of("deep_lukewarm_ocean");
 
-    RegistryKey<Biome> DEEP_OCEAN = RegistryKey.unsafeOf("deep_ocean");
+    RegistryKey<Biome> DEEP_OCEAN = RegistryKey.of("deep_ocean");
 
-    RegistryKey<Biome> DESERT = RegistryKey.unsafeOf("desert");
+    RegistryKey<Biome> DESERT = RegistryKey.of("desert");
 
-    RegistryKey<Biome> DRIPSTONE_CAVES = RegistryKey.unsafeOf("dripstone_caves");
+    RegistryKey<Biome> DRIPSTONE_CAVES = RegistryKey.of("dripstone_caves");
 
-    RegistryKey<Biome> END_BARRENS = RegistryKey.unsafeOf("end_barrens");
+    RegistryKey<Biome> END_BARRENS = RegistryKey.of("end_barrens");
 
-    RegistryKey<Biome> END_HIGHLANDS = RegistryKey.unsafeOf("end_highlands");
+    RegistryKey<Biome> END_HIGHLANDS = RegistryKey.of("end_highlands");
 
-    RegistryKey<Biome> END_MIDLANDS = RegistryKey.unsafeOf("end_midlands");
+    RegistryKey<Biome> END_MIDLANDS = RegistryKey.of("end_midlands");
 
-    RegistryKey<Biome> ERODED_BADLANDS = RegistryKey.unsafeOf("eroded_badlands");
+    RegistryKey<Biome> ERODED_BADLANDS = RegistryKey.of("eroded_badlands");
 
-    RegistryKey<Biome> FLOWER_FOREST = RegistryKey.unsafeOf("flower_forest");
+    RegistryKey<Biome> FLOWER_FOREST = RegistryKey.of("flower_forest");
 
-    RegistryKey<Biome> FOREST = RegistryKey.unsafeOf("forest");
+    RegistryKey<Biome> FOREST = RegistryKey.of("forest");
 
-    RegistryKey<Biome> FROZEN_OCEAN = RegistryKey.unsafeOf("frozen_ocean");
+    RegistryKey<Biome> FROZEN_OCEAN = RegistryKey.of("frozen_ocean");
 
-    RegistryKey<Biome> FROZEN_PEAKS = RegistryKey.unsafeOf("frozen_peaks");
+    RegistryKey<Biome> FROZEN_PEAKS = RegistryKey.of("frozen_peaks");
 
-    RegistryKey<Biome> FROZEN_RIVER = RegistryKey.unsafeOf("frozen_river");
+    RegistryKey<Biome> FROZEN_RIVER = RegistryKey.of("frozen_river");
 
-    RegistryKey<Biome> GROVE = RegistryKey.unsafeOf("grove");
+    RegistryKey<Biome> GROVE = RegistryKey.of("grove");
 
-    RegistryKey<Biome> ICE_SPIKES = RegistryKey.unsafeOf("ice_spikes");
+    RegistryKey<Biome> ICE_SPIKES = RegistryKey.of("ice_spikes");
 
-    RegistryKey<Biome> JAGGED_PEAKS = RegistryKey.unsafeOf("jagged_peaks");
+    RegistryKey<Biome> JAGGED_PEAKS = RegistryKey.of("jagged_peaks");
 
-    RegistryKey<Biome> JUNGLE = RegistryKey.unsafeOf("jungle");
+    RegistryKey<Biome> JUNGLE = RegistryKey.of("jungle");
 
-    RegistryKey<Biome> LUKEWARM_OCEAN = RegistryKey.unsafeOf("lukewarm_ocean");
+    RegistryKey<Biome> LUKEWARM_OCEAN = RegistryKey.of("lukewarm_ocean");
 
-    RegistryKey<Biome> LUSH_CAVES = RegistryKey.unsafeOf("lush_caves");
+    RegistryKey<Biome> LUSH_CAVES = RegistryKey.of("lush_caves");
 
-    RegistryKey<Biome> MANGROVE_SWAMP = RegistryKey.unsafeOf("mangrove_swamp");
+    RegistryKey<Biome> MANGROVE_SWAMP = RegistryKey.of("mangrove_swamp");
 
-    RegistryKey<Biome> MEADOW = RegistryKey.unsafeOf("meadow");
+    RegistryKey<Biome> MEADOW = RegistryKey.of("meadow");
 
-    RegistryKey<Biome> MUSHROOM_FIELDS = RegistryKey.unsafeOf("mushroom_fields");
+    RegistryKey<Biome> MUSHROOM_FIELDS = RegistryKey.of("mushroom_fields");
 
-    RegistryKey<Biome> NETHER_WASTES = RegistryKey.unsafeOf("nether_wastes");
+    RegistryKey<Biome> NETHER_WASTES = RegistryKey.of("nether_wastes");
 
-    RegistryKey<Biome> OCEAN = RegistryKey.unsafeOf("ocean");
+    RegistryKey<Biome> OCEAN = RegistryKey.of("ocean");
 
-    RegistryKey<Biome> OLD_GROWTH_BIRCH_FOREST = RegistryKey.unsafeOf("old_growth_birch_forest");
+    RegistryKey<Biome> OLD_GROWTH_BIRCH_FOREST = RegistryKey.of("old_growth_birch_forest");
 
-    RegistryKey<Biome> OLD_GROWTH_PINE_TAIGA = RegistryKey.unsafeOf("old_growth_pine_taiga");
+    RegistryKey<Biome> OLD_GROWTH_PINE_TAIGA = RegistryKey.of("old_growth_pine_taiga");
 
-    RegistryKey<Biome> OLD_GROWTH_SPRUCE_TAIGA = RegistryKey.unsafeOf("old_growth_spruce_taiga");
+    RegistryKey<Biome> OLD_GROWTH_SPRUCE_TAIGA = RegistryKey.of("old_growth_spruce_taiga");
 
-    RegistryKey<Biome> PALE_GARDEN = RegistryKey.unsafeOf("pale_garden");
+    RegistryKey<Biome> PALE_GARDEN = RegistryKey.of("pale_garden");
 
-    RegistryKey<Biome> PLAINS = RegistryKey.unsafeOf("plains");
+    RegistryKey<Biome> PLAINS = RegistryKey.of("plains");
 
-    RegistryKey<Biome> RIVER = RegistryKey.unsafeOf("river");
+    RegistryKey<Biome> RIVER = RegistryKey.of("river");
 
-    RegistryKey<Biome> SAVANNA = RegistryKey.unsafeOf("savanna");
+    RegistryKey<Biome> SAVANNA = RegistryKey.of("savanna");
 
-    RegistryKey<Biome> SAVANNA_PLATEAU = RegistryKey.unsafeOf("savanna_plateau");
+    RegistryKey<Biome> SAVANNA_PLATEAU = RegistryKey.of("savanna_plateau");
 
-    RegistryKey<Biome> SMALL_END_ISLANDS = RegistryKey.unsafeOf("small_end_islands");
+    RegistryKey<Biome> SMALL_END_ISLANDS = RegistryKey.of("small_end_islands");
 
-    RegistryKey<Biome> SNOWY_BEACH = RegistryKey.unsafeOf("snowy_beach");
+    RegistryKey<Biome> SNOWY_BEACH = RegistryKey.of("snowy_beach");
 
-    RegistryKey<Biome> SNOWY_PLAINS = RegistryKey.unsafeOf("snowy_plains");
+    RegistryKey<Biome> SNOWY_PLAINS = RegistryKey.of("snowy_plains");
 
-    RegistryKey<Biome> SNOWY_SLOPES = RegistryKey.unsafeOf("snowy_slopes");
+    RegistryKey<Biome> SNOWY_SLOPES = RegistryKey.of("snowy_slopes");
 
-    RegistryKey<Biome> SNOWY_TAIGA = RegistryKey.unsafeOf("snowy_taiga");
+    RegistryKey<Biome> SNOWY_TAIGA = RegistryKey.of("snowy_taiga");
 
-    RegistryKey<Biome> SOUL_SAND_VALLEY = RegistryKey.unsafeOf("soul_sand_valley");
+    RegistryKey<Biome> SOUL_SAND_VALLEY = RegistryKey.of("soul_sand_valley");
 
-    RegistryKey<Biome> SPARSE_JUNGLE = RegistryKey.unsafeOf("sparse_jungle");
+    RegistryKey<Biome> SPARSE_JUNGLE = RegistryKey.of("sparse_jungle");
 
-    RegistryKey<Biome> STONY_PEAKS = RegistryKey.unsafeOf("stony_peaks");
+    RegistryKey<Biome> STONY_PEAKS = RegistryKey.of("stony_peaks");
 
-    RegistryKey<Biome> STONY_SHORE = RegistryKey.unsafeOf("stony_shore");
+    RegistryKey<Biome> STONY_SHORE = RegistryKey.of("stony_shore");
 
-    RegistryKey<Biome> SULFUR_CAVES = RegistryKey.unsafeOf("sulfur_caves");
+    RegistryKey<Biome> SULFUR_CAVES = RegistryKey.of("sulfur_caves");
 
-    RegistryKey<Biome> SUNFLOWER_PLAINS = RegistryKey.unsafeOf("sunflower_plains");
+    RegistryKey<Biome> SUNFLOWER_PLAINS = RegistryKey.of("sunflower_plains");
 
-    RegistryKey<Biome> SWAMP = RegistryKey.unsafeOf("swamp");
+    RegistryKey<Biome> SWAMP = RegistryKey.of("swamp");
 
-    RegistryKey<Biome> TAIGA = RegistryKey.unsafeOf("taiga");
+    RegistryKey<Biome> TAIGA = RegistryKey.of("taiga");
 
-    RegistryKey<Biome> THE_END = RegistryKey.unsafeOf("the_end");
+    RegistryKey<Biome> THE_END = RegistryKey.of("the_end");
 
-    RegistryKey<Biome> THE_VOID = RegistryKey.unsafeOf("the_void");
+    RegistryKey<Biome> THE_VOID = RegistryKey.of("the_void");
 
-    RegistryKey<Biome> WARM_OCEAN = RegistryKey.unsafeOf("warm_ocean");
+    RegistryKey<Biome> WARM_OCEAN = RegistryKey.of("warm_ocean");
 
-    RegistryKey<Biome> WARPED_FOREST = RegistryKey.unsafeOf("warped_forest");
+    RegistryKey<Biome> WARPED_FOREST = RegistryKey.of("warped_forest");
 
-    RegistryKey<Biome> WINDSWEPT_FOREST = RegistryKey.unsafeOf("windswept_forest");
+    RegistryKey<Biome> WINDSWEPT_FOREST = RegistryKey.of("windswept_forest");
 
-    RegistryKey<Biome> WINDSWEPT_GRAVELLY_HILLS = RegistryKey.unsafeOf("windswept_gravelly_hills");
+    RegistryKey<Biome> WINDSWEPT_GRAVELLY_HILLS = RegistryKey.of("windswept_gravelly_hills");
 
-    RegistryKey<Biome> WINDSWEPT_HILLS = RegistryKey.unsafeOf("windswept_hills");
+    RegistryKey<Biome> WINDSWEPT_HILLS = RegistryKey.of("windswept_hills");
 
-    RegistryKey<Biome> WINDSWEPT_SAVANNA = RegistryKey.unsafeOf("windswept_savanna");
+    RegistryKey<Biome> WINDSWEPT_SAVANNA = RegistryKey.of("windswept_savanna");
 
-    RegistryKey<Biome> WOODED_BADLANDS = RegistryKey.unsafeOf("wooded_badlands");
+    RegistryKey<Biome> WOODED_BADLANDS = RegistryKey.of("wooded_badlands");
 }

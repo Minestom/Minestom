@@ -9,17 +9,17 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface WolfSoundVariants permits WolfSoundVariant {
-    RegistryKey<WolfSoundVariant> ANGRY = RegistryKey.unsafeOf("angry");
+    RegistryKey<WolfSoundVariant> ANGRY = RegistryKey.of("angry");
 
-    RegistryKey<WolfSoundVariant> BIG = RegistryKey.unsafeOf("big");
+    RegistryKey<WolfSoundVariant> BIG = RegistryKey.of("big");
 
-    RegistryKey<WolfSoundVariant> CLASSIC = RegistryKey.unsafeOf("classic");
+    RegistryKey<WolfSoundVariant> CLASSIC = RegistryKey.of("classic");
 
-    RegistryKey<WolfSoundVariant> CUTE = RegistryKey.unsafeOf("cute");
+    RegistryKey<WolfSoundVariant> CUTE = RegistryKey.of("cute");
 
-    RegistryKey<WolfSoundVariant> GRUMPY = RegistryKey.unsafeOf("grumpy");
+    RegistryKey<WolfSoundVariant> GRUMPY = RegistryKey.of("grumpy");
 
-    RegistryKey<WolfSoundVariant> PUGLIN = RegistryKey.unsafeOf("puglin");
+    RegistryKey<WolfSoundVariant> PUGLIN = RegistryKey.of("puglin");
 
-    RegistryKey<WolfSoundVariant> SAD = RegistryKey.unsafeOf("sad");
+    RegistryKey<WolfSoundVariant> SAD = RegistryKey.of("sad");
 }
