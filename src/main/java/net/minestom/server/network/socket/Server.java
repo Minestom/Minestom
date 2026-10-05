@@ -24,9 +24,12 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 public final class Server {
+
+    private volatile ConnectionFactory connectionFactory = PlayerSocketConnection::new;
     private volatile boolean stop;
 
     private final PacketParser.Client packetParser;
+
 
     private @UnknownNullability ServerSocketChannel serverSocket;
     private @UnknownNullability SocketAddress socketAddress;
@@ -93,7 +96,8 @@ public final class Server {
                     configureSocket(client);
                     Thread readThread = readBuilder.unstarted(() -> playerReadLoop(reference.get()));
                     Thread writeThread = writeBuilder.unstarted(() -> playerWriteLoop(reference.get()));
-                    PlayerSocketConnection connection = new PlayerSocketConnection(client, client.getRemoteAddress(), readThread, writeThread);
+                    PlayerSocketConnection connection = connectionFactory.create(client, client.getRemoteAddress(),
+                            readThread, writeThread);
                     reference.set(connection);
                     readThread.start();
                     writeThread.start();
@@ -201,6 +205,14 @@ public final class Server {
     @ApiStatus.Internal
     public PacketParser.Client packetParser() {
         return packetParser;
+    }
+
+    public void setConnectionFactory(ConnectionFactory connectionFactory) {
+        this.connectionFactory = Objects.requireNonNull(connectionFactory);
+    }
+
+    public ConnectionFactory connectionFactory() {
+        return connectionFactory;
     }
 
     public SocketAddress socketAddress() {

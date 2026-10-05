@@ -98,6 +98,65 @@ public final class PacketReading {
         @Nullable T read(PacketRegistry.PacketInfo<? extends T> packetInfo, NetworkBuffer buffer);
     }
 
+    /**
+     * Raw-frame hook applied pre-read on the decompressed slice.
+     * <p>
+     * Only invoked when {@link #intercepts} accepts the peeked id, so unsubscribed
+     * packets stay on the zero-overhead vanilla path.
+     * <p>
+     * Internal plumbing for {@code PacketInterceptor}, direct use is discouraged.
+     */
+    @ApiStatus.Internal
+    public interface FrameHook {
+        /**
+         * Filters packets by id, before any decode.
+         *
+         * @param packetId the peeked packet id
+         * @return true to invoke {@link #transform}, false for the vanilla path
+         */
+        default boolean intercepts(int packetId) {
+            return true;
+        }
+
+        /**
+         * Decides what happens to the current frame.
+         */
+        sealed interface FrameResult {
+            /**
+             * Forwards the frame untouched.
+             * <p>
+             * In-place edits are included, no copy happens.
+             */
+            record Keep() implements FrameResult {
+            }
+
+            /**
+             * Parses the given frame instead of the original.
+             *
+             * @param frame the replacement frame
+             */
+            record Replace(NetworkBuffer frame) implements FrameResult {
+            }
+
+            /**
+             * Skips the packet entirely.
+             */
+            record Drop() implements FrameResult {
+            }
+        }
+
+        /**
+         * Transforms a single frame.
+         *
+         * @param state the connection state the frame was received in
+         * @param frame the mutable frame slice
+         * @return how to continue with the frame
+         */
+        default FrameResult transform(ConnectionState state, NetworkBuffer frame) {
+            return new FrameResult.Keep();
+        }
+    }
+
     public static Result<ClientPacket> readClients(
             NetworkBuffer buffer,
             ConnectionState state,
@@ -132,18 +191,30 @@ public final class PacketReading {
             boolean compressed,
             PacketReader<T> packetReader
     ) throws DataFormatException {
+        return readPackets(buffer, parser, state, stateUpdater, compressed, packetReader, null);
+    }
+
+    public static <T> Result<T> readPackets(
+            NetworkBuffer buffer,
+            PacketParser<T> parser,
+            ConnectionState state,
+            BiFunction<T, ConnectionState, ConnectionState> stateUpdater,
+            boolean compressed,
+            PacketReader<T> packetReader,
+            @Nullable FrameHook frameHook
+    ) throws DataFormatException {
         List<ParsedPacket<T>> packets = new ArrayList<>();
         boolean skipped = false;
-        readLoop:
-        while (buffer.readableBytes() > 0) {
-            final Result<T> result = readPacket(buffer, parser, state, stateUpdater, compressed, packetReader);
+
+        readLoop: while (buffer.readableBytes() > 0) {
+            final Result<T> result = readPacket(buffer, parser, state, stateUpdater, compressed, packetReader, frameHook);
+
             if (buffer.readableBytes() == 0 && packets.isEmpty()) return result;
+
             switch (result) {
                 case Result.Success<T> success -> {
-                    assert success.packets().size() == 1;
-                    final ParsedPacket<T> parsedPacket = success.packets().getFirst();
-                    packets.add(parsedPacket);
-                    state = parsedPacket.nextState();
+                    packets.addAll(success.packets());
+                    state = success.packets().getLast().nextState();
                 }
                 case Result.Skipped<T> _ -> skipped = true;
                 case Result.Empty<T> _ -> {
@@ -154,7 +225,9 @@ public final class PacketReading {
                 }
             }
         }
+
         if (!packets.isEmpty()) return new Result.Success<>(packets);
+
         return skipped ? skippedResult() : emptyResult();
     }
 
@@ -192,6 +265,18 @@ public final class PacketReading {
             boolean compressed,
             PacketReader<T> packetReader
     ) throws DataFormatException {
+        return readPacket(buffer, parser, state, stateUpdater, compressed, packetReader, null);
+    }
+
+    public static <T> Result<T> readPacket(
+            NetworkBuffer buffer,
+            PacketParser<T> parser,
+            ConnectionState state,
+            BiFunction<T, ConnectionState, ConnectionState> stateUpdater,
+            boolean compressed,
+            PacketReader<T> packetReader,
+            @Nullable FrameHook frameHook
+    ) throws DataFormatException {
         final long beginMark = buffer.readIndex();
         // READ PACKET LENGTH
         final int packetLength;
@@ -221,47 +306,83 @@ public final class PacketReading {
             if (requiredCapacity > buffer.capacity()) return new Result.Failure<>(requiredCapacity);
             else return emptyResult();
         }
-        final PacketRegistry<? extends T> registry = parser.stateRegistry(state);
         final long offset = buffer.advanceRead(packetLength); // ensureReadable checked above
-        final NetworkBuffer slice = buffer.slice(offset, packetLength, 0, packetLength).readOnly();
-        final @Nullable T packet = readFramedPacket(slice, registry, compressed, maxPacketSize, packetReader);
-        if (packet == null) return skippedResult();
-        final ConnectionState nextState = stateUpdater.apply(packet, state);
-        return new Result.Success<>(new ParsedPacket<>(nextState, packet));
+        final NetworkBuffer wire = buffer.slice(offset, packetLength, 0, packetLength).readOnly();
+        return readWirePayload(wire, parser, state, stateUpdater, compressed, packetReader, frameHook);
     }
 
-    private static <T> @Nullable T readFramedPacket(NetworkBuffer buffer,
-                                                    PacketRegistry<? extends T> registry,
-                                                    boolean compressed,
-                                                    int maxPacketSize,
-                                                    PacketReader<T> packetReader) throws DataFormatException {
-        if (!compressed) {
-            // No compression format
-            return readPayload(buffer, registry, packetReader);
-        }
-
-        final int dataLength = buffer.read(VAR_INT);
-        if (dataLength == 0) {
-            // Uncompressed packet
-            return readPayload(buffer, registry, packetReader);
-        }
-        if (dataLength < 0 || dataLength > maxPacketSize) {
-            throw new DataFormatException("Invalid decompressed length: " + dataLength);
-        }
-
-        // Decompress the packet into the pooled buffer and read the uncompressed packet from it
-        NetworkBuffer poolBuffer = PacketVanilla.PACKET_POOL.get();
+    /**
+     * Parses one wire frame: decompress, pre-read hook, decode.
+     * <p>
+     * A single wire packet can yield zero, one or several parsed packets: injected
+     * frames from the hook are decoded here with chained states and returned together
+     * in arrival order ({@code before < current < after}).
+     *
+     * @param wire the {@code [dataLength?][packetId + payload]} slice
+     */
+    private static <T> Result<T> readWirePayload(NetworkBuffer wire,
+                                                 PacketParser<T> parser,
+                                                 ConnectionState state,
+                                                 BiFunction<T, ConnectionState, ConnectionState> stateUpdater,
+                                                 boolean compressed,
+                                                 PacketReader<T> packetReader,
+                                                 @Nullable FrameHook frameHook
+    ) throws DataFormatException {
+        final int maxPacketSize = maxPacketSize(state);
+        // With compression the wire frame is [dataLength][id + payload],
+        // so the packet id is only visible on the decompressed payload.
+        NetworkBuffer pooled = null;
+        final NetworkBuffer payload;
         try {
-            if (poolBuffer.capacity() < dataLength) poolBuffer.resize(dataLength);
-            final NetworkBuffer slice = poolBuffer.slice(0, dataLength, 0, 0);
-            slice.registries(buffer.registries());
-            final long written = buffer.decompress(buffer.readIndex(), buffer.readableBytes(), slice);
-            if (written != dataLength) {
-                throw new DataFormatException("Decompressed length mismatch: expected " + dataLength + ", got " + written);
+            if (!compressed) {
+                payload = wire;
+            } else {
+                final int dataLength = wire.read(VAR_INT);
+                if (dataLength == 0) {
+                    payload = wire;
+                } else {
+                    if (dataLength < 0 || dataLength > maxPacketSize)
+                        throw new DataFormatException("Invalid decompressed length: " + dataLength);
+                    pooled = PacketVanilla.PACKET_POOL.get();
+                    if (pooled.capacity() < dataLength) pooled.resize(dataLength);
+                    final NetworkBuffer slice = pooled.slice(0, dataLength, 0, 0);
+                    slice.registries(wire.registries());
+                    final long written = wire.decompress(wire.readIndex(), wire.readableBytes(), slice);
+                    if (written != dataLength)
+                        throw new DataFormatException("Decompressed length mismatch: expected " + dataLength + ", got " + written);
+                    payload = slice.readOnly();
+                }
             }
-            return readPayload(slice.readOnly(), registry, packetReader);
+
+            // Pre-read hook on the decompressed [packetId + payload]. Null hook = vanilla path.
+            NetworkBuffer frame = payload;
+            if (frameHook != null) {
+                final int peekedId;
+                try {
+                    peekedId = frame.readAt(frame.readIndex(), VAR_INT);
+                } catch (IndexOutOfBoundsException _) {
+                    return skippedResult();
+                }
+                if (frameHook.intercepts(peekedId)) {
+                    NetworkBuffer mutable = payload.copy(payload.readIndex(), payload.readableBytes());
+                    final FrameHook.FrameResult hookResult = frameHook.transform(state, mutable);
+                    switch (hookResult) {
+                        case FrameHook.FrameResult.Drop _ -> {
+                            return skippedResult();
+                        }
+                        case FrameHook.FrameResult.Keep _ -> frame = mutable.readOnly();
+                        case FrameHook.FrameResult.Replace(NetworkBuffer replacement) ->
+                                frame = replacement.readOnly();
+                    }
+                }
+            }
+
+            final PacketRegistry<? extends T> registry = parser.stateRegistry(state);
+            final @Nullable T packet = readPayload(frame, registry, packetReader);
+            if (packet == null) return skippedResult();
+            return new Result.Success<>(new ParsedPacket<>(stateUpdater.apply(packet, state), packet));
         } finally {
-            PacketVanilla.PACKET_POOL.add(poolBuffer);
+            if (pooled != null) PacketVanilla.PACKET_POOL.add(pooled);
         }
     }
 

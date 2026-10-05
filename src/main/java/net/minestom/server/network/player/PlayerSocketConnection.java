@@ -106,6 +106,8 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     private final ListenerHandle<PlayerPacketOutEvent> outgoing = EventDispatcher.getHandle(PlayerPacketOutEvent.class);
 
+    private volatile @Nullable PacketInterceptor packetInterceptor;
+
     public PlayerSocketConnection(SocketChannel channel, SocketAddress remoteAddress, Thread readThread, Thread writeThread) {
         super();
         this.channel = channel;
@@ -143,16 +145,47 @@ public class PlayerSocketConnection extends PlayerConnection {
         return compressionStart != Long.MAX_VALUE;
     }
 
+    private final class DefaultFrameHook implements PacketReading.FrameHook {
+
+        private final PacketInterceptor interceptor;
+        private final ConnectionState clientState;
+
+        private DefaultFrameHook(PacketInterceptor interceptor, ConnectionState clientState) {
+            this.interceptor = interceptor;
+            this.clientState = clientState;
+        }
+
+        @Override
+        public boolean intercepts(int packetId) {
+            return interceptor.interceptsIncoming(clientState, packetId);
+        }
+
+        @Override
+        public FrameResult transform(ConnectionState state, NetworkBuffer frame) {
+            final PacketInterceptor.Verdict verdict = interceptor.preRead(PlayerSocketConnection.this, state, frame);
+            return switch (verdict) {
+                case PacketInterceptor.Verdict.Keep _ -> new FrameResult.Keep();
+                case PacketInterceptor.Verdict.Drop _ -> new FrameResult.Drop();
+                case PacketInterceptor.Verdict.Replace(NetworkBuffer replacement) ->
+                        replacement != null ? new FrameResult.Replace(replacement) : new FrameResult.Keep();
+            };
+        }
+    }
+
     private void processPackets(NetworkBuffer readBuffer, PacketParser<ClientPacket> packetParser) {
         final ConnectionState startingState = getClientState();
+        final PacketInterceptor interceptor = this.packetInterceptor;
+        final PacketReading.FrameHook frameHook = interceptor != null ? new DefaultFrameHook(interceptor, startingState) : null;
         final PacketReading.Result<ClientPacket> result;
+
         try {
             result = PacketReading.<ClientPacket>readPackets(
                     readBuffer,
                     packetParser,
                     startingState, PacketVanilla::nextClientState,
                     compression(),
-                    this::readClientPacket
+                    this::readClientPacket,
+                    frameHook
             );
         } catch (Throwable e) {
             // Errors thrown while still in the starting state are usually garbage
@@ -203,6 +236,18 @@ public class PlayerSocketConnection extends PlayerConnection {
                 }
             }
         }
+    }
+
+    /**
+     * Sets the raw-frame packet interceptor for this connection.
+     * {@code null} (default) keeps the vanilla zero-overhead path.
+     */
+    public void setPacketInterceptor(@Nullable PacketInterceptor interceptor) {
+        this.packetInterceptor = interceptor;
+    }
+
+    public @Nullable PacketInterceptor getPacketInterceptor() {
+        return packetInterceptor;
     }
 
     @Nullable ClientPacket readClientPacket(PacketRegistry.PacketInfo<? extends ClientPacket> packetInfo,
@@ -405,8 +450,43 @@ public class PlayerSocketConnection extends PlayerConnection {
                     var nextState = PacketVanilla.nextServerState(serverPacket, state);
                     if (nextState != state) setServerState(nextState);
 
+                    final PacketInterceptor interceptor = this.packetInterceptor;
+                    final long frameStart = buffer.writeIndex();
                     PacketWriting.writeFramedPacket(buffer, state, serverPacket, compressionThreshold);
-                    yield true;
+
+                    if (interceptor == null || !interceptor.interceptsOutgoing(state, serverPacket)) {
+                        yield true;
+                    }
+
+                    // Expose the [packetId + payload] slice, past the length prefixes
+                    final long frameLength = buffer.writeIndex() - frameStart;
+                    NetworkBuffer written = buffer.slice(frameStart, frameLength, 0, frameLength);
+                    // Skip the packet length prefix
+                    written.read(NetworkBuffer.VAR_INT);
+                    // Skip the data length prefix, only present with compression
+                    if (compressed) written.read(NetworkBuffer.VAR_INT);
+
+                    NetworkBuffer frame = written.slice(written.readIndex(), written.readableBytes(),
+                            0, written.readableBytes());
+
+                    final PacketInterceptor.Verdict verdict =
+                            interceptor.postWrite(this, state, serverPacket, frame);
+
+                    yield switch (verdict) {
+                        // In-place edits are already in the buffer
+                        case PacketInterceptor.Verdict.Keep _ -> true;
+                        case PacketInterceptor.Verdict.Replace(NetworkBuffer replacement) -> {
+                            if (replacement == null) yield true;
+
+                            buffer.writeIndex(frameStart);
+                            yield writeFramedReplacement(buffer, replacement, compressed, compressionThreshold);
+                        }
+                        // Rewind, nothing on the wire
+                        case PacketInterceptor.Verdict.Drop _ -> {
+                            buffer.writeIndex(frameStart);
+                            yield true;
+                        }
+                    };
                 }
                 case FramedPacket framedPacket -> {
                     final NetworkBuffer body = framedPacket.body();
@@ -441,6 +521,50 @@ public class PlayerSocketConnection extends PlayerConnection {
         }
         NetworkBuffer.copy(body, index, buffer, buffer.writeIndex(), length);
         buffer.advanceWrite(length);
+        return true;
+    }
+
+    /**
+     * Frames raw {@code [packetId + payload]} bytes for the wire.
+     * <p>
+     * Mirrors the formats written by {@link PacketWriting}.
+     *
+     * @param buffer the destination buffer
+     * @param payload the {@code [packetId + payload]} bytes
+     * @param compressed whether compression is active for this connection
+     * @param compressionThreshold the threshold below which payloads stay uncompressed
+     * @return false when the destination buffer is full, the caller retries with a grown buffer
+     */
+    private static boolean writeFramedReplacement(NetworkBuffer buffer, NetworkBuffer payload,
+                                                  boolean compressed, int compressionThreshold) {
+        final long payloadIndex = payload.readIndex();
+        final long payloadLength = payload.readableBytes();
+        if (!compressed || compressionThreshold <= 0) {
+            final long lengthIndex = buffer.advanceWrite(3);
+            if (!writeBuffer(buffer, payload, payloadIndex, payloadLength)) return false;
+            final long size = buffer.writeIndex() - (lengthIndex + 3);
+            buffer.writeAt(lengthIndex, NetworkBuffer.VAR_INT_3, (int) size);
+            return true;
+        }
+        final long compressedIndex = buffer.advanceWrite(3);
+        final long uncompressedIndex = buffer.advanceWrite(3);
+        final long contentStart = buffer.writeIndex();
+        if (!writeBuffer(buffer, payload, payloadIndex, payloadLength)) return false;
+        final long packetSize = buffer.writeIndex() - contentStart;
+        final boolean compress = packetSize >= compressionThreshold;
+        if (compress) {
+            NetworkBuffer input = PacketVanilla.PACKET_POOL.get();
+            try {
+                if (input.capacity() < packetSize) input.resize(packetSize);
+                NetworkBuffer.copy(buffer, contentStart, input, 0, packetSize);
+                buffer.writeIndex(contentStart);
+                input.compress(0, packetSize, buffer);
+            } finally {
+                PacketVanilla.PACKET_POOL.add(input);
+            }
+        }
+        buffer.writeAt(compressedIndex, NetworkBuffer.VAR_INT_3, (int) (buffer.writeIndex() - uncompressedIndex));
+        buffer.writeAt(uncompressedIndex, NetworkBuffer.VAR_INT_3, compress ? (int) packetSize : 0);
         return true;
     }
 
