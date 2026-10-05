@@ -99,8 +99,6 @@ net.minestom.server.listener
 net.minestom.server.listener.common
 net.minestom.server.listener.manager
 net.minestom.server.listener.preplay
-net.minestom.server.map
-net.minestom.server.map.framebuffers
 net.minestom.server.message
 net.minestom.server.monitoring
 net.minestom.server.network
@@ -127,6 +125,7 @@ net.minestom.server.network.socket
 net.minestom.server.particle
 net.minestom.server.ping
 net.minestom.server.potion
+net.minestom.server.property
 net.minestom.server.recipe
 net.minestom.server.recipe.display
 net.minestom.server.registry
