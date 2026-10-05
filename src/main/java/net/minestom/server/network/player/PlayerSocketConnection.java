@@ -539,19 +539,27 @@ public class PlayerSocketConnection extends PlayerConnection {
                                                   boolean compressed, int compressionThreshold) {
         final long payloadIndex = payload.readIndex();
         final long payloadLength = payload.readableBytes();
+
         if (!compressed || compressionThreshold <= 0) {
             final long lengthIndex = buffer.advanceWrite(3);
+
             if (!writeBuffer(buffer, payload, payloadIndex, payloadLength)) return false;
+
             final long size = buffer.writeIndex() - (lengthIndex + 3);
             buffer.writeAt(lengthIndex, NetworkBuffer.VAR_INT_3, (int) size);
+
             return true;
         }
+
         final long compressedIndex = buffer.advanceWrite(3);
         final long uncompressedIndex = buffer.advanceWrite(3);
         final long contentStart = buffer.writeIndex();
+
         if (!writeBuffer(buffer, payload, payloadIndex, payloadLength)) return false;
+
         final long packetSize = buffer.writeIndex() - contentStart;
         final boolean compress = packetSize >= compressionThreshold;
+
         if (compress) {
             NetworkBuffer input = PacketVanilla.PACKET_POOL.get();
             try {
@@ -563,8 +571,12 @@ public class PlayerSocketConnection extends PlayerConnection {
                 PacketVanilla.PACKET_POOL.add(input);
             }
         }
-        buffer.writeAt(compressedIndex, NetworkBuffer.VAR_INT_3, (int) (buffer.writeIndex() - uncompressedIndex));
+
+        int packetLength = (int) (buffer.writeIndex() - uncompressedIndex);
+
+        buffer.writeAt(compressedIndex, NetworkBuffer.VAR_INT_3, packetLength);
         buffer.writeAt(uncompressedIndex, NetworkBuffer.VAR_INT_3, compress ? (int) packetSize : 0);
+
         return true;
     }
 
