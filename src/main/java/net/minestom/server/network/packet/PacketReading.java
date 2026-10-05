@@ -364,7 +364,8 @@ public final class PacketReading {
                     return skippedResult();
                 }
                 if (frameHook.intercepts(peekedId)) {
-                    NetworkBuffer mutable = payload.copy(payload.readIndex(), payload.readableBytes());
+                    NetworkBuffer mutable = payload.copy(payload.readIndex(), payload.readableBytes(),
+                            0, payload.readableBytes());
                     final FrameHook.FrameResult hookResult = frameHook.transform(state, mutable);
                     switch (hookResult) {
                         case FrameHook.FrameResult.Drop _ -> {
