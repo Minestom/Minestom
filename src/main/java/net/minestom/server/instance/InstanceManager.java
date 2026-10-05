@@ -52,9 +52,34 @@ public final class InstanceManager {
      * @return the created {@link InstanceContainer}
      */
     public InstanceContainer createInstanceContainer(RegistryKey<DimensionType> dimensionType, @Nullable ChunkLoader loader) {
+        return createInstanceContainer(registries, dimensionType, loader);
+    }
+
+    /**
+     * Creates and registers an instance container with the given registry context.
+     *
+     * @param registries the registry context used by the instance
+     * @param dimensionType the dimension type
+     * @param loader the chunk loader, or {@code null} to use the default loader
+     * @return the created instance container
+     * @throws IllegalArgumentException if {@code dimensionType} is not registered in {@code registries}
+     */
+    public InstanceContainer createInstanceContainer(Registries registries, RegistryKey<DimensionType> dimensionType, @Nullable ChunkLoader loader) {
         final InstanceContainer instanceContainer = new InstanceContainer(registries, UUID.randomUUID(), dimensionType, loader, dimensionType.key());
         registerInstance(instanceContainer);
         return instanceContainer;
+    }
+
+    /**
+     * Creates and registers an instance container with the given registry context.
+     *
+     * @param registries the registry context used by the instance
+     * @param dimensionType the dimension type
+     * @return the created instance container
+     * @throws IllegalArgumentException if {@code dimensionType} is not registered in {@code registries}
+     */
+    public InstanceContainer createInstanceContainer(Registries registries, RegistryKey<DimensionType> dimensionType) {
+        return createInstanceContainer(registries, dimensionType, null);
     }
 
     public InstanceContainer createInstanceContainer(RegistryKey<DimensionType> dimensionType) {

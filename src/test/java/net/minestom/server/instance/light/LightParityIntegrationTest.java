@@ -7,6 +7,7 @@ import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.instance.palette.Palette;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.world.DimensionType;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
@@ -34,7 +35,7 @@ public class LightParityIntegrationTest {
 
     @Test
     public void test(Env env) throws URISyntaxException, IOException {
-        Map<Vec, SectionEntry> sections = retrieveSections();
+        Map<Vec, SectionEntry> sections = retrieveSections(env.process().registries());
         // Generate our own light
 
         InstanceContainer instance = (InstanceContainer) env.createFlatInstance();
@@ -131,7 +132,7 @@ public class LightParityIntegrationTest {
     record SectionEntry(Palette blocks, byte[] sky, byte[] block) {
     }
 
-    private static Map<Vec, SectionEntry> retrieveSections() throws IOException, URISyntaxException {
+    private static Map<Vec, SectionEntry> retrieveSections(Registries registries) throws IOException, URISyntaxException {
         var worldDir = Files.createTempDirectory("minestom-light-parity-test");
         var mcaFile = worldDir.resolve("region").resolve("r.0.0.mca");
         Files.createDirectories(mcaFile.getParent());
@@ -139,7 +140,7 @@ public class LightParityIntegrationTest {
             Files.copy(Objects.requireNonNull(is), mcaFile);
         }
 
-        var instance = new InstanceContainer(UUID.randomUUID(), DimensionType.OVERWORLD); // Never registered
+        var instance = new InstanceContainer(registries, UUID.randomUUID(), DimensionType.OVERWORLD); // Never registered
         var anvilLoader = new AnvilLoader(worldDir);
 
         Map<Vec, SectionEntry> sections = new HashMap<>();
