@@ -11,83 +11,83 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("unused")
 @ApiStatus.NonExtendable
 public interface AttributeKeys {
-    RegistryKey<Attribute> AIR_DRAG_MODIFIER = RegistryKey.unsafeOf("air_drag_modifier");
+    RegistryKey<Attribute> AIR_DRAG_MODIFIER = RegistryKey.of("air_drag_modifier");
 
-    RegistryKey<Attribute> ARMOR = RegistryKey.unsafeOf("armor");
+    RegistryKey<Attribute> ARMOR = RegistryKey.of("armor");
 
-    RegistryKey<Attribute> ARMOR_TOUGHNESS = RegistryKey.unsafeOf("armor_toughness");
+    RegistryKey<Attribute> ARMOR_TOUGHNESS = RegistryKey.of("armor_toughness");
 
-    RegistryKey<Attribute> ATTACK_DAMAGE = RegistryKey.unsafeOf("attack_damage");
+    RegistryKey<Attribute> ATTACK_DAMAGE = RegistryKey.of("attack_damage");
 
-    RegistryKey<Attribute> ATTACK_KNOCKBACK = RegistryKey.unsafeOf("attack_knockback");
+    RegistryKey<Attribute> ATTACK_KNOCKBACK = RegistryKey.of("attack_knockback");
 
-    RegistryKey<Attribute> ATTACK_SPEED = RegistryKey.unsafeOf("attack_speed");
+    RegistryKey<Attribute> ATTACK_SPEED = RegistryKey.of("attack_speed");
 
-    RegistryKey<Attribute> BELOW_NAME_DISTANCE = RegistryKey.unsafeOf("below_name_distance");
+    RegistryKey<Attribute> BELOW_NAME_DISTANCE = RegistryKey.of("below_name_distance");
 
-    RegistryKey<Attribute> BLOCK_BREAK_SPEED = RegistryKey.unsafeOf("block_break_speed");
+    RegistryKey<Attribute> BLOCK_BREAK_SPEED = RegistryKey.of("block_break_speed");
 
-    RegistryKey<Attribute> BLOCK_INTERACTION_RANGE = RegistryKey.unsafeOf("block_interaction_range");
+    RegistryKey<Attribute> BLOCK_INTERACTION_RANGE = RegistryKey.of("block_interaction_range");
 
-    RegistryKey<Attribute> BOUNCINESS = RegistryKey.unsafeOf("bounciness");
+    RegistryKey<Attribute> BOUNCINESS = RegistryKey.of("bounciness");
 
-    RegistryKey<Attribute> BURNING_TIME = RegistryKey.unsafeOf("burning_time");
+    RegistryKey<Attribute> BURNING_TIME = RegistryKey.of("burning_time");
 
-    RegistryKey<Attribute> CAMERA_DISTANCE = RegistryKey.unsafeOf("camera_distance");
+    RegistryKey<Attribute> CAMERA_DISTANCE = RegistryKey.of("camera_distance");
 
-    RegistryKey<Attribute> ENTITY_INTERACTION_RANGE = RegistryKey.unsafeOf("entity_interaction_range");
+    RegistryKey<Attribute> ENTITY_INTERACTION_RANGE = RegistryKey.of("entity_interaction_range");
 
-    RegistryKey<Attribute> EXPLOSION_KNOCKBACK_RESISTANCE = RegistryKey.unsafeOf("explosion_knockback_resistance");
+    RegistryKey<Attribute> EXPLOSION_KNOCKBACK_RESISTANCE = RegistryKey.of("explosion_knockback_resistance");
 
-    RegistryKey<Attribute> FALL_DAMAGE_MULTIPLIER = RegistryKey.unsafeOf("fall_damage_multiplier");
+    RegistryKey<Attribute> FALL_DAMAGE_MULTIPLIER = RegistryKey.of("fall_damage_multiplier");
 
-    RegistryKey<Attribute> FLYING_SPEED = RegistryKey.unsafeOf("flying_speed");
+    RegistryKey<Attribute> FLYING_SPEED = RegistryKey.of("flying_speed");
 
-    RegistryKey<Attribute> FOLLOW_RANGE = RegistryKey.unsafeOf("follow_range");
+    RegistryKey<Attribute> FOLLOW_RANGE = RegistryKey.of("follow_range");
 
-    RegistryKey<Attribute> FRICTION_MODIFIER = RegistryKey.unsafeOf("friction_modifier");
+    RegistryKey<Attribute> FRICTION_MODIFIER = RegistryKey.of("friction_modifier");
 
-    RegistryKey<Attribute> GRAVITY = RegistryKey.unsafeOf("gravity");
+    RegistryKey<Attribute> GRAVITY = RegistryKey.of("gravity");
 
-    RegistryKey<Attribute> JUMP_STRENGTH = RegistryKey.unsafeOf("jump_strength");
+    RegistryKey<Attribute> JUMP_STRENGTH = RegistryKey.of("jump_strength");
 
-    RegistryKey<Attribute> KNOCKBACK_RESISTANCE = RegistryKey.unsafeOf("knockback_resistance");
+    RegistryKey<Attribute> KNOCKBACK_RESISTANCE = RegistryKey.of("knockback_resistance");
 
-    RegistryKey<Attribute> LUCK = RegistryKey.unsafeOf("luck");
+    RegistryKey<Attribute> LUCK = RegistryKey.of("luck");
 
-    RegistryKey<Attribute> MAX_ABSORPTION = RegistryKey.unsafeOf("max_absorption");
+    RegistryKey<Attribute> MAX_ABSORPTION = RegistryKey.of("max_absorption");
 
-    RegistryKey<Attribute> MAX_HEALTH = RegistryKey.unsafeOf("max_health");
+    RegistryKey<Attribute> MAX_HEALTH = RegistryKey.of("max_health");
 
-    RegistryKey<Attribute> MINING_EFFICIENCY = RegistryKey.unsafeOf("mining_efficiency");
+    RegistryKey<Attribute> MINING_EFFICIENCY = RegistryKey.of("mining_efficiency");
 
-    RegistryKey<Attribute> MOVEMENT_EFFICIENCY = RegistryKey.unsafeOf("movement_efficiency");
+    RegistryKey<Attribute> MOVEMENT_EFFICIENCY = RegistryKey.of("movement_efficiency");
 
-    RegistryKey<Attribute> MOVEMENT_SPEED = RegistryKey.unsafeOf("movement_speed");
+    RegistryKey<Attribute> MOVEMENT_SPEED = RegistryKey.of("movement_speed");
 
-    RegistryKey<Attribute> NAME_TAG_DISTANCE = RegistryKey.unsafeOf("name_tag_distance");
+    RegistryKey<Attribute> NAME_TAG_DISTANCE = RegistryKey.of("name_tag_distance");
 
-    RegistryKey<Attribute> OXYGEN_BONUS = RegistryKey.unsafeOf("oxygen_bonus");
+    RegistryKey<Attribute> OXYGEN_BONUS = RegistryKey.of("oxygen_bonus");
 
-    RegistryKey<Attribute> SAFE_FALL_DISTANCE = RegistryKey.unsafeOf("safe_fall_distance");
+    RegistryKey<Attribute> SAFE_FALL_DISTANCE = RegistryKey.of("safe_fall_distance");
 
-    RegistryKey<Attribute> SCALE = RegistryKey.unsafeOf("scale");
+    RegistryKey<Attribute> SCALE = RegistryKey.of("scale");
 
-    RegistryKey<Attribute> SNEAKING_SPEED = RegistryKey.unsafeOf("sneaking_speed");
+    RegistryKey<Attribute> SNEAKING_SPEED = RegistryKey.of("sneaking_speed");
 
-    RegistryKey<Attribute> SPAWN_REINFORCEMENTS = RegistryKey.unsafeOf("spawn_reinforcements");
+    RegistryKey<Attribute> SPAWN_REINFORCEMENTS = RegistryKey.of("spawn_reinforcements");
 
-    RegistryKey<Attribute> STEP_HEIGHT = RegistryKey.unsafeOf("step_height");
+    RegistryKey<Attribute> STEP_HEIGHT = RegistryKey.of("step_height");
 
-    RegistryKey<Attribute> SUBMERGED_MINING_SPEED = RegistryKey.unsafeOf("submerged_mining_speed");
+    RegistryKey<Attribute> SUBMERGED_MINING_SPEED = RegistryKey.of("submerged_mining_speed");
 
-    RegistryKey<Attribute> SWEEPING_DAMAGE_RATIO = RegistryKey.unsafeOf("sweeping_damage_ratio");
+    RegistryKey<Attribute> SWEEPING_DAMAGE_RATIO = RegistryKey.of("sweeping_damage_ratio");
 
-    RegistryKey<Attribute> TEMPT_RANGE = RegistryKey.unsafeOf("tempt_range");
+    RegistryKey<Attribute> TEMPT_RANGE = RegistryKey.of("tempt_range");
 
-    RegistryKey<Attribute> WATER_MOVEMENT_EFFICIENCY = RegistryKey.unsafeOf("water_movement_efficiency");
+    RegistryKey<Attribute> WATER_MOVEMENT_EFFICIENCY = RegistryKey.of("water_movement_efficiency");
 
-    RegistryKey<Attribute> WAYPOINT_RECEIVE_RANGE = RegistryKey.unsafeOf("waypoint_receive_range");
+    RegistryKey<Attribute> WAYPOINT_RECEIVE_RANGE = RegistryKey.of("waypoint_receive_range");
 
-    RegistryKey<Attribute> WAYPOINT_TRANSMIT_RANGE = RegistryKey.unsafeOf("waypoint_transmit_range");
+    RegistryKey<Attribute> WAYPOINT_TRANSMIT_RANGE = RegistryKey.of("waypoint_transmit_range");
 }

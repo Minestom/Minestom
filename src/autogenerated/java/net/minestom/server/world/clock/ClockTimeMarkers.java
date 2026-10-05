@@ -9,17 +9,17 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface ClockTimeMarkers permits ClockTimeMarker {
-    RegistryKey<ClockTimeMarker> CLOCK_TIME_MARKER = RegistryKey.unsafeOf("clock_time_marker");
+    RegistryKey<ClockTimeMarker> CLOCK_TIME_MARKER = RegistryKey.of("clock_time_marker");
 
-    RegistryKey<ClockTimeMarker> DAY = RegistryKey.unsafeOf("day");
+    RegistryKey<ClockTimeMarker> DAY = RegistryKey.of("day");
 
-    RegistryKey<ClockTimeMarker> MIDNIGHT = RegistryKey.unsafeOf("midnight");
+    RegistryKey<ClockTimeMarker> MIDNIGHT = RegistryKey.of("midnight");
 
-    RegistryKey<ClockTimeMarker> NIGHT = RegistryKey.unsafeOf("night");
+    RegistryKey<ClockTimeMarker> NIGHT = RegistryKey.of("night");
 
-    RegistryKey<ClockTimeMarker> NOON = RegistryKey.unsafeOf("noon");
+    RegistryKey<ClockTimeMarker> NOON = RegistryKey.of("noon");
 
-    RegistryKey<ClockTimeMarker> ROLL_VILLAGE_SIEGE = RegistryKey.unsafeOf("roll_village_siege");
+    RegistryKey<ClockTimeMarker> ROLL_VILLAGE_SIEGE = RegistryKey.of("roll_village_siege");
 
-    RegistryKey<ClockTimeMarker> WAKE_UP_FROM_SLEEP = RegistryKey.unsafeOf("wake_up_from_sleep");
+    RegistryKey<ClockTimeMarker> WAKE_UP_FROM_SLEEP = RegistryKey.of("wake_up_from_sleep");
 }

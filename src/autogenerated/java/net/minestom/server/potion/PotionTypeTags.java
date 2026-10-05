@@ -11,13 +11,13 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("unused")
 @ApiStatus.NonExtendable
 public interface PotionTypeTags {
-    TagKey<PotionType> DOUSES_FIRE = TagKey.unsafeOf("douses_fire");
+    TagKey<PotionType> DOUSES_FIRE = TagKey.of("douses_fire");
 
-    TagKey<PotionType> EXTINGUISHES_ENTITIES = TagKey.unsafeOf("extinguishes_entities");
+    TagKey<PotionType> EXTINGUISHES_ENTITIES = TagKey.of("extinguishes_entities");
 
-    TagKey<PotionType> HURTS_WATER_SENSITIVE_ENTITIES = TagKey.unsafeOf("hurts_water_sensitive_entities");
+    TagKey<PotionType> HURTS_WATER_SENSITIVE_ENTITIES = TagKey.of("hurts_water_sensitive_entities");
 
-    TagKey<PotionType> REHYDRATES_AXOLOTLS = TagKey.unsafeOf("rehydrates_axolotls");
+    TagKey<PotionType> REHYDRATES_AXOLOTLS = TagKey.of("rehydrates_axolotls");
 
-    TagKey<PotionType> TRADEABLE = TagKey.unsafeOf("tradeable");
+    TagKey<PotionType> TRADEABLE = TagKey.of("tradeable");
 }

@@ -103,23 +103,83 @@ public class InstanceContainer extends Instance {
     protected InstanceContainer srcInstance; // only present if this instance has been created using a copy
     private volatile long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
 
+    /**
+     * Creates an instance container.
+     *
+     * @param uuid the instance ID
+     * @param dimensionType the dimension type
+     * @deprecated use {@link #InstanceContainer(Registries, UUID, RegistryKey)} to choose the registry context explicitly
+     */
+    @Deprecated
     public InstanceContainer(UUID uuid, RegistryKey<DimensionType> dimensionType) {
         this(uuid, dimensionType, null, dimensionType.key());
     }
 
+    /**
+     * Creates an instance container.
+     *
+     * @param uuid the instance ID
+     * @param dimensionType the dimension type
+     * @param dimensionName the dimension name sent to clients
+     * @deprecated use {@link #InstanceContainer(Registries, UUID, RegistryKey, ChunkLoader, Key)} to choose the registry
+     * context explicitly
+     */
+    @Deprecated
     public InstanceContainer(UUID uuid, RegistryKey<DimensionType> dimensionType, Key dimensionName) {
         this(uuid, dimensionType, null, dimensionName);
     }
 
+    /**
+     * Creates an instance container.
+     *
+     * @param uuid the instance ID
+     * @param dimensionType the dimension type
+     * @param loader the chunk loader, or {@code null} to use the default loader
+     * @deprecated use {@link #InstanceContainer(Registries, UUID, RegistryKey, ChunkLoader, Key)} to choose the registry
+     * context explicitly
+     */
+    @Deprecated
     public InstanceContainer(UUID uuid, RegistryKey<DimensionType> dimensionType, @Nullable ChunkLoader loader) {
         this(uuid, dimensionType, loader, dimensionType.key());
     }
 
-    @SuppressWarnings("this-escape") // deliberate self registration during construction
+    /**
+     * Creates an instance container.
+     *
+     * @param uuid the instance ID
+     * @param dimensionType the dimension type
+     * @param loader the chunk loader, or {@code null} to use the default loader
+     * @param dimensionName the dimension name sent to clients
+     * @deprecated use {@link #InstanceContainer(Registries, UUID, RegistryKey, ChunkLoader, Key)} to choose the registry
+     * context explicitly
+     */
+    @Deprecated
     public InstanceContainer(UUID uuid, RegistryKey<DimensionType> dimensionType, @Nullable ChunkLoader loader, Key dimensionName) {
         this(MinecraftServer.getRegistries(), uuid, dimensionType, loader, dimensionName);
     }
 
+    /**
+     * Creates an instance container whose dimension name is taken from its dimension type.
+     *
+     * @param registries the registry context used by the instance
+     * @param uuid the instance ID
+     * @param dimensionType the dimension type
+     * @throws IllegalArgumentException if {@code dimensionType} is not registered in {@code registries}
+     */
+    public InstanceContainer(Registries registries, UUID uuid, RegistryKey<DimensionType> dimensionType) {
+        this(registries, uuid, dimensionType, null, dimensionType.key());
+    }
+
+    /**
+     * Creates an instance container with the given registry context and dimension name.
+     *
+     * @param registries the registry context used by the instance
+     * @param uuid the instance ID
+     * @param dimensionType the dimension type
+     * @param loader the chunk loader, or {@code null} to use the default loader
+     * @param dimensionName the dimension name sent to clients
+     * @throws IllegalArgumentException if {@code dimensionType} is not registered in {@code registries}
+     */
     @SuppressWarnings("this-escape") // deliberate self registration during construction
     public InstanceContainer(
             Registries registries,

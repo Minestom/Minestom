@@ -9,9 +9,9 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface PigSoundVariants permits PigSoundVariant {
-    RegistryKey<PigSoundVariant> BIG = RegistryKey.unsafeOf("big");
+    RegistryKey<PigSoundVariant> BIG = RegistryKey.of("big");
 
-    RegistryKey<PigSoundVariant> CLASSIC = RegistryKey.unsafeOf("classic");
+    RegistryKey<PigSoundVariant> CLASSIC = RegistryKey.of("classic");
 
-    RegistryKey<PigSoundVariant> MINI = RegistryKey.unsafeOf("mini");
+    RegistryKey<PigSoundVariant> MINI = RegistryKey.of("mini");
 }

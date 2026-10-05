@@ -20,7 +20,7 @@ record BuiltinRegistriesGenerator(Codegen codegen) {
         final ParameterizedTypeName registryType = ParameterizedTypeName.get(registryClass, valueClass);
         constants.addField(FieldSpec.builder(ParameterizedTypeName.get(registryKeyClass, registryType), constantName)
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                .initializer("$T.unsafeOf($S)", registryKeyClass, key)
+                .initializer("$T.of($S)", registryKeyClass, key)
                 .addJavadoc("The registry key for {@link $T}.\n", valueClass)
                 .build());
     }
@@ -49,7 +49,7 @@ record BuiltinRegistriesGenerator(Codegen codegen) {
                     final String constantName = codegen.constantName(spec.constantName());
                     constants.addField(FieldSpec.builder(typedRegistryKey, constantName)
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                            .initializer("$T.unsafeOf($S)", registryKeyClass, codegen.namespaceShort(spec.key()))
+                            .initializer("$T.of($S)", registryKeyClass, codegen.namespaceShort(spec.key()))
                             .addJavadoc("The registry key for {@link $T}.\n", valueClass)
                             .build());
                 });
@@ -63,7 +63,7 @@ record BuiltinRegistriesGenerator(Codegen codegen) {
         final ParameterizedTypeName gameRuleRegistry = ParameterizedTypeName.get(registryClass, gameRuleType);
         constants.addField(FieldSpec.builder(ParameterizedTypeName.get(registryKeyClass, gameRuleRegistry), "GAME_RULE")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                .initializer("$T.unsafeOf($S)", registryKeyClass, "game_rule")
+                .initializer("$T.of($S)", registryKeyClass, "game_rule")
                 .addJavadoc("The registry key for {@link $T}.\n", gameRuleClass)
                 .build());
 

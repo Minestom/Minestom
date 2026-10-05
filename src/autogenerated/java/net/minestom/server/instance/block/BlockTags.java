@@ -11,603 +11,603 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("unused")
 @ApiStatus.NonExtendable
 public interface BlockTags {
-    TagKey<Block> ACACIA_LOGS = TagKey.unsafeOf("acacia_logs");
+    TagKey<Block> ACACIA_LOGS = TagKey.of("acacia_logs");
 
-    TagKey<Block> AIR = TagKey.unsafeOf("air");
+    TagKey<Block> AIR = TagKey.of("air");
 
-    TagKey<Block> ALL_HANGING_SIGNS = TagKey.unsafeOf("all_hanging_signs");
+    TagKey<Block> ALL_HANGING_SIGNS = TagKey.of("all_hanging_signs");
 
-    TagKey<Block> ALL_SIGNS = TagKey.unsafeOf("all_signs");
+    TagKey<Block> ALL_SIGNS = TagKey.of("all_signs");
 
-    TagKey<Block> ANCIENT_CITY_REPLACEABLE = TagKey.unsafeOf("ancient_city_replaceable");
+    TagKey<Block> ANCIENT_CITY_REPLACEABLE = TagKey.of("ancient_city_replaceable");
 
-    TagKey<Block> ANIMALS_SPAWNABLE_ON = TagKey.unsafeOf("animals_spawnable_on");
+    TagKey<Block> ANIMALS_SPAWNABLE_ON = TagKey.of("animals_spawnable_on");
 
-    TagKey<Block> ANVIL = TagKey.unsafeOf("anvil");
+    TagKey<Block> ANVIL = TagKey.of("anvil");
 
-    TagKey<Block> ARMADILLO_SPAWNABLE_ON = TagKey.unsafeOf("armadillo_spawnable_on");
+    TagKey<Block> ARMADILLO_SPAWNABLE_ON = TagKey.of("armadillo_spawnable_on");
 
-    TagKey<Block> AXOLOTLS_SPAWNABLE_ON = TagKey.unsafeOf("axolotls_spawnable_on");
+    TagKey<Block> AXOLOTLS_SPAWNABLE_ON = TagKey.of("axolotls_spawnable_on");
 
-    TagKey<Block> AZALEA_GROWS_ON = TagKey.unsafeOf("azalea_grows_on");
+    TagKey<Block> AZALEA_GROWS_ON = TagKey.of("azalea_grows_on");
 
-    TagKey<Block> AZALEA_ROOT_REPLACEABLE = TagKey.unsafeOf("azalea_root_replaceable");
+    TagKey<Block> AZALEA_ROOT_REPLACEABLE = TagKey.of("azalea_root_replaceable");
 
-    TagKey<Block> BADLANDS_TERRACOTTA = TagKey.unsafeOf("badlands_terracotta");
+    TagKey<Block> BADLANDS_TERRACOTTA = TagKey.of("badlands_terracotta");
 
-    TagKey<Block> BAMBOO_BLOCKS = TagKey.unsafeOf("bamboo_blocks");
+    TagKey<Block> BAMBOO_BLOCKS = TagKey.of("bamboo_blocks");
 
-    TagKey<Block> BANNERS = TagKey.unsafeOf("banners");
+    TagKey<Block> BANNERS = TagKey.of("banners");
 
-    TagKey<Block> BARS = TagKey.unsafeOf("bars");
+    TagKey<Block> BARS = TagKey.of("bars");
 
-    TagKey<Block> BASE_STONE_NETHER = TagKey.unsafeOf("base_stone_nether");
+    TagKey<Block> BASE_STONE_NETHER = TagKey.of("base_stone_nether");
 
-    TagKey<Block> BASE_STONE_OVERWORLD = TagKey.unsafeOf("base_stone_overworld");
+    TagKey<Block> BASE_STONE_OVERWORLD = TagKey.of("base_stone_overworld");
 
-    TagKey<Block> BATS_SPAWNABLE_ON = TagKey.unsafeOf("bats_spawnable_on");
+    TagKey<Block> BATS_SPAWNABLE_ON = TagKey.of("bats_spawnable_on");
 
-    TagKey<Block> BEACON_BASE_BLOCKS = TagKey.unsafeOf("beacon_base_blocks");
+    TagKey<Block> BEACON_BASE_BLOCKS = TagKey.of("beacon_base_blocks");
 
-    TagKey<Block> BEDS = TagKey.unsafeOf("beds");
+    TagKey<Block> BEDS = TagKey.of("beds");
 
-    TagKey<Block> BEE_ATTRACTIVE = TagKey.unsafeOf("bee_attractive");
+    TagKey<Block> BEE_ATTRACTIVE = TagKey.of("bee_attractive");
 
-    TagKey<Block> BEE_GROWABLES = TagKey.unsafeOf("bee_growables");
+    TagKey<Block> BEE_GROWABLES = TagKey.of("bee_growables");
 
-    TagKey<Block> BEEHIVES = TagKey.unsafeOf("beehives");
+    TagKey<Block> BEEHIVES = TagKey.of("beehives");
 
-    TagKey<Block> BENEATH_BAMBOO_PODZOL_REPLACEABLE = TagKey.unsafeOf("beneath_bamboo_podzol_replaceable");
+    TagKey<Block> BENEATH_BAMBOO_PODZOL_REPLACEABLE = TagKey.of("beneath_bamboo_podzol_replaceable");
 
-    TagKey<Block> BENEATH_TREE_PODZOL_REPLACEABLE = TagKey.unsafeOf("beneath_tree_podzol_replaceable");
+    TagKey<Block> BENEATH_TREE_PODZOL_REPLACEABLE = TagKey.of("beneath_tree_podzol_replaceable");
 
-    TagKey<Block> BIRCH_LOGS = TagKey.unsafeOf("birch_logs");
+    TagKey<Block> BIRCH_LOGS = TagKey.of("birch_logs");
 
-    TagKey<Block> BLOCKS_DOLPHIN_JUMP = TagKey.unsafeOf("blocks_dolphin_jump");
+    TagKey<Block> BLOCKS_DOLPHIN_JUMP = TagKey.of("blocks_dolphin_jump");
 
-    TagKey<Block> BLOCKS_FLUID_FLOW = TagKey.unsafeOf("blocks_fluid_flow");
+    TagKey<Block> BLOCKS_FLUID_FLOW = TagKey.of("blocks_fluid_flow");
 
-    TagKey<Block> BLOCKS_LAVA_FIRE_SPREAD = TagKey.unsafeOf("blocks_lava_fire_spread");
+    TagKey<Block> BLOCKS_LAVA_FIRE_SPREAD = TagKey.of("blocks_lava_fire_spread");
 
-    TagKey<Block> BLOCKS_MOTION = TagKey.unsafeOf("blocks_motion");
+    TagKey<Block> BLOCKS_MOTION = TagKey.of("blocks_motion");
 
-    TagKey<Block> BLOCKS_MOTION_IN_HEIGHTMAP = TagKey.unsafeOf("blocks_motion_in_heightmap");
+    TagKey<Block> BLOCKS_MOTION_IN_HEIGHTMAP = TagKey.of("blocks_motion_in_heightmap");
 
-    TagKey<Block> BLOCKS_MOTION_IN_HEIGHTMAP_NO_LEAVES = TagKey.unsafeOf("blocks_motion_in_heightmap_no_leaves");
+    TagKey<Block> BLOCKS_MOTION_IN_HEIGHTMAP_NO_LEAVES = TagKey.of("blocks_motion_in_heightmap_no_leaves");
 
-    TagKey<Block> BLOCKS_MOTION_NO_LEAVES = TagKey.unsafeOf("blocks_motion_no_leaves");
+    TagKey<Block> BLOCKS_MOTION_NO_LEAVES = TagKey.of("blocks_motion_no_leaves");
 
-    TagKey<Block> BLOCKS_WIND_CHARGE_EXPLOSIONS = TagKey.unsafeOf("blocks_wind_charge_explosions");
+    TagKey<Block> BLOCKS_WIND_CHARGE_EXPLOSIONS = TagKey.of("blocks_wind_charge_explosions");
 
-    TagKey<Block> BUTTONS = TagKey.unsafeOf("buttons");
+    TagKey<Block> BUTTONS = TagKey.of("buttons");
 
-    TagKey<Block> CAMEL_SAND_STEP_SOUND_BLOCKS = TagKey.unsafeOf("camel_sand_step_sound_blocks");
+    TagKey<Block> CAMEL_SAND_STEP_SOUND_BLOCKS = TagKey.of("camel_sand_step_sound_blocks");
 
-    TagKey<Block> CAMELS_SPAWNABLE_ON = TagKey.unsafeOf("camels_spawnable_on");
+    TagKey<Block> CAMELS_SPAWNABLE_ON = TagKey.of("camels_spawnable_on");
 
-    TagKey<Block> CAMPFIRES = TagKey.unsafeOf("campfires");
+    TagKey<Block> CAMPFIRES = TagKey.of("campfires");
 
-    TagKey<Block> CAN_GLIDE_THROUGH = TagKey.unsafeOf("can_glide_through");
+    TagKey<Block> CAN_GLIDE_THROUGH = TagKey.of("can_glide_through");
 
-    TagKey<Block> CANDLE_CAKES = TagKey.unsafeOf("candle_cakes");
+    TagKey<Block> CANDLE_CAKES = TagKey.of("candle_cakes");
 
-    TagKey<Block> CANDLES = TagKey.unsafeOf("candles");
+    TagKey<Block> CANDLES = TagKey.of("candles");
 
-    TagKey<Block> CANNOT_PLACE_BASALT_PILLAR_ON = TagKey.unsafeOf("cannot_place_basalt_pillar_on");
+    TagKey<Block> CANNOT_PLACE_BASALT_PILLAR_ON = TagKey.of("cannot_place_basalt_pillar_on");
 
-    TagKey<Block> CANNOT_REPLACE_BELOW_TREE_TRUNK = TagKey.unsafeOf("cannot_replace_below_tree_trunk");
+    TagKey<Block> CANNOT_REPLACE_BELOW_TREE_TRUNK = TagKey.of("cannot_replace_below_tree_trunk");
 
-    TagKey<Block> CANNOT_SUPPORT_KELP = TagKey.unsafeOf("cannot_support_kelp");
+    TagKey<Block> CANNOT_SUPPORT_KELP = TagKey.of("cannot_support_kelp");
 
-    TagKey<Block> CANNOT_SUPPORT_SEAGRASS = TagKey.unsafeOf("cannot_support_seagrass");
+    TagKey<Block> CANNOT_SUPPORT_SEAGRASS = TagKey.of("cannot_support_seagrass");
 
-    TagKey<Block> CANNOT_SUPPORT_SNOW_LAYER = TagKey.unsafeOf("cannot_support_snow_layer");
+    TagKey<Block> CANNOT_SUPPORT_SNOW_LAYER = TagKey.of("cannot_support_snow_layer");
 
-    TagKey<Block> CAT_DOES_NOT_TELEPORT_TO = TagKey.unsafeOf("cat_does_not_teleport_to");
+    TagKey<Block> CAT_DOES_NOT_TELEPORT_TO = TagKey.of("cat_does_not_teleport_to");
 
-    TagKey<Block> CATS_CAN_LIE_ON = TagKey.unsafeOf("cats_can_lie_on");
+    TagKey<Block> CATS_CAN_LIE_ON = TagKey.of("cats_can_lie_on");
 
-    TagKey<Block> CATS_CAN_SIT_ON = TagKey.unsafeOf("cats_can_sit_on");
+    TagKey<Block> CATS_CAN_SIT_ON = TagKey.of("cats_can_sit_on");
 
-    TagKey<Block> CAULDRONS = TagKey.unsafeOf("cauldrons");
+    TagKey<Block> CAULDRONS = TagKey.of("cauldrons");
 
-    TagKey<Block> CAUSES_CONTINUOUS_GEYSER_ERUPTIONS = TagKey.unsafeOf("causes_continuous_geyser_eruptions");
+    TagKey<Block> CAUSES_CONTINUOUS_GEYSER_ERUPTIONS = TagKey.of("causes_continuous_geyser_eruptions");
 
-    TagKey<Block> CAUSES_PERIODIC_GEYSER_ERUPTIONS = TagKey.unsafeOf("causes_periodic_geyser_eruptions");
+    TagKey<Block> CAUSES_PERIODIC_GEYSER_ERUPTIONS = TagKey.of("causes_periodic_geyser_eruptions");
 
-    TagKey<Block> CAUSES_SUFFOCATION = TagKey.unsafeOf("causes_suffocation");
+    TagKey<Block> CAUSES_SUFFOCATION = TagKey.of("causes_suffocation");
 
-    TagKey<Block> CAVE_VINES = TagKey.unsafeOf("cave_vines");
+    TagKey<Block> CAVE_VINES = TagKey.of("cave_vines");
 
-    TagKey<Block> CEILING_HANGING_SIGNS = TagKey.unsafeOf("ceiling_hanging_signs");
+    TagKey<Block> CEILING_HANGING_SIGNS = TagKey.of("ceiling_hanging_signs");
 
-    TagKey<Block> CHAINS = TagKey.unsafeOf("chains");
+    TagKey<Block> CHAINS = TagKey.of("chains");
 
-    TagKey<Block> CHERRY_LOGS = TagKey.unsafeOf("cherry_logs");
+    TagKey<Block> CHERRY_LOGS = TagKey.of("cherry_logs");
 
-    TagKey<Block> CLIMBABLE = TagKey.unsafeOf("climbable");
+    TagKey<Block> CLIMBABLE = TagKey.of("climbable");
 
-    TagKey<Block> COAL_ORES = TagKey.unsafeOf("coal_ores");
+    TagKey<Block> COAL_ORES = TagKey.of("coal_ores");
 
-    TagKey<Block> COMBINATION_STEP_SOUND_BLOCKS = TagKey.unsafeOf("combination_step_sound_blocks");
+    TagKey<Block> COMBINATION_STEP_SOUND_BLOCKS = TagKey.of("combination_step_sound_blocks");
 
-    TagKey<Block> COMPLETES_FIND_TREE_TUTORIAL = TagKey.unsafeOf("completes_find_tree_tutorial");
+    TagKey<Block> COMPLETES_FIND_TREE_TUTORIAL = TagKey.of("completes_find_tree_tutorial");
 
-    TagKey<Block> CONCRETE = TagKey.unsafeOf("concrete");
+    TagKey<Block> CONCRETE = TagKey.of("concrete");
 
-    TagKey<Block> CONCRETE_POWDERS = TagKey.unsafeOf("concrete_powders");
+    TagKey<Block> CONCRETE_POWDERS = TagKey.of("concrete_powders");
 
-    TagKey<Block> CONCRETE_SLABS = TagKey.unsafeOf("concrete_slabs");
+    TagKey<Block> CONCRETE_SLABS = TagKey.of("concrete_slabs");
 
-    TagKey<Block> CONCRETE_STAIRS = TagKey.unsafeOf("concrete_stairs");
+    TagKey<Block> CONCRETE_STAIRS = TagKey.of("concrete_stairs");
 
-    TagKey<Block> CONDUIT_EFFECT_BLOCK = TagKey.unsafeOf("conduit_effect_block");
+    TagKey<Block> CONDUIT_EFFECT_BLOCK = TagKey.of("conduit_effect_block");
 
-    TagKey<Block> CONVERTIBLE_TO_MUD = TagKey.unsafeOf("convertible_to_mud");
+    TagKey<Block> CONVERTIBLE_TO_MUD = TagKey.of("convertible_to_mud");
 
-    TagKey<Block> COPPER = TagKey.unsafeOf("copper");
+    TagKey<Block> COPPER = TagKey.of("copper");
 
-    TagKey<Block> COPPER_CHESTS = TagKey.unsafeOf("copper_chests");
+    TagKey<Block> COPPER_CHESTS = TagKey.of("copper_chests");
 
-    TagKey<Block> COPPER_GOLEM_STATUES = TagKey.unsafeOf("copper_golem_statues");
+    TagKey<Block> COPPER_GOLEM_STATUES = TagKey.of("copper_golem_statues");
 
-    TagKey<Block> COPPER_ORES = TagKey.unsafeOf("copper_ores");
+    TagKey<Block> COPPER_ORES = TagKey.of("copper_ores");
 
-    TagKey<Block> CORAL_BLOCKS = TagKey.unsafeOf("coral_blocks");
+    TagKey<Block> CORAL_BLOCKS = TagKey.of("coral_blocks");
 
-    TagKey<Block> CORAL_PLANTS = TagKey.unsafeOf("coral_plants");
+    TagKey<Block> CORAL_PLANTS = TagKey.of("coral_plants");
 
-    TagKey<Block> CORALS = TagKey.unsafeOf("corals");
+    TagKey<Block> CORALS = TagKey.of("corals");
 
-    TagKey<Block> CRIMSON_STEMS = TagKey.unsafeOf("crimson_stems");
+    TagKey<Block> CRIMSON_STEMS = TagKey.of("crimson_stems");
 
-    TagKey<Block> CROPS = TagKey.unsafeOf("crops");
+    TagKey<Block> CROPS = TagKey.of("crops");
 
-    TagKey<Block> CRYSTAL_SOUND_BLOCKS = TagKey.unsafeOf("crystal_sound_blocks");
+    TagKey<Block> CRYSTAL_SOUND_BLOCKS = TagKey.of("crystal_sound_blocks");
 
-    TagKey<Block> CUSHION_USES_COLLISION_SHAPE = TagKey.unsafeOf("cushion_uses_collision_shape");
+    TagKey<Block> CUSHION_USES_COLLISION_SHAPE = TagKey.of("cushion_uses_collision_shape");
 
-    TagKey<Block> DAMPENS_VIBRATIONS = TagKey.unsafeOf("dampens_vibrations");
+    TagKey<Block> DAMPENS_VIBRATIONS = TagKey.of("dampens_vibrations");
 
-    TagKey<Block> DANGEROUS_FOR_TELEPORTATION = TagKey.unsafeOf("dangerous_for_teleportation");
+    TagKey<Block> DANGEROUS_FOR_TELEPORTATION = TagKey.of("dangerous_for_teleportation");
 
-    TagKey<Block> DARK_OAK_LOGS = TagKey.unsafeOf("dark_oak_logs");
+    TagKey<Block> DARK_OAK_LOGS = TagKey.of("dark_oak_logs");
 
-    TagKey<Block> DEEPSLATE_ORE_REPLACEABLES = TagKey.unsafeOf("deepslate_ore_replaceables");
+    TagKey<Block> DEEPSLATE_ORE_REPLACEABLES = TagKey.of("deepslate_ore_replaceables");
 
-    TagKey<Block> DEFAULT_IMMUNE_TO = TagKey.unsafeOf("default_immune_to");
+    TagKey<Block> DEFAULT_IMMUNE_TO = TagKey.of("default_immune_to");
 
-    TagKey<Block> DIAMOND_ORES = TagKey.unsafeOf("diamond_ores");
+    TagKey<Block> DIAMOND_ORES = TagKey.of("diamond_ores");
 
-    TagKey<Block> DIRT = TagKey.unsafeOf("dirt");
+    TagKey<Block> DIRT = TagKey.of("dirt");
 
-    TagKey<Block> DOES_NOT_BLOCK_HOPPERS = TagKey.unsafeOf("does_not_block_hoppers");
+    TagKey<Block> DOES_NOT_BLOCK_HOPPERS = TagKey.of("does_not_block_hoppers");
 
-    TagKey<Block> DOORS = TagKey.unsafeOf("doors");
+    TagKey<Block> DOORS = TagKey.of("doors");
 
-    TagKey<Block> DRAGON_IMMUNE = TagKey.unsafeOf("dragon_immune");
+    TagKey<Block> DRAGON_IMMUNE = TagKey.of("dragon_immune");
 
-    TagKey<Block> DRAGON_TRANSPARENT = TagKey.unsafeOf("dragon_transparent");
+    TagKey<Block> DRAGON_TRANSPARENT = TagKey.of("dragon_transparent");
 
-    TagKey<Block> DRIPSTONE_REPLACEABLE_BLOCKS = TagKey.unsafeOf("dripstone_replaceable_blocks");
+    TagKey<Block> DRIPSTONE_REPLACEABLE_BLOCKS = TagKey.of("dripstone_replaceable_blocks");
 
-    TagKey<Block> EDIBLE_FOR_SHEEP = TagKey.unsafeOf("edible_for_sheep");
+    TagKey<Block> EDIBLE_FOR_SHEEP = TagKey.of("edible_for_sheep");
 
-    TagKey<Block> EMERALD_ORES = TagKey.unsafeOf("emerald_ores");
+    TagKey<Block> EMERALD_ORES = TagKey.of("emerald_ores");
 
-    TagKey<Block> ENABLES_BUBBLE_COLUMN_DRAG_DOWN = TagKey.unsafeOf("enables_bubble_column_drag_down");
+    TagKey<Block> ENABLES_BUBBLE_COLUMN_DRAG_DOWN = TagKey.of("enables_bubble_column_drag_down");
 
-    TagKey<Block> ENABLES_BUBBLE_COLUMN_PUSH_UP = TagKey.unsafeOf("enables_bubble_column_push_up");
+    TagKey<Block> ENABLES_BUBBLE_COLUMN_PUSH_UP = TagKey.of("enables_bubble_column_push_up");
 
-    TagKey<Block> ENCHANTMENT_POWER_PROVIDER = TagKey.unsafeOf("enchantment_power_provider");
+    TagKey<Block> ENCHANTMENT_POWER_PROVIDER = TagKey.of("enchantment_power_provider");
 
-    TagKey<Block> ENCHANTMENT_POWER_TRANSMITTER = TagKey.unsafeOf("enchantment_power_transmitter");
+    TagKey<Block> ENCHANTMENT_POWER_TRANSMITTER = TagKey.of("enchantment_power_transmitter");
 
-    TagKey<Block> ENDERMAN_DOES_NOT_TELEPORT_TO = TagKey.unsafeOf("enderman_does_not_teleport_to");
+    TagKey<Block> ENDERMAN_DOES_NOT_TELEPORT_TO = TagKey.of("enderman_does_not_teleport_to");
 
-    TagKey<Block> ENDERMAN_HOLDABLE = TagKey.unsafeOf("enderman_holdable");
+    TagKey<Block> ENDERMAN_HOLDABLE = TagKey.of("enderman_holdable");
 
-    TagKey<Block> ENTITIES_CAN_TELEPORT_TO = TagKey.unsafeOf("entities_can_teleport_to");
+    TagKey<Block> ENTITIES_CAN_TELEPORT_TO = TagKey.of("entities_can_teleport_to");
 
-    TagKey<Block> FALL_DAMAGE_RESETTING = TagKey.unsafeOf("fall_damage_resetting");
+    TagKey<Block> FALL_DAMAGE_RESETTING = TagKey.of("fall_damage_resetting");
 
-    TagKey<Block> FEATURES_CANNOT_REPLACE = TagKey.unsafeOf("features_cannot_replace");
+    TagKey<Block> FEATURES_CANNOT_REPLACE = TagKey.of("features_cannot_replace");
 
-    TagKey<Block> FENCE_GATES = TagKey.unsafeOf("fence_gates");
+    TagKey<Block> FENCE_GATES = TagKey.of("fence_gates");
 
-    TagKey<Block> FENCES = TagKey.unsafeOf("fences");
+    TagKey<Block> FENCES = TagKey.of("fences");
 
-    TagKey<Block> FIRE = TagKey.unsafeOf("fire");
+    TagKey<Block> FIRE = TagKey.of("fire");
 
-    TagKey<Block> FLOWER_POTS = TagKey.unsafeOf("flower_pots");
+    TagKey<Block> FLOWER_POTS = TagKey.of("flower_pots");
 
-    TagKey<Block> FLOWERS = TagKey.unsafeOf("flowers");
+    TagKey<Block> FLOWERS = TagKey.of("flowers");
 
-    TagKey<Block> FOREST_ROCK_CAN_PLACE_ON = TagKey.unsafeOf("forest_rock_can_place_on");
+    TagKey<Block> FOREST_ROCK_CAN_PLACE_ON = TagKey.of("forest_rock_can_place_on");
 
-    TagKey<Block> FOX_IMMUNE_TO = TagKey.unsafeOf("fox_immune_to");
+    TagKey<Block> FOX_IMMUNE_TO = TagKey.of("fox_immune_to");
 
-    TagKey<Block> FOXES_SPAWNABLE_ON = TagKey.unsafeOf("foxes_spawnable_on");
+    TagKey<Block> FOXES_SPAWNABLE_ON = TagKey.of("foxes_spawnable_on");
 
-    TagKey<Block> FROG_PREFER_JUMP_TO = TagKey.unsafeOf("frog_prefer_jump_to");
+    TagKey<Block> FROG_PREFER_JUMP_TO = TagKey.of("frog_prefer_jump_to");
 
-    TagKey<Block> FROGS_SPAWNABLE_ON = TagKey.unsafeOf("frogs_spawnable_on");
+    TagKey<Block> FROGS_SPAWNABLE_ON = TagKey.of("frogs_spawnable_on");
 
-    TagKey<Block> GEODE_INVALID_BLOCKS = TagKey.unsafeOf("geode_invalid_blocks");
+    TagKey<Block> GEODE_INVALID_BLOCKS = TagKey.of("geode_invalid_blocks");
 
-    TagKey<Block> GLAZED_TERRACOTTA = TagKey.unsafeOf("glazed_terracotta");
+    TagKey<Block> GLAZED_TERRACOTTA = TagKey.of("glazed_terracotta");
 
-    TagKey<Block> GOATS_SPAWNABLE_ON = TagKey.unsafeOf("goats_spawnable_on");
+    TagKey<Block> GOATS_SPAWNABLE_ON = TagKey.of("goats_spawnable_on");
 
-    TagKey<Block> GOLD_ORES = TagKey.unsafeOf("gold_ores");
+    TagKey<Block> GOLD_ORES = TagKey.of("gold_ores");
 
-    TagKey<Block> GRASS_BLOCKS = TagKey.unsafeOf("grass_blocks");
+    TagKey<Block> GRASS_BLOCKS = TagKey.of("grass_blocks");
 
-    TagKey<Block> GROWS_CROPS = TagKey.unsafeOf("grows_crops");
+    TagKey<Block> GROWS_CROPS = TagKey.of("grows_crops");
 
-    TagKey<Block> GUARDED_BY_PIGLINS = TagKey.unsafeOf("guarded_by_piglins");
+    TagKey<Block> GUARDED_BY_PIGLINS = TagKey.of("guarded_by_piglins");
 
-    TagKey<Block> HAPPY_GHAST_AVOIDS = TagKey.unsafeOf("happy_ghast_avoids");
+    TagKey<Block> HAPPY_GHAST_AVOIDS = TagKey.of("happy_ghast_avoids");
 
-    TagKey<Block> HEIGHT_SPECIFIC_ORE_REPLACEABLES = TagKey.unsafeOf("height_specific_ore_replaceables");
+    TagKey<Block> HEIGHT_SPECIFIC_ORE_REPLACEABLES = TagKey.of("height_specific_ore_replaceables");
 
-    TagKey<Block> HOGLIN_REPELLENTS = TagKey.unsafeOf("hoglin_repellents");
+    TagKey<Block> HOGLIN_REPELLENTS = TagKey.of("hoglin_repellents");
 
-    TagKey<Block> HUGE_BROWN_MUSHROOM_CAN_PLACE_ON = TagKey.unsafeOf("huge_brown_mushroom_can_place_on");
+    TagKey<Block> HUGE_BROWN_MUSHROOM_CAN_PLACE_ON = TagKey.of("huge_brown_mushroom_can_place_on");
 
-    TagKey<Block> HUGE_RED_MUSHROOM_CAN_PLACE_ON = TagKey.unsafeOf("huge_red_mushroom_can_place_on");
+    TagKey<Block> HUGE_RED_MUSHROOM_CAN_PLACE_ON = TagKey.of("huge_red_mushroom_can_place_on");
 
-    TagKey<Block> ICE = TagKey.unsafeOf("ice");
+    TagKey<Block> ICE = TagKey.of("ice");
 
-    TagKey<Block> ICE_MELTS_WHEN_DESTROYED_ABOVE = TagKey.unsafeOf("ice_melts_when_destroyed_above");
+    TagKey<Block> ICE_MELTS_WHEN_DESTROYED_ABOVE = TagKey.of("ice_melts_when_destroyed_above");
 
-    TagKey<Block> ICE_SPIKE_REPLACEABLE = TagKey.unsafeOf("ice_spike_replaceable");
+    TagKey<Block> ICE_SPIKE_REPLACEABLE = TagKey.of("ice_spike_replaceable");
 
-    TagKey<Block> IMPERMEABLE = TagKey.unsafeOf("impermeable");
+    TagKey<Block> IMPERMEABLE = TagKey.of("impermeable");
 
-    TagKey<Block> INCORRECT_FOR_COPPER_TOOL = TagKey.unsafeOf("incorrect_for_copper_tool");
+    TagKey<Block> INCORRECT_FOR_COPPER_TOOL = TagKey.of("incorrect_for_copper_tool");
 
-    TagKey<Block> INCORRECT_FOR_DIAMOND_TOOL = TagKey.unsafeOf("incorrect_for_diamond_tool");
+    TagKey<Block> INCORRECT_FOR_DIAMOND_TOOL = TagKey.of("incorrect_for_diamond_tool");
 
-    TagKey<Block> INCORRECT_FOR_GOLD_TOOL = TagKey.unsafeOf("incorrect_for_gold_tool");
+    TagKey<Block> INCORRECT_FOR_GOLD_TOOL = TagKey.of("incorrect_for_gold_tool");
 
-    TagKey<Block> INCORRECT_FOR_IRON_TOOL = TagKey.unsafeOf("incorrect_for_iron_tool");
+    TagKey<Block> INCORRECT_FOR_IRON_TOOL = TagKey.of("incorrect_for_iron_tool");
 
-    TagKey<Block> INCORRECT_FOR_NETHERITE_TOOL = TagKey.unsafeOf("incorrect_for_netherite_tool");
+    TagKey<Block> INCORRECT_FOR_NETHERITE_TOOL = TagKey.of("incorrect_for_netherite_tool");
 
-    TagKey<Block> INCORRECT_FOR_STONE_TOOL = TagKey.unsafeOf("incorrect_for_stone_tool");
+    TagKey<Block> INCORRECT_FOR_STONE_TOOL = TagKey.of("incorrect_for_stone_tool");
 
-    TagKey<Block> INCORRECT_FOR_WOODEN_TOOL = TagKey.unsafeOf("incorrect_for_wooden_tool");
+    TagKey<Block> INCORRECT_FOR_WOODEN_TOOL = TagKey.of("incorrect_for_wooden_tool");
 
-    TagKey<Block> INFINIBURN_END = TagKey.unsafeOf("infiniburn_end");
+    TagKey<Block> INFINIBURN_END = TagKey.of("infiniburn_end");
 
-    TagKey<Block> INFINIBURN_NETHER = TagKey.unsafeOf("infiniburn_nether");
+    TagKey<Block> INFINIBURN_NETHER = TagKey.of("infiniburn_nether");
 
-    TagKey<Block> INFINIBURN_OVERWORLD = TagKey.unsafeOf("infiniburn_overworld");
+    TagKey<Block> INFINIBURN_OVERWORLD = TagKey.of("infiniburn_overworld");
 
-    TagKey<Block> INSIDE_STEP_SOUND_BLOCKS = TagKey.unsafeOf("inside_step_sound_blocks");
+    TagKey<Block> INSIDE_STEP_SOUND_BLOCKS = TagKey.of("inside_step_sound_blocks");
 
-    TagKey<Block> INVALID_SPAWN_INSIDE = TagKey.unsafeOf("invalid_spawn_inside");
+    TagKey<Block> INVALID_SPAWN_INSIDE = TagKey.of("invalid_spawn_inside");
 
-    TagKey<Block> IRON_ORES = TagKey.unsafeOf("iron_ores");
+    TagKey<Block> IRON_ORES = TagKey.of("iron_ores");
 
-    TagKey<Block> JUNGLE_LOGS = TagKey.unsafeOf("jungle_logs");
+    TagKey<Block> JUNGLE_LOGS = TagKey.of("jungle_logs");
 
-    TagKey<Block> LANTERNS = TagKey.unsafeOf("lanterns");
+    TagKey<Block> LANTERNS = TagKey.of("lanterns");
 
-    TagKey<Block> LAPIS_ORES = TagKey.unsafeOf("lapis_ores");
+    TagKey<Block> LAPIS_ORES = TagKey.of("lapis_ores");
 
-    TagKey<Block> LAVA_POOL_STONE_CANNOT_REPLACE = TagKey.unsafeOf("lava_pool_stone_cannot_replace");
+    TagKey<Block> LAVA_POOL_STONE_CANNOT_REPLACE = TagKey.of("lava_pool_stone_cannot_replace");
 
-    TagKey<Block> LEAVES = TagKey.unsafeOf("leaves");
+    TagKey<Block> LEAVES = TagKey.of("leaves");
 
-    TagKey<Block> LIGHTNING_RODS = TagKey.unsafeOf("lightning_rods");
+    TagKey<Block> LIGHTNING_RODS = TagKey.of("lightning_rods");
 
-    TagKey<Block> LOGS = TagKey.unsafeOf("logs");
+    TagKey<Block> LOGS = TagKey.of("logs");
 
-    TagKey<Block> LOGS_THAT_BURN = TagKey.unsafeOf("logs_that_burn");
+    TagKey<Block> LOGS_THAT_BURN = TagKey.of("logs_that_burn");
 
-    TagKey<Block> LUSH_GROUND_REPLACEABLE = TagKey.unsafeOf("lush_ground_replaceable");
+    TagKey<Block> LUSH_GROUND_REPLACEABLE = TagKey.of("lush_ground_replaceable");
 
-    TagKey<Block> MAINTAINS_FARMLAND = TagKey.unsafeOf("maintains_farmland");
+    TagKey<Block> MAINTAINS_FARMLAND = TagKey.of("maintains_farmland");
 
-    TagKey<Block> MANGROVE_LOGS = TagKey.unsafeOf("mangrove_logs");
+    TagKey<Block> MANGROVE_LOGS = TagKey.of("mangrove_logs");
 
-    TagKey<Block> MANGROVE_LOGS_CAN_GROW_THROUGH = TagKey.unsafeOf("mangrove_logs_can_grow_through");
+    TagKey<Block> MANGROVE_LOGS_CAN_GROW_THROUGH = TagKey.of("mangrove_logs_can_grow_through");
 
-    TagKey<Block> MANGROVE_ROOTS_CAN_GROW_THROUGH = TagKey.unsafeOf("mangrove_roots_can_grow_through");
+    TagKey<Block> MANGROVE_ROOTS_CAN_GROW_THROUGH = TagKey.of("mangrove_roots_can_grow_through");
 
-    TagKey<Block> MINEABLE_AXE = TagKey.unsafeOf("mineable/axe");
+    TagKey<Block> MINEABLE_AXE = TagKey.of("mineable/axe");
 
-    TagKey<Block> MINEABLE_HOE = TagKey.unsafeOf("mineable/hoe");
+    TagKey<Block> MINEABLE_HOE = TagKey.of("mineable/hoe");
 
-    TagKey<Block> MINEABLE_PICKAXE = TagKey.unsafeOf("mineable/pickaxe");
+    TagKey<Block> MINEABLE_PICKAXE = TagKey.of("mineable/pickaxe");
 
-    TagKey<Block> MINEABLE_SHOVEL = TagKey.unsafeOf("mineable/shovel");
+    TagKey<Block> MINEABLE_SHOVEL = TagKey.of("mineable/shovel");
 
-    TagKey<Block> MOB_INTERACTABLE_DOORS = TagKey.unsafeOf("mob_interactable_doors");
+    TagKey<Block> MOB_INTERACTABLE_DOORS = TagKey.of("mob_interactable_doors");
 
-    TagKey<Block> MOOSHROOMS_SPAWNABLE_ON = TagKey.unsafeOf("mooshrooms_spawnable_on");
+    TagKey<Block> MOOSHROOMS_SPAWNABLE_ON = TagKey.of("mooshrooms_spawnable_on");
 
-    TagKey<Block> MOSS_BLOCKS = TagKey.unsafeOf("moss_blocks");
+    TagKey<Block> MOSS_BLOCKS = TagKey.of("moss_blocks");
 
-    TagKey<Block> MOSS_REPLACEABLE = TagKey.unsafeOf("moss_replaceable");
+    TagKey<Block> MOSS_REPLACEABLE = TagKey.of("moss_replaceable");
 
-    TagKey<Block> MUD = TagKey.unsafeOf("mud");
+    TagKey<Block> MUD = TagKey.of("mud");
 
-    TagKey<Block> NEEDS_DIAMOND_TOOL = TagKey.unsafeOf("needs_diamond_tool");
+    TagKey<Block> NEEDS_DIAMOND_TOOL = TagKey.of("needs_diamond_tool");
 
-    TagKey<Block> NEEDS_IRON_TOOL = TagKey.unsafeOf("needs_iron_tool");
+    TagKey<Block> NEEDS_IRON_TOOL = TagKey.of("needs_iron_tool");
 
-    TagKey<Block> NEEDS_STONE_TOOL = TagKey.unsafeOf("needs_stone_tool");
+    TagKey<Block> NEEDS_STONE_TOOL = TagKey.of("needs_stone_tool");
 
-    TagKey<Block> NETHER_PORTAL_FRAME = TagKey.unsafeOf("nether_portal_frame");
+    TagKey<Block> NETHER_PORTAL_FRAME = TagKey.of("nether_portal_frame");
 
-    TagKey<Block> NYLIUM = TagKey.unsafeOf("nylium");
+    TagKey<Block> NYLIUM = TagKey.of("nylium");
 
-    TagKey<Block> OAK_LOGS = TagKey.unsafeOf("oak_logs");
+    TagKey<Block> OAK_LOGS = TagKey.of("oak_logs");
 
-    TagKey<Block> OCCLUDES_VIBRATION_SIGNALS = TagKey.unsafeOf("occludes_vibration_signals");
+    TagKey<Block> OCCLUDES_VIBRATION_SIGNALS = TagKey.of("occludes_vibration_signals");
 
-    TagKey<Block> ORES = TagKey.unsafeOf("ores");
+    TagKey<Block> ORES = TagKey.of("ores");
 
-    TagKey<Block> OVERRIDES_MUSHROOM_LIGHT_REQUIREMENT = TagKey.unsafeOf("overrides_mushroom_light_requirement");
+    TagKey<Block> OVERRIDES_MUSHROOM_LIGHT_REQUIREMENT = TagKey.of("overrides_mushroom_light_requirement");
 
-    TagKey<Block> OVERWORLD_NATURAL_LOGS = TagKey.unsafeOf("overworld_natural_logs");
+    TagKey<Block> OVERWORLD_NATURAL_LOGS = TagKey.of("overworld_natural_logs");
 
-    TagKey<Block> PALE_OAK_LOGS = TagKey.unsafeOf("pale_oak_logs");
+    TagKey<Block> PALE_OAK_LOGS = TagKey.of("pale_oak_logs");
 
-    TagKey<Block> PARROTS_SPAWNABLE_ON = TagKey.unsafeOf("parrots_spawnable_on");
+    TagKey<Block> PARROTS_SPAWNABLE_ON = TagKey.of("parrots_spawnable_on");
 
-    TagKey<Block> PIGLIN_REPELLENTS = TagKey.unsafeOf("piglin_repellents");
+    TagKey<Block> PIGLIN_REPELLENTS = TagKey.of("piglin_repellents");
 
-    TagKey<Block> PLANKS = TagKey.unsafeOf("planks");
+    TagKey<Block> PLANKS = TagKey.of("planks");
 
-    TagKey<Block> POLAR_BEAR_IMMUNE_TO = TagKey.unsafeOf("polar_bear_immune_to");
+    TagKey<Block> POLAR_BEAR_IMMUNE_TO = TagKey.of("polar_bear_immune_to");
 
-    TagKey<Block> POLAR_BEARS_SPAWNABLE_ON_ALTERNATE = TagKey.unsafeOf("polar_bears_spawnable_on_alternate");
+    TagKey<Block> POLAR_BEARS_SPAWNABLE_ON_ALTERNATE = TagKey.of("polar_bears_spawnable_on_alternate");
 
-    TagKey<Block> POPLAR_LOGS = TagKey.unsafeOf("poplar_logs");
+    TagKey<Block> POPLAR_LOGS = TagKey.of("poplar_logs");
 
-    TagKey<Block> PORTALS = TagKey.unsafeOf("portals");
+    TagKey<Block> PORTALS = TagKey.of("portals");
 
-    TagKey<Block> PRESSURE_PLATES = TagKey.unsafeOf("pressure_plates");
+    TagKey<Block> PRESSURE_PLATES = TagKey.of("pressure_plates");
 
-    TagKey<Block> PREVENT_MOB_SPAWNING_INSIDE = TagKey.unsafeOf("prevent_mob_spawning_inside");
+    TagKey<Block> PREVENT_MOB_SPAWNING_INSIDE = TagKey.of("prevent_mob_spawning_inside");
 
-    TagKey<Block> PREVENTS_NEARBY_LEAF_DECAY = TagKey.unsafeOf("prevents_nearby_leaf_decay");
+    TagKey<Block> PREVENTS_NEARBY_LEAF_DECAY = TagKey.of("prevents_nearby_leaf_decay");
 
-    TagKey<Block> RABBITS_SPAWNABLE_ON = TagKey.unsafeOf("rabbits_spawnable_on");
+    TagKey<Block> RABBITS_SPAWNABLE_ON = TagKey.of("rabbits_spawnable_on");
 
-    TagKey<Block> RAILS = TagKey.unsafeOf("rails");
+    TagKey<Block> RAILS = TagKey.of("rails");
 
-    TagKey<Block> REDSTONE_ORES = TagKey.unsafeOf("redstone_ores");
+    TagKey<Block> REDSTONE_ORES = TagKey.of("redstone_ores");
 
-    TagKey<Block> REPLACEABLE = TagKey.unsafeOf("replaceable");
+    TagKey<Block> REPLACEABLE = TagKey.of("replaceable");
 
-    TagKey<Block> REPLACEABLE_BY_MUSHROOMS = TagKey.unsafeOf("replaceable_by_mushrooms");
+    TagKey<Block> REPLACEABLE_BY_MUSHROOMS = TagKey.of("replaceable_by_mushrooms");
 
-    TagKey<Block> REPLACEABLE_BY_TREES = TagKey.unsafeOf("replaceable_by_trees");
+    TagKey<Block> REPLACEABLE_BY_TREES = TagKey.of("replaceable_by_trees");
 
-    TagKey<Block> REQUIRED_FOR_POPLAR_LEAF_AMBIENCE = TagKey.unsafeOf("required_for_poplar_leaf_ambience");
+    TagKey<Block> REQUIRED_FOR_POPLAR_LEAF_AMBIENCE = TagKey.of("required_for_poplar_leaf_ambience");
 
-    TagKey<Block> SAND = TagKey.unsafeOf("sand");
+    TagKey<Block> SAND = TagKey.of("sand");
 
-    TagKey<Block> SAPLINGS = TagKey.unsafeOf("saplings");
+    TagKey<Block> SAPLINGS = TagKey.of("saplings");
 
-    TagKey<Block> SCULK_GROWTH_INHIBITORS = TagKey.unsafeOf("sculk_growth_inhibitors");
+    TagKey<Block> SCULK_GROWTH_INHIBITORS = TagKey.of("sculk_growth_inhibitors");
 
-    TagKey<Block> SCULK_REPLACEABLE = TagKey.unsafeOf("sculk_replaceable");
+    TagKey<Block> SCULK_REPLACEABLE = TagKey.of("sculk_replaceable");
 
-    TagKey<Block> SCULK_REPLACEABLE_WORLD_GEN = TagKey.unsafeOf("sculk_replaceable_world_gen");
+    TagKey<Block> SCULK_REPLACEABLE_WORLD_GEN = TagKey.of("sculk_replaceable_world_gen");
 
-    TagKey<Block> SHEARS_EXTREME_BREAKING_SPEED = TagKey.unsafeOf("shears_extreme_breaking_speed");
+    TagKey<Block> SHEARS_EXTREME_BREAKING_SPEED = TagKey.of("shears_extreme_breaking_speed");
 
-    TagKey<Block> SHEARS_MAJOR_BREAKING_SPEED = TagKey.unsafeOf("shears_major_breaking_speed");
+    TagKey<Block> SHEARS_MAJOR_BREAKING_SPEED = TagKey.of("shears_major_breaking_speed");
 
-    TagKey<Block> SHEARS_MINOR_BREAKING_SPEED = TagKey.unsafeOf("shears_minor_breaking_speed");
+    TagKey<Block> SHEARS_MINOR_BREAKING_SPEED = TagKey.of("shears_minor_breaking_speed");
 
-    TagKey<Block> SHULKER_BOXES = TagKey.unsafeOf("shulker_boxes");
+    TagKey<Block> SHULKER_BOXES = TagKey.of("shulker_boxes");
 
-    TagKey<Block> SHULKER_DOES_NOT_TELEPORT_TO = TagKey.unsafeOf("shulker_does_not_teleport_to");
+    TagKey<Block> SHULKER_DOES_NOT_TELEPORT_TO = TagKey.of("shulker_does_not_teleport_to");
 
-    TagKey<Block> SIGNS = TagKey.unsafeOf("signs");
+    TagKey<Block> SIGNS = TagKey.of("signs");
 
-    TagKey<Block> SKULLS = TagKey.unsafeOf("skulls");
+    TagKey<Block> SKULLS = TagKey.of("skulls");
 
-    TagKey<Block> SLABS = TagKey.unsafeOf("slabs");
+    TagKey<Block> SLABS = TagKey.of("slabs");
 
-    TagKey<Block> SMALL_FLOWERS = TagKey.unsafeOf("small_flowers");
+    TagKey<Block> SMALL_FLOWERS = TagKey.of("small_flowers");
 
-    TagKey<Block> SMELTS_TO_GLASS = TagKey.unsafeOf("smelts_to_glass");
+    TagKey<Block> SMELTS_TO_GLASS = TagKey.of("smelts_to_glass");
 
-    TagKey<Block> SNAPS_GOAT_HORN = TagKey.unsafeOf("snaps_goat_horn");
+    TagKey<Block> SNAPS_GOAT_HORN = TagKey.of("snaps_goat_horn");
 
-    TagKey<Block> SNIFFER_DIGGABLE_BLOCK = TagKey.unsafeOf("sniffer_diggable_block");
+    TagKey<Block> SNIFFER_DIGGABLE_BLOCK = TagKey.of("sniffer_diggable_block");
 
-    TagKey<Block> SNIFFER_EGG_HATCH_BOOST = TagKey.unsafeOf("sniffer_egg_hatch_boost");
+    TagKey<Block> SNIFFER_EGG_HATCH_BOOST = TagKey.of("sniffer_egg_hatch_boost");
 
-    TagKey<Block> SNOW = TagKey.unsafeOf("snow");
+    TagKey<Block> SNOW = TagKey.of("snow");
 
-    TagKey<Block> SNOW_GOLEM_IMMUNE_TO = TagKey.unsafeOf("snow_golem_immune_to");
+    TagKey<Block> SNOW_GOLEM_IMMUNE_TO = TagKey.of("snow_golem_immune_to");
 
-    TagKey<Block> SOUL_FIRE_BASE_BLOCKS = TagKey.unsafeOf("soul_fire_base_blocks");
+    TagKey<Block> SOUL_FIRE_BASE_BLOCKS = TagKey.of("soul_fire_base_blocks");
 
-    TagKey<Block> SOUL_SPEED_BLOCKS = TagKey.unsafeOf("soul_speed_blocks");
+    TagKey<Block> SOUL_SPEED_BLOCKS = TagKey.of("soul_speed_blocks");
 
-    TagKey<Block> SPEEDS_UP_ZOMBIE_VILLAGER_CURING = TagKey.unsafeOf("speeds_up_zombie_villager_curing");
+    TagKey<Block> SPEEDS_UP_ZOMBIE_VILLAGER_CURING = TagKey.of("speeds_up_zombie_villager_curing");
 
-    TagKey<Block> SPELEOTHEMS = TagKey.unsafeOf("speleothems");
+    TagKey<Block> SPELEOTHEMS = TagKey.of("speleothems");
 
-    TagKey<Block> SPRUCE_LOGS = TagKey.unsafeOf("spruce_logs");
+    TagKey<Block> SPRUCE_LOGS = TagKey.of("spruce_logs");
 
-    TagKey<Block> STAIRS = TagKey.unsafeOf("stairs");
+    TagKey<Block> STAIRS = TagKey.of("stairs");
 
-    TagKey<Block> STANDING_SIGNS = TagKey.unsafeOf("standing_signs");
+    TagKey<Block> STANDING_SIGNS = TagKey.of("standing_signs");
 
-    TagKey<Block> STONE_BRICKS = TagKey.unsafeOf("stone_bricks");
+    TagKey<Block> STONE_BRICKS = TagKey.of("stone_bricks");
 
-    TagKey<Block> STONE_BUTTONS = TagKey.unsafeOf("stone_buttons");
+    TagKey<Block> STONE_BUTTONS = TagKey.of("stone_buttons");
 
-    TagKey<Block> STONE_ORE_REPLACEABLES = TagKey.unsafeOf("stone_ore_replaceables");
+    TagKey<Block> STONE_ORE_REPLACEABLES = TagKey.of("stone_ore_replaceables");
 
-    TagKey<Block> STONE_PRESSURE_PLATES = TagKey.unsafeOf("stone_pressure_plates");
+    TagKey<Block> STONE_PRESSURE_PLATES = TagKey.of("stone_pressure_plates");
 
-    TagKey<Block> STRAY_IMMUNE_TO = TagKey.unsafeOf("stray_immune_to");
+    TagKey<Block> STRAY_IMMUNE_TO = TagKey.of("stray_immune_to");
 
-    TagKey<Block> STRIDER_WARM_BLOCKS = TagKey.unsafeOf("strider_warm_blocks");
+    TagKey<Block> STRIDER_WARM_BLOCKS = TagKey.of("strider_warm_blocks");
 
-    TagKey<Block> SUBSTRATE_OVERWORLD = TagKey.unsafeOf("substrate_overworld");
+    TagKey<Block> SUBSTRATE_OVERWORLD = TagKey.of("substrate_overworld");
 
-    TagKey<Block> SULFUR_SPIKE_REPLACEABLE_BLOCKS = TagKey.unsafeOf("sulfur_spike_replaceable_blocks");
+    TagKey<Block> SULFUR_SPIKE_REPLACEABLE_BLOCKS = TagKey.of("sulfur_spike_replaceable_blocks");
 
-    TagKey<Block> SUPPORT_OVERRIDE_CACTUS_FLOWER = TagKey.unsafeOf("support_override_cactus_flower");
+    TagKey<Block> SUPPORT_OVERRIDE_CACTUS_FLOWER = TagKey.of("support_override_cactus_flower");
 
-    TagKey<Block> SUPPORT_OVERRIDE_SNOW_LAYER = TagKey.unsafeOf("support_override_snow_layer");
+    TagKey<Block> SUPPORT_OVERRIDE_SNOW_LAYER = TagKey.of("support_override_snow_layer");
 
-    TagKey<Block> SUPPORTS_AZALEA = TagKey.unsafeOf("supports_azalea");
+    TagKey<Block> SUPPORTS_AZALEA = TagKey.of("supports_azalea");
 
-    TagKey<Block> SUPPORTS_BAMBOO = TagKey.unsafeOf("supports_bamboo");
+    TagKey<Block> SUPPORTS_BAMBOO = TagKey.of("supports_bamboo");
 
-    TagKey<Block> SUPPORTS_BIG_DRIPLEAF = TagKey.unsafeOf("supports_big_dripleaf");
+    TagKey<Block> SUPPORTS_BIG_DRIPLEAF = TagKey.of("supports_big_dripleaf");
 
-    TagKey<Block> SUPPORTS_CACTUS = TagKey.unsafeOf("supports_cactus");
+    TagKey<Block> SUPPORTS_CACTUS = TagKey.of("supports_cactus");
 
-    TagKey<Block> SUPPORTS_CHORUS_FLOWER = TagKey.unsafeOf("supports_chorus_flower");
+    TagKey<Block> SUPPORTS_CHORUS_FLOWER = TagKey.of("supports_chorus_flower");
 
-    TagKey<Block> SUPPORTS_CHORUS_PLANT = TagKey.unsafeOf("supports_chorus_plant");
+    TagKey<Block> SUPPORTS_CHORUS_PLANT = TagKey.of("supports_chorus_plant");
 
-    TagKey<Block> SUPPORTS_COCOA = TagKey.unsafeOf("supports_cocoa");
+    TagKey<Block> SUPPORTS_COCOA = TagKey.of("supports_cocoa");
 
-    TagKey<Block> SUPPORTS_CRIMSON_FUNGUS = TagKey.unsafeOf("supports_crimson_fungus");
+    TagKey<Block> SUPPORTS_CRIMSON_FUNGUS = TagKey.of("supports_crimson_fungus");
 
-    TagKey<Block> SUPPORTS_CRIMSON_ROOTS = TagKey.unsafeOf("supports_crimson_roots");
+    TagKey<Block> SUPPORTS_CRIMSON_ROOTS = TagKey.of("supports_crimson_roots");
 
-    TagKey<Block> SUPPORTS_CROPS = TagKey.unsafeOf("supports_crops");
+    TagKey<Block> SUPPORTS_CROPS = TagKey.of("supports_crops");
 
-    TagKey<Block> SUPPORTS_DRY_VEGETATION = TagKey.unsafeOf("supports_dry_vegetation");
+    TagKey<Block> SUPPORTS_DRY_VEGETATION = TagKey.of("supports_dry_vegetation");
 
-    TagKey<Block> SUPPORTS_FROGSPAWN = TagKey.unsafeOf("supports_frogspawn");
+    TagKey<Block> SUPPORTS_FROGSPAWN = TagKey.of("supports_frogspawn");
 
-    TagKey<Block> SUPPORTS_HANGING_MANGROVE_PROPAGULE = TagKey.unsafeOf("supports_hanging_mangrove_propagule");
+    TagKey<Block> SUPPORTS_HANGING_MANGROVE_PROPAGULE = TagKey.of("supports_hanging_mangrove_propagule");
 
-    TagKey<Block> SUPPORTS_LILY_PAD = TagKey.unsafeOf("supports_lily_pad");
+    TagKey<Block> SUPPORTS_LILY_PAD = TagKey.of("supports_lily_pad");
 
-    TagKey<Block> SUPPORTS_MANGROVE_PROPAGULE = TagKey.unsafeOf("supports_mangrove_propagule");
+    TagKey<Block> SUPPORTS_MANGROVE_PROPAGULE = TagKey.of("supports_mangrove_propagule");
 
-    TagKey<Block> SUPPORTS_MELON_STEM = TagKey.unsafeOf("supports_melon_stem");
+    TagKey<Block> SUPPORTS_MELON_STEM = TagKey.of("supports_melon_stem");
 
-    TagKey<Block> SUPPORTS_MELON_STEM_FRUIT = TagKey.unsafeOf("supports_melon_stem_fruit");
+    TagKey<Block> SUPPORTS_MELON_STEM_FRUIT = TagKey.of("supports_melon_stem_fruit");
 
-    TagKey<Block> SUPPORTS_NETHER_SPROUTS = TagKey.unsafeOf("supports_nether_sprouts");
+    TagKey<Block> SUPPORTS_NETHER_SPROUTS = TagKey.of("supports_nether_sprouts");
 
-    TagKey<Block> SUPPORTS_NETHER_WART = TagKey.unsafeOf("supports_nether_wart");
+    TagKey<Block> SUPPORTS_NETHER_WART = TagKey.of("supports_nether_wart");
 
-    TagKey<Block> SUPPORTS_PUMPKIN_STEM = TagKey.unsafeOf("supports_pumpkin_stem");
+    TagKey<Block> SUPPORTS_PUMPKIN_STEM = TagKey.of("supports_pumpkin_stem");
 
-    TagKey<Block> SUPPORTS_PUMPKIN_STEM_FRUIT = TagKey.unsafeOf("supports_pumpkin_stem_fruit");
+    TagKey<Block> SUPPORTS_PUMPKIN_STEM_FRUIT = TagKey.of("supports_pumpkin_stem_fruit");
 
-    TagKey<Block> SUPPORTS_SMALL_DRIPLEAF = TagKey.unsafeOf("supports_small_dripleaf");
+    TagKey<Block> SUPPORTS_SMALL_DRIPLEAF = TagKey.of("supports_small_dripleaf");
 
-    TagKey<Block> SUPPORTS_STEM_CROPS = TagKey.unsafeOf("supports_stem_crops");
+    TagKey<Block> SUPPORTS_STEM_CROPS = TagKey.of("supports_stem_crops");
 
-    TagKey<Block> SUPPORTS_STEM_FRUIT = TagKey.unsafeOf("supports_stem_fruit");
+    TagKey<Block> SUPPORTS_STEM_FRUIT = TagKey.of("supports_stem_fruit");
 
-    TagKey<Block> SUPPORTS_SUGAR_CANE = TagKey.unsafeOf("supports_sugar_cane");
+    TagKey<Block> SUPPORTS_SUGAR_CANE = TagKey.of("supports_sugar_cane");
 
-    TagKey<Block> SUPPORTS_SUGAR_CANE_ADJACENTLY = TagKey.unsafeOf("supports_sugar_cane_adjacently");
+    TagKey<Block> SUPPORTS_SUGAR_CANE_ADJACENTLY = TagKey.of("supports_sugar_cane_adjacently");
 
-    TagKey<Block> SUPPORTS_VEGETATION = TagKey.unsafeOf("supports_vegetation");
+    TagKey<Block> SUPPORTS_VEGETATION = TagKey.of("supports_vegetation");
 
-    TagKey<Block> SUPPORTS_WARPED_FUNGUS = TagKey.unsafeOf("supports_warped_fungus");
+    TagKey<Block> SUPPORTS_WARPED_FUNGUS = TagKey.of("supports_warped_fungus");
 
-    TagKey<Block> SUPPORTS_WARPED_ROOTS = TagKey.unsafeOf("supports_warped_roots");
+    TagKey<Block> SUPPORTS_WARPED_ROOTS = TagKey.of("supports_warped_roots");
 
-    TagKey<Block> SUPPORTS_WITHER_ROSE = TagKey.unsafeOf("supports_wither_rose");
+    TagKey<Block> SUPPORTS_WITHER_ROSE = TagKey.of("supports_wither_rose");
 
-    TagKey<Block> SUPPRESSES_BOUNCE = TagKey.unsafeOf("suppresses_bounce");
+    TagKey<Block> SUPPRESSES_BOUNCE = TagKey.of("suppresses_bounce");
 
-    TagKey<Block> SWORD_EFFICIENT = TagKey.unsafeOf("sword_efficient");
+    TagKey<Block> SWORD_EFFICIENT = TagKey.of("sword_efficient");
 
-    TagKey<Block> SWORD_INSTANTLY_MINES = TagKey.unsafeOf("sword_instantly_mines");
+    TagKey<Block> SWORD_INSTANTLY_MINES = TagKey.of("sword_instantly_mines");
 
-    TagKey<Block> TERRACOTTA = TagKey.unsafeOf("terracotta");
+    TagKey<Block> TERRACOTTA = TagKey.of("terracotta");
 
-    TagKey<Block> TRAIL_RUINS_REPLACEABLE = TagKey.unsafeOf("trail_ruins_replaceable");
+    TagKey<Block> TRAIL_RUINS_REPLACEABLE = TagKey.of("trail_ruins_replaceable");
 
-    TagKey<Block> TRAPDOORS = TagKey.unsafeOf("trapdoors");
+    TagKey<Block> TRAPDOORS = TagKey.of("trapdoors");
 
-    TagKey<Block> TRIGGERS_AMBIENT_DESERT_DRY_VEGETATION_BLOCK_SOUNDS = TagKey.unsafeOf("triggers_ambient_desert_dry_vegetation_block_sounds");
+    TagKey<Block> TRIGGERS_AMBIENT_DESERT_DRY_VEGETATION_BLOCK_SOUNDS = TagKey.of("triggers_ambient_desert_dry_vegetation_block_sounds");
 
-    TagKey<Block> TRIGGERS_AMBIENT_DESERT_SAND_BLOCK_SOUNDS = TagKey.unsafeOf("triggers_ambient_desert_sand_block_sounds");
+    TagKey<Block> TRIGGERS_AMBIENT_DESERT_SAND_BLOCK_SOUNDS = TagKey.of("triggers_ambient_desert_sand_block_sounds");
 
-    TagKey<Block> TRIGGERS_AMBIENT_DRIED_GHAST_BLOCK_SOUNDS = TagKey.unsafeOf("triggers_ambient_dried_ghast_block_sounds");
+    TagKey<Block> TRIGGERS_AMBIENT_DRIED_GHAST_BLOCK_SOUNDS = TagKey.of("triggers_ambient_dried_ghast_block_sounds");
 
-    TagKey<Block> TURNS_INTO_DIRT_PATH = TagKey.unsafeOf("turns_into_dirt_path");
+    TagKey<Block> TURNS_INTO_DIRT_PATH = TagKey.of("turns_into_dirt_path");
 
-    TagKey<Block> TURNS_INTO_FARMLAND = TagKey.unsafeOf("turns_into_farmland");
+    TagKey<Block> TURNS_INTO_FARMLAND = TagKey.of("turns_into_farmland");
 
-    TagKey<Block> UNCARVABLE = TagKey.unsafeOf("uncarvable");
+    TagKey<Block> UNCARVABLE = TagKey.of("uncarvable");
 
-    TagKey<Block> UNDERWATER_BONEMEALS = TagKey.unsafeOf("underwater_bonemeals");
+    TagKey<Block> UNDERWATER_BONEMEALS = TagKey.of("underwater_bonemeals");
 
-    TagKey<Block> UNSTABLE_BOTTOM_CENTER = TagKey.unsafeOf("unstable_bottom_center");
+    TagKey<Block> UNSTABLE_BOTTOM_CENTER = TagKey.of("unstable_bottom_center");
 
-    TagKey<Block> VALID_SPAWN = TagKey.unsafeOf("valid_spawn");
+    TagKey<Block> VALID_SPAWN = TagKey.of("valid_spawn");
 
-    TagKey<Block> VIBRATION_RESONATORS = TagKey.unsafeOf("vibration_resonators");
+    TagKey<Block> VIBRATION_RESONATORS = TagKey.of("vibration_resonators");
 
-    TagKey<Block> VILLAGER_BABIES_CAN_JUMP_ON_BED = TagKey.unsafeOf("villager_babies_can_jump_on_bed");
+    TagKey<Block> VILLAGER_BABIES_CAN_JUMP_ON_BED = TagKey.of("villager_babies_can_jump_on_bed");
 
-    TagKey<Block> VILLAGERS_CAN_SLEEP_ON_BED = TagKey.unsafeOf("villagers_can_sleep_on_bed");
+    TagKey<Block> VILLAGERS_CAN_SLEEP_ON_BED = TagKey.of("villagers_can_sleep_on_bed");
 
-    TagKey<Block> WALL_CORALS = TagKey.unsafeOf("wall_corals");
+    TagKey<Block> WALL_CORALS = TagKey.of("wall_corals");
 
-    TagKey<Block> WALL_HANGING_SIGNS = TagKey.unsafeOf("wall_hanging_signs");
+    TagKey<Block> WALL_HANGING_SIGNS = TagKey.of("wall_hanging_signs");
 
-    TagKey<Block> WALL_POST_OVERRIDE = TagKey.unsafeOf("wall_post_override");
+    TagKey<Block> WALL_POST_OVERRIDE = TagKey.of("wall_post_override");
 
-    TagKey<Block> WALL_SIGNS = TagKey.unsafeOf("wall_signs");
+    TagKey<Block> WALL_SIGNS = TagKey.of("wall_signs");
 
-    TagKey<Block> WALLS = TagKey.unsafeOf("walls");
+    TagKey<Block> WALLS = TagKey.of("walls");
 
-    TagKey<Block> WARPED_STEMS = TagKey.unsafeOf("warped_stems");
+    TagKey<Block> WARPED_STEMS = TagKey.of("warped_stems");
 
-    TagKey<Block> WART_BLOCKS = TagKey.unsafeOf("wart_blocks");
+    TagKey<Block> WART_BLOCKS = TagKey.of("wart_blocks");
 
-    TagKey<Block> WASHED_AWAY_BY_FLUIDS = TagKey.unsafeOf("washed_away_by_fluids");
+    TagKey<Block> WASHED_AWAY_BY_FLUIDS = TagKey.of("washed_away_by_fluids");
 
-    TagKey<Block> WITHER_IMMUNE = TagKey.unsafeOf("wither_immune");
+    TagKey<Block> WITHER_IMMUNE = TagKey.of("wither_immune");
 
-    TagKey<Block> WITHER_IMMUNE_TO = TagKey.unsafeOf("wither_immune_to");
+    TagKey<Block> WITHER_IMMUNE_TO = TagKey.of("wither_immune_to");
 
-    TagKey<Block> WITHER_SKELETON_IMMUNE_TO = TagKey.unsafeOf("wither_skeleton_immune_to");
+    TagKey<Block> WITHER_SKELETON_IMMUNE_TO = TagKey.of("wither_skeleton_immune_to");
 
-    TagKey<Block> WITHER_SUMMON_BASE_BLOCKS = TagKey.unsafeOf("wither_summon_base_blocks");
+    TagKey<Block> WITHER_SUMMON_BASE_BLOCKS = TagKey.of("wither_summon_base_blocks");
 
-    TagKey<Block> WOLVES_SPAWNABLE_ON = TagKey.unsafeOf("wolves_spawnable_on");
+    TagKey<Block> WOLVES_SPAWNABLE_ON = TagKey.of("wolves_spawnable_on");
 
-    TagKey<Block> WOODEN_BUTTONS = TagKey.unsafeOf("wooden_buttons");
+    TagKey<Block> WOODEN_BUTTONS = TagKey.of("wooden_buttons");
 
-    TagKey<Block> WOODEN_DOORS = TagKey.unsafeOf("wooden_doors");
+    TagKey<Block> WOODEN_DOORS = TagKey.of("wooden_doors");
 
-    TagKey<Block> WOODEN_FENCES = TagKey.unsafeOf("wooden_fences");
+    TagKey<Block> WOODEN_FENCES = TagKey.of("wooden_fences");
 
-    TagKey<Block> WOODEN_PRESSURE_PLATES = TagKey.unsafeOf("wooden_pressure_plates");
+    TagKey<Block> WOODEN_PRESSURE_PLATES = TagKey.of("wooden_pressure_plates");
 
-    TagKey<Block> WOODEN_SHELVES = TagKey.unsafeOf("wooden_shelves");
+    TagKey<Block> WOODEN_SHELVES = TagKey.of("wooden_shelves");
 
-    TagKey<Block> WOODEN_SLABS = TagKey.unsafeOf("wooden_slabs");
+    TagKey<Block> WOODEN_SLABS = TagKey.of("wooden_slabs");
 
-    TagKey<Block> WOODEN_STAIRS = TagKey.unsafeOf("wooden_stairs");
+    TagKey<Block> WOODEN_STAIRS = TagKey.of("wooden_stairs");
 
-    TagKey<Block> WOODEN_TRAPDOORS = TagKey.unsafeOf("wooden_trapdoors");
+    TagKey<Block> WOODEN_TRAPDOORS = TagKey.of("wooden_trapdoors");
 
-    TagKey<Block> WOOL = TagKey.unsafeOf("wool");
+    TagKey<Block> WOOL = TagKey.of("wool");
 
-    TagKey<Block> WOOL_CARPETS = TagKey.unsafeOf("wool_carpets");
+    TagKey<Block> WOOL_CARPETS = TagKey.of("wool_carpets");
 
-    TagKey<Block> WOOL_SLABS = TagKey.unsafeOf("wool_slabs");
+    TagKey<Block> WOOL_SLABS = TagKey.of("wool_slabs");
 
-    TagKey<Block> WOOL_STAIRS = TagKey.unsafeOf("wool_stairs");
+    TagKey<Block> WOOL_STAIRS = TagKey.of("wool_stairs");
 }

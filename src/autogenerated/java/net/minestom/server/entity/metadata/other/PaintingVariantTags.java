@@ -11,5 +11,5 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("unused")
 @ApiStatus.NonExtendable
 public interface PaintingVariantTags {
-    TagKey<PaintingVariant> PLACEABLE = TagKey.unsafeOf("placeable");
+    TagKey<PaintingVariant> PLACEABLE = TagKey.of("placeable");
 }

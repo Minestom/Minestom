@@ -60,235 +60,235 @@ public interface BuiltinRegistries {
     /**
      * The registry key for {@link Attribute}.
      */
-    RegistryKey<Registry<Attribute>> ATTRIBUTE = RegistryKey.unsafeOf("attribute");
+    RegistryKey<Registry<Attribute>> ATTRIBUTE = RegistryKey.of("attribute");
 
     /**
      * The registry key for {@link BannerPattern}.
      */
-    RegistryKey<Registry<BannerPattern>> BANNER_PATTERN = RegistryKey.unsafeOf("banner_pattern");
+    RegistryKey<Registry<BannerPattern>> BANNER_PATTERN = RegistryKey.of("banner_pattern");
 
     /**
      * The registry key for {@link Block}.
      */
-    RegistryKey<Registry<Block>> BLOCK = RegistryKey.unsafeOf("block");
+    RegistryKey<Registry<Block>> BLOCK = RegistryKey.of("block");
 
     /**
      * The registry key for {@link BlockEntityType}.
      */
-    RegistryKey<Registry<BlockEntityType>> BLOCK_ENTITY_TYPE = RegistryKey.unsafeOf("block_entity_type");
+    RegistryKey<Registry<BlockEntityType>> BLOCK_ENTITY_TYPE = RegistryKey.of("block_entity_type");
 
     /**
      * The registry key for {@link BlockSoundType}.
      */
-    RegistryKey<Registry<BlockSoundType>> BLOCK_SOUND_TYPE = RegistryKey.unsafeOf("block_sound_type");
+    RegistryKey<Registry<BlockSoundType>> BLOCK_SOUND_TYPE = RegistryKey.of("block_sound_type");
 
     /**
      * The registry key for {@link BlockTransformer}.
      */
-    RegistryKey<Registry<BlockTransformer>> BLOCK_TRANSFORMER = RegistryKey.unsafeOf("block_transformer");
+    RegistryKey<Registry<BlockTransformer>> BLOCK_TRANSFORMER = RegistryKey.of("block_transformer");
 
     /**
      * The registry key for {@link CatSoundVariant}.
      */
-    RegistryKey<Registry<CatSoundVariant>> CAT_SOUND_VARIANT = RegistryKey.unsafeOf("cat_sound_variant");
+    RegistryKey<Registry<CatSoundVariant>> CAT_SOUND_VARIANT = RegistryKey.of("cat_sound_variant");
 
     /**
      * The registry key for {@link CatVariant}.
      */
-    RegistryKey<Registry<CatVariant>> CAT_VARIANT = RegistryKey.unsafeOf("cat_variant");
+    RegistryKey<Registry<CatVariant>> CAT_VARIANT = RegistryKey.of("cat_variant");
 
     /**
      * The registry key for {@link ChatType}.
      */
-    RegistryKey<Registry<ChatType>> CHAT_TYPE = RegistryKey.unsafeOf("chat_type");
+    RegistryKey<Registry<ChatType>> CHAT_TYPE = RegistryKey.of("chat_type");
 
     /**
      * The registry key for {@link ChickenSoundVariant}.
      */
-    RegistryKey<Registry<ChickenSoundVariant>> CHICKEN_SOUND_VARIANT = RegistryKey.unsafeOf("chicken_sound_variant");
+    RegistryKey<Registry<ChickenSoundVariant>> CHICKEN_SOUND_VARIANT = RegistryKey.of("chicken_sound_variant");
 
     /**
      * The registry key for {@link ChickenVariant}.
      */
-    RegistryKey<Registry<ChickenVariant>> CHICKEN_VARIANT = RegistryKey.unsafeOf("chicken_variant");
+    RegistryKey<Registry<ChickenVariant>> CHICKEN_VARIANT = RegistryKey.of("chicken_variant");
 
     /**
      * The registry key for {@link ClockTimeMarker}.
      */
-    RegistryKey<Registry<ClockTimeMarker>> CLOCK_TIME_MARKER = RegistryKey.unsafeOf("clock_time_marker");
+    RegistryKey<Registry<ClockTimeMarker>> CLOCK_TIME_MARKER = RegistryKey.of("clock_time_marker");
 
     /**
      * The registry key for {@link CowSoundVariant}.
      */
-    RegistryKey<Registry<CowSoundVariant>> COW_SOUND_VARIANT = RegistryKey.unsafeOf("cow_sound_variant");
+    RegistryKey<Registry<CowSoundVariant>> COW_SOUND_VARIANT = RegistryKey.of("cow_sound_variant");
 
     /**
      * The registry key for {@link CowVariant}.
      */
-    RegistryKey<Registry<CowVariant>> COW_VARIANT = RegistryKey.unsafeOf("cow_variant");
+    RegistryKey<Registry<CowVariant>> COW_VARIANT = RegistryKey.of("cow_variant");
 
     /**
      * The registry key for {@link StatisticType}.
      */
-    RegistryKey<Registry<StatisticType>> CUSTOM_STAT = RegistryKey.unsafeOf("custom_stat");
+    RegistryKey<Registry<StatisticType>> CUSTOM_STAT = RegistryKey.of("custom_stat");
 
     /**
      * The registry key for {@link DamageType}.
      */
-    RegistryKey<Registry<DamageType>> DAMAGE_TYPE = RegistryKey.unsafeOf("damage_type");
+    RegistryKey<Registry<DamageType>> DAMAGE_TYPE = RegistryKey.of("damage_type");
 
     /**
      * The registry key for {@link DecoratedPotPattern}.
      */
-    RegistryKey<Registry<DecoratedPotPattern>> DECORATED_POT_PATTERN = RegistryKey.unsafeOf("decorated_pot_pattern");
+    RegistryKey<Registry<DecoratedPotPattern>> DECORATED_POT_PATTERN = RegistryKey.of("decorated_pot_pattern");
 
     /**
      * The registry key for {@link Dialog}.
      */
-    RegistryKey<Registry<Dialog>> DIALOG = RegistryKey.unsafeOf("dialog");
+    RegistryKey<Registry<Dialog>> DIALOG = RegistryKey.of("dialog");
 
     /**
      * The registry key for {@link DimensionType}.
      */
-    RegistryKey<Registry<DimensionType>> DIMENSION_TYPE = RegistryKey.unsafeOf("dimension_type");
+    RegistryKey<Registry<DimensionType>> DIMENSION_TYPE = RegistryKey.of("dimension_type");
 
     /**
      * The registry key for {@link Enchantment}.
      */
-    RegistryKey<Registry<Enchantment>> ENCHANTMENT = RegistryKey.unsafeOf("enchantment");
+    RegistryKey<Registry<Enchantment>> ENCHANTMENT = RegistryKey.of("enchantment");
 
     /**
      * The registry key for {@link EntityType}.
      */
-    RegistryKey<Registry<EntityType>> ENTITY_TYPE = RegistryKey.unsafeOf("entity_type");
+    RegistryKey<Registry<EntityType>> ENTITY_TYPE = RegistryKey.of("entity_type");
 
     /**
      * The registry key for {@link FeatureFlag}.
      */
-    RegistryKey<Registry<FeatureFlag>> FEATURE_FLAG = RegistryKey.unsafeOf("feature_flag");
+    RegistryKey<Registry<FeatureFlag>> FEATURE_FLAG = RegistryKey.of("feature_flag");
 
     /**
      * The registry key for {@link Fluid}.
      */
-    RegistryKey<Registry<Fluid>> FLUID = RegistryKey.unsafeOf("fluid");
+    RegistryKey<Registry<Fluid>> FLUID = RegistryKey.of("fluid");
 
     /**
      * The registry key for {@link FrogVariant}.
      */
-    RegistryKey<Registry<FrogVariant>> FROG_VARIANT = RegistryKey.unsafeOf("frog_variant");
+    RegistryKey<Registry<FrogVariant>> FROG_VARIANT = RegistryKey.of("frog_variant");
 
     /**
      * The registry key for {@link GameEvent}.
      */
-    RegistryKey<Registry<GameEvent>> GAME_EVENT = RegistryKey.unsafeOf("game_event");
+    RegistryKey<Registry<GameEvent>> GAME_EVENT = RegistryKey.of("game_event");
 
     /**
      * The registry key for {@link Instrument}.
      */
-    RegistryKey<Registry<Instrument>> INSTRUMENT = RegistryKey.unsafeOf("instrument");
+    RegistryKey<Registry<Instrument>> INSTRUMENT = RegistryKey.of("instrument");
 
     /**
      * The registry key for {@link Material}.
      */
-    RegistryKey<Registry<Material>> ITEM = RegistryKey.unsafeOf("item");
+    RegistryKey<Registry<Material>> ITEM = RegistryKey.of("item");
 
     /**
      * The registry key for {@link JukeboxSong}.
      */
-    RegistryKey<Registry<JukeboxSong>> JUKEBOX_SONG = RegistryKey.unsafeOf("jukebox_song");
+    RegistryKey<Registry<JukeboxSong>> JUKEBOX_SONG = RegistryKey.of("jukebox_song");
 
     /**
      * The registry key for {@link PotionEffect}.
      */
-    RegistryKey<Registry<PotionEffect>> MOB_EFFECT = RegistryKey.unsafeOf("mob_effect");
+    RegistryKey<Registry<PotionEffect>> MOB_EFFECT = RegistryKey.of("mob_effect");
 
     /**
      * The registry key for {@link PaintingVariant}.
      */
-    RegistryKey<Registry<PaintingVariant>> PAINTING_VARIANT = RegistryKey.unsafeOf("painting_variant");
+    RegistryKey<Registry<PaintingVariant>> PAINTING_VARIANT = RegistryKey.of("painting_variant");
 
     /**
      * The registry key for {@link PigSoundVariant}.
      */
-    RegistryKey<Registry<PigSoundVariant>> PIG_SOUND_VARIANT = RegistryKey.unsafeOf("pig_sound_variant");
+    RegistryKey<Registry<PigSoundVariant>> PIG_SOUND_VARIANT = RegistryKey.of("pig_sound_variant");
 
     /**
      * The registry key for {@link PigVariant}.
      */
-    RegistryKey<Registry<PigVariant>> PIG_VARIANT = RegistryKey.unsafeOf("pig_variant");
+    RegistryKey<Registry<PigVariant>> PIG_VARIANT = RegistryKey.of("pig_variant");
 
     /**
      * The registry key for {@link PotionType}.
      */
-    RegistryKey<Registry<PotionType>> POTION = RegistryKey.unsafeOf("potion");
+    RegistryKey<Registry<PotionType>> POTION = RegistryKey.of("potion");
 
     /**
      * The registry key for {@link BuiltinSoundEvent}.
      */
-    RegistryKey<Registry<BuiltinSoundEvent>> SOUND_EVENT = RegistryKey.unsafeOf("sound_event");
+    RegistryKey<Registry<BuiltinSoundEvent>> SOUND_EVENT = RegistryKey.of("sound_event");
 
     /**
      * The registry key for {@link SulfurCubeArchetype}.
      */
-    RegistryKey<Registry<SulfurCubeArchetype>> SULFUR_CUBE_ARCHETYPE = RegistryKey.unsafeOf("sulfur_cube_archetype");
+    RegistryKey<Registry<SulfurCubeArchetype>> SULFUR_CUBE_ARCHETYPE = RegistryKey.of("sulfur_cube_archetype");
 
     /**
      * The registry key for {@link Timeline}.
      */
-    RegistryKey<Registry<Timeline>> TIMELINE = RegistryKey.unsafeOf("timeline");
+    RegistryKey<Registry<Timeline>> TIMELINE = RegistryKey.of("timeline");
 
     /**
      * The registry key for {@link TrimMaterial}.
      */
-    RegistryKey<Registry<TrimMaterial>> TRIM_MATERIAL = RegistryKey.unsafeOf("trim_material");
+    RegistryKey<Registry<TrimMaterial>> TRIM_MATERIAL = RegistryKey.of("trim_material");
 
     /**
      * The registry key for {@link TrimPattern}.
      */
-    RegistryKey<Registry<TrimPattern>> TRIM_PATTERN = RegistryKey.unsafeOf("trim_pattern");
+    RegistryKey<Registry<TrimPattern>> TRIM_PATTERN = RegistryKey.of("trim_pattern");
 
     /**
      * The registry key for {@link VillagerProfession}.
      */
-    RegistryKey<Registry<VillagerProfession>> VILLAGER_PROFESSION = RegistryKey.unsafeOf("villager_profession");
+    RegistryKey<Registry<VillagerProfession>> VILLAGER_PROFESSION = RegistryKey.of("villager_profession");
 
     /**
      * The registry key for {@link WolfSoundVariant}.
      */
-    RegistryKey<Registry<WolfSoundVariant>> WOLF_SOUND_VARIANT = RegistryKey.unsafeOf("wolf_sound_variant");
+    RegistryKey<Registry<WolfSoundVariant>> WOLF_SOUND_VARIANT = RegistryKey.of("wolf_sound_variant");
 
     /**
      * The registry key for {@link WolfVariant}.
      */
-    RegistryKey<Registry<WolfVariant>> WOLF_VARIANT = RegistryKey.unsafeOf("wolf_variant");
+    RegistryKey<Registry<WolfVariant>> WOLF_VARIANT = RegistryKey.of("wolf_variant");
 
     /**
      * The registry key for {@link WorldClock}.
      */
-    RegistryKey<Registry<WorldClock>> WORLD_CLOCK = RegistryKey.unsafeOf("world_clock");
+    RegistryKey<Registry<WorldClock>> WORLD_CLOCK = RegistryKey.of("world_clock");
 
     /**
      * The registry key for {@link Biome}.
      */
-    RegistryKey<Registry<Biome>> BIOME = RegistryKey.unsafeOf("worldgen/biome");
+    RegistryKey<Registry<Biome>> BIOME = RegistryKey.of("worldgen/biome");
 
     /**
      * The registry key for {@link BlockStateProvider}.
      */
-    RegistryKey<Registry<BlockStateProvider>> BLOCK_STATE_PROVIDER = RegistryKey.unsafeOf("worldgen/block_state_provider");
+    RegistryKey<Registry<BlockStateProvider>> BLOCK_STATE_PROVIDER = RegistryKey.of("worldgen/block_state_provider");
 
     /**
      * The registry key for {@link ZombieNautilusVariant}.
      */
-    RegistryKey<Registry<ZombieNautilusVariant>> ZOMBIE_NAUTILUS_VARIANT = RegistryKey.unsafeOf("zombie_nautilus_variant");
+    RegistryKey<Registry<ZombieNautilusVariant>> ZOMBIE_NAUTILUS_VARIANT = RegistryKey.of("zombie_nautilus_variant");
 
     /**
      * The registry key for {@link Particle}.
      */
-    RegistryKey<Registry<Particle>> PARTICLE_TYPE = RegistryKey.unsafeOf("particle_type");
+    RegistryKey<Registry<Particle>> PARTICLE_TYPE = RegistryKey.of("particle_type");
 
     /**
      * The registry key for {@link GameRule}.
      */
-    RegistryKey<Registry<GameRule<?>>> GAME_RULE = RegistryKey.unsafeOf("game_rule");
+    RegistryKey<Registry<GameRule<?>>> GAME_RULE = RegistryKey.of("game_rule");
 }

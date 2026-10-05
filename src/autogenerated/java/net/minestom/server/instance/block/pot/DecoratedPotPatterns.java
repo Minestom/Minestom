@@ -9,49 +9,49 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface DecoratedPotPatterns permits DecoratedPotPattern {
-    RegistryKey<DecoratedPotPattern> ANGLER = RegistryKey.unsafeOf("angler");
+    RegistryKey<DecoratedPotPattern> ANGLER = RegistryKey.of("angler");
 
-    RegistryKey<DecoratedPotPattern> ARCHER = RegistryKey.unsafeOf("archer");
+    RegistryKey<DecoratedPotPattern> ARCHER = RegistryKey.of("archer");
 
-    RegistryKey<DecoratedPotPattern> ARMS_UP = RegistryKey.unsafeOf("arms_up");
+    RegistryKey<DecoratedPotPattern> ARMS_UP = RegistryKey.of("arms_up");
 
-    RegistryKey<DecoratedPotPattern> BLADE = RegistryKey.unsafeOf("blade");
+    RegistryKey<DecoratedPotPattern> BLADE = RegistryKey.of("blade");
 
-    RegistryKey<DecoratedPotPattern> BREWER = RegistryKey.unsafeOf("brewer");
+    RegistryKey<DecoratedPotPattern> BREWER = RegistryKey.of("brewer");
 
-    RegistryKey<DecoratedPotPattern> BURN = RegistryKey.unsafeOf("burn");
+    RegistryKey<DecoratedPotPattern> BURN = RegistryKey.of("burn");
 
-    RegistryKey<DecoratedPotPattern> DANGER = RegistryKey.unsafeOf("danger");
+    RegistryKey<DecoratedPotPattern> DANGER = RegistryKey.of("danger");
 
-    RegistryKey<DecoratedPotPattern> EXPLORER = RegistryKey.unsafeOf("explorer");
+    RegistryKey<DecoratedPotPattern> EXPLORER = RegistryKey.of("explorer");
 
-    RegistryKey<DecoratedPotPattern> FLOW = RegistryKey.unsafeOf("flow");
+    RegistryKey<DecoratedPotPattern> FLOW = RegistryKey.of("flow");
 
-    RegistryKey<DecoratedPotPattern> FRIEND = RegistryKey.unsafeOf("friend");
+    RegistryKey<DecoratedPotPattern> FRIEND = RegistryKey.of("friend");
 
-    RegistryKey<DecoratedPotPattern> GUSTER = RegistryKey.unsafeOf("guster");
+    RegistryKey<DecoratedPotPattern> GUSTER = RegistryKey.of("guster");
 
-    RegistryKey<DecoratedPotPattern> HEART = RegistryKey.unsafeOf("heart");
+    RegistryKey<DecoratedPotPattern> HEART = RegistryKey.of("heart");
 
-    RegistryKey<DecoratedPotPattern> HEARTBREAK = RegistryKey.unsafeOf("heartbreak");
+    RegistryKey<DecoratedPotPattern> HEARTBREAK = RegistryKey.of("heartbreak");
 
-    RegistryKey<DecoratedPotPattern> HOWL = RegistryKey.unsafeOf("howl");
+    RegistryKey<DecoratedPotPattern> HOWL = RegistryKey.of("howl");
 
-    RegistryKey<DecoratedPotPattern> MINER = RegistryKey.unsafeOf("miner");
+    RegistryKey<DecoratedPotPattern> MINER = RegistryKey.of("miner");
 
-    RegistryKey<DecoratedPotPattern> MOURNER = RegistryKey.unsafeOf("mourner");
+    RegistryKey<DecoratedPotPattern> MOURNER = RegistryKey.of("mourner");
 
-    RegistryKey<DecoratedPotPattern> PLENTY = RegistryKey.unsafeOf("plenty");
+    RegistryKey<DecoratedPotPattern> PLENTY = RegistryKey.of("plenty");
 
-    RegistryKey<DecoratedPotPattern> PRIZE = RegistryKey.unsafeOf("prize");
+    RegistryKey<DecoratedPotPattern> PRIZE = RegistryKey.of("prize");
 
-    RegistryKey<DecoratedPotPattern> SCRAPE = RegistryKey.unsafeOf("scrape");
+    RegistryKey<DecoratedPotPattern> SCRAPE = RegistryKey.of("scrape");
 
-    RegistryKey<DecoratedPotPattern> SHEAF = RegistryKey.unsafeOf("sheaf");
+    RegistryKey<DecoratedPotPattern> SHEAF = RegistryKey.of("sheaf");
 
-    RegistryKey<DecoratedPotPattern> SHELTER = RegistryKey.unsafeOf("shelter");
+    RegistryKey<DecoratedPotPattern> SHELTER = RegistryKey.of("shelter");
 
-    RegistryKey<DecoratedPotPattern> SKULL = RegistryKey.unsafeOf("skull");
+    RegistryKey<DecoratedPotPattern> SKULL = RegistryKey.of("skull");
 
-    RegistryKey<DecoratedPotPattern> SNORT = RegistryKey.unsafeOf("snort");
+    RegistryKey<DecoratedPotPattern> SNORT = RegistryKey.of("snort");
 }

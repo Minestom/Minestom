@@ -9,17 +9,17 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface ChatTypes permits ChatType {
-    RegistryKey<ChatType> CHAT = RegistryKey.unsafeOf("chat");
+    RegistryKey<ChatType> CHAT = RegistryKey.of("chat");
 
-    RegistryKey<ChatType> EMOTE_COMMAND = RegistryKey.unsafeOf("emote_command");
+    RegistryKey<ChatType> EMOTE_COMMAND = RegistryKey.of("emote_command");
 
-    RegistryKey<ChatType> MSG_COMMAND_INCOMING = RegistryKey.unsafeOf("msg_command_incoming");
+    RegistryKey<ChatType> MSG_COMMAND_INCOMING = RegistryKey.of("msg_command_incoming");
 
-    RegistryKey<ChatType> MSG_COMMAND_OUTGOING = RegistryKey.unsafeOf("msg_command_outgoing");
+    RegistryKey<ChatType> MSG_COMMAND_OUTGOING = RegistryKey.of("msg_command_outgoing");
 
-    RegistryKey<ChatType> SAY_COMMAND = RegistryKey.unsafeOf("say_command");
+    RegistryKey<ChatType> SAY_COMMAND = RegistryKey.of("say_command");
 
-    RegistryKey<ChatType> TEAM_MSG_COMMAND_INCOMING = RegistryKey.unsafeOf("team_msg_command_incoming");
+    RegistryKey<ChatType> TEAM_MSG_COMMAND_INCOMING = RegistryKey.of("team_msg_command_incoming");
 
-    RegistryKey<ChatType> TEAM_MSG_COMMAND_OUTGOING = RegistryKey.unsafeOf("team_msg_command_outgoing");
+    RegistryKey<ChatType> TEAM_MSG_COMMAND_OUTGOING = RegistryKey.of("team_msg_command_outgoing");
 }

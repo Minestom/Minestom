@@ -11,11 +11,11 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("unused")
 @ApiStatus.NonExtendable
 public interface TimelineTags {
-    TagKey<Timeline> IN_END = TagKey.unsafeOf("in_end");
+    TagKey<Timeline> IN_END = TagKey.of("in_end");
 
-    TagKey<Timeline> IN_NETHER = TagKey.unsafeOf("in_nether");
+    TagKey<Timeline> IN_NETHER = TagKey.of("in_nether");
 
-    TagKey<Timeline> IN_OVERWORLD = TagKey.unsafeOf("in_overworld");
+    TagKey<Timeline> IN_OVERWORLD = TagKey.of("in_overworld");
 
-    TagKey<Timeline> UNIVERSAL = TagKey.unsafeOf("universal");
+    TagKey<Timeline> UNIVERSAL = TagKey.of("universal");
 }

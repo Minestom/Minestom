@@ -11,23 +11,23 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("unused")
 @ApiStatus.NonExtendable
 public interface FluidTags {
-    TagKey<Fluid> AXOLOTL_TRIES_TO_FIND = TagKey.unsafeOf("axolotl_tries_to_find");
+    TagKey<Fluid> AXOLOTL_TRIES_TO_FIND = TagKey.of("axolotl_tries_to_find");
 
-    TagKey<Fluid> BUBBLE_COLUMN_CAN_OCCUPY = TagKey.unsafeOf("bubble_column_can_occupy");
+    TagKey<Fluid> BUBBLE_COLUMN_CAN_OCCUPY = TagKey.of("bubble_column_can_occupy");
 
-    TagKey<Fluid> DOLPHIN_TRIES_TO_FIND = TagKey.unsafeOf("dolphin_tries_to_find");
+    TagKey<Fluid> DOLPHIN_TRIES_TO_FIND = TagKey.of("dolphin_tries_to_find");
 
-    TagKey<Fluid> ENTITY_FLOATABLE = TagKey.unsafeOf("entity_floatable");
+    TagKey<Fluid> ENTITY_FLOATABLE = TagKey.of("entity_floatable");
 
-    TagKey<Fluid> FROG_TRIES_TO_FIND_LAND_NEAR = TagKey.unsafeOf("frog_tries_to_find_land_near");
+    TagKey<Fluid> FROG_TRIES_TO_FIND_LAND_NEAR = TagKey.of("frog_tries_to_find_land_near");
 
-    TagKey<Fluid> LAVA = TagKey.unsafeOf("lava");
+    TagKey<Fluid> LAVA = TagKey.of("lava");
 
-    TagKey<Fluid> SUPPORTS_FROGSPAWN = TagKey.unsafeOf("supports_frogspawn");
+    TagKey<Fluid> SUPPORTS_FROGSPAWN = TagKey.of("supports_frogspawn");
 
-    TagKey<Fluid> SUPPORTS_LILY_PAD = TagKey.unsafeOf("supports_lily_pad");
+    TagKey<Fluid> SUPPORTS_LILY_PAD = TagKey.of("supports_lily_pad");
 
-    TagKey<Fluid> SUPPORTS_SUGAR_CANE_ADJACENTLY = TagKey.unsafeOf("supports_sugar_cane_adjacently");
+    TagKey<Fluid> SUPPORTS_SUGAR_CANE_ADJACENTLY = TagKey.of("supports_sugar_cane_adjacently");
 
-    TagKey<Fluid> WATER = TagKey.unsafeOf("water");
+    TagKey<Fluid> WATER = TagKey.of("water");
 }

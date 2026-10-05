@@ -15,7 +15,7 @@ public sealed interface ClockTimeMarker extends ClockTimeMarkers permits ClockTi
     }
 
     static RegistryKey<ClockTimeMarker> key(Key key) {
-        return RegistryKey.unsafeOf(key);
+        return RegistryKey.of(key);
     }
 
     RegistryKey<WorldClock> clock();

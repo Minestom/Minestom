@@ -11,13 +11,13 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("unused")
 @ApiStatus.NonExtendable
 public interface FluidKeys {
-    RegistryKey<Fluid> EMPTY = RegistryKey.unsafeOf("empty");
+    RegistryKey<Fluid> EMPTY = RegistryKey.of("empty");
 
-    RegistryKey<Fluid> FLOWING_LAVA = RegistryKey.unsafeOf("flowing_lava");
+    RegistryKey<Fluid> FLOWING_LAVA = RegistryKey.of("flowing_lava");
 
-    RegistryKey<Fluid> FLOWING_WATER = RegistryKey.unsafeOf("flowing_water");
+    RegistryKey<Fluid> FLOWING_WATER = RegistryKey.of("flowing_water");
 
-    RegistryKey<Fluid> LAVA = RegistryKey.unsafeOf("lava");
+    RegistryKey<Fluid> LAVA = RegistryKey.of("lava");
 
-    RegistryKey<Fluid> WATER = RegistryKey.unsafeOf("water");
+    RegistryKey<Fluid> WATER = RegistryKey.of("water");
 }

@@ -9,19 +9,19 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface BlockStateProviders permits BlockStateProvider {
-    RegistryKey<BlockStateProvider> CAVE_VINES_BODY = RegistryKey.unsafeOf("cave_vines_body");
+    RegistryKey<BlockStateProvider> CAVE_VINES_BODY = RegistryKey.of("cave_vines_body");
 
-    RegistryKey<BlockStateProvider> CAVE_VINES_HEAD = RegistryKey.unsafeOf("cave_vines_head");
+    RegistryKey<BlockStateProvider> CAVE_VINES_HEAD = RegistryKey.of("cave_vines_head");
 
-    RegistryKey<BlockStateProvider> FLOWER_FLOWER_FOREST = RegistryKey.unsafeOf("flower_flower_forest");
+    RegistryKey<BlockStateProvider> FLOWER_FLOWER_FOREST = RegistryKey.of("flower_flower_forest");
 
-    RegistryKey<BlockStateProvider> FLOWER_MEADOW = RegistryKey.unsafeOf("flower_meadow");
+    RegistryKey<BlockStateProvider> FLOWER_MEADOW = RegistryKey.of("flower_meadow");
 
-    RegistryKey<BlockStateProvider> FLOWER_PLAIN = RegistryKey.unsafeOf("flower_plain");
+    RegistryKey<BlockStateProvider> FLOWER_PLAIN = RegistryKey.of("flower_plain");
 
-    RegistryKey<BlockStateProvider> MANGROVE_PROPAGULE = RegistryKey.unsafeOf("mangrove_propagule");
+    RegistryKey<BlockStateProvider> MANGROVE_PROPAGULE = RegistryKey.of("mangrove_propagule");
 
-    RegistryKey<BlockStateProvider> PODZOL_BENEATH_TREE = RegistryKey.unsafeOf("podzol_beneath_tree");
+    RegistryKey<BlockStateProvider> PODZOL_BENEATH_TREE = RegistryKey.of("podzol_beneath_tree");
 
-    RegistryKey<BlockStateProvider> SOIL_BENEATH_TREE = RegistryKey.unsafeOf("soil_beneath_tree");
+    RegistryKey<BlockStateProvider> SOIL_BENEATH_TREE = RegistryKey.of("soil_beneath_tree");
 }

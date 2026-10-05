@@ -9,25 +9,25 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface CatVariants permits CatVariant {
-    RegistryKey<CatVariant> ALL_BLACK = RegistryKey.unsafeOf("all_black");
+    RegistryKey<CatVariant> ALL_BLACK = RegistryKey.of("all_black");
 
-    RegistryKey<CatVariant> BLACK = RegistryKey.unsafeOf("black");
+    RegistryKey<CatVariant> BLACK = RegistryKey.of("black");
 
-    RegistryKey<CatVariant> BRITISH_SHORTHAIR = RegistryKey.unsafeOf("british_shorthair");
+    RegistryKey<CatVariant> BRITISH_SHORTHAIR = RegistryKey.of("british_shorthair");
 
-    RegistryKey<CatVariant> CALICO = RegistryKey.unsafeOf("calico");
+    RegistryKey<CatVariant> CALICO = RegistryKey.of("calico");
 
-    RegistryKey<CatVariant> JELLIE = RegistryKey.unsafeOf("jellie");
+    RegistryKey<CatVariant> JELLIE = RegistryKey.of("jellie");
 
-    RegistryKey<CatVariant> PERSIAN = RegistryKey.unsafeOf("persian");
+    RegistryKey<CatVariant> PERSIAN = RegistryKey.of("persian");
 
-    RegistryKey<CatVariant> RAGDOLL = RegistryKey.unsafeOf("ragdoll");
+    RegistryKey<CatVariant> RAGDOLL = RegistryKey.of("ragdoll");
 
-    RegistryKey<CatVariant> RED = RegistryKey.unsafeOf("red");
+    RegistryKey<CatVariant> RED = RegistryKey.of("red");
 
-    RegistryKey<CatVariant> SIAMESE = RegistryKey.unsafeOf("siamese");
+    RegistryKey<CatVariant> SIAMESE = RegistryKey.of("siamese");
 
-    RegistryKey<CatVariant> TABBY = RegistryKey.unsafeOf("tabby");
+    RegistryKey<CatVariant> TABBY = RegistryKey.of("tabby");
 
-    RegistryKey<CatVariant> WHITE = RegistryKey.unsafeOf("white");
+    RegistryKey<CatVariant> WHITE = RegistryKey.of("white");
 }

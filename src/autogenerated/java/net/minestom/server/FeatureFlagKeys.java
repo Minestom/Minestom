@@ -11,11 +11,11 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("unused")
 @ApiStatus.NonExtendable
 public interface FeatureFlagKeys {
-    RegistryKey<FeatureFlag> MINECART_IMPROVEMENTS = RegistryKey.unsafeOf("minecart_improvements");
+    RegistryKey<FeatureFlag> MINECART_IMPROVEMENTS = RegistryKey.of("minecart_improvements");
 
-    RegistryKey<FeatureFlag> REDSTONE_EXPERIMENTS = RegistryKey.unsafeOf("redstone_experiments");
+    RegistryKey<FeatureFlag> REDSTONE_EXPERIMENTS = RegistryKey.of("redstone_experiments");
 
-    RegistryKey<FeatureFlag> TRADE_REBALANCE = RegistryKey.unsafeOf("trade_rebalance");
+    RegistryKey<FeatureFlag> TRADE_REBALANCE = RegistryKey.of("trade_rebalance");
 
-    RegistryKey<FeatureFlag> VANILLA = RegistryKey.unsafeOf("vanilla");
+    RegistryKey<FeatureFlag> VANILLA = RegistryKey.of("vanilla");
 }

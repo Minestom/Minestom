@@ -11,3319 +11,3319 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("unused")
 @ApiStatus.NonExtendable
 public interface MaterialKeys {
-    RegistryKey<Material> ABANDONED_CAMP_MAP = RegistryKey.unsafeOf("abandoned_camp_map");
+    RegistryKey<Material> ABANDONED_CAMP_MAP = RegistryKey.of("abandoned_camp_map");
 
-    RegistryKey<Material> ACACIA_BOAT = RegistryKey.unsafeOf("acacia_boat");
+    RegistryKey<Material> ACACIA_BOAT = RegistryKey.of("acacia_boat");
 
-    RegistryKey<Material> ACACIA_BUTTON = RegistryKey.unsafeOf("acacia_button");
+    RegistryKey<Material> ACACIA_BUTTON = RegistryKey.of("acacia_button");
 
-    RegistryKey<Material> ACACIA_CHEST_BOAT = RegistryKey.unsafeOf("acacia_chest_boat");
+    RegistryKey<Material> ACACIA_CHEST_BOAT = RegistryKey.of("acacia_chest_boat");
 
-    RegistryKey<Material> ACACIA_DOOR = RegistryKey.unsafeOf("acacia_door");
+    RegistryKey<Material> ACACIA_DOOR = RegistryKey.of("acacia_door");
 
-    RegistryKey<Material> ACACIA_FENCE = RegistryKey.unsafeOf("acacia_fence");
+    RegistryKey<Material> ACACIA_FENCE = RegistryKey.of("acacia_fence");
 
-    RegistryKey<Material> ACACIA_FENCE_GATE = RegistryKey.unsafeOf("acacia_fence_gate");
+    RegistryKey<Material> ACACIA_FENCE_GATE = RegistryKey.of("acacia_fence_gate");
 
-    RegistryKey<Material> ACACIA_HANGING_SIGN = RegistryKey.unsafeOf("acacia_hanging_sign");
+    RegistryKey<Material> ACACIA_HANGING_SIGN = RegistryKey.of("acacia_hanging_sign");
 
-    RegistryKey<Material> ACACIA_LEAVES = RegistryKey.unsafeOf("acacia_leaves");
+    RegistryKey<Material> ACACIA_LEAVES = RegistryKey.of("acacia_leaves");
 
-    RegistryKey<Material> ACACIA_LOG = RegistryKey.unsafeOf("acacia_log");
+    RegistryKey<Material> ACACIA_LOG = RegistryKey.of("acacia_log");
 
-    RegistryKey<Material> ACACIA_PLANKS = RegistryKey.unsafeOf("acacia_planks");
+    RegistryKey<Material> ACACIA_PLANKS = RegistryKey.of("acacia_planks");
 
-    RegistryKey<Material> ACACIA_PRESSURE_PLATE = RegistryKey.unsafeOf("acacia_pressure_plate");
+    RegistryKey<Material> ACACIA_PRESSURE_PLATE = RegistryKey.of("acacia_pressure_plate");
 
-    RegistryKey<Material> ACACIA_SAPLING = RegistryKey.unsafeOf("acacia_sapling");
+    RegistryKey<Material> ACACIA_SAPLING = RegistryKey.of("acacia_sapling");
 
-    RegistryKey<Material> ACACIA_SHELF = RegistryKey.unsafeOf("acacia_shelf");
+    RegistryKey<Material> ACACIA_SHELF = RegistryKey.of("acacia_shelf");
 
-    RegistryKey<Material> ACACIA_SIGN = RegistryKey.unsafeOf("acacia_sign");
+    RegistryKey<Material> ACACIA_SIGN = RegistryKey.of("acacia_sign");
 
-    RegistryKey<Material> ACACIA_SLAB = RegistryKey.unsafeOf("acacia_slab");
+    RegistryKey<Material> ACACIA_SLAB = RegistryKey.of("acacia_slab");
 
-    RegistryKey<Material> ACACIA_STAIRS = RegistryKey.unsafeOf("acacia_stairs");
+    RegistryKey<Material> ACACIA_STAIRS = RegistryKey.of("acacia_stairs");
 
-    RegistryKey<Material> ACACIA_TRAPDOOR = RegistryKey.unsafeOf("acacia_trapdoor");
+    RegistryKey<Material> ACACIA_TRAPDOOR = RegistryKey.of("acacia_trapdoor");
 
-    RegistryKey<Material> ACACIA_WOOD = RegistryKey.unsafeOf("acacia_wood");
+    RegistryKey<Material> ACACIA_WOOD = RegistryKey.of("acacia_wood");
 
-    RegistryKey<Material> ACTIVATOR_RAIL = RegistryKey.unsafeOf("activator_rail");
+    RegistryKey<Material> ACTIVATOR_RAIL = RegistryKey.of("activator_rail");
 
-    RegistryKey<Material> AIR = RegistryKey.unsafeOf("air");
+    RegistryKey<Material> AIR = RegistryKey.of("air");
 
-    RegistryKey<Material> ALLAY_SPAWN_EGG = RegistryKey.unsafeOf("allay_spawn_egg");
+    RegistryKey<Material> ALLAY_SPAWN_EGG = RegistryKey.of("allay_spawn_egg");
 
-    RegistryKey<Material> ALLIUM = RegistryKey.unsafeOf("allium");
+    RegistryKey<Material> ALLIUM = RegistryKey.of("allium");
 
-    RegistryKey<Material> AMETHYST_BLOCK = RegistryKey.unsafeOf("amethyst_block");
+    RegistryKey<Material> AMETHYST_BLOCK = RegistryKey.of("amethyst_block");
 
-    RegistryKey<Material> AMETHYST_CLUSTER = RegistryKey.unsafeOf("amethyst_cluster");
+    RegistryKey<Material> AMETHYST_CLUSTER = RegistryKey.of("amethyst_cluster");
 
-    RegistryKey<Material> AMETHYST_SHARD = RegistryKey.unsafeOf("amethyst_shard");
+    RegistryKey<Material> AMETHYST_SHARD = RegistryKey.of("amethyst_shard");
 
-    RegistryKey<Material> ANCIENT_DEBRIS = RegistryKey.unsafeOf("ancient_debris");
+    RegistryKey<Material> ANCIENT_DEBRIS = RegistryKey.of("ancient_debris");
 
-    RegistryKey<Material> ANDESITE = RegistryKey.unsafeOf("andesite");
+    RegistryKey<Material> ANDESITE = RegistryKey.of("andesite");
 
-    RegistryKey<Material> ANDESITE_SLAB = RegistryKey.unsafeOf("andesite_slab");
+    RegistryKey<Material> ANDESITE_SLAB = RegistryKey.of("andesite_slab");
 
-    RegistryKey<Material> ANDESITE_STAIRS = RegistryKey.unsafeOf("andesite_stairs");
+    RegistryKey<Material> ANDESITE_STAIRS = RegistryKey.of("andesite_stairs");
 
-    RegistryKey<Material> ANDESITE_WALL = RegistryKey.unsafeOf("andesite_wall");
+    RegistryKey<Material> ANDESITE_WALL = RegistryKey.of("andesite_wall");
 
-    RegistryKey<Material> ANGLER_POTTERY_SHERD = RegistryKey.unsafeOf("angler_pottery_sherd");
+    RegistryKey<Material> ANGLER_POTTERY_SHERD = RegistryKey.of("angler_pottery_sherd");
 
-    RegistryKey<Material> ANVIL = RegistryKey.unsafeOf("anvil");
+    RegistryKey<Material> ANVIL = RegistryKey.of("anvil");
 
-    RegistryKey<Material> APPLE = RegistryKey.unsafeOf("apple");
+    RegistryKey<Material> APPLE = RegistryKey.of("apple");
 
-    RegistryKey<Material> ARCHER_POTTERY_SHERD = RegistryKey.unsafeOf("archer_pottery_sherd");
+    RegistryKey<Material> ARCHER_POTTERY_SHERD = RegistryKey.of("archer_pottery_sherd");
 
-    RegistryKey<Material> ARMADILLO_SCUTE = RegistryKey.unsafeOf("armadillo_scute");
+    RegistryKey<Material> ARMADILLO_SCUTE = RegistryKey.of("armadillo_scute");
 
-    RegistryKey<Material> ARMADILLO_SPAWN_EGG = RegistryKey.unsafeOf("armadillo_spawn_egg");
+    RegistryKey<Material> ARMADILLO_SPAWN_EGG = RegistryKey.of("armadillo_spawn_egg");
 
-    RegistryKey<Material> ARMOR_STAND = RegistryKey.unsafeOf("armor_stand");
+    RegistryKey<Material> ARMOR_STAND = RegistryKey.of("armor_stand");
 
-    RegistryKey<Material> ARMS_UP_POTTERY_SHERD = RegistryKey.unsafeOf("arms_up_pottery_sherd");
+    RegistryKey<Material> ARMS_UP_POTTERY_SHERD = RegistryKey.of("arms_up_pottery_sherd");
 
-    RegistryKey<Material> ARROW = RegistryKey.unsafeOf("arrow");
+    RegistryKey<Material> ARROW = RegistryKey.of("arrow");
 
-    RegistryKey<Material> AXOLOTL_BUCKET = RegistryKey.unsafeOf("axolotl_bucket");
+    RegistryKey<Material> AXOLOTL_BUCKET = RegistryKey.of("axolotl_bucket");
 
-    RegistryKey<Material> AXOLOTL_SPAWN_EGG = RegistryKey.unsafeOf("axolotl_spawn_egg");
+    RegistryKey<Material> AXOLOTL_SPAWN_EGG = RegistryKey.of("axolotl_spawn_egg");
 
-    RegistryKey<Material> AZALEA = RegistryKey.unsafeOf("azalea");
+    RegistryKey<Material> AZALEA = RegistryKey.of("azalea");
 
-    RegistryKey<Material> AZALEA_LEAVES = RegistryKey.unsafeOf("azalea_leaves");
+    RegistryKey<Material> AZALEA_LEAVES = RegistryKey.of("azalea_leaves");
 
-    RegistryKey<Material> AZURE_BLUET = RegistryKey.unsafeOf("azure_bluet");
+    RegistryKey<Material> AZURE_BLUET = RegistryKey.of("azure_bluet");
 
-    RegistryKey<Material> BAKED_POTATO = RegistryKey.unsafeOf("baked_potato");
+    RegistryKey<Material> BAKED_POTATO = RegistryKey.of("baked_potato");
 
-    RegistryKey<Material> BAMBOO = RegistryKey.unsafeOf("bamboo");
+    RegistryKey<Material> BAMBOO = RegistryKey.of("bamboo");
 
-    RegistryKey<Material> BAMBOO_BLOCK = RegistryKey.unsafeOf("bamboo_block");
+    RegistryKey<Material> BAMBOO_BLOCK = RegistryKey.of("bamboo_block");
 
-    RegistryKey<Material> BAMBOO_BUTTON = RegistryKey.unsafeOf("bamboo_button");
+    RegistryKey<Material> BAMBOO_BUTTON = RegistryKey.of("bamboo_button");
 
-    RegistryKey<Material> BAMBOO_CHEST_RAFT = RegistryKey.unsafeOf("bamboo_chest_raft");
+    RegistryKey<Material> BAMBOO_CHEST_RAFT = RegistryKey.of("bamboo_chest_raft");
 
-    RegistryKey<Material> BAMBOO_DOOR = RegistryKey.unsafeOf("bamboo_door");
+    RegistryKey<Material> BAMBOO_DOOR = RegistryKey.of("bamboo_door");
 
-    RegistryKey<Material> BAMBOO_FENCE = RegistryKey.unsafeOf("bamboo_fence");
+    RegistryKey<Material> BAMBOO_FENCE = RegistryKey.of("bamboo_fence");
 
-    RegistryKey<Material> BAMBOO_FENCE_GATE = RegistryKey.unsafeOf("bamboo_fence_gate");
+    RegistryKey<Material> BAMBOO_FENCE_GATE = RegistryKey.of("bamboo_fence_gate");
 
-    RegistryKey<Material> BAMBOO_HANGING_SIGN = RegistryKey.unsafeOf("bamboo_hanging_sign");
+    RegistryKey<Material> BAMBOO_HANGING_SIGN = RegistryKey.of("bamboo_hanging_sign");
 
-    RegistryKey<Material> BAMBOO_MOSAIC = RegistryKey.unsafeOf("bamboo_mosaic");
+    RegistryKey<Material> BAMBOO_MOSAIC = RegistryKey.of("bamboo_mosaic");
 
-    RegistryKey<Material> BAMBOO_MOSAIC_SLAB = RegistryKey.unsafeOf("bamboo_mosaic_slab");
+    RegistryKey<Material> BAMBOO_MOSAIC_SLAB = RegistryKey.of("bamboo_mosaic_slab");
 
-    RegistryKey<Material> BAMBOO_MOSAIC_STAIRS = RegistryKey.unsafeOf("bamboo_mosaic_stairs");
+    RegistryKey<Material> BAMBOO_MOSAIC_STAIRS = RegistryKey.of("bamboo_mosaic_stairs");
 
-    RegistryKey<Material> BAMBOO_PLANKS = RegistryKey.unsafeOf("bamboo_planks");
+    RegistryKey<Material> BAMBOO_PLANKS = RegistryKey.of("bamboo_planks");
 
-    RegistryKey<Material> BAMBOO_PRESSURE_PLATE = RegistryKey.unsafeOf("bamboo_pressure_plate");
+    RegistryKey<Material> BAMBOO_PRESSURE_PLATE = RegistryKey.of("bamboo_pressure_plate");
 
-    RegistryKey<Material> BAMBOO_RAFT = RegistryKey.unsafeOf("bamboo_raft");
+    RegistryKey<Material> BAMBOO_RAFT = RegistryKey.of("bamboo_raft");
 
-    RegistryKey<Material> BAMBOO_SHELF = RegistryKey.unsafeOf("bamboo_shelf");
+    RegistryKey<Material> BAMBOO_SHELF = RegistryKey.of("bamboo_shelf");
 
-    RegistryKey<Material> BAMBOO_SIGN = RegistryKey.unsafeOf("bamboo_sign");
+    RegistryKey<Material> BAMBOO_SIGN = RegistryKey.of("bamboo_sign");
 
-    RegistryKey<Material> BAMBOO_SLAB = RegistryKey.unsafeOf("bamboo_slab");
+    RegistryKey<Material> BAMBOO_SLAB = RegistryKey.of("bamboo_slab");
 
-    RegistryKey<Material> BAMBOO_STAIRS = RegistryKey.unsafeOf("bamboo_stairs");
+    RegistryKey<Material> BAMBOO_STAIRS = RegistryKey.of("bamboo_stairs");
 
-    RegistryKey<Material> BAMBOO_TRAPDOOR = RegistryKey.unsafeOf("bamboo_trapdoor");
+    RegistryKey<Material> BAMBOO_TRAPDOOR = RegistryKey.of("bamboo_trapdoor");
 
-    RegistryKey<Material> BARREL = RegistryKey.unsafeOf("barrel");
+    RegistryKey<Material> BARREL = RegistryKey.of("barrel");
 
-    RegistryKey<Material> BARRIER = RegistryKey.unsafeOf("barrier");
+    RegistryKey<Material> BARRIER = RegistryKey.of("barrier");
 
-    RegistryKey<Material> BASALT = RegistryKey.unsafeOf("basalt");
+    RegistryKey<Material> BASALT = RegistryKey.of("basalt");
 
-    RegistryKey<Material> BAT_SPAWN_EGG = RegistryKey.unsafeOf("bat_spawn_egg");
+    RegistryKey<Material> BAT_SPAWN_EGG = RegistryKey.of("bat_spawn_egg");
 
-    RegistryKey<Material> BEACON = RegistryKey.unsafeOf("beacon");
+    RegistryKey<Material> BEACON = RegistryKey.of("beacon");
 
-    RegistryKey<Material> BEDROCK = RegistryKey.unsafeOf("bedrock");
+    RegistryKey<Material> BEDROCK = RegistryKey.of("bedrock");
 
-    RegistryKey<Material> BEE_NEST = RegistryKey.unsafeOf("bee_nest");
+    RegistryKey<Material> BEE_NEST = RegistryKey.of("bee_nest");
 
-    RegistryKey<Material> BEE_SPAWN_EGG = RegistryKey.unsafeOf("bee_spawn_egg");
+    RegistryKey<Material> BEE_SPAWN_EGG = RegistryKey.of("bee_spawn_egg");
 
-    RegistryKey<Material> BEEF = RegistryKey.unsafeOf("beef");
+    RegistryKey<Material> BEEF = RegistryKey.of("beef");
 
-    RegistryKey<Material> BEEHIVE = RegistryKey.unsafeOf("beehive");
+    RegistryKey<Material> BEEHIVE = RegistryKey.of("beehive");
 
-    RegistryKey<Material> BEETROOT = RegistryKey.unsafeOf("beetroot");
+    RegistryKey<Material> BEETROOT = RegistryKey.of("beetroot");
 
-    RegistryKey<Material> BEETROOT_SEEDS = RegistryKey.unsafeOf("beetroot_seeds");
+    RegistryKey<Material> BEETROOT_SEEDS = RegistryKey.of("beetroot_seeds");
 
-    RegistryKey<Material> BEETROOT_SOUP = RegistryKey.unsafeOf("beetroot_soup");
+    RegistryKey<Material> BEETROOT_SOUP = RegistryKey.of("beetroot_soup");
 
-    RegistryKey<Material> BELL = RegistryKey.unsafeOf("bell");
+    RegistryKey<Material> BELL = RegistryKey.of("bell");
 
-    RegistryKey<Material> BIG_DRIPLEAF = RegistryKey.unsafeOf("big_dripleaf");
+    RegistryKey<Material> BIG_DRIPLEAF = RegistryKey.of("big_dripleaf");
 
-    RegistryKey<Material> BIRCH_BOAT = RegistryKey.unsafeOf("birch_boat");
+    RegistryKey<Material> BIRCH_BOAT = RegistryKey.of("birch_boat");
 
-    RegistryKey<Material> BIRCH_BUTTON = RegistryKey.unsafeOf("birch_button");
+    RegistryKey<Material> BIRCH_BUTTON = RegistryKey.of("birch_button");
 
-    RegistryKey<Material> BIRCH_CHEST_BOAT = RegistryKey.unsafeOf("birch_chest_boat");
+    RegistryKey<Material> BIRCH_CHEST_BOAT = RegistryKey.of("birch_chest_boat");
 
-    RegistryKey<Material> BIRCH_DOOR = RegistryKey.unsafeOf("birch_door");
+    RegistryKey<Material> BIRCH_DOOR = RegistryKey.of("birch_door");
 
-    RegistryKey<Material> BIRCH_FENCE = RegistryKey.unsafeOf("birch_fence");
+    RegistryKey<Material> BIRCH_FENCE = RegistryKey.of("birch_fence");
 
-    RegistryKey<Material> BIRCH_FENCE_GATE = RegistryKey.unsafeOf("birch_fence_gate");
+    RegistryKey<Material> BIRCH_FENCE_GATE = RegistryKey.of("birch_fence_gate");
 
-    RegistryKey<Material> BIRCH_HANGING_SIGN = RegistryKey.unsafeOf("birch_hanging_sign");
+    RegistryKey<Material> BIRCH_HANGING_SIGN = RegistryKey.of("birch_hanging_sign");
 
-    RegistryKey<Material> BIRCH_LEAVES = RegistryKey.unsafeOf("birch_leaves");
+    RegistryKey<Material> BIRCH_LEAVES = RegistryKey.of("birch_leaves");
 
-    RegistryKey<Material> BIRCH_LOG = RegistryKey.unsafeOf("birch_log");
+    RegistryKey<Material> BIRCH_LOG = RegistryKey.of("birch_log");
 
-    RegistryKey<Material> BIRCH_PLANKS = RegistryKey.unsafeOf("birch_planks");
+    RegistryKey<Material> BIRCH_PLANKS = RegistryKey.of("birch_planks");
 
-    RegistryKey<Material> BIRCH_PRESSURE_PLATE = RegistryKey.unsafeOf("birch_pressure_plate");
+    RegistryKey<Material> BIRCH_PRESSURE_PLATE = RegistryKey.of("birch_pressure_plate");
 
-    RegistryKey<Material> BIRCH_SAPLING = RegistryKey.unsafeOf("birch_sapling");
+    RegistryKey<Material> BIRCH_SAPLING = RegistryKey.of("birch_sapling");
 
-    RegistryKey<Material> BIRCH_SHELF = RegistryKey.unsafeOf("birch_shelf");
+    RegistryKey<Material> BIRCH_SHELF = RegistryKey.of("birch_shelf");
 
-    RegistryKey<Material> BIRCH_SIGN = RegistryKey.unsafeOf("birch_sign");
+    RegistryKey<Material> BIRCH_SIGN = RegistryKey.of("birch_sign");
 
-    RegistryKey<Material> BIRCH_SLAB = RegistryKey.unsafeOf("birch_slab");
+    RegistryKey<Material> BIRCH_SLAB = RegistryKey.of("birch_slab");
 
-    RegistryKey<Material> BIRCH_STAIRS = RegistryKey.unsafeOf("birch_stairs");
+    RegistryKey<Material> BIRCH_STAIRS = RegistryKey.of("birch_stairs");
 
-    RegistryKey<Material> BIRCH_TRAPDOOR = RegistryKey.unsafeOf("birch_trapdoor");
+    RegistryKey<Material> BIRCH_TRAPDOOR = RegistryKey.of("birch_trapdoor");
 
-    RegistryKey<Material> BIRCH_WOOD = RegistryKey.unsafeOf("birch_wood");
+    RegistryKey<Material> BIRCH_WOOD = RegistryKey.of("birch_wood");
 
-    RegistryKey<Material> BLACK_BANNER = RegistryKey.unsafeOf("black_banner");
+    RegistryKey<Material> BLACK_BANNER = RegistryKey.of("black_banner");
 
-    RegistryKey<Material> BLACK_BED = RegistryKey.unsafeOf("black_bed");
+    RegistryKey<Material> BLACK_BED = RegistryKey.of("black_bed");
 
-    RegistryKey<Material> BLACK_BUNDLE = RegistryKey.unsafeOf("black_bundle");
+    RegistryKey<Material> BLACK_BUNDLE = RegistryKey.of("black_bundle");
 
-    RegistryKey<Material> BLACK_CANDLE = RegistryKey.unsafeOf("black_candle");
+    RegistryKey<Material> BLACK_CANDLE = RegistryKey.of("black_candle");
 
-    RegistryKey<Material> BLACK_CARPET = RegistryKey.unsafeOf("black_carpet");
+    RegistryKey<Material> BLACK_CARPET = RegistryKey.of("black_carpet");
 
-    RegistryKey<Material> BLACK_CONCRETE = RegistryKey.unsafeOf("black_concrete");
+    RegistryKey<Material> BLACK_CONCRETE = RegistryKey.of("black_concrete");
 
-    RegistryKey<Material> BLACK_CONCRETE_POWDER = RegistryKey.unsafeOf("black_concrete_powder");
+    RegistryKey<Material> BLACK_CONCRETE_POWDER = RegistryKey.of("black_concrete_powder");
 
-    RegistryKey<Material> BLACK_CONCRETE_SLAB = RegistryKey.unsafeOf("black_concrete_slab");
+    RegistryKey<Material> BLACK_CONCRETE_SLAB = RegistryKey.of("black_concrete_slab");
 
-    RegistryKey<Material> BLACK_CONCRETE_STAIRS = RegistryKey.unsafeOf("black_concrete_stairs");
+    RegistryKey<Material> BLACK_CONCRETE_STAIRS = RegistryKey.of("black_concrete_stairs");
 
-    RegistryKey<Material> BLACK_CUSHION = RegistryKey.unsafeOf("black_cushion");
+    RegistryKey<Material> BLACK_CUSHION = RegistryKey.of("black_cushion");
 
-    RegistryKey<Material> BLACK_DYE = RegistryKey.unsafeOf("black_dye");
+    RegistryKey<Material> BLACK_DYE = RegistryKey.of("black_dye");
 
-    RegistryKey<Material> BLACK_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("black_glazed_terracotta");
+    RegistryKey<Material> BLACK_GLAZED_TERRACOTTA = RegistryKey.of("black_glazed_terracotta");
 
-    RegistryKey<Material> BLACK_HARNESS = RegistryKey.unsafeOf("black_harness");
+    RegistryKey<Material> BLACK_HARNESS = RegistryKey.of("black_harness");
 
-    RegistryKey<Material> BLACK_SHULKER_BOX = RegistryKey.unsafeOf("black_shulker_box");
+    RegistryKey<Material> BLACK_SHULKER_BOX = RegistryKey.of("black_shulker_box");
 
-    RegistryKey<Material> BLACK_STAINED_GLASS = RegistryKey.unsafeOf("black_stained_glass");
+    RegistryKey<Material> BLACK_STAINED_GLASS = RegistryKey.of("black_stained_glass");
 
-    RegistryKey<Material> BLACK_STAINED_GLASS_PANE = RegistryKey.unsafeOf("black_stained_glass_pane");
+    RegistryKey<Material> BLACK_STAINED_GLASS_PANE = RegistryKey.of("black_stained_glass_pane");
 
-    RegistryKey<Material> BLACK_TERRACOTTA = RegistryKey.unsafeOf("black_terracotta");
+    RegistryKey<Material> BLACK_TERRACOTTA = RegistryKey.of("black_terracotta");
 
-    RegistryKey<Material> BLACK_WOOL = RegistryKey.unsafeOf("black_wool");
+    RegistryKey<Material> BLACK_WOOL = RegistryKey.of("black_wool");
 
-    RegistryKey<Material> BLACK_WOOL_SLAB = RegistryKey.unsafeOf("black_wool_slab");
+    RegistryKey<Material> BLACK_WOOL_SLAB = RegistryKey.of("black_wool_slab");
 
-    RegistryKey<Material> BLACK_WOOL_STAIRS = RegistryKey.unsafeOf("black_wool_stairs");
+    RegistryKey<Material> BLACK_WOOL_STAIRS = RegistryKey.of("black_wool_stairs");
 
-    RegistryKey<Material> BLACKSTONE = RegistryKey.unsafeOf("blackstone");
+    RegistryKey<Material> BLACKSTONE = RegistryKey.of("blackstone");
 
-    RegistryKey<Material> BLACKSTONE_SLAB = RegistryKey.unsafeOf("blackstone_slab");
+    RegistryKey<Material> BLACKSTONE_SLAB = RegistryKey.of("blackstone_slab");
 
-    RegistryKey<Material> BLACKSTONE_STAIRS = RegistryKey.unsafeOf("blackstone_stairs");
+    RegistryKey<Material> BLACKSTONE_STAIRS = RegistryKey.of("blackstone_stairs");
 
-    RegistryKey<Material> BLACKSTONE_WALL = RegistryKey.unsafeOf("blackstone_wall");
+    RegistryKey<Material> BLACKSTONE_WALL = RegistryKey.of("blackstone_wall");
 
-    RegistryKey<Material> BLADE_POTTERY_SHERD = RegistryKey.unsafeOf("blade_pottery_sherd");
+    RegistryKey<Material> BLADE_POTTERY_SHERD = RegistryKey.of("blade_pottery_sherd");
 
-    RegistryKey<Material> BLAST_FURNACE = RegistryKey.unsafeOf("blast_furnace");
+    RegistryKey<Material> BLAST_FURNACE = RegistryKey.of("blast_furnace");
 
-    RegistryKey<Material> BLAZE_POWDER = RegistryKey.unsafeOf("blaze_powder");
+    RegistryKey<Material> BLAZE_POWDER = RegistryKey.of("blaze_powder");
 
-    RegistryKey<Material> BLAZE_ROD = RegistryKey.unsafeOf("blaze_rod");
+    RegistryKey<Material> BLAZE_ROD = RegistryKey.of("blaze_rod");
 
-    RegistryKey<Material> BLAZE_SPAWN_EGG = RegistryKey.unsafeOf("blaze_spawn_egg");
+    RegistryKey<Material> BLAZE_SPAWN_EGG = RegistryKey.of("blaze_spawn_egg");
 
-    RegistryKey<Material> BLUE_BANNER = RegistryKey.unsafeOf("blue_banner");
+    RegistryKey<Material> BLUE_BANNER = RegistryKey.of("blue_banner");
 
-    RegistryKey<Material> BLUE_BED = RegistryKey.unsafeOf("blue_bed");
+    RegistryKey<Material> BLUE_BED = RegistryKey.of("blue_bed");
 
-    RegistryKey<Material> BLUE_BUNDLE = RegistryKey.unsafeOf("blue_bundle");
+    RegistryKey<Material> BLUE_BUNDLE = RegistryKey.of("blue_bundle");
 
-    RegistryKey<Material> BLUE_CANDLE = RegistryKey.unsafeOf("blue_candle");
+    RegistryKey<Material> BLUE_CANDLE = RegistryKey.of("blue_candle");
 
-    RegistryKey<Material> BLUE_CARPET = RegistryKey.unsafeOf("blue_carpet");
+    RegistryKey<Material> BLUE_CARPET = RegistryKey.of("blue_carpet");
 
-    RegistryKey<Material> BLUE_CONCRETE = RegistryKey.unsafeOf("blue_concrete");
+    RegistryKey<Material> BLUE_CONCRETE = RegistryKey.of("blue_concrete");
 
-    RegistryKey<Material> BLUE_CONCRETE_POWDER = RegistryKey.unsafeOf("blue_concrete_powder");
+    RegistryKey<Material> BLUE_CONCRETE_POWDER = RegistryKey.of("blue_concrete_powder");
 
-    RegistryKey<Material> BLUE_CONCRETE_SLAB = RegistryKey.unsafeOf("blue_concrete_slab");
+    RegistryKey<Material> BLUE_CONCRETE_SLAB = RegistryKey.of("blue_concrete_slab");
 
-    RegistryKey<Material> BLUE_CONCRETE_STAIRS = RegistryKey.unsafeOf("blue_concrete_stairs");
+    RegistryKey<Material> BLUE_CONCRETE_STAIRS = RegistryKey.of("blue_concrete_stairs");
 
-    RegistryKey<Material> BLUE_CUSHION = RegistryKey.unsafeOf("blue_cushion");
+    RegistryKey<Material> BLUE_CUSHION = RegistryKey.of("blue_cushion");
 
-    RegistryKey<Material> BLUE_DYE = RegistryKey.unsafeOf("blue_dye");
+    RegistryKey<Material> BLUE_DYE = RegistryKey.of("blue_dye");
 
-    RegistryKey<Material> BLUE_EGG = RegistryKey.unsafeOf("blue_egg");
+    RegistryKey<Material> BLUE_EGG = RegistryKey.of("blue_egg");
 
-    RegistryKey<Material> BLUE_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("blue_glazed_terracotta");
+    RegistryKey<Material> BLUE_GLAZED_TERRACOTTA = RegistryKey.of("blue_glazed_terracotta");
 
-    RegistryKey<Material> BLUE_HARNESS = RegistryKey.unsafeOf("blue_harness");
+    RegistryKey<Material> BLUE_HARNESS = RegistryKey.of("blue_harness");
 
-    RegistryKey<Material> BLUE_ICE = RegistryKey.unsafeOf("blue_ice");
+    RegistryKey<Material> BLUE_ICE = RegistryKey.of("blue_ice");
 
-    RegistryKey<Material> BLUE_ORCHID = RegistryKey.unsafeOf("blue_orchid");
+    RegistryKey<Material> BLUE_ORCHID = RegistryKey.of("blue_orchid");
 
-    RegistryKey<Material> BLUE_SHULKER_BOX = RegistryKey.unsafeOf("blue_shulker_box");
+    RegistryKey<Material> BLUE_SHULKER_BOX = RegistryKey.of("blue_shulker_box");
 
-    RegistryKey<Material> BLUE_STAINED_GLASS = RegistryKey.unsafeOf("blue_stained_glass");
+    RegistryKey<Material> BLUE_STAINED_GLASS = RegistryKey.of("blue_stained_glass");
 
-    RegistryKey<Material> BLUE_STAINED_GLASS_PANE = RegistryKey.unsafeOf("blue_stained_glass_pane");
+    RegistryKey<Material> BLUE_STAINED_GLASS_PANE = RegistryKey.of("blue_stained_glass_pane");
 
-    RegistryKey<Material> BLUE_TERRACOTTA = RegistryKey.unsafeOf("blue_terracotta");
+    RegistryKey<Material> BLUE_TERRACOTTA = RegistryKey.of("blue_terracotta");
 
-    RegistryKey<Material> BLUE_WOOL = RegistryKey.unsafeOf("blue_wool");
+    RegistryKey<Material> BLUE_WOOL = RegistryKey.of("blue_wool");
 
-    RegistryKey<Material> BLUE_WOOL_SLAB = RegistryKey.unsafeOf("blue_wool_slab");
+    RegistryKey<Material> BLUE_WOOL_SLAB = RegistryKey.of("blue_wool_slab");
 
-    RegistryKey<Material> BLUE_WOOL_STAIRS = RegistryKey.unsafeOf("blue_wool_stairs");
+    RegistryKey<Material> BLUE_WOOL_STAIRS = RegistryKey.of("blue_wool_stairs");
 
-    RegistryKey<Material> BOGGED_SPAWN_EGG = RegistryKey.unsafeOf("bogged_spawn_egg");
+    RegistryKey<Material> BOGGED_SPAWN_EGG = RegistryKey.of("bogged_spawn_egg");
 
-    RegistryKey<Material> BOLT_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.unsafeOf("bolt_armor_trim_smithing_template");
+    RegistryKey<Material> BOLT_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.of("bolt_armor_trim_smithing_template");
 
-    RegistryKey<Material> BONE = RegistryKey.unsafeOf("bone");
+    RegistryKey<Material> BONE = RegistryKey.of("bone");
 
-    RegistryKey<Material> BONE_BLOCK = RegistryKey.unsafeOf("bone_block");
+    RegistryKey<Material> BONE_BLOCK = RegistryKey.of("bone_block");
 
-    RegistryKey<Material> BONE_MEAL = RegistryKey.unsafeOf("bone_meal");
+    RegistryKey<Material> BONE_MEAL = RegistryKey.of("bone_meal");
 
-    RegistryKey<Material> BOOK = RegistryKey.unsafeOf("book");
+    RegistryKey<Material> BOOK = RegistryKey.of("book");
 
-    RegistryKey<Material> BOOKSHELF = RegistryKey.unsafeOf("bookshelf");
+    RegistryKey<Material> BOOKSHELF = RegistryKey.of("bookshelf");
 
-    RegistryKey<Material> BORDURE_INDENTED_BANNER_PATTERN = RegistryKey.unsafeOf("bordure_indented_banner_pattern");
+    RegistryKey<Material> BORDURE_INDENTED_BANNER_PATTERN = RegistryKey.of("bordure_indented_banner_pattern");
 
-    RegistryKey<Material> BOW = RegistryKey.unsafeOf("bow");
+    RegistryKey<Material> BOW = RegistryKey.of("bow");
 
-    RegistryKey<Material> BOWL = RegistryKey.unsafeOf("bowl");
+    RegistryKey<Material> BOWL = RegistryKey.of("bowl");
 
-    RegistryKey<Material> BRAIN_CORAL = RegistryKey.unsafeOf("brain_coral");
+    RegistryKey<Material> BRAIN_CORAL = RegistryKey.of("brain_coral");
 
-    RegistryKey<Material> BRAIN_CORAL_BLOCK = RegistryKey.unsafeOf("brain_coral_block");
+    RegistryKey<Material> BRAIN_CORAL_BLOCK = RegistryKey.of("brain_coral_block");
 
-    RegistryKey<Material> BRAIN_CORAL_FAN = RegistryKey.unsafeOf("brain_coral_fan");
+    RegistryKey<Material> BRAIN_CORAL_FAN = RegistryKey.of("brain_coral_fan");
 
-    RegistryKey<Material> BREAD = RegistryKey.unsafeOf("bread");
+    RegistryKey<Material> BREAD = RegistryKey.of("bread");
 
-    RegistryKey<Material> BREEZE_ROD = RegistryKey.unsafeOf("breeze_rod");
+    RegistryKey<Material> BREEZE_ROD = RegistryKey.of("breeze_rod");
 
-    RegistryKey<Material> BREEZE_SPAWN_EGG = RegistryKey.unsafeOf("breeze_spawn_egg");
+    RegistryKey<Material> BREEZE_SPAWN_EGG = RegistryKey.of("breeze_spawn_egg");
 
-    RegistryKey<Material> BREWER_POTTERY_SHERD = RegistryKey.unsafeOf("brewer_pottery_sherd");
+    RegistryKey<Material> BREWER_POTTERY_SHERD = RegistryKey.of("brewer_pottery_sherd");
 
-    RegistryKey<Material> BREWING_STAND = RegistryKey.unsafeOf("brewing_stand");
+    RegistryKey<Material> BREWING_STAND = RegistryKey.of("brewing_stand");
 
-    RegistryKey<Material> BRICK = RegistryKey.unsafeOf("brick");
+    RegistryKey<Material> BRICK = RegistryKey.of("brick");
 
-    RegistryKey<Material> BRICK_SLAB = RegistryKey.unsafeOf("brick_slab");
+    RegistryKey<Material> BRICK_SLAB = RegistryKey.of("brick_slab");
 
-    RegistryKey<Material> BRICK_STAIRS = RegistryKey.unsafeOf("brick_stairs");
+    RegistryKey<Material> BRICK_STAIRS = RegistryKey.of("brick_stairs");
 
-    RegistryKey<Material> BRICK_WALL = RegistryKey.unsafeOf("brick_wall");
+    RegistryKey<Material> BRICK_WALL = RegistryKey.of("brick_wall");
 
-    RegistryKey<Material> BRICKS = RegistryKey.unsafeOf("bricks");
+    RegistryKey<Material> BRICKS = RegistryKey.of("bricks");
 
-    RegistryKey<Material> BROWN_BANNER = RegistryKey.unsafeOf("brown_banner");
+    RegistryKey<Material> BROWN_BANNER = RegistryKey.of("brown_banner");
 
-    RegistryKey<Material> BROWN_BED = RegistryKey.unsafeOf("brown_bed");
+    RegistryKey<Material> BROWN_BED = RegistryKey.of("brown_bed");
 
-    RegistryKey<Material> BROWN_BUNDLE = RegistryKey.unsafeOf("brown_bundle");
+    RegistryKey<Material> BROWN_BUNDLE = RegistryKey.of("brown_bundle");
 
-    RegistryKey<Material> BROWN_CANDLE = RegistryKey.unsafeOf("brown_candle");
+    RegistryKey<Material> BROWN_CANDLE = RegistryKey.of("brown_candle");
 
-    RegistryKey<Material> BROWN_CARPET = RegistryKey.unsafeOf("brown_carpet");
+    RegistryKey<Material> BROWN_CARPET = RegistryKey.of("brown_carpet");
 
-    RegistryKey<Material> BROWN_CONCRETE = RegistryKey.unsafeOf("brown_concrete");
+    RegistryKey<Material> BROWN_CONCRETE = RegistryKey.of("brown_concrete");
 
-    RegistryKey<Material> BROWN_CONCRETE_POWDER = RegistryKey.unsafeOf("brown_concrete_powder");
+    RegistryKey<Material> BROWN_CONCRETE_POWDER = RegistryKey.of("brown_concrete_powder");
 
-    RegistryKey<Material> BROWN_CONCRETE_SLAB = RegistryKey.unsafeOf("brown_concrete_slab");
+    RegistryKey<Material> BROWN_CONCRETE_SLAB = RegistryKey.of("brown_concrete_slab");
 
-    RegistryKey<Material> BROWN_CONCRETE_STAIRS = RegistryKey.unsafeOf("brown_concrete_stairs");
+    RegistryKey<Material> BROWN_CONCRETE_STAIRS = RegistryKey.of("brown_concrete_stairs");
 
-    RegistryKey<Material> BROWN_CUSHION = RegistryKey.unsafeOf("brown_cushion");
+    RegistryKey<Material> BROWN_CUSHION = RegistryKey.of("brown_cushion");
 
-    RegistryKey<Material> BROWN_DYE = RegistryKey.unsafeOf("brown_dye");
+    RegistryKey<Material> BROWN_DYE = RegistryKey.of("brown_dye");
 
-    RegistryKey<Material> BROWN_EGG = RegistryKey.unsafeOf("brown_egg");
+    RegistryKey<Material> BROWN_EGG = RegistryKey.of("brown_egg");
 
-    RegistryKey<Material> BROWN_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("brown_glazed_terracotta");
+    RegistryKey<Material> BROWN_GLAZED_TERRACOTTA = RegistryKey.of("brown_glazed_terracotta");
 
-    RegistryKey<Material> BROWN_HARNESS = RegistryKey.unsafeOf("brown_harness");
+    RegistryKey<Material> BROWN_HARNESS = RegistryKey.of("brown_harness");
 
-    RegistryKey<Material> BROWN_MUSHROOM = RegistryKey.unsafeOf("brown_mushroom");
+    RegistryKey<Material> BROWN_MUSHROOM = RegistryKey.of("brown_mushroom");
 
-    RegistryKey<Material> BROWN_MUSHROOM_BLOCK = RegistryKey.unsafeOf("brown_mushroom_block");
+    RegistryKey<Material> BROWN_MUSHROOM_BLOCK = RegistryKey.of("brown_mushroom_block");
 
-    RegistryKey<Material> BROWN_SHULKER_BOX = RegistryKey.unsafeOf("brown_shulker_box");
+    RegistryKey<Material> BROWN_SHULKER_BOX = RegistryKey.of("brown_shulker_box");
 
-    RegistryKey<Material> BROWN_STAINED_GLASS = RegistryKey.unsafeOf("brown_stained_glass");
+    RegistryKey<Material> BROWN_STAINED_GLASS = RegistryKey.of("brown_stained_glass");
 
-    RegistryKey<Material> BROWN_STAINED_GLASS_PANE = RegistryKey.unsafeOf("brown_stained_glass_pane");
+    RegistryKey<Material> BROWN_STAINED_GLASS_PANE = RegistryKey.of("brown_stained_glass_pane");
 
-    RegistryKey<Material> BROWN_TERRACOTTA = RegistryKey.unsafeOf("brown_terracotta");
+    RegistryKey<Material> BROWN_TERRACOTTA = RegistryKey.of("brown_terracotta");
 
-    RegistryKey<Material> BROWN_WOOL = RegistryKey.unsafeOf("brown_wool");
+    RegistryKey<Material> BROWN_WOOL = RegistryKey.of("brown_wool");
 
-    RegistryKey<Material> BROWN_WOOL_SLAB = RegistryKey.unsafeOf("brown_wool_slab");
+    RegistryKey<Material> BROWN_WOOL_SLAB = RegistryKey.of("brown_wool_slab");
 
-    RegistryKey<Material> BROWN_WOOL_STAIRS = RegistryKey.unsafeOf("brown_wool_stairs");
+    RegistryKey<Material> BROWN_WOOL_STAIRS = RegistryKey.of("brown_wool_stairs");
 
-    RegistryKey<Material> BRUSH = RegistryKey.unsafeOf("brush");
+    RegistryKey<Material> BRUSH = RegistryKey.of("brush");
 
-    RegistryKey<Material> BUBBLE_CORAL = RegistryKey.unsafeOf("bubble_coral");
+    RegistryKey<Material> BUBBLE_CORAL = RegistryKey.of("bubble_coral");
 
-    RegistryKey<Material> BUBBLE_CORAL_BLOCK = RegistryKey.unsafeOf("bubble_coral_block");
+    RegistryKey<Material> BUBBLE_CORAL_BLOCK = RegistryKey.of("bubble_coral_block");
 
-    RegistryKey<Material> BUBBLE_CORAL_FAN = RegistryKey.unsafeOf("bubble_coral_fan");
+    RegistryKey<Material> BUBBLE_CORAL_FAN = RegistryKey.of("bubble_coral_fan");
 
-    RegistryKey<Material> BUCKET = RegistryKey.unsafeOf("bucket");
+    RegistryKey<Material> BUCKET = RegistryKey.of("bucket");
 
-    RegistryKey<Material> BUDDING_AMETHYST = RegistryKey.unsafeOf("budding_amethyst");
+    RegistryKey<Material> BUDDING_AMETHYST = RegistryKey.of("budding_amethyst");
 
-    RegistryKey<Material> BUNDLE = RegistryKey.unsafeOf("bundle");
+    RegistryKey<Material> BUNDLE = RegistryKey.of("bundle");
 
-    RegistryKey<Material> BURIED_ANCIENT_CITY_MAP = RegistryKey.unsafeOf("buried_ancient_city_map");
+    RegistryKey<Material> BURIED_ANCIENT_CITY_MAP = RegistryKey.of("buried_ancient_city_map");
 
-    RegistryKey<Material> BURIED_MINESHAFT_MAP = RegistryKey.unsafeOf("buried_mineshaft_map");
+    RegistryKey<Material> BURIED_MINESHAFT_MAP = RegistryKey.of("buried_mineshaft_map");
 
-    RegistryKey<Material> BURIED_TREASURE_MAP = RegistryKey.unsafeOf("buried_treasure_map");
+    RegistryKey<Material> BURIED_TREASURE_MAP = RegistryKey.of("buried_treasure_map");
 
-    RegistryKey<Material> BURIED_TRIAL_CHAMBERS_MAP = RegistryKey.unsafeOf("buried_trial_chambers_map");
+    RegistryKey<Material> BURIED_TRIAL_CHAMBERS_MAP = RegistryKey.of("buried_trial_chambers_map");
 
-    RegistryKey<Material> BURN_POTTERY_SHERD = RegistryKey.unsafeOf("burn_pottery_sherd");
+    RegistryKey<Material> BURN_POTTERY_SHERD = RegistryKey.of("burn_pottery_sherd");
 
-    RegistryKey<Material> BUSH = RegistryKey.unsafeOf("bush");
+    RegistryKey<Material> BUSH = RegistryKey.of("bush");
 
-    RegistryKey<Material> CACTUS = RegistryKey.unsafeOf("cactus");
+    RegistryKey<Material> CACTUS = RegistryKey.of("cactus");
 
-    RegistryKey<Material> CACTUS_FLOWER = RegistryKey.unsafeOf("cactus_flower");
+    RegistryKey<Material> CACTUS_FLOWER = RegistryKey.of("cactus_flower");
 
-    RegistryKey<Material> CAKE = RegistryKey.unsafeOf("cake");
+    RegistryKey<Material> CAKE = RegistryKey.of("cake");
 
-    RegistryKey<Material> CALCITE = RegistryKey.unsafeOf("calcite");
+    RegistryKey<Material> CALCITE = RegistryKey.of("calcite");
 
-    RegistryKey<Material> CALIBRATED_SCULK_SENSOR = RegistryKey.unsafeOf("calibrated_sculk_sensor");
+    RegistryKey<Material> CALIBRATED_SCULK_SENSOR = RegistryKey.of("calibrated_sculk_sensor");
 
-    RegistryKey<Material> CAMEL_HUSK_SPAWN_EGG = RegistryKey.unsafeOf("camel_husk_spawn_egg");
+    RegistryKey<Material> CAMEL_HUSK_SPAWN_EGG = RegistryKey.of("camel_husk_spawn_egg");
 
-    RegistryKey<Material> CAMEL_SPAWN_EGG = RegistryKey.unsafeOf("camel_spawn_egg");
+    RegistryKey<Material> CAMEL_SPAWN_EGG = RegistryKey.of("camel_spawn_egg");
 
-    RegistryKey<Material> CAMPFIRE = RegistryKey.unsafeOf("campfire");
+    RegistryKey<Material> CAMPFIRE = RegistryKey.of("campfire");
 
-    RegistryKey<Material> CANDLE = RegistryKey.unsafeOf("candle");
+    RegistryKey<Material> CANDLE = RegistryKey.of("candle");
 
-    RegistryKey<Material> CARROT = RegistryKey.unsafeOf("carrot");
+    RegistryKey<Material> CARROT = RegistryKey.of("carrot");
 
-    RegistryKey<Material> CARROT_ON_A_STICK = RegistryKey.unsafeOf("carrot_on_a_stick");
+    RegistryKey<Material> CARROT_ON_A_STICK = RegistryKey.of("carrot_on_a_stick");
 
-    RegistryKey<Material> CARTOGRAPHY_TABLE = RegistryKey.unsafeOf("cartography_table");
+    RegistryKey<Material> CARTOGRAPHY_TABLE = RegistryKey.of("cartography_table");
 
-    RegistryKey<Material> CARVED_PUMPKIN = RegistryKey.unsafeOf("carved_pumpkin");
+    RegistryKey<Material> CARVED_PUMPKIN = RegistryKey.of("carved_pumpkin");
 
-    RegistryKey<Material> CAT_SPAWN_EGG = RegistryKey.unsafeOf("cat_spawn_egg");
+    RegistryKey<Material> CAT_SPAWN_EGG = RegistryKey.of("cat_spawn_egg");
 
-    RegistryKey<Material> CAULDRON = RegistryKey.unsafeOf("cauldron");
+    RegistryKey<Material> CAULDRON = RegistryKey.of("cauldron");
 
-    RegistryKey<Material> CAVE_SPIDER_SPAWN_EGG = RegistryKey.unsafeOf("cave_spider_spawn_egg");
+    RegistryKey<Material> CAVE_SPIDER_SPAWN_EGG = RegistryKey.of("cave_spider_spawn_egg");
 
-    RegistryKey<Material> CHAIN_COMMAND_BLOCK = RegistryKey.unsafeOf("chain_command_block");
+    RegistryKey<Material> CHAIN_COMMAND_BLOCK = RegistryKey.of("chain_command_block");
 
-    RegistryKey<Material> CHAINMAIL_BOOTS = RegistryKey.unsafeOf("chainmail_boots");
+    RegistryKey<Material> CHAINMAIL_BOOTS = RegistryKey.of("chainmail_boots");
 
-    RegistryKey<Material> CHAINMAIL_CHESTPLATE = RegistryKey.unsafeOf("chainmail_chestplate");
+    RegistryKey<Material> CHAINMAIL_CHESTPLATE = RegistryKey.of("chainmail_chestplate");
 
-    RegistryKey<Material> CHAINMAIL_HELMET = RegistryKey.unsafeOf("chainmail_helmet");
+    RegistryKey<Material> CHAINMAIL_HELMET = RegistryKey.of("chainmail_helmet");
 
-    RegistryKey<Material> CHAINMAIL_LEGGINGS = RegistryKey.unsafeOf("chainmail_leggings");
+    RegistryKey<Material> CHAINMAIL_LEGGINGS = RegistryKey.of("chainmail_leggings");
 
-    RegistryKey<Material> CHARCOAL = RegistryKey.unsafeOf("charcoal");
+    RegistryKey<Material> CHARCOAL = RegistryKey.of("charcoal");
 
-    RegistryKey<Material> CHERRY_BOAT = RegistryKey.unsafeOf("cherry_boat");
+    RegistryKey<Material> CHERRY_BOAT = RegistryKey.of("cherry_boat");
 
-    RegistryKey<Material> CHERRY_BUTTON = RegistryKey.unsafeOf("cherry_button");
+    RegistryKey<Material> CHERRY_BUTTON = RegistryKey.of("cherry_button");
 
-    RegistryKey<Material> CHERRY_CHEST_BOAT = RegistryKey.unsafeOf("cherry_chest_boat");
+    RegistryKey<Material> CHERRY_CHEST_BOAT = RegistryKey.of("cherry_chest_boat");
 
-    RegistryKey<Material> CHERRY_DOOR = RegistryKey.unsafeOf("cherry_door");
+    RegistryKey<Material> CHERRY_DOOR = RegistryKey.of("cherry_door");
 
-    RegistryKey<Material> CHERRY_FENCE = RegistryKey.unsafeOf("cherry_fence");
+    RegistryKey<Material> CHERRY_FENCE = RegistryKey.of("cherry_fence");
 
-    RegistryKey<Material> CHERRY_FENCE_GATE = RegistryKey.unsafeOf("cherry_fence_gate");
+    RegistryKey<Material> CHERRY_FENCE_GATE = RegistryKey.of("cherry_fence_gate");
 
-    RegistryKey<Material> CHERRY_HANGING_SIGN = RegistryKey.unsafeOf("cherry_hanging_sign");
+    RegistryKey<Material> CHERRY_HANGING_SIGN = RegistryKey.of("cherry_hanging_sign");
 
-    RegistryKey<Material> CHERRY_LEAVES = RegistryKey.unsafeOf("cherry_leaves");
+    RegistryKey<Material> CHERRY_LEAVES = RegistryKey.of("cherry_leaves");
 
-    RegistryKey<Material> CHERRY_LOG = RegistryKey.unsafeOf("cherry_log");
+    RegistryKey<Material> CHERRY_LOG = RegistryKey.of("cherry_log");
 
-    RegistryKey<Material> CHERRY_PLANKS = RegistryKey.unsafeOf("cherry_planks");
+    RegistryKey<Material> CHERRY_PLANKS = RegistryKey.of("cherry_planks");
 
-    RegistryKey<Material> CHERRY_PRESSURE_PLATE = RegistryKey.unsafeOf("cherry_pressure_plate");
+    RegistryKey<Material> CHERRY_PRESSURE_PLATE = RegistryKey.of("cherry_pressure_plate");
 
-    RegistryKey<Material> CHERRY_SAPLING = RegistryKey.unsafeOf("cherry_sapling");
+    RegistryKey<Material> CHERRY_SAPLING = RegistryKey.of("cherry_sapling");
 
-    RegistryKey<Material> CHERRY_SHELF = RegistryKey.unsafeOf("cherry_shelf");
+    RegistryKey<Material> CHERRY_SHELF = RegistryKey.of("cherry_shelf");
 
-    RegistryKey<Material> CHERRY_SIGN = RegistryKey.unsafeOf("cherry_sign");
+    RegistryKey<Material> CHERRY_SIGN = RegistryKey.of("cherry_sign");
 
-    RegistryKey<Material> CHERRY_SLAB = RegistryKey.unsafeOf("cherry_slab");
+    RegistryKey<Material> CHERRY_SLAB = RegistryKey.of("cherry_slab");
 
-    RegistryKey<Material> CHERRY_STAIRS = RegistryKey.unsafeOf("cherry_stairs");
+    RegistryKey<Material> CHERRY_STAIRS = RegistryKey.of("cherry_stairs");
 
-    RegistryKey<Material> CHERRY_TRAPDOOR = RegistryKey.unsafeOf("cherry_trapdoor");
+    RegistryKey<Material> CHERRY_TRAPDOOR = RegistryKey.of("cherry_trapdoor");
 
-    RegistryKey<Material> CHERRY_WOOD = RegistryKey.unsafeOf("cherry_wood");
+    RegistryKey<Material> CHERRY_WOOD = RegistryKey.of("cherry_wood");
 
-    RegistryKey<Material> CHEST = RegistryKey.unsafeOf("chest");
+    RegistryKey<Material> CHEST = RegistryKey.of("chest");
 
-    RegistryKey<Material> CHEST_MINECART = RegistryKey.unsafeOf("chest_minecart");
+    RegistryKey<Material> CHEST_MINECART = RegistryKey.of("chest_minecart");
 
-    RegistryKey<Material> CHICKEN = RegistryKey.unsafeOf("chicken");
+    RegistryKey<Material> CHICKEN = RegistryKey.of("chicken");
 
-    RegistryKey<Material> CHICKEN_SPAWN_EGG = RegistryKey.unsafeOf("chicken_spawn_egg");
+    RegistryKey<Material> CHICKEN_SPAWN_EGG = RegistryKey.of("chicken_spawn_egg");
 
-    RegistryKey<Material> CHIPPED_ANVIL = RegistryKey.unsafeOf("chipped_anvil");
+    RegistryKey<Material> CHIPPED_ANVIL = RegistryKey.of("chipped_anvil");
 
-    RegistryKey<Material> CHISELED_BOOKSHELF = RegistryKey.unsafeOf("chiseled_bookshelf");
+    RegistryKey<Material> CHISELED_BOOKSHELF = RegistryKey.of("chiseled_bookshelf");
 
-    RegistryKey<Material> CHISELED_CINNABAR = RegistryKey.unsafeOf("chiseled_cinnabar");
+    RegistryKey<Material> CHISELED_CINNABAR = RegistryKey.of("chiseled_cinnabar");
 
-    RegistryKey<Material> CHISELED_COPPER = RegistryKey.unsafeOf("chiseled_copper");
+    RegistryKey<Material> CHISELED_COPPER = RegistryKey.of("chiseled_copper");
 
-    RegistryKey<Material> CHISELED_DEEPSLATE = RegistryKey.unsafeOf("chiseled_deepslate");
+    RegistryKey<Material> CHISELED_DEEPSLATE = RegistryKey.of("chiseled_deepslate");
 
-    RegistryKey<Material> CHISELED_NETHER_BRICKS = RegistryKey.unsafeOf("chiseled_nether_bricks");
+    RegistryKey<Material> CHISELED_NETHER_BRICKS = RegistryKey.of("chiseled_nether_bricks");
 
-    RegistryKey<Material> CHISELED_POLISHED_BLACKSTONE = RegistryKey.unsafeOf("chiseled_polished_blackstone");
+    RegistryKey<Material> CHISELED_POLISHED_BLACKSTONE = RegistryKey.of("chiseled_polished_blackstone");
 
-    RegistryKey<Material> CHISELED_QUARTZ_BLOCK = RegistryKey.unsafeOf("chiseled_quartz_block");
+    RegistryKey<Material> CHISELED_QUARTZ_BLOCK = RegistryKey.of("chiseled_quartz_block");
 
-    RegistryKey<Material> CHISELED_RED_SANDSTONE = RegistryKey.unsafeOf("chiseled_red_sandstone");
+    RegistryKey<Material> CHISELED_RED_SANDSTONE = RegistryKey.of("chiseled_red_sandstone");
 
-    RegistryKey<Material> CHISELED_RESIN_BRICKS = RegistryKey.unsafeOf("chiseled_resin_bricks");
+    RegistryKey<Material> CHISELED_RESIN_BRICKS = RegistryKey.of("chiseled_resin_bricks");
 
-    RegistryKey<Material> CHISELED_SANDSTONE = RegistryKey.unsafeOf("chiseled_sandstone");
+    RegistryKey<Material> CHISELED_SANDSTONE = RegistryKey.of("chiseled_sandstone");
 
-    RegistryKey<Material> CHISELED_STONE_BRICKS = RegistryKey.unsafeOf("chiseled_stone_bricks");
+    RegistryKey<Material> CHISELED_STONE_BRICKS = RegistryKey.of("chiseled_stone_bricks");
 
-    RegistryKey<Material> CHISELED_SULFUR = RegistryKey.unsafeOf("chiseled_sulfur");
+    RegistryKey<Material> CHISELED_SULFUR = RegistryKey.of("chiseled_sulfur");
 
-    RegistryKey<Material> CHISELED_TUFF = RegistryKey.unsafeOf("chiseled_tuff");
+    RegistryKey<Material> CHISELED_TUFF = RegistryKey.of("chiseled_tuff");
 
-    RegistryKey<Material> CHISELED_TUFF_BRICKS = RegistryKey.unsafeOf("chiseled_tuff_bricks");
+    RegistryKey<Material> CHISELED_TUFF_BRICKS = RegistryKey.of("chiseled_tuff_bricks");
 
-    RegistryKey<Material> CHORUS_FLOWER = RegistryKey.unsafeOf("chorus_flower");
+    RegistryKey<Material> CHORUS_FLOWER = RegistryKey.of("chorus_flower");
 
-    RegistryKey<Material> CHORUS_FRUIT = RegistryKey.unsafeOf("chorus_fruit");
+    RegistryKey<Material> CHORUS_FRUIT = RegistryKey.of("chorus_fruit");
 
-    RegistryKey<Material> CHORUS_PLANT = RegistryKey.unsafeOf("chorus_plant");
+    RegistryKey<Material> CHORUS_PLANT = RegistryKey.of("chorus_plant");
 
-    RegistryKey<Material> CINNABAR = RegistryKey.unsafeOf("cinnabar");
+    RegistryKey<Material> CINNABAR = RegistryKey.of("cinnabar");
 
-    RegistryKey<Material> CINNABAR_BRICK_SLAB = RegistryKey.unsafeOf("cinnabar_brick_slab");
+    RegistryKey<Material> CINNABAR_BRICK_SLAB = RegistryKey.of("cinnabar_brick_slab");
 
-    RegistryKey<Material> CINNABAR_BRICK_STAIRS = RegistryKey.unsafeOf("cinnabar_brick_stairs");
+    RegistryKey<Material> CINNABAR_BRICK_STAIRS = RegistryKey.of("cinnabar_brick_stairs");
 
-    RegistryKey<Material> CINNABAR_BRICK_WALL = RegistryKey.unsafeOf("cinnabar_brick_wall");
+    RegistryKey<Material> CINNABAR_BRICK_WALL = RegistryKey.of("cinnabar_brick_wall");
 
-    RegistryKey<Material> CINNABAR_BRICKS = RegistryKey.unsafeOf("cinnabar_bricks");
+    RegistryKey<Material> CINNABAR_BRICKS = RegistryKey.of("cinnabar_bricks");
 
-    RegistryKey<Material> CINNABAR_SLAB = RegistryKey.unsafeOf("cinnabar_slab");
+    RegistryKey<Material> CINNABAR_SLAB = RegistryKey.of("cinnabar_slab");
 
-    RegistryKey<Material> CINNABAR_STAIRS = RegistryKey.unsafeOf("cinnabar_stairs");
+    RegistryKey<Material> CINNABAR_STAIRS = RegistryKey.of("cinnabar_stairs");
 
-    RegistryKey<Material> CINNABAR_WALL = RegistryKey.unsafeOf("cinnabar_wall");
+    RegistryKey<Material> CINNABAR_WALL = RegistryKey.of("cinnabar_wall");
 
-    RegistryKey<Material> CLAY = RegistryKey.unsafeOf("clay");
+    RegistryKey<Material> CLAY = RegistryKey.of("clay");
 
-    RegistryKey<Material> CLAY_BALL = RegistryKey.unsafeOf("clay_ball");
+    RegistryKey<Material> CLAY_BALL = RegistryKey.of("clay_ball");
 
-    RegistryKey<Material> CLOCK = RegistryKey.unsafeOf("clock");
+    RegistryKey<Material> CLOCK = RegistryKey.of("clock");
 
-    RegistryKey<Material> CLOSED_EYEBLOSSOM = RegistryKey.unsafeOf("closed_eyeblossom");
+    RegistryKey<Material> CLOSED_EYEBLOSSOM = RegistryKey.of("closed_eyeblossom");
 
-    RegistryKey<Material> COAL = RegistryKey.unsafeOf("coal");
+    RegistryKey<Material> COAL = RegistryKey.of("coal");
 
-    RegistryKey<Material> COAL_BLOCK = RegistryKey.unsafeOf("coal_block");
+    RegistryKey<Material> COAL_BLOCK = RegistryKey.of("coal_block");
 
-    RegistryKey<Material> COAL_ORE = RegistryKey.unsafeOf("coal_ore");
+    RegistryKey<Material> COAL_ORE = RegistryKey.of("coal_ore");
 
-    RegistryKey<Material> COARSE_DIRT = RegistryKey.unsafeOf("coarse_dirt");
+    RegistryKey<Material> COARSE_DIRT = RegistryKey.of("coarse_dirt");
 
-    RegistryKey<Material> COAST_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.unsafeOf("coast_armor_trim_smithing_template");
+    RegistryKey<Material> COAST_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.of("coast_armor_trim_smithing_template");
 
-    RegistryKey<Material> COBBLED_DEEPSLATE = RegistryKey.unsafeOf("cobbled_deepslate");
+    RegistryKey<Material> COBBLED_DEEPSLATE = RegistryKey.of("cobbled_deepslate");
 
-    RegistryKey<Material> COBBLED_DEEPSLATE_SLAB = RegistryKey.unsafeOf("cobbled_deepslate_slab");
+    RegistryKey<Material> COBBLED_DEEPSLATE_SLAB = RegistryKey.of("cobbled_deepslate_slab");
 
-    RegistryKey<Material> COBBLED_DEEPSLATE_STAIRS = RegistryKey.unsafeOf("cobbled_deepslate_stairs");
+    RegistryKey<Material> COBBLED_DEEPSLATE_STAIRS = RegistryKey.of("cobbled_deepslate_stairs");
 
-    RegistryKey<Material> COBBLED_DEEPSLATE_WALL = RegistryKey.unsafeOf("cobbled_deepslate_wall");
+    RegistryKey<Material> COBBLED_DEEPSLATE_WALL = RegistryKey.of("cobbled_deepslate_wall");
 
-    RegistryKey<Material> COBBLESTONE = RegistryKey.unsafeOf("cobblestone");
+    RegistryKey<Material> COBBLESTONE = RegistryKey.of("cobblestone");
 
-    RegistryKey<Material> COBBLESTONE_SLAB = RegistryKey.unsafeOf("cobblestone_slab");
+    RegistryKey<Material> COBBLESTONE_SLAB = RegistryKey.of("cobblestone_slab");
 
-    RegistryKey<Material> COBBLESTONE_STAIRS = RegistryKey.unsafeOf("cobblestone_stairs");
+    RegistryKey<Material> COBBLESTONE_STAIRS = RegistryKey.of("cobblestone_stairs");
 
-    RegistryKey<Material> COBBLESTONE_WALL = RegistryKey.unsafeOf("cobblestone_wall");
+    RegistryKey<Material> COBBLESTONE_WALL = RegistryKey.of("cobblestone_wall");
 
-    RegistryKey<Material> COBWEB = RegistryKey.unsafeOf("cobweb");
+    RegistryKey<Material> COBWEB = RegistryKey.of("cobweb");
 
-    RegistryKey<Material> COCOA_BEANS = RegistryKey.unsafeOf("cocoa_beans");
+    RegistryKey<Material> COCOA_BEANS = RegistryKey.of("cocoa_beans");
 
-    RegistryKey<Material> COD = RegistryKey.unsafeOf("cod");
+    RegistryKey<Material> COD = RegistryKey.of("cod");
 
-    RegistryKey<Material> COD_BUCKET = RegistryKey.unsafeOf("cod_bucket");
+    RegistryKey<Material> COD_BUCKET = RegistryKey.of("cod_bucket");
 
-    RegistryKey<Material> COD_SPAWN_EGG = RegistryKey.unsafeOf("cod_spawn_egg");
+    RegistryKey<Material> COD_SPAWN_EGG = RegistryKey.of("cod_spawn_egg");
 
-    RegistryKey<Material> COMMAND_BLOCK = RegistryKey.unsafeOf("command_block");
+    RegistryKey<Material> COMMAND_BLOCK = RegistryKey.of("command_block");
 
-    RegistryKey<Material> COMMAND_BLOCK_MINECART = RegistryKey.unsafeOf("command_block_minecart");
+    RegistryKey<Material> COMMAND_BLOCK_MINECART = RegistryKey.of("command_block_minecart");
 
-    RegistryKey<Material> COMPARATOR = RegistryKey.unsafeOf("comparator");
+    RegistryKey<Material> COMPARATOR = RegistryKey.of("comparator");
 
-    RegistryKey<Material> COMPASS = RegistryKey.unsafeOf("compass");
+    RegistryKey<Material> COMPASS = RegistryKey.of("compass");
 
-    RegistryKey<Material> COMPOSTER = RegistryKey.unsafeOf("composter");
+    RegistryKey<Material> COMPOSTER = RegistryKey.of("composter");
 
-    RegistryKey<Material> CONDUIT = RegistryKey.unsafeOf("conduit");
+    RegistryKey<Material> CONDUIT = RegistryKey.of("conduit");
 
-    RegistryKey<Material> COOKED_BEEF = RegistryKey.unsafeOf("cooked_beef");
+    RegistryKey<Material> COOKED_BEEF = RegistryKey.of("cooked_beef");
 
-    RegistryKey<Material> COOKED_CHICKEN = RegistryKey.unsafeOf("cooked_chicken");
+    RegistryKey<Material> COOKED_CHICKEN = RegistryKey.of("cooked_chicken");
 
-    RegistryKey<Material> COOKED_COD = RegistryKey.unsafeOf("cooked_cod");
+    RegistryKey<Material> COOKED_COD = RegistryKey.of("cooked_cod");
 
-    RegistryKey<Material> COOKED_MUTTON = RegistryKey.unsafeOf("cooked_mutton");
+    RegistryKey<Material> COOKED_MUTTON = RegistryKey.of("cooked_mutton");
 
-    RegistryKey<Material> COOKED_PORKCHOP = RegistryKey.unsafeOf("cooked_porkchop");
+    RegistryKey<Material> COOKED_PORKCHOP = RegistryKey.of("cooked_porkchop");
 
-    RegistryKey<Material> COOKED_RABBIT = RegistryKey.unsafeOf("cooked_rabbit");
+    RegistryKey<Material> COOKED_RABBIT = RegistryKey.of("cooked_rabbit");
 
-    RegistryKey<Material> COOKED_SALMON = RegistryKey.unsafeOf("cooked_salmon");
+    RegistryKey<Material> COOKED_SALMON = RegistryKey.of("cooked_salmon");
 
-    RegistryKey<Material> COOKIE = RegistryKey.unsafeOf("cookie");
+    RegistryKey<Material> COOKIE = RegistryKey.of("cookie");
 
-    RegistryKey<Material> COPPER_AXE = RegistryKey.unsafeOf("copper_axe");
+    RegistryKey<Material> COPPER_AXE = RegistryKey.of("copper_axe");
 
-    RegistryKey<Material> COPPER_BARS = RegistryKey.unsafeOf("copper_bars");
+    RegistryKey<Material> COPPER_BARS = RegistryKey.of("copper_bars");
 
-    RegistryKey<Material> COPPER_BLOCK = RegistryKey.unsafeOf("copper_block");
+    RegistryKey<Material> COPPER_BLOCK = RegistryKey.of("copper_block");
 
-    RegistryKey<Material> COPPER_BOOTS = RegistryKey.unsafeOf("copper_boots");
+    RegistryKey<Material> COPPER_BOOTS = RegistryKey.of("copper_boots");
 
-    RegistryKey<Material> COPPER_BULB = RegistryKey.unsafeOf("copper_bulb");
+    RegistryKey<Material> COPPER_BULB = RegistryKey.of("copper_bulb");
 
-    RegistryKey<Material> COPPER_CHAIN = RegistryKey.unsafeOf("copper_chain");
+    RegistryKey<Material> COPPER_CHAIN = RegistryKey.of("copper_chain");
 
-    RegistryKey<Material> COPPER_CHEST = RegistryKey.unsafeOf("copper_chest");
+    RegistryKey<Material> COPPER_CHEST = RegistryKey.of("copper_chest");
 
-    RegistryKey<Material> COPPER_CHESTPLATE = RegistryKey.unsafeOf("copper_chestplate");
+    RegistryKey<Material> COPPER_CHESTPLATE = RegistryKey.of("copper_chestplate");
 
-    RegistryKey<Material> COPPER_DOOR = RegistryKey.unsafeOf("copper_door");
+    RegistryKey<Material> COPPER_DOOR = RegistryKey.of("copper_door");
 
-    RegistryKey<Material> COPPER_GOLEM_SPAWN_EGG = RegistryKey.unsafeOf("copper_golem_spawn_egg");
+    RegistryKey<Material> COPPER_GOLEM_SPAWN_EGG = RegistryKey.of("copper_golem_spawn_egg");
 
-    RegistryKey<Material> COPPER_GOLEM_STATUE = RegistryKey.unsafeOf("copper_golem_statue");
+    RegistryKey<Material> COPPER_GOLEM_STATUE = RegistryKey.of("copper_golem_statue");
 
-    RegistryKey<Material> COPPER_GRATE = RegistryKey.unsafeOf("copper_grate");
+    RegistryKey<Material> COPPER_GRATE = RegistryKey.of("copper_grate");
 
-    RegistryKey<Material> COPPER_HELMET = RegistryKey.unsafeOf("copper_helmet");
+    RegistryKey<Material> COPPER_HELMET = RegistryKey.of("copper_helmet");
 
-    RegistryKey<Material> COPPER_HOE = RegistryKey.unsafeOf("copper_hoe");
+    RegistryKey<Material> COPPER_HOE = RegistryKey.of("copper_hoe");
 
-    RegistryKey<Material> COPPER_HORSE_ARMOR = RegistryKey.unsafeOf("copper_horse_armor");
+    RegistryKey<Material> COPPER_HORSE_ARMOR = RegistryKey.of("copper_horse_armor");
 
-    RegistryKey<Material> COPPER_INGOT = RegistryKey.unsafeOf("copper_ingot");
+    RegistryKey<Material> COPPER_INGOT = RegistryKey.of("copper_ingot");
 
-    RegistryKey<Material> COPPER_LANTERN = RegistryKey.unsafeOf("copper_lantern");
+    RegistryKey<Material> COPPER_LANTERN = RegistryKey.of("copper_lantern");
 
-    RegistryKey<Material> COPPER_LEGGINGS = RegistryKey.unsafeOf("copper_leggings");
+    RegistryKey<Material> COPPER_LEGGINGS = RegistryKey.of("copper_leggings");
 
-    RegistryKey<Material> COPPER_NAUTILUS_ARMOR = RegistryKey.unsafeOf("copper_nautilus_armor");
+    RegistryKey<Material> COPPER_NAUTILUS_ARMOR = RegistryKey.of("copper_nautilus_armor");
 
-    RegistryKey<Material> COPPER_NUGGET = RegistryKey.unsafeOf("copper_nugget");
+    RegistryKey<Material> COPPER_NUGGET = RegistryKey.of("copper_nugget");
 
-    RegistryKey<Material> COPPER_ORE = RegistryKey.unsafeOf("copper_ore");
+    RegistryKey<Material> COPPER_ORE = RegistryKey.of("copper_ore");
 
-    RegistryKey<Material> COPPER_PICKAXE = RegistryKey.unsafeOf("copper_pickaxe");
+    RegistryKey<Material> COPPER_PICKAXE = RegistryKey.of("copper_pickaxe");
 
-    RegistryKey<Material> COPPER_SHOVEL = RegistryKey.unsafeOf("copper_shovel");
+    RegistryKey<Material> COPPER_SHOVEL = RegistryKey.of("copper_shovel");
 
-    RegistryKey<Material> COPPER_SPEAR = RegistryKey.unsafeOf("copper_spear");
+    RegistryKey<Material> COPPER_SPEAR = RegistryKey.of("copper_spear");
 
-    RegistryKey<Material> COPPER_SWORD = RegistryKey.unsafeOf("copper_sword");
+    RegistryKey<Material> COPPER_SWORD = RegistryKey.of("copper_sword");
 
-    RegistryKey<Material> COPPER_TORCH = RegistryKey.unsafeOf("copper_torch");
+    RegistryKey<Material> COPPER_TORCH = RegistryKey.of("copper_torch");
 
-    RegistryKey<Material> COPPER_TRAPDOOR = RegistryKey.unsafeOf("copper_trapdoor");
+    RegistryKey<Material> COPPER_TRAPDOOR = RegistryKey.of("copper_trapdoor");
 
-    RegistryKey<Material> CORNFLOWER = RegistryKey.unsafeOf("cornflower");
+    RegistryKey<Material> CORNFLOWER = RegistryKey.of("cornflower");
 
-    RegistryKey<Material> COW_SPAWN_EGG = RegistryKey.unsafeOf("cow_spawn_egg");
+    RegistryKey<Material> COW_SPAWN_EGG = RegistryKey.of("cow_spawn_egg");
 
-    RegistryKey<Material> CRACKED_DEEPSLATE_BRICKS = RegistryKey.unsafeOf("cracked_deepslate_bricks");
+    RegistryKey<Material> CRACKED_DEEPSLATE_BRICKS = RegistryKey.of("cracked_deepslate_bricks");
 
-    RegistryKey<Material> CRACKED_DEEPSLATE_TILES = RegistryKey.unsafeOf("cracked_deepslate_tiles");
+    RegistryKey<Material> CRACKED_DEEPSLATE_TILES = RegistryKey.of("cracked_deepslate_tiles");
 
-    RegistryKey<Material> CRACKED_NETHER_BRICKS = RegistryKey.unsafeOf("cracked_nether_bricks");
+    RegistryKey<Material> CRACKED_NETHER_BRICKS = RegistryKey.of("cracked_nether_bricks");
 
-    RegistryKey<Material> CRACKED_POLISHED_BLACKSTONE_BRICKS = RegistryKey.unsafeOf("cracked_polished_blackstone_bricks");
+    RegistryKey<Material> CRACKED_POLISHED_BLACKSTONE_BRICKS = RegistryKey.of("cracked_polished_blackstone_bricks");
 
-    RegistryKey<Material> CRACKED_STONE_BRICKS = RegistryKey.unsafeOf("cracked_stone_bricks");
+    RegistryKey<Material> CRACKED_STONE_BRICKS = RegistryKey.of("cracked_stone_bricks");
 
-    RegistryKey<Material> CRAFTER = RegistryKey.unsafeOf("crafter");
+    RegistryKey<Material> CRAFTER = RegistryKey.of("crafter");
 
-    RegistryKey<Material> CRAFTING_TABLE = RegistryKey.unsafeOf("crafting_table");
+    RegistryKey<Material> CRAFTING_TABLE = RegistryKey.of("crafting_table");
 
-    RegistryKey<Material> CREAKING_HEART = RegistryKey.unsafeOf("creaking_heart");
+    RegistryKey<Material> CREAKING_HEART = RegistryKey.of("creaking_heart");
 
-    RegistryKey<Material> CREAKING_SPAWN_EGG = RegistryKey.unsafeOf("creaking_spawn_egg");
+    RegistryKey<Material> CREAKING_SPAWN_EGG = RegistryKey.of("creaking_spawn_egg");
 
-    RegistryKey<Material> CREEPER_BANNER_PATTERN = RegistryKey.unsafeOf("creeper_banner_pattern");
+    RegistryKey<Material> CREEPER_BANNER_PATTERN = RegistryKey.of("creeper_banner_pattern");
 
-    RegistryKey<Material> CREEPER_HEAD = RegistryKey.unsafeOf("creeper_head");
+    RegistryKey<Material> CREEPER_HEAD = RegistryKey.of("creeper_head");
 
-    RegistryKey<Material> CREEPER_SPAWN_EGG = RegistryKey.unsafeOf("creeper_spawn_egg");
+    RegistryKey<Material> CREEPER_SPAWN_EGG = RegistryKey.of("creeper_spawn_egg");
 
-    RegistryKey<Material> CRIMSON_BUTTON = RegistryKey.unsafeOf("crimson_button");
+    RegistryKey<Material> CRIMSON_BUTTON = RegistryKey.of("crimson_button");
 
-    RegistryKey<Material> CRIMSON_DOOR = RegistryKey.unsafeOf("crimson_door");
+    RegistryKey<Material> CRIMSON_DOOR = RegistryKey.of("crimson_door");
 
-    RegistryKey<Material> CRIMSON_FENCE = RegistryKey.unsafeOf("crimson_fence");
+    RegistryKey<Material> CRIMSON_FENCE = RegistryKey.of("crimson_fence");
 
-    RegistryKey<Material> CRIMSON_FENCE_GATE = RegistryKey.unsafeOf("crimson_fence_gate");
+    RegistryKey<Material> CRIMSON_FENCE_GATE = RegistryKey.of("crimson_fence_gate");
 
-    RegistryKey<Material> CRIMSON_FUNGUS = RegistryKey.unsafeOf("crimson_fungus");
+    RegistryKey<Material> CRIMSON_FUNGUS = RegistryKey.of("crimson_fungus");
 
-    RegistryKey<Material> CRIMSON_HANGING_SIGN = RegistryKey.unsafeOf("crimson_hanging_sign");
+    RegistryKey<Material> CRIMSON_HANGING_SIGN = RegistryKey.of("crimson_hanging_sign");
 
-    RegistryKey<Material> CRIMSON_HYPHAE = RegistryKey.unsafeOf("crimson_hyphae");
+    RegistryKey<Material> CRIMSON_HYPHAE = RegistryKey.of("crimson_hyphae");
 
-    RegistryKey<Material> CRIMSON_NYLIUM = RegistryKey.unsafeOf("crimson_nylium");
+    RegistryKey<Material> CRIMSON_NYLIUM = RegistryKey.of("crimson_nylium");
 
-    RegistryKey<Material> CRIMSON_PLANKS = RegistryKey.unsafeOf("crimson_planks");
+    RegistryKey<Material> CRIMSON_PLANKS = RegistryKey.of("crimson_planks");
 
-    RegistryKey<Material> CRIMSON_PRESSURE_PLATE = RegistryKey.unsafeOf("crimson_pressure_plate");
+    RegistryKey<Material> CRIMSON_PRESSURE_PLATE = RegistryKey.of("crimson_pressure_plate");
 
-    RegistryKey<Material> CRIMSON_ROOTS = RegistryKey.unsafeOf("crimson_roots");
+    RegistryKey<Material> CRIMSON_ROOTS = RegistryKey.of("crimson_roots");
 
-    RegistryKey<Material> CRIMSON_SHELF = RegistryKey.unsafeOf("crimson_shelf");
+    RegistryKey<Material> CRIMSON_SHELF = RegistryKey.of("crimson_shelf");
 
-    RegistryKey<Material> CRIMSON_SIGN = RegistryKey.unsafeOf("crimson_sign");
+    RegistryKey<Material> CRIMSON_SIGN = RegistryKey.of("crimson_sign");
 
-    RegistryKey<Material> CRIMSON_SLAB = RegistryKey.unsafeOf("crimson_slab");
+    RegistryKey<Material> CRIMSON_SLAB = RegistryKey.of("crimson_slab");
 
-    RegistryKey<Material> CRIMSON_STAIRS = RegistryKey.unsafeOf("crimson_stairs");
+    RegistryKey<Material> CRIMSON_STAIRS = RegistryKey.of("crimson_stairs");
 
-    RegistryKey<Material> CRIMSON_STEM = RegistryKey.unsafeOf("crimson_stem");
+    RegistryKey<Material> CRIMSON_STEM = RegistryKey.of("crimson_stem");
 
-    RegistryKey<Material> CRIMSON_TRAPDOOR = RegistryKey.unsafeOf("crimson_trapdoor");
+    RegistryKey<Material> CRIMSON_TRAPDOOR = RegistryKey.of("crimson_trapdoor");
 
-    RegistryKey<Material> CROSSBOW = RegistryKey.unsafeOf("crossbow");
+    RegistryKey<Material> CROSSBOW = RegistryKey.of("crossbow");
 
-    RegistryKey<Material> CRYING_OBSIDIAN = RegistryKey.unsafeOf("crying_obsidian");
+    RegistryKey<Material> CRYING_OBSIDIAN = RegistryKey.of("crying_obsidian");
 
-    RegistryKey<Material> CUT_COPPER = RegistryKey.unsafeOf("cut_copper");
+    RegistryKey<Material> CUT_COPPER = RegistryKey.of("cut_copper");
 
-    RegistryKey<Material> CUT_COPPER_SLAB = RegistryKey.unsafeOf("cut_copper_slab");
+    RegistryKey<Material> CUT_COPPER_SLAB = RegistryKey.of("cut_copper_slab");
 
-    RegistryKey<Material> CUT_COPPER_STAIRS = RegistryKey.unsafeOf("cut_copper_stairs");
+    RegistryKey<Material> CUT_COPPER_STAIRS = RegistryKey.of("cut_copper_stairs");
 
-    RegistryKey<Material> CUT_RED_SANDSTONE = RegistryKey.unsafeOf("cut_red_sandstone");
+    RegistryKey<Material> CUT_RED_SANDSTONE = RegistryKey.of("cut_red_sandstone");
 
-    RegistryKey<Material> CUT_RED_SANDSTONE_SLAB = RegistryKey.unsafeOf("cut_red_sandstone_slab");
+    RegistryKey<Material> CUT_RED_SANDSTONE_SLAB = RegistryKey.of("cut_red_sandstone_slab");
 
-    RegistryKey<Material> CUT_SANDSTONE = RegistryKey.unsafeOf("cut_sandstone");
+    RegistryKey<Material> CUT_SANDSTONE = RegistryKey.of("cut_sandstone");
 
-    RegistryKey<Material> CUT_SANDSTONE_SLAB = RegistryKey.unsafeOf("cut_sandstone_slab");
+    RegistryKey<Material> CUT_SANDSTONE_SLAB = RegistryKey.of("cut_sandstone_slab");
 
-    RegistryKey<Material> CYAN_BANNER = RegistryKey.unsafeOf("cyan_banner");
+    RegistryKey<Material> CYAN_BANNER = RegistryKey.of("cyan_banner");
 
-    RegistryKey<Material> CYAN_BED = RegistryKey.unsafeOf("cyan_bed");
+    RegistryKey<Material> CYAN_BED = RegistryKey.of("cyan_bed");
 
-    RegistryKey<Material> CYAN_BUNDLE = RegistryKey.unsafeOf("cyan_bundle");
+    RegistryKey<Material> CYAN_BUNDLE = RegistryKey.of("cyan_bundle");
 
-    RegistryKey<Material> CYAN_CANDLE = RegistryKey.unsafeOf("cyan_candle");
+    RegistryKey<Material> CYAN_CANDLE = RegistryKey.of("cyan_candle");
 
-    RegistryKey<Material> CYAN_CARPET = RegistryKey.unsafeOf("cyan_carpet");
+    RegistryKey<Material> CYAN_CARPET = RegistryKey.of("cyan_carpet");
 
-    RegistryKey<Material> CYAN_CONCRETE = RegistryKey.unsafeOf("cyan_concrete");
+    RegistryKey<Material> CYAN_CONCRETE = RegistryKey.of("cyan_concrete");
 
-    RegistryKey<Material> CYAN_CONCRETE_POWDER = RegistryKey.unsafeOf("cyan_concrete_powder");
+    RegistryKey<Material> CYAN_CONCRETE_POWDER = RegistryKey.of("cyan_concrete_powder");
 
-    RegistryKey<Material> CYAN_CONCRETE_SLAB = RegistryKey.unsafeOf("cyan_concrete_slab");
+    RegistryKey<Material> CYAN_CONCRETE_SLAB = RegistryKey.of("cyan_concrete_slab");
 
-    RegistryKey<Material> CYAN_CONCRETE_STAIRS = RegistryKey.unsafeOf("cyan_concrete_stairs");
+    RegistryKey<Material> CYAN_CONCRETE_STAIRS = RegistryKey.of("cyan_concrete_stairs");
 
-    RegistryKey<Material> CYAN_CUSHION = RegistryKey.unsafeOf("cyan_cushion");
+    RegistryKey<Material> CYAN_CUSHION = RegistryKey.of("cyan_cushion");
 
-    RegistryKey<Material> CYAN_DYE = RegistryKey.unsafeOf("cyan_dye");
+    RegistryKey<Material> CYAN_DYE = RegistryKey.of("cyan_dye");
 
-    RegistryKey<Material> CYAN_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("cyan_glazed_terracotta");
+    RegistryKey<Material> CYAN_GLAZED_TERRACOTTA = RegistryKey.of("cyan_glazed_terracotta");
 
-    RegistryKey<Material> CYAN_HARNESS = RegistryKey.unsafeOf("cyan_harness");
+    RegistryKey<Material> CYAN_HARNESS = RegistryKey.of("cyan_harness");
 
-    RegistryKey<Material> CYAN_SHULKER_BOX = RegistryKey.unsafeOf("cyan_shulker_box");
+    RegistryKey<Material> CYAN_SHULKER_BOX = RegistryKey.of("cyan_shulker_box");
 
-    RegistryKey<Material> CYAN_STAINED_GLASS = RegistryKey.unsafeOf("cyan_stained_glass");
+    RegistryKey<Material> CYAN_STAINED_GLASS = RegistryKey.of("cyan_stained_glass");
 
-    RegistryKey<Material> CYAN_STAINED_GLASS_PANE = RegistryKey.unsafeOf("cyan_stained_glass_pane");
+    RegistryKey<Material> CYAN_STAINED_GLASS_PANE = RegistryKey.of("cyan_stained_glass_pane");
 
-    RegistryKey<Material> CYAN_TERRACOTTA = RegistryKey.unsafeOf("cyan_terracotta");
+    RegistryKey<Material> CYAN_TERRACOTTA = RegistryKey.of("cyan_terracotta");
 
-    RegistryKey<Material> CYAN_WOOL = RegistryKey.unsafeOf("cyan_wool");
+    RegistryKey<Material> CYAN_WOOL = RegistryKey.of("cyan_wool");
 
-    RegistryKey<Material> CYAN_WOOL_SLAB = RegistryKey.unsafeOf("cyan_wool_slab");
+    RegistryKey<Material> CYAN_WOOL_SLAB = RegistryKey.of("cyan_wool_slab");
 
-    RegistryKey<Material> CYAN_WOOL_STAIRS = RegistryKey.unsafeOf("cyan_wool_stairs");
+    RegistryKey<Material> CYAN_WOOL_STAIRS = RegistryKey.of("cyan_wool_stairs");
 
-    RegistryKey<Material> DAMAGED_ANVIL = RegistryKey.unsafeOf("damaged_anvil");
+    RegistryKey<Material> DAMAGED_ANVIL = RegistryKey.of("damaged_anvil");
 
-    RegistryKey<Material> DANDELION = RegistryKey.unsafeOf("dandelion");
+    RegistryKey<Material> DANDELION = RegistryKey.of("dandelion");
 
-    RegistryKey<Material> DANGER_POTTERY_SHERD = RegistryKey.unsafeOf("danger_pottery_sherd");
+    RegistryKey<Material> DANGER_POTTERY_SHERD = RegistryKey.of("danger_pottery_sherd");
 
-    RegistryKey<Material> DARK_OAK_BOAT = RegistryKey.unsafeOf("dark_oak_boat");
+    RegistryKey<Material> DARK_OAK_BOAT = RegistryKey.of("dark_oak_boat");
 
-    RegistryKey<Material> DARK_OAK_BUTTON = RegistryKey.unsafeOf("dark_oak_button");
+    RegistryKey<Material> DARK_OAK_BUTTON = RegistryKey.of("dark_oak_button");
 
-    RegistryKey<Material> DARK_OAK_CHEST_BOAT = RegistryKey.unsafeOf("dark_oak_chest_boat");
+    RegistryKey<Material> DARK_OAK_CHEST_BOAT = RegistryKey.of("dark_oak_chest_boat");
 
-    RegistryKey<Material> DARK_OAK_DOOR = RegistryKey.unsafeOf("dark_oak_door");
+    RegistryKey<Material> DARK_OAK_DOOR = RegistryKey.of("dark_oak_door");
 
-    RegistryKey<Material> DARK_OAK_FENCE = RegistryKey.unsafeOf("dark_oak_fence");
+    RegistryKey<Material> DARK_OAK_FENCE = RegistryKey.of("dark_oak_fence");
 
-    RegistryKey<Material> DARK_OAK_FENCE_GATE = RegistryKey.unsafeOf("dark_oak_fence_gate");
+    RegistryKey<Material> DARK_OAK_FENCE_GATE = RegistryKey.of("dark_oak_fence_gate");
 
-    RegistryKey<Material> DARK_OAK_HANGING_SIGN = RegistryKey.unsafeOf("dark_oak_hanging_sign");
+    RegistryKey<Material> DARK_OAK_HANGING_SIGN = RegistryKey.of("dark_oak_hanging_sign");
 
-    RegistryKey<Material> DARK_OAK_LEAVES = RegistryKey.unsafeOf("dark_oak_leaves");
+    RegistryKey<Material> DARK_OAK_LEAVES = RegistryKey.of("dark_oak_leaves");
 
-    RegistryKey<Material> DARK_OAK_LOG = RegistryKey.unsafeOf("dark_oak_log");
+    RegistryKey<Material> DARK_OAK_LOG = RegistryKey.of("dark_oak_log");
 
-    RegistryKey<Material> DARK_OAK_PLANKS = RegistryKey.unsafeOf("dark_oak_planks");
+    RegistryKey<Material> DARK_OAK_PLANKS = RegistryKey.of("dark_oak_planks");
 
-    RegistryKey<Material> DARK_OAK_PRESSURE_PLATE = RegistryKey.unsafeOf("dark_oak_pressure_plate");
+    RegistryKey<Material> DARK_OAK_PRESSURE_PLATE = RegistryKey.of("dark_oak_pressure_plate");
 
-    RegistryKey<Material> DARK_OAK_SAPLING = RegistryKey.unsafeOf("dark_oak_sapling");
+    RegistryKey<Material> DARK_OAK_SAPLING = RegistryKey.of("dark_oak_sapling");
 
-    RegistryKey<Material> DARK_OAK_SHELF = RegistryKey.unsafeOf("dark_oak_shelf");
+    RegistryKey<Material> DARK_OAK_SHELF = RegistryKey.of("dark_oak_shelf");
 
-    RegistryKey<Material> DARK_OAK_SIGN = RegistryKey.unsafeOf("dark_oak_sign");
+    RegistryKey<Material> DARK_OAK_SIGN = RegistryKey.of("dark_oak_sign");
 
-    RegistryKey<Material> DARK_OAK_SLAB = RegistryKey.unsafeOf("dark_oak_slab");
+    RegistryKey<Material> DARK_OAK_SLAB = RegistryKey.of("dark_oak_slab");
 
-    RegistryKey<Material> DARK_OAK_STAIRS = RegistryKey.unsafeOf("dark_oak_stairs");
+    RegistryKey<Material> DARK_OAK_STAIRS = RegistryKey.of("dark_oak_stairs");
 
-    RegistryKey<Material> DARK_OAK_TRAPDOOR = RegistryKey.unsafeOf("dark_oak_trapdoor");
+    RegistryKey<Material> DARK_OAK_TRAPDOOR = RegistryKey.of("dark_oak_trapdoor");
 
-    RegistryKey<Material> DARK_OAK_WOOD = RegistryKey.unsafeOf("dark_oak_wood");
+    RegistryKey<Material> DARK_OAK_WOOD = RegistryKey.of("dark_oak_wood");
 
-    RegistryKey<Material> DARK_PRISMARINE = RegistryKey.unsafeOf("dark_prismarine");
+    RegistryKey<Material> DARK_PRISMARINE = RegistryKey.of("dark_prismarine");
 
-    RegistryKey<Material> DARK_PRISMARINE_SLAB = RegistryKey.unsafeOf("dark_prismarine_slab");
+    RegistryKey<Material> DARK_PRISMARINE_SLAB = RegistryKey.of("dark_prismarine_slab");
 
-    RegistryKey<Material> DARK_PRISMARINE_STAIRS = RegistryKey.unsafeOf("dark_prismarine_stairs");
+    RegistryKey<Material> DARK_PRISMARINE_STAIRS = RegistryKey.of("dark_prismarine_stairs");
 
-    RegistryKey<Material> DAYLIGHT_DETECTOR = RegistryKey.unsafeOf("daylight_detector");
+    RegistryKey<Material> DAYLIGHT_DETECTOR = RegistryKey.of("daylight_detector");
 
-    RegistryKey<Material> DEAD_BRAIN_CORAL = RegistryKey.unsafeOf("dead_brain_coral");
+    RegistryKey<Material> DEAD_BRAIN_CORAL = RegistryKey.of("dead_brain_coral");
 
-    RegistryKey<Material> DEAD_BRAIN_CORAL_BLOCK = RegistryKey.unsafeOf("dead_brain_coral_block");
+    RegistryKey<Material> DEAD_BRAIN_CORAL_BLOCK = RegistryKey.of("dead_brain_coral_block");
 
-    RegistryKey<Material> DEAD_BRAIN_CORAL_FAN = RegistryKey.unsafeOf("dead_brain_coral_fan");
+    RegistryKey<Material> DEAD_BRAIN_CORAL_FAN = RegistryKey.of("dead_brain_coral_fan");
 
-    RegistryKey<Material> DEAD_BUBBLE_CORAL = RegistryKey.unsafeOf("dead_bubble_coral");
+    RegistryKey<Material> DEAD_BUBBLE_CORAL = RegistryKey.of("dead_bubble_coral");
 
-    RegistryKey<Material> DEAD_BUBBLE_CORAL_BLOCK = RegistryKey.unsafeOf("dead_bubble_coral_block");
+    RegistryKey<Material> DEAD_BUBBLE_CORAL_BLOCK = RegistryKey.of("dead_bubble_coral_block");
 
-    RegistryKey<Material> DEAD_BUBBLE_CORAL_FAN = RegistryKey.unsafeOf("dead_bubble_coral_fan");
+    RegistryKey<Material> DEAD_BUBBLE_CORAL_FAN = RegistryKey.of("dead_bubble_coral_fan");
 
-    RegistryKey<Material> DEAD_BUSH = RegistryKey.unsafeOf("dead_bush");
+    RegistryKey<Material> DEAD_BUSH = RegistryKey.of("dead_bush");
 
-    RegistryKey<Material> DEAD_FIRE_CORAL = RegistryKey.unsafeOf("dead_fire_coral");
+    RegistryKey<Material> DEAD_FIRE_CORAL = RegistryKey.of("dead_fire_coral");
 
-    RegistryKey<Material> DEAD_FIRE_CORAL_BLOCK = RegistryKey.unsafeOf("dead_fire_coral_block");
+    RegistryKey<Material> DEAD_FIRE_CORAL_BLOCK = RegistryKey.of("dead_fire_coral_block");
 
-    RegistryKey<Material> DEAD_FIRE_CORAL_FAN = RegistryKey.unsafeOf("dead_fire_coral_fan");
+    RegistryKey<Material> DEAD_FIRE_CORAL_FAN = RegistryKey.of("dead_fire_coral_fan");
 
-    RegistryKey<Material> DEAD_HORN_CORAL = RegistryKey.unsafeOf("dead_horn_coral");
+    RegistryKey<Material> DEAD_HORN_CORAL = RegistryKey.of("dead_horn_coral");
 
-    RegistryKey<Material> DEAD_HORN_CORAL_BLOCK = RegistryKey.unsafeOf("dead_horn_coral_block");
+    RegistryKey<Material> DEAD_HORN_CORAL_BLOCK = RegistryKey.of("dead_horn_coral_block");
 
-    RegistryKey<Material> DEAD_HORN_CORAL_FAN = RegistryKey.unsafeOf("dead_horn_coral_fan");
+    RegistryKey<Material> DEAD_HORN_CORAL_FAN = RegistryKey.of("dead_horn_coral_fan");
 
-    RegistryKey<Material> DEAD_TUBE_CORAL = RegistryKey.unsafeOf("dead_tube_coral");
+    RegistryKey<Material> DEAD_TUBE_CORAL = RegistryKey.of("dead_tube_coral");
 
-    RegistryKey<Material> DEAD_TUBE_CORAL_BLOCK = RegistryKey.unsafeOf("dead_tube_coral_block");
+    RegistryKey<Material> DEAD_TUBE_CORAL_BLOCK = RegistryKey.of("dead_tube_coral_block");
 
-    RegistryKey<Material> DEAD_TUBE_CORAL_FAN = RegistryKey.unsafeOf("dead_tube_coral_fan");
+    RegistryKey<Material> DEAD_TUBE_CORAL_FAN = RegistryKey.of("dead_tube_coral_fan");
 
-    RegistryKey<Material> DEBUG_STICK = RegistryKey.unsafeOf("debug_stick");
+    RegistryKey<Material> DEBUG_STICK = RegistryKey.of("debug_stick");
 
-    RegistryKey<Material> DECORATED_POT = RegistryKey.unsafeOf("decorated_pot");
+    RegistryKey<Material> DECORATED_POT = RegistryKey.of("decorated_pot");
 
-    RegistryKey<Material> DEEPSLATE = RegistryKey.unsafeOf("deepslate");
+    RegistryKey<Material> DEEPSLATE = RegistryKey.of("deepslate");
 
-    RegistryKey<Material> DEEPSLATE_BRICK_SLAB = RegistryKey.unsafeOf("deepslate_brick_slab");
+    RegistryKey<Material> DEEPSLATE_BRICK_SLAB = RegistryKey.of("deepslate_brick_slab");
 
-    RegistryKey<Material> DEEPSLATE_BRICK_STAIRS = RegistryKey.unsafeOf("deepslate_brick_stairs");
+    RegistryKey<Material> DEEPSLATE_BRICK_STAIRS = RegistryKey.of("deepslate_brick_stairs");
 
-    RegistryKey<Material> DEEPSLATE_BRICK_WALL = RegistryKey.unsafeOf("deepslate_brick_wall");
+    RegistryKey<Material> DEEPSLATE_BRICK_WALL = RegistryKey.of("deepslate_brick_wall");
 
-    RegistryKey<Material> DEEPSLATE_BRICKS = RegistryKey.unsafeOf("deepslate_bricks");
+    RegistryKey<Material> DEEPSLATE_BRICKS = RegistryKey.of("deepslate_bricks");
 
-    RegistryKey<Material> DEEPSLATE_COAL_ORE = RegistryKey.unsafeOf("deepslate_coal_ore");
+    RegistryKey<Material> DEEPSLATE_COAL_ORE = RegistryKey.of("deepslate_coal_ore");
 
-    RegistryKey<Material> DEEPSLATE_COPPER_ORE = RegistryKey.unsafeOf("deepslate_copper_ore");
+    RegistryKey<Material> DEEPSLATE_COPPER_ORE = RegistryKey.of("deepslate_copper_ore");
 
-    RegistryKey<Material> DEEPSLATE_DIAMOND_ORE = RegistryKey.unsafeOf("deepslate_diamond_ore");
+    RegistryKey<Material> DEEPSLATE_DIAMOND_ORE = RegistryKey.of("deepslate_diamond_ore");
 
-    RegistryKey<Material> DEEPSLATE_EMERALD_ORE = RegistryKey.unsafeOf("deepslate_emerald_ore");
+    RegistryKey<Material> DEEPSLATE_EMERALD_ORE = RegistryKey.of("deepslate_emerald_ore");
 
-    RegistryKey<Material> DEEPSLATE_GOLD_ORE = RegistryKey.unsafeOf("deepslate_gold_ore");
+    RegistryKey<Material> DEEPSLATE_GOLD_ORE = RegistryKey.of("deepslate_gold_ore");
 
-    RegistryKey<Material> DEEPSLATE_IRON_ORE = RegistryKey.unsafeOf("deepslate_iron_ore");
+    RegistryKey<Material> DEEPSLATE_IRON_ORE = RegistryKey.of("deepslate_iron_ore");
 
-    RegistryKey<Material> DEEPSLATE_LAPIS_ORE = RegistryKey.unsafeOf("deepslate_lapis_ore");
+    RegistryKey<Material> DEEPSLATE_LAPIS_ORE = RegistryKey.of("deepslate_lapis_ore");
 
-    RegistryKey<Material> DEEPSLATE_REDSTONE_ORE = RegistryKey.unsafeOf("deepslate_redstone_ore");
+    RegistryKey<Material> DEEPSLATE_REDSTONE_ORE = RegistryKey.of("deepslate_redstone_ore");
 
-    RegistryKey<Material> DEEPSLATE_TILE_SLAB = RegistryKey.unsafeOf("deepslate_tile_slab");
+    RegistryKey<Material> DEEPSLATE_TILE_SLAB = RegistryKey.of("deepslate_tile_slab");
 
-    RegistryKey<Material> DEEPSLATE_TILE_STAIRS = RegistryKey.unsafeOf("deepslate_tile_stairs");
+    RegistryKey<Material> DEEPSLATE_TILE_STAIRS = RegistryKey.of("deepslate_tile_stairs");
 
-    RegistryKey<Material> DEEPSLATE_TILE_WALL = RegistryKey.unsafeOf("deepslate_tile_wall");
+    RegistryKey<Material> DEEPSLATE_TILE_WALL = RegistryKey.of("deepslate_tile_wall");
 
-    RegistryKey<Material> DEEPSLATE_TILES = RegistryKey.unsafeOf("deepslate_tiles");
+    RegistryKey<Material> DEEPSLATE_TILES = RegistryKey.of("deepslate_tiles");
 
-    RegistryKey<Material> DESERT_PYRAMID_MAP = RegistryKey.unsafeOf("desert_pyramid_map");
+    RegistryKey<Material> DESERT_PYRAMID_MAP = RegistryKey.of("desert_pyramid_map");
 
-    RegistryKey<Material> DESERT_VILLAGE_MAP = RegistryKey.unsafeOf("desert_village_map");
+    RegistryKey<Material> DESERT_VILLAGE_MAP = RegistryKey.of("desert_village_map");
 
-    RegistryKey<Material> DETECTOR_RAIL = RegistryKey.unsafeOf("detector_rail");
+    RegistryKey<Material> DETECTOR_RAIL = RegistryKey.of("detector_rail");
 
-    RegistryKey<Material> DIAMOND = RegistryKey.unsafeOf("diamond");
+    RegistryKey<Material> DIAMOND = RegistryKey.of("diamond");
 
-    RegistryKey<Material> DIAMOND_AXE = RegistryKey.unsafeOf("diamond_axe");
+    RegistryKey<Material> DIAMOND_AXE = RegistryKey.of("diamond_axe");
 
-    RegistryKey<Material> DIAMOND_BLOCK = RegistryKey.unsafeOf("diamond_block");
+    RegistryKey<Material> DIAMOND_BLOCK = RegistryKey.of("diamond_block");
 
-    RegistryKey<Material> DIAMOND_BOOTS = RegistryKey.unsafeOf("diamond_boots");
+    RegistryKey<Material> DIAMOND_BOOTS = RegistryKey.of("diamond_boots");
 
-    RegistryKey<Material> DIAMOND_CHESTPLATE = RegistryKey.unsafeOf("diamond_chestplate");
+    RegistryKey<Material> DIAMOND_CHESTPLATE = RegistryKey.of("diamond_chestplate");
 
-    RegistryKey<Material> DIAMOND_HELMET = RegistryKey.unsafeOf("diamond_helmet");
+    RegistryKey<Material> DIAMOND_HELMET = RegistryKey.of("diamond_helmet");
 
-    RegistryKey<Material> DIAMOND_HOE = RegistryKey.unsafeOf("diamond_hoe");
+    RegistryKey<Material> DIAMOND_HOE = RegistryKey.of("diamond_hoe");
 
-    RegistryKey<Material> DIAMOND_HORSE_ARMOR = RegistryKey.unsafeOf("diamond_horse_armor");
+    RegistryKey<Material> DIAMOND_HORSE_ARMOR = RegistryKey.of("diamond_horse_armor");
 
-    RegistryKey<Material> DIAMOND_LEGGINGS = RegistryKey.unsafeOf("diamond_leggings");
+    RegistryKey<Material> DIAMOND_LEGGINGS = RegistryKey.of("diamond_leggings");
 
-    RegistryKey<Material> DIAMOND_NAUTILUS_ARMOR = RegistryKey.unsafeOf("diamond_nautilus_armor");
+    RegistryKey<Material> DIAMOND_NAUTILUS_ARMOR = RegistryKey.of("diamond_nautilus_armor");
 
-    RegistryKey<Material> DIAMOND_ORE = RegistryKey.unsafeOf("diamond_ore");
+    RegistryKey<Material> DIAMOND_ORE = RegistryKey.of("diamond_ore");
 
-    RegistryKey<Material> DIAMOND_PICKAXE = RegistryKey.unsafeOf("diamond_pickaxe");
+    RegistryKey<Material> DIAMOND_PICKAXE = RegistryKey.of("diamond_pickaxe");
 
-    RegistryKey<Material> DIAMOND_SHOVEL = RegistryKey.unsafeOf("diamond_shovel");
+    RegistryKey<Material> DIAMOND_SHOVEL = RegistryKey.of("diamond_shovel");
 
-    RegistryKey<Material> DIAMOND_SPEAR = RegistryKey.unsafeOf("diamond_spear");
+    RegistryKey<Material> DIAMOND_SPEAR = RegistryKey.of("diamond_spear");
 
-    RegistryKey<Material> DIAMOND_SWORD = RegistryKey.unsafeOf("diamond_sword");
+    RegistryKey<Material> DIAMOND_SWORD = RegistryKey.of("diamond_sword");
 
-    RegistryKey<Material> DIORITE = RegistryKey.unsafeOf("diorite");
+    RegistryKey<Material> DIORITE = RegistryKey.of("diorite");
 
-    RegistryKey<Material> DIORITE_SLAB = RegistryKey.unsafeOf("diorite_slab");
+    RegistryKey<Material> DIORITE_SLAB = RegistryKey.of("diorite_slab");
 
-    RegistryKey<Material> DIORITE_STAIRS = RegistryKey.unsafeOf("diorite_stairs");
+    RegistryKey<Material> DIORITE_STAIRS = RegistryKey.of("diorite_stairs");
 
-    RegistryKey<Material> DIORITE_WALL = RegistryKey.unsafeOf("diorite_wall");
+    RegistryKey<Material> DIORITE_WALL = RegistryKey.of("diorite_wall");
 
-    RegistryKey<Material> DIRT = RegistryKey.unsafeOf("dirt");
+    RegistryKey<Material> DIRT = RegistryKey.of("dirt");
 
-    RegistryKey<Material> DIRT_PATH = RegistryKey.unsafeOf("dirt_path");
+    RegistryKey<Material> DIRT_PATH = RegistryKey.of("dirt_path");
 
-    RegistryKey<Material> DISC_FRAGMENT_5 = RegistryKey.unsafeOf("disc_fragment_5");
+    RegistryKey<Material> DISC_FRAGMENT_5 = RegistryKey.of("disc_fragment_5");
 
-    RegistryKey<Material> DISPENSER = RegistryKey.unsafeOf("dispenser");
+    RegistryKey<Material> DISPENSER = RegistryKey.of("dispenser");
 
-    RegistryKey<Material> DOLPHIN_SPAWN_EGG = RegistryKey.unsafeOf("dolphin_spawn_egg");
+    RegistryKey<Material> DOLPHIN_SPAWN_EGG = RegistryKey.of("dolphin_spawn_egg");
 
-    RegistryKey<Material> DONKEY_SPAWN_EGG = RegistryKey.unsafeOf("donkey_spawn_egg");
+    RegistryKey<Material> DONKEY_SPAWN_EGG = RegistryKey.of("donkey_spawn_egg");
 
-    RegistryKey<Material> DRAGON_BREATH = RegistryKey.unsafeOf("dragon_breath");
+    RegistryKey<Material> DRAGON_BREATH = RegistryKey.of("dragon_breath");
 
-    RegistryKey<Material> DRAGON_EGG = RegistryKey.unsafeOf("dragon_egg");
+    RegistryKey<Material> DRAGON_EGG = RegistryKey.of("dragon_egg");
 
-    RegistryKey<Material> DRAGON_HEAD = RegistryKey.unsafeOf("dragon_head");
+    RegistryKey<Material> DRAGON_HEAD = RegistryKey.of("dragon_head");
 
-    RegistryKey<Material> DRIED_GHAST = RegistryKey.unsafeOf("dried_ghast");
+    RegistryKey<Material> DRIED_GHAST = RegistryKey.of("dried_ghast");
 
-    RegistryKey<Material> DRIED_KELP = RegistryKey.unsafeOf("dried_kelp");
+    RegistryKey<Material> DRIED_KELP = RegistryKey.of("dried_kelp");
 
-    RegistryKey<Material> DRIED_KELP_BLOCK = RegistryKey.unsafeOf("dried_kelp_block");
+    RegistryKey<Material> DRIED_KELP_BLOCK = RegistryKey.of("dried_kelp_block");
 
-    RegistryKey<Material> DRIPSTONE_BLOCK = RegistryKey.unsafeOf("dripstone_block");
+    RegistryKey<Material> DRIPSTONE_BLOCK = RegistryKey.of("dripstone_block");
 
-    RegistryKey<Material> DROPPER = RegistryKey.unsafeOf("dropper");
+    RegistryKey<Material> DROPPER = RegistryKey.of("dropper");
 
-    RegistryKey<Material> DROWNED_SPAWN_EGG = RegistryKey.unsafeOf("drowned_spawn_egg");
+    RegistryKey<Material> DROWNED_SPAWN_EGG = RegistryKey.of("drowned_spawn_egg");
 
-    RegistryKey<Material> DUNE_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.unsafeOf("dune_armor_trim_smithing_template");
+    RegistryKey<Material> DUNE_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.of("dune_armor_trim_smithing_template");
 
-    RegistryKey<Material> ECHO_SHARD = RegistryKey.unsafeOf("echo_shard");
+    RegistryKey<Material> ECHO_SHARD = RegistryKey.of("echo_shard");
 
-    RegistryKey<Material> EGG = RegistryKey.unsafeOf("egg");
+    RegistryKey<Material> EGG = RegistryKey.of("egg");
 
-    RegistryKey<Material> ELDER_GUARDIAN_SPAWN_EGG = RegistryKey.unsafeOf("elder_guardian_spawn_egg");
+    RegistryKey<Material> ELDER_GUARDIAN_SPAWN_EGG = RegistryKey.of("elder_guardian_spawn_egg");
 
-    RegistryKey<Material> ELYTRA = RegistryKey.unsafeOf("elytra");
+    RegistryKey<Material> ELYTRA = RegistryKey.of("elytra");
 
-    RegistryKey<Material> EMERALD = RegistryKey.unsafeOf("emerald");
+    RegistryKey<Material> EMERALD = RegistryKey.of("emerald");
 
-    RegistryKey<Material> EMERALD_BLOCK = RegistryKey.unsafeOf("emerald_block");
+    RegistryKey<Material> EMERALD_BLOCK = RegistryKey.of("emerald_block");
 
-    RegistryKey<Material> EMERALD_ORE = RegistryKey.unsafeOf("emerald_ore");
+    RegistryKey<Material> EMERALD_ORE = RegistryKey.of("emerald_ore");
 
-    RegistryKey<Material> ENCHANTED_BOOK = RegistryKey.unsafeOf("enchanted_book");
+    RegistryKey<Material> ENCHANTED_BOOK = RegistryKey.of("enchanted_book");
 
-    RegistryKey<Material> ENCHANTED_GOLDEN_APPLE = RegistryKey.unsafeOf("enchanted_golden_apple");
+    RegistryKey<Material> ENCHANTED_GOLDEN_APPLE = RegistryKey.of("enchanted_golden_apple");
 
-    RegistryKey<Material> ENCHANTING_TABLE = RegistryKey.unsafeOf("enchanting_table");
+    RegistryKey<Material> ENCHANTING_TABLE = RegistryKey.of("enchanting_table");
 
-    RegistryKey<Material> END_CRYSTAL = RegistryKey.unsafeOf("end_crystal");
+    RegistryKey<Material> END_CRYSTAL = RegistryKey.of("end_crystal");
 
-    RegistryKey<Material> END_PORTAL_FRAME = RegistryKey.unsafeOf("end_portal_frame");
+    RegistryKey<Material> END_PORTAL_FRAME = RegistryKey.of("end_portal_frame");
 
-    RegistryKey<Material> END_ROD = RegistryKey.unsafeOf("end_rod");
+    RegistryKey<Material> END_ROD = RegistryKey.of("end_rod");
 
-    RegistryKey<Material> END_STONE = RegistryKey.unsafeOf("end_stone");
+    RegistryKey<Material> END_STONE = RegistryKey.of("end_stone");
 
-    RegistryKey<Material> END_STONE_BRICK_SLAB = RegistryKey.unsafeOf("end_stone_brick_slab");
+    RegistryKey<Material> END_STONE_BRICK_SLAB = RegistryKey.of("end_stone_brick_slab");
 
-    RegistryKey<Material> END_STONE_BRICK_STAIRS = RegistryKey.unsafeOf("end_stone_brick_stairs");
+    RegistryKey<Material> END_STONE_BRICK_STAIRS = RegistryKey.of("end_stone_brick_stairs");
 
-    RegistryKey<Material> END_STONE_BRICK_WALL = RegistryKey.unsafeOf("end_stone_brick_wall");
+    RegistryKey<Material> END_STONE_BRICK_WALL = RegistryKey.of("end_stone_brick_wall");
 
-    RegistryKey<Material> END_STONE_BRICKS = RegistryKey.unsafeOf("end_stone_bricks");
+    RegistryKey<Material> END_STONE_BRICKS = RegistryKey.of("end_stone_bricks");
 
-    RegistryKey<Material> ENDER_CHEST = RegistryKey.unsafeOf("ender_chest");
+    RegistryKey<Material> ENDER_CHEST = RegistryKey.of("ender_chest");
 
-    RegistryKey<Material> ENDER_DRAGON_SPAWN_EGG = RegistryKey.unsafeOf("ender_dragon_spawn_egg");
+    RegistryKey<Material> ENDER_DRAGON_SPAWN_EGG = RegistryKey.of("ender_dragon_spawn_egg");
 
-    RegistryKey<Material> ENDER_EYE = RegistryKey.unsafeOf("ender_eye");
+    RegistryKey<Material> ENDER_EYE = RegistryKey.of("ender_eye");
 
-    RegistryKey<Material> ENDER_PEARL = RegistryKey.unsafeOf("ender_pearl");
+    RegistryKey<Material> ENDER_PEARL = RegistryKey.of("ender_pearl");
 
-    RegistryKey<Material> ENDERMAN_SPAWN_EGG = RegistryKey.unsafeOf("enderman_spawn_egg");
+    RegistryKey<Material> ENDERMAN_SPAWN_EGG = RegistryKey.of("enderman_spawn_egg");
 
-    RegistryKey<Material> ENDERMITE_SPAWN_EGG = RegistryKey.unsafeOf("endermite_spawn_egg");
+    RegistryKey<Material> ENDERMITE_SPAWN_EGG = RegistryKey.of("endermite_spawn_egg");
 
-    RegistryKey<Material> EVOKER_SPAWN_EGG = RegistryKey.unsafeOf("evoker_spawn_egg");
+    RegistryKey<Material> EVOKER_SPAWN_EGG = RegistryKey.of("evoker_spawn_egg");
 
-    RegistryKey<Material> EXPERIENCE_BOTTLE = RegistryKey.unsafeOf("experience_bottle");
+    RegistryKey<Material> EXPERIENCE_BOTTLE = RegistryKey.of("experience_bottle");
 
-    RegistryKey<Material> EXPLORER_POTTERY_SHERD = RegistryKey.unsafeOf("explorer_pottery_sherd");
+    RegistryKey<Material> EXPLORER_POTTERY_SHERD = RegistryKey.of("explorer_pottery_sherd");
 
-    RegistryKey<Material> EXPOSED_CHISELED_COPPER = RegistryKey.unsafeOf("exposed_chiseled_copper");
+    RegistryKey<Material> EXPOSED_CHISELED_COPPER = RegistryKey.of("exposed_chiseled_copper");
 
-    RegistryKey<Material> EXPOSED_COPPER = RegistryKey.unsafeOf("exposed_copper");
+    RegistryKey<Material> EXPOSED_COPPER = RegistryKey.of("exposed_copper");
 
-    RegistryKey<Material> EXPOSED_COPPER_BARS = RegistryKey.unsafeOf("exposed_copper_bars");
+    RegistryKey<Material> EXPOSED_COPPER_BARS = RegistryKey.of("exposed_copper_bars");
 
-    RegistryKey<Material> EXPOSED_COPPER_BULB = RegistryKey.unsafeOf("exposed_copper_bulb");
+    RegistryKey<Material> EXPOSED_COPPER_BULB = RegistryKey.of("exposed_copper_bulb");
 
-    RegistryKey<Material> EXPOSED_COPPER_CHAIN = RegistryKey.unsafeOf("exposed_copper_chain");
+    RegistryKey<Material> EXPOSED_COPPER_CHAIN = RegistryKey.of("exposed_copper_chain");
 
-    RegistryKey<Material> EXPOSED_COPPER_CHEST = RegistryKey.unsafeOf("exposed_copper_chest");
+    RegistryKey<Material> EXPOSED_COPPER_CHEST = RegistryKey.of("exposed_copper_chest");
 
-    RegistryKey<Material> EXPOSED_COPPER_DOOR = RegistryKey.unsafeOf("exposed_copper_door");
+    RegistryKey<Material> EXPOSED_COPPER_DOOR = RegistryKey.of("exposed_copper_door");
 
-    RegistryKey<Material> EXPOSED_COPPER_GOLEM_STATUE = RegistryKey.unsafeOf("exposed_copper_golem_statue");
+    RegistryKey<Material> EXPOSED_COPPER_GOLEM_STATUE = RegistryKey.of("exposed_copper_golem_statue");
 
-    RegistryKey<Material> EXPOSED_COPPER_GRATE = RegistryKey.unsafeOf("exposed_copper_grate");
+    RegistryKey<Material> EXPOSED_COPPER_GRATE = RegistryKey.of("exposed_copper_grate");
 
-    RegistryKey<Material> EXPOSED_COPPER_LANTERN = RegistryKey.unsafeOf("exposed_copper_lantern");
+    RegistryKey<Material> EXPOSED_COPPER_LANTERN = RegistryKey.of("exposed_copper_lantern");
 
-    RegistryKey<Material> EXPOSED_COPPER_TRAPDOOR = RegistryKey.unsafeOf("exposed_copper_trapdoor");
+    RegistryKey<Material> EXPOSED_COPPER_TRAPDOOR = RegistryKey.of("exposed_copper_trapdoor");
 
-    RegistryKey<Material> EXPOSED_CUT_COPPER = RegistryKey.unsafeOf("exposed_cut_copper");
+    RegistryKey<Material> EXPOSED_CUT_COPPER = RegistryKey.of("exposed_cut_copper");
 
-    RegistryKey<Material> EXPOSED_CUT_COPPER_SLAB = RegistryKey.unsafeOf("exposed_cut_copper_slab");
+    RegistryKey<Material> EXPOSED_CUT_COPPER_SLAB = RegistryKey.of("exposed_cut_copper_slab");
 
-    RegistryKey<Material> EXPOSED_CUT_COPPER_STAIRS = RegistryKey.unsafeOf("exposed_cut_copper_stairs");
+    RegistryKey<Material> EXPOSED_CUT_COPPER_STAIRS = RegistryKey.of("exposed_cut_copper_stairs");
 
-    RegistryKey<Material> EXPOSED_LIGHTNING_ROD = RegistryKey.unsafeOf("exposed_lightning_rod");
+    RegistryKey<Material> EXPOSED_LIGHTNING_ROD = RegistryKey.of("exposed_lightning_rod");
 
-    RegistryKey<Material> EYE_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.unsafeOf("eye_armor_trim_smithing_template");
+    RegistryKey<Material> EYE_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.of("eye_armor_trim_smithing_template");
 
-    RegistryKey<Material> FARMLAND = RegistryKey.unsafeOf("farmland");
+    RegistryKey<Material> FARMLAND = RegistryKey.of("farmland");
 
-    RegistryKey<Material> FEATHER = RegistryKey.unsafeOf("feather");
+    RegistryKey<Material> FEATHER = RegistryKey.of("feather");
 
-    RegistryKey<Material> FERMENTED_SPIDER_EYE = RegistryKey.unsafeOf("fermented_spider_eye");
+    RegistryKey<Material> FERMENTED_SPIDER_EYE = RegistryKey.of("fermented_spider_eye");
 
-    RegistryKey<Material> FERN = RegistryKey.unsafeOf("fern");
+    RegistryKey<Material> FERN = RegistryKey.of("fern");
 
-    RegistryKey<Material> FIELD_MASONED_BANNER_PATTERN = RegistryKey.unsafeOf("field_masoned_banner_pattern");
+    RegistryKey<Material> FIELD_MASONED_BANNER_PATTERN = RegistryKey.of("field_masoned_banner_pattern");
 
-    RegistryKey<Material> FILLED_MAP = RegistryKey.unsafeOf("filled_map");
+    RegistryKey<Material> FILLED_MAP = RegistryKey.of("filled_map");
 
-    RegistryKey<Material> FIRE_CHARGE = RegistryKey.unsafeOf("fire_charge");
+    RegistryKey<Material> FIRE_CHARGE = RegistryKey.of("fire_charge");
 
-    RegistryKey<Material> FIRE_CORAL = RegistryKey.unsafeOf("fire_coral");
+    RegistryKey<Material> FIRE_CORAL = RegistryKey.of("fire_coral");
 
-    RegistryKey<Material> FIRE_CORAL_BLOCK = RegistryKey.unsafeOf("fire_coral_block");
+    RegistryKey<Material> FIRE_CORAL_BLOCK = RegistryKey.of("fire_coral_block");
 
-    RegistryKey<Material> FIRE_CORAL_FAN = RegistryKey.unsafeOf("fire_coral_fan");
+    RegistryKey<Material> FIRE_CORAL_FAN = RegistryKey.of("fire_coral_fan");
 
-    RegistryKey<Material> FIREFLY_BUSH = RegistryKey.unsafeOf("firefly_bush");
+    RegistryKey<Material> FIREFLY_BUSH = RegistryKey.of("firefly_bush");
 
-    RegistryKey<Material> FIREWORK_ROCKET = RegistryKey.unsafeOf("firework_rocket");
+    RegistryKey<Material> FIREWORK_ROCKET = RegistryKey.of("firework_rocket");
 
-    RegistryKey<Material> FIREWORK_STAR = RegistryKey.unsafeOf("firework_star");
+    RegistryKey<Material> FIREWORK_STAR = RegistryKey.of("firework_star");
 
-    RegistryKey<Material> FISHING_ROD = RegistryKey.unsafeOf("fishing_rod");
+    RegistryKey<Material> FISHING_ROD = RegistryKey.of("fishing_rod");
 
-    RegistryKey<Material> FLETCHING_TABLE = RegistryKey.unsafeOf("fletching_table");
+    RegistryKey<Material> FLETCHING_TABLE = RegistryKey.of("fletching_table");
 
-    RegistryKey<Material> FLINT = RegistryKey.unsafeOf("flint");
+    RegistryKey<Material> FLINT = RegistryKey.of("flint");
 
-    RegistryKey<Material> FLINT_AND_STEEL = RegistryKey.unsafeOf("flint_and_steel");
+    RegistryKey<Material> FLINT_AND_STEEL = RegistryKey.of("flint_and_steel");
 
-    RegistryKey<Material> FLOW_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.unsafeOf("flow_armor_trim_smithing_template");
+    RegistryKey<Material> FLOW_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.of("flow_armor_trim_smithing_template");
 
-    RegistryKey<Material> FLOW_BANNER_PATTERN = RegistryKey.unsafeOf("flow_banner_pattern");
+    RegistryKey<Material> FLOW_BANNER_PATTERN = RegistryKey.of("flow_banner_pattern");
 
-    RegistryKey<Material> FLOW_POTTERY_SHERD = RegistryKey.unsafeOf("flow_pottery_sherd");
+    RegistryKey<Material> FLOW_POTTERY_SHERD = RegistryKey.of("flow_pottery_sherd");
 
-    RegistryKey<Material> FLOWER_BANNER_PATTERN = RegistryKey.unsafeOf("flower_banner_pattern");
+    RegistryKey<Material> FLOWER_BANNER_PATTERN = RegistryKey.of("flower_banner_pattern");
 
-    RegistryKey<Material> FLOWER_POT = RegistryKey.unsafeOf("flower_pot");
+    RegistryKey<Material> FLOWER_POT = RegistryKey.of("flower_pot");
 
-    RegistryKey<Material> FLOWERING_AZALEA = RegistryKey.unsafeOf("flowering_azalea");
+    RegistryKey<Material> FLOWERING_AZALEA = RegistryKey.of("flowering_azalea");
 
-    RegistryKey<Material> FLOWERING_AZALEA_LEAVES = RegistryKey.unsafeOf("flowering_azalea_leaves");
+    RegistryKey<Material> FLOWERING_AZALEA_LEAVES = RegistryKey.of("flowering_azalea_leaves");
 
-    RegistryKey<Material> FOX_SPAWN_EGG = RegistryKey.unsafeOf("fox_spawn_egg");
+    RegistryKey<Material> FOX_SPAWN_EGG = RegistryKey.of("fox_spawn_egg");
 
-    RegistryKey<Material> FRIEND_POTTERY_SHERD = RegistryKey.unsafeOf("friend_pottery_sherd");
+    RegistryKey<Material> FRIEND_POTTERY_SHERD = RegistryKey.of("friend_pottery_sherd");
 
-    RegistryKey<Material> FROG_SPAWN_EGG = RegistryKey.unsafeOf("frog_spawn_egg");
+    RegistryKey<Material> FROG_SPAWN_EGG = RegistryKey.of("frog_spawn_egg");
 
-    RegistryKey<Material> FROGSPAWN = RegistryKey.unsafeOf("frogspawn");
+    RegistryKey<Material> FROGSPAWN = RegistryKey.of("frogspawn");
 
-    RegistryKey<Material> FURNACE = RegistryKey.unsafeOf("furnace");
+    RegistryKey<Material> FURNACE = RegistryKey.of("furnace");
 
-    RegistryKey<Material> FURNACE_MINECART = RegistryKey.unsafeOf("furnace_minecart");
+    RegistryKey<Material> FURNACE_MINECART = RegistryKey.of("furnace_minecart");
 
-    RegistryKey<Material> GHAST_SPAWN_EGG = RegistryKey.unsafeOf("ghast_spawn_egg");
+    RegistryKey<Material> GHAST_SPAWN_EGG = RegistryKey.of("ghast_spawn_egg");
 
-    RegistryKey<Material> GHAST_TEAR = RegistryKey.unsafeOf("ghast_tear");
+    RegistryKey<Material> GHAST_TEAR = RegistryKey.of("ghast_tear");
 
-    RegistryKey<Material> GILDED_BLACKSTONE = RegistryKey.unsafeOf("gilded_blackstone");
+    RegistryKey<Material> GILDED_BLACKSTONE = RegistryKey.of("gilded_blackstone");
 
-    RegistryKey<Material> GLASS = RegistryKey.unsafeOf("glass");
+    RegistryKey<Material> GLASS = RegistryKey.of("glass");
 
-    RegistryKey<Material> GLASS_BOTTLE = RegistryKey.unsafeOf("glass_bottle");
+    RegistryKey<Material> GLASS_BOTTLE = RegistryKey.of("glass_bottle");
 
-    RegistryKey<Material> GLASS_PANE = RegistryKey.unsafeOf("glass_pane");
+    RegistryKey<Material> GLASS_PANE = RegistryKey.of("glass_pane");
 
-    RegistryKey<Material> GLISTERING_MELON_SLICE = RegistryKey.unsafeOf("glistering_melon_slice");
+    RegistryKey<Material> GLISTERING_MELON_SLICE = RegistryKey.of("glistering_melon_slice");
 
-    RegistryKey<Material> GLOBE_BANNER_PATTERN = RegistryKey.unsafeOf("globe_banner_pattern");
+    RegistryKey<Material> GLOBE_BANNER_PATTERN = RegistryKey.of("globe_banner_pattern");
 
-    RegistryKey<Material> GLOW_BERRIES = RegistryKey.unsafeOf("glow_berries");
+    RegistryKey<Material> GLOW_BERRIES = RegistryKey.of("glow_berries");
 
-    RegistryKey<Material> GLOW_INK_SAC = RegistryKey.unsafeOf("glow_ink_sac");
+    RegistryKey<Material> GLOW_INK_SAC = RegistryKey.of("glow_ink_sac");
 
-    RegistryKey<Material> GLOW_ITEM_FRAME = RegistryKey.unsafeOf("glow_item_frame");
+    RegistryKey<Material> GLOW_ITEM_FRAME = RegistryKey.of("glow_item_frame");
 
-    RegistryKey<Material> GLOW_LICHEN = RegistryKey.unsafeOf("glow_lichen");
+    RegistryKey<Material> GLOW_LICHEN = RegistryKey.of("glow_lichen");
 
-    RegistryKey<Material> GLOW_SQUID_SPAWN_EGG = RegistryKey.unsafeOf("glow_squid_spawn_egg");
+    RegistryKey<Material> GLOW_SQUID_SPAWN_EGG = RegistryKey.of("glow_squid_spawn_egg");
 
-    RegistryKey<Material> GLOWSTONE = RegistryKey.unsafeOf("glowstone");
+    RegistryKey<Material> GLOWSTONE = RegistryKey.of("glowstone");
 
-    RegistryKey<Material> GLOWSTONE_DUST = RegistryKey.unsafeOf("glowstone_dust");
+    RegistryKey<Material> GLOWSTONE_DUST = RegistryKey.of("glowstone_dust");
 
-    RegistryKey<Material> GOAT_HORN = RegistryKey.unsafeOf("goat_horn");
+    RegistryKey<Material> GOAT_HORN = RegistryKey.of("goat_horn");
 
-    RegistryKey<Material> GOAT_SPAWN_EGG = RegistryKey.unsafeOf("goat_spawn_egg");
+    RegistryKey<Material> GOAT_SPAWN_EGG = RegistryKey.of("goat_spawn_egg");
 
-    RegistryKey<Material> GOLD_BLOCK = RegistryKey.unsafeOf("gold_block");
+    RegistryKey<Material> GOLD_BLOCK = RegistryKey.of("gold_block");
 
-    RegistryKey<Material> GOLD_INGOT = RegistryKey.unsafeOf("gold_ingot");
+    RegistryKey<Material> GOLD_INGOT = RegistryKey.of("gold_ingot");
 
-    RegistryKey<Material> GOLD_NUGGET = RegistryKey.unsafeOf("gold_nugget");
+    RegistryKey<Material> GOLD_NUGGET = RegistryKey.of("gold_nugget");
 
-    RegistryKey<Material> GOLD_ORE = RegistryKey.unsafeOf("gold_ore");
+    RegistryKey<Material> GOLD_ORE = RegistryKey.of("gold_ore");
 
-    RegistryKey<Material> GOLDEN_APPLE = RegistryKey.unsafeOf("golden_apple");
+    RegistryKey<Material> GOLDEN_APPLE = RegistryKey.of("golden_apple");
 
-    RegistryKey<Material> GOLDEN_AXE = RegistryKey.unsafeOf("golden_axe");
+    RegistryKey<Material> GOLDEN_AXE = RegistryKey.of("golden_axe");
 
-    RegistryKey<Material> GOLDEN_BOOTS = RegistryKey.unsafeOf("golden_boots");
+    RegistryKey<Material> GOLDEN_BOOTS = RegistryKey.of("golden_boots");
 
-    RegistryKey<Material> GOLDEN_CARROT = RegistryKey.unsafeOf("golden_carrot");
+    RegistryKey<Material> GOLDEN_CARROT = RegistryKey.of("golden_carrot");
 
-    RegistryKey<Material> GOLDEN_CHESTPLATE = RegistryKey.unsafeOf("golden_chestplate");
+    RegistryKey<Material> GOLDEN_CHESTPLATE = RegistryKey.of("golden_chestplate");
 
-    RegistryKey<Material> GOLDEN_DANDELION = RegistryKey.unsafeOf("golden_dandelion");
+    RegistryKey<Material> GOLDEN_DANDELION = RegistryKey.of("golden_dandelion");
 
-    RegistryKey<Material> GOLDEN_HELMET = RegistryKey.unsafeOf("golden_helmet");
+    RegistryKey<Material> GOLDEN_HELMET = RegistryKey.of("golden_helmet");
 
-    RegistryKey<Material> GOLDEN_HOE = RegistryKey.unsafeOf("golden_hoe");
+    RegistryKey<Material> GOLDEN_HOE = RegistryKey.of("golden_hoe");
 
-    RegistryKey<Material> GOLDEN_HORSE_ARMOR = RegistryKey.unsafeOf("golden_horse_armor");
+    RegistryKey<Material> GOLDEN_HORSE_ARMOR = RegistryKey.of("golden_horse_armor");
 
-    RegistryKey<Material> GOLDEN_LEGGINGS = RegistryKey.unsafeOf("golden_leggings");
+    RegistryKey<Material> GOLDEN_LEGGINGS = RegistryKey.of("golden_leggings");
 
-    RegistryKey<Material> GOLDEN_NAUTILUS_ARMOR = RegistryKey.unsafeOf("golden_nautilus_armor");
+    RegistryKey<Material> GOLDEN_NAUTILUS_ARMOR = RegistryKey.of("golden_nautilus_armor");
 
-    RegistryKey<Material> GOLDEN_PICKAXE = RegistryKey.unsafeOf("golden_pickaxe");
+    RegistryKey<Material> GOLDEN_PICKAXE = RegistryKey.of("golden_pickaxe");
 
-    RegistryKey<Material> GOLDEN_SHOVEL = RegistryKey.unsafeOf("golden_shovel");
+    RegistryKey<Material> GOLDEN_SHOVEL = RegistryKey.of("golden_shovel");
 
-    RegistryKey<Material> GOLDEN_SPEAR = RegistryKey.unsafeOf("golden_spear");
+    RegistryKey<Material> GOLDEN_SPEAR = RegistryKey.of("golden_spear");
 
-    RegistryKey<Material> GOLDEN_SWORD = RegistryKey.unsafeOf("golden_sword");
+    RegistryKey<Material> GOLDEN_SWORD = RegistryKey.of("golden_sword");
 
-    RegistryKey<Material> GRANITE = RegistryKey.unsafeOf("granite");
+    RegistryKey<Material> GRANITE = RegistryKey.of("granite");
 
-    RegistryKey<Material> GRANITE_SLAB = RegistryKey.unsafeOf("granite_slab");
+    RegistryKey<Material> GRANITE_SLAB = RegistryKey.of("granite_slab");
 
-    RegistryKey<Material> GRANITE_STAIRS = RegistryKey.unsafeOf("granite_stairs");
+    RegistryKey<Material> GRANITE_STAIRS = RegistryKey.of("granite_stairs");
 
-    RegistryKey<Material> GRANITE_WALL = RegistryKey.unsafeOf("granite_wall");
+    RegistryKey<Material> GRANITE_WALL = RegistryKey.of("granite_wall");
 
-    RegistryKey<Material> GRASS_BLOCK = RegistryKey.unsafeOf("grass_block");
+    RegistryKey<Material> GRASS_BLOCK = RegistryKey.of("grass_block");
 
-    RegistryKey<Material> GRAVEL = RegistryKey.unsafeOf("gravel");
+    RegistryKey<Material> GRAVEL = RegistryKey.of("gravel");
 
-    RegistryKey<Material> GRAY_BANNER = RegistryKey.unsafeOf("gray_banner");
+    RegistryKey<Material> GRAY_BANNER = RegistryKey.of("gray_banner");
 
-    RegistryKey<Material> GRAY_BED = RegistryKey.unsafeOf("gray_bed");
+    RegistryKey<Material> GRAY_BED = RegistryKey.of("gray_bed");
 
-    RegistryKey<Material> GRAY_BUNDLE = RegistryKey.unsafeOf("gray_bundle");
+    RegistryKey<Material> GRAY_BUNDLE = RegistryKey.of("gray_bundle");
 
-    RegistryKey<Material> GRAY_CANDLE = RegistryKey.unsafeOf("gray_candle");
+    RegistryKey<Material> GRAY_CANDLE = RegistryKey.of("gray_candle");
 
-    RegistryKey<Material> GRAY_CARPET = RegistryKey.unsafeOf("gray_carpet");
+    RegistryKey<Material> GRAY_CARPET = RegistryKey.of("gray_carpet");
 
-    RegistryKey<Material> GRAY_CONCRETE = RegistryKey.unsafeOf("gray_concrete");
+    RegistryKey<Material> GRAY_CONCRETE = RegistryKey.of("gray_concrete");
 
-    RegistryKey<Material> GRAY_CONCRETE_POWDER = RegistryKey.unsafeOf("gray_concrete_powder");
+    RegistryKey<Material> GRAY_CONCRETE_POWDER = RegistryKey.of("gray_concrete_powder");
 
-    RegistryKey<Material> GRAY_CONCRETE_SLAB = RegistryKey.unsafeOf("gray_concrete_slab");
+    RegistryKey<Material> GRAY_CONCRETE_SLAB = RegistryKey.of("gray_concrete_slab");
 
-    RegistryKey<Material> GRAY_CONCRETE_STAIRS = RegistryKey.unsafeOf("gray_concrete_stairs");
+    RegistryKey<Material> GRAY_CONCRETE_STAIRS = RegistryKey.of("gray_concrete_stairs");
 
-    RegistryKey<Material> GRAY_CUSHION = RegistryKey.unsafeOf("gray_cushion");
+    RegistryKey<Material> GRAY_CUSHION = RegistryKey.of("gray_cushion");
 
-    RegistryKey<Material> GRAY_DYE = RegistryKey.unsafeOf("gray_dye");
+    RegistryKey<Material> GRAY_DYE = RegistryKey.of("gray_dye");
 
-    RegistryKey<Material> GRAY_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("gray_glazed_terracotta");
+    RegistryKey<Material> GRAY_GLAZED_TERRACOTTA = RegistryKey.of("gray_glazed_terracotta");
 
-    RegistryKey<Material> GRAY_HARNESS = RegistryKey.unsafeOf("gray_harness");
+    RegistryKey<Material> GRAY_HARNESS = RegistryKey.of("gray_harness");
 
-    RegistryKey<Material> GRAY_SHULKER_BOX = RegistryKey.unsafeOf("gray_shulker_box");
+    RegistryKey<Material> GRAY_SHULKER_BOX = RegistryKey.of("gray_shulker_box");
 
-    RegistryKey<Material> GRAY_STAINED_GLASS = RegistryKey.unsafeOf("gray_stained_glass");
+    RegistryKey<Material> GRAY_STAINED_GLASS = RegistryKey.of("gray_stained_glass");
 
-    RegistryKey<Material> GRAY_STAINED_GLASS_PANE = RegistryKey.unsafeOf("gray_stained_glass_pane");
+    RegistryKey<Material> GRAY_STAINED_GLASS_PANE = RegistryKey.of("gray_stained_glass_pane");
 
-    RegistryKey<Material> GRAY_TERRACOTTA = RegistryKey.unsafeOf("gray_terracotta");
+    RegistryKey<Material> GRAY_TERRACOTTA = RegistryKey.of("gray_terracotta");
 
-    RegistryKey<Material> GRAY_WOOL = RegistryKey.unsafeOf("gray_wool");
+    RegistryKey<Material> GRAY_WOOL = RegistryKey.of("gray_wool");
 
-    RegistryKey<Material> GRAY_WOOL_SLAB = RegistryKey.unsafeOf("gray_wool_slab");
+    RegistryKey<Material> GRAY_WOOL_SLAB = RegistryKey.of("gray_wool_slab");
 
-    RegistryKey<Material> GRAY_WOOL_STAIRS = RegistryKey.unsafeOf("gray_wool_stairs");
+    RegistryKey<Material> GRAY_WOOL_STAIRS = RegistryKey.of("gray_wool_stairs");
 
-    RegistryKey<Material> GREEN_BANNER = RegistryKey.unsafeOf("green_banner");
+    RegistryKey<Material> GREEN_BANNER = RegistryKey.of("green_banner");
 
-    RegistryKey<Material> GREEN_BED = RegistryKey.unsafeOf("green_bed");
+    RegistryKey<Material> GREEN_BED = RegistryKey.of("green_bed");
 
-    RegistryKey<Material> GREEN_BUNDLE = RegistryKey.unsafeOf("green_bundle");
+    RegistryKey<Material> GREEN_BUNDLE = RegistryKey.of("green_bundle");
 
-    RegistryKey<Material> GREEN_CANDLE = RegistryKey.unsafeOf("green_candle");
+    RegistryKey<Material> GREEN_CANDLE = RegistryKey.of("green_candle");
 
-    RegistryKey<Material> GREEN_CARPET = RegistryKey.unsafeOf("green_carpet");
+    RegistryKey<Material> GREEN_CARPET = RegistryKey.of("green_carpet");
 
-    RegistryKey<Material> GREEN_CONCRETE = RegistryKey.unsafeOf("green_concrete");
+    RegistryKey<Material> GREEN_CONCRETE = RegistryKey.of("green_concrete");
 
-    RegistryKey<Material> GREEN_CONCRETE_POWDER = RegistryKey.unsafeOf("green_concrete_powder");
+    RegistryKey<Material> GREEN_CONCRETE_POWDER = RegistryKey.of("green_concrete_powder");
 
-    RegistryKey<Material> GREEN_CONCRETE_SLAB = RegistryKey.unsafeOf("green_concrete_slab");
+    RegistryKey<Material> GREEN_CONCRETE_SLAB = RegistryKey.of("green_concrete_slab");
 
-    RegistryKey<Material> GREEN_CONCRETE_STAIRS = RegistryKey.unsafeOf("green_concrete_stairs");
+    RegistryKey<Material> GREEN_CONCRETE_STAIRS = RegistryKey.of("green_concrete_stairs");
 
-    RegistryKey<Material> GREEN_CUSHION = RegistryKey.unsafeOf("green_cushion");
+    RegistryKey<Material> GREEN_CUSHION = RegistryKey.of("green_cushion");
 
-    RegistryKey<Material> GREEN_DYE = RegistryKey.unsafeOf("green_dye");
+    RegistryKey<Material> GREEN_DYE = RegistryKey.of("green_dye");
 
-    RegistryKey<Material> GREEN_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("green_glazed_terracotta");
+    RegistryKey<Material> GREEN_GLAZED_TERRACOTTA = RegistryKey.of("green_glazed_terracotta");
 
-    RegistryKey<Material> GREEN_HARNESS = RegistryKey.unsafeOf("green_harness");
+    RegistryKey<Material> GREEN_HARNESS = RegistryKey.of("green_harness");
 
-    RegistryKey<Material> GREEN_SHULKER_BOX = RegistryKey.unsafeOf("green_shulker_box");
+    RegistryKey<Material> GREEN_SHULKER_BOX = RegistryKey.of("green_shulker_box");
 
-    RegistryKey<Material> GREEN_STAINED_GLASS = RegistryKey.unsafeOf("green_stained_glass");
+    RegistryKey<Material> GREEN_STAINED_GLASS = RegistryKey.of("green_stained_glass");
 
-    RegistryKey<Material> GREEN_STAINED_GLASS_PANE = RegistryKey.unsafeOf("green_stained_glass_pane");
+    RegistryKey<Material> GREEN_STAINED_GLASS_PANE = RegistryKey.of("green_stained_glass_pane");
 
-    RegistryKey<Material> GREEN_TERRACOTTA = RegistryKey.unsafeOf("green_terracotta");
+    RegistryKey<Material> GREEN_TERRACOTTA = RegistryKey.of("green_terracotta");
 
-    RegistryKey<Material> GREEN_WOOL = RegistryKey.unsafeOf("green_wool");
+    RegistryKey<Material> GREEN_WOOL = RegistryKey.of("green_wool");
 
-    RegistryKey<Material> GREEN_WOOL_SLAB = RegistryKey.unsafeOf("green_wool_slab");
+    RegistryKey<Material> GREEN_WOOL_SLAB = RegistryKey.of("green_wool_slab");
 
-    RegistryKey<Material> GREEN_WOOL_STAIRS = RegistryKey.unsafeOf("green_wool_stairs");
+    RegistryKey<Material> GREEN_WOOL_STAIRS = RegistryKey.of("green_wool_stairs");
 
-    RegistryKey<Material> GRINDSTONE = RegistryKey.unsafeOf("grindstone");
+    RegistryKey<Material> GRINDSTONE = RegistryKey.of("grindstone");
 
-    RegistryKey<Material> GUARDIAN_SPAWN_EGG = RegistryKey.unsafeOf("guardian_spawn_egg");
+    RegistryKey<Material> GUARDIAN_SPAWN_EGG = RegistryKey.of("guardian_spawn_egg");
 
-    RegistryKey<Material> GUNPOWDER = RegistryKey.unsafeOf("gunpowder");
+    RegistryKey<Material> GUNPOWDER = RegistryKey.of("gunpowder");
 
-    RegistryKey<Material> GUSTER_BANNER_PATTERN = RegistryKey.unsafeOf("guster_banner_pattern");
+    RegistryKey<Material> GUSTER_BANNER_PATTERN = RegistryKey.of("guster_banner_pattern");
 
-    RegistryKey<Material> GUSTER_POTTERY_SHERD = RegistryKey.unsafeOf("guster_pottery_sherd");
+    RegistryKey<Material> GUSTER_POTTERY_SHERD = RegistryKey.of("guster_pottery_sherd");
 
-    RegistryKey<Material> HANGING_ROOTS = RegistryKey.unsafeOf("hanging_roots");
+    RegistryKey<Material> HANGING_ROOTS = RegistryKey.of("hanging_roots");
 
-    RegistryKey<Material> HAPPY_GHAST_SPAWN_EGG = RegistryKey.unsafeOf("happy_ghast_spawn_egg");
+    RegistryKey<Material> HAPPY_GHAST_SPAWN_EGG = RegistryKey.of("happy_ghast_spawn_egg");
 
-    RegistryKey<Material> HAY_BLOCK = RegistryKey.unsafeOf("hay_block");
+    RegistryKey<Material> HAY_BLOCK = RegistryKey.of("hay_block");
 
-    RegistryKey<Material> HEART_OF_THE_SEA = RegistryKey.unsafeOf("heart_of_the_sea");
+    RegistryKey<Material> HEART_OF_THE_SEA = RegistryKey.of("heart_of_the_sea");
 
-    RegistryKey<Material> HEART_POTTERY_SHERD = RegistryKey.unsafeOf("heart_pottery_sherd");
+    RegistryKey<Material> HEART_POTTERY_SHERD = RegistryKey.of("heart_pottery_sherd");
 
-    RegistryKey<Material> HEARTBREAK_POTTERY_SHERD = RegistryKey.unsafeOf("heartbreak_pottery_sherd");
+    RegistryKey<Material> HEARTBREAK_POTTERY_SHERD = RegistryKey.of("heartbreak_pottery_sherd");
 
-    RegistryKey<Material> HEAVY_CORE = RegistryKey.unsafeOf("heavy_core");
+    RegistryKey<Material> HEAVY_CORE = RegistryKey.of("heavy_core");
 
-    RegistryKey<Material> HEAVY_WEIGHTED_PRESSURE_PLATE = RegistryKey.unsafeOf("heavy_weighted_pressure_plate");
+    RegistryKey<Material> HEAVY_WEIGHTED_PRESSURE_PLATE = RegistryKey.of("heavy_weighted_pressure_plate");
 
-    RegistryKey<Material> HOGLIN_SPAWN_EGG = RegistryKey.unsafeOf("hoglin_spawn_egg");
+    RegistryKey<Material> HOGLIN_SPAWN_EGG = RegistryKey.of("hoglin_spawn_egg");
 
-    RegistryKey<Material> HONEY_BLOCK = RegistryKey.unsafeOf("honey_block");
+    RegistryKey<Material> HONEY_BLOCK = RegistryKey.of("honey_block");
 
-    RegistryKey<Material> HONEY_BOTTLE = RegistryKey.unsafeOf("honey_bottle");
+    RegistryKey<Material> HONEY_BOTTLE = RegistryKey.of("honey_bottle");
 
-    RegistryKey<Material> HONEYCOMB = RegistryKey.unsafeOf("honeycomb");
+    RegistryKey<Material> HONEYCOMB = RegistryKey.of("honeycomb");
 
-    RegistryKey<Material> HONEYCOMB_BLOCK = RegistryKey.unsafeOf("honeycomb_block");
+    RegistryKey<Material> HONEYCOMB_BLOCK = RegistryKey.of("honeycomb_block");
 
-    RegistryKey<Material> HOPPER = RegistryKey.unsafeOf("hopper");
+    RegistryKey<Material> HOPPER = RegistryKey.of("hopper");
 
-    RegistryKey<Material> HOPPER_MINECART = RegistryKey.unsafeOf("hopper_minecart");
+    RegistryKey<Material> HOPPER_MINECART = RegistryKey.of("hopper_minecart");
 
-    RegistryKey<Material> HORN_CORAL = RegistryKey.unsafeOf("horn_coral");
+    RegistryKey<Material> HORN_CORAL = RegistryKey.of("horn_coral");
 
-    RegistryKey<Material> HORN_CORAL_BLOCK = RegistryKey.unsafeOf("horn_coral_block");
+    RegistryKey<Material> HORN_CORAL_BLOCK = RegistryKey.of("horn_coral_block");
 
-    RegistryKey<Material> HORN_CORAL_FAN = RegistryKey.unsafeOf("horn_coral_fan");
+    RegistryKey<Material> HORN_CORAL_FAN = RegistryKey.of("horn_coral_fan");
 
-    RegistryKey<Material> HORSE_SPAWN_EGG = RegistryKey.unsafeOf("horse_spawn_egg");
+    RegistryKey<Material> HORSE_SPAWN_EGG = RegistryKey.of("horse_spawn_egg");
 
-    RegistryKey<Material> HOST_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.unsafeOf("host_armor_trim_smithing_template");
+    RegistryKey<Material> HOST_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.of("host_armor_trim_smithing_template");
 
-    RegistryKey<Material> HOWL_POTTERY_SHERD = RegistryKey.unsafeOf("howl_pottery_sherd");
+    RegistryKey<Material> HOWL_POTTERY_SHERD = RegistryKey.of("howl_pottery_sherd");
 
-    RegistryKey<Material> HUSK_SPAWN_EGG = RegistryKey.unsafeOf("husk_spawn_egg");
+    RegistryKey<Material> HUSK_SPAWN_EGG = RegistryKey.of("husk_spawn_egg");
 
-    RegistryKey<Material> ICE = RegistryKey.unsafeOf("ice");
+    RegistryKey<Material> ICE = RegistryKey.of("ice");
 
-    RegistryKey<Material> INFESTED_CHISELED_STONE_BRICKS = RegistryKey.unsafeOf("infested_chiseled_stone_bricks");
+    RegistryKey<Material> INFESTED_CHISELED_STONE_BRICKS = RegistryKey.of("infested_chiseled_stone_bricks");
 
-    RegistryKey<Material> INFESTED_COBBLESTONE = RegistryKey.unsafeOf("infested_cobblestone");
+    RegistryKey<Material> INFESTED_COBBLESTONE = RegistryKey.of("infested_cobblestone");
 
-    RegistryKey<Material> INFESTED_CRACKED_STONE_BRICKS = RegistryKey.unsafeOf("infested_cracked_stone_bricks");
+    RegistryKey<Material> INFESTED_CRACKED_STONE_BRICKS = RegistryKey.of("infested_cracked_stone_bricks");
 
-    RegistryKey<Material> INFESTED_DEEPSLATE = RegistryKey.unsafeOf("infested_deepslate");
+    RegistryKey<Material> INFESTED_DEEPSLATE = RegistryKey.of("infested_deepslate");
 
-    RegistryKey<Material> INFESTED_MOSSY_STONE_BRICKS = RegistryKey.unsafeOf("infested_mossy_stone_bricks");
+    RegistryKey<Material> INFESTED_MOSSY_STONE_BRICKS = RegistryKey.of("infested_mossy_stone_bricks");
 
-    RegistryKey<Material> INFESTED_STONE = RegistryKey.unsafeOf("infested_stone");
+    RegistryKey<Material> INFESTED_STONE = RegistryKey.of("infested_stone");
 
-    RegistryKey<Material> INFESTED_STONE_BRICKS = RegistryKey.unsafeOf("infested_stone_bricks");
+    RegistryKey<Material> INFESTED_STONE_BRICKS = RegistryKey.of("infested_stone_bricks");
 
-    RegistryKey<Material> INK_SAC = RegistryKey.unsafeOf("ink_sac");
+    RegistryKey<Material> INK_SAC = RegistryKey.of("ink_sac");
 
-    RegistryKey<Material> IRON_AXE = RegistryKey.unsafeOf("iron_axe");
+    RegistryKey<Material> IRON_AXE = RegistryKey.of("iron_axe");
 
-    RegistryKey<Material> IRON_BARS = RegistryKey.unsafeOf("iron_bars");
+    RegistryKey<Material> IRON_BARS = RegistryKey.of("iron_bars");
 
-    RegistryKey<Material> IRON_BLOCK = RegistryKey.unsafeOf("iron_block");
+    RegistryKey<Material> IRON_BLOCK = RegistryKey.of("iron_block");
 
-    RegistryKey<Material> IRON_BOOTS = RegistryKey.unsafeOf("iron_boots");
+    RegistryKey<Material> IRON_BOOTS = RegistryKey.of("iron_boots");
 
-    RegistryKey<Material> IRON_CHAIN = RegistryKey.unsafeOf("iron_chain");
+    RegistryKey<Material> IRON_CHAIN = RegistryKey.of("iron_chain");
 
-    RegistryKey<Material> IRON_CHESTPLATE = RegistryKey.unsafeOf("iron_chestplate");
+    RegistryKey<Material> IRON_CHESTPLATE = RegistryKey.of("iron_chestplate");
 
-    RegistryKey<Material> IRON_DOOR = RegistryKey.unsafeOf("iron_door");
+    RegistryKey<Material> IRON_DOOR = RegistryKey.of("iron_door");
 
-    RegistryKey<Material> IRON_GOLEM_SPAWN_EGG = RegistryKey.unsafeOf("iron_golem_spawn_egg");
+    RegistryKey<Material> IRON_GOLEM_SPAWN_EGG = RegistryKey.of("iron_golem_spawn_egg");
 
-    RegistryKey<Material> IRON_HELMET = RegistryKey.unsafeOf("iron_helmet");
+    RegistryKey<Material> IRON_HELMET = RegistryKey.of("iron_helmet");
 
-    RegistryKey<Material> IRON_HOE = RegistryKey.unsafeOf("iron_hoe");
+    RegistryKey<Material> IRON_HOE = RegistryKey.of("iron_hoe");
 
-    RegistryKey<Material> IRON_HORSE_ARMOR = RegistryKey.unsafeOf("iron_horse_armor");
+    RegistryKey<Material> IRON_HORSE_ARMOR = RegistryKey.of("iron_horse_armor");
 
-    RegistryKey<Material> IRON_INGOT = RegistryKey.unsafeOf("iron_ingot");
+    RegistryKey<Material> IRON_INGOT = RegistryKey.of("iron_ingot");
 
-    RegistryKey<Material> IRON_LEGGINGS = RegistryKey.unsafeOf("iron_leggings");
+    RegistryKey<Material> IRON_LEGGINGS = RegistryKey.of("iron_leggings");
 
-    RegistryKey<Material> IRON_NAUTILUS_ARMOR = RegistryKey.unsafeOf("iron_nautilus_armor");
+    RegistryKey<Material> IRON_NAUTILUS_ARMOR = RegistryKey.of("iron_nautilus_armor");
 
-    RegistryKey<Material> IRON_NUGGET = RegistryKey.unsafeOf("iron_nugget");
+    RegistryKey<Material> IRON_NUGGET = RegistryKey.of("iron_nugget");
 
-    RegistryKey<Material> IRON_ORE = RegistryKey.unsafeOf("iron_ore");
+    RegistryKey<Material> IRON_ORE = RegistryKey.of("iron_ore");
 
-    RegistryKey<Material> IRON_PICKAXE = RegistryKey.unsafeOf("iron_pickaxe");
+    RegistryKey<Material> IRON_PICKAXE = RegistryKey.of("iron_pickaxe");
 
-    RegistryKey<Material> IRON_SHOVEL = RegistryKey.unsafeOf("iron_shovel");
+    RegistryKey<Material> IRON_SHOVEL = RegistryKey.of("iron_shovel");
 
-    RegistryKey<Material> IRON_SPEAR = RegistryKey.unsafeOf("iron_spear");
+    RegistryKey<Material> IRON_SPEAR = RegistryKey.of("iron_spear");
 
-    RegistryKey<Material> IRON_SWORD = RegistryKey.unsafeOf("iron_sword");
+    RegistryKey<Material> IRON_SWORD = RegistryKey.of("iron_sword");
 
-    RegistryKey<Material> IRON_TRAPDOOR = RegistryKey.unsafeOf("iron_trapdoor");
+    RegistryKey<Material> IRON_TRAPDOOR = RegistryKey.of("iron_trapdoor");
 
-    RegistryKey<Material> ITEM_FRAME = RegistryKey.unsafeOf("item_frame");
+    RegistryKey<Material> ITEM_FRAME = RegistryKey.of("item_frame");
 
-    RegistryKey<Material> JACK_O_LANTERN = RegistryKey.unsafeOf("jack_o_lantern");
+    RegistryKey<Material> JACK_O_LANTERN = RegistryKey.of("jack_o_lantern");
 
-    RegistryKey<Material> JIGSAW = RegistryKey.unsafeOf("jigsaw");
+    RegistryKey<Material> JIGSAW = RegistryKey.of("jigsaw");
 
-    RegistryKey<Material> JUKEBOX = RegistryKey.unsafeOf("jukebox");
+    RegistryKey<Material> JUKEBOX = RegistryKey.of("jukebox");
 
-    RegistryKey<Material> JUNGLE_BOAT = RegistryKey.unsafeOf("jungle_boat");
+    RegistryKey<Material> JUNGLE_BOAT = RegistryKey.of("jungle_boat");
 
-    RegistryKey<Material> JUNGLE_BUTTON = RegistryKey.unsafeOf("jungle_button");
+    RegistryKey<Material> JUNGLE_BUTTON = RegistryKey.of("jungle_button");
 
-    RegistryKey<Material> JUNGLE_CHEST_BOAT = RegistryKey.unsafeOf("jungle_chest_boat");
+    RegistryKey<Material> JUNGLE_CHEST_BOAT = RegistryKey.of("jungle_chest_boat");
 
-    RegistryKey<Material> JUNGLE_DOOR = RegistryKey.unsafeOf("jungle_door");
+    RegistryKey<Material> JUNGLE_DOOR = RegistryKey.of("jungle_door");
 
-    RegistryKey<Material> JUNGLE_FENCE = RegistryKey.unsafeOf("jungle_fence");
+    RegistryKey<Material> JUNGLE_FENCE = RegistryKey.of("jungle_fence");
 
-    RegistryKey<Material> JUNGLE_FENCE_GATE = RegistryKey.unsafeOf("jungle_fence_gate");
+    RegistryKey<Material> JUNGLE_FENCE_GATE = RegistryKey.of("jungle_fence_gate");
 
-    RegistryKey<Material> JUNGLE_HANGING_SIGN = RegistryKey.unsafeOf("jungle_hanging_sign");
+    RegistryKey<Material> JUNGLE_HANGING_SIGN = RegistryKey.of("jungle_hanging_sign");
 
-    RegistryKey<Material> JUNGLE_LEAVES = RegistryKey.unsafeOf("jungle_leaves");
+    RegistryKey<Material> JUNGLE_LEAVES = RegistryKey.of("jungle_leaves");
 
-    RegistryKey<Material> JUNGLE_LOG = RegistryKey.unsafeOf("jungle_log");
+    RegistryKey<Material> JUNGLE_LOG = RegistryKey.of("jungle_log");
 
-    RegistryKey<Material> JUNGLE_PLANKS = RegistryKey.unsafeOf("jungle_planks");
+    RegistryKey<Material> JUNGLE_PLANKS = RegistryKey.of("jungle_planks");
 
-    RegistryKey<Material> JUNGLE_PRESSURE_PLATE = RegistryKey.unsafeOf("jungle_pressure_plate");
+    RegistryKey<Material> JUNGLE_PRESSURE_PLATE = RegistryKey.of("jungle_pressure_plate");
 
-    RegistryKey<Material> JUNGLE_PYRAMID_MAP = RegistryKey.unsafeOf("jungle_pyramid_map");
+    RegistryKey<Material> JUNGLE_PYRAMID_MAP = RegistryKey.of("jungle_pyramid_map");
 
-    RegistryKey<Material> JUNGLE_SAPLING = RegistryKey.unsafeOf("jungle_sapling");
+    RegistryKey<Material> JUNGLE_SAPLING = RegistryKey.of("jungle_sapling");
 
-    RegistryKey<Material> JUNGLE_SHELF = RegistryKey.unsafeOf("jungle_shelf");
+    RegistryKey<Material> JUNGLE_SHELF = RegistryKey.of("jungle_shelf");
 
-    RegistryKey<Material> JUNGLE_SIGN = RegistryKey.unsafeOf("jungle_sign");
+    RegistryKey<Material> JUNGLE_SIGN = RegistryKey.of("jungle_sign");
 
-    RegistryKey<Material> JUNGLE_SLAB = RegistryKey.unsafeOf("jungle_slab");
+    RegistryKey<Material> JUNGLE_SLAB = RegistryKey.of("jungle_slab");
 
-    RegistryKey<Material> JUNGLE_STAIRS = RegistryKey.unsafeOf("jungle_stairs");
+    RegistryKey<Material> JUNGLE_STAIRS = RegistryKey.of("jungle_stairs");
 
-    RegistryKey<Material> JUNGLE_TRAPDOOR = RegistryKey.unsafeOf("jungle_trapdoor");
+    RegistryKey<Material> JUNGLE_TRAPDOOR = RegistryKey.of("jungle_trapdoor");
 
-    RegistryKey<Material> JUNGLE_WOOD = RegistryKey.unsafeOf("jungle_wood");
+    RegistryKey<Material> JUNGLE_WOOD = RegistryKey.of("jungle_wood");
 
-    RegistryKey<Material> KELP = RegistryKey.unsafeOf("kelp");
+    RegistryKey<Material> KELP = RegistryKey.of("kelp");
 
-    RegistryKey<Material> KNOWLEDGE_BOOK = RegistryKey.unsafeOf("knowledge_book");
+    RegistryKey<Material> KNOWLEDGE_BOOK = RegistryKey.of("knowledge_book");
 
-    RegistryKey<Material> LADDER = RegistryKey.unsafeOf("ladder");
+    RegistryKey<Material> LADDER = RegistryKey.of("ladder");
 
-    RegistryKey<Material> LANTERN = RegistryKey.unsafeOf("lantern");
+    RegistryKey<Material> LANTERN = RegistryKey.of("lantern");
 
-    RegistryKey<Material> LAPIS_BLOCK = RegistryKey.unsafeOf("lapis_block");
+    RegistryKey<Material> LAPIS_BLOCK = RegistryKey.of("lapis_block");
 
-    RegistryKey<Material> LAPIS_LAZULI = RegistryKey.unsafeOf("lapis_lazuli");
+    RegistryKey<Material> LAPIS_LAZULI = RegistryKey.of("lapis_lazuli");
 
-    RegistryKey<Material> LAPIS_ORE = RegistryKey.unsafeOf("lapis_ore");
+    RegistryKey<Material> LAPIS_ORE = RegistryKey.of("lapis_ore");
 
-    RegistryKey<Material> LARGE_AMETHYST_BUD = RegistryKey.unsafeOf("large_amethyst_bud");
+    RegistryKey<Material> LARGE_AMETHYST_BUD = RegistryKey.of("large_amethyst_bud");
 
-    RegistryKey<Material> LARGE_FERN = RegistryKey.unsafeOf("large_fern");
+    RegistryKey<Material> LARGE_FERN = RegistryKey.of("large_fern");
 
-    RegistryKey<Material> LAVA_BUCKET = RegistryKey.unsafeOf("lava_bucket");
+    RegistryKey<Material> LAVA_BUCKET = RegistryKey.of("lava_bucket");
 
-    RegistryKey<Material> LEAD = RegistryKey.unsafeOf("lead");
+    RegistryKey<Material> LEAD = RegistryKey.of("lead");
 
-    RegistryKey<Material> LEAF_LITTER = RegistryKey.unsafeOf("leaf_litter");
+    RegistryKey<Material> LEAF_LITTER = RegistryKey.of("leaf_litter");
 
-    RegistryKey<Material> LEATHER = RegistryKey.unsafeOf("leather");
+    RegistryKey<Material> LEATHER = RegistryKey.of("leather");
 
-    RegistryKey<Material> LEATHER_BOOTS = RegistryKey.unsafeOf("leather_boots");
+    RegistryKey<Material> LEATHER_BOOTS = RegistryKey.of("leather_boots");
 
-    RegistryKey<Material> LEATHER_CHESTPLATE = RegistryKey.unsafeOf("leather_chestplate");
+    RegistryKey<Material> LEATHER_CHESTPLATE = RegistryKey.of("leather_chestplate");
 
-    RegistryKey<Material> LEATHER_HELMET = RegistryKey.unsafeOf("leather_helmet");
+    RegistryKey<Material> LEATHER_HELMET = RegistryKey.of("leather_helmet");
 
-    RegistryKey<Material> LEATHER_HORSE_ARMOR = RegistryKey.unsafeOf("leather_horse_armor");
+    RegistryKey<Material> LEATHER_HORSE_ARMOR = RegistryKey.of("leather_horse_armor");
 
-    RegistryKey<Material> LEATHER_LEGGINGS = RegistryKey.unsafeOf("leather_leggings");
+    RegistryKey<Material> LEATHER_LEGGINGS = RegistryKey.of("leather_leggings");
 
-    RegistryKey<Material> LECTERN = RegistryKey.unsafeOf("lectern");
+    RegistryKey<Material> LECTERN = RegistryKey.of("lectern");
 
-    RegistryKey<Material> LEVER = RegistryKey.unsafeOf("lever");
+    RegistryKey<Material> LEVER = RegistryKey.of("lever");
 
-    RegistryKey<Material> LIGHT = RegistryKey.unsafeOf("light");
+    RegistryKey<Material> LIGHT = RegistryKey.of("light");
 
-    RegistryKey<Material> LIGHT_BLUE_BANNER = RegistryKey.unsafeOf("light_blue_banner");
+    RegistryKey<Material> LIGHT_BLUE_BANNER = RegistryKey.of("light_blue_banner");
 
-    RegistryKey<Material> LIGHT_BLUE_BED = RegistryKey.unsafeOf("light_blue_bed");
+    RegistryKey<Material> LIGHT_BLUE_BED = RegistryKey.of("light_blue_bed");
 
-    RegistryKey<Material> LIGHT_BLUE_BUNDLE = RegistryKey.unsafeOf("light_blue_bundle");
+    RegistryKey<Material> LIGHT_BLUE_BUNDLE = RegistryKey.of("light_blue_bundle");
 
-    RegistryKey<Material> LIGHT_BLUE_CANDLE = RegistryKey.unsafeOf("light_blue_candle");
+    RegistryKey<Material> LIGHT_BLUE_CANDLE = RegistryKey.of("light_blue_candle");
 
-    RegistryKey<Material> LIGHT_BLUE_CARPET = RegistryKey.unsafeOf("light_blue_carpet");
+    RegistryKey<Material> LIGHT_BLUE_CARPET = RegistryKey.of("light_blue_carpet");
 
-    RegistryKey<Material> LIGHT_BLUE_CONCRETE = RegistryKey.unsafeOf("light_blue_concrete");
+    RegistryKey<Material> LIGHT_BLUE_CONCRETE = RegistryKey.of("light_blue_concrete");
 
-    RegistryKey<Material> LIGHT_BLUE_CONCRETE_POWDER = RegistryKey.unsafeOf("light_blue_concrete_powder");
+    RegistryKey<Material> LIGHT_BLUE_CONCRETE_POWDER = RegistryKey.of("light_blue_concrete_powder");
 
-    RegistryKey<Material> LIGHT_BLUE_CONCRETE_SLAB = RegistryKey.unsafeOf("light_blue_concrete_slab");
+    RegistryKey<Material> LIGHT_BLUE_CONCRETE_SLAB = RegistryKey.of("light_blue_concrete_slab");
 
-    RegistryKey<Material> LIGHT_BLUE_CONCRETE_STAIRS = RegistryKey.unsafeOf("light_blue_concrete_stairs");
+    RegistryKey<Material> LIGHT_BLUE_CONCRETE_STAIRS = RegistryKey.of("light_blue_concrete_stairs");
 
-    RegistryKey<Material> LIGHT_BLUE_CUSHION = RegistryKey.unsafeOf("light_blue_cushion");
+    RegistryKey<Material> LIGHT_BLUE_CUSHION = RegistryKey.of("light_blue_cushion");
 
-    RegistryKey<Material> LIGHT_BLUE_DYE = RegistryKey.unsafeOf("light_blue_dye");
+    RegistryKey<Material> LIGHT_BLUE_DYE = RegistryKey.of("light_blue_dye");
 
-    RegistryKey<Material> LIGHT_BLUE_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("light_blue_glazed_terracotta");
+    RegistryKey<Material> LIGHT_BLUE_GLAZED_TERRACOTTA = RegistryKey.of("light_blue_glazed_terracotta");
 
-    RegistryKey<Material> LIGHT_BLUE_HARNESS = RegistryKey.unsafeOf("light_blue_harness");
+    RegistryKey<Material> LIGHT_BLUE_HARNESS = RegistryKey.of("light_blue_harness");
 
-    RegistryKey<Material> LIGHT_BLUE_SHULKER_BOX = RegistryKey.unsafeOf("light_blue_shulker_box");
+    RegistryKey<Material> LIGHT_BLUE_SHULKER_BOX = RegistryKey.of("light_blue_shulker_box");
 
-    RegistryKey<Material> LIGHT_BLUE_STAINED_GLASS = RegistryKey.unsafeOf("light_blue_stained_glass");
+    RegistryKey<Material> LIGHT_BLUE_STAINED_GLASS = RegistryKey.of("light_blue_stained_glass");
 
-    RegistryKey<Material> LIGHT_BLUE_STAINED_GLASS_PANE = RegistryKey.unsafeOf("light_blue_stained_glass_pane");
+    RegistryKey<Material> LIGHT_BLUE_STAINED_GLASS_PANE = RegistryKey.of("light_blue_stained_glass_pane");
 
-    RegistryKey<Material> LIGHT_BLUE_TERRACOTTA = RegistryKey.unsafeOf("light_blue_terracotta");
+    RegistryKey<Material> LIGHT_BLUE_TERRACOTTA = RegistryKey.of("light_blue_terracotta");
 
-    RegistryKey<Material> LIGHT_BLUE_WOOL = RegistryKey.unsafeOf("light_blue_wool");
+    RegistryKey<Material> LIGHT_BLUE_WOOL = RegistryKey.of("light_blue_wool");
 
-    RegistryKey<Material> LIGHT_BLUE_WOOL_SLAB = RegistryKey.unsafeOf("light_blue_wool_slab");
+    RegistryKey<Material> LIGHT_BLUE_WOOL_SLAB = RegistryKey.of("light_blue_wool_slab");
 
-    RegistryKey<Material> LIGHT_BLUE_WOOL_STAIRS = RegistryKey.unsafeOf("light_blue_wool_stairs");
+    RegistryKey<Material> LIGHT_BLUE_WOOL_STAIRS = RegistryKey.of("light_blue_wool_stairs");
 
-    RegistryKey<Material> LIGHT_GRAY_BANNER = RegistryKey.unsafeOf("light_gray_banner");
+    RegistryKey<Material> LIGHT_GRAY_BANNER = RegistryKey.of("light_gray_banner");
 
-    RegistryKey<Material> LIGHT_GRAY_BED = RegistryKey.unsafeOf("light_gray_bed");
+    RegistryKey<Material> LIGHT_GRAY_BED = RegistryKey.of("light_gray_bed");
 
-    RegistryKey<Material> LIGHT_GRAY_BUNDLE = RegistryKey.unsafeOf("light_gray_bundle");
+    RegistryKey<Material> LIGHT_GRAY_BUNDLE = RegistryKey.of("light_gray_bundle");
 
-    RegistryKey<Material> LIGHT_GRAY_CANDLE = RegistryKey.unsafeOf("light_gray_candle");
+    RegistryKey<Material> LIGHT_GRAY_CANDLE = RegistryKey.of("light_gray_candle");
 
-    RegistryKey<Material> LIGHT_GRAY_CARPET = RegistryKey.unsafeOf("light_gray_carpet");
+    RegistryKey<Material> LIGHT_GRAY_CARPET = RegistryKey.of("light_gray_carpet");
 
-    RegistryKey<Material> LIGHT_GRAY_CONCRETE = RegistryKey.unsafeOf("light_gray_concrete");
+    RegistryKey<Material> LIGHT_GRAY_CONCRETE = RegistryKey.of("light_gray_concrete");
 
-    RegistryKey<Material> LIGHT_GRAY_CONCRETE_POWDER = RegistryKey.unsafeOf("light_gray_concrete_powder");
+    RegistryKey<Material> LIGHT_GRAY_CONCRETE_POWDER = RegistryKey.of("light_gray_concrete_powder");
 
-    RegistryKey<Material> LIGHT_GRAY_CONCRETE_SLAB = RegistryKey.unsafeOf("light_gray_concrete_slab");
+    RegistryKey<Material> LIGHT_GRAY_CONCRETE_SLAB = RegistryKey.of("light_gray_concrete_slab");
 
-    RegistryKey<Material> LIGHT_GRAY_CONCRETE_STAIRS = RegistryKey.unsafeOf("light_gray_concrete_stairs");
+    RegistryKey<Material> LIGHT_GRAY_CONCRETE_STAIRS = RegistryKey.of("light_gray_concrete_stairs");
 
-    RegistryKey<Material> LIGHT_GRAY_CUSHION = RegistryKey.unsafeOf("light_gray_cushion");
+    RegistryKey<Material> LIGHT_GRAY_CUSHION = RegistryKey.of("light_gray_cushion");
 
-    RegistryKey<Material> LIGHT_GRAY_DYE = RegistryKey.unsafeOf("light_gray_dye");
+    RegistryKey<Material> LIGHT_GRAY_DYE = RegistryKey.of("light_gray_dye");
 
-    RegistryKey<Material> LIGHT_GRAY_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("light_gray_glazed_terracotta");
+    RegistryKey<Material> LIGHT_GRAY_GLAZED_TERRACOTTA = RegistryKey.of("light_gray_glazed_terracotta");
 
-    RegistryKey<Material> LIGHT_GRAY_HARNESS = RegistryKey.unsafeOf("light_gray_harness");
+    RegistryKey<Material> LIGHT_GRAY_HARNESS = RegistryKey.of("light_gray_harness");
 
-    RegistryKey<Material> LIGHT_GRAY_SHULKER_BOX = RegistryKey.unsafeOf("light_gray_shulker_box");
+    RegistryKey<Material> LIGHT_GRAY_SHULKER_BOX = RegistryKey.of("light_gray_shulker_box");
 
-    RegistryKey<Material> LIGHT_GRAY_STAINED_GLASS = RegistryKey.unsafeOf("light_gray_stained_glass");
+    RegistryKey<Material> LIGHT_GRAY_STAINED_GLASS = RegistryKey.of("light_gray_stained_glass");
 
-    RegistryKey<Material> LIGHT_GRAY_STAINED_GLASS_PANE = RegistryKey.unsafeOf("light_gray_stained_glass_pane");
+    RegistryKey<Material> LIGHT_GRAY_STAINED_GLASS_PANE = RegistryKey.of("light_gray_stained_glass_pane");
 
-    RegistryKey<Material> LIGHT_GRAY_TERRACOTTA = RegistryKey.unsafeOf("light_gray_terracotta");
+    RegistryKey<Material> LIGHT_GRAY_TERRACOTTA = RegistryKey.of("light_gray_terracotta");
 
-    RegistryKey<Material> LIGHT_GRAY_WOOL = RegistryKey.unsafeOf("light_gray_wool");
+    RegistryKey<Material> LIGHT_GRAY_WOOL = RegistryKey.of("light_gray_wool");
 
-    RegistryKey<Material> LIGHT_GRAY_WOOL_SLAB = RegistryKey.unsafeOf("light_gray_wool_slab");
+    RegistryKey<Material> LIGHT_GRAY_WOOL_SLAB = RegistryKey.of("light_gray_wool_slab");
 
-    RegistryKey<Material> LIGHT_GRAY_WOOL_STAIRS = RegistryKey.unsafeOf("light_gray_wool_stairs");
+    RegistryKey<Material> LIGHT_GRAY_WOOL_STAIRS = RegistryKey.of("light_gray_wool_stairs");
 
-    RegistryKey<Material> LIGHT_WEIGHTED_PRESSURE_PLATE = RegistryKey.unsafeOf("light_weighted_pressure_plate");
+    RegistryKey<Material> LIGHT_WEIGHTED_PRESSURE_PLATE = RegistryKey.of("light_weighted_pressure_plate");
 
-    RegistryKey<Material> LIGHTNING_ROD = RegistryKey.unsafeOf("lightning_rod");
+    RegistryKey<Material> LIGHTNING_ROD = RegistryKey.of("lightning_rod");
 
-    RegistryKey<Material> LILAC = RegistryKey.unsafeOf("lilac");
+    RegistryKey<Material> LILAC = RegistryKey.of("lilac");
 
-    RegistryKey<Material> LILY_OF_THE_VALLEY = RegistryKey.unsafeOf("lily_of_the_valley");
+    RegistryKey<Material> LILY_OF_THE_VALLEY = RegistryKey.of("lily_of_the_valley");
 
-    RegistryKey<Material> LILY_PAD = RegistryKey.unsafeOf("lily_pad");
+    RegistryKey<Material> LILY_PAD = RegistryKey.of("lily_pad");
 
-    RegistryKey<Material> LIME_BANNER = RegistryKey.unsafeOf("lime_banner");
+    RegistryKey<Material> LIME_BANNER = RegistryKey.of("lime_banner");
 
-    RegistryKey<Material> LIME_BED = RegistryKey.unsafeOf("lime_bed");
+    RegistryKey<Material> LIME_BED = RegistryKey.of("lime_bed");
 
-    RegistryKey<Material> LIME_BUNDLE = RegistryKey.unsafeOf("lime_bundle");
+    RegistryKey<Material> LIME_BUNDLE = RegistryKey.of("lime_bundle");
 
-    RegistryKey<Material> LIME_CANDLE = RegistryKey.unsafeOf("lime_candle");
+    RegistryKey<Material> LIME_CANDLE = RegistryKey.of("lime_candle");
 
-    RegistryKey<Material> LIME_CARPET = RegistryKey.unsafeOf("lime_carpet");
+    RegistryKey<Material> LIME_CARPET = RegistryKey.of("lime_carpet");
 
-    RegistryKey<Material> LIME_CONCRETE = RegistryKey.unsafeOf("lime_concrete");
+    RegistryKey<Material> LIME_CONCRETE = RegistryKey.of("lime_concrete");
 
-    RegistryKey<Material> LIME_CONCRETE_POWDER = RegistryKey.unsafeOf("lime_concrete_powder");
+    RegistryKey<Material> LIME_CONCRETE_POWDER = RegistryKey.of("lime_concrete_powder");
 
-    RegistryKey<Material> LIME_CONCRETE_SLAB = RegistryKey.unsafeOf("lime_concrete_slab");
+    RegistryKey<Material> LIME_CONCRETE_SLAB = RegistryKey.of("lime_concrete_slab");
 
-    RegistryKey<Material> LIME_CONCRETE_STAIRS = RegistryKey.unsafeOf("lime_concrete_stairs");
+    RegistryKey<Material> LIME_CONCRETE_STAIRS = RegistryKey.of("lime_concrete_stairs");
 
-    RegistryKey<Material> LIME_CUSHION = RegistryKey.unsafeOf("lime_cushion");
+    RegistryKey<Material> LIME_CUSHION = RegistryKey.of("lime_cushion");
 
-    RegistryKey<Material> LIME_DYE = RegistryKey.unsafeOf("lime_dye");
+    RegistryKey<Material> LIME_DYE = RegistryKey.of("lime_dye");
 
-    RegistryKey<Material> LIME_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("lime_glazed_terracotta");
+    RegistryKey<Material> LIME_GLAZED_TERRACOTTA = RegistryKey.of("lime_glazed_terracotta");
 
-    RegistryKey<Material> LIME_HARNESS = RegistryKey.unsafeOf("lime_harness");
+    RegistryKey<Material> LIME_HARNESS = RegistryKey.of("lime_harness");
 
-    RegistryKey<Material> LIME_SHULKER_BOX = RegistryKey.unsafeOf("lime_shulker_box");
+    RegistryKey<Material> LIME_SHULKER_BOX = RegistryKey.of("lime_shulker_box");
 
-    RegistryKey<Material> LIME_STAINED_GLASS = RegistryKey.unsafeOf("lime_stained_glass");
+    RegistryKey<Material> LIME_STAINED_GLASS = RegistryKey.of("lime_stained_glass");
 
-    RegistryKey<Material> LIME_STAINED_GLASS_PANE = RegistryKey.unsafeOf("lime_stained_glass_pane");
+    RegistryKey<Material> LIME_STAINED_GLASS_PANE = RegistryKey.of("lime_stained_glass_pane");
 
-    RegistryKey<Material> LIME_TERRACOTTA = RegistryKey.unsafeOf("lime_terracotta");
+    RegistryKey<Material> LIME_TERRACOTTA = RegistryKey.of("lime_terracotta");
 
-    RegistryKey<Material> LIME_WOOL = RegistryKey.unsafeOf("lime_wool");
+    RegistryKey<Material> LIME_WOOL = RegistryKey.of("lime_wool");
 
-    RegistryKey<Material> LIME_WOOL_SLAB = RegistryKey.unsafeOf("lime_wool_slab");
+    RegistryKey<Material> LIME_WOOL_SLAB = RegistryKey.of("lime_wool_slab");
 
-    RegistryKey<Material> LIME_WOOL_STAIRS = RegistryKey.unsafeOf("lime_wool_stairs");
+    RegistryKey<Material> LIME_WOOL_STAIRS = RegistryKey.of("lime_wool_stairs");
 
-    RegistryKey<Material> LINGERING_POTION = RegistryKey.unsafeOf("lingering_potion");
+    RegistryKey<Material> LINGERING_POTION = RegistryKey.of("lingering_potion");
 
-    RegistryKey<Material> LLAMA_SPAWN_EGG = RegistryKey.unsafeOf("llama_spawn_egg");
+    RegistryKey<Material> LLAMA_SPAWN_EGG = RegistryKey.of("llama_spawn_egg");
 
-    RegistryKey<Material> LODESTONE = RegistryKey.unsafeOf("lodestone");
+    RegistryKey<Material> LODESTONE = RegistryKey.of("lodestone");
 
-    RegistryKey<Material> LOOM = RegistryKey.unsafeOf("loom");
+    RegistryKey<Material> LOOM = RegistryKey.of("loom");
 
-    RegistryKey<Material> MACE = RegistryKey.unsafeOf("mace");
+    RegistryKey<Material> MACE = RegistryKey.of("mace");
 
-    RegistryKey<Material> MAGENTA_BANNER = RegistryKey.unsafeOf("magenta_banner");
+    RegistryKey<Material> MAGENTA_BANNER = RegistryKey.of("magenta_banner");
 
-    RegistryKey<Material> MAGENTA_BED = RegistryKey.unsafeOf("magenta_bed");
+    RegistryKey<Material> MAGENTA_BED = RegistryKey.of("magenta_bed");
 
-    RegistryKey<Material> MAGENTA_BUNDLE = RegistryKey.unsafeOf("magenta_bundle");
+    RegistryKey<Material> MAGENTA_BUNDLE = RegistryKey.of("magenta_bundle");
 
-    RegistryKey<Material> MAGENTA_CANDLE = RegistryKey.unsafeOf("magenta_candle");
+    RegistryKey<Material> MAGENTA_CANDLE = RegistryKey.of("magenta_candle");
 
-    RegistryKey<Material> MAGENTA_CARPET = RegistryKey.unsafeOf("magenta_carpet");
+    RegistryKey<Material> MAGENTA_CARPET = RegistryKey.of("magenta_carpet");
 
-    RegistryKey<Material> MAGENTA_CONCRETE = RegistryKey.unsafeOf("magenta_concrete");
+    RegistryKey<Material> MAGENTA_CONCRETE = RegistryKey.of("magenta_concrete");
 
-    RegistryKey<Material> MAGENTA_CONCRETE_POWDER = RegistryKey.unsafeOf("magenta_concrete_powder");
+    RegistryKey<Material> MAGENTA_CONCRETE_POWDER = RegistryKey.of("magenta_concrete_powder");
 
-    RegistryKey<Material> MAGENTA_CONCRETE_SLAB = RegistryKey.unsafeOf("magenta_concrete_slab");
+    RegistryKey<Material> MAGENTA_CONCRETE_SLAB = RegistryKey.of("magenta_concrete_slab");
 
-    RegistryKey<Material> MAGENTA_CONCRETE_STAIRS = RegistryKey.unsafeOf("magenta_concrete_stairs");
+    RegistryKey<Material> MAGENTA_CONCRETE_STAIRS = RegistryKey.of("magenta_concrete_stairs");
 
-    RegistryKey<Material> MAGENTA_CUSHION = RegistryKey.unsafeOf("magenta_cushion");
+    RegistryKey<Material> MAGENTA_CUSHION = RegistryKey.of("magenta_cushion");
 
-    RegistryKey<Material> MAGENTA_DYE = RegistryKey.unsafeOf("magenta_dye");
+    RegistryKey<Material> MAGENTA_DYE = RegistryKey.of("magenta_dye");
 
-    RegistryKey<Material> MAGENTA_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("magenta_glazed_terracotta");
+    RegistryKey<Material> MAGENTA_GLAZED_TERRACOTTA = RegistryKey.of("magenta_glazed_terracotta");
 
-    RegistryKey<Material> MAGENTA_HARNESS = RegistryKey.unsafeOf("magenta_harness");
+    RegistryKey<Material> MAGENTA_HARNESS = RegistryKey.of("magenta_harness");
 
-    RegistryKey<Material> MAGENTA_SHULKER_BOX = RegistryKey.unsafeOf("magenta_shulker_box");
+    RegistryKey<Material> MAGENTA_SHULKER_BOX = RegistryKey.of("magenta_shulker_box");
 
-    RegistryKey<Material> MAGENTA_STAINED_GLASS = RegistryKey.unsafeOf("magenta_stained_glass");
+    RegistryKey<Material> MAGENTA_STAINED_GLASS = RegistryKey.of("magenta_stained_glass");
 
-    RegistryKey<Material> MAGENTA_STAINED_GLASS_PANE = RegistryKey.unsafeOf("magenta_stained_glass_pane");
+    RegistryKey<Material> MAGENTA_STAINED_GLASS_PANE = RegistryKey.of("magenta_stained_glass_pane");
 
-    RegistryKey<Material> MAGENTA_TERRACOTTA = RegistryKey.unsafeOf("magenta_terracotta");
+    RegistryKey<Material> MAGENTA_TERRACOTTA = RegistryKey.of("magenta_terracotta");
 
-    RegistryKey<Material> MAGENTA_WOOL = RegistryKey.unsafeOf("magenta_wool");
+    RegistryKey<Material> MAGENTA_WOOL = RegistryKey.of("magenta_wool");
 
-    RegistryKey<Material> MAGENTA_WOOL_SLAB = RegistryKey.unsafeOf("magenta_wool_slab");
+    RegistryKey<Material> MAGENTA_WOOL_SLAB = RegistryKey.of("magenta_wool_slab");
 
-    RegistryKey<Material> MAGENTA_WOOL_STAIRS = RegistryKey.unsafeOf("magenta_wool_stairs");
+    RegistryKey<Material> MAGENTA_WOOL_STAIRS = RegistryKey.of("magenta_wool_stairs");
 
-    RegistryKey<Material> MAGMA_BLOCK = RegistryKey.unsafeOf("magma_block");
+    RegistryKey<Material> MAGMA_BLOCK = RegistryKey.of("magma_block");
 
-    RegistryKey<Material> MAGMA_CREAM = RegistryKey.unsafeOf("magma_cream");
+    RegistryKey<Material> MAGMA_CREAM = RegistryKey.of("magma_cream");
 
-    RegistryKey<Material> MAGMA_CUBE_SPAWN_EGG = RegistryKey.unsafeOf("magma_cube_spawn_egg");
+    RegistryKey<Material> MAGMA_CUBE_SPAWN_EGG = RegistryKey.of("magma_cube_spawn_egg");
 
-    RegistryKey<Material> MANGROVE_BOAT = RegistryKey.unsafeOf("mangrove_boat");
+    RegistryKey<Material> MANGROVE_BOAT = RegistryKey.of("mangrove_boat");
 
-    RegistryKey<Material> MANGROVE_BUTTON = RegistryKey.unsafeOf("mangrove_button");
+    RegistryKey<Material> MANGROVE_BUTTON = RegistryKey.of("mangrove_button");
 
-    RegistryKey<Material> MANGROVE_CHEST_BOAT = RegistryKey.unsafeOf("mangrove_chest_boat");
+    RegistryKey<Material> MANGROVE_CHEST_BOAT = RegistryKey.of("mangrove_chest_boat");
 
-    RegistryKey<Material> MANGROVE_DOOR = RegistryKey.unsafeOf("mangrove_door");
+    RegistryKey<Material> MANGROVE_DOOR = RegistryKey.of("mangrove_door");
 
-    RegistryKey<Material> MANGROVE_FENCE = RegistryKey.unsafeOf("mangrove_fence");
+    RegistryKey<Material> MANGROVE_FENCE = RegistryKey.of("mangrove_fence");
 
-    RegistryKey<Material> MANGROVE_FENCE_GATE = RegistryKey.unsafeOf("mangrove_fence_gate");
+    RegistryKey<Material> MANGROVE_FENCE_GATE = RegistryKey.of("mangrove_fence_gate");
 
-    RegistryKey<Material> MANGROVE_HANGING_SIGN = RegistryKey.unsafeOf("mangrove_hanging_sign");
+    RegistryKey<Material> MANGROVE_HANGING_SIGN = RegistryKey.of("mangrove_hanging_sign");
 
-    RegistryKey<Material> MANGROVE_LEAVES = RegistryKey.unsafeOf("mangrove_leaves");
+    RegistryKey<Material> MANGROVE_LEAVES = RegistryKey.of("mangrove_leaves");
 
-    RegistryKey<Material> MANGROVE_LOG = RegistryKey.unsafeOf("mangrove_log");
+    RegistryKey<Material> MANGROVE_LOG = RegistryKey.of("mangrove_log");
 
-    RegistryKey<Material> MANGROVE_PLANKS = RegistryKey.unsafeOf("mangrove_planks");
+    RegistryKey<Material> MANGROVE_PLANKS = RegistryKey.of("mangrove_planks");
 
-    RegistryKey<Material> MANGROVE_PRESSURE_PLATE = RegistryKey.unsafeOf("mangrove_pressure_plate");
+    RegistryKey<Material> MANGROVE_PRESSURE_PLATE = RegistryKey.of("mangrove_pressure_plate");
 
-    RegistryKey<Material> MANGROVE_PROPAGULE = RegistryKey.unsafeOf("mangrove_propagule");
+    RegistryKey<Material> MANGROVE_PROPAGULE = RegistryKey.of("mangrove_propagule");
 
-    RegistryKey<Material> MANGROVE_ROOTS = RegistryKey.unsafeOf("mangrove_roots");
+    RegistryKey<Material> MANGROVE_ROOTS = RegistryKey.of("mangrove_roots");
 
-    RegistryKey<Material> MANGROVE_SHELF = RegistryKey.unsafeOf("mangrove_shelf");
+    RegistryKey<Material> MANGROVE_SHELF = RegistryKey.of("mangrove_shelf");
 
-    RegistryKey<Material> MANGROVE_SIGN = RegistryKey.unsafeOf("mangrove_sign");
+    RegistryKey<Material> MANGROVE_SIGN = RegistryKey.of("mangrove_sign");
 
-    RegistryKey<Material> MANGROVE_SLAB = RegistryKey.unsafeOf("mangrove_slab");
+    RegistryKey<Material> MANGROVE_SLAB = RegistryKey.of("mangrove_slab");
 
-    RegistryKey<Material> MANGROVE_STAIRS = RegistryKey.unsafeOf("mangrove_stairs");
+    RegistryKey<Material> MANGROVE_STAIRS = RegistryKey.of("mangrove_stairs");
 
-    RegistryKey<Material> MANGROVE_TRAPDOOR = RegistryKey.unsafeOf("mangrove_trapdoor");
+    RegistryKey<Material> MANGROVE_TRAPDOOR = RegistryKey.of("mangrove_trapdoor");
 
-    RegistryKey<Material> MANGROVE_WOOD = RegistryKey.unsafeOf("mangrove_wood");
+    RegistryKey<Material> MANGROVE_WOOD = RegistryKey.of("mangrove_wood");
 
-    RegistryKey<Material> MAP = RegistryKey.unsafeOf("map");
+    RegistryKey<Material> MAP = RegistryKey.of("map");
 
-    RegistryKey<Material> MEDIUM_AMETHYST_BUD = RegistryKey.unsafeOf("medium_amethyst_bud");
+    RegistryKey<Material> MEDIUM_AMETHYST_BUD = RegistryKey.of("medium_amethyst_bud");
 
-    RegistryKey<Material> MELON = RegistryKey.unsafeOf("melon");
+    RegistryKey<Material> MELON = RegistryKey.of("melon");
 
-    RegistryKey<Material> MELON_SEEDS = RegistryKey.unsafeOf("melon_seeds");
+    RegistryKey<Material> MELON_SEEDS = RegistryKey.of("melon_seeds");
 
-    RegistryKey<Material> MELON_SLICE = RegistryKey.unsafeOf("melon_slice");
+    RegistryKey<Material> MELON_SLICE = RegistryKey.of("melon_slice");
 
-    RegistryKey<Material> MILK_BUCKET = RegistryKey.unsafeOf("milk_bucket");
+    RegistryKey<Material> MILK_BUCKET = RegistryKey.of("milk_bucket");
 
-    RegistryKey<Material> MINECART = RegistryKey.unsafeOf("minecart");
+    RegistryKey<Material> MINECART = RegistryKey.of("minecart");
 
-    RegistryKey<Material> MINER_POTTERY_SHERD = RegistryKey.unsafeOf("miner_pottery_sherd");
+    RegistryKey<Material> MINER_POTTERY_SHERD = RegistryKey.of("miner_pottery_sherd");
 
-    RegistryKey<Material> MOJANG_BANNER_PATTERN = RegistryKey.unsafeOf("mojang_banner_pattern");
+    RegistryKey<Material> MOJANG_BANNER_PATTERN = RegistryKey.of("mojang_banner_pattern");
 
-    RegistryKey<Material> MOOSHROOM_SPAWN_EGG = RegistryKey.unsafeOf("mooshroom_spawn_egg");
+    RegistryKey<Material> MOOSHROOM_SPAWN_EGG = RegistryKey.of("mooshroom_spawn_egg");
 
-    RegistryKey<Material> MOSS_BLOCK = RegistryKey.unsafeOf("moss_block");
+    RegistryKey<Material> MOSS_BLOCK = RegistryKey.of("moss_block");
 
-    RegistryKey<Material> MOSS_CARPET = RegistryKey.unsafeOf("moss_carpet");
+    RegistryKey<Material> MOSS_CARPET = RegistryKey.of("moss_carpet");
 
-    RegistryKey<Material> MOSSY_COBBLESTONE = RegistryKey.unsafeOf("mossy_cobblestone");
+    RegistryKey<Material> MOSSY_COBBLESTONE = RegistryKey.of("mossy_cobblestone");
 
-    RegistryKey<Material> MOSSY_COBBLESTONE_SLAB = RegistryKey.unsafeOf("mossy_cobblestone_slab");
+    RegistryKey<Material> MOSSY_COBBLESTONE_SLAB = RegistryKey.of("mossy_cobblestone_slab");
 
-    RegistryKey<Material> MOSSY_COBBLESTONE_STAIRS = RegistryKey.unsafeOf("mossy_cobblestone_stairs");
+    RegistryKey<Material> MOSSY_COBBLESTONE_STAIRS = RegistryKey.of("mossy_cobblestone_stairs");
 
-    RegistryKey<Material> MOSSY_COBBLESTONE_WALL = RegistryKey.unsafeOf("mossy_cobblestone_wall");
+    RegistryKey<Material> MOSSY_COBBLESTONE_WALL = RegistryKey.of("mossy_cobblestone_wall");
 
-    RegistryKey<Material> MOSSY_STONE_BRICK_SLAB = RegistryKey.unsafeOf("mossy_stone_brick_slab");
+    RegistryKey<Material> MOSSY_STONE_BRICK_SLAB = RegistryKey.of("mossy_stone_brick_slab");
 
-    RegistryKey<Material> MOSSY_STONE_BRICK_STAIRS = RegistryKey.unsafeOf("mossy_stone_brick_stairs");
+    RegistryKey<Material> MOSSY_STONE_BRICK_STAIRS = RegistryKey.of("mossy_stone_brick_stairs");
 
-    RegistryKey<Material> MOSSY_STONE_BRICK_WALL = RegistryKey.unsafeOf("mossy_stone_brick_wall");
+    RegistryKey<Material> MOSSY_STONE_BRICK_WALL = RegistryKey.of("mossy_stone_brick_wall");
 
-    RegistryKey<Material> MOSSY_STONE_BRICKS = RegistryKey.unsafeOf("mossy_stone_bricks");
+    RegistryKey<Material> MOSSY_STONE_BRICKS = RegistryKey.of("mossy_stone_bricks");
 
-    RegistryKey<Material> MOURNER_POTTERY_SHERD = RegistryKey.unsafeOf("mourner_pottery_sherd");
+    RegistryKey<Material> MOURNER_POTTERY_SHERD = RegistryKey.of("mourner_pottery_sherd");
 
-    RegistryKey<Material> MUD = RegistryKey.unsafeOf("mud");
+    RegistryKey<Material> MUD = RegistryKey.of("mud");
 
-    RegistryKey<Material> MUD_BRICK_SLAB = RegistryKey.unsafeOf("mud_brick_slab");
+    RegistryKey<Material> MUD_BRICK_SLAB = RegistryKey.of("mud_brick_slab");
 
-    RegistryKey<Material> MUD_BRICK_STAIRS = RegistryKey.unsafeOf("mud_brick_stairs");
+    RegistryKey<Material> MUD_BRICK_STAIRS = RegistryKey.of("mud_brick_stairs");
 
-    RegistryKey<Material> MUD_BRICK_WALL = RegistryKey.unsafeOf("mud_brick_wall");
+    RegistryKey<Material> MUD_BRICK_WALL = RegistryKey.of("mud_brick_wall");
 
-    RegistryKey<Material> MUD_BRICKS = RegistryKey.unsafeOf("mud_bricks");
+    RegistryKey<Material> MUD_BRICKS = RegistryKey.of("mud_bricks");
 
-    RegistryKey<Material> MUDDY_MANGROVE_ROOTS = RegistryKey.unsafeOf("muddy_mangrove_roots");
+    RegistryKey<Material> MUDDY_MANGROVE_ROOTS = RegistryKey.of("muddy_mangrove_roots");
 
-    RegistryKey<Material> MULE_SPAWN_EGG = RegistryKey.unsafeOf("mule_spawn_egg");
+    RegistryKey<Material> MULE_SPAWN_EGG = RegistryKey.of("mule_spawn_egg");
 
-    RegistryKey<Material> MUSHROOM_STEM = RegistryKey.unsafeOf("mushroom_stem");
+    RegistryKey<Material> MUSHROOM_STEM = RegistryKey.of("mushroom_stem");
 
-    RegistryKey<Material> MUSHROOM_STEW = RegistryKey.unsafeOf("mushroom_stew");
+    RegistryKey<Material> MUSHROOM_STEW = RegistryKey.of("mushroom_stew");
 
-    RegistryKey<Material> MUSIC_DISC_11 = RegistryKey.unsafeOf("music_disc_11");
+    RegistryKey<Material> MUSIC_DISC_11 = RegistryKey.of("music_disc_11");
 
-    RegistryKey<Material> MUSIC_DISC_13 = RegistryKey.unsafeOf("music_disc_13");
+    RegistryKey<Material> MUSIC_DISC_13 = RegistryKey.of("music_disc_13");
 
-    RegistryKey<Material> MUSIC_DISC_5 = RegistryKey.unsafeOf("music_disc_5");
+    RegistryKey<Material> MUSIC_DISC_5 = RegistryKey.of("music_disc_5");
 
-    RegistryKey<Material> MUSIC_DISC_BLOCKS = RegistryKey.unsafeOf("music_disc_blocks");
+    RegistryKey<Material> MUSIC_DISC_BLOCKS = RegistryKey.of("music_disc_blocks");
 
-    RegistryKey<Material> MUSIC_DISC_BOUNCE = RegistryKey.unsafeOf("music_disc_bounce");
+    RegistryKey<Material> MUSIC_DISC_BOUNCE = RegistryKey.of("music_disc_bounce");
 
-    RegistryKey<Material> MUSIC_DISC_CAT = RegistryKey.unsafeOf("music_disc_cat");
+    RegistryKey<Material> MUSIC_DISC_CAT = RegistryKey.of("music_disc_cat");
 
-    RegistryKey<Material> MUSIC_DISC_CHIRP = RegistryKey.unsafeOf("music_disc_chirp");
+    RegistryKey<Material> MUSIC_DISC_CHIRP = RegistryKey.of("music_disc_chirp");
 
-    RegistryKey<Material> MUSIC_DISC_CREATOR = RegistryKey.unsafeOf("music_disc_creator");
+    RegistryKey<Material> MUSIC_DISC_CREATOR = RegistryKey.of("music_disc_creator");
 
-    RegistryKey<Material> MUSIC_DISC_CREATOR_MUSIC_BOX = RegistryKey.unsafeOf("music_disc_creator_music_box");
+    RegistryKey<Material> MUSIC_DISC_CREATOR_MUSIC_BOX = RegistryKey.of("music_disc_creator_music_box");
 
-    RegistryKey<Material> MUSIC_DISC_FAR = RegistryKey.unsafeOf("music_disc_far");
+    RegistryKey<Material> MUSIC_DISC_FAR = RegistryKey.of("music_disc_far");
 
-    RegistryKey<Material> MUSIC_DISC_LAVA_CHICKEN = RegistryKey.unsafeOf("music_disc_lava_chicken");
+    RegistryKey<Material> MUSIC_DISC_LAVA_CHICKEN = RegistryKey.of("music_disc_lava_chicken");
 
-    RegistryKey<Material> MUSIC_DISC_MALL = RegistryKey.unsafeOf("music_disc_mall");
+    RegistryKey<Material> MUSIC_DISC_MALL = RegistryKey.of("music_disc_mall");
 
-    RegistryKey<Material> MUSIC_DISC_MELLOHI = RegistryKey.unsafeOf("music_disc_mellohi");
+    RegistryKey<Material> MUSIC_DISC_MELLOHI = RegistryKey.of("music_disc_mellohi");
 
-    RegistryKey<Material> MUSIC_DISC_OTHERSIDE = RegistryKey.unsafeOf("music_disc_otherside");
+    RegistryKey<Material> MUSIC_DISC_OTHERSIDE = RegistryKey.of("music_disc_otherside");
 
-    RegistryKey<Material> MUSIC_DISC_PIGSTEP = RegistryKey.unsafeOf("music_disc_pigstep");
+    RegistryKey<Material> MUSIC_DISC_PIGSTEP = RegistryKey.of("music_disc_pigstep");
 
-    RegistryKey<Material> MUSIC_DISC_PRECIPICE = RegistryKey.unsafeOf("music_disc_precipice");
+    RegistryKey<Material> MUSIC_DISC_PRECIPICE = RegistryKey.of("music_disc_precipice");
 
-    RegistryKey<Material> MUSIC_DISC_RELIC = RegistryKey.unsafeOf("music_disc_relic");
+    RegistryKey<Material> MUSIC_DISC_RELIC = RegistryKey.of("music_disc_relic");
 
-    RegistryKey<Material> MUSIC_DISC_STAL = RegistryKey.unsafeOf("music_disc_stal");
+    RegistryKey<Material> MUSIC_DISC_STAL = RegistryKey.of("music_disc_stal");
 
-    RegistryKey<Material> MUSIC_DISC_STRAD = RegistryKey.unsafeOf("music_disc_strad");
+    RegistryKey<Material> MUSIC_DISC_STRAD = RegistryKey.of("music_disc_strad");
 
-    RegistryKey<Material> MUSIC_DISC_TEARS = RegistryKey.unsafeOf("music_disc_tears");
+    RegistryKey<Material> MUSIC_DISC_TEARS = RegistryKey.of("music_disc_tears");
 
-    RegistryKey<Material> MUSIC_DISC_WAIT = RegistryKey.unsafeOf("music_disc_wait");
+    RegistryKey<Material> MUSIC_DISC_WAIT = RegistryKey.of("music_disc_wait");
 
-    RegistryKey<Material> MUSIC_DISC_WARD = RegistryKey.unsafeOf("music_disc_ward");
+    RegistryKey<Material> MUSIC_DISC_WARD = RegistryKey.of("music_disc_ward");
 
-    RegistryKey<Material> MUTTON = RegistryKey.unsafeOf("mutton");
+    RegistryKey<Material> MUTTON = RegistryKey.of("mutton");
 
-    RegistryKey<Material> MYCELIUM = RegistryKey.unsafeOf("mycelium");
+    RegistryKey<Material> MYCELIUM = RegistryKey.of("mycelium");
 
-    RegistryKey<Material> NAME_TAG = RegistryKey.unsafeOf("name_tag");
+    RegistryKey<Material> NAME_TAG = RegistryKey.of("name_tag");
 
-    RegistryKey<Material> NAUTILUS_SHELL = RegistryKey.unsafeOf("nautilus_shell");
+    RegistryKey<Material> NAUTILUS_SHELL = RegistryKey.of("nautilus_shell");
 
-    RegistryKey<Material> NAUTILUS_SPAWN_EGG = RegistryKey.unsafeOf("nautilus_spawn_egg");
+    RegistryKey<Material> NAUTILUS_SPAWN_EGG = RegistryKey.of("nautilus_spawn_egg");
 
-    RegistryKey<Material> NETHER_BRICK = RegistryKey.unsafeOf("nether_brick");
+    RegistryKey<Material> NETHER_BRICK = RegistryKey.of("nether_brick");
 
-    RegistryKey<Material> NETHER_BRICK_FENCE = RegistryKey.unsafeOf("nether_brick_fence");
+    RegistryKey<Material> NETHER_BRICK_FENCE = RegistryKey.of("nether_brick_fence");
 
-    RegistryKey<Material> NETHER_BRICK_SLAB = RegistryKey.unsafeOf("nether_brick_slab");
+    RegistryKey<Material> NETHER_BRICK_SLAB = RegistryKey.of("nether_brick_slab");
 
-    RegistryKey<Material> NETHER_BRICK_STAIRS = RegistryKey.unsafeOf("nether_brick_stairs");
+    RegistryKey<Material> NETHER_BRICK_STAIRS = RegistryKey.of("nether_brick_stairs");
 
-    RegistryKey<Material> NETHER_BRICK_WALL = RegistryKey.unsafeOf("nether_brick_wall");
+    RegistryKey<Material> NETHER_BRICK_WALL = RegistryKey.of("nether_brick_wall");
 
-    RegistryKey<Material> NETHER_BRICKS = RegistryKey.unsafeOf("nether_bricks");
+    RegistryKey<Material> NETHER_BRICKS = RegistryKey.of("nether_bricks");
 
-    RegistryKey<Material> NETHER_GOLD_ORE = RegistryKey.unsafeOf("nether_gold_ore");
+    RegistryKey<Material> NETHER_GOLD_ORE = RegistryKey.of("nether_gold_ore");
 
-    RegistryKey<Material> NETHER_QUARTZ_ORE = RegistryKey.unsafeOf("nether_quartz_ore");
+    RegistryKey<Material> NETHER_QUARTZ_ORE = RegistryKey.of("nether_quartz_ore");
 
-    RegistryKey<Material> NETHER_SPROUTS = RegistryKey.unsafeOf("nether_sprouts");
+    RegistryKey<Material> NETHER_SPROUTS = RegistryKey.of("nether_sprouts");
 
-    RegistryKey<Material> NETHER_STAR = RegistryKey.unsafeOf("nether_star");
+    RegistryKey<Material> NETHER_STAR = RegistryKey.of("nether_star");
 
-    RegistryKey<Material> NETHER_WART = RegistryKey.unsafeOf("nether_wart");
+    RegistryKey<Material> NETHER_WART = RegistryKey.of("nether_wart");
 
-    RegistryKey<Material> NETHER_WART_BLOCK = RegistryKey.unsafeOf("nether_wart_block");
+    RegistryKey<Material> NETHER_WART_BLOCK = RegistryKey.of("nether_wart_block");
 
-    RegistryKey<Material> NETHERITE_AXE = RegistryKey.unsafeOf("netherite_axe");
+    RegistryKey<Material> NETHERITE_AXE = RegistryKey.of("netherite_axe");
 
-    RegistryKey<Material> NETHERITE_BLOCK = RegistryKey.unsafeOf("netherite_block");
+    RegistryKey<Material> NETHERITE_BLOCK = RegistryKey.of("netherite_block");
 
-    RegistryKey<Material> NETHERITE_BOOTS = RegistryKey.unsafeOf("netherite_boots");
+    RegistryKey<Material> NETHERITE_BOOTS = RegistryKey.of("netherite_boots");
 
-    RegistryKey<Material> NETHERITE_CHESTPLATE = RegistryKey.unsafeOf("netherite_chestplate");
+    RegistryKey<Material> NETHERITE_CHESTPLATE = RegistryKey.of("netherite_chestplate");
 
-    RegistryKey<Material> NETHERITE_HELMET = RegistryKey.unsafeOf("netherite_helmet");
+    RegistryKey<Material> NETHERITE_HELMET = RegistryKey.of("netherite_helmet");
 
-    RegistryKey<Material> NETHERITE_HOE = RegistryKey.unsafeOf("netherite_hoe");
+    RegistryKey<Material> NETHERITE_HOE = RegistryKey.of("netherite_hoe");
 
-    RegistryKey<Material> NETHERITE_HORSE_ARMOR = RegistryKey.unsafeOf("netherite_horse_armor");
+    RegistryKey<Material> NETHERITE_HORSE_ARMOR = RegistryKey.of("netherite_horse_armor");
 
-    RegistryKey<Material> NETHERITE_INGOT = RegistryKey.unsafeOf("netherite_ingot");
+    RegistryKey<Material> NETHERITE_INGOT = RegistryKey.of("netherite_ingot");
 
-    RegistryKey<Material> NETHERITE_LEGGINGS = RegistryKey.unsafeOf("netherite_leggings");
+    RegistryKey<Material> NETHERITE_LEGGINGS = RegistryKey.of("netherite_leggings");
 
-    RegistryKey<Material> NETHERITE_NAUTILUS_ARMOR = RegistryKey.unsafeOf("netherite_nautilus_armor");
+    RegistryKey<Material> NETHERITE_NAUTILUS_ARMOR = RegistryKey.of("netherite_nautilus_armor");
 
-    RegistryKey<Material> NETHERITE_PICKAXE = RegistryKey.unsafeOf("netherite_pickaxe");
+    RegistryKey<Material> NETHERITE_PICKAXE = RegistryKey.of("netherite_pickaxe");
 
-    RegistryKey<Material> NETHERITE_SCRAP = RegistryKey.unsafeOf("netherite_scrap");
+    RegistryKey<Material> NETHERITE_SCRAP = RegistryKey.of("netherite_scrap");
 
-    RegistryKey<Material> NETHERITE_SHOVEL = RegistryKey.unsafeOf("netherite_shovel");
+    RegistryKey<Material> NETHERITE_SHOVEL = RegistryKey.of("netherite_shovel");
 
-    RegistryKey<Material> NETHERITE_SPEAR = RegistryKey.unsafeOf("netherite_spear");
+    RegistryKey<Material> NETHERITE_SPEAR = RegistryKey.of("netherite_spear");
 
-    RegistryKey<Material> NETHERITE_SWORD = RegistryKey.unsafeOf("netherite_sword");
+    RegistryKey<Material> NETHERITE_SWORD = RegistryKey.of("netherite_sword");
 
-    RegistryKey<Material> NETHERITE_UPGRADE_SMITHING_TEMPLATE = RegistryKey.unsafeOf("netherite_upgrade_smithing_template");
+    RegistryKey<Material> NETHERITE_UPGRADE_SMITHING_TEMPLATE = RegistryKey.of("netherite_upgrade_smithing_template");
 
-    RegistryKey<Material> NETHERRACK = RegistryKey.unsafeOf("netherrack");
+    RegistryKey<Material> NETHERRACK = RegistryKey.of("netherrack");
 
-    RegistryKey<Material> NOTE_BLOCK = RegistryKey.unsafeOf("note_block");
+    RegistryKey<Material> NOTE_BLOCK = RegistryKey.of("note_block");
 
-    RegistryKey<Material> OAK_BOAT = RegistryKey.unsafeOf("oak_boat");
+    RegistryKey<Material> OAK_BOAT = RegistryKey.of("oak_boat");
 
-    RegistryKey<Material> OAK_BUTTON = RegistryKey.unsafeOf("oak_button");
+    RegistryKey<Material> OAK_BUTTON = RegistryKey.of("oak_button");
 
-    RegistryKey<Material> OAK_CHEST_BOAT = RegistryKey.unsafeOf("oak_chest_boat");
+    RegistryKey<Material> OAK_CHEST_BOAT = RegistryKey.of("oak_chest_boat");
 
-    RegistryKey<Material> OAK_DOOR = RegistryKey.unsafeOf("oak_door");
+    RegistryKey<Material> OAK_DOOR = RegistryKey.of("oak_door");
 
-    RegistryKey<Material> OAK_FENCE = RegistryKey.unsafeOf("oak_fence");
+    RegistryKey<Material> OAK_FENCE = RegistryKey.of("oak_fence");
 
-    RegistryKey<Material> OAK_FENCE_GATE = RegistryKey.unsafeOf("oak_fence_gate");
+    RegistryKey<Material> OAK_FENCE_GATE = RegistryKey.of("oak_fence_gate");
 
-    RegistryKey<Material> OAK_HANGING_SIGN = RegistryKey.unsafeOf("oak_hanging_sign");
+    RegistryKey<Material> OAK_HANGING_SIGN = RegistryKey.of("oak_hanging_sign");
 
-    RegistryKey<Material> OAK_LEAVES = RegistryKey.unsafeOf("oak_leaves");
+    RegistryKey<Material> OAK_LEAVES = RegistryKey.of("oak_leaves");
 
-    RegistryKey<Material> OAK_LOG = RegistryKey.unsafeOf("oak_log");
+    RegistryKey<Material> OAK_LOG = RegistryKey.of("oak_log");
 
-    RegistryKey<Material> OAK_PLANKS = RegistryKey.unsafeOf("oak_planks");
+    RegistryKey<Material> OAK_PLANKS = RegistryKey.of("oak_planks");
 
-    RegistryKey<Material> OAK_PRESSURE_PLATE = RegistryKey.unsafeOf("oak_pressure_plate");
+    RegistryKey<Material> OAK_PRESSURE_PLATE = RegistryKey.of("oak_pressure_plate");
 
-    RegistryKey<Material> OAK_SAPLING = RegistryKey.unsafeOf("oak_sapling");
+    RegistryKey<Material> OAK_SAPLING = RegistryKey.of("oak_sapling");
 
-    RegistryKey<Material> OAK_SHELF = RegistryKey.unsafeOf("oak_shelf");
+    RegistryKey<Material> OAK_SHELF = RegistryKey.of("oak_shelf");
 
-    RegistryKey<Material> OAK_SIGN = RegistryKey.unsafeOf("oak_sign");
+    RegistryKey<Material> OAK_SIGN = RegistryKey.of("oak_sign");
 
-    RegistryKey<Material> OAK_SLAB = RegistryKey.unsafeOf("oak_slab");
+    RegistryKey<Material> OAK_SLAB = RegistryKey.of("oak_slab");
 
-    RegistryKey<Material> OAK_STAIRS = RegistryKey.unsafeOf("oak_stairs");
+    RegistryKey<Material> OAK_STAIRS = RegistryKey.of("oak_stairs");
 
-    RegistryKey<Material> OAK_TRAPDOOR = RegistryKey.unsafeOf("oak_trapdoor");
+    RegistryKey<Material> OAK_TRAPDOOR = RegistryKey.of("oak_trapdoor");
 
-    RegistryKey<Material> OAK_WOOD = RegistryKey.unsafeOf("oak_wood");
+    RegistryKey<Material> OAK_WOOD = RegistryKey.of("oak_wood");
 
-    RegistryKey<Material> OBSERVER = RegistryKey.unsafeOf("observer");
+    RegistryKey<Material> OBSERVER = RegistryKey.of("observer");
 
-    RegistryKey<Material> OBSIDIAN = RegistryKey.unsafeOf("obsidian");
+    RegistryKey<Material> OBSIDIAN = RegistryKey.of("obsidian");
 
-    RegistryKey<Material> OCEAN_MONUMENT_MAP = RegistryKey.unsafeOf("ocean_monument_map");
+    RegistryKey<Material> OCEAN_MONUMENT_MAP = RegistryKey.of("ocean_monument_map");
 
-    RegistryKey<Material> OCELOT_SPAWN_EGG = RegistryKey.unsafeOf("ocelot_spawn_egg");
+    RegistryKey<Material> OCELOT_SPAWN_EGG = RegistryKey.of("ocelot_spawn_egg");
 
-    RegistryKey<Material> OCHRE_FROGLIGHT = RegistryKey.unsafeOf("ochre_froglight");
+    RegistryKey<Material> OCHRE_FROGLIGHT = RegistryKey.of("ochre_froglight");
 
-    RegistryKey<Material> OMINOUS_BOTTLE = RegistryKey.unsafeOf("ominous_bottle");
+    RegistryKey<Material> OMINOUS_BOTTLE = RegistryKey.of("ominous_bottle");
 
-    RegistryKey<Material> OMINOUS_TRIAL_KEY = RegistryKey.unsafeOf("ominous_trial_key");
+    RegistryKey<Material> OMINOUS_TRIAL_KEY = RegistryKey.of("ominous_trial_key");
 
-    RegistryKey<Material> OPEN_EYEBLOSSOM = RegistryKey.unsafeOf("open_eyeblossom");
+    RegistryKey<Material> OPEN_EYEBLOSSOM = RegistryKey.of("open_eyeblossom");
 
-    RegistryKey<Material> ORANGE_BANNER = RegistryKey.unsafeOf("orange_banner");
+    RegistryKey<Material> ORANGE_BANNER = RegistryKey.of("orange_banner");
 
-    RegistryKey<Material> ORANGE_BED = RegistryKey.unsafeOf("orange_bed");
+    RegistryKey<Material> ORANGE_BED = RegistryKey.of("orange_bed");
 
-    RegistryKey<Material> ORANGE_BUNDLE = RegistryKey.unsafeOf("orange_bundle");
+    RegistryKey<Material> ORANGE_BUNDLE = RegistryKey.of("orange_bundle");
 
-    RegistryKey<Material> ORANGE_CANDLE = RegistryKey.unsafeOf("orange_candle");
+    RegistryKey<Material> ORANGE_CANDLE = RegistryKey.of("orange_candle");
 
-    RegistryKey<Material> ORANGE_CARPET = RegistryKey.unsafeOf("orange_carpet");
+    RegistryKey<Material> ORANGE_CARPET = RegistryKey.of("orange_carpet");
 
-    RegistryKey<Material> ORANGE_CONCRETE = RegistryKey.unsafeOf("orange_concrete");
+    RegistryKey<Material> ORANGE_CONCRETE = RegistryKey.of("orange_concrete");
 
-    RegistryKey<Material> ORANGE_CONCRETE_POWDER = RegistryKey.unsafeOf("orange_concrete_powder");
+    RegistryKey<Material> ORANGE_CONCRETE_POWDER = RegistryKey.of("orange_concrete_powder");
 
-    RegistryKey<Material> ORANGE_CONCRETE_SLAB = RegistryKey.unsafeOf("orange_concrete_slab");
+    RegistryKey<Material> ORANGE_CONCRETE_SLAB = RegistryKey.of("orange_concrete_slab");
 
-    RegistryKey<Material> ORANGE_CONCRETE_STAIRS = RegistryKey.unsafeOf("orange_concrete_stairs");
+    RegistryKey<Material> ORANGE_CONCRETE_STAIRS = RegistryKey.of("orange_concrete_stairs");
 
-    RegistryKey<Material> ORANGE_CUSHION = RegistryKey.unsafeOf("orange_cushion");
+    RegistryKey<Material> ORANGE_CUSHION = RegistryKey.of("orange_cushion");
 
-    RegistryKey<Material> ORANGE_DYE = RegistryKey.unsafeOf("orange_dye");
+    RegistryKey<Material> ORANGE_DYE = RegistryKey.of("orange_dye");
 
-    RegistryKey<Material> ORANGE_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("orange_glazed_terracotta");
+    RegistryKey<Material> ORANGE_GLAZED_TERRACOTTA = RegistryKey.of("orange_glazed_terracotta");
 
-    RegistryKey<Material> ORANGE_HARNESS = RegistryKey.unsafeOf("orange_harness");
+    RegistryKey<Material> ORANGE_HARNESS = RegistryKey.of("orange_harness");
 
-    RegistryKey<Material> ORANGE_POPLAR_LEAVES = RegistryKey.unsafeOf("orange_poplar_leaves");
+    RegistryKey<Material> ORANGE_POPLAR_LEAVES = RegistryKey.of("orange_poplar_leaves");
 
-    RegistryKey<Material> ORANGE_SHULKER_BOX = RegistryKey.unsafeOf("orange_shulker_box");
+    RegistryKey<Material> ORANGE_SHULKER_BOX = RegistryKey.of("orange_shulker_box");
 
-    RegistryKey<Material> ORANGE_STAINED_GLASS = RegistryKey.unsafeOf("orange_stained_glass");
+    RegistryKey<Material> ORANGE_STAINED_GLASS = RegistryKey.of("orange_stained_glass");
 
-    RegistryKey<Material> ORANGE_STAINED_GLASS_PANE = RegistryKey.unsafeOf("orange_stained_glass_pane");
+    RegistryKey<Material> ORANGE_STAINED_GLASS_PANE = RegistryKey.of("orange_stained_glass_pane");
 
-    RegistryKey<Material> ORANGE_TERRACOTTA = RegistryKey.unsafeOf("orange_terracotta");
+    RegistryKey<Material> ORANGE_TERRACOTTA = RegistryKey.of("orange_terracotta");
 
-    RegistryKey<Material> ORANGE_TULIP = RegistryKey.unsafeOf("orange_tulip");
+    RegistryKey<Material> ORANGE_TULIP = RegistryKey.of("orange_tulip");
 
-    RegistryKey<Material> ORANGE_WOOL = RegistryKey.unsafeOf("orange_wool");
+    RegistryKey<Material> ORANGE_WOOL = RegistryKey.of("orange_wool");
 
-    RegistryKey<Material> ORANGE_WOOL_SLAB = RegistryKey.unsafeOf("orange_wool_slab");
+    RegistryKey<Material> ORANGE_WOOL_SLAB = RegistryKey.of("orange_wool_slab");
 
-    RegistryKey<Material> ORANGE_WOOL_STAIRS = RegistryKey.unsafeOf("orange_wool_stairs");
+    RegistryKey<Material> ORANGE_WOOL_STAIRS = RegistryKey.of("orange_wool_stairs");
 
-    RegistryKey<Material> OXEYE_DAISY = RegistryKey.unsafeOf("oxeye_daisy");
+    RegistryKey<Material> OXEYE_DAISY = RegistryKey.of("oxeye_daisy");
 
-    RegistryKey<Material> OXIDIZED_CHISELED_COPPER = RegistryKey.unsafeOf("oxidized_chiseled_copper");
+    RegistryKey<Material> OXIDIZED_CHISELED_COPPER = RegistryKey.of("oxidized_chiseled_copper");
 
-    RegistryKey<Material> OXIDIZED_COPPER = RegistryKey.unsafeOf("oxidized_copper");
+    RegistryKey<Material> OXIDIZED_COPPER = RegistryKey.of("oxidized_copper");
 
-    RegistryKey<Material> OXIDIZED_COPPER_BARS = RegistryKey.unsafeOf("oxidized_copper_bars");
+    RegistryKey<Material> OXIDIZED_COPPER_BARS = RegistryKey.of("oxidized_copper_bars");
 
-    RegistryKey<Material> OXIDIZED_COPPER_BULB = RegistryKey.unsafeOf("oxidized_copper_bulb");
+    RegistryKey<Material> OXIDIZED_COPPER_BULB = RegistryKey.of("oxidized_copper_bulb");
 
-    RegistryKey<Material> OXIDIZED_COPPER_CHAIN = RegistryKey.unsafeOf("oxidized_copper_chain");
+    RegistryKey<Material> OXIDIZED_COPPER_CHAIN = RegistryKey.of("oxidized_copper_chain");
 
-    RegistryKey<Material> OXIDIZED_COPPER_CHEST = RegistryKey.unsafeOf("oxidized_copper_chest");
+    RegistryKey<Material> OXIDIZED_COPPER_CHEST = RegistryKey.of("oxidized_copper_chest");
 
-    RegistryKey<Material> OXIDIZED_COPPER_DOOR = RegistryKey.unsafeOf("oxidized_copper_door");
+    RegistryKey<Material> OXIDIZED_COPPER_DOOR = RegistryKey.of("oxidized_copper_door");
 
-    RegistryKey<Material> OXIDIZED_COPPER_GOLEM_STATUE = RegistryKey.unsafeOf("oxidized_copper_golem_statue");
+    RegistryKey<Material> OXIDIZED_COPPER_GOLEM_STATUE = RegistryKey.of("oxidized_copper_golem_statue");
 
-    RegistryKey<Material> OXIDIZED_COPPER_GRATE = RegistryKey.unsafeOf("oxidized_copper_grate");
+    RegistryKey<Material> OXIDIZED_COPPER_GRATE = RegistryKey.of("oxidized_copper_grate");
 
-    RegistryKey<Material> OXIDIZED_COPPER_LANTERN = RegistryKey.unsafeOf("oxidized_copper_lantern");
+    RegistryKey<Material> OXIDIZED_COPPER_LANTERN = RegistryKey.of("oxidized_copper_lantern");
 
-    RegistryKey<Material> OXIDIZED_COPPER_TRAPDOOR = RegistryKey.unsafeOf("oxidized_copper_trapdoor");
+    RegistryKey<Material> OXIDIZED_COPPER_TRAPDOOR = RegistryKey.of("oxidized_copper_trapdoor");
 
-    RegistryKey<Material> OXIDIZED_CUT_COPPER = RegistryKey.unsafeOf("oxidized_cut_copper");
+    RegistryKey<Material> OXIDIZED_CUT_COPPER = RegistryKey.of("oxidized_cut_copper");
 
-    RegistryKey<Material> OXIDIZED_CUT_COPPER_SLAB = RegistryKey.unsafeOf("oxidized_cut_copper_slab");
+    RegistryKey<Material> OXIDIZED_CUT_COPPER_SLAB = RegistryKey.of("oxidized_cut_copper_slab");
 
-    RegistryKey<Material> OXIDIZED_CUT_COPPER_STAIRS = RegistryKey.unsafeOf("oxidized_cut_copper_stairs");
+    RegistryKey<Material> OXIDIZED_CUT_COPPER_STAIRS = RegistryKey.of("oxidized_cut_copper_stairs");
 
-    RegistryKey<Material> OXIDIZED_LIGHTNING_ROD = RegistryKey.unsafeOf("oxidized_lightning_rod");
+    RegistryKey<Material> OXIDIZED_LIGHTNING_ROD = RegistryKey.of("oxidized_lightning_rod");
 
-    RegistryKey<Material> PACKED_ICE = RegistryKey.unsafeOf("packed_ice");
+    RegistryKey<Material> PACKED_ICE = RegistryKey.of("packed_ice");
 
-    RegistryKey<Material> PACKED_MUD = RegistryKey.unsafeOf("packed_mud");
+    RegistryKey<Material> PACKED_MUD = RegistryKey.of("packed_mud");
 
-    RegistryKey<Material> PAINTING = RegistryKey.unsafeOf("painting");
+    RegistryKey<Material> PAINTING = RegistryKey.of("painting");
 
-    RegistryKey<Material> PALE_HANGING_MOSS = RegistryKey.unsafeOf("pale_hanging_moss");
+    RegistryKey<Material> PALE_HANGING_MOSS = RegistryKey.of("pale_hanging_moss");
 
-    RegistryKey<Material> PALE_MOSS_BLOCK = RegistryKey.unsafeOf("pale_moss_block");
+    RegistryKey<Material> PALE_MOSS_BLOCK = RegistryKey.of("pale_moss_block");
 
-    RegistryKey<Material> PALE_MOSS_CARPET = RegistryKey.unsafeOf("pale_moss_carpet");
+    RegistryKey<Material> PALE_MOSS_CARPET = RegistryKey.of("pale_moss_carpet");
 
-    RegistryKey<Material> PALE_OAK_BOAT = RegistryKey.unsafeOf("pale_oak_boat");
+    RegistryKey<Material> PALE_OAK_BOAT = RegistryKey.of("pale_oak_boat");
 
-    RegistryKey<Material> PALE_OAK_BUTTON = RegistryKey.unsafeOf("pale_oak_button");
+    RegistryKey<Material> PALE_OAK_BUTTON = RegistryKey.of("pale_oak_button");
 
-    RegistryKey<Material> PALE_OAK_CHEST_BOAT = RegistryKey.unsafeOf("pale_oak_chest_boat");
+    RegistryKey<Material> PALE_OAK_CHEST_BOAT = RegistryKey.of("pale_oak_chest_boat");
 
-    RegistryKey<Material> PALE_OAK_DOOR = RegistryKey.unsafeOf("pale_oak_door");
+    RegistryKey<Material> PALE_OAK_DOOR = RegistryKey.of("pale_oak_door");
 
-    RegistryKey<Material> PALE_OAK_FENCE = RegistryKey.unsafeOf("pale_oak_fence");
+    RegistryKey<Material> PALE_OAK_FENCE = RegistryKey.of("pale_oak_fence");
 
-    RegistryKey<Material> PALE_OAK_FENCE_GATE = RegistryKey.unsafeOf("pale_oak_fence_gate");
+    RegistryKey<Material> PALE_OAK_FENCE_GATE = RegistryKey.of("pale_oak_fence_gate");
 
-    RegistryKey<Material> PALE_OAK_HANGING_SIGN = RegistryKey.unsafeOf("pale_oak_hanging_sign");
+    RegistryKey<Material> PALE_OAK_HANGING_SIGN = RegistryKey.of("pale_oak_hanging_sign");
 
-    RegistryKey<Material> PALE_OAK_LEAVES = RegistryKey.unsafeOf("pale_oak_leaves");
+    RegistryKey<Material> PALE_OAK_LEAVES = RegistryKey.of("pale_oak_leaves");
 
-    RegistryKey<Material> PALE_OAK_LOG = RegistryKey.unsafeOf("pale_oak_log");
+    RegistryKey<Material> PALE_OAK_LOG = RegistryKey.of("pale_oak_log");
 
-    RegistryKey<Material> PALE_OAK_PLANKS = RegistryKey.unsafeOf("pale_oak_planks");
+    RegistryKey<Material> PALE_OAK_PLANKS = RegistryKey.of("pale_oak_planks");
 
-    RegistryKey<Material> PALE_OAK_PRESSURE_PLATE = RegistryKey.unsafeOf("pale_oak_pressure_plate");
+    RegistryKey<Material> PALE_OAK_PRESSURE_PLATE = RegistryKey.of("pale_oak_pressure_plate");
 
-    RegistryKey<Material> PALE_OAK_SAPLING = RegistryKey.unsafeOf("pale_oak_sapling");
+    RegistryKey<Material> PALE_OAK_SAPLING = RegistryKey.of("pale_oak_sapling");
 
-    RegistryKey<Material> PALE_OAK_SHELF = RegistryKey.unsafeOf("pale_oak_shelf");
+    RegistryKey<Material> PALE_OAK_SHELF = RegistryKey.of("pale_oak_shelf");
 
-    RegistryKey<Material> PALE_OAK_SIGN = RegistryKey.unsafeOf("pale_oak_sign");
+    RegistryKey<Material> PALE_OAK_SIGN = RegistryKey.of("pale_oak_sign");
 
-    RegistryKey<Material> PALE_OAK_SLAB = RegistryKey.unsafeOf("pale_oak_slab");
+    RegistryKey<Material> PALE_OAK_SLAB = RegistryKey.of("pale_oak_slab");
 
-    RegistryKey<Material> PALE_OAK_STAIRS = RegistryKey.unsafeOf("pale_oak_stairs");
+    RegistryKey<Material> PALE_OAK_STAIRS = RegistryKey.of("pale_oak_stairs");
 
-    RegistryKey<Material> PALE_OAK_TRAPDOOR = RegistryKey.unsafeOf("pale_oak_trapdoor");
+    RegistryKey<Material> PALE_OAK_TRAPDOOR = RegistryKey.of("pale_oak_trapdoor");
 
-    RegistryKey<Material> PALE_OAK_WOOD = RegistryKey.unsafeOf("pale_oak_wood");
+    RegistryKey<Material> PALE_OAK_WOOD = RegistryKey.of("pale_oak_wood");
 
-    RegistryKey<Material> PANDA_SPAWN_EGG = RegistryKey.unsafeOf("panda_spawn_egg");
+    RegistryKey<Material> PANDA_SPAWN_EGG = RegistryKey.of("panda_spawn_egg");
 
-    RegistryKey<Material> PAPER = RegistryKey.unsafeOf("paper");
+    RegistryKey<Material> PAPER = RegistryKey.of("paper");
 
-    RegistryKey<Material> PARCHED_SPAWN_EGG = RegistryKey.unsafeOf("parched_spawn_egg");
+    RegistryKey<Material> PARCHED_SPAWN_EGG = RegistryKey.of("parched_spawn_egg");
 
-    RegistryKey<Material> PARROT_SPAWN_EGG = RegistryKey.unsafeOf("parrot_spawn_egg");
+    RegistryKey<Material> PARROT_SPAWN_EGG = RegistryKey.of("parrot_spawn_egg");
 
-    RegistryKey<Material> PEARLESCENT_FROGLIGHT = RegistryKey.unsafeOf("pearlescent_froglight");
+    RegistryKey<Material> PEARLESCENT_FROGLIGHT = RegistryKey.of("pearlescent_froglight");
 
-    RegistryKey<Material> PEONY = RegistryKey.unsafeOf("peony");
+    RegistryKey<Material> PEONY = RegistryKey.of("peony");
 
-    RegistryKey<Material> PETRIFIED_OAK_SLAB = RegistryKey.unsafeOf("petrified_oak_slab");
+    RegistryKey<Material> PETRIFIED_OAK_SLAB = RegistryKey.of("petrified_oak_slab");
 
-    RegistryKey<Material> PHANTOM_MEMBRANE = RegistryKey.unsafeOf("phantom_membrane");
+    RegistryKey<Material> PHANTOM_MEMBRANE = RegistryKey.of("phantom_membrane");
 
-    RegistryKey<Material> PHANTOM_SPAWN_EGG = RegistryKey.unsafeOf("phantom_spawn_egg");
+    RegistryKey<Material> PHANTOM_SPAWN_EGG = RegistryKey.of("phantom_spawn_egg");
 
-    RegistryKey<Material> PIG_SPAWN_EGG = RegistryKey.unsafeOf("pig_spawn_egg");
+    RegistryKey<Material> PIG_SPAWN_EGG = RegistryKey.of("pig_spawn_egg");
 
-    RegistryKey<Material> PIGLIN_BANNER_PATTERN = RegistryKey.unsafeOf("piglin_banner_pattern");
+    RegistryKey<Material> PIGLIN_BANNER_PATTERN = RegistryKey.of("piglin_banner_pattern");
 
-    RegistryKey<Material> PIGLIN_BRUTE_SPAWN_EGG = RegistryKey.unsafeOf("piglin_brute_spawn_egg");
+    RegistryKey<Material> PIGLIN_BRUTE_SPAWN_EGG = RegistryKey.of("piglin_brute_spawn_egg");
 
-    RegistryKey<Material> PIGLIN_HEAD = RegistryKey.unsafeOf("piglin_head");
+    RegistryKey<Material> PIGLIN_HEAD = RegistryKey.of("piglin_head");
 
-    RegistryKey<Material> PIGLIN_SPAWN_EGG = RegistryKey.unsafeOf("piglin_spawn_egg");
+    RegistryKey<Material> PIGLIN_SPAWN_EGG = RegistryKey.of("piglin_spawn_egg");
 
-    RegistryKey<Material> PILLAGER_SPAWN_EGG = RegistryKey.unsafeOf("pillager_spawn_egg");
+    RegistryKey<Material> PILLAGER_SPAWN_EGG = RegistryKey.of("pillager_spawn_egg");
 
-    RegistryKey<Material> PINK_BANNER = RegistryKey.unsafeOf("pink_banner");
+    RegistryKey<Material> PINK_BANNER = RegistryKey.of("pink_banner");
 
-    RegistryKey<Material> PINK_BED = RegistryKey.unsafeOf("pink_bed");
+    RegistryKey<Material> PINK_BED = RegistryKey.of("pink_bed");
 
-    RegistryKey<Material> PINK_BUNDLE = RegistryKey.unsafeOf("pink_bundle");
+    RegistryKey<Material> PINK_BUNDLE = RegistryKey.of("pink_bundle");
 
-    RegistryKey<Material> PINK_CANDLE = RegistryKey.unsafeOf("pink_candle");
+    RegistryKey<Material> PINK_CANDLE = RegistryKey.of("pink_candle");
 
-    RegistryKey<Material> PINK_CARPET = RegistryKey.unsafeOf("pink_carpet");
+    RegistryKey<Material> PINK_CARPET = RegistryKey.of("pink_carpet");
 
-    RegistryKey<Material> PINK_CONCRETE = RegistryKey.unsafeOf("pink_concrete");
+    RegistryKey<Material> PINK_CONCRETE = RegistryKey.of("pink_concrete");
 
-    RegistryKey<Material> PINK_CONCRETE_POWDER = RegistryKey.unsafeOf("pink_concrete_powder");
+    RegistryKey<Material> PINK_CONCRETE_POWDER = RegistryKey.of("pink_concrete_powder");
 
-    RegistryKey<Material> PINK_CONCRETE_SLAB = RegistryKey.unsafeOf("pink_concrete_slab");
+    RegistryKey<Material> PINK_CONCRETE_SLAB = RegistryKey.of("pink_concrete_slab");
 
-    RegistryKey<Material> PINK_CONCRETE_STAIRS = RegistryKey.unsafeOf("pink_concrete_stairs");
+    RegistryKey<Material> PINK_CONCRETE_STAIRS = RegistryKey.of("pink_concrete_stairs");
 
-    RegistryKey<Material> PINK_CUSHION = RegistryKey.unsafeOf("pink_cushion");
+    RegistryKey<Material> PINK_CUSHION = RegistryKey.of("pink_cushion");
 
-    RegistryKey<Material> PINK_DYE = RegistryKey.unsafeOf("pink_dye");
+    RegistryKey<Material> PINK_DYE = RegistryKey.of("pink_dye");
 
-    RegistryKey<Material> PINK_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("pink_glazed_terracotta");
+    RegistryKey<Material> PINK_GLAZED_TERRACOTTA = RegistryKey.of("pink_glazed_terracotta");
 
-    RegistryKey<Material> PINK_HARNESS = RegistryKey.unsafeOf("pink_harness");
+    RegistryKey<Material> PINK_HARNESS = RegistryKey.of("pink_harness");
 
-    RegistryKey<Material> PINK_PETALS = RegistryKey.unsafeOf("pink_petals");
+    RegistryKey<Material> PINK_PETALS = RegistryKey.of("pink_petals");
 
-    RegistryKey<Material> PINK_SHULKER_BOX = RegistryKey.unsafeOf("pink_shulker_box");
+    RegistryKey<Material> PINK_SHULKER_BOX = RegistryKey.of("pink_shulker_box");
 
-    RegistryKey<Material> PINK_STAINED_GLASS = RegistryKey.unsafeOf("pink_stained_glass");
+    RegistryKey<Material> PINK_STAINED_GLASS = RegistryKey.of("pink_stained_glass");
 
-    RegistryKey<Material> PINK_STAINED_GLASS_PANE = RegistryKey.unsafeOf("pink_stained_glass_pane");
+    RegistryKey<Material> PINK_STAINED_GLASS_PANE = RegistryKey.of("pink_stained_glass_pane");
 
-    RegistryKey<Material> PINK_TERRACOTTA = RegistryKey.unsafeOf("pink_terracotta");
+    RegistryKey<Material> PINK_TERRACOTTA = RegistryKey.of("pink_terracotta");
 
-    RegistryKey<Material> PINK_TULIP = RegistryKey.unsafeOf("pink_tulip");
+    RegistryKey<Material> PINK_TULIP = RegistryKey.of("pink_tulip");
 
-    RegistryKey<Material> PINK_WOOL = RegistryKey.unsafeOf("pink_wool");
+    RegistryKey<Material> PINK_WOOL = RegistryKey.of("pink_wool");
 
-    RegistryKey<Material> PINK_WOOL_SLAB = RegistryKey.unsafeOf("pink_wool_slab");
+    RegistryKey<Material> PINK_WOOL_SLAB = RegistryKey.of("pink_wool_slab");
 
-    RegistryKey<Material> PINK_WOOL_STAIRS = RegistryKey.unsafeOf("pink_wool_stairs");
+    RegistryKey<Material> PINK_WOOL_STAIRS = RegistryKey.of("pink_wool_stairs");
 
-    RegistryKey<Material> PISTON = RegistryKey.unsafeOf("piston");
+    RegistryKey<Material> PISTON = RegistryKey.of("piston");
 
-    RegistryKey<Material> PITCHER_PLANT = RegistryKey.unsafeOf("pitcher_plant");
+    RegistryKey<Material> PITCHER_PLANT = RegistryKey.of("pitcher_plant");
 
-    RegistryKey<Material> PITCHER_POD = RegistryKey.unsafeOf("pitcher_pod");
+    RegistryKey<Material> PITCHER_POD = RegistryKey.of("pitcher_pod");
 
-    RegistryKey<Material> PLAINS_VILLAGE_MAP = RegistryKey.unsafeOf("plains_village_map");
+    RegistryKey<Material> PLAINS_VILLAGE_MAP = RegistryKey.of("plains_village_map");
 
-    RegistryKey<Material> PLAYER_HEAD = RegistryKey.unsafeOf("player_head");
+    RegistryKey<Material> PLAYER_HEAD = RegistryKey.of("player_head");
 
-    RegistryKey<Material> PLENTY_POTTERY_SHERD = RegistryKey.unsafeOf("plenty_pottery_sherd");
+    RegistryKey<Material> PLENTY_POTTERY_SHERD = RegistryKey.of("plenty_pottery_sherd");
 
-    RegistryKey<Material> PODZOL = RegistryKey.unsafeOf("podzol");
+    RegistryKey<Material> PODZOL = RegistryKey.of("podzol");
 
-    RegistryKey<Material> POINTED_DRIPSTONE = RegistryKey.unsafeOf("pointed_dripstone");
+    RegistryKey<Material> POINTED_DRIPSTONE = RegistryKey.of("pointed_dripstone");
 
-    RegistryKey<Material> POISONOUS_POTATO = RegistryKey.unsafeOf("poisonous_potato");
+    RegistryKey<Material> POISONOUS_POTATO = RegistryKey.of("poisonous_potato");
 
-    RegistryKey<Material> POLAR_BEAR_SPAWN_EGG = RegistryKey.unsafeOf("polar_bear_spawn_egg");
+    RegistryKey<Material> POLAR_BEAR_SPAWN_EGG = RegistryKey.of("polar_bear_spawn_egg");
 
-    RegistryKey<Material> POLISHED_ANDESITE = RegistryKey.unsafeOf("polished_andesite");
+    RegistryKey<Material> POLISHED_ANDESITE = RegistryKey.of("polished_andesite");
 
-    RegistryKey<Material> POLISHED_ANDESITE_SLAB = RegistryKey.unsafeOf("polished_andesite_slab");
+    RegistryKey<Material> POLISHED_ANDESITE_SLAB = RegistryKey.of("polished_andesite_slab");
 
-    RegistryKey<Material> POLISHED_ANDESITE_STAIRS = RegistryKey.unsafeOf("polished_andesite_stairs");
+    RegistryKey<Material> POLISHED_ANDESITE_STAIRS = RegistryKey.of("polished_andesite_stairs");
 
-    RegistryKey<Material> POLISHED_BASALT = RegistryKey.unsafeOf("polished_basalt");
+    RegistryKey<Material> POLISHED_BASALT = RegistryKey.of("polished_basalt");
 
-    RegistryKey<Material> POLISHED_BLACKSTONE = RegistryKey.unsafeOf("polished_blackstone");
+    RegistryKey<Material> POLISHED_BLACKSTONE = RegistryKey.of("polished_blackstone");
 
-    RegistryKey<Material> POLISHED_BLACKSTONE_BRICK_SLAB = RegistryKey.unsafeOf("polished_blackstone_brick_slab");
+    RegistryKey<Material> POLISHED_BLACKSTONE_BRICK_SLAB = RegistryKey.of("polished_blackstone_brick_slab");
 
-    RegistryKey<Material> POLISHED_BLACKSTONE_BRICK_STAIRS = RegistryKey.unsafeOf("polished_blackstone_brick_stairs");
+    RegistryKey<Material> POLISHED_BLACKSTONE_BRICK_STAIRS = RegistryKey.of("polished_blackstone_brick_stairs");
 
-    RegistryKey<Material> POLISHED_BLACKSTONE_BRICK_WALL = RegistryKey.unsafeOf("polished_blackstone_brick_wall");
+    RegistryKey<Material> POLISHED_BLACKSTONE_BRICK_WALL = RegistryKey.of("polished_blackstone_brick_wall");
 
-    RegistryKey<Material> POLISHED_BLACKSTONE_BRICKS = RegistryKey.unsafeOf("polished_blackstone_bricks");
+    RegistryKey<Material> POLISHED_BLACKSTONE_BRICKS = RegistryKey.of("polished_blackstone_bricks");
 
-    RegistryKey<Material> POLISHED_BLACKSTONE_BUTTON = RegistryKey.unsafeOf("polished_blackstone_button");
+    RegistryKey<Material> POLISHED_BLACKSTONE_BUTTON = RegistryKey.of("polished_blackstone_button");
 
-    RegistryKey<Material> POLISHED_BLACKSTONE_PRESSURE_PLATE = RegistryKey.unsafeOf("polished_blackstone_pressure_plate");
+    RegistryKey<Material> POLISHED_BLACKSTONE_PRESSURE_PLATE = RegistryKey.of("polished_blackstone_pressure_plate");
 
-    RegistryKey<Material> POLISHED_BLACKSTONE_SLAB = RegistryKey.unsafeOf("polished_blackstone_slab");
+    RegistryKey<Material> POLISHED_BLACKSTONE_SLAB = RegistryKey.of("polished_blackstone_slab");
 
-    RegistryKey<Material> POLISHED_BLACKSTONE_STAIRS = RegistryKey.unsafeOf("polished_blackstone_stairs");
+    RegistryKey<Material> POLISHED_BLACKSTONE_STAIRS = RegistryKey.of("polished_blackstone_stairs");
 
-    RegistryKey<Material> POLISHED_BLACKSTONE_WALL = RegistryKey.unsafeOf("polished_blackstone_wall");
+    RegistryKey<Material> POLISHED_BLACKSTONE_WALL = RegistryKey.of("polished_blackstone_wall");
 
-    RegistryKey<Material> POLISHED_CINNABAR = RegistryKey.unsafeOf("polished_cinnabar");
+    RegistryKey<Material> POLISHED_CINNABAR = RegistryKey.of("polished_cinnabar");
 
-    RegistryKey<Material> POLISHED_CINNABAR_SLAB = RegistryKey.unsafeOf("polished_cinnabar_slab");
+    RegistryKey<Material> POLISHED_CINNABAR_SLAB = RegistryKey.of("polished_cinnabar_slab");
 
-    RegistryKey<Material> POLISHED_CINNABAR_STAIRS = RegistryKey.unsafeOf("polished_cinnabar_stairs");
+    RegistryKey<Material> POLISHED_CINNABAR_STAIRS = RegistryKey.of("polished_cinnabar_stairs");
 
-    RegistryKey<Material> POLISHED_CINNABAR_WALL = RegistryKey.unsafeOf("polished_cinnabar_wall");
+    RegistryKey<Material> POLISHED_CINNABAR_WALL = RegistryKey.of("polished_cinnabar_wall");
 
-    RegistryKey<Material> POLISHED_DEEPSLATE = RegistryKey.unsafeOf("polished_deepslate");
+    RegistryKey<Material> POLISHED_DEEPSLATE = RegistryKey.of("polished_deepslate");
 
-    RegistryKey<Material> POLISHED_DEEPSLATE_SLAB = RegistryKey.unsafeOf("polished_deepslate_slab");
+    RegistryKey<Material> POLISHED_DEEPSLATE_SLAB = RegistryKey.of("polished_deepslate_slab");
 
-    RegistryKey<Material> POLISHED_DEEPSLATE_STAIRS = RegistryKey.unsafeOf("polished_deepslate_stairs");
+    RegistryKey<Material> POLISHED_DEEPSLATE_STAIRS = RegistryKey.of("polished_deepslate_stairs");
 
-    RegistryKey<Material> POLISHED_DEEPSLATE_WALL = RegistryKey.unsafeOf("polished_deepslate_wall");
+    RegistryKey<Material> POLISHED_DEEPSLATE_WALL = RegistryKey.of("polished_deepslate_wall");
 
-    RegistryKey<Material> POLISHED_DIORITE = RegistryKey.unsafeOf("polished_diorite");
+    RegistryKey<Material> POLISHED_DIORITE = RegistryKey.of("polished_diorite");
 
-    RegistryKey<Material> POLISHED_DIORITE_SLAB = RegistryKey.unsafeOf("polished_diorite_slab");
+    RegistryKey<Material> POLISHED_DIORITE_SLAB = RegistryKey.of("polished_diorite_slab");
 
-    RegistryKey<Material> POLISHED_DIORITE_STAIRS = RegistryKey.unsafeOf("polished_diorite_stairs");
+    RegistryKey<Material> POLISHED_DIORITE_STAIRS = RegistryKey.of("polished_diorite_stairs");
 
-    RegistryKey<Material> POLISHED_GRANITE = RegistryKey.unsafeOf("polished_granite");
+    RegistryKey<Material> POLISHED_GRANITE = RegistryKey.of("polished_granite");
 
-    RegistryKey<Material> POLISHED_GRANITE_SLAB = RegistryKey.unsafeOf("polished_granite_slab");
+    RegistryKey<Material> POLISHED_GRANITE_SLAB = RegistryKey.of("polished_granite_slab");
 
-    RegistryKey<Material> POLISHED_GRANITE_STAIRS = RegistryKey.unsafeOf("polished_granite_stairs");
+    RegistryKey<Material> POLISHED_GRANITE_STAIRS = RegistryKey.of("polished_granite_stairs");
 
-    RegistryKey<Material> POLISHED_SULFUR = RegistryKey.unsafeOf("polished_sulfur");
+    RegistryKey<Material> POLISHED_SULFUR = RegistryKey.of("polished_sulfur");
 
-    RegistryKey<Material> POLISHED_SULFUR_SLAB = RegistryKey.unsafeOf("polished_sulfur_slab");
+    RegistryKey<Material> POLISHED_SULFUR_SLAB = RegistryKey.of("polished_sulfur_slab");
 
-    RegistryKey<Material> POLISHED_SULFUR_STAIRS = RegistryKey.unsafeOf("polished_sulfur_stairs");
+    RegistryKey<Material> POLISHED_SULFUR_STAIRS = RegistryKey.of("polished_sulfur_stairs");
 
-    RegistryKey<Material> POLISHED_SULFUR_WALL = RegistryKey.unsafeOf("polished_sulfur_wall");
+    RegistryKey<Material> POLISHED_SULFUR_WALL = RegistryKey.of("polished_sulfur_wall");
 
-    RegistryKey<Material> POLISHED_TUFF = RegistryKey.unsafeOf("polished_tuff");
+    RegistryKey<Material> POLISHED_TUFF = RegistryKey.of("polished_tuff");
 
-    RegistryKey<Material> POLISHED_TUFF_SLAB = RegistryKey.unsafeOf("polished_tuff_slab");
+    RegistryKey<Material> POLISHED_TUFF_SLAB = RegistryKey.of("polished_tuff_slab");
 
-    RegistryKey<Material> POLISHED_TUFF_STAIRS = RegistryKey.unsafeOf("polished_tuff_stairs");
+    RegistryKey<Material> POLISHED_TUFF_STAIRS = RegistryKey.of("polished_tuff_stairs");
 
-    RegistryKey<Material> POLISHED_TUFF_WALL = RegistryKey.unsafeOf("polished_tuff_wall");
+    RegistryKey<Material> POLISHED_TUFF_WALL = RegistryKey.of("polished_tuff_wall");
 
-    RegistryKey<Material> POPLAR_BOAT = RegistryKey.unsafeOf("poplar_boat");
+    RegistryKey<Material> POPLAR_BOAT = RegistryKey.of("poplar_boat");
 
-    RegistryKey<Material> POPLAR_BUTTON = RegistryKey.unsafeOf("poplar_button");
+    RegistryKey<Material> POPLAR_BUTTON = RegistryKey.of("poplar_button");
 
-    RegistryKey<Material> POPLAR_CHEST_BOAT = RegistryKey.unsafeOf("poplar_chest_boat");
+    RegistryKey<Material> POPLAR_CHEST_BOAT = RegistryKey.of("poplar_chest_boat");
 
-    RegistryKey<Material> POPLAR_DOOR = RegistryKey.unsafeOf("poplar_door");
+    RegistryKey<Material> POPLAR_DOOR = RegistryKey.of("poplar_door");
 
-    RegistryKey<Material> POPLAR_FENCE = RegistryKey.unsafeOf("poplar_fence");
+    RegistryKey<Material> POPLAR_FENCE = RegistryKey.of("poplar_fence");
 
-    RegistryKey<Material> POPLAR_FENCE_GATE = RegistryKey.unsafeOf("poplar_fence_gate");
+    RegistryKey<Material> POPLAR_FENCE_GATE = RegistryKey.of("poplar_fence_gate");
 
-    RegistryKey<Material> POPLAR_HANGING_SIGN = RegistryKey.unsafeOf("poplar_hanging_sign");
+    RegistryKey<Material> POPLAR_HANGING_SIGN = RegistryKey.of("poplar_hanging_sign");
 
-    RegistryKey<Material> POPLAR_LOG = RegistryKey.unsafeOf("poplar_log");
+    RegistryKey<Material> POPLAR_LOG = RegistryKey.of("poplar_log");
 
-    RegistryKey<Material> POPLAR_PLANKS = RegistryKey.unsafeOf("poplar_planks");
+    RegistryKey<Material> POPLAR_PLANKS = RegistryKey.of("poplar_planks");
 
-    RegistryKey<Material> POPLAR_PRESSURE_PLATE = RegistryKey.unsafeOf("poplar_pressure_plate");
+    RegistryKey<Material> POPLAR_PRESSURE_PLATE = RegistryKey.of("poplar_pressure_plate");
 
-    RegistryKey<Material> POPLAR_SAPLING = RegistryKey.unsafeOf("poplar_sapling");
+    RegistryKey<Material> POPLAR_SAPLING = RegistryKey.of("poplar_sapling");
 
-    RegistryKey<Material> POPLAR_SHELF = RegistryKey.unsafeOf("poplar_shelf");
+    RegistryKey<Material> POPLAR_SHELF = RegistryKey.of("poplar_shelf");
 
-    RegistryKey<Material> POPLAR_SIGN = RegistryKey.unsafeOf("poplar_sign");
+    RegistryKey<Material> POPLAR_SIGN = RegistryKey.of("poplar_sign");
 
-    RegistryKey<Material> POPLAR_SLAB = RegistryKey.unsafeOf("poplar_slab");
+    RegistryKey<Material> POPLAR_SLAB = RegistryKey.of("poplar_slab");
 
-    RegistryKey<Material> POPLAR_STAIRS = RegistryKey.unsafeOf("poplar_stairs");
+    RegistryKey<Material> POPLAR_STAIRS = RegistryKey.of("poplar_stairs");
 
-    RegistryKey<Material> POPLAR_TRAPDOOR = RegistryKey.unsafeOf("poplar_trapdoor");
+    RegistryKey<Material> POPLAR_TRAPDOOR = RegistryKey.of("poplar_trapdoor");
 
-    RegistryKey<Material> POPLAR_WOOD = RegistryKey.unsafeOf("poplar_wood");
+    RegistryKey<Material> POPLAR_WOOD = RegistryKey.of("poplar_wood");
 
-    RegistryKey<Material> POPPED_CHORUS_FRUIT = RegistryKey.unsafeOf("popped_chorus_fruit");
+    RegistryKey<Material> POPPED_CHORUS_FRUIT = RegistryKey.of("popped_chorus_fruit");
 
-    RegistryKey<Material> POPPY = RegistryKey.unsafeOf("poppy");
+    RegistryKey<Material> POPPY = RegistryKey.of("poppy");
 
-    RegistryKey<Material> PORKCHOP = RegistryKey.unsafeOf("porkchop");
+    RegistryKey<Material> PORKCHOP = RegistryKey.of("porkchop");
 
-    RegistryKey<Material> POTATO = RegistryKey.unsafeOf("potato");
+    RegistryKey<Material> POTATO = RegistryKey.of("potato");
 
-    RegistryKey<Material> POTENT_SULFUR = RegistryKey.unsafeOf("potent_sulfur");
+    RegistryKey<Material> POTENT_SULFUR = RegistryKey.of("potent_sulfur");
 
-    RegistryKey<Material> POTION = RegistryKey.unsafeOf("potion");
+    RegistryKey<Material> POTION = RegistryKey.of("potion");
 
-    RegistryKey<Material> POWDER_SNOW_BUCKET = RegistryKey.unsafeOf("powder_snow_bucket");
+    RegistryKey<Material> POWDER_SNOW_BUCKET = RegistryKey.of("powder_snow_bucket");
 
-    RegistryKey<Material> POWERED_RAIL = RegistryKey.unsafeOf("powered_rail");
+    RegistryKey<Material> POWERED_RAIL = RegistryKey.of("powered_rail");
 
-    RegistryKey<Material> PRISMARINE = RegistryKey.unsafeOf("prismarine");
+    RegistryKey<Material> PRISMARINE = RegistryKey.of("prismarine");
 
-    RegistryKey<Material> PRISMARINE_BRICK_SLAB = RegistryKey.unsafeOf("prismarine_brick_slab");
+    RegistryKey<Material> PRISMARINE_BRICK_SLAB = RegistryKey.of("prismarine_brick_slab");
 
-    RegistryKey<Material> PRISMARINE_BRICK_STAIRS = RegistryKey.unsafeOf("prismarine_brick_stairs");
+    RegistryKey<Material> PRISMARINE_BRICK_STAIRS = RegistryKey.of("prismarine_brick_stairs");
 
-    RegistryKey<Material> PRISMARINE_BRICKS = RegistryKey.unsafeOf("prismarine_bricks");
+    RegistryKey<Material> PRISMARINE_BRICKS = RegistryKey.of("prismarine_bricks");
 
-    RegistryKey<Material> PRISMARINE_CRYSTALS = RegistryKey.unsafeOf("prismarine_crystals");
+    RegistryKey<Material> PRISMARINE_CRYSTALS = RegistryKey.of("prismarine_crystals");
 
-    RegistryKey<Material> PRISMARINE_SHARD = RegistryKey.unsafeOf("prismarine_shard");
+    RegistryKey<Material> PRISMARINE_SHARD = RegistryKey.of("prismarine_shard");
 
-    RegistryKey<Material> PRISMARINE_SLAB = RegistryKey.unsafeOf("prismarine_slab");
+    RegistryKey<Material> PRISMARINE_SLAB = RegistryKey.of("prismarine_slab");
 
-    RegistryKey<Material> PRISMARINE_STAIRS = RegistryKey.unsafeOf("prismarine_stairs");
+    RegistryKey<Material> PRISMARINE_STAIRS = RegistryKey.of("prismarine_stairs");
 
-    RegistryKey<Material> PRISMARINE_WALL = RegistryKey.unsafeOf("prismarine_wall");
+    RegistryKey<Material> PRISMARINE_WALL = RegistryKey.of("prismarine_wall");
 
-    RegistryKey<Material> PRIZE_POTTERY_SHERD = RegistryKey.unsafeOf("prize_pottery_sherd");
+    RegistryKey<Material> PRIZE_POTTERY_SHERD = RegistryKey.of("prize_pottery_sherd");
 
-    RegistryKey<Material> PUFFERFISH = RegistryKey.unsafeOf("pufferfish");
+    RegistryKey<Material> PUFFERFISH = RegistryKey.of("pufferfish");
 
-    RegistryKey<Material> PUFFERFISH_BUCKET = RegistryKey.unsafeOf("pufferfish_bucket");
+    RegistryKey<Material> PUFFERFISH_BUCKET = RegistryKey.of("pufferfish_bucket");
 
-    RegistryKey<Material> PUFFERFISH_SPAWN_EGG = RegistryKey.unsafeOf("pufferfish_spawn_egg");
+    RegistryKey<Material> PUFFERFISH_SPAWN_EGG = RegistryKey.of("pufferfish_spawn_egg");
 
-    RegistryKey<Material> PUMPKIN = RegistryKey.unsafeOf("pumpkin");
+    RegistryKey<Material> PUMPKIN = RegistryKey.of("pumpkin");
 
-    RegistryKey<Material> PUMPKIN_PIE = RegistryKey.unsafeOf("pumpkin_pie");
+    RegistryKey<Material> PUMPKIN_PIE = RegistryKey.of("pumpkin_pie");
 
-    RegistryKey<Material> PUMPKIN_SEEDS = RegistryKey.unsafeOf("pumpkin_seeds");
+    RegistryKey<Material> PUMPKIN_SEEDS = RegistryKey.of("pumpkin_seeds");
 
-    RegistryKey<Material> PURPLE_BANNER = RegistryKey.unsafeOf("purple_banner");
+    RegistryKey<Material> PURPLE_BANNER = RegistryKey.of("purple_banner");
 
-    RegistryKey<Material> PURPLE_BED = RegistryKey.unsafeOf("purple_bed");
+    RegistryKey<Material> PURPLE_BED = RegistryKey.of("purple_bed");
 
-    RegistryKey<Material> PURPLE_BUNDLE = RegistryKey.unsafeOf("purple_bundle");
+    RegistryKey<Material> PURPLE_BUNDLE = RegistryKey.of("purple_bundle");
 
-    RegistryKey<Material> PURPLE_CANDLE = RegistryKey.unsafeOf("purple_candle");
+    RegistryKey<Material> PURPLE_CANDLE = RegistryKey.of("purple_candle");
 
-    RegistryKey<Material> PURPLE_CARPET = RegistryKey.unsafeOf("purple_carpet");
+    RegistryKey<Material> PURPLE_CARPET = RegistryKey.of("purple_carpet");
 
-    RegistryKey<Material> PURPLE_CONCRETE = RegistryKey.unsafeOf("purple_concrete");
+    RegistryKey<Material> PURPLE_CONCRETE = RegistryKey.of("purple_concrete");
 
-    RegistryKey<Material> PURPLE_CONCRETE_POWDER = RegistryKey.unsafeOf("purple_concrete_powder");
+    RegistryKey<Material> PURPLE_CONCRETE_POWDER = RegistryKey.of("purple_concrete_powder");
 
-    RegistryKey<Material> PURPLE_CONCRETE_SLAB = RegistryKey.unsafeOf("purple_concrete_slab");
+    RegistryKey<Material> PURPLE_CONCRETE_SLAB = RegistryKey.of("purple_concrete_slab");
 
-    RegistryKey<Material> PURPLE_CONCRETE_STAIRS = RegistryKey.unsafeOf("purple_concrete_stairs");
+    RegistryKey<Material> PURPLE_CONCRETE_STAIRS = RegistryKey.of("purple_concrete_stairs");
 
-    RegistryKey<Material> PURPLE_CUSHION = RegistryKey.unsafeOf("purple_cushion");
+    RegistryKey<Material> PURPLE_CUSHION = RegistryKey.of("purple_cushion");
 
-    RegistryKey<Material> PURPLE_DYE = RegistryKey.unsafeOf("purple_dye");
+    RegistryKey<Material> PURPLE_DYE = RegistryKey.of("purple_dye");
 
-    RegistryKey<Material> PURPLE_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("purple_glazed_terracotta");
+    RegistryKey<Material> PURPLE_GLAZED_TERRACOTTA = RegistryKey.of("purple_glazed_terracotta");
 
-    RegistryKey<Material> PURPLE_HARNESS = RegistryKey.unsafeOf("purple_harness");
+    RegistryKey<Material> PURPLE_HARNESS = RegistryKey.of("purple_harness");
 
-    RegistryKey<Material> PURPLE_SHULKER_BOX = RegistryKey.unsafeOf("purple_shulker_box");
+    RegistryKey<Material> PURPLE_SHULKER_BOX = RegistryKey.of("purple_shulker_box");
 
-    RegistryKey<Material> PURPLE_STAINED_GLASS = RegistryKey.unsafeOf("purple_stained_glass");
+    RegistryKey<Material> PURPLE_STAINED_GLASS = RegistryKey.of("purple_stained_glass");
 
-    RegistryKey<Material> PURPLE_STAINED_GLASS_PANE = RegistryKey.unsafeOf("purple_stained_glass_pane");
+    RegistryKey<Material> PURPLE_STAINED_GLASS_PANE = RegistryKey.of("purple_stained_glass_pane");
 
-    RegistryKey<Material> PURPLE_TERRACOTTA = RegistryKey.unsafeOf("purple_terracotta");
+    RegistryKey<Material> PURPLE_TERRACOTTA = RegistryKey.of("purple_terracotta");
 
-    RegistryKey<Material> PURPLE_WOOL = RegistryKey.unsafeOf("purple_wool");
+    RegistryKey<Material> PURPLE_WOOL = RegistryKey.of("purple_wool");
 
-    RegistryKey<Material> PURPLE_WOOL_SLAB = RegistryKey.unsafeOf("purple_wool_slab");
+    RegistryKey<Material> PURPLE_WOOL_SLAB = RegistryKey.of("purple_wool_slab");
 
-    RegistryKey<Material> PURPLE_WOOL_STAIRS = RegistryKey.unsafeOf("purple_wool_stairs");
+    RegistryKey<Material> PURPLE_WOOL_STAIRS = RegistryKey.of("purple_wool_stairs");
 
-    RegistryKey<Material> PURPUR_BLOCK = RegistryKey.unsafeOf("purpur_block");
+    RegistryKey<Material> PURPUR_BLOCK = RegistryKey.of("purpur_block");
 
-    RegistryKey<Material> PURPUR_PILLAR = RegistryKey.unsafeOf("purpur_pillar");
+    RegistryKey<Material> PURPUR_PILLAR = RegistryKey.of("purpur_pillar");
 
-    RegistryKey<Material> PURPUR_SLAB = RegistryKey.unsafeOf("purpur_slab");
+    RegistryKey<Material> PURPUR_SLAB = RegistryKey.of("purpur_slab");
 
-    RegistryKey<Material> PURPUR_STAIRS = RegistryKey.unsafeOf("purpur_stairs");
+    RegistryKey<Material> PURPUR_STAIRS = RegistryKey.of("purpur_stairs");
 
-    RegistryKey<Material> QUARTZ = RegistryKey.unsafeOf("quartz");
+    RegistryKey<Material> QUARTZ = RegistryKey.of("quartz");
 
-    RegistryKey<Material> QUARTZ_BLOCK = RegistryKey.unsafeOf("quartz_block");
+    RegistryKey<Material> QUARTZ_BLOCK = RegistryKey.of("quartz_block");
 
-    RegistryKey<Material> QUARTZ_BRICKS = RegistryKey.unsafeOf("quartz_bricks");
+    RegistryKey<Material> QUARTZ_BRICKS = RegistryKey.of("quartz_bricks");
 
-    RegistryKey<Material> QUARTZ_PILLAR = RegistryKey.unsafeOf("quartz_pillar");
+    RegistryKey<Material> QUARTZ_PILLAR = RegistryKey.of("quartz_pillar");
 
-    RegistryKey<Material> QUARTZ_SLAB = RegistryKey.unsafeOf("quartz_slab");
+    RegistryKey<Material> QUARTZ_SLAB = RegistryKey.of("quartz_slab");
 
-    RegistryKey<Material> QUARTZ_STAIRS = RegistryKey.unsafeOf("quartz_stairs");
+    RegistryKey<Material> QUARTZ_STAIRS = RegistryKey.of("quartz_stairs");
 
-    RegistryKey<Material> RABBIT = RegistryKey.unsafeOf("rabbit");
+    RegistryKey<Material> RABBIT = RegistryKey.of("rabbit");
 
-    RegistryKey<Material> RABBIT_FOOT = RegistryKey.unsafeOf("rabbit_foot");
+    RegistryKey<Material> RABBIT_FOOT = RegistryKey.of("rabbit_foot");
 
-    RegistryKey<Material> RABBIT_HIDE = RegistryKey.unsafeOf("rabbit_hide");
+    RegistryKey<Material> RABBIT_HIDE = RegistryKey.of("rabbit_hide");
 
-    RegistryKey<Material> RABBIT_SPAWN_EGG = RegistryKey.unsafeOf("rabbit_spawn_egg");
+    RegistryKey<Material> RABBIT_SPAWN_EGG = RegistryKey.of("rabbit_spawn_egg");
 
-    RegistryKey<Material> RABBIT_STEW = RegistryKey.unsafeOf("rabbit_stew");
+    RegistryKey<Material> RABBIT_STEW = RegistryKey.of("rabbit_stew");
 
-    RegistryKey<Material> RAIL = RegistryKey.unsafeOf("rail");
+    RegistryKey<Material> RAIL = RegistryKey.of("rail");
 
-    RegistryKey<Material> RAISER_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.unsafeOf("raiser_armor_trim_smithing_template");
+    RegistryKey<Material> RAISER_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.of("raiser_armor_trim_smithing_template");
 
-    RegistryKey<Material> RAVAGER_SPAWN_EGG = RegistryKey.unsafeOf("ravager_spawn_egg");
+    RegistryKey<Material> RAVAGER_SPAWN_EGG = RegistryKey.of("ravager_spawn_egg");
 
-    RegistryKey<Material> RAW_COPPER = RegistryKey.unsafeOf("raw_copper");
+    RegistryKey<Material> RAW_COPPER = RegistryKey.of("raw_copper");
 
-    RegistryKey<Material> RAW_COPPER_BLOCK = RegistryKey.unsafeOf("raw_copper_block");
+    RegistryKey<Material> RAW_COPPER_BLOCK = RegistryKey.of("raw_copper_block");
 
-    RegistryKey<Material> RAW_GOLD = RegistryKey.unsafeOf("raw_gold");
+    RegistryKey<Material> RAW_GOLD = RegistryKey.of("raw_gold");
 
-    RegistryKey<Material> RAW_GOLD_BLOCK = RegistryKey.unsafeOf("raw_gold_block");
+    RegistryKey<Material> RAW_GOLD_BLOCK = RegistryKey.of("raw_gold_block");
 
-    RegistryKey<Material> RAW_IRON = RegistryKey.unsafeOf("raw_iron");
+    RegistryKey<Material> RAW_IRON = RegistryKey.of("raw_iron");
 
-    RegistryKey<Material> RAW_IRON_BLOCK = RegistryKey.unsafeOf("raw_iron_block");
+    RegistryKey<Material> RAW_IRON_BLOCK = RegistryKey.of("raw_iron_block");
 
-    RegistryKey<Material> RECOVERY_COMPASS = RegistryKey.unsafeOf("recovery_compass");
+    RegistryKey<Material> RECOVERY_COMPASS = RegistryKey.of("recovery_compass");
 
-    RegistryKey<Material> RED_BANNER = RegistryKey.unsafeOf("red_banner");
+    RegistryKey<Material> RED_BANNER = RegistryKey.of("red_banner");
 
-    RegistryKey<Material> RED_BED = RegistryKey.unsafeOf("red_bed");
+    RegistryKey<Material> RED_BED = RegistryKey.of("red_bed");
 
-    RegistryKey<Material> RED_BUNDLE = RegistryKey.unsafeOf("red_bundle");
+    RegistryKey<Material> RED_BUNDLE = RegistryKey.of("red_bundle");
 
-    RegistryKey<Material> RED_CANDLE = RegistryKey.unsafeOf("red_candle");
+    RegistryKey<Material> RED_CANDLE = RegistryKey.of("red_candle");
 
-    RegistryKey<Material> RED_CARPET = RegistryKey.unsafeOf("red_carpet");
+    RegistryKey<Material> RED_CARPET = RegistryKey.of("red_carpet");
 
-    RegistryKey<Material> RED_CONCRETE = RegistryKey.unsafeOf("red_concrete");
+    RegistryKey<Material> RED_CONCRETE = RegistryKey.of("red_concrete");
 
-    RegistryKey<Material> RED_CONCRETE_POWDER = RegistryKey.unsafeOf("red_concrete_powder");
+    RegistryKey<Material> RED_CONCRETE_POWDER = RegistryKey.of("red_concrete_powder");
 
-    RegistryKey<Material> RED_CONCRETE_SLAB = RegistryKey.unsafeOf("red_concrete_slab");
+    RegistryKey<Material> RED_CONCRETE_SLAB = RegistryKey.of("red_concrete_slab");
 
-    RegistryKey<Material> RED_CONCRETE_STAIRS = RegistryKey.unsafeOf("red_concrete_stairs");
+    RegistryKey<Material> RED_CONCRETE_STAIRS = RegistryKey.of("red_concrete_stairs");
 
-    RegistryKey<Material> RED_CUSHION = RegistryKey.unsafeOf("red_cushion");
+    RegistryKey<Material> RED_CUSHION = RegistryKey.of("red_cushion");
 
-    RegistryKey<Material> RED_DYE = RegistryKey.unsafeOf("red_dye");
+    RegistryKey<Material> RED_DYE = RegistryKey.of("red_dye");
 
-    RegistryKey<Material> RED_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("red_glazed_terracotta");
+    RegistryKey<Material> RED_GLAZED_TERRACOTTA = RegistryKey.of("red_glazed_terracotta");
 
-    RegistryKey<Material> RED_HARNESS = RegistryKey.unsafeOf("red_harness");
+    RegistryKey<Material> RED_HARNESS = RegistryKey.of("red_harness");
 
-    RegistryKey<Material> RED_MUSHROOM = RegistryKey.unsafeOf("red_mushroom");
+    RegistryKey<Material> RED_MUSHROOM = RegistryKey.of("red_mushroom");
 
-    RegistryKey<Material> RED_MUSHROOM_BLOCK = RegistryKey.unsafeOf("red_mushroom_block");
+    RegistryKey<Material> RED_MUSHROOM_BLOCK = RegistryKey.of("red_mushroom_block");
 
-    RegistryKey<Material> RED_NETHER_BRICK_SLAB = RegistryKey.unsafeOf("red_nether_brick_slab");
+    RegistryKey<Material> RED_NETHER_BRICK_SLAB = RegistryKey.of("red_nether_brick_slab");
 
-    RegistryKey<Material> RED_NETHER_BRICK_STAIRS = RegistryKey.unsafeOf("red_nether_brick_stairs");
+    RegistryKey<Material> RED_NETHER_BRICK_STAIRS = RegistryKey.of("red_nether_brick_stairs");
 
-    RegistryKey<Material> RED_NETHER_BRICK_WALL = RegistryKey.unsafeOf("red_nether_brick_wall");
+    RegistryKey<Material> RED_NETHER_BRICK_WALL = RegistryKey.of("red_nether_brick_wall");
 
-    RegistryKey<Material> RED_NETHER_BRICKS = RegistryKey.unsafeOf("red_nether_bricks");
+    RegistryKey<Material> RED_NETHER_BRICKS = RegistryKey.of("red_nether_bricks");
 
-    RegistryKey<Material> RED_POPLAR_LEAVES = RegistryKey.unsafeOf("red_poplar_leaves");
+    RegistryKey<Material> RED_POPLAR_LEAVES = RegistryKey.of("red_poplar_leaves");
 
-    RegistryKey<Material> RED_SAND = RegistryKey.unsafeOf("red_sand");
+    RegistryKey<Material> RED_SAND = RegistryKey.of("red_sand");
 
-    RegistryKey<Material> RED_SANDSTONE = RegistryKey.unsafeOf("red_sandstone");
+    RegistryKey<Material> RED_SANDSTONE = RegistryKey.of("red_sandstone");
 
-    RegistryKey<Material> RED_SANDSTONE_SLAB = RegistryKey.unsafeOf("red_sandstone_slab");
+    RegistryKey<Material> RED_SANDSTONE_SLAB = RegistryKey.of("red_sandstone_slab");
 
-    RegistryKey<Material> RED_SANDSTONE_STAIRS = RegistryKey.unsafeOf("red_sandstone_stairs");
+    RegistryKey<Material> RED_SANDSTONE_STAIRS = RegistryKey.of("red_sandstone_stairs");
 
-    RegistryKey<Material> RED_SANDSTONE_WALL = RegistryKey.unsafeOf("red_sandstone_wall");
+    RegistryKey<Material> RED_SANDSTONE_WALL = RegistryKey.of("red_sandstone_wall");
 
-    RegistryKey<Material> RED_SHRUB = RegistryKey.unsafeOf("red_shrub");
+    RegistryKey<Material> RED_SHRUB = RegistryKey.of("red_shrub");
 
-    RegistryKey<Material> RED_SHULKER_BOX = RegistryKey.unsafeOf("red_shulker_box");
+    RegistryKey<Material> RED_SHULKER_BOX = RegistryKey.of("red_shulker_box");
 
-    RegistryKey<Material> RED_STAINED_GLASS = RegistryKey.unsafeOf("red_stained_glass");
+    RegistryKey<Material> RED_STAINED_GLASS = RegistryKey.of("red_stained_glass");
 
-    RegistryKey<Material> RED_STAINED_GLASS_PANE = RegistryKey.unsafeOf("red_stained_glass_pane");
+    RegistryKey<Material> RED_STAINED_GLASS_PANE = RegistryKey.of("red_stained_glass_pane");
 
-    RegistryKey<Material> RED_TERRACOTTA = RegistryKey.unsafeOf("red_terracotta");
+    RegistryKey<Material> RED_TERRACOTTA = RegistryKey.of("red_terracotta");
 
-    RegistryKey<Material> RED_TULIP = RegistryKey.unsafeOf("red_tulip");
+    RegistryKey<Material> RED_TULIP = RegistryKey.of("red_tulip");
 
-    RegistryKey<Material> RED_WOOL = RegistryKey.unsafeOf("red_wool");
+    RegistryKey<Material> RED_WOOL = RegistryKey.of("red_wool");
 
-    RegistryKey<Material> RED_WOOL_SLAB = RegistryKey.unsafeOf("red_wool_slab");
+    RegistryKey<Material> RED_WOOL_SLAB = RegistryKey.of("red_wool_slab");
 
-    RegistryKey<Material> RED_WOOL_STAIRS = RegistryKey.unsafeOf("red_wool_stairs");
+    RegistryKey<Material> RED_WOOL_STAIRS = RegistryKey.of("red_wool_stairs");
 
-    RegistryKey<Material> REDSTONE = RegistryKey.unsafeOf("redstone");
+    RegistryKey<Material> REDSTONE = RegistryKey.of("redstone");
 
-    RegistryKey<Material> REDSTONE_BLOCK = RegistryKey.unsafeOf("redstone_block");
+    RegistryKey<Material> REDSTONE_BLOCK = RegistryKey.of("redstone_block");
 
-    RegistryKey<Material> REDSTONE_LAMP = RegistryKey.unsafeOf("redstone_lamp");
+    RegistryKey<Material> REDSTONE_LAMP = RegistryKey.of("redstone_lamp");
 
-    RegistryKey<Material> REDSTONE_ORE = RegistryKey.unsafeOf("redstone_ore");
+    RegistryKey<Material> REDSTONE_ORE = RegistryKey.of("redstone_ore");
 
-    RegistryKey<Material> REDSTONE_TORCH = RegistryKey.unsafeOf("redstone_torch");
+    RegistryKey<Material> REDSTONE_TORCH = RegistryKey.of("redstone_torch");
 
-    RegistryKey<Material> REINFORCED_DEEPSLATE = RegistryKey.unsafeOf("reinforced_deepslate");
+    RegistryKey<Material> REINFORCED_DEEPSLATE = RegistryKey.of("reinforced_deepslate");
 
-    RegistryKey<Material> REPEATER = RegistryKey.unsafeOf("repeater");
+    RegistryKey<Material> REPEATER = RegistryKey.of("repeater");
 
-    RegistryKey<Material> REPEATING_COMMAND_BLOCK = RegistryKey.unsafeOf("repeating_command_block");
+    RegistryKey<Material> REPEATING_COMMAND_BLOCK = RegistryKey.of("repeating_command_block");
 
-    RegistryKey<Material> RESIN_BLOCK = RegistryKey.unsafeOf("resin_block");
+    RegistryKey<Material> RESIN_BLOCK = RegistryKey.of("resin_block");
 
-    RegistryKey<Material> RESIN_BRICK = RegistryKey.unsafeOf("resin_brick");
+    RegistryKey<Material> RESIN_BRICK = RegistryKey.of("resin_brick");
 
-    RegistryKey<Material> RESIN_BRICK_SLAB = RegistryKey.unsafeOf("resin_brick_slab");
+    RegistryKey<Material> RESIN_BRICK_SLAB = RegistryKey.of("resin_brick_slab");
 
-    RegistryKey<Material> RESIN_BRICK_STAIRS = RegistryKey.unsafeOf("resin_brick_stairs");
+    RegistryKey<Material> RESIN_BRICK_STAIRS = RegistryKey.of("resin_brick_stairs");
 
-    RegistryKey<Material> RESIN_BRICK_WALL = RegistryKey.unsafeOf("resin_brick_wall");
+    RegistryKey<Material> RESIN_BRICK_WALL = RegistryKey.of("resin_brick_wall");
 
-    RegistryKey<Material> RESIN_BRICKS = RegistryKey.unsafeOf("resin_bricks");
+    RegistryKey<Material> RESIN_BRICKS = RegistryKey.of("resin_bricks");
 
-    RegistryKey<Material> RESIN_CLUMP = RegistryKey.unsafeOf("resin_clump");
+    RegistryKey<Material> RESIN_CLUMP = RegistryKey.of("resin_clump");
 
-    RegistryKey<Material> RESPAWN_ANCHOR = RegistryKey.unsafeOf("respawn_anchor");
+    RegistryKey<Material> RESPAWN_ANCHOR = RegistryKey.of("respawn_anchor");
 
-    RegistryKey<Material> RIB_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.unsafeOf("rib_armor_trim_smithing_template");
+    RegistryKey<Material> RIB_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.of("rib_armor_trim_smithing_template");
 
-    RegistryKey<Material> ROOTED_DIRT = RegistryKey.unsafeOf("rooted_dirt");
+    RegistryKey<Material> ROOTED_DIRT = RegistryKey.of("rooted_dirt");
 
-    RegistryKey<Material> ROSE_BUSH = RegistryKey.unsafeOf("rose_bush");
+    RegistryKey<Material> ROSE_BUSH = RegistryKey.of("rose_bush");
 
-    RegistryKey<Material> ROTTEN_FLESH = RegistryKey.unsafeOf("rotten_flesh");
+    RegistryKey<Material> ROTTEN_FLESH = RegistryKey.of("rotten_flesh");
 
-    RegistryKey<Material> SADDLE = RegistryKey.unsafeOf("saddle");
+    RegistryKey<Material> SADDLE = RegistryKey.of("saddle");
 
-    RegistryKey<Material> SALMON = RegistryKey.unsafeOf("salmon");
+    RegistryKey<Material> SALMON = RegistryKey.of("salmon");
 
-    RegistryKey<Material> SALMON_BUCKET = RegistryKey.unsafeOf("salmon_bucket");
+    RegistryKey<Material> SALMON_BUCKET = RegistryKey.of("salmon_bucket");
 
-    RegistryKey<Material> SALMON_SPAWN_EGG = RegistryKey.unsafeOf("salmon_spawn_egg");
+    RegistryKey<Material> SALMON_SPAWN_EGG = RegistryKey.of("salmon_spawn_egg");
 
-    RegistryKey<Material> SAND = RegistryKey.unsafeOf("sand");
+    RegistryKey<Material> SAND = RegistryKey.of("sand");
 
-    RegistryKey<Material> SANDSTONE = RegistryKey.unsafeOf("sandstone");
+    RegistryKey<Material> SANDSTONE = RegistryKey.of("sandstone");
 
-    RegistryKey<Material> SANDSTONE_SLAB = RegistryKey.unsafeOf("sandstone_slab");
+    RegistryKey<Material> SANDSTONE_SLAB = RegistryKey.of("sandstone_slab");
 
-    RegistryKey<Material> SANDSTONE_STAIRS = RegistryKey.unsafeOf("sandstone_stairs");
+    RegistryKey<Material> SANDSTONE_STAIRS = RegistryKey.of("sandstone_stairs");
 
-    RegistryKey<Material> SANDSTONE_WALL = RegistryKey.unsafeOf("sandstone_wall");
+    RegistryKey<Material> SANDSTONE_WALL = RegistryKey.of("sandstone_wall");
 
-    RegistryKey<Material> SAVANNA_VILLAGE_MAP = RegistryKey.unsafeOf("savanna_village_map");
+    RegistryKey<Material> SAVANNA_VILLAGE_MAP = RegistryKey.of("savanna_village_map");
 
-    RegistryKey<Material> SCAFFOLDING = RegistryKey.unsafeOf("scaffolding");
+    RegistryKey<Material> SCAFFOLDING = RegistryKey.of("scaffolding");
 
-    RegistryKey<Material> SCRAPE_POTTERY_SHERD = RegistryKey.unsafeOf("scrape_pottery_sherd");
+    RegistryKey<Material> SCRAPE_POTTERY_SHERD = RegistryKey.of("scrape_pottery_sherd");
 
-    RegistryKey<Material> SCULK = RegistryKey.unsafeOf("sculk");
+    RegistryKey<Material> SCULK = RegistryKey.of("sculk");
 
-    RegistryKey<Material> SCULK_CATALYST = RegistryKey.unsafeOf("sculk_catalyst");
+    RegistryKey<Material> SCULK_CATALYST = RegistryKey.of("sculk_catalyst");
 
-    RegistryKey<Material> SCULK_SENSOR = RegistryKey.unsafeOf("sculk_sensor");
+    RegistryKey<Material> SCULK_SENSOR = RegistryKey.of("sculk_sensor");
 
-    RegistryKey<Material> SCULK_SHRIEKER = RegistryKey.unsafeOf("sculk_shrieker");
+    RegistryKey<Material> SCULK_SHRIEKER = RegistryKey.of("sculk_shrieker");
 
-    RegistryKey<Material> SCULK_VEIN = RegistryKey.unsafeOf("sculk_vein");
+    RegistryKey<Material> SCULK_VEIN = RegistryKey.of("sculk_vein");
 
-    RegistryKey<Material> SEA_LANTERN = RegistryKey.unsafeOf("sea_lantern");
+    RegistryKey<Material> SEA_LANTERN = RegistryKey.of("sea_lantern");
 
-    RegistryKey<Material> SEA_PICKLE = RegistryKey.unsafeOf("sea_pickle");
+    RegistryKey<Material> SEA_PICKLE = RegistryKey.of("sea_pickle");
 
-    RegistryKey<Material> SEAGRASS = RegistryKey.unsafeOf("seagrass");
+    RegistryKey<Material> SEAGRASS = RegistryKey.of("seagrass");
 
-    RegistryKey<Material> SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.unsafeOf("sentry_armor_trim_smithing_template");
+    RegistryKey<Material> SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.of("sentry_armor_trim_smithing_template");
 
-    RegistryKey<Material> SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.unsafeOf("shaper_armor_trim_smithing_template");
+    RegistryKey<Material> SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.of("shaper_armor_trim_smithing_template");
 
-    RegistryKey<Material> SHEAF_POTTERY_SHERD = RegistryKey.unsafeOf("sheaf_pottery_sherd");
+    RegistryKey<Material> SHEAF_POTTERY_SHERD = RegistryKey.of("sheaf_pottery_sherd");
 
-    RegistryKey<Material> SHEARS = RegistryKey.unsafeOf("shears");
+    RegistryKey<Material> SHEARS = RegistryKey.of("shears");
 
-    RegistryKey<Material> SHEEP_SPAWN_EGG = RegistryKey.unsafeOf("sheep_spawn_egg");
+    RegistryKey<Material> SHEEP_SPAWN_EGG = RegistryKey.of("sheep_spawn_egg");
 
-    RegistryKey<Material> SHELF_MUSHROOM = RegistryKey.unsafeOf("shelf_mushroom");
+    RegistryKey<Material> SHELF_MUSHROOM = RegistryKey.of("shelf_mushroom");
 
-    RegistryKey<Material> SHELTER_POTTERY_SHERD = RegistryKey.unsafeOf("shelter_pottery_sherd");
+    RegistryKey<Material> SHELTER_POTTERY_SHERD = RegistryKey.of("shelter_pottery_sherd");
 
-    RegistryKey<Material> SHIELD = RegistryKey.unsafeOf("shield");
+    RegistryKey<Material> SHIELD = RegistryKey.of("shield");
 
-    RegistryKey<Material> SHORT_DRY_GRASS = RegistryKey.unsafeOf("short_dry_grass");
+    RegistryKey<Material> SHORT_DRY_GRASS = RegistryKey.of("short_dry_grass");
 
-    RegistryKey<Material> SHORT_GRASS = RegistryKey.unsafeOf("short_grass");
+    RegistryKey<Material> SHORT_GRASS = RegistryKey.of("short_grass");
 
-    RegistryKey<Material> SHROOMLIGHT = RegistryKey.unsafeOf("shroomlight");
+    RegistryKey<Material> SHROOMLIGHT = RegistryKey.of("shroomlight");
 
-    RegistryKey<Material> SHULKER_BOX = RegistryKey.unsafeOf("shulker_box");
+    RegistryKey<Material> SHULKER_BOX = RegistryKey.of("shulker_box");
 
-    RegistryKey<Material> SHULKER_SHELL = RegistryKey.unsafeOf("shulker_shell");
+    RegistryKey<Material> SHULKER_SHELL = RegistryKey.of("shulker_shell");
 
-    RegistryKey<Material> SHULKER_SPAWN_EGG = RegistryKey.unsafeOf("shulker_spawn_egg");
+    RegistryKey<Material> SHULKER_SPAWN_EGG = RegistryKey.of("shulker_spawn_egg");
 
-    RegistryKey<Material> SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.unsafeOf("silence_armor_trim_smithing_template");
+    RegistryKey<Material> SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.of("silence_armor_trim_smithing_template");
 
-    RegistryKey<Material> SILVERFISH_SPAWN_EGG = RegistryKey.unsafeOf("silverfish_spawn_egg");
+    RegistryKey<Material> SILVERFISH_SPAWN_EGG = RegistryKey.of("silverfish_spawn_egg");
 
-    RegistryKey<Material> SKELETON_HORSE_SPAWN_EGG = RegistryKey.unsafeOf("skeleton_horse_spawn_egg");
+    RegistryKey<Material> SKELETON_HORSE_SPAWN_EGG = RegistryKey.of("skeleton_horse_spawn_egg");
 
-    RegistryKey<Material> SKELETON_SKULL = RegistryKey.unsafeOf("skeleton_skull");
+    RegistryKey<Material> SKELETON_SKULL = RegistryKey.of("skeleton_skull");
 
-    RegistryKey<Material> SKELETON_SPAWN_EGG = RegistryKey.unsafeOf("skeleton_spawn_egg");
+    RegistryKey<Material> SKELETON_SPAWN_EGG = RegistryKey.of("skeleton_spawn_egg");
 
-    RegistryKey<Material> SKULL_BANNER_PATTERN = RegistryKey.unsafeOf("skull_banner_pattern");
+    RegistryKey<Material> SKULL_BANNER_PATTERN = RegistryKey.of("skull_banner_pattern");
 
-    RegistryKey<Material> SKULL_POTTERY_SHERD = RegistryKey.unsafeOf("skull_pottery_sherd");
+    RegistryKey<Material> SKULL_POTTERY_SHERD = RegistryKey.of("skull_pottery_sherd");
 
-    RegistryKey<Material> SLIME_BALL = RegistryKey.unsafeOf("slime_ball");
+    RegistryKey<Material> SLIME_BALL = RegistryKey.of("slime_ball");
 
-    RegistryKey<Material> SLIME_BLOCK = RegistryKey.unsafeOf("slime_block");
+    RegistryKey<Material> SLIME_BLOCK = RegistryKey.of("slime_block");
 
-    RegistryKey<Material> SLIME_SPAWN_EGG = RegistryKey.unsafeOf("slime_spawn_egg");
+    RegistryKey<Material> SLIME_SPAWN_EGG = RegistryKey.of("slime_spawn_egg");
 
-    RegistryKey<Material> SMALL_AMETHYST_BUD = RegistryKey.unsafeOf("small_amethyst_bud");
+    RegistryKey<Material> SMALL_AMETHYST_BUD = RegistryKey.of("small_amethyst_bud");
 
-    RegistryKey<Material> SMALL_DRIPLEAF = RegistryKey.unsafeOf("small_dripleaf");
+    RegistryKey<Material> SMALL_DRIPLEAF = RegistryKey.of("small_dripleaf");
 
-    RegistryKey<Material> SMITHING_TABLE = RegistryKey.unsafeOf("smithing_table");
+    RegistryKey<Material> SMITHING_TABLE = RegistryKey.of("smithing_table");
 
-    RegistryKey<Material> SMOKER = RegistryKey.unsafeOf("smoker");
+    RegistryKey<Material> SMOKER = RegistryKey.of("smoker");
 
-    RegistryKey<Material> SMOOTH_BASALT = RegistryKey.unsafeOf("smooth_basalt");
+    RegistryKey<Material> SMOOTH_BASALT = RegistryKey.of("smooth_basalt");
 
-    RegistryKey<Material> SMOOTH_QUARTZ = RegistryKey.unsafeOf("smooth_quartz");
+    RegistryKey<Material> SMOOTH_QUARTZ = RegistryKey.of("smooth_quartz");
 
-    RegistryKey<Material> SMOOTH_QUARTZ_SLAB = RegistryKey.unsafeOf("smooth_quartz_slab");
+    RegistryKey<Material> SMOOTH_QUARTZ_SLAB = RegistryKey.of("smooth_quartz_slab");
 
-    RegistryKey<Material> SMOOTH_QUARTZ_STAIRS = RegistryKey.unsafeOf("smooth_quartz_stairs");
+    RegistryKey<Material> SMOOTH_QUARTZ_STAIRS = RegistryKey.of("smooth_quartz_stairs");
 
-    RegistryKey<Material> SMOOTH_RED_SANDSTONE = RegistryKey.unsafeOf("smooth_red_sandstone");
+    RegistryKey<Material> SMOOTH_RED_SANDSTONE = RegistryKey.of("smooth_red_sandstone");
 
-    RegistryKey<Material> SMOOTH_RED_SANDSTONE_SLAB = RegistryKey.unsafeOf("smooth_red_sandstone_slab");
+    RegistryKey<Material> SMOOTH_RED_SANDSTONE_SLAB = RegistryKey.of("smooth_red_sandstone_slab");
 
-    RegistryKey<Material> SMOOTH_RED_SANDSTONE_STAIRS = RegistryKey.unsafeOf("smooth_red_sandstone_stairs");
+    RegistryKey<Material> SMOOTH_RED_SANDSTONE_STAIRS = RegistryKey.of("smooth_red_sandstone_stairs");
 
-    RegistryKey<Material> SMOOTH_SANDSTONE = RegistryKey.unsafeOf("smooth_sandstone");
+    RegistryKey<Material> SMOOTH_SANDSTONE = RegistryKey.of("smooth_sandstone");
 
-    RegistryKey<Material> SMOOTH_SANDSTONE_SLAB = RegistryKey.unsafeOf("smooth_sandstone_slab");
+    RegistryKey<Material> SMOOTH_SANDSTONE_SLAB = RegistryKey.of("smooth_sandstone_slab");
 
-    RegistryKey<Material> SMOOTH_SANDSTONE_STAIRS = RegistryKey.unsafeOf("smooth_sandstone_stairs");
+    RegistryKey<Material> SMOOTH_SANDSTONE_STAIRS = RegistryKey.of("smooth_sandstone_stairs");
 
-    RegistryKey<Material> SMOOTH_STONE = RegistryKey.unsafeOf("smooth_stone");
+    RegistryKey<Material> SMOOTH_STONE = RegistryKey.of("smooth_stone");
 
-    RegistryKey<Material> SMOOTH_STONE_SLAB = RegistryKey.unsafeOf("smooth_stone_slab");
+    RegistryKey<Material> SMOOTH_STONE_SLAB = RegistryKey.of("smooth_stone_slab");
 
-    RegistryKey<Material> SNIFFER_EGG = RegistryKey.unsafeOf("sniffer_egg");
+    RegistryKey<Material> SNIFFER_EGG = RegistryKey.of("sniffer_egg");
 
-    RegistryKey<Material> SNIFFER_SPAWN_EGG = RegistryKey.unsafeOf("sniffer_spawn_egg");
+    RegistryKey<Material> SNIFFER_SPAWN_EGG = RegistryKey.of("sniffer_spawn_egg");
 
-    RegistryKey<Material> SNORT_POTTERY_SHERD = RegistryKey.unsafeOf("snort_pottery_sherd");
+    RegistryKey<Material> SNORT_POTTERY_SHERD = RegistryKey.of("snort_pottery_sherd");
 
-    RegistryKey<Material> SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.unsafeOf("snout_armor_trim_smithing_template");
+    RegistryKey<Material> SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.of("snout_armor_trim_smithing_template");
 
-    RegistryKey<Material> SNOW = RegistryKey.unsafeOf("snow");
+    RegistryKey<Material> SNOW = RegistryKey.of("snow");
 
-    RegistryKey<Material> SNOW_BLOCK = RegistryKey.unsafeOf("snow_block");
+    RegistryKey<Material> SNOW_BLOCK = RegistryKey.of("snow_block");
 
-    RegistryKey<Material> SNOW_GOLEM_SPAWN_EGG = RegistryKey.unsafeOf("snow_golem_spawn_egg");
+    RegistryKey<Material> SNOW_GOLEM_SPAWN_EGG = RegistryKey.of("snow_golem_spawn_egg");
 
-    RegistryKey<Material> SNOWBALL = RegistryKey.unsafeOf("snowball");
+    RegistryKey<Material> SNOWBALL = RegistryKey.of("snowball");
 
-    RegistryKey<Material> SNOWY_VILLAGE_MAP = RegistryKey.unsafeOf("snowy_village_map");
+    RegistryKey<Material> SNOWY_VILLAGE_MAP = RegistryKey.of("snowy_village_map");
 
-    RegistryKey<Material> SOUL_CAMPFIRE = RegistryKey.unsafeOf("soul_campfire");
+    RegistryKey<Material> SOUL_CAMPFIRE = RegistryKey.of("soul_campfire");
 
-    RegistryKey<Material> SOUL_LANTERN = RegistryKey.unsafeOf("soul_lantern");
+    RegistryKey<Material> SOUL_LANTERN = RegistryKey.of("soul_lantern");
 
-    RegistryKey<Material> SOUL_SAND = RegistryKey.unsafeOf("soul_sand");
+    RegistryKey<Material> SOUL_SAND = RegistryKey.of("soul_sand");
 
-    RegistryKey<Material> SOUL_SOIL = RegistryKey.unsafeOf("soul_soil");
+    RegistryKey<Material> SOUL_SOIL = RegistryKey.of("soul_soil");
 
-    RegistryKey<Material> SOUL_TORCH = RegistryKey.unsafeOf("soul_torch");
+    RegistryKey<Material> SOUL_TORCH = RegistryKey.of("soul_torch");
 
-    RegistryKey<Material> SPAWNER = RegistryKey.unsafeOf("spawner");
+    RegistryKey<Material> SPAWNER = RegistryKey.of("spawner");
 
-    RegistryKey<Material> SPECTRAL_ARROW = RegistryKey.unsafeOf("spectral_arrow");
+    RegistryKey<Material> SPECTRAL_ARROW = RegistryKey.of("spectral_arrow");
 
-    RegistryKey<Material> SPIDER_EYE = RegistryKey.unsafeOf("spider_eye");
+    RegistryKey<Material> SPIDER_EYE = RegistryKey.of("spider_eye");
 
-    RegistryKey<Material> SPIDER_SPAWN_EGG = RegistryKey.unsafeOf("spider_spawn_egg");
+    RegistryKey<Material> SPIDER_SPAWN_EGG = RegistryKey.of("spider_spawn_egg");
 
-    RegistryKey<Material> SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.unsafeOf("spire_armor_trim_smithing_template");
+    RegistryKey<Material> SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.of("spire_armor_trim_smithing_template");
 
-    RegistryKey<Material> SPLASH_POTION = RegistryKey.unsafeOf("splash_potion");
+    RegistryKey<Material> SPLASH_POTION = RegistryKey.of("splash_potion");
 
-    RegistryKey<Material> SPONGE = RegistryKey.unsafeOf("sponge");
+    RegistryKey<Material> SPONGE = RegistryKey.of("sponge");
 
-    RegistryKey<Material> SPORE_BLOSSOM = RegistryKey.unsafeOf("spore_blossom");
+    RegistryKey<Material> SPORE_BLOSSOM = RegistryKey.of("spore_blossom");
 
-    RegistryKey<Material> SPRUCE_BOAT = RegistryKey.unsafeOf("spruce_boat");
+    RegistryKey<Material> SPRUCE_BOAT = RegistryKey.of("spruce_boat");
 
-    RegistryKey<Material> SPRUCE_BUTTON = RegistryKey.unsafeOf("spruce_button");
+    RegistryKey<Material> SPRUCE_BUTTON = RegistryKey.of("spruce_button");
 
-    RegistryKey<Material> SPRUCE_CHEST_BOAT = RegistryKey.unsafeOf("spruce_chest_boat");
+    RegistryKey<Material> SPRUCE_CHEST_BOAT = RegistryKey.of("spruce_chest_boat");
 
-    RegistryKey<Material> SPRUCE_DOOR = RegistryKey.unsafeOf("spruce_door");
+    RegistryKey<Material> SPRUCE_DOOR = RegistryKey.of("spruce_door");
 
-    RegistryKey<Material> SPRUCE_FENCE = RegistryKey.unsafeOf("spruce_fence");
+    RegistryKey<Material> SPRUCE_FENCE = RegistryKey.of("spruce_fence");
 
-    RegistryKey<Material> SPRUCE_FENCE_GATE = RegistryKey.unsafeOf("spruce_fence_gate");
+    RegistryKey<Material> SPRUCE_FENCE_GATE = RegistryKey.of("spruce_fence_gate");
 
-    RegistryKey<Material> SPRUCE_HANGING_SIGN = RegistryKey.unsafeOf("spruce_hanging_sign");
+    RegistryKey<Material> SPRUCE_HANGING_SIGN = RegistryKey.of("spruce_hanging_sign");
 
-    RegistryKey<Material> SPRUCE_LEAVES = RegistryKey.unsafeOf("spruce_leaves");
+    RegistryKey<Material> SPRUCE_LEAVES = RegistryKey.of("spruce_leaves");
 
-    RegistryKey<Material> SPRUCE_LOG = RegistryKey.unsafeOf("spruce_log");
+    RegistryKey<Material> SPRUCE_LOG = RegistryKey.of("spruce_log");
 
-    RegistryKey<Material> SPRUCE_PLANKS = RegistryKey.unsafeOf("spruce_planks");
+    RegistryKey<Material> SPRUCE_PLANKS = RegistryKey.of("spruce_planks");
 
-    RegistryKey<Material> SPRUCE_PRESSURE_PLATE = RegistryKey.unsafeOf("spruce_pressure_plate");
+    RegistryKey<Material> SPRUCE_PRESSURE_PLATE = RegistryKey.of("spruce_pressure_plate");
 
-    RegistryKey<Material> SPRUCE_SAPLING = RegistryKey.unsafeOf("spruce_sapling");
+    RegistryKey<Material> SPRUCE_SAPLING = RegistryKey.of("spruce_sapling");
 
-    RegistryKey<Material> SPRUCE_SHELF = RegistryKey.unsafeOf("spruce_shelf");
+    RegistryKey<Material> SPRUCE_SHELF = RegistryKey.of("spruce_shelf");
 
-    RegistryKey<Material> SPRUCE_SIGN = RegistryKey.unsafeOf("spruce_sign");
+    RegistryKey<Material> SPRUCE_SIGN = RegistryKey.of("spruce_sign");
 
-    RegistryKey<Material> SPRUCE_SLAB = RegistryKey.unsafeOf("spruce_slab");
+    RegistryKey<Material> SPRUCE_SLAB = RegistryKey.of("spruce_slab");
 
-    RegistryKey<Material> SPRUCE_STAIRS = RegistryKey.unsafeOf("spruce_stairs");
+    RegistryKey<Material> SPRUCE_STAIRS = RegistryKey.of("spruce_stairs");
 
-    RegistryKey<Material> SPRUCE_TRAPDOOR = RegistryKey.unsafeOf("spruce_trapdoor");
+    RegistryKey<Material> SPRUCE_TRAPDOOR = RegistryKey.of("spruce_trapdoor");
 
-    RegistryKey<Material> SPRUCE_WOOD = RegistryKey.unsafeOf("spruce_wood");
+    RegistryKey<Material> SPRUCE_WOOD = RegistryKey.of("spruce_wood");
 
-    RegistryKey<Material> SPYGLASS = RegistryKey.unsafeOf("spyglass");
+    RegistryKey<Material> SPYGLASS = RegistryKey.of("spyglass");
 
-    RegistryKey<Material> SQUID_SPAWN_EGG = RegistryKey.unsafeOf("squid_spawn_egg");
+    RegistryKey<Material> SQUID_SPAWN_EGG = RegistryKey.of("squid_spawn_egg");
 
-    RegistryKey<Material> STICK = RegistryKey.unsafeOf("stick");
+    RegistryKey<Material> STICK = RegistryKey.of("stick");
 
-    RegistryKey<Material> STICKY_PISTON = RegistryKey.unsafeOf("sticky_piston");
+    RegistryKey<Material> STICKY_PISTON = RegistryKey.of("sticky_piston");
 
-    RegistryKey<Material> STONE = RegistryKey.unsafeOf("stone");
+    RegistryKey<Material> STONE = RegistryKey.of("stone");
 
-    RegistryKey<Material> STONE_AXE = RegistryKey.unsafeOf("stone_axe");
+    RegistryKey<Material> STONE_AXE = RegistryKey.of("stone_axe");
 
-    RegistryKey<Material> STONE_BRICK_SLAB = RegistryKey.unsafeOf("stone_brick_slab");
+    RegistryKey<Material> STONE_BRICK_SLAB = RegistryKey.of("stone_brick_slab");
 
-    RegistryKey<Material> STONE_BRICK_STAIRS = RegistryKey.unsafeOf("stone_brick_stairs");
+    RegistryKey<Material> STONE_BRICK_STAIRS = RegistryKey.of("stone_brick_stairs");
 
-    RegistryKey<Material> STONE_BRICK_WALL = RegistryKey.unsafeOf("stone_brick_wall");
+    RegistryKey<Material> STONE_BRICK_WALL = RegistryKey.of("stone_brick_wall");
 
-    RegistryKey<Material> STONE_BRICKS = RegistryKey.unsafeOf("stone_bricks");
+    RegistryKey<Material> STONE_BRICKS = RegistryKey.of("stone_bricks");
 
-    RegistryKey<Material> STONE_BUTTON = RegistryKey.unsafeOf("stone_button");
+    RegistryKey<Material> STONE_BUTTON = RegistryKey.of("stone_button");
 
-    RegistryKey<Material> STONE_HOE = RegistryKey.unsafeOf("stone_hoe");
+    RegistryKey<Material> STONE_HOE = RegistryKey.of("stone_hoe");
 
-    RegistryKey<Material> STONE_PICKAXE = RegistryKey.unsafeOf("stone_pickaxe");
+    RegistryKey<Material> STONE_PICKAXE = RegistryKey.of("stone_pickaxe");
 
-    RegistryKey<Material> STONE_PRESSURE_PLATE = RegistryKey.unsafeOf("stone_pressure_plate");
+    RegistryKey<Material> STONE_PRESSURE_PLATE = RegistryKey.of("stone_pressure_plate");
 
-    RegistryKey<Material> STONE_SHOVEL = RegistryKey.unsafeOf("stone_shovel");
+    RegistryKey<Material> STONE_SHOVEL = RegistryKey.of("stone_shovel");
 
-    RegistryKey<Material> STONE_SLAB = RegistryKey.unsafeOf("stone_slab");
+    RegistryKey<Material> STONE_SLAB = RegistryKey.of("stone_slab");
 
-    RegistryKey<Material> STONE_SPEAR = RegistryKey.unsafeOf("stone_spear");
+    RegistryKey<Material> STONE_SPEAR = RegistryKey.of("stone_spear");
 
-    RegistryKey<Material> STONE_STAIRS = RegistryKey.unsafeOf("stone_stairs");
+    RegistryKey<Material> STONE_STAIRS = RegistryKey.of("stone_stairs");
 
-    RegistryKey<Material> STONE_SWORD = RegistryKey.unsafeOf("stone_sword");
+    RegistryKey<Material> STONE_SWORD = RegistryKey.of("stone_sword");
 
-    RegistryKey<Material> STONECUTTER = RegistryKey.unsafeOf("stonecutter");
+    RegistryKey<Material> STONECUTTER = RegistryKey.of("stonecutter");
 
-    RegistryKey<Material> STRAW_BED = RegistryKey.unsafeOf("straw_bed");
+    RegistryKey<Material> STRAW_BED = RegistryKey.of("straw_bed");
 
-    RegistryKey<Material> STRAY_SPAWN_EGG = RegistryKey.unsafeOf("stray_spawn_egg");
+    RegistryKey<Material> STRAY_SPAWN_EGG = RegistryKey.of("stray_spawn_egg");
 
-    RegistryKey<Material> STRIDER_SPAWN_EGG = RegistryKey.unsafeOf("strider_spawn_egg");
+    RegistryKey<Material> STRIDER_SPAWN_EGG = RegistryKey.of("strider_spawn_egg");
 
-    RegistryKey<Material> STRING = RegistryKey.unsafeOf("string");
+    RegistryKey<Material> STRING = RegistryKey.of("string");
 
-    RegistryKey<Material> STRIPPED_ACACIA_LOG = RegistryKey.unsafeOf("stripped_acacia_log");
+    RegistryKey<Material> STRIPPED_ACACIA_LOG = RegistryKey.of("stripped_acacia_log");
 
-    RegistryKey<Material> STRIPPED_ACACIA_WOOD = RegistryKey.unsafeOf("stripped_acacia_wood");
+    RegistryKey<Material> STRIPPED_ACACIA_WOOD = RegistryKey.of("stripped_acacia_wood");
 
-    RegistryKey<Material> STRIPPED_BAMBOO_BLOCK = RegistryKey.unsafeOf("stripped_bamboo_block");
+    RegistryKey<Material> STRIPPED_BAMBOO_BLOCK = RegistryKey.of("stripped_bamboo_block");
 
-    RegistryKey<Material> STRIPPED_BIRCH_LOG = RegistryKey.unsafeOf("stripped_birch_log");
+    RegistryKey<Material> STRIPPED_BIRCH_LOG = RegistryKey.of("stripped_birch_log");
 
-    RegistryKey<Material> STRIPPED_BIRCH_WOOD = RegistryKey.unsafeOf("stripped_birch_wood");
+    RegistryKey<Material> STRIPPED_BIRCH_WOOD = RegistryKey.of("stripped_birch_wood");
 
-    RegistryKey<Material> STRIPPED_CHERRY_LOG = RegistryKey.unsafeOf("stripped_cherry_log");
+    RegistryKey<Material> STRIPPED_CHERRY_LOG = RegistryKey.of("stripped_cherry_log");
 
-    RegistryKey<Material> STRIPPED_CHERRY_WOOD = RegistryKey.unsafeOf("stripped_cherry_wood");
+    RegistryKey<Material> STRIPPED_CHERRY_WOOD = RegistryKey.of("stripped_cherry_wood");
 
-    RegistryKey<Material> STRIPPED_CRIMSON_HYPHAE = RegistryKey.unsafeOf("stripped_crimson_hyphae");
+    RegistryKey<Material> STRIPPED_CRIMSON_HYPHAE = RegistryKey.of("stripped_crimson_hyphae");
 
-    RegistryKey<Material> STRIPPED_CRIMSON_STEM = RegistryKey.unsafeOf("stripped_crimson_stem");
+    RegistryKey<Material> STRIPPED_CRIMSON_STEM = RegistryKey.of("stripped_crimson_stem");
 
-    RegistryKey<Material> STRIPPED_DARK_OAK_LOG = RegistryKey.unsafeOf("stripped_dark_oak_log");
+    RegistryKey<Material> STRIPPED_DARK_OAK_LOG = RegistryKey.of("stripped_dark_oak_log");
 
-    RegistryKey<Material> STRIPPED_DARK_OAK_WOOD = RegistryKey.unsafeOf("stripped_dark_oak_wood");
+    RegistryKey<Material> STRIPPED_DARK_OAK_WOOD = RegistryKey.of("stripped_dark_oak_wood");
 
-    RegistryKey<Material> STRIPPED_JUNGLE_LOG = RegistryKey.unsafeOf("stripped_jungle_log");
+    RegistryKey<Material> STRIPPED_JUNGLE_LOG = RegistryKey.of("stripped_jungle_log");
 
-    RegistryKey<Material> STRIPPED_JUNGLE_WOOD = RegistryKey.unsafeOf("stripped_jungle_wood");
+    RegistryKey<Material> STRIPPED_JUNGLE_WOOD = RegistryKey.of("stripped_jungle_wood");
 
-    RegistryKey<Material> STRIPPED_MANGROVE_LOG = RegistryKey.unsafeOf("stripped_mangrove_log");
+    RegistryKey<Material> STRIPPED_MANGROVE_LOG = RegistryKey.of("stripped_mangrove_log");
 
-    RegistryKey<Material> STRIPPED_MANGROVE_WOOD = RegistryKey.unsafeOf("stripped_mangrove_wood");
+    RegistryKey<Material> STRIPPED_MANGROVE_WOOD = RegistryKey.of("stripped_mangrove_wood");
 
-    RegistryKey<Material> STRIPPED_OAK_LOG = RegistryKey.unsafeOf("stripped_oak_log");
+    RegistryKey<Material> STRIPPED_OAK_LOG = RegistryKey.of("stripped_oak_log");
 
-    RegistryKey<Material> STRIPPED_OAK_WOOD = RegistryKey.unsafeOf("stripped_oak_wood");
+    RegistryKey<Material> STRIPPED_OAK_WOOD = RegistryKey.of("stripped_oak_wood");
 
-    RegistryKey<Material> STRIPPED_PALE_OAK_LOG = RegistryKey.unsafeOf("stripped_pale_oak_log");
+    RegistryKey<Material> STRIPPED_PALE_OAK_LOG = RegistryKey.of("stripped_pale_oak_log");
 
-    RegistryKey<Material> STRIPPED_PALE_OAK_WOOD = RegistryKey.unsafeOf("stripped_pale_oak_wood");
+    RegistryKey<Material> STRIPPED_PALE_OAK_WOOD = RegistryKey.of("stripped_pale_oak_wood");
 
-    RegistryKey<Material> STRIPPED_POPLAR_LOG = RegistryKey.unsafeOf("stripped_poplar_log");
+    RegistryKey<Material> STRIPPED_POPLAR_LOG = RegistryKey.of("stripped_poplar_log");
 
-    RegistryKey<Material> STRIPPED_POPLAR_WOOD = RegistryKey.unsafeOf("stripped_poplar_wood");
+    RegistryKey<Material> STRIPPED_POPLAR_WOOD = RegistryKey.of("stripped_poplar_wood");
 
-    RegistryKey<Material> STRIPPED_SPRUCE_LOG = RegistryKey.unsafeOf("stripped_spruce_log");
+    RegistryKey<Material> STRIPPED_SPRUCE_LOG = RegistryKey.of("stripped_spruce_log");
 
-    RegistryKey<Material> STRIPPED_SPRUCE_WOOD = RegistryKey.unsafeOf("stripped_spruce_wood");
+    RegistryKey<Material> STRIPPED_SPRUCE_WOOD = RegistryKey.of("stripped_spruce_wood");
 
-    RegistryKey<Material> STRIPPED_WARPED_HYPHAE = RegistryKey.unsafeOf("stripped_warped_hyphae");
+    RegistryKey<Material> STRIPPED_WARPED_HYPHAE = RegistryKey.of("stripped_warped_hyphae");
 
-    RegistryKey<Material> STRIPPED_WARPED_STEM = RegistryKey.unsafeOf("stripped_warped_stem");
+    RegistryKey<Material> STRIPPED_WARPED_STEM = RegistryKey.of("stripped_warped_stem");
 
-    RegistryKey<Material> STRUCTURE_BLOCK = RegistryKey.unsafeOf("structure_block");
+    RegistryKey<Material> STRUCTURE_BLOCK = RegistryKey.of("structure_block");
 
-    RegistryKey<Material> STRUCTURE_VOID = RegistryKey.unsafeOf("structure_void");
+    RegistryKey<Material> STRUCTURE_VOID = RegistryKey.of("structure_void");
 
-    RegistryKey<Material> SUGAR = RegistryKey.unsafeOf("sugar");
+    RegistryKey<Material> SUGAR = RegistryKey.of("sugar");
 
-    RegistryKey<Material> SUGAR_CANE = RegistryKey.unsafeOf("sugar_cane");
+    RegistryKey<Material> SUGAR_CANE = RegistryKey.of("sugar_cane");
 
-    RegistryKey<Material> SULFUR = RegistryKey.unsafeOf("sulfur");
+    RegistryKey<Material> SULFUR = RegistryKey.of("sulfur");
 
-    RegistryKey<Material> SULFUR_BRICK_SLAB = RegistryKey.unsafeOf("sulfur_brick_slab");
+    RegistryKey<Material> SULFUR_BRICK_SLAB = RegistryKey.of("sulfur_brick_slab");
 
-    RegistryKey<Material> SULFUR_BRICK_STAIRS = RegistryKey.unsafeOf("sulfur_brick_stairs");
+    RegistryKey<Material> SULFUR_BRICK_STAIRS = RegistryKey.of("sulfur_brick_stairs");
 
-    RegistryKey<Material> SULFUR_BRICK_WALL = RegistryKey.unsafeOf("sulfur_brick_wall");
+    RegistryKey<Material> SULFUR_BRICK_WALL = RegistryKey.of("sulfur_brick_wall");
 
-    RegistryKey<Material> SULFUR_BRICKS = RegistryKey.unsafeOf("sulfur_bricks");
+    RegistryKey<Material> SULFUR_BRICKS = RegistryKey.of("sulfur_bricks");
 
-    RegistryKey<Material> SULFUR_CUBE_BUCKET = RegistryKey.unsafeOf("sulfur_cube_bucket");
+    RegistryKey<Material> SULFUR_CUBE_BUCKET = RegistryKey.of("sulfur_cube_bucket");
 
-    RegistryKey<Material> SULFUR_CUBE_SPAWN_EGG = RegistryKey.unsafeOf("sulfur_cube_spawn_egg");
+    RegistryKey<Material> SULFUR_CUBE_SPAWN_EGG = RegistryKey.of("sulfur_cube_spawn_egg");
 
-    RegistryKey<Material> SULFUR_SLAB = RegistryKey.unsafeOf("sulfur_slab");
+    RegistryKey<Material> SULFUR_SLAB = RegistryKey.of("sulfur_slab");
 
-    RegistryKey<Material> SULFUR_SPIKE = RegistryKey.unsafeOf("sulfur_spike");
+    RegistryKey<Material> SULFUR_SPIKE = RegistryKey.of("sulfur_spike");
 
-    RegistryKey<Material> SULFUR_STAIRS = RegistryKey.unsafeOf("sulfur_stairs");
+    RegistryKey<Material> SULFUR_STAIRS = RegistryKey.of("sulfur_stairs");
 
-    RegistryKey<Material> SULFUR_WALL = RegistryKey.unsafeOf("sulfur_wall");
+    RegistryKey<Material> SULFUR_WALL = RegistryKey.of("sulfur_wall");
 
-    RegistryKey<Material> SUNFLOWER = RegistryKey.unsafeOf("sunflower");
+    RegistryKey<Material> SUNFLOWER = RegistryKey.of("sunflower");
 
-    RegistryKey<Material> SUSPICIOUS_GRAVEL = RegistryKey.unsafeOf("suspicious_gravel");
+    RegistryKey<Material> SUSPICIOUS_GRAVEL = RegistryKey.of("suspicious_gravel");
 
-    RegistryKey<Material> SUSPICIOUS_SAND = RegistryKey.unsafeOf("suspicious_sand");
+    RegistryKey<Material> SUSPICIOUS_SAND = RegistryKey.of("suspicious_sand");
 
-    RegistryKey<Material> SUSPICIOUS_STEW = RegistryKey.unsafeOf("suspicious_stew");
+    RegistryKey<Material> SUSPICIOUS_STEW = RegistryKey.of("suspicious_stew");
 
-    RegistryKey<Material> SWAMP_HUT_MAP = RegistryKey.unsafeOf("swamp_hut_map");
+    RegistryKey<Material> SWAMP_HUT_MAP = RegistryKey.of("swamp_hut_map");
 
-    RegistryKey<Material> SWEET_BERRIES = RegistryKey.unsafeOf("sweet_berries");
+    RegistryKey<Material> SWEET_BERRIES = RegistryKey.of("sweet_berries");
 
-    RegistryKey<Material> TADPOLE_BUCKET = RegistryKey.unsafeOf("tadpole_bucket");
+    RegistryKey<Material> TADPOLE_BUCKET = RegistryKey.of("tadpole_bucket");
 
-    RegistryKey<Material> TADPOLE_SPAWN_EGG = RegistryKey.unsafeOf("tadpole_spawn_egg");
+    RegistryKey<Material> TADPOLE_SPAWN_EGG = RegistryKey.of("tadpole_spawn_egg");
 
-    RegistryKey<Material> TAIGA_VILLAGE_MAP = RegistryKey.unsafeOf("taiga_village_map");
+    RegistryKey<Material> TAIGA_VILLAGE_MAP = RegistryKey.of("taiga_village_map");
 
-    RegistryKey<Material> TALL_DRY_GRASS = RegistryKey.unsafeOf("tall_dry_grass");
+    RegistryKey<Material> TALL_DRY_GRASS = RegistryKey.of("tall_dry_grass");
 
-    RegistryKey<Material> TALL_GRASS = RegistryKey.unsafeOf("tall_grass");
+    RegistryKey<Material> TALL_GRASS = RegistryKey.of("tall_grass");
 
-    RegistryKey<Material> TARGET = RegistryKey.unsafeOf("target");
+    RegistryKey<Material> TARGET = RegistryKey.of("target");
 
-    RegistryKey<Material> TERRACOTTA = RegistryKey.unsafeOf("terracotta");
+    RegistryKey<Material> TERRACOTTA = RegistryKey.of("terracotta");
 
-    RegistryKey<Material> TEST_BLOCK = RegistryKey.unsafeOf("test_block");
+    RegistryKey<Material> TEST_BLOCK = RegistryKey.of("test_block");
 
-    RegistryKey<Material> TEST_INSTANCE_BLOCK = RegistryKey.unsafeOf("test_instance_block");
+    RegistryKey<Material> TEST_INSTANCE_BLOCK = RegistryKey.of("test_instance_block");
 
-    RegistryKey<Material> TIDE_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.unsafeOf("tide_armor_trim_smithing_template");
+    RegistryKey<Material> TIDE_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.of("tide_armor_trim_smithing_template");
 
-    RegistryKey<Material> TINTED_GLASS = RegistryKey.unsafeOf("tinted_glass");
+    RegistryKey<Material> TINTED_GLASS = RegistryKey.of("tinted_glass");
 
-    RegistryKey<Material> TIPPED_ARROW = RegistryKey.unsafeOf("tipped_arrow");
+    RegistryKey<Material> TIPPED_ARROW = RegistryKey.of("tipped_arrow");
 
-    RegistryKey<Material> TNT = RegistryKey.unsafeOf("tnt");
+    RegistryKey<Material> TNT = RegistryKey.of("tnt");
 
-    RegistryKey<Material> TNT_MINECART = RegistryKey.unsafeOf("tnt_minecart");
+    RegistryKey<Material> TNT_MINECART = RegistryKey.of("tnt_minecart");
 
-    RegistryKey<Material> TORCH = RegistryKey.unsafeOf("torch");
+    RegistryKey<Material> TORCH = RegistryKey.of("torch");
 
-    RegistryKey<Material> TORCHFLOWER = RegistryKey.unsafeOf("torchflower");
+    RegistryKey<Material> TORCHFLOWER = RegistryKey.of("torchflower");
 
-    RegistryKey<Material> TORCHFLOWER_SEEDS = RegistryKey.unsafeOf("torchflower_seeds");
+    RegistryKey<Material> TORCHFLOWER_SEEDS = RegistryKey.of("torchflower_seeds");
 
-    RegistryKey<Material> TOTEM_OF_UNDYING = RegistryKey.unsafeOf("totem_of_undying");
+    RegistryKey<Material> TOTEM_OF_UNDYING = RegistryKey.of("totem_of_undying");
 
-    RegistryKey<Material> TRADER_LLAMA_SPAWN_EGG = RegistryKey.unsafeOf("trader_llama_spawn_egg");
+    RegistryKey<Material> TRADER_LLAMA_SPAWN_EGG = RegistryKey.of("trader_llama_spawn_egg");
 
-    RegistryKey<Material> TRAPPED_CHEST = RegistryKey.unsafeOf("trapped_chest");
+    RegistryKey<Material> TRAPPED_CHEST = RegistryKey.of("trapped_chest");
 
-    RegistryKey<Material> TRIAL_KEY = RegistryKey.unsafeOf("trial_key");
+    RegistryKey<Material> TRIAL_KEY = RegistryKey.of("trial_key");
 
-    RegistryKey<Material> TRIAL_SPAWNER = RegistryKey.unsafeOf("trial_spawner");
+    RegistryKey<Material> TRIAL_SPAWNER = RegistryKey.of("trial_spawner");
 
-    RegistryKey<Material> TRIDENT = RegistryKey.unsafeOf("trident");
+    RegistryKey<Material> TRIDENT = RegistryKey.of("trident");
 
-    RegistryKey<Material> TRIPWIRE_HOOK = RegistryKey.unsafeOf("tripwire_hook");
+    RegistryKey<Material> TRIPWIRE_HOOK = RegistryKey.of("tripwire_hook");
 
-    RegistryKey<Material> TROPICAL_FISH = RegistryKey.unsafeOf("tropical_fish");
+    RegistryKey<Material> TROPICAL_FISH = RegistryKey.of("tropical_fish");
 
-    RegistryKey<Material> TROPICAL_FISH_BUCKET = RegistryKey.unsafeOf("tropical_fish_bucket");
+    RegistryKey<Material> TROPICAL_FISH_BUCKET = RegistryKey.of("tropical_fish_bucket");
 
-    RegistryKey<Material> TROPICAL_FISH_SPAWN_EGG = RegistryKey.unsafeOf("tropical_fish_spawn_egg");
+    RegistryKey<Material> TROPICAL_FISH_SPAWN_EGG = RegistryKey.of("tropical_fish_spawn_egg");
 
-    RegistryKey<Material> TUBE_CORAL = RegistryKey.unsafeOf("tube_coral");
+    RegistryKey<Material> TUBE_CORAL = RegistryKey.of("tube_coral");
 
-    RegistryKey<Material> TUBE_CORAL_BLOCK = RegistryKey.unsafeOf("tube_coral_block");
+    RegistryKey<Material> TUBE_CORAL_BLOCK = RegistryKey.of("tube_coral_block");
 
-    RegistryKey<Material> TUBE_CORAL_FAN = RegistryKey.unsafeOf("tube_coral_fan");
+    RegistryKey<Material> TUBE_CORAL_FAN = RegistryKey.of("tube_coral_fan");
 
-    RegistryKey<Material> TUFF = RegistryKey.unsafeOf("tuff");
+    RegistryKey<Material> TUFF = RegistryKey.of("tuff");
 
-    RegistryKey<Material> TUFF_BRICK_SLAB = RegistryKey.unsafeOf("tuff_brick_slab");
+    RegistryKey<Material> TUFF_BRICK_SLAB = RegistryKey.of("tuff_brick_slab");
 
-    RegistryKey<Material> TUFF_BRICK_STAIRS = RegistryKey.unsafeOf("tuff_brick_stairs");
+    RegistryKey<Material> TUFF_BRICK_STAIRS = RegistryKey.of("tuff_brick_stairs");
 
-    RegistryKey<Material> TUFF_BRICK_WALL = RegistryKey.unsafeOf("tuff_brick_wall");
+    RegistryKey<Material> TUFF_BRICK_WALL = RegistryKey.of("tuff_brick_wall");
 
-    RegistryKey<Material> TUFF_BRICKS = RegistryKey.unsafeOf("tuff_bricks");
+    RegistryKey<Material> TUFF_BRICKS = RegistryKey.of("tuff_bricks");
 
-    RegistryKey<Material> TUFF_SLAB = RegistryKey.unsafeOf("tuff_slab");
+    RegistryKey<Material> TUFF_SLAB = RegistryKey.of("tuff_slab");
 
-    RegistryKey<Material> TUFF_STAIRS = RegistryKey.unsafeOf("tuff_stairs");
+    RegistryKey<Material> TUFF_STAIRS = RegistryKey.of("tuff_stairs");
 
-    RegistryKey<Material> TUFF_WALL = RegistryKey.unsafeOf("tuff_wall");
+    RegistryKey<Material> TUFF_WALL = RegistryKey.of("tuff_wall");
 
-    RegistryKey<Material> TURTLE_EGG = RegistryKey.unsafeOf("turtle_egg");
+    RegistryKey<Material> TURTLE_EGG = RegistryKey.of("turtle_egg");
 
-    RegistryKey<Material> TURTLE_HELMET = RegistryKey.unsafeOf("turtle_helmet");
+    RegistryKey<Material> TURTLE_HELMET = RegistryKey.of("turtle_helmet");
 
-    RegistryKey<Material> TURTLE_SCUTE = RegistryKey.unsafeOf("turtle_scute");
+    RegistryKey<Material> TURTLE_SCUTE = RegistryKey.of("turtle_scute");
 
-    RegistryKey<Material> TURTLE_SPAWN_EGG = RegistryKey.unsafeOf("turtle_spawn_egg");
+    RegistryKey<Material> TURTLE_SPAWN_EGG = RegistryKey.of("turtle_spawn_egg");
 
-    RegistryKey<Material> TWISTING_VINES = RegistryKey.unsafeOf("twisting_vines");
+    RegistryKey<Material> TWISTING_VINES = RegistryKey.of("twisting_vines");
 
-    RegistryKey<Material> VAULT = RegistryKey.unsafeOf("vault");
+    RegistryKey<Material> VAULT = RegistryKey.of("vault");
 
-    RegistryKey<Material> VERDANT_FROGLIGHT = RegistryKey.unsafeOf("verdant_froglight");
+    RegistryKey<Material> VERDANT_FROGLIGHT = RegistryKey.of("verdant_froglight");
 
-    RegistryKey<Material> VEX_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.unsafeOf("vex_armor_trim_smithing_template");
+    RegistryKey<Material> VEX_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.of("vex_armor_trim_smithing_template");
 
-    RegistryKey<Material> VEX_SPAWN_EGG = RegistryKey.unsafeOf("vex_spawn_egg");
+    RegistryKey<Material> VEX_SPAWN_EGG = RegistryKey.of("vex_spawn_egg");
 
-    RegistryKey<Material> VILLAGER_SPAWN_EGG = RegistryKey.unsafeOf("villager_spawn_egg");
+    RegistryKey<Material> VILLAGER_SPAWN_EGG = RegistryKey.of("villager_spawn_egg");
 
-    RegistryKey<Material> VINDICATOR_SPAWN_EGG = RegistryKey.unsafeOf("vindicator_spawn_egg");
+    RegistryKey<Material> VINDICATOR_SPAWN_EGG = RegistryKey.of("vindicator_spawn_egg");
 
-    RegistryKey<Material> VINE = RegistryKey.unsafeOf("vine");
+    RegistryKey<Material> VINE = RegistryKey.of("vine");
 
-    RegistryKey<Material> WANDERING_TRADER_SPAWN_EGG = RegistryKey.unsafeOf("wandering_trader_spawn_egg");
+    RegistryKey<Material> WANDERING_TRADER_SPAWN_EGG = RegistryKey.of("wandering_trader_spawn_egg");
 
-    RegistryKey<Material> WARD_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.unsafeOf("ward_armor_trim_smithing_template");
+    RegistryKey<Material> WARD_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.of("ward_armor_trim_smithing_template");
 
-    RegistryKey<Material> WARDEN_SPAWN_EGG = RegistryKey.unsafeOf("warden_spawn_egg");
+    RegistryKey<Material> WARDEN_SPAWN_EGG = RegistryKey.of("warden_spawn_egg");
 
-    RegistryKey<Material> WARM_OCEAN_RUINS_MAP = RegistryKey.unsafeOf("warm_ocean_ruins_map");
+    RegistryKey<Material> WARM_OCEAN_RUINS_MAP = RegistryKey.of("warm_ocean_ruins_map");
 
-    RegistryKey<Material> WARPED_BUTTON = RegistryKey.unsafeOf("warped_button");
+    RegistryKey<Material> WARPED_BUTTON = RegistryKey.of("warped_button");
 
-    RegistryKey<Material> WARPED_DOOR = RegistryKey.unsafeOf("warped_door");
+    RegistryKey<Material> WARPED_DOOR = RegistryKey.of("warped_door");
 
-    RegistryKey<Material> WARPED_FENCE = RegistryKey.unsafeOf("warped_fence");
+    RegistryKey<Material> WARPED_FENCE = RegistryKey.of("warped_fence");
 
-    RegistryKey<Material> WARPED_FENCE_GATE = RegistryKey.unsafeOf("warped_fence_gate");
+    RegistryKey<Material> WARPED_FENCE_GATE = RegistryKey.of("warped_fence_gate");
 
-    RegistryKey<Material> WARPED_FUNGUS = RegistryKey.unsafeOf("warped_fungus");
+    RegistryKey<Material> WARPED_FUNGUS = RegistryKey.of("warped_fungus");
 
-    RegistryKey<Material> WARPED_FUNGUS_ON_A_STICK = RegistryKey.unsafeOf("warped_fungus_on_a_stick");
+    RegistryKey<Material> WARPED_FUNGUS_ON_A_STICK = RegistryKey.of("warped_fungus_on_a_stick");
 
-    RegistryKey<Material> WARPED_HANGING_SIGN = RegistryKey.unsafeOf("warped_hanging_sign");
+    RegistryKey<Material> WARPED_HANGING_SIGN = RegistryKey.of("warped_hanging_sign");
 
-    RegistryKey<Material> WARPED_HYPHAE = RegistryKey.unsafeOf("warped_hyphae");
+    RegistryKey<Material> WARPED_HYPHAE = RegistryKey.of("warped_hyphae");
 
-    RegistryKey<Material> WARPED_NYLIUM = RegistryKey.unsafeOf("warped_nylium");
+    RegistryKey<Material> WARPED_NYLIUM = RegistryKey.of("warped_nylium");
 
-    RegistryKey<Material> WARPED_PLANKS = RegistryKey.unsafeOf("warped_planks");
+    RegistryKey<Material> WARPED_PLANKS = RegistryKey.of("warped_planks");
 
-    RegistryKey<Material> WARPED_PRESSURE_PLATE = RegistryKey.unsafeOf("warped_pressure_plate");
+    RegistryKey<Material> WARPED_PRESSURE_PLATE = RegistryKey.of("warped_pressure_plate");
 
-    RegistryKey<Material> WARPED_ROOTS = RegistryKey.unsafeOf("warped_roots");
+    RegistryKey<Material> WARPED_ROOTS = RegistryKey.of("warped_roots");
 
-    RegistryKey<Material> WARPED_SHELF = RegistryKey.unsafeOf("warped_shelf");
+    RegistryKey<Material> WARPED_SHELF = RegistryKey.of("warped_shelf");
 
-    RegistryKey<Material> WARPED_SIGN = RegistryKey.unsafeOf("warped_sign");
+    RegistryKey<Material> WARPED_SIGN = RegistryKey.of("warped_sign");
 
-    RegistryKey<Material> WARPED_SLAB = RegistryKey.unsafeOf("warped_slab");
+    RegistryKey<Material> WARPED_SLAB = RegistryKey.of("warped_slab");
 
-    RegistryKey<Material> WARPED_STAIRS = RegistryKey.unsafeOf("warped_stairs");
+    RegistryKey<Material> WARPED_STAIRS = RegistryKey.of("warped_stairs");
 
-    RegistryKey<Material> WARPED_STEM = RegistryKey.unsafeOf("warped_stem");
+    RegistryKey<Material> WARPED_STEM = RegistryKey.of("warped_stem");
 
-    RegistryKey<Material> WARPED_TRAPDOOR = RegistryKey.unsafeOf("warped_trapdoor");
+    RegistryKey<Material> WARPED_TRAPDOOR = RegistryKey.of("warped_trapdoor");
 
-    RegistryKey<Material> WARPED_WART_BLOCK = RegistryKey.unsafeOf("warped_wart_block");
+    RegistryKey<Material> WARPED_WART_BLOCK = RegistryKey.of("warped_wart_block");
 
-    RegistryKey<Material> WATER_BUCKET = RegistryKey.unsafeOf("water_bucket");
+    RegistryKey<Material> WATER_BUCKET = RegistryKey.of("water_bucket");
 
-    RegistryKey<Material> WAXED_CHISELED_COPPER = RegistryKey.unsafeOf("waxed_chiseled_copper");
+    RegistryKey<Material> WAXED_CHISELED_COPPER = RegistryKey.of("waxed_chiseled_copper");
 
-    RegistryKey<Material> WAXED_COPPER_BARS = RegistryKey.unsafeOf("waxed_copper_bars");
+    RegistryKey<Material> WAXED_COPPER_BARS = RegistryKey.of("waxed_copper_bars");
 
-    RegistryKey<Material> WAXED_COPPER_BLOCK = RegistryKey.unsafeOf("waxed_copper_block");
+    RegistryKey<Material> WAXED_COPPER_BLOCK = RegistryKey.of("waxed_copper_block");
 
-    RegistryKey<Material> WAXED_COPPER_BULB = RegistryKey.unsafeOf("waxed_copper_bulb");
+    RegistryKey<Material> WAXED_COPPER_BULB = RegistryKey.of("waxed_copper_bulb");
 
-    RegistryKey<Material> WAXED_COPPER_CHAIN = RegistryKey.unsafeOf("waxed_copper_chain");
+    RegistryKey<Material> WAXED_COPPER_CHAIN = RegistryKey.of("waxed_copper_chain");
 
-    RegistryKey<Material> WAXED_COPPER_CHEST = RegistryKey.unsafeOf("waxed_copper_chest");
+    RegistryKey<Material> WAXED_COPPER_CHEST = RegistryKey.of("waxed_copper_chest");
 
-    RegistryKey<Material> WAXED_COPPER_DOOR = RegistryKey.unsafeOf("waxed_copper_door");
+    RegistryKey<Material> WAXED_COPPER_DOOR = RegistryKey.of("waxed_copper_door");
 
-    RegistryKey<Material> WAXED_COPPER_GOLEM_STATUE = RegistryKey.unsafeOf("waxed_copper_golem_statue");
+    RegistryKey<Material> WAXED_COPPER_GOLEM_STATUE = RegistryKey.of("waxed_copper_golem_statue");
 
-    RegistryKey<Material> WAXED_COPPER_GRATE = RegistryKey.unsafeOf("waxed_copper_grate");
+    RegistryKey<Material> WAXED_COPPER_GRATE = RegistryKey.of("waxed_copper_grate");
 
-    RegistryKey<Material> WAXED_COPPER_LANTERN = RegistryKey.unsafeOf("waxed_copper_lantern");
+    RegistryKey<Material> WAXED_COPPER_LANTERN = RegistryKey.of("waxed_copper_lantern");
 
-    RegistryKey<Material> WAXED_COPPER_TRAPDOOR = RegistryKey.unsafeOf("waxed_copper_trapdoor");
+    RegistryKey<Material> WAXED_COPPER_TRAPDOOR = RegistryKey.of("waxed_copper_trapdoor");
 
-    RegistryKey<Material> WAXED_CUT_COPPER = RegistryKey.unsafeOf("waxed_cut_copper");
+    RegistryKey<Material> WAXED_CUT_COPPER = RegistryKey.of("waxed_cut_copper");
 
-    RegistryKey<Material> WAXED_CUT_COPPER_SLAB = RegistryKey.unsafeOf("waxed_cut_copper_slab");
+    RegistryKey<Material> WAXED_CUT_COPPER_SLAB = RegistryKey.of("waxed_cut_copper_slab");
 
-    RegistryKey<Material> WAXED_CUT_COPPER_STAIRS = RegistryKey.unsafeOf("waxed_cut_copper_stairs");
+    RegistryKey<Material> WAXED_CUT_COPPER_STAIRS = RegistryKey.of("waxed_cut_copper_stairs");
 
-    RegistryKey<Material> WAXED_EXPOSED_CHISELED_COPPER = RegistryKey.unsafeOf("waxed_exposed_chiseled_copper");
+    RegistryKey<Material> WAXED_EXPOSED_CHISELED_COPPER = RegistryKey.of("waxed_exposed_chiseled_copper");
 
-    RegistryKey<Material> WAXED_EXPOSED_COPPER = RegistryKey.unsafeOf("waxed_exposed_copper");
+    RegistryKey<Material> WAXED_EXPOSED_COPPER = RegistryKey.of("waxed_exposed_copper");
 
-    RegistryKey<Material> WAXED_EXPOSED_COPPER_BARS = RegistryKey.unsafeOf("waxed_exposed_copper_bars");
+    RegistryKey<Material> WAXED_EXPOSED_COPPER_BARS = RegistryKey.of("waxed_exposed_copper_bars");
 
-    RegistryKey<Material> WAXED_EXPOSED_COPPER_BULB = RegistryKey.unsafeOf("waxed_exposed_copper_bulb");
+    RegistryKey<Material> WAXED_EXPOSED_COPPER_BULB = RegistryKey.of("waxed_exposed_copper_bulb");
 
-    RegistryKey<Material> WAXED_EXPOSED_COPPER_CHAIN = RegistryKey.unsafeOf("waxed_exposed_copper_chain");
+    RegistryKey<Material> WAXED_EXPOSED_COPPER_CHAIN = RegistryKey.of("waxed_exposed_copper_chain");
 
-    RegistryKey<Material> WAXED_EXPOSED_COPPER_CHEST = RegistryKey.unsafeOf("waxed_exposed_copper_chest");
+    RegistryKey<Material> WAXED_EXPOSED_COPPER_CHEST = RegistryKey.of("waxed_exposed_copper_chest");
 
-    RegistryKey<Material> WAXED_EXPOSED_COPPER_DOOR = RegistryKey.unsafeOf("waxed_exposed_copper_door");
+    RegistryKey<Material> WAXED_EXPOSED_COPPER_DOOR = RegistryKey.of("waxed_exposed_copper_door");
 
-    RegistryKey<Material> WAXED_EXPOSED_COPPER_GOLEM_STATUE = RegistryKey.unsafeOf("waxed_exposed_copper_golem_statue");
+    RegistryKey<Material> WAXED_EXPOSED_COPPER_GOLEM_STATUE = RegistryKey.of("waxed_exposed_copper_golem_statue");
 
-    RegistryKey<Material> WAXED_EXPOSED_COPPER_GRATE = RegistryKey.unsafeOf("waxed_exposed_copper_grate");
+    RegistryKey<Material> WAXED_EXPOSED_COPPER_GRATE = RegistryKey.of("waxed_exposed_copper_grate");
 
-    RegistryKey<Material> WAXED_EXPOSED_COPPER_LANTERN = RegistryKey.unsafeOf("waxed_exposed_copper_lantern");
+    RegistryKey<Material> WAXED_EXPOSED_COPPER_LANTERN = RegistryKey.of("waxed_exposed_copper_lantern");
 
-    RegistryKey<Material> WAXED_EXPOSED_COPPER_TRAPDOOR = RegistryKey.unsafeOf("waxed_exposed_copper_trapdoor");
+    RegistryKey<Material> WAXED_EXPOSED_COPPER_TRAPDOOR = RegistryKey.of("waxed_exposed_copper_trapdoor");
 
-    RegistryKey<Material> WAXED_EXPOSED_CUT_COPPER = RegistryKey.unsafeOf("waxed_exposed_cut_copper");
+    RegistryKey<Material> WAXED_EXPOSED_CUT_COPPER = RegistryKey.of("waxed_exposed_cut_copper");
 
-    RegistryKey<Material> WAXED_EXPOSED_CUT_COPPER_SLAB = RegistryKey.unsafeOf("waxed_exposed_cut_copper_slab");
+    RegistryKey<Material> WAXED_EXPOSED_CUT_COPPER_SLAB = RegistryKey.of("waxed_exposed_cut_copper_slab");
 
-    RegistryKey<Material> WAXED_EXPOSED_CUT_COPPER_STAIRS = RegistryKey.unsafeOf("waxed_exposed_cut_copper_stairs");
+    RegistryKey<Material> WAXED_EXPOSED_CUT_COPPER_STAIRS = RegistryKey.of("waxed_exposed_cut_copper_stairs");
 
-    RegistryKey<Material> WAXED_EXPOSED_LIGHTNING_ROD = RegistryKey.unsafeOf("waxed_exposed_lightning_rod");
+    RegistryKey<Material> WAXED_EXPOSED_LIGHTNING_ROD = RegistryKey.of("waxed_exposed_lightning_rod");
 
-    RegistryKey<Material> WAXED_LIGHTNING_ROD = RegistryKey.unsafeOf("waxed_lightning_rod");
+    RegistryKey<Material> WAXED_LIGHTNING_ROD = RegistryKey.of("waxed_lightning_rod");
 
-    RegistryKey<Material> WAXED_OXIDIZED_CHISELED_COPPER = RegistryKey.unsafeOf("waxed_oxidized_chiseled_copper");
+    RegistryKey<Material> WAXED_OXIDIZED_CHISELED_COPPER = RegistryKey.of("waxed_oxidized_chiseled_copper");
 
-    RegistryKey<Material> WAXED_OXIDIZED_COPPER = RegistryKey.unsafeOf("waxed_oxidized_copper");
+    RegistryKey<Material> WAXED_OXIDIZED_COPPER = RegistryKey.of("waxed_oxidized_copper");
 
-    RegistryKey<Material> WAXED_OXIDIZED_COPPER_BARS = RegistryKey.unsafeOf("waxed_oxidized_copper_bars");
+    RegistryKey<Material> WAXED_OXIDIZED_COPPER_BARS = RegistryKey.of("waxed_oxidized_copper_bars");
 
-    RegistryKey<Material> WAXED_OXIDIZED_COPPER_BULB = RegistryKey.unsafeOf("waxed_oxidized_copper_bulb");
+    RegistryKey<Material> WAXED_OXIDIZED_COPPER_BULB = RegistryKey.of("waxed_oxidized_copper_bulb");
 
-    RegistryKey<Material> WAXED_OXIDIZED_COPPER_CHAIN = RegistryKey.unsafeOf("waxed_oxidized_copper_chain");
+    RegistryKey<Material> WAXED_OXIDIZED_COPPER_CHAIN = RegistryKey.of("waxed_oxidized_copper_chain");
 
-    RegistryKey<Material> WAXED_OXIDIZED_COPPER_CHEST = RegistryKey.unsafeOf("waxed_oxidized_copper_chest");
+    RegistryKey<Material> WAXED_OXIDIZED_COPPER_CHEST = RegistryKey.of("waxed_oxidized_copper_chest");
 
-    RegistryKey<Material> WAXED_OXIDIZED_COPPER_DOOR = RegistryKey.unsafeOf("waxed_oxidized_copper_door");
+    RegistryKey<Material> WAXED_OXIDIZED_COPPER_DOOR = RegistryKey.of("waxed_oxidized_copper_door");
 
-    RegistryKey<Material> WAXED_OXIDIZED_COPPER_GOLEM_STATUE = RegistryKey.unsafeOf("waxed_oxidized_copper_golem_statue");
+    RegistryKey<Material> WAXED_OXIDIZED_COPPER_GOLEM_STATUE = RegistryKey.of("waxed_oxidized_copper_golem_statue");
 
-    RegistryKey<Material> WAXED_OXIDIZED_COPPER_GRATE = RegistryKey.unsafeOf("waxed_oxidized_copper_grate");
+    RegistryKey<Material> WAXED_OXIDIZED_COPPER_GRATE = RegistryKey.of("waxed_oxidized_copper_grate");
 
-    RegistryKey<Material> WAXED_OXIDIZED_COPPER_LANTERN = RegistryKey.unsafeOf("waxed_oxidized_copper_lantern");
+    RegistryKey<Material> WAXED_OXIDIZED_COPPER_LANTERN = RegistryKey.of("waxed_oxidized_copper_lantern");
 
-    RegistryKey<Material> WAXED_OXIDIZED_COPPER_TRAPDOOR = RegistryKey.unsafeOf("waxed_oxidized_copper_trapdoor");
+    RegistryKey<Material> WAXED_OXIDIZED_COPPER_TRAPDOOR = RegistryKey.of("waxed_oxidized_copper_trapdoor");
 
-    RegistryKey<Material> WAXED_OXIDIZED_CUT_COPPER = RegistryKey.unsafeOf("waxed_oxidized_cut_copper");
+    RegistryKey<Material> WAXED_OXIDIZED_CUT_COPPER = RegistryKey.of("waxed_oxidized_cut_copper");
 
-    RegistryKey<Material> WAXED_OXIDIZED_CUT_COPPER_SLAB = RegistryKey.unsafeOf("waxed_oxidized_cut_copper_slab");
+    RegistryKey<Material> WAXED_OXIDIZED_CUT_COPPER_SLAB = RegistryKey.of("waxed_oxidized_cut_copper_slab");
 
-    RegistryKey<Material> WAXED_OXIDIZED_CUT_COPPER_STAIRS = RegistryKey.unsafeOf("waxed_oxidized_cut_copper_stairs");
+    RegistryKey<Material> WAXED_OXIDIZED_CUT_COPPER_STAIRS = RegistryKey.of("waxed_oxidized_cut_copper_stairs");
 
-    RegistryKey<Material> WAXED_OXIDIZED_LIGHTNING_ROD = RegistryKey.unsafeOf("waxed_oxidized_lightning_rod");
+    RegistryKey<Material> WAXED_OXIDIZED_LIGHTNING_ROD = RegistryKey.of("waxed_oxidized_lightning_rod");
 
-    RegistryKey<Material> WAXED_WEATHERED_CHISELED_COPPER = RegistryKey.unsafeOf("waxed_weathered_chiseled_copper");
+    RegistryKey<Material> WAXED_WEATHERED_CHISELED_COPPER = RegistryKey.of("waxed_weathered_chiseled_copper");
 
-    RegistryKey<Material> WAXED_WEATHERED_COPPER = RegistryKey.unsafeOf("waxed_weathered_copper");
+    RegistryKey<Material> WAXED_WEATHERED_COPPER = RegistryKey.of("waxed_weathered_copper");
 
-    RegistryKey<Material> WAXED_WEATHERED_COPPER_BARS = RegistryKey.unsafeOf("waxed_weathered_copper_bars");
+    RegistryKey<Material> WAXED_WEATHERED_COPPER_BARS = RegistryKey.of("waxed_weathered_copper_bars");
 
-    RegistryKey<Material> WAXED_WEATHERED_COPPER_BULB = RegistryKey.unsafeOf("waxed_weathered_copper_bulb");
+    RegistryKey<Material> WAXED_WEATHERED_COPPER_BULB = RegistryKey.of("waxed_weathered_copper_bulb");
 
-    RegistryKey<Material> WAXED_WEATHERED_COPPER_CHAIN = RegistryKey.unsafeOf("waxed_weathered_copper_chain");
+    RegistryKey<Material> WAXED_WEATHERED_COPPER_CHAIN = RegistryKey.of("waxed_weathered_copper_chain");
 
-    RegistryKey<Material> WAXED_WEATHERED_COPPER_CHEST = RegistryKey.unsafeOf("waxed_weathered_copper_chest");
+    RegistryKey<Material> WAXED_WEATHERED_COPPER_CHEST = RegistryKey.of("waxed_weathered_copper_chest");
 
-    RegistryKey<Material> WAXED_WEATHERED_COPPER_DOOR = RegistryKey.unsafeOf("waxed_weathered_copper_door");
+    RegistryKey<Material> WAXED_WEATHERED_COPPER_DOOR = RegistryKey.of("waxed_weathered_copper_door");
 
-    RegistryKey<Material> WAXED_WEATHERED_COPPER_GOLEM_STATUE = RegistryKey.unsafeOf("waxed_weathered_copper_golem_statue");
+    RegistryKey<Material> WAXED_WEATHERED_COPPER_GOLEM_STATUE = RegistryKey.of("waxed_weathered_copper_golem_statue");
 
-    RegistryKey<Material> WAXED_WEATHERED_COPPER_GRATE = RegistryKey.unsafeOf("waxed_weathered_copper_grate");
+    RegistryKey<Material> WAXED_WEATHERED_COPPER_GRATE = RegistryKey.of("waxed_weathered_copper_grate");
 
-    RegistryKey<Material> WAXED_WEATHERED_COPPER_LANTERN = RegistryKey.unsafeOf("waxed_weathered_copper_lantern");
+    RegistryKey<Material> WAXED_WEATHERED_COPPER_LANTERN = RegistryKey.of("waxed_weathered_copper_lantern");
 
-    RegistryKey<Material> WAXED_WEATHERED_COPPER_TRAPDOOR = RegistryKey.unsafeOf("waxed_weathered_copper_trapdoor");
+    RegistryKey<Material> WAXED_WEATHERED_COPPER_TRAPDOOR = RegistryKey.of("waxed_weathered_copper_trapdoor");
 
-    RegistryKey<Material> WAXED_WEATHERED_CUT_COPPER = RegistryKey.unsafeOf("waxed_weathered_cut_copper");
+    RegistryKey<Material> WAXED_WEATHERED_CUT_COPPER = RegistryKey.of("waxed_weathered_cut_copper");
 
-    RegistryKey<Material> WAXED_WEATHERED_CUT_COPPER_SLAB = RegistryKey.unsafeOf("waxed_weathered_cut_copper_slab");
+    RegistryKey<Material> WAXED_WEATHERED_CUT_COPPER_SLAB = RegistryKey.of("waxed_weathered_cut_copper_slab");
 
-    RegistryKey<Material> WAXED_WEATHERED_CUT_COPPER_STAIRS = RegistryKey.unsafeOf("waxed_weathered_cut_copper_stairs");
+    RegistryKey<Material> WAXED_WEATHERED_CUT_COPPER_STAIRS = RegistryKey.of("waxed_weathered_cut_copper_stairs");
 
-    RegistryKey<Material> WAXED_WEATHERED_LIGHTNING_ROD = RegistryKey.unsafeOf("waxed_weathered_lightning_rod");
+    RegistryKey<Material> WAXED_WEATHERED_LIGHTNING_ROD = RegistryKey.of("waxed_weathered_lightning_rod");
 
-    RegistryKey<Material> WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.unsafeOf("wayfinder_armor_trim_smithing_template");
+    RegistryKey<Material> WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.of("wayfinder_armor_trim_smithing_template");
 
-    RegistryKey<Material> WEATHERED_CHISELED_COPPER = RegistryKey.unsafeOf("weathered_chiseled_copper");
+    RegistryKey<Material> WEATHERED_CHISELED_COPPER = RegistryKey.of("weathered_chiseled_copper");
 
-    RegistryKey<Material> WEATHERED_COPPER = RegistryKey.unsafeOf("weathered_copper");
+    RegistryKey<Material> WEATHERED_COPPER = RegistryKey.of("weathered_copper");
 
-    RegistryKey<Material> WEATHERED_COPPER_BARS = RegistryKey.unsafeOf("weathered_copper_bars");
+    RegistryKey<Material> WEATHERED_COPPER_BARS = RegistryKey.of("weathered_copper_bars");
 
-    RegistryKey<Material> WEATHERED_COPPER_BULB = RegistryKey.unsafeOf("weathered_copper_bulb");
+    RegistryKey<Material> WEATHERED_COPPER_BULB = RegistryKey.of("weathered_copper_bulb");
 
-    RegistryKey<Material> WEATHERED_COPPER_CHAIN = RegistryKey.unsafeOf("weathered_copper_chain");
+    RegistryKey<Material> WEATHERED_COPPER_CHAIN = RegistryKey.of("weathered_copper_chain");
 
-    RegistryKey<Material> WEATHERED_COPPER_CHEST = RegistryKey.unsafeOf("weathered_copper_chest");
+    RegistryKey<Material> WEATHERED_COPPER_CHEST = RegistryKey.of("weathered_copper_chest");
 
-    RegistryKey<Material> WEATHERED_COPPER_DOOR = RegistryKey.unsafeOf("weathered_copper_door");
+    RegistryKey<Material> WEATHERED_COPPER_DOOR = RegistryKey.of("weathered_copper_door");
 
-    RegistryKey<Material> WEATHERED_COPPER_GOLEM_STATUE = RegistryKey.unsafeOf("weathered_copper_golem_statue");
+    RegistryKey<Material> WEATHERED_COPPER_GOLEM_STATUE = RegistryKey.of("weathered_copper_golem_statue");
 
-    RegistryKey<Material> WEATHERED_COPPER_GRATE = RegistryKey.unsafeOf("weathered_copper_grate");
+    RegistryKey<Material> WEATHERED_COPPER_GRATE = RegistryKey.of("weathered_copper_grate");
 
-    RegistryKey<Material> WEATHERED_COPPER_LANTERN = RegistryKey.unsafeOf("weathered_copper_lantern");
+    RegistryKey<Material> WEATHERED_COPPER_LANTERN = RegistryKey.of("weathered_copper_lantern");
 
-    RegistryKey<Material> WEATHERED_COPPER_TRAPDOOR = RegistryKey.unsafeOf("weathered_copper_trapdoor");
+    RegistryKey<Material> WEATHERED_COPPER_TRAPDOOR = RegistryKey.of("weathered_copper_trapdoor");
 
-    RegistryKey<Material> WEATHERED_CUT_COPPER = RegistryKey.unsafeOf("weathered_cut_copper");
+    RegistryKey<Material> WEATHERED_CUT_COPPER = RegistryKey.of("weathered_cut_copper");
 
-    RegistryKey<Material> WEATHERED_CUT_COPPER_SLAB = RegistryKey.unsafeOf("weathered_cut_copper_slab");
+    RegistryKey<Material> WEATHERED_CUT_COPPER_SLAB = RegistryKey.of("weathered_cut_copper_slab");
 
-    RegistryKey<Material> WEATHERED_CUT_COPPER_STAIRS = RegistryKey.unsafeOf("weathered_cut_copper_stairs");
+    RegistryKey<Material> WEATHERED_CUT_COPPER_STAIRS = RegistryKey.of("weathered_cut_copper_stairs");
 
-    RegistryKey<Material> WEATHERED_LIGHTNING_ROD = RegistryKey.unsafeOf("weathered_lightning_rod");
+    RegistryKey<Material> WEATHERED_LIGHTNING_ROD = RegistryKey.of("weathered_lightning_rod");
 
-    RegistryKey<Material> WEEPING_VINES = RegistryKey.unsafeOf("weeping_vines");
+    RegistryKey<Material> WEEPING_VINES = RegistryKey.of("weeping_vines");
 
-    RegistryKey<Material> WET_SPONGE = RegistryKey.unsafeOf("wet_sponge");
+    RegistryKey<Material> WET_SPONGE = RegistryKey.of("wet_sponge");
 
-    RegistryKey<Material> WHEAT = RegistryKey.unsafeOf("wheat");
+    RegistryKey<Material> WHEAT = RegistryKey.of("wheat");
 
-    RegistryKey<Material> WHEAT_SEEDS = RegistryKey.unsafeOf("wheat_seeds");
+    RegistryKey<Material> WHEAT_SEEDS = RegistryKey.of("wheat_seeds");
 
-    RegistryKey<Material> WHITE_BANNER = RegistryKey.unsafeOf("white_banner");
+    RegistryKey<Material> WHITE_BANNER = RegistryKey.of("white_banner");
 
-    RegistryKey<Material> WHITE_BED = RegistryKey.unsafeOf("white_bed");
+    RegistryKey<Material> WHITE_BED = RegistryKey.of("white_bed");
 
-    RegistryKey<Material> WHITE_BUNDLE = RegistryKey.unsafeOf("white_bundle");
+    RegistryKey<Material> WHITE_BUNDLE = RegistryKey.of("white_bundle");
 
-    RegistryKey<Material> WHITE_CANDLE = RegistryKey.unsafeOf("white_candle");
+    RegistryKey<Material> WHITE_CANDLE = RegistryKey.of("white_candle");
 
-    RegistryKey<Material> WHITE_CARPET = RegistryKey.unsafeOf("white_carpet");
+    RegistryKey<Material> WHITE_CARPET = RegistryKey.of("white_carpet");
 
-    RegistryKey<Material> WHITE_CONCRETE = RegistryKey.unsafeOf("white_concrete");
+    RegistryKey<Material> WHITE_CONCRETE = RegistryKey.of("white_concrete");
 
-    RegistryKey<Material> WHITE_CONCRETE_POWDER = RegistryKey.unsafeOf("white_concrete_powder");
+    RegistryKey<Material> WHITE_CONCRETE_POWDER = RegistryKey.of("white_concrete_powder");
 
-    RegistryKey<Material> WHITE_CONCRETE_SLAB = RegistryKey.unsafeOf("white_concrete_slab");
+    RegistryKey<Material> WHITE_CONCRETE_SLAB = RegistryKey.of("white_concrete_slab");
 
-    RegistryKey<Material> WHITE_CONCRETE_STAIRS = RegistryKey.unsafeOf("white_concrete_stairs");
+    RegistryKey<Material> WHITE_CONCRETE_STAIRS = RegistryKey.of("white_concrete_stairs");
 
-    RegistryKey<Material> WHITE_CUSHION = RegistryKey.unsafeOf("white_cushion");
+    RegistryKey<Material> WHITE_CUSHION = RegistryKey.of("white_cushion");
 
-    RegistryKey<Material> WHITE_DYE = RegistryKey.unsafeOf("white_dye");
+    RegistryKey<Material> WHITE_DYE = RegistryKey.of("white_dye");
 
-    RegistryKey<Material> WHITE_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("white_glazed_terracotta");
+    RegistryKey<Material> WHITE_GLAZED_TERRACOTTA = RegistryKey.of("white_glazed_terracotta");
 
-    RegistryKey<Material> WHITE_HARNESS = RegistryKey.unsafeOf("white_harness");
+    RegistryKey<Material> WHITE_HARNESS = RegistryKey.of("white_harness");
 
-    RegistryKey<Material> WHITE_SHULKER_BOX = RegistryKey.unsafeOf("white_shulker_box");
+    RegistryKey<Material> WHITE_SHULKER_BOX = RegistryKey.of("white_shulker_box");
 
-    RegistryKey<Material> WHITE_STAINED_GLASS = RegistryKey.unsafeOf("white_stained_glass");
+    RegistryKey<Material> WHITE_STAINED_GLASS = RegistryKey.of("white_stained_glass");
 
-    RegistryKey<Material> WHITE_STAINED_GLASS_PANE = RegistryKey.unsafeOf("white_stained_glass_pane");
+    RegistryKey<Material> WHITE_STAINED_GLASS_PANE = RegistryKey.of("white_stained_glass_pane");
 
-    RegistryKey<Material> WHITE_TERRACOTTA = RegistryKey.unsafeOf("white_terracotta");
+    RegistryKey<Material> WHITE_TERRACOTTA = RegistryKey.of("white_terracotta");
 
-    RegistryKey<Material> WHITE_TULIP = RegistryKey.unsafeOf("white_tulip");
+    RegistryKey<Material> WHITE_TULIP = RegistryKey.of("white_tulip");
 
-    RegistryKey<Material> WHITE_WOOL = RegistryKey.unsafeOf("white_wool");
+    RegistryKey<Material> WHITE_WOOL = RegistryKey.of("white_wool");
 
-    RegistryKey<Material> WHITE_WOOL_SLAB = RegistryKey.unsafeOf("white_wool_slab");
+    RegistryKey<Material> WHITE_WOOL_SLAB = RegistryKey.of("white_wool_slab");
 
-    RegistryKey<Material> WHITE_WOOL_STAIRS = RegistryKey.unsafeOf("white_wool_stairs");
+    RegistryKey<Material> WHITE_WOOL_STAIRS = RegistryKey.of("white_wool_stairs");
 
-    RegistryKey<Material> WILD_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.unsafeOf("wild_armor_trim_smithing_template");
+    RegistryKey<Material> WILD_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.of("wild_armor_trim_smithing_template");
 
-    RegistryKey<Material> WILDFLOWERS = RegistryKey.unsafeOf("wildflowers");
+    RegistryKey<Material> WILDFLOWERS = RegistryKey.of("wildflowers");
 
-    RegistryKey<Material> WIND_CHARGE = RegistryKey.unsafeOf("wind_charge");
+    RegistryKey<Material> WIND_CHARGE = RegistryKey.of("wind_charge");
 
-    RegistryKey<Material> WITCH_SPAWN_EGG = RegistryKey.unsafeOf("witch_spawn_egg");
+    RegistryKey<Material> WITCH_SPAWN_EGG = RegistryKey.of("witch_spawn_egg");
 
-    RegistryKey<Material> WITHER_ROSE = RegistryKey.unsafeOf("wither_rose");
+    RegistryKey<Material> WITHER_ROSE = RegistryKey.of("wither_rose");
 
-    RegistryKey<Material> WITHER_SKELETON_SKULL = RegistryKey.unsafeOf("wither_skeleton_skull");
+    RegistryKey<Material> WITHER_SKELETON_SKULL = RegistryKey.of("wither_skeleton_skull");
 
-    RegistryKey<Material> WITHER_SKELETON_SPAWN_EGG = RegistryKey.unsafeOf("wither_skeleton_spawn_egg");
+    RegistryKey<Material> WITHER_SKELETON_SPAWN_EGG = RegistryKey.of("wither_skeleton_spawn_egg");
 
-    RegistryKey<Material> WITHER_SPAWN_EGG = RegistryKey.unsafeOf("wither_spawn_egg");
+    RegistryKey<Material> WITHER_SPAWN_EGG = RegistryKey.of("wither_spawn_egg");
 
-    RegistryKey<Material> WOLF_ARMOR = RegistryKey.unsafeOf("wolf_armor");
+    RegistryKey<Material> WOLF_ARMOR = RegistryKey.of("wolf_armor");
 
-    RegistryKey<Material> WOLF_SPAWN_EGG = RegistryKey.unsafeOf("wolf_spawn_egg");
+    RegistryKey<Material> WOLF_SPAWN_EGG = RegistryKey.of("wolf_spawn_egg");
 
-    RegistryKey<Material> WOODEN_AXE = RegistryKey.unsafeOf("wooden_axe");
+    RegistryKey<Material> WOODEN_AXE = RegistryKey.of("wooden_axe");
 
-    RegistryKey<Material> WOODEN_HOE = RegistryKey.unsafeOf("wooden_hoe");
+    RegistryKey<Material> WOODEN_HOE = RegistryKey.of("wooden_hoe");
 
-    RegistryKey<Material> WOODEN_PICKAXE = RegistryKey.unsafeOf("wooden_pickaxe");
+    RegistryKey<Material> WOODEN_PICKAXE = RegistryKey.of("wooden_pickaxe");
 
-    RegistryKey<Material> WOODEN_SHOVEL = RegistryKey.unsafeOf("wooden_shovel");
+    RegistryKey<Material> WOODEN_SHOVEL = RegistryKey.of("wooden_shovel");
 
-    RegistryKey<Material> WOODEN_SPEAR = RegistryKey.unsafeOf("wooden_spear");
+    RegistryKey<Material> WOODEN_SPEAR = RegistryKey.of("wooden_spear");
 
-    RegistryKey<Material> WOODEN_SWORD = RegistryKey.unsafeOf("wooden_sword");
+    RegistryKey<Material> WOODEN_SWORD = RegistryKey.of("wooden_sword");
 
-    RegistryKey<Material> WOODLAND_MANSION_MAP = RegistryKey.unsafeOf("woodland_mansion_map");
+    RegistryKey<Material> WOODLAND_MANSION_MAP = RegistryKey.of("woodland_mansion_map");
 
-    RegistryKey<Material> WRITABLE_BOOK = RegistryKey.unsafeOf("writable_book");
+    RegistryKey<Material> WRITABLE_BOOK = RegistryKey.of("writable_book");
 
-    RegistryKey<Material> WRITTEN_BOOK = RegistryKey.unsafeOf("written_book");
+    RegistryKey<Material> WRITTEN_BOOK = RegistryKey.of("written_book");
 
-    RegistryKey<Material> YELLOW_BANNER = RegistryKey.unsafeOf("yellow_banner");
+    RegistryKey<Material> YELLOW_BANNER = RegistryKey.of("yellow_banner");
 
-    RegistryKey<Material> YELLOW_BED = RegistryKey.unsafeOf("yellow_bed");
+    RegistryKey<Material> YELLOW_BED = RegistryKey.of("yellow_bed");
 
-    RegistryKey<Material> YELLOW_BUNDLE = RegistryKey.unsafeOf("yellow_bundle");
+    RegistryKey<Material> YELLOW_BUNDLE = RegistryKey.of("yellow_bundle");
 
-    RegistryKey<Material> YELLOW_CANDLE = RegistryKey.unsafeOf("yellow_candle");
+    RegistryKey<Material> YELLOW_CANDLE = RegistryKey.of("yellow_candle");
 
-    RegistryKey<Material> YELLOW_CARPET = RegistryKey.unsafeOf("yellow_carpet");
+    RegistryKey<Material> YELLOW_CARPET = RegistryKey.of("yellow_carpet");
 
-    RegistryKey<Material> YELLOW_CONCRETE = RegistryKey.unsafeOf("yellow_concrete");
+    RegistryKey<Material> YELLOW_CONCRETE = RegistryKey.of("yellow_concrete");
 
-    RegistryKey<Material> YELLOW_CONCRETE_POWDER = RegistryKey.unsafeOf("yellow_concrete_powder");
+    RegistryKey<Material> YELLOW_CONCRETE_POWDER = RegistryKey.of("yellow_concrete_powder");
 
-    RegistryKey<Material> YELLOW_CONCRETE_SLAB = RegistryKey.unsafeOf("yellow_concrete_slab");
+    RegistryKey<Material> YELLOW_CONCRETE_SLAB = RegistryKey.of("yellow_concrete_slab");
 
-    RegistryKey<Material> YELLOW_CONCRETE_STAIRS = RegistryKey.unsafeOf("yellow_concrete_stairs");
+    RegistryKey<Material> YELLOW_CONCRETE_STAIRS = RegistryKey.of("yellow_concrete_stairs");
 
-    RegistryKey<Material> YELLOW_CUSHION = RegistryKey.unsafeOf("yellow_cushion");
+    RegistryKey<Material> YELLOW_CUSHION = RegistryKey.of("yellow_cushion");
 
-    RegistryKey<Material> YELLOW_DYE = RegistryKey.unsafeOf("yellow_dye");
+    RegistryKey<Material> YELLOW_DYE = RegistryKey.of("yellow_dye");
 
-    RegistryKey<Material> YELLOW_GLAZED_TERRACOTTA = RegistryKey.unsafeOf("yellow_glazed_terracotta");
+    RegistryKey<Material> YELLOW_GLAZED_TERRACOTTA = RegistryKey.of("yellow_glazed_terracotta");
 
-    RegistryKey<Material> YELLOW_HARNESS = RegistryKey.unsafeOf("yellow_harness");
+    RegistryKey<Material> YELLOW_HARNESS = RegistryKey.of("yellow_harness");
 
-    RegistryKey<Material> YELLOW_POPLAR_LEAVES = RegistryKey.unsafeOf("yellow_poplar_leaves");
+    RegistryKey<Material> YELLOW_POPLAR_LEAVES = RegistryKey.of("yellow_poplar_leaves");
 
-    RegistryKey<Material> YELLOW_SHULKER_BOX = RegistryKey.unsafeOf("yellow_shulker_box");
+    RegistryKey<Material> YELLOW_SHULKER_BOX = RegistryKey.of("yellow_shulker_box");
 
-    RegistryKey<Material> YELLOW_STAINED_GLASS = RegistryKey.unsafeOf("yellow_stained_glass");
+    RegistryKey<Material> YELLOW_STAINED_GLASS = RegistryKey.of("yellow_stained_glass");
 
-    RegistryKey<Material> YELLOW_STAINED_GLASS_PANE = RegistryKey.unsafeOf("yellow_stained_glass_pane");
+    RegistryKey<Material> YELLOW_STAINED_GLASS_PANE = RegistryKey.of("yellow_stained_glass_pane");
 
-    RegistryKey<Material> YELLOW_TERRACOTTA = RegistryKey.unsafeOf("yellow_terracotta");
+    RegistryKey<Material> YELLOW_TERRACOTTA = RegistryKey.of("yellow_terracotta");
 
-    RegistryKey<Material> YELLOW_WOOL = RegistryKey.unsafeOf("yellow_wool");
+    RegistryKey<Material> YELLOW_WOOL = RegistryKey.of("yellow_wool");
 
-    RegistryKey<Material> YELLOW_WOOL_SLAB = RegistryKey.unsafeOf("yellow_wool_slab");
+    RegistryKey<Material> YELLOW_WOOL_SLAB = RegistryKey.of("yellow_wool_slab");
 
-    RegistryKey<Material> YELLOW_WOOL_STAIRS = RegistryKey.unsafeOf("yellow_wool_stairs");
+    RegistryKey<Material> YELLOW_WOOL_STAIRS = RegistryKey.of("yellow_wool_stairs");
 
-    RegistryKey<Material> ZOGLIN_SPAWN_EGG = RegistryKey.unsafeOf("zoglin_spawn_egg");
+    RegistryKey<Material> ZOGLIN_SPAWN_EGG = RegistryKey.of("zoglin_spawn_egg");
 
-    RegistryKey<Material> ZOMBIE_HEAD = RegistryKey.unsafeOf("zombie_head");
+    RegistryKey<Material> ZOMBIE_HEAD = RegistryKey.of("zombie_head");
 
-    RegistryKey<Material> ZOMBIE_HORSE_SPAWN_EGG = RegistryKey.unsafeOf("zombie_horse_spawn_egg");
+    RegistryKey<Material> ZOMBIE_HORSE_SPAWN_EGG = RegistryKey.of("zombie_horse_spawn_egg");
 
-    RegistryKey<Material> ZOMBIE_NAUTILUS_SPAWN_EGG = RegistryKey.unsafeOf("zombie_nautilus_spawn_egg");
+    RegistryKey<Material> ZOMBIE_NAUTILUS_SPAWN_EGG = RegistryKey.of("zombie_nautilus_spawn_egg");
 
-    RegistryKey<Material> ZOMBIE_SPAWN_EGG = RegistryKey.unsafeOf("zombie_spawn_egg");
+    RegistryKey<Material> ZOMBIE_SPAWN_EGG = RegistryKey.of("zombie_spawn_egg");
 
-    RegistryKey<Material> ZOMBIE_VILLAGER_SPAWN_EGG = RegistryKey.unsafeOf("zombie_villager_spawn_egg");
+    RegistryKey<Material> ZOMBIE_VILLAGER_SPAWN_EGG = RegistryKey.of("zombie_villager_spawn_egg");
 
-    RegistryKey<Material> ZOMBIFIED_PIGLIN_SPAWN_EGG = RegistryKey.unsafeOf("zombified_piglin_spawn_egg");
+    RegistryKey<Material> ZOMBIFIED_PIGLIN_SPAWN_EGG = RegistryKey.of("zombified_piglin_spawn_egg");
 }

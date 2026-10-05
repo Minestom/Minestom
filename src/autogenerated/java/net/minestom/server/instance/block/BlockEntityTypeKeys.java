@@ -11,101 +11,101 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("unused")
 @ApiStatus.NonExtendable
 public interface BlockEntityTypeKeys {
-    RegistryKey<BlockEntityType> BANNER = RegistryKey.unsafeOf("banner");
+    RegistryKey<BlockEntityType> BANNER = RegistryKey.of("banner");
 
-    RegistryKey<BlockEntityType> BARREL = RegistryKey.unsafeOf("barrel");
+    RegistryKey<BlockEntityType> BARREL = RegistryKey.of("barrel");
 
-    RegistryKey<BlockEntityType> BEACON = RegistryKey.unsafeOf("beacon");
+    RegistryKey<BlockEntityType> BEACON = RegistryKey.of("beacon");
 
-    RegistryKey<BlockEntityType> BEEHIVE = RegistryKey.unsafeOf("beehive");
+    RegistryKey<BlockEntityType> BEEHIVE = RegistryKey.of("beehive");
 
-    RegistryKey<BlockEntityType> BELL = RegistryKey.unsafeOf("bell");
+    RegistryKey<BlockEntityType> BELL = RegistryKey.of("bell");
 
-    RegistryKey<BlockEntityType> BLAST_FURNACE = RegistryKey.unsafeOf("blast_furnace");
+    RegistryKey<BlockEntityType> BLAST_FURNACE = RegistryKey.of("blast_furnace");
 
-    RegistryKey<BlockEntityType> BREWING_STAND = RegistryKey.unsafeOf("brewing_stand");
+    RegistryKey<BlockEntityType> BREWING_STAND = RegistryKey.of("brewing_stand");
 
-    RegistryKey<BlockEntityType> BRUSHABLE_BLOCK = RegistryKey.unsafeOf("brushable_block");
+    RegistryKey<BlockEntityType> BRUSHABLE_BLOCK = RegistryKey.of("brushable_block");
 
-    RegistryKey<BlockEntityType> CALIBRATED_SCULK_SENSOR = RegistryKey.unsafeOf("calibrated_sculk_sensor");
+    RegistryKey<BlockEntityType> CALIBRATED_SCULK_SENSOR = RegistryKey.of("calibrated_sculk_sensor");
 
-    RegistryKey<BlockEntityType> CAMPFIRE = RegistryKey.unsafeOf("campfire");
+    RegistryKey<BlockEntityType> CAMPFIRE = RegistryKey.of("campfire");
 
-    RegistryKey<BlockEntityType> CHEST = RegistryKey.unsafeOf("chest");
+    RegistryKey<BlockEntityType> CHEST = RegistryKey.of("chest");
 
-    RegistryKey<BlockEntityType> CHISELED_BOOKSHELF = RegistryKey.unsafeOf("chiseled_bookshelf");
+    RegistryKey<BlockEntityType> CHISELED_BOOKSHELF = RegistryKey.of("chiseled_bookshelf");
 
-    RegistryKey<BlockEntityType> COMMAND_BLOCK = RegistryKey.unsafeOf("command_block");
+    RegistryKey<BlockEntityType> COMMAND_BLOCK = RegistryKey.of("command_block");
 
-    RegistryKey<BlockEntityType> COMPARATOR = RegistryKey.unsafeOf("comparator");
+    RegistryKey<BlockEntityType> COMPARATOR = RegistryKey.of("comparator");
 
-    RegistryKey<BlockEntityType> CONDUIT = RegistryKey.unsafeOf("conduit");
+    RegistryKey<BlockEntityType> CONDUIT = RegistryKey.of("conduit");
 
-    RegistryKey<BlockEntityType> COPPER_GOLEM_STATUE = RegistryKey.unsafeOf("copper_golem_statue");
+    RegistryKey<BlockEntityType> COPPER_GOLEM_STATUE = RegistryKey.of("copper_golem_statue");
 
-    RegistryKey<BlockEntityType> CRAFTER = RegistryKey.unsafeOf("crafter");
+    RegistryKey<BlockEntityType> CRAFTER = RegistryKey.of("crafter");
 
-    RegistryKey<BlockEntityType> CREAKING_HEART = RegistryKey.unsafeOf("creaking_heart");
+    RegistryKey<BlockEntityType> CREAKING_HEART = RegistryKey.of("creaking_heart");
 
-    RegistryKey<BlockEntityType> DAYLIGHT_DETECTOR = RegistryKey.unsafeOf("daylight_detector");
+    RegistryKey<BlockEntityType> DAYLIGHT_DETECTOR = RegistryKey.of("daylight_detector");
 
-    RegistryKey<BlockEntityType> DECORATED_POT = RegistryKey.unsafeOf("decorated_pot");
+    RegistryKey<BlockEntityType> DECORATED_POT = RegistryKey.of("decorated_pot");
 
-    RegistryKey<BlockEntityType> DISPENSER = RegistryKey.unsafeOf("dispenser");
+    RegistryKey<BlockEntityType> DISPENSER = RegistryKey.of("dispenser");
 
-    RegistryKey<BlockEntityType> DROPPER = RegistryKey.unsafeOf("dropper");
+    RegistryKey<BlockEntityType> DROPPER = RegistryKey.of("dropper");
 
-    RegistryKey<BlockEntityType> ENCHANTING_TABLE = RegistryKey.unsafeOf("enchanting_table");
+    RegistryKey<BlockEntityType> ENCHANTING_TABLE = RegistryKey.of("enchanting_table");
 
-    RegistryKey<BlockEntityType> END_GATEWAY = RegistryKey.unsafeOf("end_gateway");
+    RegistryKey<BlockEntityType> END_GATEWAY = RegistryKey.of("end_gateway");
 
-    RegistryKey<BlockEntityType> END_PORTAL = RegistryKey.unsafeOf("end_portal");
+    RegistryKey<BlockEntityType> END_PORTAL = RegistryKey.of("end_portal");
 
-    RegistryKey<BlockEntityType> ENDER_CHEST = RegistryKey.unsafeOf("ender_chest");
+    RegistryKey<BlockEntityType> ENDER_CHEST = RegistryKey.of("ender_chest");
 
-    RegistryKey<BlockEntityType> FURNACE = RegistryKey.unsafeOf("furnace");
+    RegistryKey<BlockEntityType> FURNACE = RegistryKey.of("furnace");
 
-    RegistryKey<BlockEntityType> HANGING_SIGN = RegistryKey.unsafeOf("hanging_sign");
+    RegistryKey<BlockEntityType> HANGING_SIGN = RegistryKey.of("hanging_sign");
 
-    RegistryKey<BlockEntityType> HOPPER = RegistryKey.unsafeOf("hopper");
+    RegistryKey<BlockEntityType> HOPPER = RegistryKey.of("hopper");
 
-    RegistryKey<BlockEntityType> JIGSAW = RegistryKey.unsafeOf("jigsaw");
+    RegistryKey<BlockEntityType> JIGSAW = RegistryKey.of("jigsaw");
 
-    RegistryKey<BlockEntityType> JUKEBOX = RegistryKey.unsafeOf("jukebox");
+    RegistryKey<BlockEntityType> JUKEBOX = RegistryKey.of("jukebox");
 
-    RegistryKey<BlockEntityType> LECTERN = RegistryKey.unsafeOf("lectern");
+    RegistryKey<BlockEntityType> LECTERN = RegistryKey.of("lectern");
 
-    RegistryKey<BlockEntityType> MOB_SPAWNER = RegistryKey.unsafeOf("mob_spawner");
+    RegistryKey<BlockEntityType> MOB_SPAWNER = RegistryKey.of("mob_spawner");
 
-    RegistryKey<BlockEntityType> PISTON = RegistryKey.unsafeOf("piston");
+    RegistryKey<BlockEntityType> PISTON = RegistryKey.of("piston");
 
-    RegistryKey<BlockEntityType> POTENT_SULFUR = RegistryKey.unsafeOf("potent_sulfur");
+    RegistryKey<BlockEntityType> POTENT_SULFUR = RegistryKey.of("potent_sulfur");
 
-    RegistryKey<BlockEntityType> SCULK_CATALYST = RegistryKey.unsafeOf("sculk_catalyst");
+    RegistryKey<BlockEntityType> SCULK_CATALYST = RegistryKey.of("sculk_catalyst");
 
-    RegistryKey<BlockEntityType> SCULK_SENSOR = RegistryKey.unsafeOf("sculk_sensor");
+    RegistryKey<BlockEntityType> SCULK_SENSOR = RegistryKey.of("sculk_sensor");
 
-    RegistryKey<BlockEntityType> SCULK_SHRIEKER = RegistryKey.unsafeOf("sculk_shrieker");
+    RegistryKey<BlockEntityType> SCULK_SHRIEKER = RegistryKey.of("sculk_shrieker");
 
-    RegistryKey<BlockEntityType> SHELF = RegistryKey.unsafeOf("shelf");
+    RegistryKey<BlockEntityType> SHELF = RegistryKey.of("shelf");
 
-    RegistryKey<BlockEntityType> SHULKER_BOX = RegistryKey.unsafeOf("shulker_box");
+    RegistryKey<BlockEntityType> SHULKER_BOX = RegistryKey.of("shulker_box");
 
-    RegistryKey<BlockEntityType> SIGN = RegistryKey.unsafeOf("sign");
+    RegistryKey<BlockEntityType> SIGN = RegistryKey.of("sign");
 
-    RegistryKey<BlockEntityType> SKULL = RegistryKey.unsafeOf("skull");
+    RegistryKey<BlockEntityType> SKULL = RegistryKey.of("skull");
 
-    RegistryKey<BlockEntityType> SMOKER = RegistryKey.unsafeOf("smoker");
+    RegistryKey<BlockEntityType> SMOKER = RegistryKey.of("smoker");
 
-    RegistryKey<BlockEntityType> STRUCTURE_BLOCK = RegistryKey.unsafeOf("structure_block");
+    RegistryKey<BlockEntityType> STRUCTURE_BLOCK = RegistryKey.of("structure_block");
 
-    RegistryKey<BlockEntityType> TEST_BLOCK = RegistryKey.unsafeOf("test_block");
+    RegistryKey<BlockEntityType> TEST_BLOCK = RegistryKey.of("test_block");
 
-    RegistryKey<BlockEntityType> TEST_INSTANCE_BLOCK = RegistryKey.unsafeOf("test_instance_block");
+    RegistryKey<BlockEntityType> TEST_INSTANCE_BLOCK = RegistryKey.of("test_instance_block");
 
-    RegistryKey<BlockEntityType> TRAPPED_CHEST = RegistryKey.unsafeOf("trapped_chest");
+    RegistryKey<BlockEntityType> TRAPPED_CHEST = RegistryKey.of("trapped_chest");
 
-    RegistryKey<BlockEntityType> TRIAL_SPAWNER = RegistryKey.unsafeOf("trial_spawner");
+    RegistryKey<BlockEntityType> TRIAL_SPAWNER = RegistryKey.of("trial_spawner");
 
-    RegistryKey<BlockEntityType> VAULT = RegistryKey.unsafeOf("vault");
+    RegistryKey<BlockEntityType> VAULT = RegistryKey.of("vault");
 }

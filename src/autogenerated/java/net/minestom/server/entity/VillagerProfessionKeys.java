@@ -11,33 +11,33 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("unused")
 @ApiStatus.NonExtendable
 public interface VillagerProfessionKeys {
-    RegistryKey<VillagerProfession> ARMORER = RegistryKey.unsafeOf("armorer");
+    RegistryKey<VillagerProfession> ARMORER = RegistryKey.of("armorer");
 
-    RegistryKey<VillagerProfession> BUTCHER = RegistryKey.unsafeOf("butcher");
+    RegistryKey<VillagerProfession> BUTCHER = RegistryKey.of("butcher");
 
-    RegistryKey<VillagerProfession> CARTOGRAPHER = RegistryKey.unsafeOf("cartographer");
+    RegistryKey<VillagerProfession> CARTOGRAPHER = RegistryKey.of("cartographer");
 
-    RegistryKey<VillagerProfession> CLERIC = RegistryKey.unsafeOf("cleric");
+    RegistryKey<VillagerProfession> CLERIC = RegistryKey.of("cleric");
 
-    RegistryKey<VillagerProfession> FARMER = RegistryKey.unsafeOf("farmer");
+    RegistryKey<VillagerProfession> FARMER = RegistryKey.of("farmer");
 
-    RegistryKey<VillagerProfession> FISHERMAN = RegistryKey.unsafeOf("fisherman");
+    RegistryKey<VillagerProfession> FISHERMAN = RegistryKey.of("fisherman");
 
-    RegistryKey<VillagerProfession> FLETCHER = RegistryKey.unsafeOf("fletcher");
+    RegistryKey<VillagerProfession> FLETCHER = RegistryKey.of("fletcher");
 
-    RegistryKey<VillagerProfession> LEATHERWORKER = RegistryKey.unsafeOf("leatherworker");
+    RegistryKey<VillagerProfession> LEATHERWORKER = RegistryKey.of("leatherworker");
 
-    RegistryKey<VillagerProfession> LIBRARIAN = RegistryKey.unsafeOf("librarian");
+    RegistryKey<VillagerProfession> LIBRARIAN = RegistryKey.of("librarian");
 
-    RegistryKey<VillagerProfession> MASON = RegistryKey.unsafeOf("mason");
+    RegistryKey<VillagerProfession> MASON = RegistryKey.of("mason");
 
-    RegistryKey<VillagerProfession> NITWIT = RegistryKey.unsafeOf("nitwit");
+    RegistryKey<VillagerProfession> NITWIT = RegistryKey.of("nitwit");
 
-    RegistryKey<VillagerProfession> NONE = RegistryKey.unsafeOf("none");
+    RegistryKey<VillagerProfession> NONE = RegistryKey.of("none");
 
-    RegistryKey<VillagerProfession> SHEPHERD = RegistryKey.unsafeOf("shepherd");
+    RegistryKey<VillagerProfession> SHEPHERD = RegistryKey.of("shepherd");
 
-    RegistryKey<VillagerProfession> TOOLSMITH = RegistryKey.unsafeOf("toolsmith");
+    RegistryKey<VillagerProfession> TOOLSMITH = RegistryKey.of("toolsmith");
 
-    RegistryKey<VillagerProfession> WEAPONSMITH = RegistryKey.unsafeOf("weaponsmith");
+    RegistryKey<VillagerProfession> WEAPONSMITH = RegistryKey.of("weaponsmith");
 }

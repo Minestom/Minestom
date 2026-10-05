@@ -154,7 +154,9 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
      *
      * @param uuid          the {@link UUID} of the instance
      * @param dimensionType the {@link DimensionType} of the instance
+     * @deprecated use {@link #Instance(Registries, UUID, RegistryKey)} to choose the registry context explicitly
      */
+    @Deprecated
     public Instance(UUID uuid, RegistryKey<DimensionType> dimensionType) {
         this(uuid, dimensionType, dimensionType.key());
     }
@@ -164,9 +166,23 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
      *
      * @param uuid          the {@link UUID} of the instance
      * @param dimensionType the {@link DimensionType} of the instance
+     * @deprecated use {@link #Instance(Registries, UUID, RegistryKey, Key)} to choose the registry context explicitly
      */
+    @Deprecated
     public Instance(UUID uuid, RegistryKey<DimensionType> dimensionType, Key dimensionName) {
         this(MinecraftServer.getRegistries(), uuid, dimensionType, dimensionName);
+    }
+
+    /**
+     * Creates an instance whose dimension name is taken from its dimension type.
+     *
+     * @param registries the registry context used by the instance
+     * @param uuid the instance ID
+     * @param dimensionType the dimension type
+     * @throws IllegalArgumentException if {@code dimensionType} is not registered in {@code registries}
+     */
+    public Instance(Registries registries, UUID uuid, RegistryKey<DimensionType> dimensionType) {
+        this(registries, uuid, dimensionType, dimensionType.key());
     }
 
     /**
@@ -181,7 +197,8 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
         this.uuid = uuid;
         this.dimensionType = dimensionType;
         this.cachedDimensionType = registries.dimensionType().get(dimensionType);
-        Check.argCondition(cachedDimensionType == null, "The dimension " + dimensionType + " is not registered! Please add it to the registry (`MinecraftServer.getDimensionTypeRegistry().registry(dimensionType)`).");
+        Check.argCondition(cachedDimensionType == null,
+                "The dimension {0} is not registered in the supplied registry context", dimensionType);
         this.dimensionName = dimensionName.asString();
 
         this.clocks = new Object2ObjectArrayMap<>();

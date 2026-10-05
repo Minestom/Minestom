@@ -30,7 +30,7 @@ class EnchantmentTableInventoryRegistriesTest {
     @Test
     void unknownEnchantmentIsRejected(Registries registries) {
         final var inventory = new EnchantmentTableInventory(Component.text("Enchant"), registries.enchantment());
-        final RegistryKey<Enchantment> unknown = RegistryKey.unsafeOf("minestom:unknown_enchantment");
+        final RegistryKey<Enchantment> unknown = RegistryKey.of("minestom:unknown_enchantment");
 
         assertThrows(IllegalArgumentException.class, () ->
                 inventory.setEnchantmentShown(EnchantmentTableInventory.EnchantmentSlot.MIDDLE, unknown));

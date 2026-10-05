@@ -11,475 +11,475 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("unused")
 @ApiStatus.NonExtendable
 public interface MaterialTags {
-    TagKey<Material> ACACIA_LOGS = TagKey.unsafeOf("acacia_logs");
+    TagKey<Material> ACACIA_LOGS = TagKey.of("acacia_logs");
 
-    TagKey<Material> ANVIL = TagKey.unsafeOf("anvil");
+    TagKey<Material> ANVIL = TagKey.of("anvil");
 
-    TagKey<Material> ARMADILLO_FOOD = TagKey.unsafeOf("armadillo_food");
+    TagKey<Material> ARMADILLO_FOOD = TagKey.of("armadillo_food");
 
-    TagKey<Material> ARROWS = TagKey.unsafeOf("arrows");
+    TagKey<Material> ARROWS = TagKey.of("arrows");
 
-    TagKey<Material> AXES = TagKey.unsafeOf("axes");
+    TagKey<Material> AXES = TagKey.of("axes");
 
-    TagKey<Material> AXOLOTL_FOOD = TagKey.unsafeOf("axolotl_food");
+    TagKey<Material> AXOLOTL_FOOD = TagKey.of("axolotl_food");
 
-    TagKey<Material> BAMBOO_BLOCKS = TagKey.unsafeOf("bamboo_blocks");
+    TagKey<Material> BAMBOO_BLOCKS = TagKey.of("bamboo_blocks");
 
-    TagKey<Material> BANNERS = TagKey.unsafeOf("banners");
+    TagKey<Material> BANNERS = TagKey.of("banners");
 
-    TagKey<Material> BARS = TagKey.unsafeOf("bars");
+    TagKey<Material> BARS = TagKey.of("bars");
 
-    TagKey<Material> BEACON_PAYMENT_ITEMS = TagKey.unsafeOf("beacon_payment_items");
+    TagKey<Material> BEACON_PAYMENT_ITEMS = TagKey.of("beacon_payment_items");
 
-    TagKey<Material> BEDS = TagKey.unsafeOf("beds");
+    TagKey<Material> BEDS = TagKey.of("beds");
 
-    TagKey<Material> BEE_FOOD = TagKey.unsafeOf("bee_food");
+    TagKey<Material> BEE_FOOD = TagKey.of("bee_food");
 
-    TagKey<Material> BIRCH_LOGS = TagKey.unsafeOf("birch_logs");
+    TagKey<Material> BIRCH_LOGS = TagKey.of("birch_logs");
 
-    TagKey<Material> BOATS = TagKey.unsafeOf("boats");
+    TagKey<Material> BOATS = TagKey.of("boats");
 
-    TagKey<Material> BOOK_CLONING_TARGET = TagKey.unsafeOf("book_cloning_target");
+    TagKey<Material> BOOK_CLONING_TARGET = TagKey.of("book_cloning_target");
 
-    TagKey<Material> BOOKSHELF_BOOKS = TagKey.unsafeOf("bookshelf_books");
+    TagKey<Material> BOOKSHELF_BOOKS = TagKey.of("bookshelf_books");
 
-    TagKey<Material> BREAKS_DECORATED_POTS = TagKey.unsafeOf("breaks_decorated_pots");
+    TagKey<Material> BREAKS_DECORATED_POTS = TagKey.of("breaks_decorated_pots");
 
-    TagKey<Material> BREWING_POTION_INPUTS = TagKey.unsafeOf("brewing_potion_inputs");
+    TagKey<Material> BREWING_POTION_INPUTS = TagKey.of("brewing_potion_inputs");
 
-    TagKey<Material> BUNDLES = TagKey.unsafeOf("bundles");
+    TagKey<Material> BUNDLES = TagKey.of("bundles");
 
-    TagKey<Material> BUTTONS = TagKey.unsafeOf("buttons");
+    TagKey<Material> BUTTONS = TagKey.of("buttons");
 
-    TagKey<Material> CAMEL_FOOD = TagKey.unsafeOf("camel_food");
+    TagKey<Material> CAMEL_FOOD = TagKey.of("camel_food");
 
-    TagKey<Material> CAMEL_HUSK_FOOD = TagKey.unsafeOf("camel_husk_food");
+    TagKey<Material> CAMEL_HUSK_FOOD = TagKey.of("camel_husk_food");
 
-    TagKey<Material> CANDLES = TagKey.unsafeOf("candles");
+    TagKey<Material> CANDLES = TagKey.of("candles");
 
-    TagKey<Material> CAT_COLLAR_DYES = TagKey.unsafeOf("cat_collar_dyes");
+    TagKey<Material> CAT_COLLAR_DYES = TagKey.of("cat_collar_dyes");
 
-    TagKey<Material> CAT_FOOD = TagKey.unsafeOf("cat_food");
+    TagKey<Material> CAT_FOOD = TagKey.of("cat_food");
 
-    TagKey<Material> CAULDRON_CAN_REMOVE_DYE = TagKey.unsafeOf("cauldron_can_remove_dye");
+    TagKey<Material> CAULDRON_CAN_REMOVE_DYE = TagKey.of("cauldron_can_remove_dye");
 
-    TagKey<Material> CHAINS = TagKey.unsafeOf("chains");
+    TagKey<Material> CHAINS = TagKey.of("chains");
 
-    TagKey<Material> CHERRY_LOGS = TagKey.unsafeOf("cherry_logs");
+    TagKey<Material> CHERRY_LOGS = TagKey.of("cherry_logs");
 
-    TagKey<Material> CHEST_ARMOR = TagKey.unsafeOf("chest_armor");
+    TagKey<Material> CHEST_ARMOR = TagKey.of("chest_armor");
 
-    TagKey<Material> CHEST_BOATS = TagKey.unsafeOf("chest_boats");
+    TagKey<Material> CHEST_BOATS = TagKey.of("chest_boats");
 
-    TagKey<Material> CHICKEN_FOOD = TagKey.unsafeOf("chicken_food");
+    TagKey<Material> CHICKEN_FOOD = TagKey.of("chicken_food");
 
-    TagKey<Material> CLONABLE_MAPS = TagKey.unsafeOf("clonable_maps");
+    TagKey<Material> CLONABLE_MAPS = TagKey.of("clonable_maps");
 
-    TagKey<Material> CLUSTER_MAX_HARVESTABLES = TagKey.unsafeOf("cluster_max_harvestables");
+    TagKey<Material> CLUSTER_MAX_HARVESTABLES = TagKey.of("cluster_max_harvestables");
 
-    TagKey<Material> COAL_ORES = TagKey.unsafeOf("coal_ores");
+    TagKey<Material> COAL_ORES = TagKey.of("coal_ores");
 
-    TagKey<Material> COALS = TagKey.unsafeOf("coals");
+    TagKey<Material> COALS = TagKey.of("coals");
 
-    TagKey<Material> COMPASSES = TagKey.unsafeOf("compasses");
+    TagKey<Material> COMPASSES = TagKey.of("compasses");
 
-    TagKey<Material> COMPLETES_FIND_TREE_TUTORIAL = TagKey.unsafeOf("completes_find_tree_tutorial");
+    TagKey<Material> COMPLETES_FIND_TREE_TUTORIAL = TagKey.of("completes_find_tree_tutorial");
 
-    TagKey<Material> CONCRETE = TagKey.unsafeOf("concrete");
+    TagKey<Material> CONCRETE = TagKey.of("concrete");
 
-    TagKey<Material> CONCRETE_POWDERS = TagKey.unsafeOf("concrete_powders");
+    TagKey<Material> CONCRETE_POWDERS = TagKey.of("concrete_powders");
 
-    TagKey<Material> CONCRETE_SLABS = TagKey.unsafeOf("concrete_slabs");
+    TagKey<Material> CONCRETE_SLABS = TagKey.of("concrete_slabs");
 
-    TagKey<Material> CONCRETE_STAIRS = TagKey.unsafeOf("concrete_stairs");
+    TagKey<Material> CONCRETE_STAIRS = TagKey.of("concrete_stairs");
 
-    TagKey<Material> COPPER = TagKey.unsafeOf("copper");
+    TagKey<Material> COPPER = TagKey.of("copper");
 
-    TagKey<Material> COPPER_CHESTS = TagKey.unsafeOf("copper_chests");
+    TagKey<Material> COPPER_CHESTS = TagKey.of("copper_chests");
 
-    TagKey<Material> COPPER_GOLEM_STATUES = TagKey.unsafeOf("copper_golem_statues");
+    TagKey<Material> COPPER_GOLEM_STATUES = TagKey.of("copper_golem_statues");
 
-    TagKey<Material> COPPER_ORES = TagKey.unsafeOf("copper_ores");
+    TagKey<Material> COPPER_ORES = TagKey.of("copper_ores");
 
-    TagKey<Material> COPPER_TOOL_MATERIALS = TagKey.unsafeOf("copper_tool_materials");
+    TagKey<Material> COPPER_TOOL_MATERIALS = TagKey.of("copper_tool_materials");
 
-    TagKey<Material> COW_FOOD = TagKey.unsafeOf("cow_food");
+    TagKey<Material> COW_FOOD = TagKey.of("cow_food");
 
-    TagKey<Material> CREEPER_DROP_MUSIC_DISCS = TagKey.unsafeOf("creeper_drop_music_discs");
+    TagKey<Material> CREEPER_DROP_MUSIC_DISCS = TagKey.of("creeper_drop_music_discs");
 
-    TagKey<Material> CREEPER_IGNITERS = TagKey.unsafeOf("creeper_igniters");
+    TagKey<Material> CREEPER_IGNITERS = TagKey.of("creeper_igniters");
 
-    TagKey<Material> CRIMSON_STEMS = TagKey.unsafeOf("crimson_stems");
+    TagKey<Material> CRIMSON_STEMS = TagKey.of("crimson_stems");
 
-    TagKey<Material> CUSHIONS = TagKey.unsafeOf("cushions");
+    TagKey<Material> CUSHIONS = TagKey.of("cushions");
 
-    TagKey<Material> DAMPENS_VIBRATIONS = TagKey.unsafeOf("dampens_vibrations");
+    TagKey<Material> DAMPENS_VIBRATIONS = TagKey.of("dampens_vibrations");
 
-    TagKey<Material> DARK_OAK_LOGS = TagKey.unsafeOf("dark_oak_logs");
+    TagKey<Material> DARK_OAK_LOGS = TagKey.of("dark_oak_logs");
 
-    TagKey<Material> DECORATED_POT_INGREDIENTS = TagKey.unsafeOf("decorated_pot_ingredients");
+    TagKey<Material> DECORATED_POT_INGREDIENTS = TagKey.of("decorated_pot_ingredients");
 
-    TagKey<Material> DECORATED_POT_SHERDS = TagKey.unsafeOf("decorated_pot_sherds");
+    TagKey<Material> DECORATED_POT_SHERDS = TagKey.of("decorated_pot_sherds");
 
-    TagKey<Material> DIAMOND_ORES = TagKey.unsafeOf("diamond_ores");
+    TagKey<Material> DIAMOND_ORES = TagKey.of("diamond_ores");
 
-    TagKey<Material> DIAMOND_TOOL_MATERIALS = TagKey.unsafeOf("diamond_tool_materials");
+    TagKey<Material> DIAMOND_TOOL_MATERIALS = TagKey.of("diamond_tool_materials");
 
-    TagKey<Material> DIRT = TagKey.unsafeOf("dirt");
+    TagKey<Material> DIRT = TagKey.of("dirt");
 
-    TagKey<Material> DOORS = TagKey.unsafeOf("doors");
+    TagKey<Material> DOORS = TagKey.of("doors");
 
-    TagKey<Material> DOUSES_CAMPFIRES = TagKey.unsafeOf("douses_campfires");
+    TagKey<Material> DOUSES_CAMPFIRES = TagKey.of("douses_campfires");
 
-    TagKey<Material> DROWNED_PREFERRED_WEAPONS = TagKey.unsafeOf("drowned_preferred_weapons");
+    TagKey<Material> DROWNED_PREFERRED_WEAPONS = TagKey.of("drowned_preferred_weapons");
 
-    TagKey<Material> DUPLICATES_ALLAYS = TagKey.unsafeOf("duplicates_allays");
+    TagKey<Material> DUPLICATES_ALLAYS = TagKey.of("duplicates_allays");
 
-    TagKey<Material> DYES = TagKey.unsafeOf("dyes");
+    TagKey<Material> DYES = TagKey.of("dyes");
 
-    TagKey<Material> EGGS = TagKey.unsafeOf("eggs");
+    TagKey<Material> EGGS = TagKey.of("eggs");
 
-    TagKey<Material> EMERALD_ORES = TagKey.unsafeOf("emerald_ores");
+    TagKey<Material> EMERALD_ORES = TagKey.of("emerald_ores");
 
-    TagKey<Material> ENCHANTABLE_ARMOR = TagKey.unsafeOf("enchantable/armor");
+    TagKey<Material> ENCHANTABLE_ARMOR = TagKey.of("enchantable/armor");
 
-    TagKey<Material> ENCHANTABLE_BOW = TagKey.unsafeOf("enchantable/bow");
+    TagKey<Material> ENCHANTABLE_BOW = TagKey.of("enchantable/bow");
 
-    TagKey<Material> ENCHANTABLE_CHEST_ARMOR = TagKey.unsafeOf("enchantable/chest_armor");
+    TagKey<Material> ENCHANTABLE_CHEST_ARMOR = TagKey.of("enchantable/chest_armor");
 
-    TagKey<Material> ENCHANTABLE_CROSSBOW = TagKey.unsafeOf("enchantable/crossbow");
+    TagKey<Material> ENCHANTABLE_CROSSBOW = TagKey.of("enchantable/crossbow");
 
-    TagKey<Material> ENCHANTABLE_DURABILITY = TagKey.unsafeOf("enchantable/durability");
+    TagKey<Material> ENCHANTABLE_DURABILITY = TagKey.of("enchantable/durability");
 
-    TagKey<Material> ENCHANTABLE_EQUIPPABLE = TagKey.unsafeOf("enchantable/equippable");
+    TagKey<Material> ENCHANTABLE_EQUIPPABLE = TagKey.of("enchantable/equippable");
 
-    TagKey<Material> ENCHANTABLE_FIRE_ASPECT = TagKey.unsafeOf("enchantable/fire_aspect");
+    TagKey<Material> ENCHANTABLE_FIRE_ASPECT = TagKey.of("enchantable/fire_aspect");
 
-    TagKey<Material> ENCHANTABLE_FISHING = TagKey.unsafeOf("enchantable/fishing");
+    TagKey<Material> ENCHANTABLE_FISHING = TagKey.of("enchantable/fishing");
 
-    TagKey<Material> ENCHANTABLE_FOOT_ARMOR = TagKey.unsafeOf("enchantable/foot_armor");
+    TagKey<Material> ENCHANTABLE_FOOT_ARMOR = TagKey.of("enchantable/foot_armor");
 
-    TagKey<Material> ENCHANTABLE_HEAD_ARMOR = TagKey.unsafeOf("enchantable/head_armor");
+    TagKey<Material> ENCHANTABLE_HEAD_ARMOR = TagKey.of("enchantable/head_armor");
 
-    TagKey<Material> ENCHANTABLE_LEG_ARMOR = TagKey.unsafeOf("enchantable/leg_armor");
+    TagKey<Material> ENCHANTABLE_LEG_ARMOR = TagKey.of("enchantable/leg_armor");
 
-    TagKey<Material> ENCHANTABLE_LUNGE = TagKey.unsafeOf("enchantable/lunge");
+    TagKey<Material> ENCHANTABLE_LUNGE = TagKey.of("enchantable/lunge");
 
-    TagKey<Material> ENCHANTABLE_MACE = TagKey.unsafeOf("enchantable/mace");
+    TagKey<Material> ENCHANTABLE_MACE = TagKey.of("enchantable/mace");
 
-    TagKey<Material> ENCHANTABLE_MELEE_WEAPON = TagKey.unsafeOf("enchantable/melee_weapon");
+    TagKey<Material> ENCHANTABLE_MELEE_WEAPON = TagKey.of("enchantable/melee_weapon");
 
-    TagKey<Material> ENCHANTABLE_MINING = TagKey.unsafeOf("enchantable/mining");
+    TagKey<Material> ENCHANTABLE_MINING = TagKey.of("enchantable/mining");
 
-    TagKey<Material> ENCHANTABLE_MINING_LOOT = TagKey.unsafeOf("enchantable/mining_loot");
+    TagKey<Material> ENCHANTABLE_MINING_LOOT = TagKey.of("enchantable/mining_loot");
 
-    TagKey<Material> ENCHANTABLE_SHARP_WEAPON = TagKey.unsafeOf("enchantable/sharp_weapon");
+    TagKey<Material> ENCHANTABLE_SHARP_WEAPON = TagKey.of("enchantable/sharp_weapon");
 
-    TagKey<Material> ENCHANTABLE_SWEEPING = TagKey.unsafeOf("enchantable/sweeping");
+    TagKey<Material> ENCHANTABLE_SWEEPING = TagKey.of("enchantable/sweeping");
 
-    TagKey<Material> ENCHANTABLE_TRIDENT = TagKey.unsafeOf("enchantable/trident");
+    TagKey<Material> ENCHANTABLE_TRIDENT = TagKey.of("enchantable/trident");
 
-    TagKey<Material> ENCHANTABLE_VANISHING = TagKey.unsafeOf("enchantable/vanishing");
+    TagKey<Material> ENCHANTABLE_VANISHING = TagKey.of("enchantable/vanishing");
 
-    TagKey<Material> ENCHANTABLE_WEAPON = TagKey.unsafeOf("enchantable/weapon");
+    TagKey<Material> ENCHANTABLE_WEAPON = TagKey.of("enchantable/weapon");
 
-    TagKey<Material> EXTENDABLE_MAPS = TagKey.unsafeOf("extendable_maps");
+    TagKey<Material> EXTENDABLE_MAPS = TagKey.of("extendable_maps");
 
-    TagKey<Material> FENCE_GATES = TagKey.unsafeOf("fence_gates");
+    TagKey<Material> FENCE_GATES = TagKey.of("fence_gates");
 
-    TagKey<Material> FENCES = TagKey.unsafeOf("fences");
+    TagKey<Material> FENCES = TagKey.of("fences");
 
-    TagKey<Material> FISHES = TagKey.unsafeOf("fishes");
+    TagKey<Material> FISHES = TagKey.of("fishes");
 
-    TagKey<Material> FLOWERS = TagKey.unsafeOf("flowers");
+    TagKey<Material> FLOWERS = TagKey.of("flowers");
 
-    TagKey<Material> FOOT_ARMOR = TagKey.unsafeOf("foot_armor");
+    TagKey<Material> FOOT_ARMOR = TagKey.of("foot_armor");
 
-    TagKey<Material> FOX_FOOD = TagKey.unsafeOf("fox_food");
+    TagKey<Material> FOX_FOOD = TagKey.of("fox_food");
 
-    TagKey<Material> FREEZE_IMMUNE_WEARABLES = TagKey.unsafeOf("freeze_immune_wearables");
+    TagKey<Material> FREEZE_IMMUNE_WEARABLES = TagKey.of("freeze_immune_wearables");
 
-    TagKey<Material> FROG_FOOD = TagKey.unsafeOf("frog_food");
+    TagKey<Material> FROG_FOOD = TagKey.of("frog_food");
 
-    TagKey<Material> FURNACE_FUEL_BOTTOM_TAKEABLE = TagKey.unsafeOf("furnace_fuel_bottom_takeable");
+    TagKey<Material> FURNACE_FUEL_BOTTOM_TAKEABLE = TagKey.of("furnace_fuel_bottom_takeable");
 
-    TagKey<Material> FURNACE_MINECART_FUEL = TagKey.unsafeOf("furnace_minecart_fuel");
+    TagKey<Material> FURNACE_MINECART_FUEL = TagKey.of("furnace_minecart_fuel");
 
-    TagKey<Material> GAZE_DISGUISE_EQUIPMENT = TagKey.unsafeOf("gaze_disguise_equipment");
+    TagKey<Material> GAZE_DISGUISE_EQUIPMENT = TagKey.of("gaze_disguise_equipment");
 
-    TagKey<Material> GLAZED_TERRACOTTA = TagKey.unsafeOf("glazed_terracotta");
+    TagKey<Material> GLAZED_TERRACOTTA = TagKey.of("glazed_terracotta");
 
-    TagKey<Material> GOAT_FOOD = TagKey.unsafeOf("goat_food");
+    TagKey<Material> GOAT_FOOD = TagKey.of("goat_food");
 
-    TagKey<Material> GOLD_ORES = TagKey.unsafeOf("gold_ores");
+    TagKey<Material> GOLD_ORES = TagKey.of("gold_ores");
 
-    TagKey<Material> GOLD_TOOL_MATERIALS = TagKey.unsafeOf("gold_tool_materials");
+    TagKey<Material> GOLD_TOOL_MATERIALS = TagKey.of("gold_tool_materials");
 
-    TagKey<Material> GRASS_BLOCKS = TagKey.unsafeOf("grass_blocks");
+    TagKey<Material> GRASS_BLOCKS = TagKey.of("grass_blocks");
 
-    TagKey<Material> HANGING_SIGNS = TagKey.unsafeOf("hanging_signs");
+    TagKey<Material> HANGING_SIGNS = TagKey.of("hanging_signs");
 
-    TagKey<Material> HAPPY_GHAST_FOOD = TagKey.unsafeOf("happy_ghast_food");
+    TagKey<Material> HAPPY_GHAST_FOOD = TagKey.of("happy_ghast_food");
 
-    TagKey<Material> HAPPY_GHAST_TEMPT_ITEMS = TagKey.unsafeOf("happy_ghast_tempt_items");
+    TagKey<Material> HAPPY_GHAST_TEMPT_ITEMS = TagKey.of("happy_ghast_tempt_items");
 
-    TagKey<Material> HARNESSES = TagKey.unsafeOf("harnesses");
+    TagKey<Material> HARNESSES = TagKey.of("harnesses");
 
-    TagKey<Material> HEAD_ARMOR = TagKey.unsafeOf("head_armor");
+    TagKey<Material> HEAD_ARMOR = TagKey.of("head_armor");
 
-    TagKey<Material> HOES = TagKey.unsafeOf("hoes");
+    TagKey<Material> HOES = TagKey.of("hoes");
 
-    TagKey<Material> HOGLIN_FOOD = TagKey.unsafeOf("hoglin_food");
+    TagKey<Material> HOGLIN_FOOD = TagKey.of("hoglin_food");
 
-    TagKey<Material> HORSE_FOOD = TagKey.unsafeOf("horse_food");
+    TagKey<Material> HORSE_FOOD = TagKey.of("horse_food");
 
-    TagKey<Material> HORSE_TEMPT_ITEMS = TagKey.unsafeOf("horse_tempt_items");
+    TagKey<Material> HORSE_TEMPT_ITEMS = TagKey.of("horse_tempt_items");
 
-    TagKey<Material> IGNORED_BY_PIGLIN_BABIES = TagKey.unsafeOf("ignored_by_piglin_babies");
+    TagKey<Material> IGNORED_BY_PIGLIN_BABIES = TagKey.of("ignored_by_piglin_babies");
 
-    TagKey<Material> IRON_ORES = TagKey.unsafeOf("iron_ores");
+    TagKey<Material> IRON_ORES = TagKey.of("iron_ores");
 
-    TagKey<Material> IRON_TOOL_MATERIALS = TagKey.unsafeOf("iron_tool_materials");
+    TagKey<Material> IRON_TOOL_MATERIALS = TagKey.of("iron_tool_materials");
 
-    TagKey<Material> JUNGLE_LOGS = TagKey.unsafeOf("jungle_logs");
+    TagKey<Material> JUNGLE_LOGS = TagKey.of("jungle_logs");
 
-    TagKey<Material> LANTERNS = TagKey.unsafeOf("lanterns");
+    TagKey<Material> LANTERNS = TagKey.of("lanterns");
 
-    TagKey<Material> LAPIS_ORES = TagKey.unsafeOf("lapis_ores");
+    TagKey<Material> LAPIS_ORES = TagKey.of("lapis_ores");
 
-    TagKey<Material> LEAVES = TagKey.unsafeOf("leaves");
+    TagKey<Material> LEAVES = TagKey.of("leaves");
 
-    TagKey<Material> LECTERN_BOOKS = TagKey.unsafeOf("lectern_books");
+    TagKey<Material> LECTERN_BOOKS = TagKey.of("lectern_books");
 
-    TagKey<Material> LEG_ARMOR = TagKey.unsafeOf("leg_armor");
+    TagKey<Material> LEG_ARMOR = TagKey.of("leg_armor");
 
-    TagKey<Material> LIGHTNING_RODS = TagKey.unsafeOf("lightning_rods");
+    TagKey<Material> LIGHTNING_RODS = TagKey.of("lightning_rods");
 
-    TagKey<Material> LLAMA_FOOD = TagKey.unsafeOf("llama_food");
+    TagKey<Material> LLAMA_FOOD = TagKey.of("llama_food");
 
-    TagKey<Material> LLAMA_TEMPT_ITEMS = TagKey.unsafeOf("llama_tempt_items");
+    TagKey<Material> LLAMA_TEMPT_ITEMS = TagKey.of("llama_tempt_items");
 
-    TagKey<Material> LOGS = TagKey.unsafeOf("logs");
+    TagKey<Material> LOGS = TagKey.of("logs");
 
-    TagKey<Material> LOGS_THAT_BURN = TagKey.unsafeOf("logs_that_burn");
+    TagKey<Material> LOGS_THAT_BURN = TagKey.of("logs_that_burn");
 
-    TagKey<Material> LOOM_DYES = TagKey.unsafeOf("loom_dyes");
+    TagKey<Material> LOOM_DYES = TagKey.of("loom_dyes");
 
-    TagKey<Material> LOOM_PATTERNS = TagKey.unsafeOf("loom_patterns");
+    TagKey<Material> LOOM_PATTERNS = TagKey.of("loom_patterns");
 
-    TagKey<Material> MANGROVE_LOGS = TagKey.unsafeOf("mangrove_logs");
+    TagKey<Material> MANGROVE_LOGS = TagKey.of("mangrove_logs");
 
-    TagKey<Material> MAP_INVISIBILITY_EQUIPMENT = TagKey.unsafeOf("map_invisibility_equipment");
+    TagKey<Material> MAP_INVISIBILITY_EQUIPMENT = TagKey.of("map_invisibility_equipment");
 
-    TagKey<Material> MEAT = TagKey.unsafeOf("meat");
+    TagKey<Material> MEAT = TagKey.of("meat");
 
-    TagKey<Material> METAL_NUGGETS = TagKey.unsafeOf("metal_nuggets");
+    TagKey<Material> METAL_NUGGETS = TagKey.of("metal_nuggets");
 
-    TagKey<Material> MOSS_BLOCKS = TagKey.unsafeOf("moss_blocks");
+    TagKey<Material> MOSS_BLOCKS = TagKey.of("moss_blocks");
 
-    TagKey<Material> MUD = TagKey.unsafeOf("mud");
+    TagKey<Material> MUD = TagKey.of("mud");
 
-    TagKey<Material> MUSHROOMS = TagKey.unsafeOf("mushrooms");
+    TagKey<Material> MUSHROOMS = TagKey.of("mushrooms");
 
-    TagKey<Material> NAUTILUS_BUCKET_FOOD = TagKey.unsafeOf("nautilus_bucket_food");
+    TagKey<Material> NAUTILUS_BUCKET_FOOD = TagKey.of("nautilus_bucket_food");
 
-    TagKey<Material> NAUTILUS_FOOD = TagKey.unsafeOf("nautilus_food");
+    TagKey<Material> NAUTILUS_FOOD = TagKey.of("nautilus_food");
 
-    TagKey<Material> NAUTILUS_TAMING_ITEMS = TagKey.unsafeOf("nautilus_taming_items");
+    TagKey<Material> NAUTILUS_TAMING_ITEMS = TagKey.of("nautilus_taming_items");
 
-    TagKey<Material> NETHERITE_TOOL_MATERIALS = TagKey.unsafeOf("netherite_tool_materials");
+    TagKey<Material> NETHERITE_TOOL_MATERIALS = TagKey.of("netherite_tool_materials");
 
-    TagKey<Material> NON_FLAMMABLE_WOOD = TagKey.unsafeOf("non_flammable_wood");
+    TagKey<Material> NON_FLAMMABLE_WOOD = TagKey.of("non_flammable_wood");
 
-    TagKey<Material> NOTEBLOCK_TOP_INSTRUMENTS = TagKey.unsafeOf("noteblock_top_instruments");
+    TagKey<Material> NOTEBLOCK_TOP_INSTRUMENTS = TagKey.of("noteblock_top_instruments");
 
-    TagKey<Material> OAK_LOGS = TagKey.unsafeOf("oak_logs");
+    TagKey<Material> OAK_LOGS = TagKey.of("oak_logs");
 
-    TagKey<Material> OCELOT_FOOD = TagKey.unsafeOf("ocelot_food");
+    TagKey<Material> OCELOT_FOOD = TagKey.of("ocelot_food");
 
-    TagKey<Material> ORES = TagKey.unsafeOf("ores");
+    TagKey<Material> ORES = TagKey.of("ores");
 
-    TagKey<Material> PALE_OAK_LOGS = TagKey.unsafeOf("pale_oak_logs");
+    TagKey<Material> PALE_OAK_LOGS = TagKey.of("pale_oak_logs");
 
-    TagKey<Material> PANDA_EATS_FROM_GROUND = TagKey.unsafeOf("panda_eats_from_ground");
+    TagKey<Material> PANDA_EATS_FROM_GROUND = TagKey.of("panda_eats_from_ground");
 
-    TagKey<Material> PANDA_FOOD = TagKey.unsafeOf("panda_food");
+    TagKey<Material> PANDA_FOOD = TagKey.of("panda_food");
 
-    TagKey<Material> PARROT_FOOD = TagKey.unsafeOf("parrot_food");
+    TagKey<Material> PARROT_FOOD = TagKey.of("parrot_food");
 
-    TagKey<Material> PARROT_POISONOUS_FOOD = TagKey.unsafeOf("parrot_poisonous_food");
+    TagKey<Material> PARROT_POISONOUS_FOOD = TagKey.of("parrot_poisonous_food");
 
-    TagKey<Material> PICKAXES = TagKey.unsafeOf("pickaxes");
+    TagKey<Material> PICKAXES = TagKey.of("pickaxes");
 
-    TagKey<Material> PIG_FOOD = TagKey.unsafeOf("pig_food");
+    TagKey<Material> PIG_FOOD = TagKey.of("pig_food");
 
-    TagKey<Material> PIGLIN_FOOD = TagKey.unsafeOf("piglin_food");
+    TagKey<Material> PIGLIN_FOOD = TagKey.of("piglin_food");
 
-    TagKey<Material> PIGLIN_LOVED = TagKey.unsafeOf("piglin_loved");
+    TagKey<Material> PIGLIN_LOVED = TagKey.of("piglin_loved");
 
-    TagKey<Material> PIGLIN_PREFERRED_WEAPONS = TagKey.unsafeOf("piglin_preferred_weapons");
+    TagKey<Material> PIGLIN_PREFERRED_WEAPONS = TagKey.of("piglin_preferred_weapons");
 
-    TagKey<Material> PIGLIN_REPELLENTS = TagKey.unsafeOf("piglin_repellents");
+    TagKey<Material> PIGLIN_REPELLENTS = TagKey.of("piglin_repellents");
 
-    TagKey<Material> PIGLIN_SAFE_ARMOR = TagKey.unsafeOf("piglin_safe_armor");
+    TagKey<Material> PIGLIN_SAFE_ARMOR = TagKey.of("piglin_safe_armor");
 
-    TagKey<Material> PILLAGER_PREFERRED_WEAPONS = TagKey.unsafeOf("pillager_preferred_weapons");
+    TagKey<Material> PILLAGER_PREFERRED_WEAPONS = TagKey.of("pillager_preferred_weapons");
 
-    TagKey<Material> PLANKS = TagKey.unsafeOf("planks");
+    TagKey<Material> PLANKS = TagKey.of("planks");
 
-    TagKey<Material> POPLAR_LOGS = TagKey.unsafeOf("poplar_logs");
+    TagKey<Material> POPLAR_LOGS = TagKey.of("poplar_logs");
 
-    TagKey<Material> RABBIT_FOOD = TagKey.unsafeOf("rabbit_food");
+    TagKey<Material> RABBIT_FOOD = TagKey.of("rabbit_food");
 
-    TagKey<Material> RAILS = TagKey.unsafeOf("rails");
+    TagKey<Material> RAILS = TagKey.of("rails");
 
-    TagKey<Material> REDSTONE_ORES = TagKey.unsafeOf("redstone_ores");
+    TagKey<Material> REDSTONE_ORES = TagKey.of("redstone_ores");
 
-    TagKey<Material> REPAIRS_CHAIN_ARMOR = TagKey.unsafeOf("repairs_chain_armor");
+    TagKey<Material> REPAIRS_CHAIN_ARMOR = TagKey.of("repairs_chain_armor");
 
-    TagKey<Material> REPAIRS_COPPER_ARMOR = TagKey.unsafeOf("repairs_copper_armor");
+    TagKey<Material> REPAIRS_COPPER_ARMOR = TagKey.of("repairs_copper_armor");
 
-    TagKey<Material> REPAIRS_DIAMOND_ARMOR = TagKey.unsafeOf("repairs_diamond_armor");
+    TagKey<Material> REPAIRS_DIAMOND_ARMOR = TagKey.of("repairs_diamond_armor");
 
-    TagKey<Material> REPAIRS_GOLD_ARMOR = TagKey.unsafeOf("repairs_gold_armor");
+    TagKey<Material> REPAIRS_GOLD_ARMOR = TagKey.of("repairs_gold_armor");
 
-    TagKey<Material> REPAIRS_IRON_ARMOR = TagKey.unsafeOf("repairs_iron_armor");
+    TagKey<Material> REPAIRS_IRON_ARMOR = TagKey.of("repairs_iron_armor");
 
-    TagKey<Material> REPAIRS_LEATHER_ARMOR = TagKey.unsafeOf("repairs_leather_armor");
+    TagKey<Material> REPAIRS_LEATHER_ARMOR = TagKey.of("repairs_leather_armor");
 
-    TagKey<Material> REPAIRS_NETHERITE_ARMOR = TagKey.unsafeOf("repairs_netherite_armor");
+    TagKey<Material> REPAIRS_NETHERITE_ARMOR = TagKey.of("repairs_netherite_armor");
 
-    TagKey<Material> REPAIRS_TURTLE_HELMET = TagKey.unsafeOf("repairs_turtle_helmet");
+    TagKey<Material> REPAIRS_TURTLE_HELMET = TagKey.of("repairs_turtle_helmet");
 
-    TagKey<Material> REPAIRS_WOLF_ARMOR = TagKey.unsafeOf("repairs_wolf_armor");
+    TagKey<Material> REPAIRS_WOLF_ARMOR = TagKey.of("repairs_wolf_armor");
 
-    TagKey<Material> SAND = TagKey.unsafeOf("sand");
+    TagKey<Material> SAND = TagKey.of("sand");
 
-    TagKey<Material> SAPLINGS = TagKey.unsafeOf("saplings");
+    TagKey<Material> SAPLINGS = TagKey.of("saplings");
 
-    TagKey<Material> SHEARABLE_FROM_COPPER_GOLEM = TagKey.unsafeOf("shearable_from_copper_golem");
+    TagKey<Material> SHEARABLE_FROM_COPPER_GOLEM = TagKey.of("shearable_from_copper_golem");
 
-    TagKey<Material> SHEEP_FOOD = TagKey.unsafeOf("sheep_food");
+    TagKey<Material> SHEEP_FOOD = TagKey.of("sheep_food");
 
-    TagKey<Material> SHOVELS = TagKey.unsafeOf("shovels");
+    TagKey<Material> SHOVELS = TagKey.of("shovels");
 
-    TagKey<Material> SHULKER_BOXES = TagKey.unsafeOf("shulker_boxes");
+    TagKey<Material> SHULKER_BOXES = TagKey.of("shulker_boxes");
 
-    TagKey<Material> SIGNS = TagKey.unsafeOf("signs");
+    TagKey<Material> SIGNS = TagKey.of("signs");
 
-    TagKey<Material> SKELETON_PREFERRED_WEAPONS = TagKey.unsafeOf("skeleton_preferred_weapons");
+    TagKey<Material> SKELETON_PREFERRED_WEAPONS = TagKey.of("skeleton_preferred_weapons");
 
-    TagKey<Material> SKULLS = TagKey.unsafeOf("skulls");
+    TagKey<Material> SKULLS = TagKey.of("skulls");
 
-    TagKey<Material> SLABS = TagKey.unsafeOf("slabs");
+    TagKey<Material> SLABS = TagKey.of("slabs");
 
-    TagKey<Material> SMALL_FLOWERS = TagKey.unsafeOf("small_flowers");
+    TagKey<Material> SMALL_FLOWERS = TagKey.of("small_flowers");
 
-    TagKey<Material> SMELTS_TO_GLASS = TagKey.unsafeOf("smelts_to_glass");
+    TagKey<Material> SMELTS_TO_GLASS = TagKey.of("smelts_to_glass");
 
-    TagKey<Material> SNIFFER_FOOD = TagKey.unsafeOf("sniffer_food");
+    TagKey<Material> SNIFFER_FOOD = TagKey.of("sniffer_food");
 
-    TagKey<Material> SOUL_FIRE_BASE_BLOCKS = TagKey.unsafeOf("soul_fire_base_blocks");
+    TagKey<Material> SOUL_FIRE_BASE_BLOCKS = TagKey.of("soul_fire_base_blocks");
 
-    TagKey<Material> SPEARS = TagKey.unsafeOf("spears");
+    TagKey<Material> SPEARS = TagKey.of("spears");
 
-    TagKey<Material> SPRUCE_LOGS = TagKey.unsafeOf("spruce_logs");
+    TagKey<Material> SPRUCE_LOGS = TagKey.of("spruce_logs");
 
-    TagKey<Material> STAIRS = TagKey.unsafeOf("stairs");
+    TagKey<Material> STAIRS = TagKey.of("stairs");
 
-    TagKey<Material> STONE_BRICKS = TagKey.unsafeOf("stone_bricks");
+    TagKey<Material> STONE_BRICKS = TagKey.of("stone_bricks");
 
-    TagKey<Material> STONE_BUTTONS = TagKey.unsafeOf("stone_buttons");
+    TagKey<Material> STONE_BUTTONS = TagKey.of("stone_buttons");
 
-    TagKey<Material> STONE_CRAFTING_MATERIALS = TagKey.unsafeOf("stone_crafting_materials");
+    TagKey<Material> STONE_CRAFTING_MATERIALS = TagKey.of("stone_crafting_materials");
 
-    TagKey<Material> STONE_TOOL_MATERIALS = TagKey.unsafeOf("stone_tool_materials");
+    TagKey<Material> STONE_TOOL_MATERIALS = TagKey.of("stone_tool_materials");
 
-    TagKey<Material> STRIDER_FOOD = TagKey.unsafeOf("strider_food");
+    TagKey<Material> STRIDER_FOOD = TagKey.of("strider_food");
 
-    TagKey<Material> STRIDER_TEMPT_ITEMS = TagKey.unsafeOf("strider_tempt_items");
+    TagKey<Material> STRIDER_TEMPT_ITEMS = TagKey.of("strider_tempt_items");
 
-    TagKey<Material> SULFUR_CUBE_ARCHETYPE_BOUNCY = TagKey.unsafeOf("sulfur_cube_archetype/bouncy");
+    TagKey<Material> SULFUR_CUBE_ARCHETYPE_BOUNCY = TagKey.of("sulfur_cube_archetype/bouncy");
 
-    TagKey<Material> SULFUR_CUBE_ARCHETYPE_EXPLOSIVE = TagKey.unsafeOf("sulfur_cube_archetype/explosive");
+    TagKey<Material> SULFUR_CUBE_ARCHETYPE_EXPLOSIVE = TagKey.of("sulfur_cube_archetype/explosive");
 
-    TagKey<Material> SULFUR_CUBE_ARCHETYPE_FAST_FLAT = TagKey.unsafeOf("sulfur_cube_archetype/fast_flat");
+    TagKey<Material> SULFUR_CUBE_ARCHETYPE_FAST_FLAT = TagKey.of("sulfur_cube_archetype/fast_flat");
 
-    TagKey<Material> SULFUR_CUBE_ARCHETYPE_FAST_SLIDING = TagKey.unsafeOf("sulfur_cube_archetype/fast_sliding");
+    TagKey<Material> SULFUR_CUBE_ARCHETYPE_FAST_SLIDING = TagKey.of("sulfur_cube_archetype/fast_sliding");
 
-    TagKey<Material> SULFUR_CUBE_ARCHETYPE_HIGH_RESISTANCE = TagKey.unsafeOf("sulfur_cube_archetype/high_resistance");
+    TagKey<Material> SULFUR_CUBE_ARCHETYPE_HIGH_RESISTANCE = TagKey.of("sulfur_cube_archetype/high_resistance");
 
-    TagKey<Material> SULFUR_CUBE_ARCHETYPE_HOT = TagKey.unsafeOf("sulfur_cube_archetype/hot");
+    TagKey<Material> SULFUR_CUBE_ARCHETYPE_HOT = TagKey.of("sulfur_cube_archetype/hot");
 
-    TagKey<Material> SULFUR_CUBE_ARCHETYPE_LIGHT = TagKey.unsafeOf("sulfur_cube_archetype/light");
+    TagKey<Material> SULFUR_CUBE_ARCHETYPE_LIGHT = TagKey.of("sulfur_cube_archetype/light");
 
-    TagKey<Material> SULFUR_CUBE_ARCHETYPE_REGULAR = TagKey.unsafeOf("sulfur_cube_archetype/regular");
+    TagKey<Material> SULFUR_CUBE_ARCHETYPE_REGULAR = TagKey.of("sulfur_cube_archetype/regular");
 
-    TagKey<Material> SULFUR_CUBE_ARCHETYPE_SLOW_BOUNCY = TagKey.unsafeOf("sulfur_cube_archetype/slow_bouncy");
+    TagKey<Material> SULFUR_CUBE_ARCHETYPE_SLOW_BOUNCY = TagKey.of("sulfur_cube_archetype/slow_bouncy");
 
-    TagKey<Material> SULFUR_CUBE_ARCHETYPE_SLOW_FLAT = TagKey.unsafeOf("sulfur_cube_archetype/slow_flat");
+    TagKey<Material> SULFUR_CUBE_ARCHETYPE_SLOW_FLAT = TagKey.of("sulfur_cube_archetype/slow_flat");
 
-    TagKey<Material> SULFUR_CUBE_ARCHETYPE_SLOW_SLIDING = TagKey.unsafeOf("sulfur_cube_archetype/slow_sliding");
+    TagKey<Material> SULFUR_CUBE_ARCHETYPE_SLOW_SLIDING = TagKey.of("sulfur_cube_archetype/slow_sliding");
 
-    TagKey<Material> SULFUR_CUBE_ARCHETYPE_STICKY = TagKey.unsafeOf("sulfur_cube_archetype/sticky");
+    TagKey<Material> SULFUR_CUBE_ARCHETYPE_STICKY = TagKey.of("sulfur_cube_archetype/sticky");
 
-    TagKey<Material> SULFUR_CUBE_FOOD = TagKey.unsafeOf("sulfur_cube_food");
+    TagKey<Material> SULFUR_CUBE_FOOD = TagKey.of("sulfur_cube_food");
 
-    TagKey<Material> SULFUR_CUBE_SWALLOWABLE = TagKey.unsafeOf("sulfur_cube_swallowable");
+    TagKey<Material> SULFUR_CUBE_SWALLOWABLE = TagKey.of("sulfur_cube_swallowable");
 
-    TagKey<Material> SWORDS = TagKey.unsafeOf("swords");
+    TagKey<Material> SWORDS = TagKey.of("swords");
 
-    TagKey<Material> TERRACOTTA = TagKey.unsafeOf("terracotta");
+    TagKey<Material> TERRACOTTA = TagKey.of("terracotta");
 
-    TagKey<Material> TRAPDOORS = TagKey.unsafeOf("trapdoors");
+    TagKey<Material> TRAPDOORS = TagKey.of("trapdoors");
 
-    TagKey<Material> TRIM_MATERIALS = TagKey.unsafeOf("trim_materials");
+    TagKey<Material> TRIM_MATERIALS = TagKey.of("trim_materials");
 
-    TagKey<Material> TRIMMABLE_ARMOR = TagKey.unsafeOf("trimmable_armor");
+    TagKey<Material> TRIMMABLE_ARMOR = TagKey.of("trimmable_armor");
 
-    TagKey<Material> TURTLE_FOOD = TagKey.unsafeOf("turtle_food");
+    TagKey<Material> TURTLE_FOOD = TagKey.of("turtle_food");
 
-    TagKey<Material> VILLAGER_PICKS_UP = TagKey.unsafeOf("villager_picks_up");
+    TagKey<Material> VILLAGER_PICKS_UP = TagKey.of("villager_picks_up");
 
-    TagKey<Material> VILLAGER_PLANTABLE_SEEDS = TagKey.unsafeOf("villager_plantable_seeds");
+    TagKey<Material> VILLAGER_PLANTABLE_SEEDS = TagKey.of("villager_plantable_seeds");
 
-    TagKey<Material> WALLS = TagKey.unsafeOf("walls");
+    TagKey<Material> WALLS = TagKey.of("walls");
 
-    TagKey<Material> WARPED_STEMS = TagKey.unsafeOf("warped_stems");
+    TagKey<Material> WARPED_STEMS = TagKey.of("warped_stems");
 
-    TagKey<Material> WART_BLOCKS = TagKey.unsafeOf("wart_blocks");
+    TagKey<Material> WART_BLOCKS = TagKey.of("wart_blocks");
 
-    TagKey<Material> WITHER_SKELETON_DISLIKED_WEAPONS = TagKey.unsafeOf("wither_skeleton_disliked_weapons");
+    TagKey<Material> WITHER_SKELETON_DISLIKED_WEAPONS = TagKey.of("wither_skeleton_disliked_weapons");
 
-    TagKey<Material> WOLF_COLLAR_DYES = TagKey.unsafeOf("wolf_collar_dyes");
+    TagKey<Material> WOLF_COLLAR_DYES = TagKey.of("wolf_collar_dyes");
 
-    TagKey<Material> WOLF_FOOD = TagKey.unsafeOf("wolf_food");
+    TagKey<Material> WOLF_FOOD = TagKey.of("wolf_food");
 
-    TagKey<Material> WOODEN_BUTTONS = TagKey.unsafeOf("wooden_buttons");
+    TagKey<Material> WOODEN_BUTTONS = TagKey.of("wooden_buttons");
 
-    TagKey<Material> WOODEN_DOORS = TagKey.unsafeOf("wooden_doors");
+    TagKey<Material> WOODEN_DOORS = TagKey.of("wooden_doors");
 
-    TagKey<Material> WOODEN_FENCES = TagKey.unsafeOf("wooden_fences");
+    TagKey<Material> WOODEN_FENCES = TagKey.of("wooden_fences");
 
-    TagKey<Material> WOODEN_PRESSURE_PLATES = TagKey.unsafeOf("wooden_pressure_plates");
+    TagKey<Material> WOODEN_PRESSURE_PLATES = TagKey.of("wooden_pressure_plates");
 
-    TagKey<Material> WOODEN_SHELVES = TagKey.unsafeOf("wooden_shelves");
+    TagKey<Material> WOODEN_SHELVES = TagKey.of("wooden_shelves");
 
-    TagKey<Material> WOODEN_SLABS = TagKey.unsafeOf("wooden_slabs");
+    TagKey<Material> WOODEN_SLABS = TagKey.of("wooden_slabs");
 
-    TagKey<Material> WOODEN_STAIRS = TagKey.unsafeOf("wooden_stairs");
+    TagKey<Material> WOODEN_STAIRS = TagKey.of("wooden_stairs");
 
-    TagKey<Material> WOODEN_TOOL_MATERIALS = TagKey.unsafeOf("wooden_tool_materials");
+    TagKey<Material> WOODEN_TOOL_MATERIALS = TagKey.of("wooden_tool_materials");
 
-    TagKey<Material> WOODEN_TRAPDOORS = TagKey.unsafeOf("wooden_trapdoors");
+    TagKey<Material> WOODEN_TRAPDOORS = TagKey.of("wooden_trapdoors");
 
-    TagKey<Material> WOOL = TagKey.unsafeOf("wool");
+    TagKey<Material> WOOL = TagKey.of("wool");
 
-    TagKey<Material> WOOL_CARPETS = TagKey.unsafeOf("wool_carpets");
+    TagKey<Material> WOOL_CARPETS = TagKey.of("wool_carpets");
 
-    TagKey<Material> WOOL_SLABS = TagKey.unsafeOf("wool_slabs");
+    TagKey<Material> WOOL_SLABS = TagKey.of("wool_slabs");
 
-    TagKey<Material> WOOL_STAIRS = TagKey.unsafeOf("wool_stairs");
+    TagKey<Material> WOOL_STAIRS = TagKey.of("wool_stairs");
 
-    TagKey<Material> ZOMBIE_HORSE_FOOD = TagKey.unsafeOf("zombie_horse_food");
+    TagKey<Material> ZOMBIE_HORSE_FOOD = TagKey.of("zombie_horse_food");
 }

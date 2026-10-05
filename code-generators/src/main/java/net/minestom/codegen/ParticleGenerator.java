@@ -49,7 +49,7 @@ record ParticleGenerator(Codegen codegen) {
             particleKeysInterface.addField(FieldSpec.builder(
                             ParameterizedTypeName.get(registryKeyCN, fieldCN), codegen.constantName(key))
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                    .initializer("$T.unsafeOf($S)", registryKeyCN, namespacedName)
+                    .initializer("$T.of($S)", registryKeyCN, namespacedName)
                     .build());
         }
 

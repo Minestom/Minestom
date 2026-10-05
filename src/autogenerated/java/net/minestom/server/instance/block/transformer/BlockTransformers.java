@@ -9,9 +9,9 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 sealed interface BlockTransformers permits BlockTransformer {
-    RegistryKey<BlockTransformer> AXE = RegistryKey.unsafeOf("axe");
+    RegistryKey<BlockTransformer> AXE = RegistryKey.of("axe");
 
-    RegistryKey<BlockTransformer> HOE = RegistryKey.unsafeOf("hoe");
+    RegistryKey<BlockTransformer> HOE = RegistryKey.of("hoe");
 
-    RegistryKey<BlockTransformer> SHOVEL = RegistryKey.unsafeOf("shovel");
+    RegistryKey<BlockTransformer> SHOVEL = RegistryKey.of("shovel");
 }

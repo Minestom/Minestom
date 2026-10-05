@@ -11,175 +11,175 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("unused")
 @ApiStatus.NonExtendable
 public interface BiomeTags {
-    TagKey<Biome> ALLOWS_SURFACE_SLIME_SPAWNS = TagKey.unsafeOf("allows_surface_slime_spawns");
+    TagKey<Biome> ALLOWS_SURFACE_SLIME_SPAWNS = TagKey.of("allows_surface_slime_spawns");
 
-    TagKey<Biome> ALLOWS_TROPICAL_FISH_SPAWNS_AT_ANY_HEIGHT = TagKey.unsafeOf("allows_tropical_fish_spawns_at_any_height");
+    TagKey<Biome> ALLOWS_TROPICAL_FISH_SPAWNS_AT_ANY_HEIGHT = TagKey.of("allows_tropical_fish_spawns_at_any_height");
 
-    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_BAMBOO_JUNGLE = TagKey.unsafeOf("has_structure/abandoned_camp_bamboo_jungle");
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_BAMBOO_JUNGLE = TagKey.of("has_structure/abandoned_camp_bamboo_jungle");
 
-    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_BIRCH_FOREST = TagKey.unsafeOf("has_structure/abandoned_camp_birch_forest");
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_BIRCH_FOREST = TagKey.of("has_structure/abandoned_camp_birch_forest");
 
-    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_CHERRY_GROVE = TagKey.unsafeOf("has_structure/abandoned_camp_cherry_grove");
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_CHERRY_GROVE = TagKey.of("has_structure/abandoned_camp_cherry_grove");
 
-    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_DAPPLED_FOREST = TagKey.unsafeOf("has_structure/abandoned_camp_dappled_forest");
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_DAPPLED_FOREST = TagKey.of("has_structure/abandoned_camp_dappled_forest");
 
-    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_FLOWER_FOREST = TagKey.unsafeOf("has_structure/abandoned_camp_flower_forest");
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_FLOWER_FOREST = TagKey.of("has_structure/abandoned_camp_flower_forest");
 
-    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_FOREST = TagKey.unsafeOf("has_structure/abandoned_camp_forest");
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_FOREST = TagKey.of("has_structure/abandoned_camp_forest");
 
-    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_MEADOW = TagKey.unsafeOf("has_structure/abandoned_camp_meadow");
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_MEADOW = TagKey.of("has_structure/abandoned_camp_meadow");
 
-    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_OLD_GROWTH_BIRCH_FOREST = TagKey.unsafeOf("has_structure/abandoned_camp_old_growth_birch_forest");
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_OLD_GROWTH_BIRCH_FOREST = TagKey.of("has_structure/abandoned_camp_old_growth_birch_forest");
 
-    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_OLD_GROWTH_PINE_TAIGA = TagKey.unsafeOf("has_structure/abandoned_camp_old_growth_pine_taiga");
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_OLD_GROWTH_PINE_TAIGA = TagKey.of("has_structure/abandoned_camp_old_growth_pine_taiga");
 
-    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_OLD_GROWTH_SPRUCE_TAIGA = TagKey.unsafeOf("has_structure/abandoned_camp_old_growth_spruce_taiga");
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_OLD_GROWTH_SPRUCE_TAIGA = TagKey.of("has_structure/abandoned_camp_old_growth_spruce_taiga");
 
-    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_PALE_GARDEN = TagKey.unsafeOf("has_structure/abandoned_camp_pale_garden");
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_PALE_GARDEN = TagKey.of("has_structure/abandoned_camp_pale_garden");
 
-    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_SAVANNA = TagKey.unsafeOf("has_structure/abandoned_camp_savanna");
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_SAVANNA = TagKey.of("has_structure/abandoned_camp_savanna");
 
-    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_SNOWY_TAIGA = TagKey.unsafeOf("has_structure/abandoned_camp_snowy_taiga");
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_SNOWY_TAIGA = TagKey.of("has_structure/abandoned_camp_snowy_taiga");
 
-    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_SPARSE_JUNGLE = TagKey.unsafeOf("has_structure/abandoned_camp_sparse_jungle");
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_SPARSE_JUNGLE = TagKey.of("has_structure/abandoned_camp_sparse_jungle");
 
-    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_SWAMP = TagKey.unsafeOf("has_structure/abandoned_camp_swamp");
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_SWAMP = TagKey.of("has_structure/abandoned_camp_swamp");
 
-    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_TAIGA = TagKey.unsafeOf("has_structure/abandoned_camp_taiga");
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_TAIGA = TagKey.of("has_structure/abandoned_camp_taiga");
 
-    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_WINDSWEPT_FOREST = TagKey.unsafeOf("has_structure/abandoned_camp_windswept_forest");
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_WINDSWEPT_FOREST = TagKey.of("has_structure/abandoned_camp_windswept_forest");
 
-    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_WOODED_BADLANDS = TagKey.unsafeOf("has_structure/abandoned_camp_wooded_badlands");
+    TagKey<Biome> HAS_STRUCTURE_ABANDONED_CAMP_WOODED_BADLANDS = TagKey.of("has_structure/abandoned_camp_wooded_badlands");
 
-    TagKey<Biome> HAS_STRUCTURE_ANCIENT_CITY = TagKey.unsafeOf("has_structure/ancient_city");
+    TagKey<Biome> HAS_STRUCTURE_ANCIENT_CITY = TagKey.of("has_structure/ancient_city");
 
-    TagKey<Biome> HAS_STRUCTURE_BASTION_REMNANT = TagKey.unsafeOf("has_structure/bastion_remnant");
+    TagKey<Biome> HAS_STRUCTURE_BASTION_REMNANT = TagKey.of("has_structure/bastion_remnant");
 
-    TagKey<Biome> HAS_STRUCTURE_BURIED_TREASURE = TagKey.unsafeOf("has_structure/buried_treasure");
+    TagKey<Biome> HAS_STRUCTURE_BURIED_TREASURE = TagKey.of("has_structure/buried_treasure");
 
-    TagKey<Biome> HAS_STRUCTURE_DESERT_PYRAMID = TagKey.unsafeOf("has_structure/desert_pyramid");
+    TagKey<Biome> HAS_STRUCTURE_DESERT_PYRAMID = TagKey.of("has_structure/desert_pyramid");
 
-    TagKey<Biome> HAS_STRUCTURE_END_CITY = TagKey.unsafeOf("has_structure/end_city");
+    TagKey<Biome> HAS_STRUCTURE_END_CITY = TagKey.of("has_structure/end_city");
 
-    TagKey<Biome> HAS_STRUCTURE_IGLOO = TagKey.unsafeOf("has_structure/igloo");
+    TagKey<Biome> HAS_STRUCTURE_IGLOO = TagKey.of("has_structure/igloo");
 
-    TagKey<Biome> HAS_STRUCTURE_JUNGLE_TEMPLE = TagKey.unsafeOf("has_structure/jungle_temple");
+    TagKey<Biome> HAS_STRUCTURE_JUNGLE_TEMPLE = TagKey.of("has_structure/jungle_temple");
 
-    TagKey<Biome> HAS_STRUCTURE_MINESHAFT = TagKey.unsafeOf("has_structure/mineshaft");
+    TagKey<Biome> HAS_STRUCTURE_MINESHAFT = TagKey.of("has_structure/mineshaft");
 
-    TagKey<Biome> HAS_STRUCTURE_MINESHAFT_MESA = TagKey.unsafeOf("has_structure/mineshaft_mesa");
+    TagKey<Biome> HAS_STRUCTURE_MINESHAFT_MESA = TagKey.of("has_structure/mineshaft_mesa");
 
-    TagKey<Biome> HAS_STRUCTURE_NETHER_FORTRESS = TagKey.unsafeOf("has_structure/nether_fortress");
+    TagKey<Biome> HAS_STRUCTURE_NETHER_FORTRESS = TagKey.of("has_structure/nether_fortress");
 
-    TagKey<Biome> HAS_STRUCTURE_NETHER_FOSSIL = TagKey.unsafeOf("has_structure/nether_fossil");
+    TagKey<Biome> HAS_STRUCTURE_NETHER_FOSSIL = TagKey.of("has_structure/nether_fossil");
 
-    TagKey<Biome> HAS_STRUCTURE_OCEAN_MONUMENT = TagKey.unsafeOf("has_structure/ocean_monument");
+    TagKey<Biome> HAS_STRUCTURE_OCEAN_MONUMENT = TagKey.of("has_structure/ocean_monument");
 
-    TagKey<Biome> HAS_STRUCTURE_OCEAN_RUIN_COLD = TagKey.unsafeOf("has_structure/ocean_ruin_cold");
+    TagKey<Biome> HAS_STRUCTURE_OCEAN_RUIN_COLD = TagKey.of("has_structure/ocean_ruin_cold");
 
-    TagKey<Biome> HAS_STRUCTURE_OCEAN_RUIN_WARM = TagKey.unsafeOf("has_structure/ocean_ruin_warm");
+    TagKey<Biome> HAS_STRUCTURE_OCEAN_RUIN_WARM = TagKey.of("has_structure/ocean_ruin_warm");
 
-    TagKey<Biome> HAS_STRUCTURE_PILLAGER_OUTPOST = TagKey.unsafeOf("has_structure/pillager_outpost");
+    TagKey<Biome> HAS_STRUCTURE_PILLAGER_OUTPOST = TagKey.of("has_structure/pillager_outpost");
 
-    TagKey<Biome> HAS_STRUCTURE_RUINED_PORTAL_DESERT = TagKey.unsafeOf("has_structure/ruined_portal_desert");
+    TagKey<Biome> HAS_STRUCTURE_RUINED_PORTAL_DESERT = TagKey.of("has_structure/ruined_portal_desert");
 
-    TagKey<Biome> HAS_STRUCTURE_RUINED_PORTAL_JUNGLE = TagKey.unsafeOf("has_structure/ruined_portal_jungle");
+    TagKey<Biome> HAS_STRUCTURE_RUINED_PORTAL_JUNGLE = TagKey.of("has_structure/ruined_portal_jungle");
 
-    TagKey<Biome> HAS_STRUCTURE_RUINED_PORTAL_MOUNTAIN = TagKey.unsafeOf("has_structure/ruined_portal_mountain");
+    TagKey<Biome> HAS_STRUCTURE_RUINED_PORTAL_MOUNTAIN = TagKey.of("has_structure/ruined_portal_mountain");
 
-    TagKey<Biome> HAS_STRUCTURE_RUINED_PORTAL_NETHER = TagKey.unsafeOf("has_structure/ruined_portal_nether");
+    TagKey<Biome> HAS_STRUCTURE_RUINED_PORTAL_NETHER = TagKey.of("has_structure/ruined_portal_nether");
 
-    TagKey<Biome> HAS_STRUCTURE_RUINED_PORTAL_OCEAN = TagKey.unsafeOf("has_structure/ruined_portal_ocean");
+    TagKey<Biome> HAS_STRUCTURE_RUINED_PORTAL_OCEAN = TagKey.of("has_structure/ruined_portal_ocean");
 
-    TagKey<Biome> HAS_STRUCTURE_RUINED_PORTAL_STANDARD = TagKey.unsafeOf("has_structure/ruined_portal_standard");
+    TagKey<Biome> HAS_STRUCTURE_RUINED_PORTAL_STANDARD = TagKey.of("has_structure/ruined_portal_standard");
 
-    TagKey<Biome> HAS_STRUCTURE_RUINED_PORTAL_SWAMP = TagKey.unsafeOf("has_structure/ruined_portal_swamp");
+    TagKey<Biome> HAS_STRUCTURE_RUINED_PORTAL_SWAMP = TagKey.of("has_structure/ruined_portal_swamp");
 
-    TagKey<Biome> HAS_STRUCTURE_SHIPWRECK = TagKey.unsafeOf("has_structure/shipwreck");
+    TagKey<Biome> HAS_STRUCTURE_SHIPWRECK = TagKey.of("has_structure/shipwreck");
 
-    TagKey<Biome> HAS_STRUCTURE_SHIPWRECK_BEACHED = TagKey.unsafeOf("has_structure/shipwreck_beached");
+    TagKey<Biome> HAS_STRUCTURE_SHIPWRECK_BEACHED = TagKey.of("has_structure/shipwreck_beached");
 
-    TagKey<Biome> HAS_STRUCTURE_STRONGHOLD = TagKey.unsafeOf("has_structure/stronghold");
+    TagKey<Biome> HAS_STRUCTURE_STRONGHOLD = TagKey.of("has_structure/stronghold");
 
-    TagKey<Biome> HAS_STRUCTURE_SWAMP_HUT = TagKey.unsafeOf("has_structure/swamp_hut");
+    TagKey<Biome> HAS_STRUCTURE_SWAMP_HUT = TagKey.of("has_structure/swamp_hut");
 
-    TagKey<Biome> HAS_STRUCTURE_TRAIL_RUINS = TagKey.unsafeOf("has_structure/trail_ruins");
+    TagKey<Biome> HAS_STRUCTURE_TRAIL_RUINS = TagKey.of("has_structure/trail_ruins");
 
-    TagKey<Biome> HAS_STRUCTURE_TRIAL_CHAMBERS = TagKey.unsafeOf("has_structure/trial_chambers");
+    TagKey<Biome> HAS_STRUCTURE_TRIAL_CHAMBERS = TagKey.of("has_structure/trial_chambers");
 
-    TagKey<Biome> HAS_STRUCTURE_VILLAGE_DESERT = TagKey.unsafeOf("has_structure/village_desert");
+    TagKey<Biome> HAS_STRUCTURE_VILLAGE_DESERT = TagKey.of("has_structure/village_desert");
 
-    TagKey<Biome> HAS_STRUCTURE_VILLAGE_PLAINS = TagKey.unsafeOf("has_structure/village_plains");
+    TagKey<Biome> HAS_STRUCTURE_VILLAGE_PLAINS = TagKey.of("has_structure/village_plains");
 
-    TagKey<Biome> HAS_STRUCTURE_VILLAGE_SAVANNA = TagKey.unsafeOf("has_structure/village_savanna");
+    TagKey<Biome> HAS_STRUCTURE_VILLAGE_SAVANNA = TagKey.of("has_structure/village_savanna");
 
-    TagKey<Biome> HAS_STRUCTURE_VILLAGE_SNOWY = TagKey.unsafeOf("has_structure/village_snowy");
+    TagKey<Biome> HAS_STRUCTURE_VILLAGE_SNOWY = TagKey.of("has_structure/village_snowy");
 
-    TagKey<Biome> HAS_STRUCTURE_VILLAGE_TAIGA = TagKey.unsafeOf("has_structure/village_taiga");
+    TagKey<Biome> HAS_STRUCTURE_VILLAGE_TAIGA = TagKey.of("has_structure/village_taiga");
 
-    TagKey<Biome> HAS_STRUCTURE_WOODLAND_MANSION = TagKey.unsafeOf("has_structure/woodland_mansion");
+    TagKey<Biome> HAS_STRUCTURE_WOODLAND_MANSION = TagKey.of("has_structure/woodland_mansion");
 
-    TagKey<Biome> IS_BADLANDS = TagKey.unsafeOf("is_badlands");
+    TagKey<Biome> IS_BADLANDS = TagKey.of("is_badlands");
 
-    TagKey<Biome> IS_BEACH = TagKey.unsafeOf("is_beach");
+    TagKey<Biome> IS_BEACH = TagKey.of("is_beach");
 
-    TagKey<Biome> IS_DEEP_OCEAN = TagKey.unsafeOf("is_deep_ocean");
+    TagKey<Biome> IS_DEEP_OCEAN = TagKey.of("is_deep_ocean");
 
-    TagKey<Biome> IS_END = TagKey.unsafeOf("is_end");
+    TagKey<Biome> IS_END = TagKey.of("is_end");
 
-    TagKey<Biome> IS_FOREST = TagKey.unsafeOf("is_forest");
+    TagKey<Biome> IS_FOREST = TagKey.of("is_forest");
 
-    TagKey<Biome> IS_HILL = TagKey.unsafeOf("is_hill");
+    TagKey<Biome> IS_HILL = TagKey.of("is_hill");
 
-    TagKey<Biome> IS_JUNGLE = TagKey.unsafeOf("is_jungle");
+    TagKey<Biome> IS_JUNGLE = TagKey.of("is_jungle");
 
-    TagKey<Biome> IS_MOUNTAIN = TagKey.unsafeOf("is_mountain");
+    TagKey<Biome> IS_MOUNTAIN = TagKey.of("is_mountain");
 
-    TagKey<Biome> IS_NETHER = TagKey.unsafeOf("is_nether");
+    TagKey<Biome> IS_NETHER = TagKey.of("is_nether");
 
-    TagKey<Biome> IS_OCEAN = TagKey.unsafeOf("is_ocean");
+    TagKey<Biome> IS_OCEAN = TagKey.of("is_ocean");
 
-    TagKey<Biome> IS_OVERWORLD = TagKey.unsafeOf("is_overworld");
+    TagKey<Biome> IS_OVERWORLD = TagKey.of("is_overworld");
 
-    TagKey<Biome> IS_RIVER = TagKey.unsafeOf("is_river");
+    TagKey<Biome> IS_RIVER = TagKey.of("is_river");
 
-    TagKey<Biome> IS_SAVANNA = TagKey.unsafeOf("is_savanna");
+    TagKey<Biome> IS_SAVANNA = TagKey.of("is_savanna");
 
-    TagKey<Biome> IS_TAIGA = TagKey.unsafeOf("is_taiga");
+    TagKey<Biome> IS_TAIGA = TagKey.of("is_taiga");
 
-    TagKey<Biome> MINESHAFT_BLOCKING = TagKey.unsafeOf("mineshaft_blocking");
+    TagKey<Biome> MINESHAFT_BLOCKING = TagKey.of("mineshaft_blocking");
 
-    TagKey<Biome> MORE_FREQUENT_DROWNED_SPAWNS = TagKey.unsafeOf("more_frequent_drowned_spawns");
+    TagKey<Biome> MORE_FREQUENT_DROWNED_SPAWNS = TagKey.of("more_frequent_drowned_spawns");
 
-    TagKey<Biome> POLAR_BEARS_SPAWN_ON_ALTERNATE_BLOCKS = TagKey.unsafeOf("polar_bears_spawn_on_alternate_blocks");
+    TagKey<Biome> POLAR_BEARS_SPAWN_ON_ALTERNATE_BLOCKS = TagKey.of("polar_bears_spawn_on_alternate_blocks");
 
-    TagKey<Biome> PRODUCES_CORALS_FROM_BONEMEAL = TagKey.unsafeOf("produces_corals_from_bonemeal");
+    TagKey<Biome> PRODUCES_CORALS_FROM_BONEMEAL = TagKey.of("produces_corals_from_bonemeal");
 
-    TagKey<Biome> REDUCE_WATER_AMBIENT_SPAWNS = TagKey.unsafeOf("reduce_water_ambient_spawns");
+    TagKey<Biome> REDUCE_WATER_AMBIENT_SPAWNS = TagKey.of("reduce_water_ambient_spawns");
 
-    TagKey<Biome> REQUIRED_OCEAN_MONUMENT_SURROUNDING = TagKey.unsafeOf("required_ocean_monument_surrounding");
+    TagKey<Biome> REQUIRED_OCEAN_MONUMENT_SURROUNDING = TagKey.of("required_ocean_monument_surrounding");
 
-    TagKey<Biome> SPAWNS_COLD_VARIANT_FARM_ANIMALS = TagKey.unsafeOf("spawns_cold_variant_farm_animals");
+    TagKey<Biome> SPAWNS_COLD_VARIANT_FARM_ANIMALS = TagKey.of("spawns_cold_variant_farm_animals");
 
-    TagKey<Biome> SPAWNS_COLD_VARIANT_FROGS = TagKey.unsafeOf("spawns_cold_variant_frogs");
+    TagKey<Biome> SPAWNS_COLD_VARIANT_FROGS = TagKey.of("spawns_cold_variant_frogs");
 
-    TagKey<Biome> SPAWNS_CORAL_VARIANT_ZOMBIE_NAUTILUS = TagKey.unsafeOf("spawns_coral_variant_zombie_nautilus");
+    TagKey<Biome> SPAWNS_CORAL_VARIANT_ZOMBIE_NAUTILUS = TagKey.of("spawns_coral_variant_zombie_nautilus");
 
-    TagKey<Biome> SPAWNS_GOLD_RABBITS = TagKey.unsafeOf("spawns_gold_rabbits");
+    TagKey<Biome> SPAWNS_GOLD_RABBITS = TagKey.of("spawns_gold_rabbits");
 
-    TagKey<Biome> SPAWNS_SNOW_FOXES = TagKey.unsafeOf("spawns_snow_foxes");
+    TagKey<Biome> SPAWNS_SNOW_FOXES = TagKey.of("spawns_snow_foxes");
 
-    TagKey<Biome> SPAWNS_WARM_VARIANT_FARM_ANIMALS = TagKey.unsafeOf("spawns_warm_variant_farm_animals");
+    TagKey<Biome> SPAWNS_WARM_VARIANT_FARM_ANIMALS = TagKey.of("spawns_warm_variant_farm_animals");
 
-    TagKey<Biome> SPAWNS_WARM_VARIANT_FROGS = TagKey.unsafeOf("spawns_warm_variant_frogs");
+    TagKey<Biome> SPAWNS_WARM_VARIANT_FROGS = TagKey.of("spawns_warm_variant_frogs");
 
-    TagKey<Biome> SPAWNS_WHITE_RABBITS = TagKey.unsafeOf("spawns_white_rabbits");
+    TagKey<Biome> SPAWNS_WHITE_RABBITS = TagKey.of("spawns_white_rabbits");
 
-    TagKey<Biome> STRONGHOLD_BIASED_TO = TagKey.unsafeOf("stronghold_biased_to");
+    TagKey<Biome> STRONGHOLD_BIASED_TO = TagKey.of("stronghold_biased_to");
 
-    TagKey<Biome> WATER_ON_MAP_OUTLINES = TagKey.unsafeOf("water_on_map_outlines");
+    TagKey<Biome> WATER_ON_MAP_OUTLINES = TagKey.of("water_on_map_outlines");
 
-    TagKey<Biome> WITHOUT_WANDERING_TRADER_SPAWNS = TagKey.unsafeOf("without_wandering_trader_spawns");
+    TagKey<Biome> WITHOUT_WANDERING_TRADER_SPAWNS = TagKey.of("without_wandering_trader_spawns");
 
-    TagKey<Biome> WITHOUT_ZOMBIE_SIEGES = TagKey.unsafeOf("without_zombie_sieges");
+    TagKey<Biome> WITHOUT_ZOMBIE_SIEGES = TagKey.of("without_zombie_sieges");
 }
