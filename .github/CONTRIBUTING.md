@@ -12,6 +12,27 @@
 #### **Do you intend to add a new feature or change an existing one?**
 * Do not open a pull-request on GitHub until you have collected positive feedback about the change from a maintainer.
 
+#### **Does your change break existing code?**
+* Breaking changes need a maintainer's approval. Once approved, a maintainer labels the pull-request as `breaking`, which lets it pass the binary compatibility check.
+
+* Add a `## Migration` section to the PR description. Give each breaking change its own block: a one line description, the code before the change, a `:arrow_down:` line, then the code after it. These blocks are copied into the release notes.
+
+* This also applies to changes that only break source compatibility, or that remove internal API people are known to use, even when the binary compatibility check passes.
+
+* When something is removed without a replacement, say so in one line instead of a block.
+
+````markdown
+## Migration
+Registry keys are created with `of`.
+```java
+RegistryKey<Biome> key = RegistryKey.unsafeOf("minecraft:plains");
+```
+:arrow_down:
+```java
+RegistryKey<Biome> key = RegistryKey.of("minecraft:plains");
+```
+````
+
 #### **Do you have questions about the source code?**
 * Ask any question about how to use Minestom in the GitHub issues section or the community portals.
 
