@@ -2,6 +2,8 @@ package net.minestom.server.statistic;
 
 import net.minestom.server.entity.Player;
 
+import java.util.Objects;
+
 /**
  * Represents a single statistic in the "statistics" game menu.
  * <p>
@@ -26,5 +28,16 @@ public class PlayerStatistic {
 
     public int getStatisticId() {
         return statisticId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof PlayerStatistic that)) return false;
+        return statisticId == that.statisticId && category == that.category;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(category, statisticId);
     }
 }
