@@ -8,6 +8,7 @@ import net.minestom.server.Auth;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.configuration.ClientFinishConfigurationPacket;
 import net.minestom.server.network.packet.client.configuration.ClientSelectKnownPacksPacket;
@@ -49,6 +50,7 @@ public final class LoginListener {
     private static final Component ERROR_MALFORMED_USERNAME = Component.text("Malformed username!", NamedTextColor.RED);
     private static final Component ENCRYPTION_FAILED = Component.text("Encryption failed!", NamedTextColor.RED);
     private static final Component ERROR_MOJANG_RESPONSE = Component.text("Failed to contact Mojang's Session Servers (Are they down?)", NamedTextColor.RED);
+    private static final Component CONFIGURATION_FINISHED_EARLY = Component.text("Configuration finished too early!", NamedTextColor.RED);
 
     public static final Component INVALID_PROXY_RESPONSE = Component.text("Invalid proxy response!", NamedTextColor.RED);
 
@@ -234,6 +236,12 @@ public final class LoginListener {
     }
 
     public static void finishConfigListener(ClientFinishConfigurationPacket packet, Player player) {
+        final PlayerConnection connection = player.getPlayerConnection();
+        if (connection.getServerState() != ConnectionState.PLAY) {
+            // The server has not sent its own finish packet yet, so the player has no spawning instance.
+            connection.kick(CONFIGURATION_FINISHED_EARLY);
+            return;
+        }
         MinecraftServer.getConnectionManager().transitionConfigToPlay(player);
     }
 

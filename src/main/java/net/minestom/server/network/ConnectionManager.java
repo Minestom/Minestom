@@ -58,6 +58,7 @@ public final class ConnectionManager {
 
     private static final Component TIMEOUT_TEXT = Component.text("Timeout", NamedTextColor.RED);
     private static final Component SHUTDOWN_TEXT = Component.text("Server shutting down");
+    private static final Component SPAWN_ERROR_TEXT = Component.text("Error during spawn!", NamedTextColor.RED);
 
     private final CachedPacket cachedTagsPacket =
             new CachedPacket(() -> Registries.tagsPacket(MinecraftServer.getRegistries()));
@@ -356,20 +357,25 @@ public final class ConnectionManager {
         });
         this.playWaitingPlayers.drain(player -> {
             if (!player.isOnline()) return; // Player disconnected while in queued to join
-            configurationPlayers.remove(player);
-            playPlayers.add(player);
-            keepAlivePlayers.add(player);
+            try {
+                configurationPlayers.remove(player);
+                playPlayers.add(player);
+                keepAlivePlayers.add(player);
 
-            // This fixes a bug with Geyser. They do not reply to keep alive during config, meaning that
-            // `Player#didAnswerKeepAlive()` will always be false when entering the play state, so a new keep
-            // alive will never be sent and they will disconnect themselves or we will kick them for not replying.
-            player.refreshAnswerKeepAlive(true);
+                // This fixes a bug with Geyser. They do not reply to keep alive during config, meaning that
+                // `Player#didAnswerKeepAlive()` will always be false when entering the play state, so a new keep
+                // alive will never be sent and they will disconnect themselves or we will kick them for not replying.
+                player.refreshAnswerKeepAlive(true);
 
-            // Spawn the player at Player#getRespawnPoint
-            CompletableFuture<Void> spawnFuture = player.UNSAFE_init();
+                // Spawn the player at Player#getRespawnPoint
+                CompletableFuture<Void> spawnFuture = player.UNSAFE_init();
 
-            // Required to get the exact moment the player spawns
-            if (ServerProperties.INSIDE_TEST.get()) spawnFuture.join();
+                // Required to get the exact moment the player spawns
+                if (ServerProperties.INSIDE_TEST.get()) spawnFuture.join();
+            } catch (Throwable t) {
+                player.kick(SPAWN_ERROR_TEXT);
+                MinecraftServer.getExceptionManager().handleException(t);
+            }
         });
     }
 
