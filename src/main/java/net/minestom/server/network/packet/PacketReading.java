@@ -104,7 +104,7 @@ public final class PacketReading {
      * Only invoked when {@link #intercepts} accepts the peeked id, so unsubscribed
      * packets stay on the zero-overhead vanilla path.
      * <p>
-     * Internal plumbing for {@code PacketInterceptor}, direct use is discouraged.
+     * Internal plumbing, direct use is discouraged.
      */
     @ApiStatus.Internal
     public interface FrameHook {
@@ -112,49 +112,22 @@ public final class PacketReading {
          * Filters packets by id, before any decode.
          *
          * @param packetId the peeked packet id
-         * @return true to invoke {@link #transform}, false for the vanilla path
+         * @return true to invoke {@link #translate}, false for the vanilla path
          */
         default boolean intercepts(int packetId) {
             return true;
         }
 
         /**
-         * Decides what happens to the current frame.
-         */
-        sealed interface FrameResult {
-            /**
-             * Forwards the frame untouched.
-             * <p>
-             * In-place edits are included, no copy happens.
-             */
-            record Keep() implements FrameResult {
-            }
-
-            /**
-             * Parses the given frame instead of the original.
-             *
-             * @param frame the replacement frame
-             */
-            record Replace(NetworkBuffer frame) implements FrameResult {
-            }
-
-            /**
-             * Skips the packet entirely.
-             */
-            record Drop() implements FrameResult {
-            }
-        }
-
-        /**
-         * Transforms a single frame.
+         * Translates the given frames, returning zero or more frames to continue with.
+         * <p>
+         * Frames that are never returned are skipped.
          *
-         * @param state the connection state the frame was received in
-         * @param frame the mutable frame slice
-         * @return how to continue with the frame
+         * @param state the connection state the frames were received in
+         * @param frames the incoming frames
+         * @return the translated frames, in order
          */
-        default FrameResult transform(ConnectionState state, NetworkBuffer frame) {
-            return new FrameResult.Keep();
-        }
+        List<NetworkBuffer> translate(ConnectionState state, List<NetworkBuffer> frames);
     }
 
     public static Result<ClientPacket> readClients(
@@ -314,9 +287,8 @@ public final class PacketReading {
     /**
      * Parses one wire frame: decompress, pre-read hook, decode.
      * <p>
-     * A single wire packet can yield zero, one or several parsed packets: injected
-     * frames from the hook are decoded here with chained states and returned together
-     * in arrival order ({@code before < current < after}).
+     * A single wire packet can yield zero, one or several parsed packets. Translated
+     * frames are decoded in order with chained states.
      *
      * @param wire the {@code [dataLength?][packetId + payload]} slice
      */
@@ -355,33 +327,43 @@ public final class PacketReading {
             }
 
             // Pre-read hook on the decompressed [packetId + payload]. Null hook = vanilla path.
-            NetworkBuffer frame = payload;
+            List<NetworkBuffer> frames;
             if (frameHook != null) {
                 final int peekedId;
                 try {
-                    peekedId = frame.readAt(frame.readIndex(), VAR_INT);
+                    peekedId = payload.readAt(payload.readIndex(), VAR_INT);
                 } catch (IndexOutOfBoundsException _) {
                     return skippedResult();
                 }
                 if (frameHook.intercepts(peekedId)) {
+                    // Mutable copy rebased to zero: copy() keeps absolute indexes
                     NetworkBuffer mutable = payload.copy(payload.readIndex(), payload.readableBytes(),
                             0, payload.readableBytes());
-                    final FrameHook.FrameResult hookResult = frameHook.transform(state, mutable);
-                    switch (hookResult) {
-                        case FrameHook.FrameResult.Drop _ -> {
-                            return skippedResult();
-                        }
-                        case FrameHook.FrameResult.Keep _ -> frame = mutable.readOnly();
-                        case FrameHook.FrameResult.Replace(NetworkBuffer replacement) ->
-                                frame = replacement.readOnly();
-                    }
+                    frames = frameHook.translate(state, List.of(mutable));
+                } else {
+                    frames = List.of(payload);
                 }
+            } else {
+                frames = List.of(payload);
             }
 
-            final PacketRegistry<? extends T> registry = parser.stateRegistry(state);
-            final @Nullable T packet = readPayload(frame, registry, packetReader);
-            if (packet == null) return skippedResult();
-            return new Result.Success<>(new ParsedPacket<>(stateUpdater.apply(packet, state), packet));
+            List<ParsedPacket<T>> out = new ArrayList<>();
+            ConnectionState cursor = state;
+
+            for (NetworkBuffer frame : frames) {
+                final PacketRegistry<? extends T> registry = parser.stateRegistry(cursor);
+                final @Nullable T packet = readPayload(frame.readOnly(), registry, packetReader);
+
+                if (packet == null) continue;
+
+                cursor = stateUpdater.apply(packet, cursor);
+                out.add(new ParsedPacket<>(cursor, packet));
+            }
+
+            if (out.isEmpty()) return skippedResult();
+            if (out.size() == 1) return new Result.Success<>(out.getFirst());
+
+            return new Result.Success<>(out);
         } finally {
             if (pooled != null) PacketVanilla.PACKET_POOL.add(pooled);
         }
