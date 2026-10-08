@@ -6,10 +6,10 @@ import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentFloatRange;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentIntRange;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentItemStack;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentKey;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentNbtCompoundTag;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentNbtTag;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentResource;
-import net.minestom.server.command.builder.arguments.minecraft.ArgumentResourceLocation;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentResourceOrTag;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentTeamColor;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentTime;
@@ -183,12 +183,12 @@ public class ArgumentType {
     }
 
     /**
-     * Creates a new {@link ArgumentResourceLocation}.
+     * Creates a new {@link ArgumentKey}.
      *
-     * @see ArgumentResourceLocation
+     * @see ArgumentKey
      */
-    public static ArgumentResourceLocation ResourceLocation(String id) {
-        return new ArgumentResourceLocation(id);
+    public static ArgumentKey Key(String id) {
+        return new ArgumentKey(id);
     }
 
     /**
