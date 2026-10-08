@@ -109,10 +109,9 @@ public sealed interface SlotDisplay extends ComponentHolder<SlotDisplay> {
 
         @Override
         public SlotDisplay copyWithOperator(UnaryOperator<Component> operator) {
-            final TrimPattern pattern = trimPattern.asValue();
             return new SmithingTrim(base.copyWithOperator(operator),
                     trimMaterial.copyWithOperator(operator),
-                    pattern != null
+                    trimPattern instanceof TrimPattern pattern
                             ? TrimPattern.create(pattern.assetId(), operator.apply(pattern.description()), pattern.isDecal())
                             : trimPattern);
         }
