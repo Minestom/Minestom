@@ -24,6 +24,7 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 public final class Server {
+    private volatile ConnectionFactory connectionFactory = PlayerSocketConnection::new;
     private volatile boolean stop;
 
     private final PacketParser.Client packetParser;
@@ -93,11 +94,17 @@ public final class Server {
                     configureSocket(client);
                     Thread readThread = readBuilder.unstarted(() -> playerReadLoop(reference.get()));
                     Thread writeThread = writeBuilder.unstarted(() -> playerWriteLoop(reference.get()));
-                    PlayerSocketConnection connection = new PlayerSocketConnection(client, client.getRemoteAddress(), readThread, writeThread);
+                    PlayerSocketConnection connection = connectionFactory.create(client, client.getRemoteAddress(), readThread, writeThread);
+
+                    if (connection == null) {
+                        client.close(); // Rejected by the factory
+                        continue;
+                    }
+
                     reference.set(connection);
                     readThread.start();
                     writeThread.start();
-                } catch (IOException e) {
+                } catch (IOException | RuntimeException e) {
                     if (!ServerProperties.SUPPRESS_CONNECTION_ACCEPT_ERRORS.get())
                         MinecraftServer.getExceptionManager().handleException(e);
                     try {
@@ -196,6 +203,14 @@ public final class Server {
         } catch (IOException e) {
             MinecraftServer.getExceptionManager().handleException(e);
         }
+    }
+
+    public void setConnectionFactory(ConnectionFactory connectionFactory) {
+        this.connectionFactory = Objects.requireNonNull(connectionFactory);
+    }
+
+    public ConnectionFactory connectionFactory() {
+        return connectionFactory;
     }
 
     @ApiStatus.Internal
