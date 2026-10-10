@@ -41,7 +41,7 @@ public final class CachedPacket implements SendablePacket {
 
     static {
         try {
-            PACKET = MethodHandles.lookup().findVarHandle(CachedPacket.class, "packet", SoftReference.class);
+            PACKET = MethodHandles.lookup().findVarHandle(CachedPacket.class, "cache", SoftReference.class);
         } catch (ReflectiveOperationException e) {
             throw new ExceptionInInitializerError(e);
         }
@@ -51,7 +51,7 @@ public final class CachedPacket implements SendablePacket {
 
     // Accessed through PACKET using acquire/release semantics.
     @SuppressWarnings("unused")
-    private @Nullable SoftReference<FramedPacket> packet;
+    private @Nullable SoftReference<Cache> cache;
 
     /**
      * Creates a cached packet backed by the given packet supplier.
@@ -101,7 +101,7 @@ public final class CachedPacket implements SendablePacket {
      * Returns the packet represented by this cached value.
      *
      * <p>When caching is enabled, this method may initialize or reuse the cached
-     * framed packet. Supplier invocation and cache computation are serialized.
+     * packet. Supplier invocation and cache computation are serialized.
      *
      * <p>When caching is disabled, the packet supplier is invoked directly and
      * may be invoked concurrently by multiple callers.
@@ -110,15 +110,17 @@ public final class CachedPacket implements SendablePacket {
      * @return the packet value
      */
     public ServerPacket packet(ConnectionState state) {
-        final FramedPacket cache = updatedCache(state);
-        return cache != null ? cache.packet() : packetSupplier.get();
+        if (!ServerProperties.CACHED_PACKET.get()) return packetSupplier.get();
+        final Cache cache = cache();
+        return cache != null ? cache.packet() : computePacket();
     }
 
     /**
      * Returns the cached framed packet body for the given connection state.
      *
-     * <p>If caching is enabled, this method initializes the cache when necessary.
-     * Cache computation and supplier invocation are serialized.
+     * <p>If caching is enabled, this method frames the packet for
+     * {@code state} when no body is cached yet, reusing the cached packet when
+     * one exists. Cache computation and supplier invocation are serialized.
      *
      * <p>If caching is disabled, no framed body is created and {@code null} is
      * returned.
@@ -127,67 +129,73 @@ public final class CachedPacket implements SendablePacket {
      * @return the framed packet body, or {@code null} when caching is disabled
      */
     public @Nullable NetworkBuffer body(ConnectionState state) {
-        final FramedPacket cache = updatedCache(state);
-        return cache != null ? cache.body() : null;
-    }
-
-    /**
-     * Returns the current cached value, computing it when absent.
-     *
-     * @param state the connection state used when framing the packet
-     * @return the cached framed packet, or {@code null} when caching is disabled
-     */
-    private @Nullable FramedPacket updatedCache(ConnectionState state) {
         if (!ServerProperties.CACHED_PACKET.get()) return null;
-
-        final FramedPacket cache = cachedPacket();
-        return cache != null ? cache : computeCache(state);
+        final Cache cache = cache();
+        final NetworkBuffer body = cache != null ? cache.body() : null;
+        return body != null ? body : computeBody(state);
     }
 
     /**
-     * Returns an existing cached value or computes and publishes a replacement.
+     * Returns the cached packet, computing it when absent.
      *
      * <p>This method is synchronized so that only one thread invokes the packet
-     * supplier and computes a replacement cache entry at a time. The cache is
-     * checked again after acquiring this object's monitor because another thread
-     * may have populated it while the current thread was waiting.
+     * supplier at a time. The cache is checked again after acquiring this
+     * object's monitor because another thread may have populated it while the
+     * current thread was waiting.
+     *
+     * @return the existing or newly computed packet
+     */
+    private synchronized ServerPacket computePacket() {
+        final Cache cache = cache();
+        if (cache != null) return cache.packet();
+        final ServerPacket packet = packetSupplier.get();
+        PACKET.setRelease(this, new SoftReference<>(new Cache(packet, null)));
+        return packet;
+    }
+
+    /**
+     * Returns the existing framed body or computes and publishes one.
+     *
+     * <p>This method is synchronized so that only one thread invokes the packet
+     * supplier and frames a replacement at a time. The cache is checked again
+     * after acquiring this object's monitor because another thread may have
+     * populated it while the current thread was waiting.
      *
      * <p>Invalidation does not acquire this monitor. An invalidation occurring
      * during computation may therefore be followed by publication of the
      * in progress result.
      *
      * @param state the connection state used when framing the packet
-     * @return the existing or newly computed framed packet
+     * @return the existing or newly framed body
      */
-    private synchronized FramedPacket computeCache(ConnectionState state) {
-        final FramedPacket cache = cachedPacket();
-        if (cache != null) return cache;
+    private synchronized NetworkBuffer computeBody(ConnectionState state) {
+        final Cache cache = cache();
+        final NetworkBuffer cached = cache != null ? cache.body() : null;
+        if (cached != null) return cached;
 
-        final ServerPacket packet = packetSupplier.get();
-        final NetworkBuffer buffer = PacketWriting.allocateTrimmedPacket(state, packet, MinecraftServer.getCompressionThreshold());
-
-        final FramedPacket updated = new FramedPacket(packet, buffer);
-        PACKET.setRelease(this, new SoftReference<>(updated));
-        return updated;
+        final ServerPacket packet = cache != null ? cache.packet() : packetSupplier.get();
+        final NetworkBuffer body = PacketWriting.allocateTrimmedPacket(state, packet, MinecraftServer.getCompressionThreshold());
+        PACKET.setRelease(this, new SoftReference<>(new Cache(packet, body)));
+        return body;
     }
 
     /**
-     * Returns the currently referenced cached packet.
+     * Returns the currently referenced cache.
      *
      * <p>The cached reference is read using acquire semantics.
      *
-     * @return the cached framed packet, or {@code null} if no cache exists or
-     * the soft reference has been cleared
+     * @return the cache, or {@code null} if no cache exists or the soft
+     * reference has been cleared
      */
     @SuppressWarnings("unchecked")
-    private @Nullable FramedPacket cachedPacket() {
-        final SoftReference<FramedPacket> ref = (SoftReference<FramedPacket>) PACKET.getAcquire(this);
+    private @Nullable Cache cache() {
+        final SoftReference<Cache> ref = (SoftReference<Cache>) PACKET.getAcquire(this);
         return ref != null ? ref.get() : null;
     }
 
     /**
-     * Returns whether a framed packet is currently cached and has not been
-     * reclaimed.
+     * Returns whether a packet is currently cached and has not been
+     * reclaimed. The cached packet may not have been framed yet.
      *
      * <p>This result is inherently transient because the underlying soft
      * reference may be cleared or the cache may be invalidated immediately
@@ -197,7 +205,7 @@ public final class CachedPacket implements SendablePacket {
      * available
      */
     public boolean isValid() {
-        return ServerProperties.CACHED_PACKET.get() && cachedPacket() != null;
+        return ServerProperties.CACHED_PACKET.get() && cache() != null;
     }
 
     /**
@@ -211,6 +219,11 @@ public final class CachedPacket implements SendablePacket {
      */
     @Override
     public String toString() {
-        return String.format("CachedPacket{cache=%s}", cachedPacket());
+        return String.format("CachedPacket{cache=%s}", cache());
+    }
+
+    // The packet, plus its framed body once a connection requested it.
+    // Requires identity
+    private record Cache(ServerPacket packet, @Nullable NetworkBuffer body) {
     }
 }
