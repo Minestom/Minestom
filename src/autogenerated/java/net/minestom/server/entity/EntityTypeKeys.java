@@ -77,6 +77,8 @@ public interface EntityTypeKeys {
 
     RegistryKey<EntityType> CREEPER = RegistryKey.of("creeper");
 
+    RegistryKey<EntityType> CUSHION = RegistryKey.of("cushion");
+
     RegistryKey<EntityType> DARK_OAK_BOAT = RegistryKey.of("dark_oak_boat");
 
     RegistryKey<EntityType> DARK_OAK_CHEST_BOAT = RegistryKey.of("dark_oak_chest_boat");
@@ -226,6 +228,10 @@ public interface EntityTypeKeys {
     RegistryKey<EntityType> PLAYER = RegistryKey.of("player");
 
     RegistryKey<EntityType> POLAR_BEAR = RegistryKey.of("polar_bear");
+
+    RegistryKey<EntityType> POPLAR_BOAT = RegistryKey.of("poplar_boat");
+
+    RegistryKey<EntityType> POPLAR_CHEST_BOAT = RegistryKey.of("poplar_chest_boat");
 
     RegistryKey<EntityType> PUFFERFISH = RegistryKey.of("pufferfish");
 

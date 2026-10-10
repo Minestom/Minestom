@@ -60,7 +60,6 @@ import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPa
 import net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
 import net.minestom.server.network.packet.client.play.ClientAdvancementTabPacket;
-import net.minestom.server.network.packet.client.play.ClientAnimationPacket;
 import net.minestom.server.network.packet.client.play.ClientAttackPacket;
 import net.minestom.server.network.packet.client.play.ClientChangeGameModePacket;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
@@ -90,6 +89,7 @@ import net.minestom.server.network.packet.client.play.ClientPlayerPositionAndRot
 import net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket;
 import net.minestom.server.network.packet.client.play.ClientPlayerPositionStatusPacket;
 import net.minestom.server.network.packet.client.play.ClientPlayerRotationPacket;
+import net.minestom.server.network.packet.client.play.ClientPunchPacket;
 import net.minestom.server.network.packet.client.play.ClientSelectBundleItemPacket;
 import net.minestom.server.network.packet.client.play.ClientSetGameRulesPacket;
 import net.minestom.server.network.packet.client.play.ClientSetRecipeBookStatePacket;
@@ -168,7 +168,7 @@ public final class PacketListenerManager {
         setPlayListener(ClientPlayerPositionAndRotationPacket.class, PlayerPositionListener::playerPositionAndLookListener);
         setPlayListener(ClientTeleportConfirmPacket.class, PlayerPositionListener::teleportConfirmListener);
         setPlayListener(ClientPlayerActionPacket.class, PlayerActionListener::playerActionListener);
-        setPlayListener(ClientAnimationPacket.class, AnimationListener::animationListener);
+        setPlayListener(ClientPunchPacket.class, AnimationListener::punchListener);
         setPlayListener(ClientInteractEntityPacket.class, UseEntityListener::useEntityListener);
         setPlayListener(ClientAttackPacket.class, UseEntityListener::attackEntityListener);
         setPlayListener(ClientUseItemPacket.class, UseItemListener::useItemListener);

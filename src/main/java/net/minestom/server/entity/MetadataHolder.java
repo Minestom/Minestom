@@ -104,6 +104,7 @@ import net.minestom.server.entity.metadata.other.AllayMeta;
 import net.minestom.server.entity.metadata.other.AreaEffectCloudMeta;
 import net.minestom.server.entity.metadata.other.ArmorStandMeta;
 import net.minestom.server.entity.metadata.other.BoatMeta;
+import net.minestom.server.entity.metadata.other.CushionMeta;
 import net.minestom.server.entity.metadata.other.EndCrystalMeta;
 import net.minestom.server.entity.metadata.other.EnderDragonMeta;
 import net.minestom.server.entity.metadata.other.EvokerFangsMeta;
@@ -305,8 +306,7 @@ public final class MetadataHolder {
         return Map.copyOf(new Int2ObjectArrayMap<>(ids, values, count));
     }
 
-    @SuppressWarnings("JavacQuirks")
-    static final Map<EntityType, BiFunction<@Nullable Entity, MetadataHolder, ? extends EntityMeta>> ENTITY_META_SUPPLIER = Map.ofEntries(
+    static final Map<EntityType, BiFunction<@Nullable Entity, MetadataHolder, ? extends EntityMeta>> ENTITY_META_SUPPLIER = Map.<EntityType, BiFunction<@Nullable Entity, MetadataHolder, ? extends EntityMeta>>ofEntries(
             entry(EntityType.ACACIA_BOAT, BoatMeta::new),
             entry(EntityType.ACACIA_CHEST_BOAT, BoatMeta::new),
             entry(EntityType.ALLAY, AllayMeta::new),
@@ -338,6 +338,7 @@ public final class MetadataHolder {
             entry(EntityType.COW, CowMeta::new),
             entry(EntityType.CREAKING, CreakingMeta::new),
             entry(EntityType.CREEPER, CreeperMeta::new),
+            entry(EntityType.CUSHION, CushionMeta::new),
             entry(EntityType.DARK_OAK_BOAT, BoatMeta::new),
             entry(EntityType.DARK_OAK_CHEST_BOAT, BoatMeta::new),
             entry(EntityType.DOLPHIN, DolphinMeta::new),
@@ -413,6 +414,8 @@ public final class MetadataHolder {
             entry(EntityType.PIGLIN_BRUTE, PiglinBruteMeta::new),
             entry(EntityType.PILLAGER, PillagerMeta::new),
             entry(EntityType.POLAR_BEAR, PolarBearMeta::new),
+            entry(EntityType.POPLAR_BOAT, BoatMeta::new),
+            entry(EntityType.POPLAR_CHEST_BOAT, BoatMeta::new),
             entry(EntityType.TNT, PrimedTntMeta::new),
             entry(EntityType.PUFFERFISH, PufferfishMeta::new),
             entry(EntityType.RABBIT, RabbitMeta::new),

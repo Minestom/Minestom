@@ -1,16 +1,16 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.instance.block.SignTextSlot;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 
 import static net.minestom.server.network.NetworkBuffer.BLOCK_POSITION;
-import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
 
-public record OpenSignEditorPacket(Point position, boolean isFrontText) implements ServerPacket.Play {
+public record OpenSignEditorPacket(Point position, SignTextSlot slot) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<OpenSignEditorPacket> SERIALIZER = NetworkBufferTemplate.template(
             BLOCK_POSITION, OpenSignEditorPacket::position,
-            BOOLEAN, OpenSignEditorPacket::isFrontText,
+            SignTextSlot.NETWORK_TYPE, OpenSignEditorPacket::slot,
             OpenSignEditorPacket::new);
 }

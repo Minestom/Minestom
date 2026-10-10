@@ -92,6 +92,12 @@ sealed interface Particles permits Particle {
 
     Particle PALE_OAK_LEAVES = ParticleImpl.get(ParticleKeys.PALE_OAK_LEAVES);
 
+    Particle RED_POPLAR_LEAVES = ParticleImpl.get(ParticleKeys.RED_POPLAR_LEAVES);
+
+    Particle ORANGE_POPLAR_LEAVES = ParticleImpl.get(ParticleKeys.ORANGE_POPLAR_LEAVES);
+
+    Particle YELLOW_POPLAR_LEAVES = ParticleImpl.get(ParticleKeys.YELLOW_POPLAR_LEAVES);
+
     Particle.TintedLeaves TINTED_LEAVES = ParticleImpl.get(ParticleKeys.TINTED_LEAVES);
 
     Particle SCULK_SOUL = ParticleImpl.get(ParticleKeys.SCULK_SOUL);

@@ -133,6 +133,8 @@ public interface StatisticTypeKeys {
 
     RegistryKey<StatisticType> SLEEP_IN_BED = RegistryKey.of("sleep_in_bed");
 
+    RegistryKey<StatisticType> SLEEP_IN_STRAW_BED = RegistryKey.of("sleep_in_straw_bed");
+
     RegistryKey<StatisticType> SNEAK_TIME = RegistryKey.of("sneak_time");
 
     RegistryKey<StatisticType> SPRINT_ONE_CM = RegistryKey.of("sprint_one_cm");

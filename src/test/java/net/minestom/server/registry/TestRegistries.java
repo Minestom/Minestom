@@ -20,7 +20,9 @@ import net.minestom.server.entity.metadata.cube.SulfurCubeArchetype;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
+import net.minestom.server.instance.block.pot.DecoratedPotPattern;
 import net.minestom.server.instance.block.predicate.DataComponentPredicate;
+import net.minestom.server.instance.block.transformer.BlockTransformer;
 import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.item.enchant.Enchantment;
@@ -33,6 +35,7 @@ import net.minestom.server.message.ChatType;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import net.minestom.server.world.clock.WorldClock;
+import net.minestom.server.world.generation.BlockStateProvider;
 import net.minestom.server.world.timeline.Timeline;
 import org.jetbrains.annotations.Nullable;
 
@@ -67,6 +70,9 @@ public class TestRegistries implements Registries {
     public @Nullable DynamicRegistry<Timeline> timeline = null;
     public @Nullable DynamicRegistry<WorldClock> worldClock = null;
     public @Nullable DynamicRegistry<SulfurCubeArchetype> sulfurCubeArchetype = null;
+    public @Nullable DynamicRegistry<DecoratedPotPattern> decoratedPotPattern = null;
+    public @Nullable DynamicRegistry<BlockTransformer> blockTransformer = null;
+    public @Nullable DynamicRegistry<BlockStateProvider> blockStateProvider = null;
     public @Nullable DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues = null;
     public @Nullable DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects = null;
     public @Nullable DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects = null;
@@ -212,6 +218,21 @@ public class TestRegistries implements Registries {
     @Override
     public DynamicRegistry<SulfurCubeArchetype> sulfurCubeArchetype() {
         return Objects.requireNonNull(sulfurCubeArchetype);
+    }
+
+    @Override
+    public DynamicRegistry<DecoratedPotPattern> decoratedPotPattern() {
+        return Objects.requireNonNull(decoratedPotPattern);
+    }
+
+    @Override
+    public DynamicRegistry<BlockTransformer> blockTransformer() {
+        return Objects.requireNonNull(blockTransformer);
+    }
+
+    @Override
+    public DynamicRegistry<BlockStateProvider> blockStateProvider() {
+        return Objects.requireNonNull(blockStateProvider);
     }
 
     @Override

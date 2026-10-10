@@ -268,13 +268,15 @@ public class AnvilLoader implements ChunkLoader {
         int[] convertedPalette = new int[length];
         for (int i = 0; i < length; i++) {
             CompoundBinaryTag paletteEntry = paletteTag.getCompound(i);
-            final String blockName = paletteEntry.getString("Name");
+            // TODO: Drop the Name and Properties fallbacks, worlds saved before data version 5006 use them.
+            final String blockName = paletteEntry.getString("id", paletteEntry.getString("Name"));
             if (blockName.equals("minecraft:air")) {
                 convertedPalette[i] = Block.AIR.stateId();
             } else {
                 Block block = Objects.requireNonNull(Block.fromKey(blockName), "Unknown block " + blockName);
                 // Properties
-                final CompoundBinaryTag propertiesNBT = paletteEntry.getCompound("Properties");
+                CompoundBinaryTag propertiesNBT = paletteEntry.getCompound("properties");
+                if (propertiesNBT.isEmpty()) propertiesNBT = paletteEntry.getCompound("Properties");
                 if (!propertiesNBT.isEmpty()) {
                     final Map<String, String> properties = HashMap.newHashMap(propertiesNBT.size());
                     for (var property : propertiesNBT) {
@@ -545,7 +547,7 @@ public class AnvilLoader implements ChunkLoader {
 
     private static CompoundBinaryTag blockStateNbtCompute(final Block block) {
         final CompoundBinaryTag.Builder tag = CompoundBinaryTag.builder();
-        tag.putString("Name", block.name());
+        tag.putString("id", block.name());
         final Map<String, String> blockProperties = block.properties();
         if (!blockProperties.isEmpty()) {
             final Map<String, String> defaultProperties = block.defaultState().properties();
@@ -557,7 +559,7 @@ public class AnvilLoader implements ChunkLoader {
                 propertiesTag.putString(key, value);
             }
             CompoundBinaryTag properties = propertiesTag.build();
-            if (!properties.isEmpty()) tag.put("Properties", properties);
+            if (!properties.isEmpty()) tag.put("properties", properties);
         }
         return tag.build();
     }

@@ -54,7 +54,10 @@ final class RegistriesImpl {
                 registries.worldClock(),
                 registries.timeline(),
                 registries.dimensionType(),
-                registries.sulfurCubeArchetype()
+                registries.sulfurCubeArchetype(),
+                registries.decoratedPotPattern(),
+                registries.blockTransformer(),
+                registries.blockStateProvider()
         );
     }
 

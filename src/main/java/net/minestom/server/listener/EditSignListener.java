@@ -19,7 +19,7 @@ public class EditSignListener {
                 block,
                 position,
                 packet.lines(),
-                packet.isFrontText()
+                packet.slot()
         ));
     }
 }

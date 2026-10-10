@@ -191,6 +191,10 @@ public interface BlockKeys {
 
     RegistryKey<Block> BLACK_CONCRETE_POWDER = RegistryKey.of("black_concrete_powder");
 
+    RegistryKey<Block> BLACK_CONCRETE_SLAB = RegistryKey.of("black_concrete_slab");
+
+    RegistryKey<Block> BLACK_CONCRETE_STAIRS = RegistryKey.of("black_concrete_stairs");
+
     RegistryKey<Block> BLACK_GLAZED_TERRACOTTA = RegistryKey.of("black_glazed_terracotta");
 
     RegistryKey<Block> BLACK_SHULKER_BOX = RegistryKey.of("black_shulker_box");
@@ -204,6 +208,10 @@ public interface BlockKeys {
     RegistryKey<Block> BLACK_WALL_BANNER = RegistryKey.of("black_wall_banner");
 
     RegistryKey<Block> BLACK_WOOL = RegistryKey.of("black_wool");
+
+    RegistryKey<Block> BLACK_WOOL_SLAB = RegistryKey.of("black_wool_slab");
+
+    RegistryKey<Block> BLACK_WOOL_STAIRS = RegistryKey.of("black_wool_stairs");
 
     RegistryKey<Block> BLACKSTONE = RegistryKey.of("blackstone");
 
@@ -229,6 +237,10 @@ public interface BlockKeys {
 
     RegistryKey<Block> BLUE_CONCRETE_POWDER = RegistryKey.of("blue_concrete_powder");
 
+    RegistryKey<Block> BLUE_CONCRETE_SLAB = RegistryKey.of("blue_concrete_slab");
+
+    RegistryKey<Block> BLUE_CONCRETE_STAIRS = RegistryKey.of("blue_concrete_stairs");
+
     RegistryKey<Block> BLUE_GLAZED_TERRACOTTA = RegistryKey.of("blue_glazed_terracotta");
 
     RegistryKey<Block> BLUE_ICE = RegistryKey.of("blue_ice");
@@ -246,6 +258,10 @@ public interface BlockKeys {
     RegistryKey<Block> BLUE_WALL_BANNER = RegistryKey.of("blue_wall_banner");
 
     RegistryKey<Block> BLUE_WOOL = RegistryKey.of("blue_wool");
+
+    RegistryKey<Block> BLUE_WOOL_SLAB = RegistryKey.of("blue_wool_slab");
+
+    RegistryKey<Block> BLUE_WOOL_STAIRS = RegistryKey.of("blue_wool_stairs");
 
     RegistryKey<Block> BONE_BLOCK = RegistryKey.of("bone_block");
 
@@ -283,6 +299,10 @@ public interface BlockKeys {
 
     RegistryKey<Block> BROWN_CONCRETE_POWDER = RegistryKey.of("brown_concrete_powder");
 
+    RegistryKey<Block> BROWN_CONCRETE_SLAB = RegistryKey.of("brown_concrete_slab");
+
+    RegistryKey<Block> BROWN_CONCRETE_STAIRS = RegistryKey.of("brown_concrete_stairs");
+
     RegistryKey<Block> BROWN_GLAZED_TERRACOTTA = RegistryKey.of("brown_glazed_terracotta");
 
     RegistryKey<Block> BROWN_MUSHROOM = RegistryKey.of("brown_mushroom");
@@ -300,6 +320,10 @@ public interface BlockKeys {
     RegistryKey<Block> BROWN_WALL_BANNER = RegistryKey.of("brown_wall_banner");
 
     RegistryKey<Block> BROWN_WOOL = RegistryKey.of("brown_wool");
+
+    RegistryKey<Block> BROWN_WOOL_SLAB = RegistryKey.of("brown_wool_slab");
+
+    RegistryKey<Block> BROWN_WOOL_STAIRS = RegistryKey.of("brown_wool_stairs");
 
     RegistryKey<Block> BUBBLE_COLUMN = RegistryKey.of("bubble_column");
 
@@ -589,6 +613,10 @@ public interface BlockKeys {
 
     RegistryKey<Block> CYAN_CONCRETE_POWDER = RegistryKey.of("cyan_concrete_powder");
 
+    RegistryKey<Block> CYAN_CONCRETE_SLAB = RegistryKey.of("cyan_concrete_slab");
+
+    RegistryKey<Block> CYAN_CONCRETE_STAIRS = RegistryKey.of("cyan_concrete_stairs");
+
     RegistryKey<Block> CYAN_GLAZED_TERRACOTTA = RegistryKey.of("cyan_glazed_terracotta");
 
     RegistryKey<Block> CYAN_SHULKER_BOX = RegistryKey.of("cyan_shulker_box");
@@ -602,6 +630,10 @@ public interface BlockKeys {
     RegistryKey<Block> CYAN_WALL_BANNER = RegistryKey.of("cyan_wall_banner");
 
     RegistryKey<Block> CYAN_WOOL = RegistryKey.of("cyan_wool");
+
+    RegistryKey<Block> CYAN_WOOL_SLAB = RegistryKey.of("cyan_wool_slab");
+
+    RegistryKey<Block> CYAN_WOOL_STAIRS = RegistryKey.of("cyan_wool_stairs");
 
     RegistryKey<Block> DAMAGED_ANVIL = RegistryKey.of("damaged_anvil");
 
@@ -891,6 +923,10 @@ public interface BlockKeys {
 
     RegistryKey<Block> GRAY_CONCRETE_POWDER = RegistryKey.of("gray_concrete_powder");
 
+    RegistryKey<Block> GRAY_CONCRETE_SLAB = RegistryKey.of("gray_concrete_slab");
+
+    RegistryKey<Block> GRAY_CONCRETE_STAIRS = RegistryKey.of("gray_concrete_stairs");
+
     RegistryKey<Block> GRAY_GLAZED_TERRACOTTA = RegistryKey.of("gray_glazed_terracotta");
 
     RegistryKey<Block> GRAY_SHULKER_BOX = RegistryKey.of("gray_shulker_box");
@@ -904,6 +940,10 @@ public interface BlockKeys {
     RegistryKey<Block> GRAY_WALL_BANNER = RegistryKey.of("gray_wall_banner");
 
     RegistryKey<Block> GRAY_WOOL = RegistryKey.of("gray_wool");
+
+    RegistryKey<Block> GRAY_WOOL_SLAB = RegistryKey.of("gray_wool_slab");
+
+    RegistryKey<Block> GRAY_WOOL_STAIRS = RegistryKey.of("gray_wool_stairs");
 
     RegistryKey<Block> GREEN_BANNER = RegistryKey.of("green_banner");
 
@@ -919,6 +959,10 @@ public interface BlockKeys {
 
     RegistryKey<Block> GREEN_CONCRETE_POWDER = RegistryKey.of("green_concrete_powder");
 
+    RegistryKey<Block> GREEN_CONCRETE_SLAB = RegistryKey.of("green_concrete_slab");
+
+    RegistryKey<Block> GREEN_CONCRETE_STAIRS = RegistryKey.of("green_concrete_stairs");
+
     RegistryKey<Block> GREEN_GLAZED_TERRACOTTA = RegistryKey.of("green_glazed_terracotta");
 
     RegistryKey<Block> GREEN_SHULKER_BOX = RegistryKey.of("green_shulker_box");
@@ -932,6 +976,10 @@ public interface BlockKeys {
     RegistryKey<Block> GREEN_WALL_BANNER = RegistryKey.of("green_wall_banner");
 
     RegistryKey<Block> GREEN_WOOL = RegistryKey.of("green_wool");
+
+    RegistryKey<Block> GREEN_WOOL_SLAB = RegistryKey.of("green_wool_slab");
+
+    RegistryKey<Block> GREEN_WOOL_STAIRS = RegistryKey.of("green_wool_stairs");
 
     RegistryKey<Block> GRINDSTONE = RegistryKey.of("grindstone");
 
@@ -1069,6 +1117,10 @@ public interface BlockKeys {
 
     RegistryKey<Block> LIGHT_BLUE_CONCRETE_POWDER = RegistryKey.of("light_blue_concrete_powder");
 
+    RegistryKey<Block> LIGHT_BLUE_CONCRETE_SLAB = RegistryKey.of("light_blue_concrete_slab");
+
+    RegistryKey<Block> LIGHT_BLUE_CONCRETE_STAIRS = RegistryKey.of("light_blue_concrete_stairs");
+
     RegistryKey<Block> LIGHT_BLUE_GLAZED_TERRACOTTA = RegistryKey.of("light_blue_glazed_terracotta");
 
     RegistryKey<Block> LIGHT_BLUE_SHULKER_BOX = RegistryKey.of("light_blue_shulker_box");
@@ -1082,6 +1134,10 @@ public interface BlockKeys {
     RegistryKey<Block> LIGHT_BLUE_WALL_BANNER = RegistryKey.of("light_blue_wall_banner");
 
     RegistryKey<Block> LIGHT_BLUE_WOOL = RegistryKey.of("light_blue_wool");
+
+    RegistryKey<Block> LIGHT_BLUE_WOOL_SLAB = RegistryKey.of("light_blue_wool_slab");
+
+    RegistryKey<Block> LIGHT_BLUE_WOOL_STAIRS = RegistryKey.of("light_blue_wool_stairs");
 
     RegistryKey<Block> LIGHT_GRAY_BANNER = RegistryKey.of("light_gray_banner");
 
@@ -1097,6 +1153,10 @@ public interface BlockKeys {
 
     RegistryKey<Block> LIGHT_GRAY_CONCRETE_POWDER = RegistryKey.of("light_gray_concrete_powder");
 
+    RegistryKey<Block> LIGHT_GRAY_CONCRETE_SLAB = RegistryKey.of("light_gray_concrete_slab");
+
+    RegistryKey<Block> LIGHT_GRAY_CONCRETE_STAIRS = RegistryKey.of("light_gray_concrete_stairs");
+
     RegistryKey<Block> LIGHT_GRAY_GLAZED_TERRACOTTA = RegistryKey.of("light_gray_glazed_terracotta");
 
     RegistryKey<Block> LIGHT_GRAY_SHULKER_BOX = RegistryKey.of("light_gray_shulker_box");
@@ -1110,6 +1170,10 @@ public interface BlockKeys {
     RegistryKey<Block> LIGHT_GRAY_WALL_BANNER = RegistryKey.of("light_gray_wall_banner");
 
     RegistryKey<Block> LIGHT_GRAY_WOOL = RegistryKey.of("light_gray_wool");
+
+    RegistryKey<Block> LIGHT_GRAY_WOOL_SLAB = RegistryKey.of("light_gray_wool_slab");
+
+    RegistryKey<Block> LIGHT_GRAY_WOOL_STAIRS = RegistryKey.of("light_gray_wool_stairs");
 
     RegistryKey<Block> LIGHT_WEIGHTED_PRESSURE_PLATE = RegistryKey.of("light_weighted_pressure_plate");
 
@@ -1135,6 +1199,10 @@ public interface BlockKeys {
 
     RegistryKey<Block> LIME_CONCRETE_POWDER = RegistryKey.of("lime_concrete_powder");
 
+    RegistryKey<Block> LIME_CONCRETE_SLAB = RegistryKey.of("lime_concrete_slab");
+
+    RegistryKey<Block> LIME_CONCRETE_STAIRS = RegistryKey.of("lime_concrete_stairs");
+
     RegistryKey<Block> LIME_GLAZED_TERRACOTTA = RegistryKey.of("lime_glazed_terracotta");
 
     RegistryKey<Block> LIME_SHULKER_BOX = RegistryKey.of("lime_shulker_box");
@@ -1148,6 +1216,10 @@ public interface BlockKeys {
     RegistryKey<Block> LIME_WALL_BANNER = RegistryKey.of("lime_wall_banner");
 
     RegistryKey<Block> LIME_WOOL = RegistryKey.of("lime_wool");
+
+    RegistryKey<Block> LIME_WOOL_SLAB = RegistryKey.of("lime_wool_slab");
+
+    RegistryKey<Block> LIME_WOOL_STAIRS = RegistryKey.of("lime_wool_stairs");
 
     RegistryKey<Block> LODESTONE = RegistryKey.of("lodestone");
 
@@ -1167,6 +1239,10 @@ public interface BlockKeys {
 
     RegistryKey<Block> MAGENTA_CONCRETE_POWDER = RegistryKey.of("magenta_concrete_powder");
 
+    RegistryKey<Block> MAGENTA_CONCRETE_SLAB = RegistryKey.of("magenta_concrete_slab");
+
+    RegistryKey<Block> MAGENTA_CONCRETE_STAIRS = RegistryKey.of("magenta_concrete_stairs");
+
     RegistryKey<Block> MAGENTA_GLAZED_TERRACOTTA = RegistryKey.of("magenta_glazed_terracotta");
 
     RegistryKey<Block> MAGENTA_SHULKER_BOX = RegistryKey.of("magenta_shulker_box");
@@ -1180,6 +1256,10 @@ public interface BlockKeys {
     RegistryKey<Block> MAGENTA_WALL_BANNER = RegistryKey.of("magenta_wall_banner");
 
     RegistryKey<Block> MAGENTA_WOOL = RegistryKey.of("magenta_wool");
+
+    RegistryKey<Block> MAGENTA_WOOL_SLAB = RegistryKey.of("magenta_wool_slab");
+
+    RegistryKey<Block> MAGENTA_WOOL_STAIRS = RegistryKey.of("magenta_wool_stairs");
 
     RegistryKey<Block> MAGMA_BLOCK = RegistryKey.of("magma_block");
 
@@ -1351,7 +1431,13 @@ public interface BlockKeys {
 
     RegistryKey<Block> ORANGE_CONCRETE_POWDER = RegistryKey.of("orange_concrete_powder");
 
+    RegistryKey<Block> ORANGE_CONCRETE_SLAB = RegistryKey.of("orange_concrete_slab");
+
+    RegistryKey<Block> ORANGE_CONCRETE_STAIRS = RegistryKey.of("orange_concrete_stairs");
+
     RegistryKey<Block> ORANGE_GLAZED_TERRACOTTA = RegistryKey.of("orange_glazed_terracotta");
+
+    RegistryKey<Block> ORANGE_POPLAR_LEAVES = RegistryKey.of("orange_poplar_leaves");
 
     RegistryKey<Block> ORANGE_SHULKER_BOX = RegistryKey.of("orange_shulker_box");
 
@@ -1366,6 +1452,10 @@ public interface BlockKeys {
     RegistryKey<Block> ORANGE_WALL_BANNER = RegistryKey.of("orange_wall_banner");
 
     RegistryKey<Block> ORANGE_WOOL = RegistryKey.of("orange_wool");
+
+    RegistryKey<Block> ORANGE_WOOL_SLAB = RegistryKey.of("orange_wool_slab");
+
+    RegistryKey<Block> ORANGE_WOOL_STAIRS = RegistryKey.of("orange_wool_stairs");
 
     RegistryKey<Block> OXEYE_DAISY = RegistryKey.of("oxeye_daisy");
 
@@ -1469,6 +1559,10 @@ public interface BlockKeys {
 
     RegistryKey<Block> PINK_CONCRETE_POWDER = RegistryKey.of("pink_concrete_powder");
 
+    RegistryKey<Block> PINK_CONCRETE_SLAB = RegistryKey.of("pink_concrete_slab");
+
+    RegistryKey<Block> PINK_CONCRETE_STAIRS = RegistryKey.of("pink_concrete_stairs");
+
     RegistryKey<Block> PINK_GLAZED_TERRACOTTA = RegistryKey.of("pink_glazed_terracotta");
 
     RegistryKey<Block> PINK_PETALS = RegistryKey.of("pink_petals");
@@ -1486,6 +1580,10 @@ public interface BlockKeys {
     RegistryKey<Block> PINK_WALL_BANNER = RegistryKey.of("pink_wall_banner");
 
     RegistryKey<Block> PINK_WOOL = RegistryKey.of("pink_wool");
+
+    RegistryKey<Block> PINK_WOOL_SLAB = RegistryKey.of("pink_wool_slab");
+
+    RegistryKey<Block> PINK_WOOL_STAIRS = RegistryKey.of("pink_wool_stairs");
 
     RegistryKey<Block> PISTON = RegistryKey.of("piston");
 
@@ -1575,6 +1673,40 @@ public interface BlockKeys {
 
     RegistryKey<Block> POLISHED_TUFF_WALL = RegistryKey.of("polished_tuff_wall");
 
+    RegistryKey<Block> POPLAR_BUTTON = RegistryKey.of("poplar_button");
+
+    RegistryKey<Block> POPLAR_DOOR = RegistryKey.of("poplar_door");
+
+    RegistryKey<Block> POPLAR_FENCE = RegistryKey.of("poplar_fence");
+
+    RegistryKey<Block> POPLAR_FENCE_GATE = RegistryKey.of("poplar_fence_gate");
+
+    RegistryKey<Block> POPLAR_HANGING_SIGN = RegistryKey.of("poplar_hanging_sign");
+
+    RegistryKey<Block> POPLAR_LOG = RegistryKey.of("poplar_log");
+
+    RegistryKey<Block> POPLAR_PLANKS = RegistryKey.of("poplar_planks");
+
+    RegistryKey<Block> POPLAR_PRESSURE_PLATE = RegistryKey.of("poplar_pressure_plate");
+
+    RegistryKey<Block> POPLAR_SAPLING = RegistryKey.of("poplar_sapling");
+
+    RegistryKey<Block> POPLAR_SHELF = RegistryKey.of("poplar_shelf");
+
+    RegistryKey<Block> POPLAR_SIGN = RegistryKey.of("poplar_sign");
+
+    RegistryKey<Block> POPLAR_SLAB = RegistryKey.of("poplar_slab");
+
+    RegistryKey<Block> POPLAR_STAIRS = RegistryKey.of("poplar_stairs");
+
+    RegistryKey<Block> POPLAR_TRAPDOOR = RegistryKey.of("poplar_trapdoor");
+
+    RegistryKey<Block> POPLAR_WALL_HANGING_SIGN = RegistryKey.of("poplar_wall_hanging_sign");
+
+    RegistryKey<Block> POPLAR_WALL_SIGN = RegistryKey.of("poplar_wall_sign");
+
+    RegistryKey<Block> POPLAR_WOOD = RegistryKey.of("poplar_wood");
+
     RegistryKey<Block> POPPY = RegistryKey.of("poppy");
 
     RegistryKey<Block> POTATOES = RegistryKey.of("potatoes");
@@ -1639,6 +1771,8 @@ public interface BlockKeys {
 
     RegistryKey<Block> POTTED_PINK_TULIP = RegistryKey.of("potted_pink_tulip");
 
+    RegistryKey<Block> POTTED_POPLAR_SAPLING = RegistryKey.of("potted_poplar_sapling");
+
     RegistryKey<Block> POTTED_POPPY = RegistryKey.of("potted_poppy");
 
     RegistryKey<Block> POTTED_RED_MUSHROOM = RegistryKey.of("potted_red_mushroom");
@@ -1695,6 +1829,10 @@ public interface BlockKeys {
 
     RegistryKey<Block> PURPLE_CONCRETE_POWDER = RegistryKey.of("purple_concrete_powder");
 
+    RegistryKey<Block> PURPLE_CONCRETE_SLAB = RegistryKey.of("purple_concrete_slab");
+
+    RegistryKey<Block> PURPLE_CONCRETE_STAIRS = RegistryKey.of("purple_concrete_stairs");
+
     RegistryKey<Block> PURPLE_GLAZED_TERRACOTTA = RegistryKey.of("purple_glazed_terracotta");
 
     RegistryKey<Block> PURPLE_SHULKER_BOX = RegistryKey.of("purple_shulker_box");
@@ -1708,6 +1846,10 @@ public interface BlockKeys {
     RegistryKey<Block> PURPLE_WALL_BANNER = RegistryKey.of("purple_wall_banner");
 
     RegistryKey<Block> PURPLE_WOOL = RegistryKey.of("purple_wool");
+
+    RegistryKey<Block> PURPLE_WOOL_SLAB = RegistryKey.of("purple_wool_slab");
+
+    RegistryKey<Block> PURPLE_WOOL_STAIRS = RegistryKey.of("purple_wool_stairs");
 
     RegistryKey<Block> PURPUR_BLOCK = RegistryKey.of("purpur_block");
 
@@ -1749,6 +1891,10 @@ public interface BlockKeys {
 
     RegistryKey<Block> RED_CONCRETE_POWDER = RegistryKey.of("red_concrete_powder");
 
+    RegistryKey<Block> RED_CONCRETE_SLAB = RegistryKey.of("red_concrete_slab");
+
+    RegistryKey<Block> RED_CONCRETE_STAIRS = RegistryKey.of("red_concrete_stairs");
+
     RegistryKey<Block> RED_GLAZED_TERRACOTTA = RegistryKey.of("red_glazed_terracotta");
 
     RegistryKey<Block> RED_MUSHROOM = RegistryKey.of("red_mushroom");
@@ -1763,6 +1909,8 @@ public interface BlockKeys {
 
     RegistryKey<Block> RED_NETHER_BRICKS = RegistryKey.of("red_nether_bricks");
 
+    RegistryKey<Block> RED_POPLAR_LEAVES = RegistryKey.of("red_poplar_leaves");
+
     RegistryKey<Block> RED_SAND = RegistryKey.of("red_sand");
 
     RegistryKey<Block> RED_SANDSTONE = RegistryKey.of("red_sandstone");
@@ -1772,6 +1920,8 @@ public interface BlockKeys {
     RegistryKey<Block> RED_SANDSTONE_STAIRS = RegistryKey.of("red_sandstone_stairs");
 
     RegistryKey<Block> RED_SANDSTONE_WALL = RegistryKey.of("red_sandstone_wall");
+
+    RegistryKey<Block> RED_SHRUB = RegistryKey.of("red_shrub");
 
     RegistryKey<Block> RED_SHULKER_BOX = RegistryKey.of("red_shulker_box");
 
@@ -1786,6 +1936,10 @@ public interface BlockKeys {
     RegistryKey<Block> RED_WALL_BANNER = RegistryKey.of("red_wall_banner");
 
     RegistryKey<Block> RED_WOOL = RegistryKey.of("red_wool");
+
+    RegistryKey<Block> RED_WOOL_SLAB = RegistryKey.of("red_wool_slab");
+
+    RegistryKey<Block> RED_WOOL_STAIRS = RegistryKey.of("red_wool_stairs");
 
     RegistryKey<Block> REDSTONE_BLOCK = RegistryKey.of("redstone_block");
 
@@ -1850,6 +2004,8 @@ public interface BlockKeys {
     RegistryKey<Block> SEA_PICKLE = RegistryKey.of("sea_pickle");
 
     RegistryKey<Block> SEAGRASS = RegistryKey.of("seagrass");
+
+    RegistryKey<Block> SHELF_MUSHROOM = RegistryKey.of("shelf_mushroom");
 
     RegistryKey<Block> SHORT_DRY_GRASS = RegistryKey.of("short_dry_grass");
 
@@ -1981,6 +2137,8 @@ public interface BlockKeys {
 
     RegistryKey<Block> STONECUTTER = RegistryKey.of("stonecutter");
 
+    RegistryKey<Block> STRAW_BED = RegistryKey.of("straw_bed");
+
     RegistryKey<Block> STRIPPED_ACACIA_LOG = RegistryKey.of("stripped_acacia_log");
 
     RegistryKey<Block> STRIPPED_ACACIA_WOOD = RegistryKey.of("stripped_acacia_wood");
@@ -2018,6 +2176,10 @@ public interface BlockKeys {
     RegistryKey<Block> STRIPPED_PALE_OAK_LOG = RegistryKey.of("stripped_pale_oak_log");
 
     RegistryKey<Block> STRIPPED_PALE_OAK_WOOD = RegistryKey.of("stripped_pale_oak_wood");
+
+    RegistryKey<Block> STRIPPED_POPLAR_LOG = RegistryKey.of("stripped_poplar_log");
+
+    RegistryKey<Block> STRIPPED_POPLAR_WOOD = RegistryKey.of("stripped_poplar_wood");
 
     RegistryKey<Block> STRIPPED_SPRUCE_LOG = RegistryKey.of("stripped_spruce_log");
 
@@ -2347,6 +2509,10 @@ public interface BlockKeys {
 
     RegistryKey<Block> WHITE_CONCRETE_POWDER = RegistryKey.of("white_concrete_powder");
 
+    RegistryKey<Block> WHITE_CONCRETE_SLAB = RegistryKey.of("white_concrete_slab");
+
+    RegistryKey<Block> WHITE_CONCRETE_STAIRS = RegistryKey.of("white_concrete_stairs");
+
     RegistryKey<Block> WHITE_GLAZED_TERRACOTTA = RegistryKey.of("white_glazed_terracotta");
 
     RegistryKey<Block> WHITE_SHULKER_BOX = RegistryKey.of("white_shulker_box");
@@ -2362,6 +2528,10 @@ public interface BlockKeys {
     RegistryKey<Block> WHITE_WALL_BANNER = RegistryKey.of("white_wall_banner");
 
     RegistryKey<Block> WHITE_WOOL = RegistryKey.of("white_wool");
+
+    RegistryKey<Block> WHITE_WOOL_SLAB = RegistryKey.of("white_wool_slab");
+
+    RegistryKey<Block> WHITE_WOOL_STAIRS = RegistryKey.of("white_wool_stairs");
 
     RegistryKey<Block> WILDFLOWERS = RegistryKey.of("wildflowers");
 
@@ -2385,7 +2555,13 @@ public interface BlockKeys {
 
     RegistryKey<Block> YELLOW_CONCRETE_POWDER = RegistryKey.of("yellow_concrete_powder");
 
+    RegistryKey<Block> YELLOW_CONCRETE_SLAB = RegistryKey.of("yellow_concrete_slab");
+
+    RegistryKey<Block> YELLOW_CONCRETE_STAIRS = RegistryKey.of("yellow_concrete_stairs");
+
     RegistryKey<Block> YELLOW_GLAZED_TERRACOTTA = RegistryKey.of("yellow_glazed_terracotta");
+
+    RegistryKey<Block> YELLOW_POPLAR_LEAVES = RegistryKey.of("yellow_poplar_leaves");
 
     RegistryKey<Block> YELLOW_SHULKER_BOX = RegistryKey.of("yellow_shulker_box");
 
@@ -2398,6 +2574,10 @@ public interface BlockKeys {
     RegistryKey<Block> YELLOW_WALL_BANNER = RegistryKey.of("yellow_wall_banner");
 
     RegistryKey<Block> YELLOW_WOOL = RegistryKey.of("yellow_wool");
+
+    RegistryKey<Block> YELLOW_WOOL_SLAB = RegistryKey.of("yellow_wool_slab");
+
+    RegistryKey<Block> YELLOW_WOOL_STAIRS = RegistryKey.of("yellow_wool_stairs");
 
     RegistryKey<Block> ZOMBIE_HEAD = RegistryKey.of("zombie_head");
 
