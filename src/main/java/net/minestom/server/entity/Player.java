@@ -159,6 +159,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
@@ -203,6 +204,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     private PlayerSkin skin;
 
     private @Nullable Instance pendingInstance = null;
+    // Counts the calls to setInstance, so a spawn waiting for chunks knows when a later call replaces it
+    private final AtomicInteger instanceRequests = new AtomicInteger();
     private int dimensionTypeId;
     private volatile GameMode gameMode;
     private WorldPos deathLocation;
@@ -664,6 +667,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * <p>
      * Be aware that because chunk operations are expensive,
      * it is possible for this method to be non-blocking when retrieving chunks is required.
+     * <p>
+     * A future that waits for chunks completes with a {@link CancellationException} when a later call to this method
+     * replaces it, and the player stays wherever that later call moves it.
      *
      * @param instance      the new player instance
      * @param spawnPosition the new position of the player
@@ -673,6 +679,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     public CompletableFuture<Void> setInstance(Instance instance, Pos spawnPosition) {
         final Instance currentInstance = this.instance;
         Check.argCondition(currentInstance == instance, "Instance should be different than the current one");
+        final int request = instanceRequests.incrementAndGet();
         if (SharedInstance.areLinked(currentInstance, instance) && spawnPosition.sameChunk(this.position)) {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
@@ -723,6 +730,10 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         var _ = CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new))
                 .thenRun(() -> {
                     scheduler.scheduleNextProcess(() -> {
+                        if (instanceRequests.get() != request) {
+                            future.completeExceptionally(new CancellationException("Another setInstance call replaced this one"));
+                            return;
+                        }
                         runnable.accept(instance);
                         future.complete(null);
                     });

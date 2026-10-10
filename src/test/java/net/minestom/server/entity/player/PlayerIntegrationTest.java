@@ -18,6 +18,9 @@ import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.player.PlayerChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerGameModeChangeEvent;
 import net.minestom.server.event.player.PlayerInputEvent;
+import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.ChunkLoader;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.listener.PlayerInputListener;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.packet.client.common.ClientSettingsPacket;
@@ -41,6 +44,7 @@ import net.minestom.server.world.DimensionType;
 import net.minestom.testing.Collector;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -49,6 +53,8 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
 import java.util.function.Predicate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -384,6 +390,43 @@ public class PlayerIntegrationTest {
         tracker.assertSingle(FacePlayerPacket.class, packet -> assertEquals(entity.getEntityId(), packet.entityId()));
 
         assertEquals(startingPlayerPos, player.getPosition());
+    }
+
+    @Test
+    public void laterSetInstanceCancelsSpawnWaitingForChunks(Env env) {
+        final Player player = env.createPlayer(env.createFlatInstance(), new Pos(0, 40, 0));
+        final CountDownLatch release = new CountDownLatch(1);
+        final Instance slow = env.process().instance().createInstanceContainer(new ChunkLoader() {
+            @Override
+            public @Nullable Chunk loadChunk(Instance instance, int chunkX, int chunkZ) {
+                try {
+                    release.await();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                return null;
+            }
+
+            @Override
+            public void saveChunk(Chunk chunk) {
+            }
+
+            @Override
+            public boolean supportsParallelLoading() {
+                return true;
+            }
+        });
+        final Instance target = env.createFlatInstance();
+
+        final CompletableFuture<Void> waiting = player.setInstance(slow, new Pos(0, 40, 0));
+        final CompletableFuture<Void> moved = player.setInstance(target, new Pos(0, 40, 0));
+        assertTrue(env.tickWhile(() -> !moved.isDone(), Duration.ofSeconds(5)));
+        moved.join();
+        release.countDown();
+        assertTrue(env.tickWhile(() -> !waiting.isDone(), Duration.ofSeconds(5)));
+
+        assertTrue(waiting.isCancelled());
+        assertEquals(target, player.getInstance());
     }
 
     @Test
