@@ -2,6 +2,7 @@ package net.minestom.server.dialog;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.registry.DynamicRegistry;
@@ -11,10 +12,12 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.UnaryOperator;
 
-public sealed interface DialogInput {
+public sealed interface DialogInput extends ComponentHolder<DialogInput> {
     int DEFAULT_WIDTH = 200;
 
     Registry<StructCodec<? extends DialogInput>> REGISTRY = DynamicRegistry.fromMap(
@@ -57,6 +60,22 @@ public sealed interface DialogInput {
         public StructCodec<Boolean> codec() {
             return CODEC;
         }
+
+        @Override
+        public List<Component> components() {
+            return List.of(label);
+        }
+
+        @Override
+        public Boolean copyWithOperator(UnaryOperator<Component> operator) {
+            return new Boolean(
+                    key,
+                    operator.apply(label),
+                    initial,
+                    onTrue,
+                    onFalse
+            );
+        }
     }
 
     record NumberRange(
@@ -86,6 +105,25 @@ public sealed interface DialogInput {
         @Override
         public StructCodec<NumberRange> codec() {
             return CODEC;
+        }
+
+        @Override
+        public List<Component> components() {
+            return List.of(label);
+        }
+
+        @Override
+        public NumberRange copyWithOperator(UnaryOperator<Component> operator) {
+            return new NumberRange(
+                    key,
+                    width,
+                    operator.apply(label),
+                    labelFormat,
+                    start,
+                    end,
+                    initial,
+                    step
+            );
         }
     }
 
@@ -118,12 +156,50 @@ public sealed interface DialogInput {
             return CODEC;
         }
 
-        public record Option(String id, @Nullable Component display, boolean initial) {
+        @Override
+        public List<Component> components() {
+            List<Component> components = new ArrayList<>();
+            components.add(label);
+            for (Option option : options) {
+                components.addAll(option.components());
+            }
+            return components;
+        }
+
+        @Override
+        public SingleOption copyWithOperator(UnaryOperator<Component> operator) {
+
+            List<Option> options = new ArrayList<>();
+            for (Option option : this.options) {
+                options.add(option.copyWithOperator(operator));
+            }
+
+            return new SingleOption(
+                    key,
+                    width,
+                    options,
+                    operator.apply(label),
+                    labelVisible
+            );
+        }
+
+        public record Option(String id, @Nullable Component display, boolean initial) implements ComponentHolder<Option> {
             public static final StructCodec<Option> CODEC = StructCodec.struct(
                     "id", Codec.STRING, Option::id,
                     "display", Codec.COMPONENT.optional(), Option::display,
                     "initial", Codec.BOOLEAN.optional(false), Option::initial,
                     Option::new);
+
+            @Override
+            public List<Component> components() {
+                if (display == null) return List.of();
+                return List.of(display);
+            }
+
+            @Override
+            public Option copyWithOperator(UnaryOperator<Component> operator) {
+                return new Option(id, display != null ? operator.apply(display) : null, initial);
+            }
         }
     }
 
@@ -152,6 +228,24 @@ public sealed interface DialogInput {
         @Override
         public StructCodec<Text> codec() {
             return CODEC;
+        }
+
+        @Override
+        public List<Component> components() {
+            return List.of(label);
+        }
+
+        @Override
+        public Text copyWithOperator(UnaryOperator<Component> operator) {
+            return new Text(
+                    key,
+                    width,
+                    operator.apply(label),
+                    labelVisible,
+                    initial,
+                    maxLength,
+                    multiline
+            );
         }
 
         public record Multiline(@Nullable Integer maxLines, @Nullable Integer height) {
