@@ -163,7 +163,7 @@ public sealed interface DialogInput extends ComponentHolder<DialogInput> {
             for (Option option : options) {
                 components.addAll(option.components());
             }
-            return components;
+            return List.copyOf(components);
         }
 
         @Override

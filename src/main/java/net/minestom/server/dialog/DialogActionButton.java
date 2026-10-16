@@ -29,7 +29,7 @@ public record DialogActionButton(
         List<Component> components = new ArrayList<>();
         components.add(label);
         if (tooltip != null) components.add(tooltip);
-        return components;
+        return List.copyOf(components);
     }
 
     @Override

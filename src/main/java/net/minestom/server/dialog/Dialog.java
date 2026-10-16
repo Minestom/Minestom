@@ -103,7 +103,7 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike, Dialog
         public List<Component> components() {
             List<Component> components = new ArrayList<>(metadata.components());
             components.addAll(action.components());
-            return components;
+            return List.copyOf(components);
         }
 
         @Override
@@ -136,7 +136,7 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike, Dialog
         public List<Component> components() {
             List<Component> components = new ArrayList<>(metadata.components());
             if (exitAction != null) components.addAll(exitAction.components());
-            return components;
+            return List.copyOf(components);
         }
 
         @Override
@@ -178,7 +178,7 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike, Dialog
                 }
             }
             if (exitAction != null) components.addAll(exitAction.components());
-            return components;
+            return List.copyOf(components);
         }
 
         @Override
@@ -227,7 +227,7 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike, Dialog
             }
 
             if (exitAction != null) components.addAll(exitAction.components());
-            return components;
+            return List.copyOf(components);
         }
 
         @Override
@@ -268,7 +268,7 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike, Dialog
 
             components.addAll(yesButton.components());
             components.addAll(noButton.components());
-            return components;
+            return List.copyOf(components);
         }
 
         @Override

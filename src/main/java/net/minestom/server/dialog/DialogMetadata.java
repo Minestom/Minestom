@@ -48,7 +48,7 @@ public record DialogMetadata(
         for (DialogInput input : inputs) {
             components.addAll(input.components());
         }
-        return components;
+        return List.copyOf(components);
     }
 
     @Override

@@ -48,7 +48,7 @@ public sealed interface DialogBody extends ComponentHolder<DialogBody> {
         public List<Component> components() {
             List<Component> components = new ArrayList<>();
             if (description != null) components.addAll(description.components());
-            return components;
+            return List.copyOf(components);
         }
 
         @Override
