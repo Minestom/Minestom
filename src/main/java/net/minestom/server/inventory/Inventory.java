@@ -262,9 +262,20 @@ public non-sealed class Inventory extends AbstractInventory {
 
     @Override
     public boolean middleClick(Player player, int slot) {
-        // TODO
-        update(player);
-        return false;
+        final PlayerInventory playerInventory = player.getInventory();
+        final ItemStack cursor = playerInventory.getCursorItem();
+        final boolean isInWindow = isClickInWindow(slot);
+        final int clickSlot = isInWindow ? slot : slot - offset;
+        final AbstractInventory clickedInventory = isInWindow ? this : playerInventory;
+        final ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot);
+        final InventoryClickResult clickResult = clickProcessor.middleClick(player, clicked, cursor);
+        if (clickResult.isCancel()) {
+            updateAll(player);
+            return false;
+        }
+        playerInventory.setCursorItem(clickResult.getCursor());
+        callClickEvent(player, clickedInventory, slot, ClickType.MIDDLE_CLICK, clicked, cursor);
+        return true;
     }
 
     @Override

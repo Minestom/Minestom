@@ -3,6 +3,7 @@ package net.minestom.server.inventory.click;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.EquipmentSlot;
+import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryClickEvent;
@@ -82,6 +83,15 @@ public final class InventoryClickProcessor {
             }
         }
         return result;
+    }
+
+    public InventoryClickResult middleClick(Player player, ItemStack clicked, ItemStack cursor) {
+        InventoryClickResult clickResult = new InventoryClickResult(clicked, cursor);
+        if (player.getGameMode() != GameMode.CREATIVE || !cursor.isAir() || clicked.isAir()) {
+            return clickResult.cancelled();
+        }
+        clickResult.setCursor(clicked.withAmount(clicked.maxStackSize()));
+        return clickResult;
     }
 
     public InventoryClickResult changeHeld(ItemStack clicked, ItemStack cursor) {
@@ -208,6 +218,26 @@ public final class InventoryClickProcessor {
             }
             // Update the cursor
             cursor = cursor.withAmount(finalCursorAmount);
+        } else if (button == 10) {
+            // End middle: creative clone drag, the cursor pays for what landed
+            if (player.getGameMode() != GameMode.CREATIVE || cursor.isAir()) return null;
+            final int maxSize = cursor.maxStackSize();
+            int finalCursorAmount = cursor.amount();
+            for (int slot : slots) {
+                final boolean isInWindow = slot < inventory.getSize();
+                final var inv = isInWindow ? inventory : player.getInventory();
+                final int s = isInWindow ? slot : slot - inventory.getSize();
+
+                ItemStack slotItem = inv.getItemStack(s);
+                if (!slotItem.isAir() && !cursor.isSimilar(slotItem)) continue;
+                final int carry = slotItem.isAir() ? 0 : slotItem.amount();
+                if (carry >= maxSize) continue;
+                slotItem = cursor.withAmount(maxSize);
+                finalCursorAmount -= maxSize - carry;
+                inv.setItemStack(s, slotItem);
+                callClickEvent(player, inv, s, ClickType.MIDDLE_DRAGGING, slotItem, cursor);
+            }
+            cursor = finalCursorAmount <= 0 ? ItemStack.AIR : cursor.withAmount(finalCursorAmount);
         }
 
         return cursor;
