@@ -56,7 +56,6 @@ public interface NodeGenerator {
     default boolean canMoveTowards(Block.Getter getter, Point start, Point end, BoundingBox boundingBox) {
         final Point diff = end.sub(start);
 
-        if (getter.getBlock(end) != Block.AIR) return false;
         PhysicsResult res = CollisionUtils.handlePhysics(getter, boundingBox,
                 start.asPos(), diff.asVec(), null, false);
         return !res.collisionZ() && !res.collisionY() && !res.collisionX();
