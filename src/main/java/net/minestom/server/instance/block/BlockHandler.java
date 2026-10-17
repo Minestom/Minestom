@@ -6,6 +6,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -35,6 +36,23 @@ public interface BlockHandler {
      * @param destroy the destroy details
      */
     default void onDestroy(Destroy destroy) {
+    }
+
+    /**
+     * Called when one of the six neighbors changes, vanilla's {@code neighborChanged}: west, east, down, up, north,
+     * south, before the placement rules' {@code blockUpdate} pass.
+     *
+     * @param change the change details
+     */
+    default void onNeighborChange(NeighborChange change) {
+    }
+
+    /**
+     * The max distance where a neighbor change can be triggered, counted like
+     * {@link BlockPlacementRule#maxUpdateDistance()}: a change's own neighbors are at 0, a handler's changes one further.
+     */
+    default int maxNeighborUpdateDistance() {
+        return BlockPlacementRule.DEFAULT_UPDATE_RANGE;
     }
 
     /**
@@ -205,6 +223,62 @@ public interface BlockHandler {
 
         public Player getPlayer() {
             return player;
+        }
+    }
+
+    /**
+     * Represents an object forwarded to {@link #onNeighborChange(NeighborChange)}.
+     */
+    final class NeighborChange {
+        private final Block block;
+        private final Instance instance;
+        private final Point blockPosition;
+        private final BlockFace blockFace;
+        private final Point changedPosition;
+        private final Block previousBlock;
+        private final Block changedBlock;
+
+        @ApiStatus.Internal
+        public NeighborChange(Block block, Instance instance, Point blockPosition, BlockFace blockFace,
+                              Point changedPosition, Block previousBlock, Block changedBlock) {
+            this.block = block;
+            this.instance = instance;
+            this.blockPosition = blockPosition;
+            this.blockFace = blockFace;
+            this.changedPosition = changedPosition;
+            this.previousBlock = previousBlock;
+            this.changedBlock = changedBlock;
+        }
+
+        public Block getBlock() {
+            return block;
+        }
+
+        public Instance getInstance() {
+            return instance;
+        }
+
+        public Point getBlockPosition() {
+            return blockPosition;
+        }
+
+        /**
+         * The face of this block that touches the change.
+         */
+        public BlockFace getBlockFace() {
+            return blockFace;
+        }
+
+        public Point getChangedPosition() {
+            return changedPosition;
+        }
+
+        public Block getPreviousBlock() {
+            return previousBlock;
+        }
+
+        public Block getChangedBlock() {
+            return changedBlock;
         }
     }
 
