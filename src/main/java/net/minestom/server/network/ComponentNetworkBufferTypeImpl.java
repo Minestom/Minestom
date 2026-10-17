@@ -388,8 +388,9 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
                 buffer.write(BYTE, TAG_STRING);
                 buffer.write(STRING_IO_UTF8, "id");
                 buffer.write(STRING_IO_UTF8, payload.key().asString());
-
-                BinaryTagTypeImpl.writeNamed(buffer, "payload", MinestomAdventure.unwrapNbt(payload.nbt()));
+                if (payload.nbt() != null) {
+                    BinaryTagTypeImpl.writeNamed(buffer, "payload", MinestomAdventure.unwrapNbt(payload.nbt()));
+                }
             }
             default -> throw new UnsupportedOperationException("Unknown click event action: " + clickEvent.action());
         }
