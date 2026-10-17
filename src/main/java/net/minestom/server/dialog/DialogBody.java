@@ -2,6 +2,7 @@ package net.minestom.server.dialog;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.item.ItemStack;
@@ -10,9 +11,12 @@ import net.minestom.server.registry.Registry;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.function.UnaryOperator;
 
-public sealed interface DialogBody {
+public sealed interface DialogBody extends ComponentHolder<DialogBody> {
     Registry<StructCodec<? extends DialogBody>> REGISTRY = DynamicRegistry.fromMap(
             Key.key("dialog_body_type"),
             Map.entry(Key.key("item"), Item.CODEC),
@@ -39,6 +43,25 @@ public sealed interface DialogBody {
         public StructCodec<Item> codec() {
             return CODEC;
         }
+
+        @Override
+        public List<Component> components() {
+            List<Component> components = new ArrayList<>();
+            if (description != null) components.addAll(description.components());
+            return List.copyOf(components);
+        }
+
+        @Override
+        public Item copyWithOperator(UnaryOperator<Component> operator) {
+            return new Item(
+                    itemStack,
+                    description != null ? description.copyWithOperator(operator) : null,
+                    showDecoration,
+                    showTooltip,
+                    width,
+                    height
+            );
+        }
     }
 
     record PlainMessage(Component contents, int width) implements DialogBody {
@@ -55,6 +78,19 @@ public sealed interface DialogBody {
         @Override
         public StructCodec<PlainMessage> codec() {
             return CODEC;
+        }
+
+        @Override
+        public List<Component> components() {
+            return List.of(contents);
+        }
+
+        @Override
+        public PlainMessage copyWithOperator(UnaryOperator<Component> operator) {
+            return new PlainMessage(
+                    operator.apply(contents),
+                    width
+            );
         }
     }
 
