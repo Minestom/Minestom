@@ -67,7 +67,7 @@ public abstract class Explosion {
         ExplosionPacket packet = new ExplosionPacket(
                 // TODO(1.21.9): explosion update
                 new Vec(centerX, centerY, centerZ), 0, 0, Vec.ZERO,
-                Particle.EXPLOSION, SoundEvent.ENTITY_GENERIC_EXPLODE, WeightedList.of());
+                Particle.EXPLOSION, SoundEvent.ENTITY_GENERIC_EXPLODE, WeightedList.of(), true);
         postExplosion(instance, blocks, packet);
         PacketSendingUtils.sendGroupedPacket(instance.getPlayers(), packet);
 

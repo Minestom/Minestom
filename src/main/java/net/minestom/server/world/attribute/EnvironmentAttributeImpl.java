@@ -10,7 +10,8 @@ import java.util.Objects;
 record EnvironmentAttributeImpl<T>(
         Key key,
         EnvironmentAttribute.Type<T> type,
-        T defaultValue
+        T defaultValue,
+        boolean syncable
 ) implements EnvironmentAttribute<T> {
     public static final DynamicRegistry<EnvironmentAttribute<?>> REGISTRY =
             DynamicRegistry.create(Key.key("environment_attribute"));
@@ -23,7 +24,16 @@ record EnvironmentAttributeImpl<T>(
             EnvironmentAttribute.Type<T> type,
             T defaultValue
     ) {
-        EnvironmentAttributeImpl<T> attribute = new EnvironmentAttributeImpl<>(Key.key(key), type, defaultValue);
+        return register(key, type, defaultValue, false);
+    }
+
+    static <T> EnvironmentAttribute<T> register(
+            @KeyPattern String key,
+            EnvironmentAttribute.Type<T> type,
+            T defaultValue,
+            boolean syncable
+    ) {
+        EnvironmentAttributeImpl<T> attribute = new EnvironmentAttributeImpl<>(Key.key(key), type, defaultValue, syncable);
         REGISTRY.register(attribute.key(), attribute);
         return attribute;
     }

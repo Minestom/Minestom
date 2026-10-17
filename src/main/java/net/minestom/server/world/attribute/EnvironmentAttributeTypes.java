@@ -27,7 +27,10 @@ sealed interface EnvironmentAttributeTypes permits EnvironmentAttribute.Type {
     EnvironmentAttribute.Type<EntityActivity> ACTIVITY = register("activity", EntityActivity.CODEC, Map.of());
     EnvironmentAttribute.Type<BedRule> BED_RULE = register("bed_rule", BedRule.CODEC, Map.of());
     EnvironmentAttribute.Type<Particle> PARTICLE = register("particle", Particle.CODEC, Map.of());
-    EnvironmentAttribute.Type<List<AmbientParticle>> AMBIENT_PARTICLES = register("ambient_particles", AmbientParticle.CODEC.list(), Map.of());
+    EnvironmentAttribute.Type<List<AmbientParticle>> AMBIENT_PARTICLES = register("ambient_particles", AmbientParticle.CODEC.list(AmbientParticle.MAX_ENTRIES),
+            Map.of(Modifier.Operator.APPEND, new ListModifier<>(AmbientParticle.CODEC.list(AmbientParticle.MAX_ENTRIES))));
     EnvironmentAttribute.Type<BackgroundMusic> BACKGROUND_MUSIC = register("background_music", BackgroundMusic.CODEC, Map.of());
     EnvironmentAttribute.Type<AmbientSounds> AMBIENT_SOUNDS = register("ambient_sounds", AmbientSounds.CODEC, Map.of());
+    EnvironmentAttribute.Type<MobSpawnSettings> MOB_SPAWN_SETTINGS = register("mob_spawn_settings", MobSpawnSettings.CODEC,
+            Map.of(Modifier.Operator.OVERLAY, MobSpawnSettingsModifier.OVERLAY));
 }

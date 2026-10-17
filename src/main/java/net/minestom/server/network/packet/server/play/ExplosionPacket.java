@@ -15,7 +15,8 @@ public record ExplosionPacket(
         Point center, float radius, int blockCount,
         @Nullable Point playerKnockback,
         Particle particle, SoundEvent sound,
-        WeightedList<BlockParticleInfo> blockParticles
+        WeightedList<BlockParticleInfo> blockParticles,
+        boolean playSound
 ) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<ExplosionPacket> SERIALIZER = NetworkBufferTemplate.template(
             VECTOR3D, ExplosionPacket::center,
@@ -25,6 +26,7 @@ public record ExplosionPacket(
             Particle.NETWORK_TYPE, ExplosionPacket::particle,
             SoundEvent.NETWORK_TYPE, ExplosionPacket::sound,
             WeightedList.networkType(BlockParticleInfo.SERIALIZER), ExplosionPacket::blockParticles,
+            NetworkBuffer.BOOLEAN, ExplosionPacket::playSound,
             ExplosionPacket::new);
 
     public record BlockParticleInfo(Particle particle, float scaling, float speed) {

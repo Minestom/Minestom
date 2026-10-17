@@ -14,6 +14,8 @@ public record EnvironmentAttributeMap(Map<EnvironmentAttribute<?>, Entry<?, ?>> 
     public static final Codec<EnvironmentAttributeMap> CODEC = EnvironmentAttribute.CODEC
             .mapValueTyped(Entry::codec0, true)
             .transform(EnvironmentAttributeMap::new, EnvironmentAttributeMap::entries);
+    public static final Codec<EnvironmentAttributeMap> NETWORK_CODEC = CODEC
+            .transform(EnvironmentAttributeMap::filterSyncable, EnvironmentAttributeMap::filterSyncable);
 
     public static Builder builder() {
         return new Builder();
@@ -25,6 +27,18 @@ public record EnvironmentAttributeMap(Map<EnvironmentAttribute<?>, Entry<?, ?>> 
 
     public EnvironmentAttributeMap {
         entries = Map.copyOf(entries);
+    }
+
+    /**
+     * Returns a map holding only the attributes that are sent to clients, see {@link EnvironmentAttribute#syncable()}.
+     * Returns this map when every attribute is syncable.
+     */
+    public EnvironmentAttributeMap filterSyncable() {
+        final Map<EnvironmentAttribute<?>, Entry<?, ?>> synced = new HashMap<>();
+        for (var entry : entries.entrySet()) {
+            if (entry.getKey().syncable()) synced.put(entry.getKey(), entry.getValue());
+        }
+        return synced.size() == entries.size() ? this : new EnvironmentAttributeMap(synced);
     }
 
     public record Entry<T, Arg>(Arg argument, Modifier<T, Arg> modifier) {

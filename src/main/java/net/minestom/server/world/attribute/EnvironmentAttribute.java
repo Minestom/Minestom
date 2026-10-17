@@ -16,6 +16,12 @@ public sealed interface EnvironmentAttribute<T> extends EnvironmentAttributes pe
 
     T defaultValue();
 
+    /**
+     * Whether the attribute is sent to clients. A server only attribute is dropped by
+     * {@link EnvironmentAttributeMap#NETWORK_CODEC}.
+     */
+    boolean syncable();
+
     Codec<T> valueCodec();
 
     static Collection<EnvironmentAttribute<?>> values() {
@@ -31,7 +37,7 @@ public sealed interface EnvironmentAttribute<T> extends EnvironmentAttributes pe
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    sealed interface Modifier<Sub, Arg> permits BooleanModifier, FloatModifier, ColorModifier, Modifier.Override {
+    sealed interface Modifier<Sub, Arg> permits BooleanModifier, FloatModifier, ColorModifier, ListModifier, MobSpawnSettingsModifier, Modifier.Override {
 
         Map<Operator, Modifier<java.lang.Boolean, ?>> BOOLEAN_OPERATORS = Map.of(
                 Operator.AND, Boolean.AND,
@@ -74,7 +80,9 @@ public sealed interface EnvironmentAttribute<T> extends EnvironmentAttributes pe
             OR,
             NOR,
             XOR,
-            XNOR;
+            XNOR,
+            APPEND,
+            OVERLAY;
 
             public static final Codec<Operator> CODEC = Codec.Enum(Operator.class);
         }
