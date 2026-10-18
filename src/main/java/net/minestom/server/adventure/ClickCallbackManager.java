@@ -25,17 +25,24 @@ public final class ClickCallbackManager implements Tickable {
     private final Map<UUID, ClickCallback<Audience>> permanent = new ConcurrentHashMap<>(0);
     private final Map<UUID, CallbackData> temporary = new ConcurrentHashMap<>(0);
 
-    private record CallbackData(ClickCallback<Audience> callback, long expiry, AtomicInteger uses) {
+    private record CallbackData(ClickCallback<Audience> callback, long expiry, AtomicInteger uses, boolean unlimitedUses) {
         private CallbackData {
             Objects.requireNonNull(callback, "callback");
             Objects.requireNonNull(uses, "uses");
         }
 
         boolean isExpired(final long time) {
+            if (this.unlimitedUses) return time >= this.expiry;
+
             return this.uses.get() <= 0 || time >= this.expiry;
         }
 
         void consume(final Audience audience) {
+            long nanoTime = System.nanoTime();
+            if (this.unlimitedUses && this.expiry > nanoTime) {
+                this.callback.accept(audience);
+                return;
+            }
             final int remaining = this.uses.getAndUpdate(current -> current > 0 ? current - 1 : current);
             if (remaining > 0 && this.expiry > System.nanoTime()) {
                 this.callback.accept(audience);
@@ -96,14 +103,15 @@ public final class ClickCallbackManager implements Tickable {
         long expiry;
         try {
             expiry = System.nanoTime() + options.lifetime().toNanos();
+            if (expiry < 0) expiry = Long.MAX_VALUE;
         } catch (final ArithmeticException _) {
             expiry = Long.MAX_VALUE;
         }
 
         if (expiry == Long.MAX_VALUE && uses == ClickCallback.UNLIMITED_USES) {
             this.permanent.put(uuid, callback);
-        } else if (uses > 0 && expiry > System.nanoTime()) {
-            this.temporary.put(uuid, new CallbackData(callback, expiry, new AtomicInteger(uses)));
+        } else if (expiry > System.nanoTime()) {
+            this.temporary.put(uuid, new CallbackData(callback, expiry, new AtomicInteger(uses), uses == ClickCallback.UNLIMITED_USES));
         }
 
         return ClickEvent.custom(KEY, new BinaryTagHolderImpl(UUIDUtils.toNbt(uuid)));
