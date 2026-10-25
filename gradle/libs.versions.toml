@@ -18,10 +18,10 @@ jcTools = "4.0.7"
 junit = "6.1.3"
 jmh = "1.37"
 jcstress = "0.16"
-errorprone = "2.50.0"
+errorprone = "2.51.0"
 
 # Code Generation
-javaPoet = "0.20.0"
+javaPoet = "0.22.0"
 
 # Log impl (for demo)
 logback = "1.6.5"
