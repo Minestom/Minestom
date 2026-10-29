@@ -1,6 +1,8 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.event.player.PlayerTickEvent;
@@ -99,6 +101,33 @@ public class InstanceUnregisterIntegrationTest {
 
         //noinspection UnusedAssignment
         chunk = null;
+        waitUntilCleared(ref);
+    }
+
+    @Test
+    public void sharedInstanceEntitiesGC(Env env) {
+        // Ensure that unregistering a SharedInstance removes its entities
+        // so that they can't keep the parent InstanceContainer reachable.
+        var instanceManager = env.process().instance();
+        var container = instanceManager.createInstanceContainer();
+        var shared = instanceManager.createSharedInstance(container);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(shared, new Pos(0, 40, 0)).join();
+
+        var ref = new WeakReference<>(container);
+        instanceManager.unregisterInstance(shared);
+        Assertions.assertTrue(shared.getEntities().isEmpty());
+
+        instanceManager.unregisterInstance(container);
+        env.tick();
+
+        //noinspection UnusedAssignment
+        container = null;
+        //noinspection UnusedAssignment
+        shared = null;
+        //noinspection UnusedAssignment
+        entity = null;
         waitUntilCleared(ref);
     }
 
