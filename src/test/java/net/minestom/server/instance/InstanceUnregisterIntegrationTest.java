@@ -132,6 +132,30 @@ public class InstanceUnregisterIntegrationTest {
     }
 
     @Test
+    public void sharedInstanceChunkUnloadGC(Env env) {
+        // Ensure that unloading a chunk in an InstanceContainer also
+        // removes entities in the connected SharedInstances.
+        var instanceManager = env.process().instance();
+        var container = instanceManager.createInstanceContainer();
+        var shared = instanceManager.createSharedInstance(container);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(shared, new Pos(0, 40, 0)).join();
+        var chunk = shared.getChunk(0, 0);
+
+        var ref = new WeakReference<>(entity);
+        container.unloadChunk(chunk);
+        Assertions.assertTrue(shared.getEntities().isEmpty());
+
+        env.tick();
+
+        // Verify that the reference to the entity is completely lost after it is removed
+        //noinspection UnusedAssignment
+        entity = null;
+        waitUntilCleared(ref);
+    }
+
+    @Test
     public void testGCWithEventsLambda(Env env) {
         var ref = new WeakReference<>(new InstanceContainer(
                 env.process().registries(), UUID.randomUUID(), DimensionType.OVERWORLD));
