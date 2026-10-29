@@ -156,6 +156,33 @@ public class InstanceUnregisterIntegrationTest {
     }
 
     @Test
+    public void deletedPartitionReleasesElements(Env env) {
+        // Ensure that deleting a partition does not leave its elements behind in the ThreadDispatcher
+
+        // Create the instance without registering so that InstanceManager doesn't hold any references to it
+        var instance = new InstanceContainer(env.process().registries(), UUID.randomUUID(),
+                DimensionType.OVERWORLD);
+        instance.setRegistered(true); // Required to add the entity
+
+        var chunk = instance.loadChunk(0, 0).join();
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0, 40, 0)).join();
+
+        var ref = new WeakReference<>(entity);
+        // Deleting the partition should clear the last remaining reference to the entity
+        env.process().dispatcher().deletePartition(chunk);
+        env.tick();
+
+        //noinspection UnusedAssignment
+        instance = null;
+        //noinspection UnusedAssignment
+        chunk = null;
+        //noinspection UnusedAssignment
+        entity = null;
+        waitUntilCleared(ref);
+    }
+
+    @Test
     public void testGCWithEventsLambda(Env env) {
         var ref = new WeakReference<>(new InstanceContainer(
                 env.process().registries(), UUID.randomUUID(), DimensionType.OVERWORLD));
