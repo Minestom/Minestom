@@ -419,6 +419,17 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
     }
 
     /**
+     * Returns whether light is blocked by the faces of this block state's occlusion shape, in addition to
+     * {@link #lightBlocked()}. Only true for partial blocks like slabs, stairs and snow layers.
+     *
+     * @return true if the occlusion shape blocks light
+     */
+    @Contract(pure = true)
+    default boolean lightUsesShape() {
+        return registry().lightUsesShape();
+    }
+
+    /**
      * Returns whether this block state may be replaced directly during block placement.
      *
      * @return {@code true} if this block state is replaceable

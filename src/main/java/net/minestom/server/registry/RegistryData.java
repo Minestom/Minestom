@@ -222,6 +222,7 @@ public final class RegistryData {
         private static final short REDSTONE_CONDUCTOR_OFFSET = 1 << 6;
         private static final short SIGNAL_SOURCE_OFFSET = 1 << 7;
         private static final short FLUID_OFFSET = 1 << 8;
+        private static final short LIGHT_USES_SHAPE_OFFSET = 1 << 9;
 
         private final Key key;
         private final int id;
@@ -265,6 +266,7 @@ public final class RegistryData {
             boolean requiresTool = fromParent(parent, BlockEntry::requiresTool, main, "requiresTool", Properties::getBoolean, true);
             this.lightEmission = fromParent(parent, BlockEntry::lightEmission, main, "lightEmission", Properties::getInt, 0).byteValue();
             this.lightBlocked = fromParent(parent, BlockEntry::lightBlocked, main, "lightBlock", Properties::getInt, 0).byteValue();
+            boolean lightUsesShape = fromParent(parent, BlockEntry::lightUsesShape, main, "lightUsesShape", Properties::getBoolean, false);
             boolean replaceable = fromParent(parent, BlockEntry::isReplaceable, main, "replaceable", Properties::getBoolean, false);
             this.blockSoundType = fromParent(parent, BlockEntry::getBlockSoundType, main, "soundType", (properties, string) -> {
                 final String soundTypeKey = properties.getString(string);
@@ -327,7 +329,8 @@ public final class RegistryData {
                             (requiresTool ? REQUIRES_TOOL_OFFSET : 0) |
                             (replaceable ? REPLACEABLE_OFFSET : 0) |
                             (redstoneConductor ? REDSTONE_CONDUCTOR_OFFSET : 0) |
-                            (signalSource ? SIGNAL_SOURCE_OFFSET : 0)
+                            (signalSource ? SIGNAL_SOURCE_OFFSET : 0) |
+                            (lightUsesShape ? LIGHT_USES_SHAPE_OFFSET : 0)
             );
         }
 
@@ -420,6 +423,10 @@ public final class RegistryData {
 
         public int lightBlocked() {
             return lightBlocked;
+        }
+
+        public boolean lightUsesShape() {
+            return (packedFlags & LIGHT_USES_SHAPE_OFFSET) != 0;
         }
 
         public boolean isReplaceable() {
