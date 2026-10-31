@@ -1,6 +1,8 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.event.player.PlayerTickEvent;
@@ -99,6 +101,84 @@ public class InstanceUnregisterIntegrationTest {
 
         //noinspection UnusedAssignment
         chunk = null;
+        waitUntilCleared(ref);
+    }
+
+    @Test
+    public void sharedInstanceEntitiesGC(Env env) {
+        // Ensure that unregistering a SharedInstance removes its entities
+        // so that they can't keep the parent InstanceContainer reachable.
+        var instanceManager = env.process().instance();
+        var container = instanceManager.createInstanceContainer();
+        var shared = instanceManager.createSharedInstance(container);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(shared, new Pos(0, 40, 0)).join();
+
+        var ref = new WeakReference<>(container);
+        instanceManager.unregisterInstance(shared);
+        Assertions.assertTrue(shared.getEntities().isEmpty());
+
+        instanceManager.unregisterInstance(container);
+        env.tick();
+
+        //noinspection UnusedAssignment
+        container = null;
+        //noinspection UnusedAssignment
+        shared = null;
+        //noinspection UnusedAssignment
+        entity = null;
+        waitUntilCleared(ref);
+    }
+
+    @Test
+    public void sharedInstanceChunkUnloadGC(Env env) {
+        // Ensure that unloading a chunk in an InstanceContainer also
+        // removes entities in the connected SharedInstances.
+        var instanceManager = env.process().instance();
+        var container = instanceManager.createInstanceContainer();
+        var shared = instanceManager.createSharedInstance(container);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(shared, new Pos(0, 40, 0)).join();
+        var chunk = shared.getChunk(0, 0);
+
+        var ref = new WeakReference<>(entity);
+        container.unloadChunk(chunk);
+        Assertions.assertTrue(shared.getEntities().isEmpty());
+
+        env.tick();
+
+        // Verify that the reference to the entity is completely lost after it is removed
+        //noinspection UnusedAssignment
+        entity = null;
+        waitUntilCleared(ref);
+    }
+
+    @Test
+    public void deletedPartitionReleasesElements(Env env) {
+        // Ensure that deleting a partition does not leave its elements behind in the ThreadDispatcher
+
+        // Create the instance without registering so that InstanceManager doesn't hold any references to it
+        var instance = new InstanceContainer(env.process().registries(), UUID.randomUUID(),
+                DimensionType.OVERWORLD);
+        instance.setRegistered(true); // Required to add the entity
+
+        var chunk = instance.loadChunk(0, 0).join();
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0, 40, 0)).join();
+
+        var ref = new WeakReference<>(entity);
+        // Deleting the partition should clear the last remaining reference to the entity
+        env.process().dispatcher().deletePartition(chunk);
+        env.tick();
+
+        //noinspection UnusedAssignment
+        instance = null;
+        //noinspection UnusedAssignment
+        chunk = null;
+        //noinspection UnusedAssignment
+        entity = null;
         waitUntilCleared(ref);
     }
 
