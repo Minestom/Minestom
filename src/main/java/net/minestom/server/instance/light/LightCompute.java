@@ -9,7 +9,6 @@ import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.Direction;
 
 import java.util.Arrays;
-import java.util.Objects;
 
 import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
 
@@ -57,12 +56,12 @@ public final class LightCompute {
             };
             for (int bx = 0; bx < 16; bx++) {
                 for (int by = 0; by < 16; by++) {
-                    final byte lightEmission = (byte) Math.max(switch (face) {
-                        case NORTH, SOUTH -> (byte) otherLight.getLevel(bx, by, 15 - k);
-                        case WEST, EAST -> (byte) otherLight.getLevel(15 - k, bx, by);
-                        default -> (byte) otherLight.getLevel(bx, 15 - k, by);
-                    } - 1, 0);
-                    if (lightEmission <= 0) continue;
+                    final int neighborLevel = switch (face) {
+                        case NORTH, SOUTH -> otherLight.getLevel(bx, by, 15 - k);
+                        case WEST, EAST -> otherLight.getLevel(15 - k, bx, by);
+                        default -> otherLight.getLevel(bx, 15 - k, by);
+                    };
+                    if (neighborLevel <= 1) continue;
 
                     final int posTo = switch (face) {
                         case NORTH, SOUTH -> bx | (k << 4) | (by << 8);
@@ -70,16 +69,15 @@ public final class LightCompute {
                         default -> bx | (by << 4) | (k << 8);
                     };
 
-                    if (content != null) {
-                        final int internalEmission = (byte) Math.max(getLight(content, posTo) - 1, 0);
-                        if (lightEmission <= internalEmission) continue;
-                    }
-
                     final Block blockTo = switch (face) {
                         case NORTH, SOUTH -> getBlock(blockPalette, bx, by, k);
                         case WEST, EAST -> getBlock(blockPalette, k, bx, by);
                         default -> getBlock(blockPalette, bx, k, by);
                     };
+
+                    final int lightEmission = neighborLevel - opacity(blockTo);
+                    if (lightEmission <= 0) continue;
+                    if (content != null && lightEmission <= getLight(content, posTo)) continue;
 
                     final Block blockFrom = switch (face) {
                         case NORTH, SOUTH -> getBlock(otherPalette, bx, by, 15 - k);
@@ -87,16 +85,7 @@ public final class LightCompute {
                         default -> getBlock(otherPalette, bx, 15 - k, by);
                     };
 
-                    if (blockTo == null && blockFrom != null) {
-                        if (blockFrom.occlusionShape().isOccluded(Block.AIR.occlusionShape(), face.getOppositeFace()))
-                            continue;
-                    } else if (blockTo != null && blockFrom == null) {
-                        if (Block.AIR.occlusionShape().isOccluded(blockTo.occlusionShape(), face))
-                            continue;
-                    } else if (blockTo != null && blockFrom != null) {
-                        if (blockFrom.occlusionShape().isOccluded(blockTo.occlusionShape(), face.getOppositeFace()))
-                            continue;
-                    }
+                    if (shapeOccludes(blockFrom, blockTo, face.getOppositeFace())) continue;
 
                     final int index = posTo | (lightEmission << 12);
                     lightSources.enqueue((short) index);
@@ -142,7 +131,6 @@ public final class LightCompute {
             final int z = (index >> 4) & 15;
             final int y = (index >> 8) & 15;
             final int lightLevel = (index >> 12) & 15;
-            final byte newLightLevel = (byte) (lightLevel - 1);
 
             for (Direction direction : DIRECTIONS) {
                 final int xO = x + direction.normalX();
@@ -157,20 +145,21 @@ public final class LightCompute {
                 // Section
                 final int newIndex = xO | (zO << 4) | (yO << 8);
 
-                if (getLight(lightArray, newIndex) < newLightLevel) {
-                    final Block currentBlock = Objects.requireNonNullElse(getBlock(blockPalette, x, y, z), Block.AIR);
-                    final Block propagatedBlock = Objects.requireNonNullElse(getBlock(blockPalette, xO, yO, zO), Block.AIR);
+                // Every block costs at least one level, so skip the block lookups when that already can't help
+                if (getLight(lightArray, newIndex) >= lightLevel - 1)
+                    continue;
 
-                    final Shape currentShape = currentBlock.occlusionShape();
-                    final Shape propagatedShape = propagatedBlock.occlusionShape();
+                final Block propagatedBlock = getBlock(blockPalette, xO, yO, zO);
+                final int newLightLevel = lightLevel - opacity(propagatedBlock);
+                if (getLight(lightArray, newIndex) >= newLightLevel)
+                    continue;
 
-                    final boolean airAir = currentBlock.air() && propagatedBlock.air();
-                    if (!airAir && currentShape.isOccluded(propagatedShape, BlockFace.fromDirection(direction)))
-                        continue;
+                final Block currentBlock = getBlock(blockPalette, x, y, z);
+                if (shapeOccludes(currentBlock, propagatedBlock, BlockFace.fromDirection(direction)))
+                    continue;
 
-                    placeLight(lightArray, newIndex, newLightLevel);
-                    lightSources.enqueue((short) (newIndex | (newLightLevel << 12)));
-                }
+                placeLight(lightArray, newIndex, newLightLevel);
+                lightSources.enqueue((short) (newIndex | (newLightLevel << 12)));
             }
         }
         return lightArray;
@@ -192,8 +181,20 @@ public final class LightCompute {
         return ((value >>> ((index & 1) << 2)) & 0xF);
     }
 
-    public static Block getBlock(Palette palette, int x, int y, int z) {
+    static Block getBlock(Palette palette, int x, int y, int z) {
         return Block.fromStateId(palette.get(x, y, z));
+    }
+
+    static int opacity(Block block) {
+        return Math.max(1, block.lightBlocked());
+    }
+
+    public static boolean shapeOccludes(Block from, Block to, BlockFace face) {
+        final boolean fromShape = from.lightUsesShape(), toShape = to.lightUsesShape();
+        if (!fromShape && !toShape) return false;
+        final Shape fromOcclusion = fromShape ? from.occlusionShape() : Block.AIR.occlusionShape();
+        final Shape toOcclusion = toShape ? to.occlusionShape() : Block.AIR.occlusionShape();
+        return fromOcclusion.isOccluded(toOcclusion, face);
     }
 
     public static byte[] bake(byte[] content1, byte[] content2) {

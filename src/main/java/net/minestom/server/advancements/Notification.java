@@ -25,7 +25,7 @@ public record Notification(Component title, FrameType frameType, ItemStack icon)
         final var displayData = new AdvancementsPacket.DisplayData(
                 title, Component.text("Articdive was here. #Minestom"),
                 icon, frameType,
-                0x6, null, 0f, 0f);
+                0x6, null);
 
         final var criteria = new AdvancementsPacket.Criteria("minestom:some_criteria",
                 new AdvancementsPacket.CriterionProgress(System.currentTimeMillis()));
@@ -34,7 +34,7 @@ public record Notification(Component title, FrameType frameType, ItemStack icon)
                 List.of(new AdvancementsPacket.Requirement(List.of(criteria.criterionIdentifier()))),
                 false);
 
-        final var mapping = new AdvancementsPacket.AdvancementMapping(IDENTIFIER, advancement);
+        final var mapping = new AdvancementsPacket.AdvancementMapping(IDENTIFIER, advancement, 0f, 0f);
         final var progressMapping = new AdvancementsPacket.ProgressMapping(IDENTIFIER,
                 new AdvancementsPacket.AdvancementProgress(List.of(criteria)));
 

@@ -25,7 +25,9 @@ public enum RecipeType implements StaticProtocolObject<RecipeType> {
 
     STONECUTTING("stonecutting"),
 
-    SMITHING("smithing");
+    SMITHING("smithing"),
+
+    BREWING("brewing");
 
     private static final Map<Key, RecipeType> BY_KEY = Arrays.stream(values()).collect(Collectors.toUnmodifiableMap(RecipeType::key, Function.identity()));
 

@@ -48,6 +48,9 @@ public class PlayerPositionListener {
 
     public static void teleportConfirmListener(ClientTeleportConfirmPacket packet, Player player) {
         player.refreshReceivedTeleportId(packet.teleportId());
+        // A confirmation for a superseded teleport says nothing about where the client is now.
+        if (packet.teleportId() != player.getLastSentTeleportId()) return;
+        processMovement(player, packet.position(), player.isOnGround());
     }
 
     private static void processMovement(Player player, Pos packetPosition, boolean onGround) {

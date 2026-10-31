@@ -6,6 +6,7 @@ import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.SignTextSlot;
 
 import java.util.List;
 
@@ -15,15 +16,15 @@ public class PlayerEditSignEvent implements PlayerInstanceEvent, BlockEvent {
     private final Block block;
     private final BlockVec blockPosition;
     private final List<String> lines;
-    private final boolean isFrontText;
+    private final SignTextSlot slot;
 
-    public PlayerEditSignEvent(Player player, Instance instance, Block block, BlockVec blockPosition, List<String> lines, boolean isFrontText) {
+    public PlayerEditSignEvent(Player player, Instance instance, Block block, BlockVec blockPosition, List<String> lines, SignTextSlot slot) {
         this.player = player;
         this.instance = instance;
         this.block = block;
         this.blockPosition = blockPosition;
         this.lines = lines;
-        this.isFrontText = isFrontText;
+        this.slot = slot;
     }
 
     @Override
@@ -54,7 +55,15 @@ public class PlayerEditSignEvent implements PlayerInstanceEvent, BlockEvent {
         return lines;
     }
 
+    /**
+     * {@return the sign text slot, the side the text is displayed on}
+     */
+    public SignTextSlot getTextSlot() {
+        return slot;
+    }
+
+    @Deprecated
     public boolean isFrontText() {
-        return isFrontText;
+        return slot == SignTextSlot.FRONT;
     }
 }

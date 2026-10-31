@@ -222,6 +222,7 @@ public final class RegistryData {
         private static final short REDSTONE_CONDUCTOR_OFFSET = 1 << 6;
         private static final short SIGNAL_SOURCE_OFFSET = 1 << 7;
         private static final short FLUID_OFFSET = 1 << 8;
+        private static final short LIGHT_USES_SHAPE_OFFSET = 1 << 9;
 
         private final Key key;
         private final int id;
@@ -234,7 +235,6 @@ public final class RegistryData {
         private final float jumpFactor;
         private final int mapColorId;
         private final short packedFlags;
-        private final boolean blocksMotion;
         private final byte lightEmission;
         private final byte lightBlocked;
         private final @Nullable BlockEntityType blockEntityType;
@@ -260,13 +260,13 @@ public final class RegistryData {
             this.mapColorId = fromParent(parent, BlockEntry::mapColorId, main, "mapColorId", Properties::getInt, 0);
             boolean air = fromParent(parent, BlockEntry::isAir, main, "air", Properties::getBoolean, false);
             boolean solid = fromParent(parent, BlockEntry::isSolid, main, "solid", Properties::getBoolean, null);
-            this.blocksMotion = fromParent(parent, BlockEntry::blocksMotion, main, "blocksMotion", Properties::getBoolean, false);
             boolean liquid = fromParent(parent, BlockEntry::isLiquid, main, "liquid", Properties::getBoolean, false);
             boolean fluid = fromParent(parent, BlockEntry::isFluid, main, "fluid", Properties::getBoolean, false);
             boolean occludes = fromParent(parent, BlockEntry::occludes, main, "occludes", Properties::getBoolean, true);
             boolean requiresTool = fromParent(parent, BlockEntry::requiresTool, main, "requiresTool", Properties::getBoolean, true);
             this.lightEmission = fromParent(parent, BlockEntry::lightEmission, main, "lightEmission", Properties::getInt, 0).byteValue();
             this.lightBlocked = fromParent(parent, BlockEntry::lightBlocked, main, "lightBlock", Properties::getInt, 0).byteValue();
+            boolean lightUsesShape = fromParent(parent, BlockEntry::lightUsesShape, main, "lightUsesShape", Properties::getBoolean, false);
             boolean replaceable = fromParent(parent, BlockEntry::isReplaceable, main, "replaceable", Properties::getBoolean, false);
             this.blockSoundType = fromParent(parent, BlockEntry::getBlockSoundType, main, "soundType", (properties, string) -> {
                 final String soundTypeKey = properties.getString(string);
@@ -329,7 +329,8 @@ public final class RegistryData {
                             (requiresTool ? REQUIRES_TOOL_OFFSET : 0) |
                             (replaceable ? REPLACEABLE_OFFSET : 0) |
                             (redstoneConductor ? REDSTONE_CONDUCTOR_OFFSET : 0) |
-                            (signalSource ? SIGNAL_SOURCE_OFFSET : 0)
+                            (signalSource ? SIGNAL_SOURCE_OFFSET : 0) |
+                            (lightUsesShape ? LIGHT_USES_SHAPE_OFFSET : 0)
             );
         }
 
@@ -400,10 +401,6 @@ public final class RegistryData {
             return (packedFlags & SOLID_OFFSET) != 0;
         }
 
-        public boolean blocksMotion() {
-            return blocksMotion;
-        }
-
         public boolean isLiquid() {
             return (packedFlags & LIQUID_OFFSET) != 0;
         }
@@ -426,6 +423,10 @@ public final class RegistryData {
 
         public int lightBlocked() {
             return lightBlocked;
+        }
+
+        public boolean lightUsesShape() {
+            return (packedFlags & LIGHT_USES_SHAPE_OFFSET) != 0;
         }
 
         public boolean isReplaceable() {

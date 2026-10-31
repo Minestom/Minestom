@@ -129,6 +129,8 @@ sealed interface StatisticTypes permits StatisticType {
 
     StatisticType SLEEP_IN_BED = StatisticTypeImpl.get(StatisticTypeKeys.SLEEP_IN_BED);
 
+    StatisticType SLEEP_IN_STRAW_BED = StatisticTypeImpl.get(StatisticTypeKeys.SLEEP_IN_STRAW_BED);
+
     StatisticType OPEN_SHULKER_BOX = StatisticTypeImpl.get(StatisticTypeKeys.OPEN_SHULKER_BOX);
 
     StatisticType OPEN_BARREL = StatisticTypeImpl.get(StatisticTypeKeys.OPEN_BARREL);
