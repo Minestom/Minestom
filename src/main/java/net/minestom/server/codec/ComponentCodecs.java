@@ -189,32 +189,41 @@ public final class ComponentCodecs {
     private static final Codec<HoverEvent<?>> HOVER_EVENT = HOVER_EVENT_ACTION.unionType("action", ComponentCodecs::hoverEventCodec, HoverEvent::action);
 
     @SuppressWarnings("unchecked")
+    private static @Nullable DataComponent<Object> dataComponent(Key key) {
+        return (DataComponent<Object>) DataComponent.fromKey(key);
+    }
+
     private static final Codec<Map<Key, DataComponentValue>> SHOW_ITEM_COMPONENTS = new Codec<>() {
         @Override
         public <D> Result<Map<Key, DataComponentValue>> decode(Transcoder<D> coder, D value) {
             final Result<MapLike<D>> mapResult = coder.getMap(value);
-            if (!(mapResult instanceof Result.Ok(MapLike<D> map)))
+            if (!(mapResult instanceof Result.Ok(var map)))
                 return mapResult.cast();
 
             final Map<Key, DataComponentValue> components = new HashMap<>(map.size());
-            for (final String rawKey : map.keys()) {
-                final boolean removed = rawKey.startsWith("!");
-                final Key key = Key.key(removed ? rawKey.substring(1) : rawKey);
-                if (removed) {
+            for (String rawKey : map.keys()) {
+                boolean remove = false;
+                if (!rawKey.isEmpty() && rawKey.charAt(0) == '!') {
+                    rawKey = rawKey.substring(1);
+                    remove = true;
+                }
+                final Key key = Key.key(rawKey);
+
+                if (remove) {
                     components.put(key, DataComponentValue.removed());
                     continue;
                 }
 
-                final DataComponent<Object> component = (DataComponent<Object>) DataComponent.fromKey(key);
-                if (component == null) continue;
+                final DataComponent<Object> type = dataComponent(key);
+                if (type == null) return new Result.Error<>("unknown data component: " + key);
 
-                final Result<D> rawResult = map.getValue(rawKey);
-                if (!(rawResult instanceof Result.Ok(D raw)))
-                    return rawResult.cast();
-                final Result<Object> decoded = component.decode(coder, raw);
-                if (!(decoded instanceof Result.Ok(Object decodedValue)))
-                    return decoded.cast();
-                components.put(key, MinestomDataComponentValue.dataComponentValue(decodedValue));
+                switch (map.getValue(rawKey).map(v -> type.decode(coder, v))) {
+                    case Result.Ok(Object decoded) ->
+                            components.put(key, MinestomDataComponentValue.dataComponentValue(decoded));
+                    case Result.Error<?>(String message) -> {
+                        return new Result.Error<>(type.name() + ": " + message);
+                    }
+                }
             }
             return new Result.Ok<>(components);
         }
@@ -223,28 +232,32 @@ public final class ComponentCodecs {
         public <D> Result<D> encode(Transcoder<D> coder, @Nullable Map<Key, DataComponentValue> value) {
             if (value == null) return new Result.Error<>("null");
             final MapBuilder<D> map = coder.createMap();
-            for (final var entry : value.entrySet()) {
+            for (var entry : value.entrySet()) {
                 final Key key = entry.getKey();
-                final DataComponentValue dataComponentValue = entry.getValue();
-                if (dataComponentValue instanceof DataComponentValue.Removed) {
-                    map.put("!" + key.asString(), coder.emptyMap());
+                final DataComponentValue componentValue = entry.getValue();
+                if (componentValue instanceof DataComponentValue.Removed) {
+                    map.put("!" + key.asString(), coder.createMap().build());
                     continue;
                 }
 
-                final Result<D> encoded = switch (dataComponentValue) {
+                final Result<D> encoded = switch (componentValue) {
                     case NbtDataComponentValue nbt -> Transcoder.NBT.convertTo(coder, nbt.value());
                     case GsonDataComponentValue gson -> Transcoder.JSON.convertTo(coder, gson.element());
                     case MinestomDataComponentValue minestom -> {
-                        final DataComponent<Object> component = (DataComponent<Object>) DataComponent.fromKey(key);
-                        yield component == null
-                                ? new Result.Error<>("Unknown data component: " + key)
-                                : component.encode(coder, minestom.value());
+                        final DataComponent<Object> type = dataComponent(key);
+                        yield type == null
+                                ? new Result.Error<>("unknown data component: " + key)
+                                : type.encode(coder, minestom.value());
                     }
-                    default -> new Result.Error<>("Unsupported data component value: " + dataComponentValue.getClass());
+                    default -> new Result.Error<>("unsupported data component value: " + componentValue.getClass());
                 };
-                if (!(encoded instanceof Result.Ok(D encodedValue)))
-                    return encoded.cast();
-                map.put(key.asString(), encodedValue);
+
+                switch (encoded) {
+                    case Result.Ok(D encodedValue) -> map.put(key.asString(), encodedValue);
+                    case Result.Error<?>(String message) -> {
+                        return new Result.Error<>(key + ": " + message);
+                    }
+                }
             }
             return new Result.Ok<>(map.build());
         }
