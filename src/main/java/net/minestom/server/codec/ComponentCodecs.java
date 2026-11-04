@@ -13,6 +13,7 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.TranslationArgument;
 import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.DataComponentValue;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.ShadowColor;
@@ -22,15 +23,21 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.object.ObjectContents;
 import net.kyori.adventure.text.object.PlayerHeadObjectContents;
 import net.kyori.adventure.text.object.SpriteObjectContents;
+import net.kyori.adventure.text.serializer.gson.GsonDataComponentValue;
 import net.minestom.server.adventure.MinestomAdventure;
+import net.minestom.server.adventure.MinestomDataComponentValue;
+import net.minestom.server.adventure.serializer.nbt.NbtDataComponentValue;
 import net.minestom.server.codec.Transcoder.MapBuilder;
 import net.minestom.server.codec.Transcoder.MapLike;
+import net.minestom.server.component.DataComponent;
 import net.minestom.server.dialog.Dialog;
 import net.minestom.server.network.player.ResolvableProfile;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Used internally to hold component codecs
@@ -181,13 +188,76 @@ public final class ComponentCodecs {
     private static final Codec<HoverEvent.Action<?>> HOVER_EVENT_ACTION = Codec.STRING.transform(HoverEvent.Action.NAMES::value, HoverEvent.Action::toString);
     private static final Codec<HoverEvent<?>> HOVER_EVENT = HOVER_EVENT_ACTION.unionType("action", ComponentCodecs::hoverEventCodec, HoverEvent::action);
 
+    @SuppressWarnings("unchecked")
+    private static final Codec<Map<Key, DataComponentValue>> SHOW_ITEM_COMPONENTS = new Codec<>() {
+        @Override
+        public <D> Result<Map<Key, DataComponentValue>> decode(Transcoder<D> coder, D value) {
+            final Result<MapLike<D>> mapResult = coder.getMap(value);
+            if (!(mapResult instanceof Result.Ok(MapLike<D> map)))
+                return mapResult.cast();
+
+            final Map<Key, DataComponentValue> components = new HashMap<>(map.size());
+            for (final String rawKey : map.keys()) {
+                final boolean removed = rawKey.startsWith("!");
+                final Key key = Key.key(removed ? rawKey.substring(1) : rawKey);
+                if (removed) {
+                    components.put(key, DataComponentValue.removed());
+                    continue;
+                }
+
+                final DataComponent<Object> component = (DataComponent<Object>) DataComponent.fromKey(key);
+                if (component == null) continue;
+
+                final Result<D> rawResult = map.getValue(rawKey);
+                if (!(rawResult instanceof Result.Ok(D raw)))
+                    return rawResult.cast();
+                final Result<Object> decoded = component.decode(coder, raw);
+                if (!(decoded instanceof Result.Ok(Object decodedValue)))
+                    return decoded.cast();
+                components.put(key, MinestomDataComponentValue.dataComponentValue(decodedValue));
+            }
+            return new Result.Ok<>(components);
+        }
+
+        @Override
+        public <D> Result<D> encode(Transcoder<D> coder, @Nullable Map<Key, DataComponentValue> value) {
+            if (value == null) return new Result.Error<>("null");
+            final MapBuilder<D> map = coder.createMap();
+            for (final var entry : value.entrySet()) {
+                final Key key = entry.getKey();
+                final DataComponentValue dataComponentValue = entry.getValue();
+                if (dataComponentValue instanceof DataComponentValue.Removed) {
+                    map.put("!" + key.asString(), coder.emptyMap());
+                    continue;
+                }
+
+                final Result<D> encoded = switch (dataComponentValue) {
+                    case NbtDataComponentValue nbt -> Transcoder.NBT.convertTo(coder, nbt.value());
+                    case GsonDataComponentValue gson -> Transcoder.JSON.convertTo(coder, gson.element());
+                    case MinestomDataComponentValue minestom -> {
+                        final DataComponent<Object> component = (DataComponent<Object>) DataComponent.fromKey(key);
+                        yield component == null
+                                ? new Result.Error<>("Unknown data component: " + key)
+                                : component.encode(coder, minestom.value());
+                    }
+                    default -> new Result.Error<>("Unsupported data component value: " + dataComponentValue.getClass());
+                };
+                if (!(encoded instanceof Result.Ok(D encodedValue)))
+                    return encoded.cast();
+                map.put(key.asString(), encodedValue);
+            }
+            return new Result.Ok<>(map.build());
+        }
+    };
+
     private static final StructCodec<HoverEvent<Component>> SHOW_TEXT = StructCodec.struct(
             "value", COMPONENT_FORWARD, HoverEvent::value,
             HoverEvent::showText);
     private static final StructCodec<HoverEvent<HoverEvent.ShowItem>> SHOW_ITEM = StructCodec.struct(
             "id", Codec.KEY, hoverEvent -> hoverEvent.value().item(),
             "count", Codec.INT.optional(1), hoverEvent -> hoverEvent.value().count(),
-            HoverEvent::showItem); // TODO(1.21.5): components
+            "components", SHOW_ITEM_COMPONENTS.optional(Map.of()), hoverEvent -> hoverEvent.value().dataComponents(),
+            HoverEvent::showItem);
     private static final StructCodec<HoverEvent<HoverEvent.ShowEntity>> SHOW_ENTITY = StructCodec.struct(
             "id", Codec.KEY, hoverEvent -> hoverEvent.value().type(),
             "uuid", Codec.UUID_COERCED, hoverEvent -> hoverEvent.value().id(),
