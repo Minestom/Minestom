@@ -188,11 +188,6 @@ public final class ComponentCodecs {
     private static final Codec<HoverEvent.Action<?>> HOVER_EVENT_ACTION = Codec.STRING.transform(HoverEvent.Action.NAMES::value, HoverEvent.Action::toString);
     private static final Codec<HoverEvent<?>> HOVER_EVENT = HOVER_EVENT_ACTION.unionType("action", ComponentCodecs::hoverEventCodec, HoverEvent::action);
 
-    @SuppressWarnings("unchecked")
-    private static @Nullable DataComponent<Object> dataComponent(Key key) {
-        return (DataComponent<Object>) DataComponent.fromKey(key);
-    }
-
     private static final Codec<Map<Key, DataComponentValue>> SHOW_ITEM_COMPONENTS = new Codec<>() {
         @Override
         public <D> Result<Map<Key, DataComponentValue>> decode(Transcoder<D> coder, D value) {
@@ -202,11 +197,8 @@ public final class ComponentCodecs {
 
             final Map<Key, DataComponentValue> components = new HashMap<>(map.size());
             for (String rawKey : map.keys()) {
-                boolean remove = false;
-                if (!rawKey.isEmpty() && rawKey.charAt(0) == '!') {
-                    rawKey = rawKey.substring(1);
-                    remove = true;
-                }
+                final boolean remove = rawKey.startsWith("!");
+                if (remove) rawKey = rawKey.substring(1);
                 final Key key = Key.key(rawKey);
 
                 if (remove) {
@@ -214,7 +206,8 @@ public final class ComponentCodecs {
                     continue;
                 }
 
-                final DataComponent<Object> type = dataComponent(key);
+                @SuppressWarnings("unchecked")
+                DataComponent<Object> type = (DataComponent<Object>) DataComponent.fromKey(key);
                 if (type == null) return new Result.Error<>("unknown data component: " + key);
 
                 switch (map.getValue(rawKey).map(v -> type.decode(coder, v))) {
@@ -241,10 +234,11 @@ public final class ComponentCodecs {
                 }
 
                 final Result<D> encoded = switch (componentValue) {
-                    case NbtDataComponentValue nbt -> Transcoder.NBT.convertTo(coder, nbt.value());
+                    case NbtDataComponentValue nbt -> Codec.NBT.encode(coder, nbt.value());
                     case GsonDataComponentValue gson -> Transcoder.JSON.convertTo(coder, gson.element());
                     case MinestomDataComponentValue minestom -> {
-                        final DataComponent<Object> type = dataComponent(key);
+                        @SuppressWarnings("unchecked")
+                        DataComponent<Object> type = (DataComponent<Object>) DataComponent.fromKey(key);
                         yield type == null
                                 ? new Result.Error<>("unknown data component: " + key)
                                 : type.encode(coder, minestom.value());
