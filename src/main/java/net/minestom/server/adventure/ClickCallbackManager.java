@@ -9,7 +9,9 @@ import net.minestom.server.Tickable;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.client.common.ClientCustomClickActionPacket;
 import net.minestom.server.utils.UUIDUtils;
+import org.jetbrains.annotations.Nullable;
 
+import java.time.Duration;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -21,32 +23,20 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public final class ClickCallbackManager implements Tickable {
     private static final Key KEY = Key.key("minestom", "click_callback");
+    private static final ClickEvent<ClickEvent.Payload.Custom> EXPIRED = clickEvent(new UUID(0L, 0L));
 
     private final Map<UUID, ClickCallback<Audience>> permanent = new ConcurrentHashMap<>(0);
     private final Map<UUID, CallbackData> temporary = new ConcurrentHashMap<>(0);
 
-    private record CallbackData(ClickCallback<Audience> callback, long expiry, AtomicInteger uses, boolean unlimitedUses) {
-        private CallbackData {
-            Objects.requireNonNull(callback, "callback");
-            Objects.requireNonNull(uses, "uses");
-        }
-
+    private record CallbackData(ClickCallback<Audience> callback, long expiry, @Nullable AtomicInteger uses) {
         boolean isExpired(final long time) {
-            if (this.unlimitedUses) return time >= this.expiry;
-
-            return this.uses.get() <= 0 || time >= this.expiry;
+            return time >= this.expiry || (this.uses != null && this.uses.get() <= 0);
         }
 
-        void consume(final Audience audience) {
-            long nanoTime = System.nanoTime();
-            if (this.unlimitedUses && this.expiry > nanoTime) {
-                this.callback.accept(audience);
-                return;
-            }
-            final int remaining = this.uses.getAndUpdate(current -> current > 0 ? current - 1 : current);
-            if (remaining > 0 && this.expiry > System.nanoTime()) {
-                this.callback.accept(audience);
-            }
+        void consume(final Audience audience, final long time) {
+            if (time >= this.expiry) return;
+            if (this.uses != null && this.uses.getAndUpdate(current -> current > 0 ? current - 1 : current) <= 0) return;
+            this.callback.accept(audience);
         }
     }
 
@@ -66,25 +56,22 @@ public final class ClickCallbackManager implements Tickable {
         Objects.requireNonNull(player, "player");
         Objects.requireNonNull(packet, "packet");
         if (!packet.key().equals(KEY)) return;
+        if (!(packet.payload() instanceof final IntArrayBinaryTag tag)) return;
 
-        if (packet.payload() instanceof final IntArrayBinaryTag tag) {
-            final UUID uuid;
-            try {
-                uuid = UUIDUtils.fromNbt(tag);
-            } catch (final IndexOutOfBoundsException _) {
-                return;
-            }
-
-            final ClickCallback<Audience> data = this.permanent.get(uuid);
-            if (data != null) {
-                data.accept(player);
-            } else {
-                final CallbackData temp = this.temporary.get(uuid);
-                if (temp != null) {
-                    temp.consume(player);
-                }
-            }
+        final UUID uuid;
+        try {
+            uuid = UUIDUtils.fromNbt(tag);
+        } catch (final IndexOutOfBoundsException _) {
+            return;
         }
+
+        final ClickCallback<Audience> callback = this.permanent.get(uuid);
+        if (callback != null) {
+            callback.accept(player);
+            return;
+        }
+        final CallbackData data = this.temporary.get(uuid);
+        if (data != null) data.consume(player, System.nanoTime());
     }
 
     /**
@@ -97,23 +84,30 @@ public final class ClickCallbackManager implements Tickable {
     public ClickEvent<ClickEvent.Payload.Custom> createClickEvent(final ClickCallback<Audience> callback, final ClickCallback.Options options) {
         Objects.requireNonNull(callback, "callback");
         Objects.requireNonNull(options, "options");
-        final UUID uuid = UUID.randomUUID();
         final int uses = options.uses();
+        final boolean unlimitedUses = uses == ClickCallback.UNLIMITED_USES;
+        final Duration lifetime = options.lifetime();
+        if (!lifetime.isPositive() || (!unlimitedUses && uses <= 0)) return EXPIRED;
 
-        long expiry;
-        try {
-            expiry = System.nanoTime() + options.lifetime().toNanos();
-            if (expiry < 0) expiry = Long.MAX_VALUE;
-        } catch (final ArithmeticException _) {
-            expiry = Long.MAX_VALUE;
-        }
-
-        if (expiry == Long.MAX_VALUE && uses == ClickCallback.UNLIMITED_USES) {
+        final UUID uuid = UUID.randomUUID();
+        final long expiry = expiry(System.nanoTime(), lifetime);
+        if (unlimitedUses && expiry == Long.MAX_VALUE) {
             this.permanent.put(uuid, callback);
-        } else if (expiry > System.nanoTime()) {
-            this.temporary.put(uuid, new CallbackData(callback, expiry, new AtomicInteger(uses), uses == ClickCallback.UNLIMITED_USES));
+        } else {
+            this.temporary.put(uuid, new CallbackData(callback, expiry, unlimitedUses ? null : new AtomicInteger(uses)));
         }
+        return clickEvent(uuid);
+    }
 
+    private static ClickEvent<ClickEvent.Payload.Custom> clickEvent(final UUID uuid) {
         return ClickEvent.custom(KEY, new BinaryTagHolderImpl(UUIDUtils.toNbt(uuid)));
+    }
+
+    private static long expiry(final long time, final Duration lifetime) {
+        try {
+            return Math.addExact(time, lifetime.toNanos());
+        } catch (final ArithmeticException _) {
+            return Long.MAX_VALUE;
+        }
     }
 }
