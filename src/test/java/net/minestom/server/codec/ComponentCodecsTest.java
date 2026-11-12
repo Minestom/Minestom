@@ -9,10 +9,13 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.object.ObjectContents;
 import net.minestom.server.adventure.MinestomAdventure;
+import net.minestom.server.adventure.MinestomDataComponentValue;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.network.player.GameProfile;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -126,6 +129,26 @@ class ComponentCodecsTest {
         var actual = ComponentCodecs.COMPONENT.decode(Transcoder.NBT, nbt).orElseThrow();
 
         assertEquals(component, actual);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void writeShowItemDataComponents() throws IOException {
+        var hoverEvent = HoverEvent.showItem(Key.key("minecraft:diamond"), 1, Map.of(
+                DataComponents.CUSTOM_NAME.key(),
+                MinestomDataComponentValue.dataComponentValue(Component.text("Custom Name"))
+        ));
+        var component = Component.text("hover").hoverEvent(hoverEvent);
+
+        var nbt = ComponentCodecs.COMPONENT.encode(Transcoder.NBT, component).orElseThrow();
+        assertEquals("{hover_event:{action:\"show_item\",components:{\"minecraft:custom_name\":\"Custom Name\"},id:\"minecraft:diamond\"},text:\"hover\"}",
+                MinestomAdventure.tagStringIO().asString(nbt));
+
+        var decoded = ComponentCodecs.COMPONENT.decode(Transcoder.NBT, nbt).orElseThrow();
+        var decodedHoverEvent = (HoverEvent<HoverEvent.ShowItem>) decoded.style().hoverEvent();
+        var decodedCustomName = (MinestomDataComponentValue) decodedHoverEvent.value().dataComponents()
+                .get(DataComponents.CUSTOM_NAME.key());
+        assertEquals(Component.text("Custom Name"), decodedCustomName.value());
     }
 
     @Test
