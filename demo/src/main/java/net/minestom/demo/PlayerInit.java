@@ -5,6 +5,7 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.StringBinaryTag;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickCallback;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -166,6 +167,34 @@ public class PlayerInit {
                         .clickEvent(ClickEvent.runCommand("health set 2"))
                         .append(Component.object(ObjectContents.sprite(Key.key("block/stone"))))
                         .append(Component.object(ObjectContents.playerHead("Minestom"))));
+
+                player.sendMessage(Component.text("unlimited uses, expires in 1 minute")
+                        .clickEvent(ClickEvent.callback(
+                                audience -> audience.sendMessage(Component.text("A")),
+                                ClickCallback.Options.builder().uses(ClickCallback.UNLIMITED_USES).lifetime(Duration.ofMinutes(1)).build())
+                        )
+                );
+                player.sendMessage(Component.text("unlimited uses, no expiry")
+                        .clickEvent(ClickEvent.callback(
+                                audience -> audience.sendMessage(Component.text("B")),
+                                ClickCallback.Options.builder().uses(ClickCallback.UNLIMITED_USES).lifetime(Duration.ofNanos(Long.MAX_VALUE)).build())
+                        )
+                );
+
+                player.sendMessage(Component.text("3 uses, 1 min expiry")
+                        .clickEvent(ClickEvent.callback(
+                                audience -> audience.sendMessage(Component.text("C")),
+                                ClickCallback.Options.builder().uses(3).lifetime(Duration.ofMinutes(1)).build())
+                        )
+                );
+
+                player.sendMessage(Component.text("3 uses, no expiry")
+                        .clickEvent(ClickEvent.callback(
+                                audience -> audience.sendMessage(Component.text("D")),
+                                ClickCallback.Options.builder().uses(3).lifetime(Duration.ofNanos(Long.MAX_VALUE)).build())
+                        )
+                );
+
                 ItemStack itemStack = ItemStack.builder(Material.STONE)
                         .amount(64)
                         .set(DataComponents.CAN_PLACE_ON, new BlockPredicates(List.of(
