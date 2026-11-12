@@ -357,8 +357,13 @@ public class InstanceContainer extends Instance {
         final int chunkZ = chunk.getChunkZ();
         chunk.sendPacketToViewers(new UnloadChunkPacket(chunkX, chunkZ));
         EventDispatcher.call(new InstanceChunkUnloadEvent(this, chunk));
-        // Remove all entities in chunk
+        // Remove all entities in the chunk (in this instance and in all connected SharedInstances)
         getEntityTracker().chunkEntities(chunkX, chunkZ, EntityTracker.Target.ENTITIES).forEach(Entity::remove);
+        for (SharedInstance shared : getSharedInstances()) {
+            shared.getEntityTracker()
+                    .chunkEntities(chunkX, chunkZ, EntityTracker.Target.ENTITIES)
+                    .forEach(Entity::remove);
+        }
         // Clear cache
         this.chunks.remove(CoordConversion.chunkIndex(chunkX, chunkZ));
         chunk.unload();

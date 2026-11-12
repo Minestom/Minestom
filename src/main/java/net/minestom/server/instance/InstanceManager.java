@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.instance.InstanceRegisterEvent;
@@ -12,6 +13,7 @@ import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -153,6 +155,9 @@ public final class InstanceManager {
                 instance.getChunks().forEach(dispatcher::deletePartition);
             }
             if (instance instanceof SharedInstance sharedInstance) {
+                for (Entity entity : List.copyOf(sharedInstance.getEntities())) {
+                    entity.remove();
+                }
                 sharedInstance.getInstanceContainer().removeSharedInstance(sharedInstance);
             }
             // Unregister

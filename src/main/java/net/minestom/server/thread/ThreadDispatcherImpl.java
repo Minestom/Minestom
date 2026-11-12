@@ -152,15 +152,17 @@ final class ThreadDispatcherImpl<P, E extends Tickable> implements ThreadDispatc
         if (partitionEntry != null) {
             TickThread thread = partitionEntry.thread;
             thread.entries.remove(partitionEntry);
+            for (Tickable tickable : partitionEntry.elements) {
+                elements.remove(tickable);
+            }
+            partitionEntry.elements.clear();
         }
         this.partitionUpdateQueue.remove(partition);
-        if (partition instanceof Tickable tickable) {
-            processRemovedElement(tickable);
-        }
+        elements.remove(partition);
     }
 
     private void processRemovedElement(Tickable tickable) {
-        Partition partition = elements.get(tickable);
+        Partition partition = elements.remove(tickable);
         if (partition != null) {
             partition.elements.remove(tickable);
         }
