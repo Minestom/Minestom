@@ -50,11 +50,27 @@ class ComponentCodecsTest {
     }
 
     @Test
+    void writeCustomClickEventNullPayload() throws IOException {
+        var component = Component.text("Click me!").clickEvent(ClickEvent.custom(Key.key("hello:world")));
+        var nbt = ComponentCodecs.COMPONENT.encode(Transcoder.NBT, component).orElseThrow();
+        assertEquals("{click_event:{action:\"custom\",id:\"hello:world\"},text:\"Click me!\"}",
+                MinestomAdventure.tagStringIO().asString(nbt));
+    }
+
+    @Test
     void readCustomClickEvent() throws IOException {
         var input = MinestomAdventure.tagStringIO().asTag("{click_event:{payload:55,action:\"custom\",id:\"hello:world\"},text:\"Click me!\"}");
         var actual = ComponentCodecs.COMPONENT.decode(Transcoder.NBT, input).orElseThrow();
         var expected = Component.text("Click me!").clickEvent(ClickEvent.custom(
                 Key.key("hello:world"), MinestomAdventure.wrapNbt(IntBinaryTag.intBinaryTag(55))));
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void readCustomClickEventNullPayload() throws IOException {
+        var input = MinestomAdventure.tagStringIO().asTag("{click_event:{action:\"custom\",id:\"hello:world\"},text:\"Click me!\"}");
+        var actual = ComponentCodecs.COMPONENT.decode(Transcoder.NBT, input).orElseThrow();
+        var expected = Component.text("Click me!").clickEvent(ClickEvent.custom(Key.key("hello:world")));
         assertEquals(expected, actual);
     }
 

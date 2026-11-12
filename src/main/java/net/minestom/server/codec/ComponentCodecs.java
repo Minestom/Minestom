@@ -2,7 +2,7 @@ package net.minestom.server.codec;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.KeybindComponent;
 import net.kyori.adventure.text.NBTComponent;
@@ -115,17 +115,17 @@ public final class ComponentCodecs {
                     if (!(idResult instanceof Result.Ok(Key id)))
                         yield idResult.cast();
 
-                    BinaryTag payload = CompoundBinaryTag.empty(); // Default to empty. It is optional technically, but adventure does not support that.
+                    BinaryTagHolder payloadHolder = null;
                     if (map.hasValue("payload")) {
                         final Result<BinaryTag> payloadResult = map.getValue("payload")
                                 .map(value -> Codec.RAW_VALUE.decode(coder, value))
                                 .map(value -> value.convertTo(Transcoder.NBT));
                         if (!(payloadResult instanceof Result.Ok(BinaryTag rawValue)))
                             yield payloadResult.cast();
-                        payload = rawValue;
+                        payloadHolder = MinestomAdventure.wrapNbt(rawValue);
                     }
 
-                    yield new Result.Ok<>(ClickEvent.custom(id, MinestomAdventure.wrapNbt(payload)));
+                    yield new Result.Ok<>(ClickEvent.custom(id, payloadHolder));
                 }
             };
         }
@@ -167,11 +167,13 @@ public final class ComponentCodecs {
                 }
                 case ClickEvent.Payload.Custom custom -> {
                     map.put("id", coder.createString(custom.key().asString()));
-                    final RawValue payloadRawValue = RawValue.of(Transcoder.NBT, MinestomAdventure.unwrapNbt(custom.nbt()));
-                    final Result<D> payloadResult = Codec.RAW_VALUE.encode(coder, payloadRawValue);
-                    if (!(payloadResult instanceof Result.Ok(D customPayload)))
-                        yield payloadResult.cast();
-                    map.put("payload", customPayload);
+                    if (custom.nbt() != null) {
+                        final RawValue payloadRawValue = RawValue.of(Transcoder.NBT, MinestomAdventure.unwrapNbt(custom.nbt()));
+                        final Result<D> payloadResult = Codec.RAW_VALUE.encode(coder, payloadRawValue);
+                        if (!(payloadResult instanceof Result.Ok(D customPayload)))
+                            yield payloadResult.cast();
+                        map.put("payload", customPayload);
+                    }
                     yield new Result.Ok<>(map.build());
                 }
             };
