@@ -18,7 +18,6 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -32,7 +31,6 @@ import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.world.DimensionType;
 
 public class BlockPlacementListener {
-    private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
     public static void listener(ClientPlayerBlockPlacementPacket packet, Player player) {
         final PlayerHand hand = packet.hand();
@@ -115,10 +113,9 @@ public class BlockPlacementListener {
         // Get the newly placed block position
         //todo it feels like it should be possible to have better replacement rules than this, feels pretty scuffed.
         Point placementPosition = blockPosition;
-        var interactedPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(interactedBlock);
-        final boolean placeAdjacent = !interactedBlock.air() && (interactedPlacementRule == null || !interactedPlacementRule.isSelfReplaceable(
-                new BlockPlacementRule.Replacement(interactedBlock, blockFace, cursorPosition, false, useMaterial)));
-        // If the block is not replaceable, try to place next to it.
+        // vanilla BlockPlaceContext#replaceClicked
+        final boolean placeAdjacent = !interactedBlock.air() && !isReplaceable(interactedBlock,
+                new BlockPlacementRule.Replacement(interactedBlock, blockFace, cursorPosition, false, useMaterial, player.isSneaking()));
         if (placeAdjacent) placementPosition = blockPosition.relative(blockFace);
 
         final Chunk chunk = instance.getChunkAt(placementPosition);
@@ -131,9 +128,8 @@ public class BlockPlacementListener {
 
         if (placeAdjacent) {
             var placementBlock = instance.getBlock(placementPosition);
-            var placementRule = BLOCK_MANAGER.getBlockPlacementRule(placementBlock);
-            if (!placementBlock.replaceable() && !(placementRule != null && placementRule.isSelfReplaceable(
-                    new BlockPlacementRule.Replacement(placementBlock, blockFace, cursorPosition, true, useMaterial)))) {
+            if (!isReplaceable(placementBlock,
+                    new BlockPlacementRule.Replacement(placementBlock, blockFace, cursorPosition, true, useMaterial, player.isSneaking()))) {
                 // If the block is still not replaceable, cancel the placement
                 canPlaceBlock = false;
             }
@@ -212,5 +208,10 @@ public class BlockPlacementListener {
     private static void refreshUsedHandSlot(Player player, PlayerHand hand) {
         final int slot = hand == PlayerHand.OFF ? PlayerInventoryUtils.OFFHAND_SLOT : player.getHeldSlot();
         player.getInventory().sendSlotRefresh(slot, player.getItemInHand(hand));
+    }
+
+    private static boolean isReplaceable(Block block, BlockPlacementRule.Replacement replacement) {
+        final BlockPlacementRule rule = MinecraftServer.getBlockManager().getBlockPlacementRule(block);
+        return rule != null ? rule.isSelfReplaceable(replacement) : BlockPlacementRule.isReplaceable(replacement);
     }
 }
