@@ -4,6 +4,7 @@ public enum ClickType {
 
     LEFT_CLICK,
     RIGHT_CLICK,
+    MIDDLE_CLICK,
     CHANGE_HELD,
 
     START_SHIFT_CLICK,
@@ -14,6 +15,7 @@ public enum ClickType {
 
     LEFT_DRAGGING,
     RIGHT_DRAGGING,
+    MIDDLE_DRAGGING,
 
     END_LEFT_DRAGGING,
     END_RIGHT_DRAGGING,
