@@ -25,6 +25,8 @@ sealed interface Biomes permits Biome {
 
     RegistryKey<Biome> CRIMSON_FOREST = RegistryKey.of("crimson_forest");
 
+    RegistryKey<Biome> DAPPLED_FOREST = RegistryKey.of("dappled_forest");
+
     RegistryKey<Biome> DARK_FOREST = RegistryKey.of("dark_forest");
 
     RegistryKey<Biome> DEEP_COLD_OCEAN = RegistryKey.of("deep_cold_ocean");

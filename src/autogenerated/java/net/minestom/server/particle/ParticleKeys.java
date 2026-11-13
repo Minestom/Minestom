@@ -97,6 +97,12 @@ public interface ParticleKeys {
 
     RegistryKey<Particle> PALE_OAK_LEAVES = RegistryKey.of("pale_oak_leaves");
 
+    RegistryKey<Particle> RED_POPLAR_LEAVES = RegistryKey.of("red_poplar_leaves");
+
+    RegistryKey<Particle> ORANGE_POPLAR_LEAVES = RegistryKey.of("orange_poplar_leaves");
+
+    RegistryKey<Particle> YELLOW_POPLAR_LEAVES = RegistryKey.of("yellow_poplar_leaves");
+
     RegistryKey<Particle.TintedLeaves> TINTED_LEAVES = RegistryKey.of("tinted_leaves");
 
     RegistryKey<Particle> SCULK_SOUL = RegistryKey.of("sculk_soul");

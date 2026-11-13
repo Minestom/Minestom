@@ -1,5 +1,6 @@
 package net.minestom.server.utils;
 
+import net.minestom.server.codec.Codec;
 import net.minestom.server.coordinate.Vec;
 
 public enum Direction {
@@ -9,6 +10,8 @@ public enum Direction {
     SOUTH(0, 0, 1),
     WEST(-1, 0, 0),
     EAST(1, 0, 0);
+
+    public static final Codec<Direction> CODEC = Codec.Enum(Direction.class);
 
     @SuppressWarnings("MutablePublicArray")
     public static final Direction[] HORIZONTAL = {SOUTH, WEST, NORTH, EAST};

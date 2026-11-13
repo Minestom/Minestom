@@ -62,7 +62,10 @@ public final class Generators {
             new DynamicRegistrySpec("timeline", "net.minestom.server.world.timeline", "Timeline"),
             new DynamicRegistrySpec("world_clock", "net.minestom.server.world.clock", "WorldClock"),
             new DynamicRegistrySpec("clock_time_marker", "net.minestom.server.world.clock", "ClockTimeMarker"),
-            new DynamicRegistrySpec("sulfur_cube_archetype", "net.minestom.server.entity.metadata.cube", "SulfurCubeArchetype")
+            new DynamicRegistrySpec("sulfur_cube_archetype", "net.minestom.server.entity.metadata.cube", "SulfurCubeArchetype"),
+            new DynamicRegistrySpec("decorated_pot_pattern", "net.minestom.server.instance.block.pot", "DecoratedPotPattern"),
+            new DynamicRegistrySpec("block_transformer", "net.minestom.server.instance.block.transformer", "BlockTransformer"),
+            new DynamicRegistrySpec("worldgen/block_state_provider", "net.minestom.server.world.generation", "BlockStateProvider")
     );
 
     static void main(String[] args) {

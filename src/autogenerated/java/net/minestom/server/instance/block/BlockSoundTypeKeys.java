@@ -179,9 +179,13 @@ public interface BlockSoundTypeKeys {
 
     RegistryKey<BlockSoundType> POLISHED_TUFF = RegistryKey.of("polished_tuff");
 
+    RegistryKey<BlockSoundType> POPLAR_LEAVES = RegistryKey.of("poplar_leaves");
+
     RegistryKey<BlockSoundType> POTENT_SULFUR = RegistryKey.of("potent_sulfur");
 
     RegistryKey<BlockSoundType> POWDER_SNOW = RegistryKey.of("powder_snow");
+
+    RegistryKey<BlockSoundType> RED_SHRUB = RegistryKey.of("red_shrub");
 
     RegistryKey<BlockSoundType> RESIN = RegistryKey.of("resin");
 
@@ -207,6 +211,8 @@ public interface BlockSoundTypeKeys {
 
     RegistryKey<BlockSoundType> SHELF = RegistryKey.of("shelf");
 
+    RegistryKey<BlockSoundType> SHELF_MUSHROOM = RegistryKey.of("shelf_mushroom");
+
     RegistryKey<BlockSoundType> SHROOMLIGHT = RegistryKey.of("shroomlight");
 
     RegistryKey<BlockSoundType> SLIME_BLOCK = RegistryKey.of("slime_block");
@@ -230,6 +236,8 @@ public interface BlockSoundTypeKeys {
     RegistryKey<BlockSoundType> STEM = RegistryKey.of("stem");
 
     RegistryKey<BlockSoundType> STONE = RegistryKey.of("stone");
+
+    RegistryKey<BlockSoundType> STRAW_BED = RegistryKey.of("straw_bed");
 
     RegistryKey<BlockSoundType> SULFUR = RegistryKey.of("sulfur");
 

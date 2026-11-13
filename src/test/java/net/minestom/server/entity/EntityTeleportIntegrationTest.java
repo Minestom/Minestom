@@ -69,7 +69,7 @@ public class EntityTeleportIntegrationTest {
         viewerTracker.assertAnyMatch(packet -> {
             if (!(packet instanceof EntityPositionSyncPacket syncPacket)) return false;
             assertEquals(player.getEntityId(), syncPacket.entityId());
-            assertEquals(teleportPosition, syncPacket.position());
+            assertEquals(teleportPosition, syncPacket.position().endPosition());
             assertEquals(teleportPosition.yaw(), syncPacket.yaw());
             return true;
         });

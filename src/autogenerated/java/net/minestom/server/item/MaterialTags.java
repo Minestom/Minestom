@@ -45,7 +45,7 @@ public interface MaterialTags {
 
     TagKey<Material> BREAKS_DECORATED_POTS = TagKey.of("breaks_decorated_pots");
 
-    TagKey<Material> BREWING_FUEL = TagKey.of("brewing_fuel");
+    TagKey<Material> BREWING_POTION_INPUTS = TagKey.of("brewing_potion_inputs");
 
     TagKey<Material> BUNDLES = TagKey.of("bundles");
 
@@ -73,6 +73,8 @@ public interface MaterialTags {
 
     TagKey<Material> CHICKEN_FOOD = TagKey.of("chicken_food");
 
+    TagKey<Material> CLONABLE_MAPS = TagKey.of("clonable_maps");
+
     TagKey<Material> CLUSTER_MAX_HARVESTABLES = TagKey.of("cluster_max_harvestables");
 
     TagKey<Material> COAL_ORES = TagKey.of("coal_ores");
@@ -86,6 +88,10 @@ public interface MaterialTags {
     TagKey<Material> CONCRETE = TagKey.of("concrete");
 
     TagKey<Material> CONCRETE_POWDERS = TagKey.of("concrete_powders");
+
+    TagKey<Material> CONCRETE_SLABS = TagKey.of("concrete_slabs");
+
+    TagKey<Material> CONCRETE_STAIRS = TagKey.of("concrete_stairs");
 
     TagKey<Material> COPPER = TagKey.of("copper");
 
@@ -105,6 +111,8 @@ public interface MaterialTags {
 
     TagKey<Material> CRIMSON_STEMS = TagKey.of("crimson_stems");
 
+    TagKey<Material> CUSHIONS = TagKey.of("cushions");
+
     TagKey<Material> DAMPENS_VIBRATIONS = TagKey.of("dampens_vibrations");
 
     TagKey<Material> DARK_OAK_LOGS = TagKey.of("dark_oak_logs");
@@ -120,6 +128,8 @@ public interface MaterialTags {
     TagKey<Material> DIRT = TagKey.of("dirt");
 
     TagKey<Material> DOORS = TagKey.of("doors");
+
+    TagKey<Material> DOUSES_CAMPFIRES = TagKey.of("douses_campfires");
 
     TagKey<Material> DROWNED_PREFERRED_WEAPONS = TagKey.of("drowned_preferred_weapons");
 
@@ -173,6 +183,8 @@ public interface MaterialTags {
 
     TagKey<Material> ENCHANTABLE_WEAPON = TagKey.of("enchantable/weapon");
 
+    TagKey<Material> EXTENDABLE_MAPS = TagKey.of("extendable_maps");
+
     TagKey<Material> FENCE_GATES = TagKey.of("fence_gates");
 
     TagKey<Material> FENCES = TagKey.of("fences");
@@ -188,6 +200,8 @@ public interface MaterialTags {
     TagKey<Material> FREEZE_IMMUNE_WEARABLES = TagKey.of("freeze_immune_wearables");
 
     TagKey<Material> FROG_FOOD = TagKey.of("frog_food");
+
+    TagKey<Material> FURNACE_FUEL_BOTTOM_TAKEABLE = TagKey.of("furnace_fuel_bottom_takeable");
 
     TagKey<Material> FURNACE_MINECART_FUEL = TagKey.of("furnace_minecart_fuel");
 
@@ -265,6 +279,8 @@ public interface MaterialTags {
 
     TagKey<Material> MUD = TagKey.of("mud");
 
+    TagKey<Material> MUSHROOMS = TagKey.of("mushrooms");
+
     TagKey<Material> NAUTILUS_BUCKET_FOOD = TagKey.of("nautilus_bucket_food");
 
     TagKey<Material> NAUTILUS_FOOD = TagKey.of("nautilus_food");
@@ -280,6 +296,8 @@ public interface MaterialTags {
     TagKey<Material> OAK_LOGS = TagKey.of("oak_logs");
 
     TagKey<Material> OCELOT_FOOD = TagKey.of("ocelot_food");
+
+    TagKey<Material> ORES = TagKey.of("ores");
 
     TagKey<Material> PALE_OAK_LOGS = TagKey.of("pale_oak_logs");
 
@@ -308,6 +326,8 @@ public interface MaterialTags {
     TagKey<Material> PILLAGER_PREFERRED_WEAPONS = TagKey.of("pillager_preferred_weapons");
 
     TagKey<Material> PLANKS = TagKey.of("planks");
+
+    TagKey<Material> POPLAR_LOGS = TagKey.of("poplar_logs");
 
     TagKey<Material> RABBIT_FOOD = TagKey.of("rabbit_food");
 
@@ -456,6 +476,10 @@ public interface MaterialTags {
     TagKey<Material> WOOL = TagKey.of("wool");
 
     TagKey<Material> WOOL_CARPETS = TagKey.of("wool_carpets");
+
+    TagKey<Material> WOOL_SLABS = TagKey.of("wool_slabs");
+
+    TagKey<Material> WOOL_STAIRS = TagKey.of("wool_stairs");
 
     TagKey<Material> ZOMBIE_HORSE_FOOD = TagKey.of("zombie_horse_food");
 }

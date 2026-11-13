@@ -1,36 +1,38 @@
 package net.minestom.server.item.component;
 
 import net.minestom.server.codec.Codec;
-import net.minestom.server.item.Material;
+import net.minestom.server.codec.StructCodec;
+import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.ItemStackTemplate;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
+/**
+ * The sherds shown on each side of a decorated pot. A null side is drawn as plain terracotta.
+ */
 public record PotDecorations(
-        Material back,
-        Material left,
-        Material right,
-        Material front
+        @Nullable ItemStack back,
+        @Nullable ItemStack left,
+        @Nullable ItemStack right,
+        @Nullable ItemStack front
 ) {
-    public static final Material DEFAULT_ITEM = Material.BRICK;
-    public static final PotDecorations EMPTY = new PotDecorations(DEFAULT_ITEM, DEFAULT_ITEM, DEFAULT_ITEM, DEFAULT_ITEM);
+    public static final PotDecorations EMPTY = new PotDecorations(null, null, null, null);
 
-    public static final NetworkBuffer.Type<PotDecorations> NETWORK_TYPE = Material.NETWORK_TYPE.list(4).transform(PotDecorations::new, PotDecorations::asList);
-    public static final Codec<PotDecorations> NBT_TYPE = Material.CODEC.list(4).transform(PotDecorations::new, PotDecorations::asList);
+    public static final NetworkBuffer.Type<PotDecorations> NETWORK_TYPE = NetworkBufferTemplate.template(
+            ItemStackTemplate.NETWORK_TYPE.optional(), PotDecorations::back,
+            ItemStackTemplate.NETWORK_TYPE.optional(), PotDecorations::left,
+            ItemStackTemplate.NETWORK_TYPE.optional(), PotDecorations::right,
+            ItemStackTemplate.NETWORK_TYPE.optional(), PotDecorations::front,
+            PotDecorations::new);
+    public static final Codec<PotDecorations> NBT_TYPE = StructCodec.struct(
+            "back", ItemStackTemplate.CODEC.optional(), PotDecorations::back,
+            "left", ItemStackTemplate.CODEC.optional(), PotDecorations::left,
+            "right", ItemStackTemplate.CODEC.optional(), PotDecorations::right,
+            "front", ItemStackTemplate.CODEC.optional(), PotDecorations::front,
+            PotDecorations::new);
 
-    public PotDecorations(List<Material> list) {
-        this(getOrAir(list, 0), getOrAir(list, 1), getOrAir(list, 2), getOrAir(list, 3));
-    }
-
-    public PotDecorations(Material material) {
-        this(material, material, material, material);
-    }
-
-    public List<Material> asList() {
-        return List.of(back, left, right, front);
-    }
-
-    private static Material getOrAir(List<Material> list, int index) {
-        return index < list.size() ? list.get(index) : Material.BRICK;
+    public PotDecorations(@Nullable ItemStack sherd) {
+        this(sherd, sherd, sherd, sherd);
     }
 }

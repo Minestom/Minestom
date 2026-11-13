@@ -60,15 +60,21 @@ public sealed interface ConsumeEffect {
         }
     }
 
-    record TeleportRandomly(float diameter) implements ConsumeEffect {
+    record TeleportRandomly(float diameter, boolean directionalParticles) implements ConsumeEffect {
         public static final float DEFAULT_DIAMETER = 16.0f;
 
         public static final NetworkBuffer.Type<TeleportRandomly> NETWORK_TYPE = NetworkBufferTemplate.template(
                 NetworkBuffer.FLOAT, TeleportRandomly::diameter,
+                NetworkBuffer.BOOLEAN, TeleportRandomly::directionalParticles,
                 TeleportRandomly::new);
         public static final StructCodec<TeleportRandomly> CODEC = StructCodec.struct(
                 "diameter", Codec.FLOAT.optional(DEFAULT_DIAMETER), TeleportRandomly::diameter,
+                "directional_particles", Codec.BOOLEAN.optional(true), TeleportRandomly::directionalParticles,
                 TeleportRandomly::new);
+
+        public TeleportRandomly(float diameter) {
+            this(diameter, true);
+        }
 
         public TeleportRandomly() {
             this(DEFAULT_DIAMETER);

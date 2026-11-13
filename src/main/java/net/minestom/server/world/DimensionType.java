@@ -23,26 +23,33 @@ import org.jetbrains.annotations.Nullable;
 public sealed interface DimensionType extends DimensionTypes permits DimensionTypeImpl {
     int VANILLA_MIN_Y = -64;
     int VANILLA_MAX_Y = 319;
+    int MIN_Y = -2032;
+    int MAX_Y = 2031;
 
-    Codec<DimensionType> REGISTRY_CODEC = StructCodec.struct(
-            "has_fixed_time", Codec.BOOLEAN.optional(false), DimensionType::hasFixedTime,
-            "has_skylight", Codec.BOOLEAN, DimensionType::hasSkylight,
-            "has_ceiling", Codec.BOOLEAN, DimensionType::hasCeiling,
-            "has_ender_dragon_fight", Codec.BOOLEAN, DimensionType::hasEnderDragonFight,
-            "coordinate_scale", Codec.DOUBLE, DimensionType::coordinateScale,
-            "min_y", Codec.INT, DimensionType::minY,
-            "height", Codec.INT, DimensionType::height,
-            "logical_height", Codec.INT, DimensionType::logicalHeight,
-            "infiniburn", Codec.STRING, DimensionType::infiniburn,
-            "ambient_light", Codec.FLOAT, DimensionType::ambientLight,
-            "monster_spawn_light_level", IntProvider.CODEC, DimensionType::monsterSpawnLightLevel,
-            "monster_spawn_block_light_limit", Codec.INT, DimensionType::monsterSpawnBlockLightLimit,
-            "skybox", Skybox.CODEC.optional(Skybox.OVERWORLD), DimensionType::skybox,
-            "cardinal_light", CardinalLight.CODEC.optional(CardinalLight.DEFAULT), DimensionType::cardinalLight,
-            "attributes", EnvironmentAttributeMap.CODEC.optional(EnvironmentAttributeMap.EMPTY), DimensionType::attributes,
-            "timelines", RegistryTag.codec(Registries::timeline).optional(RegistryTag.empty()), DimensionType::timelines,
-            "default_clock", WorldClock.CODEC.optional(), DimensionType::defaultClock,
-            DimensionType::create);
+    Codec<DimensionType> REGISTRY_CODEC = codec(EnvironmentAttributeMap.CODEC);
+    Codec<DimensionType> NETWORK_CODEC = codec(EnvironmentAttributeMap.NETWORK_CODEC);
+
+    private static Codec<DimensionType> codec(Codec<EnvironmentAttributeMap> attributes) {
+        return StructCodec.struct(
+                "has_fixed_time", Codec.BOOLEAN.optional(false), DimensionType::hasFixedTime,
+                "has_skylight", Codec.BOOLEAN, DimensionType::hasSkylight,
+                "has_ceiling", Codec.BOOLEAN, DimensionType::hasCeiling,
+                "has_ender_dragon_fight", Codec.BOOLEAN, DimensionType::hasEnderDragonFight,
+                "coordinate_scale", Codec.DOUBLE, DimensionType::coordinateScale,
+                "min_y", Codec.INT, DimensionType::minY,
+                "height", Codec.INT, DimensionType::height,
+                "logical_height", Codec.INT, DimensionType::logicalHeight,
+                "infiniburn", Codec.STRING, DimensionType::infiniburn,
+                "ambient_light", Codec.FLOAT, DimensionType::ambientLight,
+                "monster_spawn_light_level", IntProvider.CODEC, DimensionType::monsterSpawnLightLevel,
+                "monster_spawn_block_light_limit", Codec.INT, DimensionType::monsterSpawnBlockLightLimit,
+                "skybox", Skybox.CODEC.optional(Skybox.OVERWORLD), DimensionType::skybox,
+                "cardinal_light", CardinalLight.CODEC.optional(CardinalLight.DEFAULT), DimensionType::cardinalLight,
+                "attributes", attributes.optional(EnvironmentAttributeMap.EMPTY), DimensionType::attributes,
+                "timelines", RegistryTag.codec(Registries::timeline).optional(RegistryTag.empty()), DimensionType::timelines,
+                "default_clock", WorldClock.CODEC.optional(), DimensionType::defaultClock,
+                DimensionType::create);
+    }
 
     static DimensionType create(
             boolean hasFixedTime, boolean hasSkyLight, boolean hasCeiling, boolean hasEnderDragonFight,
@@ -74,7 +81,7 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
      */
     @ApiStatus.Internal
     static DynamicRegistry<DimensionType> createDefaultRegistry(Registries registries) {
-        return DynamicRegistry.create(BuiltinRegistries.DIMENSION_TYPE, REGISTRY_CODEC, registries);
+        return DynamicRegistry.create(BuiltinRegistries.DIMENSION_TYPE, NETWORK_CODEC, registries, null, REGISTRY_CODEC);
     }
 
     boolean hasFixedTime();
@@ -211,7 +218,7 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
         @Contract(value = "_ -> this")
         public Builder minY(int minY) {
             Check.argCondition(minY % 16 != 0, "minY must be a multiple of 16");
-            Check.argCondition(minY < -2032 || minY > 2031, "minY must be between -2032 and 2031");
+            Check.argCondition(minY < MIN_Y || minY > MAX_Y, "minY must be between " + MIN_Y + " and " + MAX_Y);
             this.minY = minY;
             return this;
         }
@@ -296,7 +303,7 @@ public sealed interface DimensionType extends DimensionTypes permits DimensionTy
         @Contract(pure = true)
         public DimensionType build() {
             Check.argCondition(height < logicalHeight, "logicalHeight must be less than or equals height");
-            Check.argCondition(minY + height - 1 > 2031, "the maximum building height (minY + height -1) must be less than 3032");
+            Check.argCondition(minY + height - 1 > MAX_Y, "the maximum building height (minY + height - 1) must be at most " + MAX_Y);
 
             return DimensionType.create(hasFixedTime, hasSkylight, hasCeiling, hasEnderDragonFight, coordinateScale,
                     minY, height, logicalHeight, infiniburn, ambientLight, monsterSpawnLightLevel,

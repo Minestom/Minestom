@@ -11,7 +11,15 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("unused")
 @ApiStatus.NonExtendable
 public interface FluidTags {
+    TagKey<Fluid> AXOLOTL_TRIES_TO_FIND = TagKey.of("axolotl_tries_to_find");
+
     TagKey<Fluid> BUBBLE_COLUMN_CAN_OCCUPY = TagKey.of("bubble_column_can_occupy");
+
+    TagKey<Fluid> DOLPHIN_TRIES_TO_FIND = TagKey.of("dolphin_tries_to_find");
+
+    TagKey<Fluid> ENTITY_FLOATABLE = TagKey.of("entity_floatable");
+
+    TagKey<Fluid> FROG_TRIES_TO_FIND_LAND_NEAR = TagKey.of("frog_tries_to_find_land_near");
 
     TagKey<Fluid> LAVA = TagKey.of("lava");
 

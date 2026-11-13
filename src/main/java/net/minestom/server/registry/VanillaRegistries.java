@@ -21,7 +21,9 @@ import net.minestom.server.entity.metadata.cube.SulfurCubeArchetype;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
+import net.minestom.server.instance.block.pot.DecoratedPotPattern;
 import net.minestom.server.instance.block.predicate.DataComponentPredicate;
+import net.minestom.server.instance.block.transformer.BlockTransformer;
 import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.item.enchant.Enchantment;
@@ -34,6 +36,7 @@ import net.minestom.server.message.ChatType;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import net.minestom.server.world.clock.WorldClock;
+import net.minestom.server.world.generation.BlockStateProvider;
 import net.minestom.server.world.timeline.Timeline;
 
 final class VanillaRegistries implements Registries {
@@ -70,6 +73,9 @@ final class VanillaRegistries implements Registries {
     private final DynamicRegistry<WorldClock> worldClock;
     private final DynamicRegistry<Timeline> timeline;
     private final DynamicRegistry<SulfurCubeArchetype> sulfurCubeArchetype;
+    private final DynamicRegistry<DecoratedPotPattern> decoratedPotPattern;
+    private final DynamicRegistry<BlockTransformer> blockTransformer;
+    private final DynamicRegistry<BlockStateProvider> blockStateProvider;
 
     @SuppressWarnings("removal")
     VanillaRegistries() {
@@ -84,7 +90,7 @@ final class VanillaRegistries implements Registries {
 
         this.chatType = ChatType.createDefaultRegistry();
         this.dialog = Dialog.createDefaultRegistry(this);
-        this.biome = Biome.createDefaultRegistry();
+        this.biome = Biome.createDefaultRegistry(this);
         this.damageType = DamageType.createDefaultRegistry();
         this.trimMaterial = TrimMaterial.createDefaultRegistry();
         this.trimPattern = TrimPattern.createDefaultRegistry();
@@ -109,6 +115,9 @@ final class VanillaRegistries implements Registries {
         this.timeline = Timeline.createDefaultRegistry(this);
         this.dimensionType = DimensionType.createDefaultRegistry(this); // depends on timelines
         this.sulfurCubeArchetype = SulfurCubeArchetype.createDefaultRegistry(this);
+        this.decoratedPotPattern = DecoratedPotPattern.createDefaultRegistry();
+        this.blockStateProvider = BlockStateProvider.createDefaultRegistry(this);
+        this.blockTransformer = BlockTransformer.createDefaultRegistry(this); // depends on block state providers
 
         // Quite a hack because materials are a static registry, and can be loaded before but are cyclic on components.
         // So we break the loop and bind them here
@@ -250,6 +259,21 @@ final class VanillaRegistries implements Registries {
     @Override
     public DynamicRegistry<SulfurCubeArchetype> sulfurCubeArchetype() {
         return sulfurCubeArchetype;
+    }
+
+    @Override
+    public DynamicRegistry<DecoratedPotPattern> decoratedPotPattern() {
+        return decoratedPotPattern;
+    }
+
+    @Override
+    public DynamicRegistry<BlockTransformer> blockTransformer() {
+        return blockTransformer;
+    }
+
+    @Override
+    public DynamicRegistry<BlockStateProvider> blockStateProvider() {
+        return blockStateProvider;
     }
 
     @Override

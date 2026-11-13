@@ -2,6 +2,7 @@ package net.minestom.demo.block;
 
 import net.kyori.adventure.key.Key;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.block.SignTextSlot;
 import net.minestom.server.network.packet.server.play.OpenSignEditorPacket;
 import net.minestom.server.tag.Tag;
 
@@ -19,7 +20,7 @@ public class SignHandler implements BlockHandler {
         interaction.getPlayer().sendPacket(
                 new OpenSignEditorPacket(
                         interaction.getBlockPosition(),
-                        true
+                        SignTextSlot.FRONT
                 )
         );
 

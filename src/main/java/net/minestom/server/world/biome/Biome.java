@@ -5,6 +5,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.world.attribute.EnvironmentAttribute;
 import net.minestom.server.world.attribute.EnvironmentAttributeMap;
@@ -12,17 +13,19 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 public sealed interface Biome extends Biomes permits BiomeImpl {
-    Codec<Biome> REGISTRY_CODEC = StructCodec.struct(
-            "has_precipitation", Codec.BOOLEAN, Biome::hasPrecipitation,
-            "temperature", Codec.FLOAT, Biome::temperature,
-            "temperature_modifier", TemperatureModifier.CODEC.optional(TemperatureModifier.NONE), Biome::temperatureModifier,
-            "downfall", Codec.FLOAT, Biome::downfall,
-            "attributes", EnvironmentAttributeMap.CODEC.optional(EnvironmentAttributeMap.EMPTY), Biome::attributes,
-            "effects", BiomeEffects.CODEC, Biome::effects,
-            Biome::create);
-    // We dont currently read generation or mob spawn settings. If we do, we will need
-    // to have a separate network codec which does not serialize those fields.
-    Codec<Biome> NETWORK_CODEC = REGISTRY_CODEC;
+    Codec<Biome> REGISTRY_CODEC = codec(EnvironmentAttributeMap.CODEC);
+    Codec<Biome> NETWORK_CODEC = codec(EnvironmentAttributeMap.NETWORK_CODEC);
+
+    private static Codec<Biome> codec(Codec<EnvironmentAttributeMap> attributes) {
+        return StructCodec.struct(
+                "has_precipitation", Codec.BOOLEAN, Biome::hasPrecipitation,
+                "temperature", Codec.FLOAT, Biome::temperature,
+                "temperature_modifier", TemperatureModifier.CODEC.optional(TemperatureModifier.NONE), Biome::temperatureModifier,
+                "downfall", Codec.FLOAT, Biome::downfall,
+                "attributes", attributes.optional(EnvironmentAttributeMap.EMPTY), Biome::attributes,
+                "effects", BiomeEffects.CODEC, Biome::effects,
+                Biome::create);
+    }
 
     static Biome create(
             boolean hasPrecipitation,
@@ -49,9 +52,9 @@ public sealed interface Biome extends Biomes permits BiomeImpl {
      * @see net.minestom.server.MinecraftServer to get an existing instance of the registry
      */
     @ApiStatus.Internal
-    static DynamicRegistry<Biome> createDefaultRegistry() {
+    static DynamicRegistry<Biome> createDefaultRegistry(Registries registries) {
         return DynamicRegistry.create(
-                BuiltinRegistries.BIOME, NETWORK_CODEC, null,
+                BuiltinRegistries.BIOME, NETWORK_CODEC, registries,
                 // We force plains to be first because it allows convenient palette initialization.
                 // Maybe worth switching to fetching plains in the palette in the future to avoid this.
                 (a, b) -> a.equals("minecraft:plains") ? -1 : b.equals("minecraft:plains") ? 1 : 0,

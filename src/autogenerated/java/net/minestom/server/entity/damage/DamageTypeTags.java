@@ -27,6 +27,8 @@ public interface DamageTypeTags {
 
     TagKey<DamageType> BYPASSES_ARMOR = TagKey.of("bypasses_armor");
 
+    TagKey<DamageType> BYPASSES_COOLDOWN = TagKey.of("bypasses_cooldown");
+
     TagKey<DamageType> BYPASSES_EFFECTS = TagKey.of("bypasses_effects");
 
     TagKey<DamageType> BYPASSES_ENCHANTMENTS = TagKey.of("bypasses_enchantments");
@@ -68,6 +70,8 @@ public interface DamageTypeTags {
     TagKey<DamageType> NO_IMPACT = TagKey.of("no_impact");
 
     TagKey<DamageType> NO_KNOCKBACK = TagKey.of("no_knockback");
+
+    TagKey<DamageType> NO_WOLF_RETALIATION = TagKey.of("no_wolf_retaliation");
 
     TagKey<DamageType> PANIC_CAUSES = TagKey.of("panic_causes");
 
