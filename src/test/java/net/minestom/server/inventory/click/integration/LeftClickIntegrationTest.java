@@ -323,6 +323,28 @@ public class LeftClickIntegrationTest {
         assertEquals(ItemStack.AIR, inventory.getItemStack(36));
     }
 
+    @Test
+    public void doubleClickSkipsFullStacks(Env env) {
+        var instance = env.createFlatInstance();
+        var player = env.createPlayer(instance, new Pos(0, 40, 0));
+        var inventory = player.getInventory();
+
+        inventory.setItemStack(0, ItemStack.of(Material.STONE, 64));
+        inventory.setItemStack(1, ItemStack.of(Material.STONE));
+        inventory.setItemStack(2, ItemStack.of(Material.STONE, 2));
+        inventory.setCursorItem(ItemStack.of(Material.STONE));
+
+        player.addPacketToQueue(new ClientClickWindowPacket(
+                (byte) 0, 0, (short) 37, (byte) 0,
+                ClientClickWindowPacket.ClickType.PICKUP_ALL, Map.of(), ItemStack.Hash.AIR));
+        player.interpretPacketQueue();
+
+        assertEquals(ItemStack.of(Material.STONE, 64), inventory.getItemStack(0));
+        assertEquals(ItemStack.of(Material.STONE), inventory.getItemStack(1));
+        assertEquals(ItemStack.AIR, inventory.getItemStack(2));
+        assertEquals(ItemStack.of(Material.STONE, 3), inventory.getCursorItem());
+    }
+
     private static void shiftClickOpenInventory(Player player, int slot) {
         _leftClick(player.getOpenInventory(), true, player, slot, true);
     }
