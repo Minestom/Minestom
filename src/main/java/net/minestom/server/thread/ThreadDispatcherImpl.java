@@ -25,7 +25,10 @@ final class ThreadDispatcherImpl<P, E extends Tickable> implements ThreadDispatc
     // Cache to retrieve the threading context from a tickable element
     private final Map<Tickable, Partition> elements = new WeakHashMap<>();
     // Queue to update partition linked thread
-    private final ArrayDeque<P> partitionUpdateQueue = new ArrayDeque<>();
+    // Unloaded partitions are not searched for, they are flagged and skipped (or purged in bulk) instead
+    private final ArrayDeque<QueuedPartition<P>> partitionUpdateQueue = new ArrayDeque<>();
+    // Number of unloaded partitions still present in the update queue
+    private int removedQueuedPartitions;
 
     // Requests consumed at the end of each tick
     private final MessagePassingQueue<Update<P, E>> updates = ConcurrentMessageQueues.mpscUnboundedArrayQueue(1024);
@@ -80,19 +83,23 @@ final class ThreadDispatcherImpl<P, E extends Tickable> implements ThreadDispatc
                 final long currentTime = System.nanoTime();
                 int counter = partitionUpdateQueue.size();
                 while (true) {
-                    final P partition = partitionUpdateQueue.pollFirst();
-                    if (partition == null) break;
-                    // Update chunk's thread
-                    Partition partitionEntry = partitions.get(partition);
-                    assert partitionEntry != null;
-                    final TickThread previous = partitionEntry.thread;
-                    final TickThread next = retrieveThread(partition);
-                    if (next != previous) {
-                        partitionEntry.thread = next;
-                        previous.entries.remove(partitionEntry);
-                        next.entries.add(partitionEntry);
+                    final QueuedPartition<P> queued = partitionUpdateQueue.pollFirst();
+                    if (queued == null) break;
+                    final Partition partitionEntry = queued.entry();
+                    if (partitionEntry.removed) {
+                        // Partition has been unloaded, drop it from the queue
+                        this.removedQueuedPartitions--;
+                    } else {
+                        // Update chunk's thread
+                        final TickThread previous = partitionEntry.thread;
+                        final TickThread next = retrieveThread(queued.partition());
+                        if (next != previous) {
+                            partitionEntry.thread = next;
+                            previous.removeEntry(partitionEntry);
+                            next.addEntry(partitionEntry);
+                        }
+                        this.partitionUpdateQueue.addLast(queued);
                     }
-                    this.partitionUpdateQueue.addLast(partition);
                     if (--counter <= 0 || System.nanoTime() - currentTime >= nanoTimeout) {
                         break;
                     }
@@ -139,9 +146,9 @@ final class ThreadDispatcherImpl<P, E extends Tickable> implements ThreadDispatc
         if (partitions.containsKey(partition)) return;
         final TickThread thread = retrieveThread(partition);
         final Partition partitionEntry = new Partition(thread);
-        thread.entries.add(partitionEntry);
+        thread.addEntry(partitionEntry);
         this.partitions.put(partition, partitionEntry);
-        this.partitionUpdateQueue.add(partition);
+        this.partitionUpdateQueue.add(new QueuedPartition<>(partition, partitionEntry));
         if (partition instanceof Tickable tickable) {
             processUpdatedElement(tickable, partition);
         }
@@ -151,13 +158,18 @@ final class ThreadDispatcherImpl<P, E extends Tickable> implements ThreadDispatc
         final Partition partitionEntry = partitions.remove(partition);
         if (partitionEntry != null) {
             TickThread thread = partitionEntry.thread;
-            thread.entries.remove(partitionEntry);
+            thread.removeEntry(partitionEntry);
             for (Tickable tickable : partitionEntry.elements) {
                 elements.remove(tickable);
             }
             partitionEntry.elements.clear();
+            // Lazily removed from the update queue, purge it once mostly made of unloaded partitions
+            partitionEntry.removed = true;
+            if (++removedQueuedPartitions > partitionUpdateQueue.size() / 2) {
+                this.partitionUpdateQueue.removeIf(queued -> queued.entry().removed);
+                this.removedQueuedPartitions = 0;
+            }
         }
-        this.partitionUpdateQueue.remove(partition);
         elements.remove(partition);
     }
 
@@ -187,12 +199,19 @@ final class ThreadDispatcherImpl<P, E extends Tickable> implements ThreadDispatc
         }
     }
 
+    private record QueuedPartition<P>(P partition, Partition entry) {
+    }
+
     /**
      * A data structure which may contain {@link Tickable}s, and is assigned a single {@link TickThread}.
      */
     public static final class Partition {
         private TickThread thread;
         private final List<Tickable> elements = new ArrayList<>();
+        // Position in the entries of the owning TickThread, -1 if absent
+        int index = -1;
+        // Whether the partition has been unloaded
+        private boolean removed;
 
         private Partition(TickThread thread) {
             this.thread = thread;

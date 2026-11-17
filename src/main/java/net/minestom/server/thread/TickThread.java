@@ -5,6 +5,7 @@ import net.minestom.server.Tickable;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,11 @@ public class TickThread extends MinestomThread {
     private volatile long tickTimeNanos;
 
     private long tickNum = 0;
-    final List<ThreadDispatcherImpl.Partition> entries = new ArrayList<>();
+    // Partitions ticked by this thread, in insertion order.
+    // A removed partition leaves a null slot so that removal does not need a linear search,
+    // the list is compacted once removed slots outnumber the live ones.
+    final List<ThreadDispatcherImpl.@Nullable Partition> entries = new ArrayList<>();
+    private int removedEntries;
 
     public TickThread(int number) {
         super(MinecraftServer.THREAD_NAME_TICK + "-" + number);
@@ -67,7 +72,8 @@ public class TickThread extends MinestomThread {
     protected void tick() {
         final ReentrantLock lock = this.lock;
         final long tickTime = TimeUnit.NANOSECONDS.toMillis(this.tickTimeNanos);
-        for (ThreadDispatcherImpl.Partition entry : entries) {
+        for (ThreadDispatcherImpl.@Nullable Partition entry : entries) {
+            if (entry == null) continue; // Removed partition
             assert entry.thread() == this;
             final List<Tickable> elements = entry.elements();
             if (elements.isEmpty()) continue;
@@ -106,7 +112,7 @@ public class TickThread extends MinestomThread {
             startTick(latch, tickTimeNanos);
             return;
         }
-        if (stop || entries.isEmpty()) {
+        if (stop || entryCount() == 0) {
             // Nothing to tick
             latch.countDown();
             return;
@@ -114,6 +120,35 @@ public class TickThread extends MinestomThread {
         this.tickTimeNanos = tickTimeNanos;
         this.tickNum++;
         LockSupport.unpark(this);
+    }
+
+    void addEntry(ThreadDispatcherImpl.Partition entry) {
+        assert entry.index == -1;
+        entry.index = entries.size();
+        entries.add(entry);
+    }
+
+    void removeEntry(ThreadDispatcherImpl.Partition entry) {
+        final List<ThreadDispatcherImpl.@Nullable Partition> entries = this.entries;
+        final int index = entry.index;
+        assert entries.get(index) == entry;
+        entries.set(index, null);
+        entry.index = -1;
+        if (++removedEntries > entries.size() / 2) {
+            // Compact while preserving the ticking order
+            int size = 0;
+            for (ThreadDispatcherImpl.@Nullable Partition current : entries) {
+                if (current == null) continue;
+                current.index = size;
+                entries.set(size++, current);
+            }
+            entries.subList(size, entries.size()).clear();
+            this.removedEntries = 0;
+        }
+    }
+
+    int entryCount() {
+        return entries.size() - removedEntries;
     }
 
     /**
