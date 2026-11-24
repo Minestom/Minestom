@@ -372,7 +372,8 @@ public class Command {
             boolean branched = false;
             for (Argument<?> argument : syntax.getArguments()) {
                 if (!branched) {
-                    if (argument instanceof ArgumentLiteral) {
+                    final Argument<?> unwrapped = Argument.unwrap(argument);
+                    if (unwrapped instanceof ArgumentLiteral) {
                         final String literal = argument.getId();
 
                         addArguments.accept(node, arguments);
@@ -380,7 +381,7 @@ public class Command {
 
                         node = findNode.apply(node, Set.of(literal));
                         continue;
-                    } else if (argument instanceof ArgumentWord argumentWord) {
+                    } else if (unwrapped instanceof ArgumentWord argumentWord) {
                         if (argumentWord.hasRestrictions()) {
                             addArguments.accept(node, arguments);
                             arguments = new ArrayList<>();

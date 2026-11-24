@@ -246,25 +246,44 @@ public abstract class Argument<T> {
      *
      * @param mapper The mapper to use (this argument's input = desired output)
      * @param <O>    The type of output expected.
-     * @return A new ArgumentMap that can get this complex object type.
+     * @return a new mapped argument
      */
-    public <O> Argument<O> map(Function<T, O> mapper) {
+    public <O> ArgumentMap<T, O> map(Function<T, O> mapper) {
         return new ArgumentMap<>(this, (_, i) -> mapper.apply(i));
     }
 
-    public <O> Argument<O> map(BiFunction<CommandSender, T, O> mapper) {
+    public <O> ArgumentMap<T, O> map(BiFunction<CommandSender, T, O> mapper) {
         return new ArgumentMap<>(this, mapper);
     }
 
     /**
-     * Maps this argument's output to another result.
+     * Filters this argument's parsed result. The predicate is not applied to completions.
      *
      * @param predicate the argument predicate
-     * @return A new ArgumentMap that filters using this filterer.
+     * @return a new filtered argument
      */
     @ApiStatus.Experimental
-    public Argument<T> filter(Predicate<T> predicate) {
+    public ArgumentFilter<T> filter(Predicate<T> predicate) {
         return new ArgumentFilter<>(this, predicate);
+    }
+
+    /**
+     * Strips any {@link ArgumentMap} and {@link ArgumentFilter} wrappers from an argument.
+     *
+     * @param argument the possibly wrapped argument
+     * @return the innermost wrapped argument, or {@code argument} if it isn't wrapped
+     */
+    @ApiStatus.Internal
+    public static Argument<?> unwrap(Argument<?> argument) {
+        while (true) {
+            if (argument instanceof ArgumentMap<?, ?> map) {
+                argument = map.argument();
+            } else if (argument instanceof ArgumentFilter<?> filter) {
+                argument = filter.argument();
+            } else {
+                return argument;
+            }
+        }
     }
 
     // getClass is required: arguments of different types sharing an id must stay distinct,
@@ -283,74 +302,5 @@ public abstract class Argument<T> {
     @Override
     public int hashCode() {
         return id.hashCode();
-    }
-
-    private static final class ArgumentMap<I, O> extends Argument<O> {
-        static final int INVALID_MAP = 555;
-        final Argument<I> argument;
-        final BiFunction<CommandSender, I, O> mapper;
-
-        private ArgumentMap(Argument<I> argument, BiFunction<CommandSender, I, O> mapper) {
-            super(argument.getId(), argument.allowSpace(), argument.useRemaining());
-            if (argument.getSuggestionCallback() != null)
-                this.setSuggestionCallback(argument.getSuggestionCallback());
-            if (argument.getDefaultValue() != null)
-                this.setDefaultValue(sender -> mapper.apply(sender, argument.getDefaultValue().apply(sender)));
-            this.argument = argument;
-            this.mapper = mapper;
-        }
-
-        @Override
-        public O parse(CommandSender sender, String input) throws ArgumentSyntaxException {
-            final I value = argument.parse(sender, input);
-            final O mappedValue = mapper.apply(sender, value);
-            if (mappedValue == null)
-                throw new ArgumentSyntaxException("Couldn't be converted to map type", input, INVALID_MAP);
-            return mappedValue;
-        }
-
-        @Override
-        public ArgumentParserType parser() {
-            return argument.parser();
-        }
-
-        @Override
-        public byte @Nullable [] nodeProperties() {
-            return argument.nodeProperties();
-        }
-    }
-
-    private static final class ArgumentFilter<T> extends Argument<T> {
-        static final int INVALID_FILTER = 556;
-        final Argument<T> argument;
-        final Predicate<T> predicate;
-
-        private ArgumentFilter(Argument<T> argument, Predicate<T> predicate) {
-            super(argument.getId(), argument.allowSpace(), argument.useRemaining());
-            if (argument.getSuggestionCallback() != null)
-                this.setSuggestionCallback(argument.getSuggestionCallback());
-            if (argument.getDefaultValue() != null)
-                this.setDefaultValue(argument.getDefaultValue());
-            this.argument = argument;
-            this.predicate = predicate;
-        }
-
-        @Override
-        public T parse(CommandSender sender, String input) throws ArgumentSyntaxException {
-            final T result = argument.parse(sender, input);
-            if (!predicate.test(result))
-                throw new ArgumentSyntaxException("Predicate failed", input, INVALID_FILTER);
-            return result;
-        }
-
-        @Override
-        public ArgumentParserType parser() {
-            return argument.parser();
-        }
-
-        @Override
-        public byte @Nullable [] nodeProperties() {
-            return argument.nodeProperties();
-        }
     }
 }
