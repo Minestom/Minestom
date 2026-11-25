@@ -14,6 +14,7 @@ import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.TranslationArgument;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.DataComponentValue;
+import net.kyori.adventure.text.event.DataComponentValueConverterRegistry;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.ShadowColor;
@@ -23,13 +24,12 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.object.ObjectContents;
 import net.kyori.adventure.text.object.PlayerHeadObjectContents;
 import net.kyori.adventure.text.object.SpriteObjectContents;
-import net.kyori.adventure.text.serializer.gson.GsonDataComponentValue;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.MinestomDataComponentValue;
-import net.minestom.server.adventure.serializer.nbt.NbtDataComponentValue;
 import net.minestom.server.codec.Transcoder.MapBuilder;
 import net.minestom.server.codec.Transcoder.MapLike;
 import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.dialog.Dialog;
 import net.minestom.server.network.player.ResolvableProfile;
 import org.jetbrains.annotations.ApiStatus;
@@ -188,74 +188,30 @@ public final class ComponentCodecs {
     private static final Codec<HoverEvent.Action<?>> HOVER_EVENT_ACTION = Codec.STRING.transform(HoverEvent.Action.NAMES::value, HoverEvent.Action::toString);
     private static final Codec<HoverEvent<?>> HOVER_EVENT = HOVER_EVENT_ACTION.unionType("action", ComponentCodecs::hoverEventCodec, HoverEvent::action);
 
-    private static final Codec<Map<Key, DataComponentValue>> SHOW_ITEM_COMPONENTS = new Codec<>() {
-        @Override
-        public <D> Result<Map<Key, DataComponentValue>> decode(Transcoder<D> coder, D value) {
-            final Result<MapLike<D>> mapResult = coder.getMap(value);
-            if (!(mapResult instanceof Result.Ok(var map)))
-                return mapResult.cast();
-
-            final Map<Key, DataComponentValue> components = new HashMap<>(map.size());
-            for (String rawKey : map.keys()) {
-                final boolean remove = rawKey.startsWith("!");
-                if (remove) rawKey = rawKey.substring(1);
-                final Key key = Key.key(rawKey);
-
-                if (remove) {
-                    components.put(key, DataComponentValue.removed());
-                    continue;
+    // Forward reference because DataComponent may still be initializing when this class loads.
+    private static final Codec<Map<Key, DataComponentValue>> SHOW_ITEM_COMPONENTS = Codec.ForwardRef(() -> DataComponent.PATCH_CODEC).transform(
+            patch -> {
+                final Map<Key, DataComponentValue> components = new HashMap<>();
+                for (final DataComponent.Value entry : patch.entrySet()) {
+                    components.put(entry.component().key(), entry.value() == null
+                            ? MinestomDataComponentValue.removed()
+                            : MinestomDataComponentValue.dataComponentValue(entry.value()));
                 }
-
-                @SuppressWarnings("unchecked")
-                DataComponent<Object> type = (DataComponent<Object>) DataComponent.fromKey(key);
-                if (type == null) return new Result.Error<>("unknown data component: " + key);
-
-                switch (map.getValue(rawKey).map(v -> type.decode(coder, v))) {
-                    case Result.Ok(Object decoded) ->
-                            components.put(key, MinestomDataComponentValue.dataComponentValue(decoded));
-                    case Result.Error<?>(String message) -> {
-                        return new Result.Error<>(type.name() + ": " + message);
-                    }
-                }
-            }
-            return new Result.Ok<>(components);
-        }
-
-        @Override
-        public <D> Result<D> encode(Transcoder<D> coder, @Nullable Map<Key, DataComponentValue> value) {
-            if (value == null) return new Result.Error<>("null");
-            final MapBuilder<D> map = coder.createMap();
-            for (var entry : value.entrySet()) {
-                final Key key = entry.getKey();
-                final DataComponentValue componentValue = entry.getValue();
-                if (componentValue instanceof DataComponentValue.Removed) {
-                    map.put("!" + key.asString(), coder.createMap().build());
-                    continue;
-                }
-
-                final Result<D> encoded = switch (componentValue) {
-                    case NbtDataComponentValue nbt -> Codec.NBT.encode(coder, nbt.value());
-                    case GsonDataComponentValue gson -> Transcoder.JSON.convertTo(coder, gson.element());
-                    case MinestomDataComponentValue minestom -> {
-                        @SuppressWarnings("unchecked")
-                        DataComponent<Object> type = (DataComponent<Object>) DataComponent.fromKey(key);
-                        yield type == null
-                                ? new Result.Error<>("unknown data component: " + key)
-                                : type.encode(coder, minestom.value());
-                    }
-                    default -> new Result.Error<>("unsupported data component value: " + componentValue.getClass());
-                };
-
-                switch (encoded) {
-                    case Result.Ok(D encodedValue) -> map.put(key.asString(), encodedValue);
-                    case Result.Error<?>(String message) -> {
-                        return new Result.Error<>(key + ": " + message);
-                    }
-                }
-            }
-            return new Result.Ok<>(map.build());
-        }
-    };
+                return components;
+            },
+            components -> {
+                final DataComponentMap.PatchBuilder patch = DataComponentMap.patchBuilder();
+                components.forEach((key, value) -> {
+                    @SuppressWarnings("unchecked")
+                    final DataComponent<Object> type = (DataComponent<Object>) DataComponent.fromKey(key);
+                    if (type == null) throw new IllegalArgumentException("unknown data component: " + key);
+                    final Object data = value instanceof DataComponentValue.Removed ? null
+                            : DataComponentValueConverterRegistry.convert(MinestomDataComponentValue.class, key, value).value();
+                    if (data == null) patch.remove(type);
+                    else patch.set(type, data);
+                });
+                return patch.build();
+            });
 
     private static final StructCodec<HoverEvent<Component>> SHOW_TEXT = StructCodec.struct(
             "value", COMPONENT_FORWARD, HoverEvent::value,

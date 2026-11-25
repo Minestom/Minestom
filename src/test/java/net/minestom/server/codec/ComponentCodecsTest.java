@@ -5,6 +5,7 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.IntBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.DataComponentValue;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.object.ObjectContents;
@@ -19,13 +20,14 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 class ComponentCodecsTest {
 
     @Test
     void readExpandFromStringInList() throws Exception {
         var input = MinestomAdventure.tagStringIO().asTag("{extra:[{color:\"red\",text:\"Hello\"},\" World\"],text:\"\"}");
-        var actual = ComponentCodecs.COMPONENT.decode(Transcoder.NBT, input).orElseThrow();
+        var actual = Codec.COMPONENT.decode(Transcoder.NBT, input).orElseThrow();
         var expected = Component.text()
                 .append(Component.text("Hello", NamedTextColor.RED))
                 .append(Component.text(" World"))
@@ -39,7 +41,7 @@ class ComponentCodecsTest {
                 .append(Component.text("Hello", NamedTextColor.RED))
                 .append(Component.text(" World"))
                 .build();
-        var nbt = ComponentCodecs.COMPONENT.encode(Transcoder.NBT, component).orElseThrow();
+        var nbt = Codec.COMPONENT.encode(Transcoder.NBT, component).orElseThrow();
         assertEquals("{extra:[{color:\"red\",text:\"Hello\"},\" World\"],text:\"\"}", MinestomAdventure.tagStringIO().asString(nbt));
     }
 
@@ -47,7 +49,7 @@ class ComponentCodecsTest {
     void writeCustomClickEvent() throws IOException {
         var component = Component.text("Click me!").clickEvent(ClickEvent.custom(
                 Key.key("hello:world"), MinestomAdventure.wrapNbt(IntBinaryTag.intBinaryTag(55))));
-        var nbt = ComponentCodecs.COMPONENT.encode(Transcoder.NBT, component).orElseThrow();
+        var nbt = Codec.COMPONENT.encode(Transcoder.NBT, component).orElseThrow();
         assertEquals("{click_event:{payload:55,action:\"custom\",id:\"hello:world\"},text:\"Click me!\"}",
                 MinestomAdventure.tagStringIO().asString(nbt));
     }
@@ -55,7 +57,7 @@ class ComponentCodecsTest {
     @Test
     void readCustomClickEvent() throws IOException {
         var input = MinestomAdventure.tagStringIO().asTag("{click_event:{payload:55,action:\"custom\",id:\"hello:world\"},text:\"Click me!\"}");
-        var actual = ComponentCodecs.COMPONENT.decode(Transcoder.NBT, input).orElseThrow();
+        var actual = Codec.COMPONENT.decode(Transcoder.NBT, input).orElseThrow();
         var expected = Component.text("Click me!").clickEvent(ClickEvent.custom(
                 Key.key("hello:world"), MinestomAdventure.wrapNbt(IntBinaryTag.intBinaryTag(55))));
         assertEquals(expected, actual);
@@ -74,7 +76,7 @@ class ComponentCodecsTest {
                         .build())
                 .build();
 
-        var actual = ComponentCodecs.COMPONENT.decode(Transcoder.NBT, input).orElseThrow();
+        var actual = Codec.COMPONENT.decode(Transcoder.NBT, input).orElseThrow();
         var expected = Component.text("hover")
                 .hoverEvent(HoverEvent.showEntity(
                         Key.key("minecraft:player"),
@@ -93,7 +95,7 @@ class ComponentCodecsTest {
                 .putString("fallback", "Missing")
                 .build();
 
-        var actual = ComponentCodecs.COMPONENT.decode(Transcoder.NBT, input).orElseThrow();
+        var actual = Codec.COMPONENT.decode(Transcoder.NBT, input).orElseThrow();
         var expected = Component.object()
                 .contents(ObjectContents.sprite(Key.key("missing")))
                 .fallback(Component.text("Missing"))
@@ -109,14 +111,13 @@ class ComponentCodecsTest {
                 .fallback(Component.text("Missing"))
                 .build();
 
-        var nbt = ComponentCodecs.COMPONENT.encode(Transcoder.NBT, component).orElseThrow();
-        var actual = ComponentCodecs.COMPONENT.decode(Transcoder.NBT, nbt).orElseThrow();
+        var nbt = Codec.COMPONENT.encode(Transcoder.NBT, component).orElseThrow();
+        var actual = Codec.COMPONENT.decode(Transcoder.NBT, nbt).orElseThrow();
 
         assertEquals(component, actual);
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     void writeShowItemDataComponents() throws IOException {
         var hoverEvent = HoverEvent.showItem(Key.key("minecraft:diamond"), 1, Map.of(
                 DataComponents.CUSTOM_NAME.key(),
@@ -124,15 +125,39 @@ class ComponentCodecsTest {
         ));
         var component = Component.text("hover").hoverEvent(hoverEvent);
 
-        var nbt = ComponentCodecs.COMPONENT.encode(Transcoder.NBT, component).orElseThrow();
+        var nbt = Codec.COMPONENT.encode(Transcoder.NBT, component).orElseThrow();
         assertEquals("{hover_event:{action:\"show_item\",components:{\"minecraft:custom_name\":\"Custom Name\"},id:\"minecraft:diamond\"},text:\"hover\"}",
                 MinestomAdventure.tagStringIO().asString(nbt));
 
-        var decoded = ComponentCodecs.COMPONENT.decode(Transcoder.NBT, nbt).orElseThrow();
-        var decodedHoverEvent = (HoverEvent<HoverEvent.ShowItem>) decoded.style().hoverEvent();
-        var decodedCustomName = (MinestomDataComponentValue) decodedHoverEvent.value().dataComponents()
-                .get(DataComponents.CUSTOM_NAME.key());
-        assertEquals(Component.text("Custom Name"), decodedCustomName.value());
+        assertEquals(component, Codec.COMPONENT.decode(Transcoder.NBT, nbt).orElseThrow());
+    }
+
+    @Test
+    void writeShowItemRemovedDataComponents() {
+        var hoverEvent = HoverEvent.showItem(Key.key("minecraft:diamond"), 1, Map.of(
+                DataComponents.LORE.key(), DataComponentValue.removed(),
+                DataComponents.MAX_STACK_SIZE.key(), MinestomDataComponentValue.dataComponentValue(null)
+        ));
+        var component = Component.text("hover").hoverEvent(hoverEvent);
+
+        var nbt = (CompoundBinaryTag) Codec.COMPONENT.encode(Transcoder.NBT, component).orElseThrow();
+        var expected = CompoundBinaryTag.builder()
+                .put("!minecraft:lore", CompoundBinaryTag.empty())
+                .put("!minecraft:max_stack_size", CompoundBinaryTag.empty())
+                .build();
+        assertEquals(expected, nbt.getCompound("hover_event").getCompound("components"));
+
+        var decoded = Codec.COMPONENT.decode(Transcoder.NBT, nbt).orElseThrow();
+        var showItem = assertInstanceOf(HoverEvent.ShowItem.class, decoded.hoverEvent().value());
+        var decodedComponents = showItem.dataComponents();
+        assertInstanceOf(DataComponentValue.Removed.class, decodedComponents.get(DataComponents.LORE.key()));
+        assertInstanceOf(DataComponentValue.Removed.class, decodedComponents.get(DataComponents.MAX_STACK_SIZE.key()));
+    }
+
+    @Test
+    void readShowItemUnknownDataComponent() throws IOException {
+        var input = MinestomAdventure.tagStringIO().asTag("{hover_event:{action:\"show_item\",components:{\"!minecraft:unknown\":{}},id:\"minecraft:diamond\"},text:\"hover\"}");
+        assertInstanceOf(Result.Error.class, Codec.COMPONENT.decode(Transcoder.NBT, input));
     }
 
     @Test
@@ -145,10 +170,10 @@ class ComponentCodecsTest {
                 .texture(Key.key("red"))
                 .build());
 
-        final var nbt = ComponentCodecs.COMPONENT.encode(Transcoder.NBT, component).orElseThrow();
+        final var nbt = Codec.COMPONENT.encode(Transcoder.NBT, component).orElseThrow();
         final var player = ((CompoundBinaryTag) nbt).getCompound("player");
         assertEquals("Steve", player.getString("name"));
         assertEquals("minecraft:red", player.getString("texture"));
-        assertEquals(component, ComponentCodecs.COMPONENT.decode(Transcoder.NBT, nbt).orElseThrow());
+        assertEquals(component, Codec.COMPONENT.decode(Transcoder.NBT, nbt).orElseThrow());
     }
 }
