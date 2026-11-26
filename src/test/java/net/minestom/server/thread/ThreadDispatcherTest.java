@@ -3,6 +3,9 @@ package net.minestom.server.thread;
 import net.minestom.server.Tickable;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -283,6 +286,129 @@ public class ThreadDispatcherTest {
             final Thread thread2 = threads2.get(entry.getKey());
             assertNotEquals(thread1, thread2);
         }
+
+        dispatcher.shutdown();
+    }
+
+    // Identity-based equality, a record would hash the mutable tick log
+    static final class OrderedPartition implements Tickable {
+        private final int id;
+        private final List<Integer> ticks;
+
+        OrderedPartition(int id, List<Integer> ticks) {
+            this.id = id;
+            this.ticks = ticks;
+        }
+
+        int id() {
+            return id;
+        }
+
+        @Override
+        public void tick(long time) {
+            ticks.add(id);
+        }
+    }
+
+    @Test
+    public void partitionRemovalKeepsOrder() {
+        List<Integer> ticks = Collections.synchronizedList(new ArrayList<>());
+        ThreadDispatcher<Tickable, Tickable> dispatcher = ThreadDispatcher.singleThread();
+        dispatcher.start();
+        final TickThread thread = dispatcher.threads().getFirst();
+
+        final int count = 100;
+        List<OrderedPartition> partitions = IntStream.range(0, count)
+                .mapToObj(id -> new OrderedPartition(id, ticks)).toList();
+        partitions.forEach(dispatcher::createPartition);
+        dispatcher.updateAndAwait(System.nanoTime());
+        assertEquals(IntStream.range(0, count).boxed().toList(), ticks);
+        assertEquals(count, thread.entryCount());
+
+        // Remove a few partitions, without triggering a compaction
+        List<Integer> expected = new ArrayList<>(IntStream.range(0, count).boxed().toList());
+        for (int id : List.of(0, 42, 57, 99)) {
+            dispatcher.deletePartition(partitions.get(id));
+            expected.removeIf(value -> value == id);
+        }
+        ticks.clear();
+        dispatcher.updateAndAwait(System.nanoTime());
+        assertEquals(expected, ticks);
+        assertEquals(expected.size(), thread.entryCount());
+
+        // Remove most partitions, triggering compactions
+        expected.stream().filter(id -> id < 90).forEach(id -> dispatcher.deletePartition(partitions.get(id)));
+        expected.removeIf(id -> id < 90);
+        // Reloaded partitions are ticked last
+        dispatcher.createPartition(partitions.get(0));
+        dispatcher.createPartition(partitions.get(42));
+        expected.add(0);
+        expected.add(42);
+        ticks.clear();
+        dispatcher.updateAndAwait(System.nanoTime());
+        assertEquals(expected, ticks);
+        assertEquals(expected.size(), thread.entryCount());
+        assertTrue(thread.entries.size() < count, "Entries have not been compacted");
+
+        // Removing every partition leaves nothing to tick
+        expected.forEach(id -> dispatcher.deletePartition(partitions.get(id)));
+        ticks.clear();
+        dispatcher.updateAndAwait(System.nanoTime());
+        assertEquals(List.of(), ticks);
+        assertEquals(0, thread.entryCount());
+
+        dispatcher.shutdown();
+    }
+
+    @Test
+    public void partitionRemovalWithRefresh() {
+        // Unloaded partitions must be dropped from the thread refresh queue
+        final int threadCount = 4;
+        Map<Integer, AtomicInteger> lookups = new ConcurrentHashMap<>();
+        AtomicInteger shift = new AtomicInteger();
+        ThreadDispatcher<OrderedPartition, Tickable> dispatcher = ThreadDispatcher.dispatcher(new ThreadProvider<>() {
+            @Override
+            public int findThread(OrderedPartition partition) {
+                lookups.computeIfAbsent(partition.id(), _ -> new AtomicInteger()).incrementAndGet();
+                return partition.id() + shift.get();
+            }
+
+            @Override
+            public RefreshType refreshType() {
+                return RefreshType.ALWAYS;
+            }
+        }, threadCount);
+        dispatcher.start();
+
+        final int count = 40;
+        List<Integer> ticks = Collections.synchronizedList(new ArrayList<>());
+        List<OrderedPartition> partitions = IntStream.range(0, count)
+                .mapToObj(id -> new OrderedPartition(id, ticks)).toList();
+        partitions.forEach(dispatcher::createPartition);
+        dispatcher.updateAndAwait(System.nanoTime());
+        assertEquals(count, ticks.size());
+
+        // Unload most partitions, then reload one of them before the queue is refreshed
+        for (int id = 0; id < 30; id++) dispatcher.deletePartition(partitions.get(id));
+        dispatcher.createPartition(partitions.get(5));
+        dispatcher.updateAndAwait(System.nanoTime());
+
+        List<Integer> alive = new ArrayList<>(List.of(5));
+        for (int id = 30; id < count; id++) alive.add(id);
+        lookups.clear();
+        shift.set(1);
+        dispatcher.refreshThreads();
+        // Each loaded partition is refreshed exactly once, unloaded ones are not refreshed at all
+        assertEquals(Set.copyOf(alive), lookups.keySet());
+        lookups.values().forEach(lookup -> assertEquals(1, lookup.get()));
+
+        ticks.clear();
+        dispatcher.updateAndAwait(System.nanoTime());
+        assertEquals(Set.copyOf(alive), Set.copyOf(ticks));
+        assertEquals(alive.size(), ticks.size());
+        int entryCount = 0;
+        for (TickThread thread : dispatcher.threads()) entryCount += thread.entryCount();
+        assertEquals(alive.size(), entryCount);
 
         dispatcher.shutdown();
     }
