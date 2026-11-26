@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -198,5 +199,24 @@ public class PathfinderIntegrationTest {
         var snapped = nodeGenerator.gravitySnap(i, -140.74433362614695, 40.58268292446131, 18.87966960447388, zombie.getBoundingBox(), 100);
         assertTrue(snapped.isPresent());
         assertEquals(40.0, snapped.getAsDouble());
+    }
+
+    @Test
+    public void testWalkThroughCrops(Env env) {
+        var instance = env.createFlatInstance();
+        instance.loadChunk(0, 0).join();
+
+        var zombie = new LivingEntity(EntityType.ZOMBIE);
+        var generator = new GroundNodeGenerator();
+        var start = new Pos(0.5, 40, 0.5);
+        var end = new Pos(1.5, 40, 0.5);
+
+        for (Block crop : List.of(Block.WHEAT, Block.CARROTS, Block.POTATOES)) {
+            instance.setBlock(1, 40, 0, crop);
+            assertTrue(generator.canMoveTowards(instance, start, end, zombie.getBoundingBox()));
+        }
+
+        instance.setBlock(1, 40, 0, Block.STONE);
+        assertFalse(generator.canMoveTowards(instance, start, end, zombie.getBoundingBox()));
     }
 }
