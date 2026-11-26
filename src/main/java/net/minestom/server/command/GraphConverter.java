@@ -47,6 +47,10 @@ final class GraphConverter {
         }
 
         final Argument<?> argument = graphNode.argument();
+        // Pick the node type from the unwrapped argument. Generic argument nodes still take their id,
+        // parser, properties and suggestions from the outer argument, so a callback set on a wrapper is kept.
+        // Enums and restricted words become literal nodes, so their suggestion callbacks are not sent.
+        final Argument<?> packetArgument = Argument.unwrap(argument);
         final List<Graph.Node> children = graphNode.next();
 
         final DeclareCommandsPacket.Node node = new DeclareCommandsPacket.Node();
@@ -68,7 +72,7 @@ final class GraphConverter {
 
         boolean isExecutable = graphNode.execution() != null && graphNode.execution().executor() != null;
 
-        if (argument instanceof ArgumentLiteral literal) {
+        if (packetArgument instanceof ArgumentLiteral literal) {
             if (literal.getId().isEmpty()) {
                 node.flags = 0; //root
             } else {
@@ -82,7 +86,7 @@ final class GraphConverter {
             to.add(node);
             return new int[]{id.getAndIncrement()};
         } else {
-            if (argument instanceof ArgumentCommand argCmd) {
+            if (packetArgument instanceof ArgumentCommand argCmd) {
                 node.flags = literal(isExecutable, true);
                 node.name = argument.getId();
                 final String shortcut = argCmd.getShortcut();
@@ -103,10 +107,10 @@ final class GraphConverter {
                 to.add(node);
 
                 return new int[]{id.getAndIncrement()};
-            } else if (argument instanceof ArgumentEnum<?> || (argument instanceof ArgumentWord word && word.hasRestrictions())) {
-                List<String> entries = argument instanceof ArgumentEnum<?> ?
-                        ((ArgumentEnum<?>) argument).entries() :
-                        Arrays.stream(((ArgumentWord) argument).getRestrictions()).toList();
+            } else if (packetArgument instanceof ArgumentEnum<?> || (packetArgument instanceof ArgumentWord word && word.hasRestrictions())) {
+                final List<String> entries = packetArgument instanceof ArgumentEnum<?> ?
+                        ((ArgumentEnum<?>) packetArgument).entries() :
+                        Arrays.stream(((ArgumentWord) packetArgument).getRestrictions()).toList();
                 final int[] res = new int[entries.size()];
                 for (int i = 0; i < res.length; i++) {
                     String entry = entries.get(i);
@@ -122,7 +126,7 @@ final class GraphConverter {
                     res[i] = id.getAndIncrement();
                 }
                 return res;
-            } else if (argument instanceof ArgumentGroup special) {
+            } else if (packetArgument instanceof ArgumentGroup special) {
                 List<Argument<?>> entries = special.group();
                 int[] res = null;
                 int[] last = new int[0];
@@ -154,7 +158,7 @@ final class GraphConverter {
                     }
                 }
                 throw new RuntimeException("Arg group must have child args.");
-            } else if (argument instanceof ArgumentLoop<?> special) {
+            } else if (packetArgument instanceof ArgumentLoop<?> special) {
                 AtomicInteger r = new AtomicInteger();
                 int[] res = new int[special.arguments().size()];
                 List<?> arguments = special.arguments();

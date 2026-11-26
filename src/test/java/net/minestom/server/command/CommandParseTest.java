@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static net.minestom.server.command.builder.arguments.ArgumentType.Enum;
 import static net.minestom.server.command.builder.arguments.ArgumentType.Literal;
 import static net.minestom.server.command.builder.arguments.ArgumentType.Word;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -76,6 +77,67 @@ public class CommandParseTest {
         // None of these are registered commands, make sure the correct command valuation is provided back
         assertUnknown(foo, "bar");
         assertUnknown(foo, "add");
+    }
+
+    @Test
+    public void mappedLiteralTakesPriorityOverWord() {
+        final AtomicBoolean wordExecutor = new AtomicBoolean();
+        final AtomicBoolean literalExecutor = new AtomicBoolean();
+        var graph = Graph.merge(Graph.builder(Literal("foo"))
+                .append(Word("value"), createExecutor(wordExecutor))
+                .append(Literal("bar").map(String::length), createExecutor(literalExecutor))
+                .build());
+
+        assertValid(graph, "foo baz", wordExecutor);
+        assertValid(graph, "foo bar", literalExecutor);
+    }
+
+    @Test
+    public void filteredLiteralTakesPriorityOverWord() {
+        final AtomicBoolean wordExecutor = new AtomicBoolean();
+        final AtomicBoolean literalExecutor = new AtomicBoolean();
+        var graph = Graph.merge(Graph.builder(Literal("foo"))
+                .append(Word("value"), createExecutor(wordExecutor))
+                .append(Literal("bar").filter(_ -> true), createExecutor(literalExecutor))
+                .build());
+
+        assertValid(graph, "foo baz", wordExecutor);
+        assertValid(graph, "foo bar", literalExecutor);
+    }
+
+    @Test
+    public void rejectedFilteredLiteralFallsBackToWord() {
+        final AtomicBoolean wordExecutor = new AtomicBoolean();
+        final AtomicBoolean literalExecutor = new AtomicBoolean();
+        var graph = Graph.merge(Graph.builder(Literal("foo"))
+                .append(Word("value"), createExecutor(wordExecutor))
+                .append(Literal("bar").filter(_ -> false), createExecutor(literalExecutor))
+                .build());
+
+        assertValid(graph, "foo bar", wordExecutor);
+    }
+
+    @Test
+    public void filteredEnumRejectsFilteredValue() {
+        enum Letter {A, B, C}
+        final AtomicBoolean b = new AtomicBoolean();
+        var graph = Graph.merge(Graph.builder(Literal("foo"))
+                .append(Enum("letter", Letter.class).filter(letter -> letter != Letter.B), createExecutor(b))
+                .build());
+
+        assertValid(graph, "foo A", b);
+        assertSyntaxError(graph, "foo B");
+    }
+
+    @Test
+    public void filteredRestrictedWordRejectsFilteredValue() {
+        final AtomicBoolean b = new AtomicBoolean();
+        var graph = Graph.merge(Graph.builder(Literal("foo"))
+                .append(Word("value").from("a", "b", "c").filter(word -> !word.equals("b")), createExecutor(b))
+                .build());
+
+        assertValid(graph, "foo a", b);
+        assertSyntaxError(graph, "foo b");
     }
 
     @Test

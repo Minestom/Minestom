@@ -98,6 +98,7 @@ record GraphImpl(NodeImpl root) implements Graph {
         };
 
         private static int argumentValue(Argument<?> argument) {
+            argument = Argument.unwrap(argument);
             if (argument.getClass() == ArgumentCommand.class) return -3000;
             if (argument.getClass() == ArgumentLiteral.class) return -2000;
             return -1000;

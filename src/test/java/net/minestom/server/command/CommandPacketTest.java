@@ -79,6 +79,57 @@ public class CommandPacketTest {
     }
 
     @Test
+    public void singleCommandMappedLiteral() {
+        var graph = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.Literal("bar").map(String::length))
+                .build();
+        assertPacketGraph("""
+                foo bar=%
+                0->foo
+                foo->bar
+                """, graph);
+    }
+
+    @Test
+    public void singleCommandFilteredLiteral() {
+        // Filters only apply when parsing, so the literal is still sent even though it can never match
+        var graph = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.Literal("bar").filter(_ -> false))
+                .build();
+        assertPacketGraph("""
+                foo bar=%
+                0->foo
+                foo->bar
+                """, graph);
+    }
+
+    @Test
+    public void singleCommandMappedEnum() {
+        var graph = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.Enum("bar", Letter.class).map(Enum::name))
+                .build();
+        assertPacketGraph("""
+                foo=%
+                a b c=§
+                0->foo
+                foo->a b c
+                """, graph);
+    }
+
+    @Test
+    public void singleCommandFilteredEnum() {
+        var graph = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.Enum("bar", Letter.class).filter(letter -> letter != Letter.B))
+                .build();
+        assertPacketGraph("""
+                foo=%
+                a b c=§
+                0->foo
+                foo->a b c
+                """, graph);
+    }
+
+    @Test
     public void singleCommandRestrictedWord() {
         var graph = Graph.builder(ArgumentType.Literal("foo"))
                 .append(ArgumentType.Word("bar").from("A", "B", "C"))
@@ -92,6 +143,86 @@ public class CommandPacketTest {
     }
 
     @Test
+    public void singleCommandMappedRestrictedWord() {
+        var graph = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.Word("bar").from("A", "B", "C").map(String::length))
+                .build();
+        assertPacketGraph("""
+                foo=%
+                a b c=§
+                0->foo
+                foo->a b c
+                """, graph);
+    }
+
+    @Test
+    public void singleCommandFilteredRestrictedWord() {
+        var graph = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.Word("bar").from("A", "B", "C").filter(word -> !word.equals("B")))
+                .build();
+        assertPacketGraph("""
+                foo=%
+                a b c=§
+                0->foo
+                foo->a b c
+                """, graph);
+    }
+
+    @Test
+    public void singleCommandChainedRestrictedWordWrappers() {
+        var graph = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.Word("colour").from("red", "green", "blue")
+                        .map(String::length).filter(length -> length > 3).map(String::valueOf))
+                .build();
+        assertPacketGraph("""
+                foo=%
+                red green blue=%
+                0->foo
+                foo->red green blue
+                """, graph);
+    }
+
+    @Test
+    public void singleCommandWrappedEntityTypeSuggestions() {
+        var unwrapped = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.EntityType("entity"))
+                .build();
+        var mapped = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.EntityType("entity").map(_ -> 0))
+                .build();
+        var filtered = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.EntityType("entity").filter(_ -> true))
+                .build();
+        var expected = """
+                foo=%
+                entity=! RESOURCE_LOCATION minecraft:summonable_entities
+                0->foo
+                foo->entity
+                """;
+        assertPacketGraph(expected, unwrapped);
+        assertPacketGraph(expected, mapped);
+        assertPacketGraph(expected, filtered);
+    }
+
+    @Test
+    public void singleCommandWrappedSuggestionCallback() {
+        var mapped = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.Word("bar").setSuggestionCallback((_, _, _) -> {}).map(String::length))
+                .build();
+        var filtered = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.Word("bar").setSuggestionCallback((_, _, _) -> {}).filter(_ -> true))
+                .build();
+        var expected = """
+                foo=%
+                bar=! STRING 0 minecraft:ask_server
+                0->foo
+                foo->bar
+                """;
+        assertPacketGraph(expected, mapped);
+        assertPacketGraph(expected, filtered);
+    }
+
+    @Test
     public void singleCommandWord() {
         var graph = Graph.builder(ArgumentType.Literal("foo"))
                 .append(ArgumentType.Word("bar"))
@@ -101,6 +232,124 @@ public class CommandPacketTest {
                 bar=! STRING 0
                 0->foo
                 foo->bar
+                """, graph);
+    }
+
+    @Test
+    public void singleCommandMappedGroup() {
+        var graph = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.Group("group", ArgumentType.Literal("bar"), ArgumentType.Word("baz")).map(_ -> 0))
+                .build();
+        assertPacketGraph("""
+                foo bar=%
+                baz=! STRING 0
+                0->foo
+                foo->bar
+                bar->baz
+                """, graph);
+    }
+
+    @Test
+    public void singleCommandFilteredGroup() {
+        var graph = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.Group("group", ArgumentType.Literal("bar"), ArgumentType.Word("baz")).filter(_ -> true))
+                .build();
+        assertPacketGraph("""
+                foo bar=%
+                baz=! STRING 0
+                0->foo
+                foo->bar
+                bar->baz
+                """, graph);
+    }
+
+    @Test
+    public void singleCommandGroupWithMappedRestrictedWord() {
+        var unwrapped = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.Group("group", ArgumentType.Literal("set"), ArgumentType.Word("colour").from("red", "green", "blue")))
+                .build();
+        var wrapped = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.Group("group", ArgumentType.Literal("set"), ArgumentType.Word("colour").from("red", "green", "blue").map(String::length)))
+                .build();
+        var expected = """
+                foo set red green blue=%
+                0->foo
+                foo->set
+                set->red green blue
+                """;
+        assertPacketGraph(expected, unwrapped);
+        assertPacketGraph(expected, wrapped);
+    }
+
+    @Test
+    public void singleCommandMappedLoop() {
+        var graph = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.Loop("loop", ArgumentType.Word("word")).map(_ -> 0))
+                .build();
+        assertPacketGraph("""
+                foo=%
+                word=! STRING 0
+                0->foo
+                foo->word
+                word+>foo
+                """, graph);
+    }
+
+    @Test
+    public void singleCommandFilteredLoop() {
+        var graph = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.Loop("loop", ArgumentType.Word("word")).filter(_ -> true))
+                .build();
+        assertPacketGraph("""
+                foo=%
+                word=! STRING 0
+                0->foo
+                foo->word
+                word+>foo
+                """, graph);
+    }
+
+    @Test
+    public void singleCommandLoopWithMappedRestrictedWord() {
+        var unwrapped = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.Loop("loop", ArgumentType.Word("colour").from("red", "green", "blue")))
+                .build();
+        var wrapped = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.Loop("loop", ArgumentType.Word("colour").from("red", "green", "blue").map(String::length)))
+                .build();
+        var expected = """
+                foo red green blue=%
+                0->foo
+                foo->red green blue
+                red green blue+>foo
+                """;
+        assertPacketGraph(expected, unwrapped);
+        assertPacketGraph(expected, wrapped);
+    }
+
+    @Test
+    public void singleCommandMappedCommand() {
+        var graph = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.Command("cmd").map(_ -> 0))
+                .build();
+        assertPacketGraph("""
+                foo cmd=%
+                0->foo
+                foo->cmd
+                cmd+>0
+                """, graph);
+    }
+
+    @Test
+    public void singleCommandFilteredCommand() {
+        var graph = Graph.builder(ArgumentType.Literal("foo"))
+                .append(ArgumentType.Command("cmd").filter(_ -> true))
+                .build();
+        assertPacketGraph("""
+                foo cmd=%
+                0->foo
+                foo->cmd
+                cmd+>0
                 """, graph);
     }
 
