@@ -13,6 +13,8 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.TranslationArgument;
 import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.DataComponentValue;
+import net.kyori.adventure.text.event.DataComponentValueConverterRegistry;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.ShadowColor;
@@ -23,14 +25,19 @@ import net.kyori.adventure.text.object.ObjectContents;
 import net.kyori.adventure.text.object.PlayerHeadObjectContents;
 import net.kyori.adventure.text.object.SpriteObjectContents;
 import net.minestom.server.adventure.MinestomAdventure;
+import net.minestom.server.adventure.MinestomDataComponentValue;
 import net.minestom.server.codec.Transcoder.MapBuilder;
 import net.minestom.server.codec.Transcoder.MapLike;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.dialog.Dialog;
 import net.minestom.server.network.player.ResolvableProfile;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Used internally to hold component codecs
@@ -183,13 +190,39 @@ public final class ComponentCodecs {
     private static final Codec<HoverEvent.Action<?>> HOVER_EVENT_ACTION = Codec.STRING.transform(HoverEvent.Action.NAMES::value, HoverEvent.Action::toString);
     private static final Codec<HoverEvent<?>> HOVER_EVENT = HOVER_EVENT_ACTION.unionType("action", ComponentCodecs::hoverEventCodec, HoverEvent::action);
 
+    // Forward reference because DataComponent may still be initializing when this class loads.
+    private static final Codec<Map<Key, DataComponentValue>> SHOW_ITEM_COMPONENTS = Codec.ForwardRef(() -> DataComponent.PATCH_CODEC).transform(
+            patch -> {
+                final Map<Key, DataComponentValue> components = new HashMap<>();
+                for (final DataComponent.Value entry : patch.entrySet()) {
+                    components.put(entry.component().key(), entry.value() == null
+                            ? MinestomDataComponentValue.removed()
+                            : MinestomDataComponentValue.dataComponentValue(entry.value()));
+                }
+                return components;
+            },
+            components -> {
+                final DataComponentMap.PatchBuilder patch = DataComponentMap.patchBuilder();
+                components.forEach((key, value) -> {
+                    @SuppressWarnings("unchecked")
+                    final DataComponent<Object> type = (DataComponent<Object>) DataComponent.fromKey(key);
+                    if (type == null) throw new IllegalArgumentException("unknown data component: " + key);
+                    final Object data = value instanceof DataComponentValue.Removed ? null
+                            : DataComponentValueConverterRegistry.convert(MinestomDataComponentValue.class, key, value).value();
+                    if (data == null) patch.remove(type);
+                    else patch.set(type, data);
+                });
+                return patch.build();
+            });
+
     private static final StructCodec<HoverEvent<Component>> SHOW_TEXT = StructCodec.struct(
             "value", COMPONENT_FORWARD, HoverEvent::value,
             HoverEvent::showText);
     private static final StructCodec<HoverEvent<HoverEvent.ShowItem>> SHOW_ITEM = StructCodec.struct(
             "id", Codec.KEY, hoverEvent -> hoverEvent.value().item(),
             "count", Codec.INT.optional(1), hoverEvent -> hoverEvent.value().count(),
-            HoverEvent::showItem); // TODO(1.21.5): components
+            "components", SHOW_ITEM_COMPONENTS.optional(Map.of()), hoverEvent -> hoverEvent.value().dataComponents(),
+            HoverEvent::showItem);
     private static final StructCodec<HoverEvent<HoverEvent.ShowEntity>> SHOW_ENTITY = StructCodec.struct(
             "id", Codec.KEY, hoverEvent -> hoverEvent.value().type(),
             "uuid", Codec.UUID_COERCED, hoverEvent -> hoverEvent.value().id(),
