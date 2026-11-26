@@ -104,8 +104,8 @@ final class GraphConverter {
 
                 return new int[]{id.getAndIncrement()};
             } else if (argument instanceof ArgumentEnum<?> || (argument instanceof ArgumentWord word && word.hasRestrictions())) {
-                List<String> entries = argument instanceof ArgumentEnum<?> ?
-                        ((ArgumentEnum<?>) argument).entries() :
+                List<String> entries = argument instanceof ArgumentEnum<?> argumentEnum ?
+                        argumentEnum.entries() :
                         Arrays.stream(((ArgumentWord) argument).getRestrictions()).toList();
                 final int[] res = new int[entries.size()];
                 for (int i = 0; i < res.length; i++) {

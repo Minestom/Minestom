@@ -38,7 +38,7 @@ public sealed interface Holder<T> permits RegistryKey, Holder.Direct {
     }
 
     default @Nullable RegistryKey<T> asKey() {
-        return this instanceof RegistryKey<T> ? (RegistryKey<T>) this : null;
+        return this instanceof RegistryKey<T> key ? key : null;
     }
 
     @SuppressWarnings("unchecked")

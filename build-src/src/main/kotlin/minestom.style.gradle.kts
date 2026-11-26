@@ -113,7 +113,8 @@ tasks.withType<JavaCompile>().configureEach {
                 "NullableWildcard",
                 "RemoveUnusedImports",
                 "WildcardImport",
-                "UnnecessaryStaticImport"
+                "UnnecessaryStaticImport",
+                "HashCodeInObjectsHash"
         )
 
         disable(

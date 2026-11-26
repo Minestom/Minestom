@@ -57,7 +57,7 @@ class NamedAndIdentifiedImpl implements NamedAndIdentified {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.uuid);
+        return Objects.hashCode(this.uuid);
     }
 
     @Override
