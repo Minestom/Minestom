@@ -37,8 +37,18 @@ public abstract class BlockPlacementRule {
      */
     public abstract @Nullable Block blockPlace(PlacementState placementState);
 
+    /**
+     * Whether {@link Replacement#block()} may be replaced by the placement. Vanilla's base rule by default; its per-block
+     * overrides (snow layers, slabs, candles, sea pickles, turtle eggs, petals, vines, scaffolding, multiface blocks) go here.
+     */
     public boolean isSelfReplaceable(Replacement replacement) {
-        return false;
+        return isReplaceable(replacement);
+    }
+
+    /** Vanilla's {@code BlockBehaviour#canBeReplaced}: the replaceable flag, except against the block's own item. */
+    public static boolean isReplaceable(Replacement replacement) {
+        final Block held = replacement.material().block();
+        return replacement.block().replaceable() && (held == null || !replacement.block().compare(held));
     }
 
     public Block getBlock() {
@@ -80,7 +90,11 @@ public abstract class BlockPlacementRule {
 			  position.
 			 */
             boolean isOffset,
-            Material material
+            Material material,
+            boolean isPlayerShifting
     ) {
+        public Replacement(Block block, BlockFace blockFace, Point cursorPosition, boolean isOffset, Material material) {
+            this(block, blockFace, cursorPosition, isOffset, material, false);
+        }
     }
 }
