@@ -11,6 +11,8 @@ import org.jetbrains.annotations.ApiStatus;
 @SuppressWarnings("unused")
 @ApiStatus.NonExtendable
 public interface MaterialKeys {
+    RegistryKey<Material> ABANDONED_CAMP_MAP = RegistryKey.of("abandoned_camp_map");
+
     RegistryKey<Material> ACACIA_BOAT = RegistryKey.of("acacia_boat");
 
     RegistryKey<Material> ACACIA_BUTTON = RegistryKey.of("acacia_button");
@@ -219,6 +221,12 @@ public interface MaterialKeys {
 
     RegistryKey<Material> BLACK_CONCRETE_POWDER = RegistryKey.of("black_concrete_powder");
 
+    RegistryKey<Material> BLACK_CONCRETE_SLAB = RegistryKey.of("black_concrete_slab");
+
+    RegistryKey<Material> BLACK_CONCRETE_STAIRS = RegistryKey.of("black_concrete_stairs");
+
+    RegistryKey<Material> BLACK_CUSHION = RegistryKey.of("black_cushion");
+
     RegistryKey<Material> BLACK_DYE = RegistryKey.of("black_dye");
 
     RegistryKey<Material> BLACK_GLAZED_TERRACOTTA = RegistryKey.of("black_glazed_terracotta");
@@ -234,6 +242,10 @@ public interface MaterialKeys {
     RegistryKey<Material> BLACK_TERRACOTTA = RegistryKey.of("black_terracotta");
 
     RegistryKey<Material> BLACK_WOOL = RegistryKey.of("black_wool");
+
+    RegistryKey<Material> BLACK_WOOL_SLAB = RegistryKey.of("black_wool_slab");
+
+    RegistryKey<Material> BLACK_WOOL_STAIRS = RegistryKey.of("black_wool_stairs");
 
     RegistryKey<Material> BLACKSTONE = RegistryKey.of("blackstone");
 
@@ -267,6 +279,12 @@ public interface MaterialKeys {
 
     RegistryKey<Material> BLUE_CONCRETE_POWDER = RegistryKey.of("blue_concrete_powder");
 
+    RegistryKey<Material> BLUE_CONCRETE_SLAB = RegistryKey.of("blue_concrete_slab");
+
+    RegistryKey<Material> BLUE_CONCRETE_STAIRS = RegistryKey.of("blue_concrete_stairs");
+
+    RegistryKey<Material> BLUE_CUSHION = RegistryKey.of("blue_cushion");
+
     RegistryKey<Material> BLUE_DYE = RegistryKey.of("blue_dye");
 
     RegistryKey<Material> BLUE_EGG = RegistryKey.of("blue_egg");
@@ -288,6 +306,10 @@ public interface MaterialKeys {
     RegistryKey<Material> BLUE_TERRACOTTA = RegistryKey.of("blue_terracotta");
 
     RegistryKey<Material> BLUE_WOOL = RegistryKey.of("blue_wool");
+
+    RegistryKey<Material> BLUE_WOOL_SLAB = RegistryKey.of("blue_wool_slab");
+
+    RegistryKey<Material> BLUE_WOOL_STAIRS = RegistryKey.of("blue_wool_stairs");
 
     RegistryKey<Material> BOGGED_SPAWN_EGG = RegistryKey.of("bogged_spawn_egg");
 
@@ -349,6 +371,12 @@ public interface MaterialKeys {
 
     RegistryKey<Material> BROWN_CONCRETE_POWDER = RegistryKey.of("brown_concrete_powder");
 
+    RegistryKey<Material> BROWN_CONCRETE_SLAB = RegistryKey.of("brown_concrete_slab");
+
+    RegistryKey<Material> BROWN_CONCRETE_STAIRS = RegistryKey.of("brown_concrete_stairs");
+
+    RegistryKey<Material> BROWN_CUSHION = RegistryKey.of("brown_cushion");
+
     RegistryKey<Material> BROWN_DYE = RegistryKey.of("brown_dye");
 
     RegistryKey<Material> BROWN_EGG = RegistryKey.of("brown_egg");
@@ -371,6 +399,10 @@ public interface MaterialKeys {
 
     RegistryKey<Material> BROWN_WOOL = RegistryKey.of("brown_wool");
 
+    RegistryKey<Material> BROWN_WOOL_SLAB = RegistryKey.of("brown_wool_slab");
+
+    RegistryKey<Material> BROWN_WOOL_STAIRS = RegistryKey.of("brown_wool_stairs");
+
     RegistryKey<Material> BRUSH = RegistryKey.of("brush");
 
     RegistryKey<Material> BUBBLE_CORAL = RegistryKey.of("bubble_coral");
@@ -384,6 +416,14 @@ public interface MaterialKeys {
     RegistryKey<Material> BUDDING_AMETHYST = RegistryKey.of("budding_amethyst");
 
     RegistryKey<Material> BUNDLE = RegistryKey.of("bundle");
+
+    RegistryKey<Material> BURIED_ANCIENT_CITY_MAP = RegistryKey.of("buried_ancient_city_map");
+
+    RegistryKey<Material> BURIED_MINESHAFT_MAP = RegistryKey.of("buried_mineshaft_map");
+
+    RegistryKey<Material> BURIED_TREASURE_MAP = RegistryKey.of("buried_treasure_map");
+
+    RegistryKey<Material> BURIED_TRIAL_CHAMBERS_MAP = RegistryKey.of("buried_trial_chambers_map");
 
     RegistryKey<Material> BURN_POTTERY_SHERD = RegistryKey.of("burn_pottery_sherd");
 
@@ -749,6 +789,12 @@ public interface MaterialKeys {
 
     RegistryKey<Material> CYAN_CONCRETE_POWDER = RegistryKey.of("cyan_concrete_powder");
 
+    RegistryKey<Material> CYAN_CONCRETE_SLAB = RegistryKey.of("cyan_concrete_slab");
+
+    RegistryKey<Material> CYAN_CONCRETE_STAIRS = RegistryKey.of("cyan_concrete_stairs");
+
+    RegistryKey<Material> CYAN_CUSHION = RegistryKey.of("cyan_cushion");
+
     RegistryKey<Material> CYAN_DYE = RegistryKey.of("cyan_dye");
 
     RegistryKey<Material> CYAN_GLAZED_TERRACOTTA = RegistryKey.of("cyan_glazed_terracotta");
@@ -764,6 +810,10 @@ public interface MaterialKeys {
     RegistryKey<Material> CYAN_TERRACOTTA = RegistryKey.of("cyan_terracotta");
 
     RegistryKey<Material> CYAN_WOOL = RegistryKey.of("cyan_wool");
+
+    RegistryKey<Material> CYAN_WOOL_SLAB = RegistryKey.of("cyan_wool_slab");
+
+    RegistryKey<Material> CYAN_WOOL_STAIRS = RegistryKey.of("cyan_wool_stairs");
 
     RegistryKey<Material> DAMAGED_ANVIL = RegistryKey.of("damaged_anvil");
 
@@ -884,6 +934,10 @@ public interface MaterialKeys {
     RegistryKey<Material> DEEPSLATE_TILE_WALL = RegistryKey.of("deepslate_tile_wall");
 
     RegistryKey<Material> DEEPSLATE_TILES = RegistryKey.of("deepslate_tiles");
+
+    RegistryKey<Material> DESERT_PYRAMID_MAP = RegistryKey.of("desert_pyramid_map");
+
+    RegistryKey<Material> DESERT_VILLAGE_MAP = RegistryKey.of("desert_village_map");
 
     RegistryKey<Material> DETECTOR_RAIL = RegistryKey.of("detector_rail");
 
@@ -1201,6 +1255,12 @@ public interface MaterialKeys {
 
     RegistryKey<Material> GRAY_CONCRETE_POWDER = RegistryKey.of("gray_concrete_powder");
 
+    RegistryKey<Material> GRAY_CONCRETE_SLAB = RegistryKey.of("gray_concrete_slab");
+
+    RegistryKey<Material> GRAY_CONCRETE_STAIRS = RegistryKey.of("gray_concrete_stairs");
+
+    RegistryKey<Material> GRAY_CUSHION = RegistryKey.of("gray_cushion");
+
     RegistryKey<Material> GRAY_DYE = RegistryKey.of("gray_dye");
 
     RegistryKey<Material> GRAY_GLAZED_TERRACOTTA = RegistryKey.of("gray_glazed_terracotta");
@@ -1217,6 +1277,10 @@ public interface MaterialKeys {
 
     RegistryKey<Material> GRAY_WOOL = RegistryKey.of("gray_wool");
 
+    RegistryKey<Material> GRAY_WOOL_SLAB = RegistryKey.of("gray_wool_slab");
+
+    RegistryKey<Material> GRAY_WOOL_STAIRS = RegistryKey.of("gray_wool_stairs");
+
     RegistryKey<Material> GREEN_BANNER = RegistryKey.of("green_banner");
 
     RegistryKey<Material> GREEN_BED = RegistryKey.of("green_bed");
@@ -1230,6 +1294,12 @@ public interface MaterialKeys {
     RegistryKey<Material> GREEN_CONCRETE = RegistryKey.of("green_concrete");
 
     RegistryKey<Material> GREEN_CONCRETE_POWDER = RegistryKey.of("green_concrete_powder");
+
+    RegistryKey<Material> GREEN_CONCRETE_SLAB = RegistryKey.of("green_concrete_slab");
+
+    RegistryKey<Material> GREEN_CONCRETE_STAIRS = RegistryKey.of("green_concrete_stairs");
+
+    RegistryKey<Material> GREEN_CUSHION = RegistryKey.of("green_cushion");
 
     RegistryKey<Material> GREEN_DYE = RegistryKey.of("green_dye");
 
@@ -1246,6 +1316,10 @@ public interface MaterialKeys {
     RegistryKey<Material> GREEN_TERRACOTTA = RegistryKey.of("green_terracotta");
 
     RegistryKey<Material> GREEN_WOOL = RegistryKey.of("green_wool");
+
+    RegistryKey<Material> GREEN_WOOL_SLAB = RegistryKey.of("green_wool_slab");
+
+    RegistryKey<Material> GREEN_WOOL_STAIRS = RegistryKey.of("green_wool_stairs");
 
     RegistryKey<Material> GRINDSTONE = RegistryKey.of("grindstone");
 
@@ -1391,6 +1465,8 @@ public interface MaterialKeys {
 
     RegistryKey<Material> JUNGLE_PRESSURE_PLATE = RegistryKey.of("jungle_pressure_plate");
 
+    RegistryKey<Material> JUNGLE_PYRAMID_MAP = RegistryKey.of("jungle_pyramid_map");
+
     RegistryKey<Material> JUNGLE_SAPLING = RegistryKey.of("jungle_sapling");
 
     RegistryKey<Material> JUNGLE_SHELF = RegistryKey.of("jungle_shelf");
@@ -1461,6 +1537,12 @@ public interface MaterialKeys {
 
     RegistryKey<Material> LIGHT_BLUE_CONCRETE_POWDER = RegistryKey.of("light_blue_concrete_powder");
 
+    RegistryKey<Material> LIGHT_BLUE_CONCRETE_SLAB = RegistryKey.of("light_blue_concrete_slab");
+
+    RegistryKey<Material> LIGHT_BLUE_CONCRETE_STAIRS = RegistryKey.of("light_blue_concrete_stairs");
+
+    RegistryKey<Material> LIGHT_BLUE_CUSHION = RegistryKey.of("light_blue_cushion");
+
     RegistryKey<Material> LIGHT_BLUE_DYE = RegistryKey.of("light_blue_dye");
 
     RegistryKey<Material> LIGHT_BLUE_GLAZED_TERRACOTTA = RegistryKey.of("light_blue_glazed_terracotta");
@@ -1477,6 +1559,10 @@ public interface MaterialKeys {
 
     RegistryKey<Material> LIGHT_BLUE_WOOL = RegistryKey.of("light_blue_wool");
 
+    RegistryKey<Material> LIGHT_BLUE_WOOL_SLAB = RegistryKey.of("light_blue_wool_slab");
+
+    RegistryKey<Material> LIGHT_BLUE_WOOL_STAIRS = RegistryKey.of("light_blue_wool_stairs");
+
     RegistryKey<Material> LIGHT_GRAY_BANNER = RegistryKey.of("light_gray_banner");
 
     RegistryKey<Material> LIGHT_GRAY_BED = RegistryKey.of("light_gray_bed");
@@ -1490,6 +1576,12 @@ public interface MaterialKeys {
     RegistryKey<Material> LIGHT_GRAY_CONCRETE = RegistryKey.of("light_gray_concrete");
 
     RegistryKey<Material> LIGHT_GRAY_CONCRETE_POWDER = RegistryKey.of("light_gray_concrete_powder");
+
+    RegistryKey<Material> LIGHT_GRAY_CONCRETE_SLAB = RegistryKey.of("light_gray_concrete_slab");
+
+    RegistryKey<Material> LIGHT_GRAY_CONCRETE_STAIRS = RegistryKey.of("light_gray_concrete_stairs");
+
+    RegistryKey<Material> LIGHT_GRAY_CUSHION = RegistryKey.of("light_gray_cushion");
 
     RegistryKey<Material> LIGHT_GRAY_DYE = RegistryKey.of("light_gray_dye");
 
@@ -1506,6 +1598,10 @@ public interface MaterialKeys {
     RegistryKey<Material> LIGHT_GRAY_TERRACOTTA = RegistryKey.of("light_gray_terracotta");
 
     RegistryKey<Material> LIGHT_GRAY_WOOL = RegistryKey.of("light_gray_wool");
+
+    RegistryKey<Material> LIGHT_GRAY_WOOL_SLAB = RegistryKey.of("light_gray_wool_slab");
+
+    RegistryKey<Material> LIGHT_GRAY_WOOL_STAIRS = RegistryKey.of("light_gray_wool_stairs");
 
     RegistryKey<Material> LIGHT_WEIGHTED_PRESSURE_PLATE = RegistryKey.of("light_weighted_pressure_plate");
 
@@ -1531,6 +1627,12 @@ public interface MaterialKeys {
 
     RegistryKey<Material> LIME_CONCRETE_POWDER = RegistryKey.of("lime_concrete_powder");
 
+    RegistryKey<Material> LIME_CONCRETE_SLAB = RegistryKey.of("lime_concrete_slab");
+
+    RegistryKey<Material> LIME_CONCRETE_STAIRS = RegistryKey.of("lime_concrete_stairs");
+
+    RegistryKey<Material> LIME_CUSHION = RegistryKey.of("lime_cushion");
+
     RegistryKey<Material> LIME_DYE = RegistryKey.of("lime_dye");
 
     RegistryKey<Material> LIME_GLAZED_TERRACOTTA = RegistryKey.of("lime_glazed_terracotta");
@@ -1546,6 +1648,10 @@ public interface MaterialKeys {
     RegistryKey<Material> LIME_TERRACOTTA = RegistryKey.of("lime_terracotta");
 
     RegistryKey<Material> LIME_WOOL = RegistryKey.of("lime_wool");
+
+    RegistryKey<Material> LIME_WOOL_SLAB = RegistryKey.of("lime_wool_slab");
+
+    RegistryKey<Material> LIME_WOOL_STAIRS = RegistryKey.of("lime_wool_stairs");
 
     RegistryKey<Material> LINGERING_POTION = RegistryKey.of("lingering_potion");
 
@@ -1571,6 +1677,12 @@ public interface MaterialKeys {
 
     RegistryKey<Material> MAGENTA_CONCRETE_POWDER = RegistryKey.of("magenta_concrete_powder");
 
+    RegistryKey<Material> MAGENTA_CONCRETE_SLAB = RegistryKey.of("magenta_concrete_slab");
+
+    RegistryKey<Material> MAGENTA_CONCRETE_STAIRS = RegistryKey.of("magenta_concrete_stairs");
+
+    RegistryKey<Material> MAGENTA_CUSHION = RegistryKey.of("magenta_cushion");
+
     RegistryKey<Material> MAGENTA_DYE = RegistryKey.of("magenta_dye");
 
     RegistryKey<Material> MAGENTA_GLAZED_TERRACOTTA = RegistryKey.of("magenta_glazed_terracotta");
@@ -1586,6 +1698,10 @@ public interface MaterialKeys {
     RegistryKey<Material> MAGENTA_TERRACOTTA = RegistryKey.of("magenta_terracotta");
 
     RegistryKey<Material> MAGENTA_WOOL = RegistryKey.of("magenta_wool");
+
+    RegistryKey<Material> MAGENTA_WOOL_SLAB = RegistryKey.of("magenta_wool_slab");
+
+    RegistryKey<Material> MAGENTA_WOOL_STAIRS = RegistryKey.of("magenta_wool_stairs");
 
     RegistryKey<Material> MAGMA_BLOCK = RegistryKey.of("magma_block");
 
@@ -1845,6 +1961,8 @@ public interface MaterialKeys {
 
     RegistryKey<Material> OBSIDIAN = RegistryKey.of("obsidian");
 
+    RegistryKey<Material> OCEAN_MONUMENT_MAP = RegistryKey.of("ocean_monument_map");
+
     RegistryKey<Material> OCELOT_SPAWN_EGG = RegistryKey.of("ocelot_spawn_egg");
 
     RegistryKey<Material> OCHRE_FROGLIGHT = RegistryKey.of("ochre_froglight");
@@ -1869,11 +1987,19 @@ public interface MaterialKeys {
 
     RegistryKey<Material> ORANGE_CONCRETE_POWDER = RegistryKey.of("orange_concrete_powder");
 
+    RegistryKey<Material> ORANGE_CONCRETE_SLAB = RegistryKey.of("orange_concrete_slab");
+
+    RegistryKey<Material> ORANGE_CONCRETE_STAIRS = RegistryKey.of("orange_concrete_stairs");
+
+    RegistryKey<Material> ORANGE_CUSHION = RegistryKey.of("orange_cushion");
+
     RegistryKey<Material> ORANGE_DYE = RegistryKey.of("orange_dye");
 
     RegistryKey<Material> ORANGE_GLAZED_TERRACOTTA = RegistryKey.of("orange_glazed_terracotta");
 
     RegistryKey<Material> ORANGE_HARNESS = RegistryKey.of("orange_harness");
+
+    RegistryKey<Material> ORANGE_POPLAR_LEAVES = RegistryKey.of("orange_poplar_leaves");
 
     RegistryKey<Material> ORANGE_SHULKER_BOX = RegistryKey.of("orange_shulker_box");
 
@@ -1886,6 +2012,10 @@ public interface MaterialKeys {
     RegistryKey<Material> ORANGE_TULIP = RegistryKey.of("orange_tulip");
 
     RegistryKey<Material> ORANGE_WOOL = RegistryKey.of("orange_wool");
+
+    RegistryKey<Material> ORANGE_WOOL_SLAB = RegistryKey.of("orange_wool_slab");
+
+    RegistryKey<Material> ORANGE_WOOL_STAIRS = RegistryKey.of("orange_wool_stairs");
 
     RegistryKey<Material> OXEYE_DAISY = RegistryKey.of("oxeye_daisy");
 
@@ -2011,6 +2141,12 @@ public interface MaterialKeys {
 
     RegistryKey<Material> PINK_CONCRETE_POWDER = RegistryKey.of("pink_concrete_powder");
 
+    RegistryKey<Material> PINK_CONCRETE_SLAB = RegistryKey.of("pink_concrete_slab");
+
+    RegistryKey<Material> PINK_CONCRETE_STAIRS = RegistryKey.of("pink_concrete_stairs");
+
+    RegistryKey<Material> PINK_CUSHION = RegistryKey.of("pink_cushion");
+
     RegistryKey<Material> PINK_DYE = RegistryKey.of("pink_dye");
 
     RegistryKey<Material> PINK_GLAZED_TERRACOTTA = RegistryKey.of("pink_glazed_terracotta");
@@ -2031,11 +2167,17 @@ public interface MaterialKeys {
 
     RegistryKey<Material> PINK_WOOL = RegistryKey.of("pink_wool");
 
+    RegistryKey<Material> PINK_WOOL_SLAB = RegistryKey.of("pink_wool_slab");
+
+    RegistryKey<Material> PINK_WOOL_STAIRS = RegistryKey.of("pink_wool_stairs");
+
     RegistryKey<Material> PISTON = RegistryKey.of("piston");
 
     RegistryKey<Material> PITCHER_PLANT = RegistryKey.of("pitcher_plant");
 
     RegistryKey<Material> PITCHER_POD = RegistryKey.of("pitcher_pod");
+
+    RegistryKey<Material> PLAINS_VILLAGE_MAP = RegistryKey.of("plains_village_map");
 
     RegistryKey<Material> PLAYER_HEAD = RegistryKey.of("player_head");
 
@@ -2121,6 +2263,40 @@ public interface MaterialKeys {
 
     RegistryKey<Material> POLISHED_TUFF_WALL = RegistryKey.of("polished_tuff_wall");
 
+    RegistryKey<Material> POPLAR_BOAT = RegistryKey.of("poplar_boat");
+
+    RegistryKey<Material> POPLAR_BUTTON = RegistryKey.of("poplar_button");
+
+    RegistryKey<Material> POPLAR_CHEST_BOAT = RegistryKey.of("poplar_chest_boat");
+
+    RegistryKey<Material> POPLAR_DOOR = RegistryKey.of("poplar_door");
+
+    RegistryKey<Material> POPLAR_FENCE = RegistryKey.of("poplar_fence");
+
+    RegistryKey<Material> POPLAR_FENCE_GATE = RegistryKey.of("poplar_fence_gate");
+
+    RegistryKey<Material> POPLAR_HANGING_SIGN = RegistryKey.of("poplar_hanging_sign");
+
+    RegistryKey<Material> POPLAR_LOG = RegistryKey.of("poplar_log");
+
+    RegistryKey<Material> POPLAR_PLANKS = RegistryKey.of("poplar_planks");
+
+    RegistryKey<Material> POPLAR_PRESSURE_PLATE = RegistryKey.of("poplar_pressure_plate");
+
+    RegistryKey<Material> POPLAR_SAPLING = RegistryKey.of("poplar_sapling");
+
+    RegistryKey<Material> POPLAR_SHELF = RegistryKey.of("poplar_shelf");
+
+    RegistryKey<Material> POPLAR_SIGN = RegistryKey.of("poplar_sign");
+
+    RegistryKey<Material> POPLAR_SLAB = RegistryKey.of("poplar_slab");
+
+    RegistryKey<Material> POPLAR_STAIRS = RegistryKey.of("poplar_stairs");
+
+    RegistryKey<Material> POPLAR_TRAPDOOR = RegistryKey.of("poplar_trapdoor");
+
+    RegistryKey<Material> POPLAR_WOOD = RegistryKey.of("poplar_wood");
+
     RegistryKey<Material> POPPED_CHORUS_FRUIT = RegistryKey.of("popped_chorus_fruit");
 
     RegistryKey<Material> POPPY = RegistryKey.of("poppy");
@@ -2183,6 +2359,12 @@ public interface MaterialKeys {
 
     RegistryKey<Material> PURPLE_CONCRETE_POWDER = RegistryKey.of("purple_concrete_powder");
 
+    RegistryKey<Material> PURPLE_CONCRETE_SLAB = RegistryKey.of("purple_concrete_slab");
+
+    RegistryKey<Material> PURPLE_CONCRETE_STAIRS = RegistryKey.of("purple_concrete_stairs");
+
+    RegistryKey<Material> PURPLE_CUSHION = RegistryKey.of("purple_cushion");
+
     RegistryKey<Material> PURPLE_DYE = RegistryKey.of("purple_dye");
 
     RegistryKey<Material> PURPLE_GLAZED_TERRACOTTA = RegistryKey.of("purple_glazed_terracotta");
@@ -2198,6 +2380,10 @@ public interface MaterialKeys {
     RegistryKey<Material> PURPLE_TERRACOTTA = RegistryKey.of("purple_terracotta");
 
     RegistryKey<Material> PURPLE_WOOL = RegistryKey.of("purple_wool");
+
+    RegistryKey<Material> PURPLE_WOOL_SLAB = RegistryKey.of("purple_wool_slab");
+
+    RegistryKey<Material> PURPLE_WOOL_STAIRS = RegistryKey.of("purple_wool_stairs");
 
     RegistryKey<Material> PURPUR_BLOCK = RegistryKey.of("purpur_block");
 
@@ -2263,6 +2449,12 @@ public interface MaterialKeys {
 
     RegistryKey<Material> RED_CONCRETE_POWDER = RegistryKey.of("red_concrete_powder");
 
+    RegistryKey<Material> RED_CONCRETE_SLAB = RegistryKey.of("red_concrete_slab");
+
+    RegistryKey<Material> RED_CONCRETE_STAIRS = RegistryKey.of("red_concrete_stairs");
+
+    RegistryKey<Material> RED_CUSHION = RegistryKey.of("red_cushion");
+
     RegistryKey<Material> RED_DYE = RegistryKey.of("red_dye");
 
     RegistryKey<Material> RED_GLAZED_TERRACOTTA = RegistryKey.of("red_glazed_terracotta");
@@ -2281,6 +2473,8 @@ public interface MaterialKeys {
 
     RegistryKey<Material> RED_NETHER_BRICKS = RegistryKey.of("red_nether_bricks");
 
+    RegistryKey<Material> RED_POPLAR_LEAVES = RegistryKey.of("red_poplar_leaves");
+
     RegistryKey<Material> RED_SAND = RegistryKey.of("red_sand");
 
     RegistryKey<Material> RED_SANDSTONE = RegistryKey.of("red_sandstone");
@@ -2290,6 +2484,8 @@ public interface MaterialKeys {
     RegistryKey<Material> RED_SANDSTONE_STAIRS = RegistryKey.of("red_sandstone_stairs");
 
     RegistryKey<Material> RED_SANDSTONE_WALL = RegistryKey.of("red_sandstone_wall");
+
+    RegistryKey<Material> RED_SHRUB = RegistryKey.of("red_shrub");
 
     RegistryKey<Material> RED_SHULKER_BOX = RegistryKey.of("red_shulker_box");
 
@@ -2302,6 +2498,10 @@ public interface MaterialKeys {
     RegistryKey<Material> RED_TULIP = RegistryKey.of("red_tulip");
 
     RegistryKey<Material> RED_WOOL = RegistryKey.of("red_wool");
+
+    RegistryKey<Material> RED_WOOL_SLAB = RegistryKey.of("red_wool_slab");
+
+    RegistryKey<Material> RED_WOOL_STAIRS = RegistryKey.of("red_wool_stairs");
 
     RegistryKey<Material> REDSTONE = RegistryKey.of("redstone");
 
@@ -2361,6 +2561,8 @@ public interface MaterialKeys {
 
     RegistryKey<Material> SANDSTONE_WALL = RegistryKey.of("sandstone_wall");
 
+    RegistryKey<Material> SAVANNA_VILLAGE_MAP = RegistryKey.of("savanna_village_map");
+
     RegistryKey<Material> SCAFFOLDING = RegistryKey.of("scaffolding");
 
     RegistryKey<Material> SCRAPE_POTTERY_SHERD = RegistryKey.of("scrape_pottery_sherd");
@@ -2390,6 +2592,8 @@ public interface MaterialKeys {
     RegistryKey<Material> SHEARS = RegistryKey.of("shears");
 
     RegistryKey<Material> SHEEP_SPAWN_EGG = RegistryKey.of("sheep_spawn_egg");
+
+    RegistryKey<Material> SHELF_MUSHROOM = RegistryKey.of("shelf_mushroom");
 
     RegistryKey<Material> SHELTER_POTTERY_SHERD = RegistryKey.of("shelter_pottery_sherd");
 
@@ -2474,6 +2678,8 @@ public interface MaterialKeys {
     RegistryKey<Material> SNOW_GOLEM_SPAWN_EGG = RegistryKey.of("snow_golem_spawn_egg");
 
     RegistryKey<Material> SNOWBALL = RegistryKey.of("snowball");
+
+    RegistryKey<Material> SNOWY_VILLAGE_MAP = RegistryKey.of("snowy_village_map");
 
     RegistryKey<Material> SOUL_CAMPFIRE = RegistryKey.of("soul_campfire");
 
@@ -2577,6 +2783,8 @@ public interface MaterialKeys {
 
     RegistryKey<Material> STONECUTTER = RegistryKey.of("stonecutter");
 
+    RegistryKey<Material> STRAW_BED = RegistryKey.of("straw_bed");
+
     RegistryKey<Material> STRAY_SPAWN_EGG = RegistryKey.of("stray_spawn_egg");
 
     RegistryKey<Material> STRIDER_SPAWN_EGG = RegistryKey.of("strider_spawn_egg");
@@ -2620,6 +2828,10 @@ public interface MaterialKeys {
     RegistryKey<Material> STRIPPED_PALE_OAK_LOG = RegistryKey.of("stripped_pale_oak_log");
 
     RegistryKey<Material> STRIPPED_PALE_OAK_WOOD = RegistryKey.of("stripped_pale_oak_wood");
+
+    RegistryKey<Material> STRIPPED_POPLAR_LOG = RegistryKey.of("stripped_poplar_log");
+
+    RegistryKey<Material> STRIPPED_POPLAR_WOOD = RegistryKey.of("stripped_poplar_wood");
 
     RegistryKey<Material> STRIPPED_SPRUCE_LOG = RegistryKey.of("stripped_spruce_log");
 
@@ -2667,11 +2879,15 @@ public interface MaterialKeys {
 
     RegistryKey<Material> SUSPICIOUS_STEW = RegistryKey.of("suspicious_stew");
 
+    RegistryKey<Material> SWAMP_HUT_MAP = RegistryKey.of("swamp_hut_map");
+
     RegistryKey<Material> SWEET_BERRIES = RegistryKey.of("sweet_berries");
 
     RegistryKey<Material> TADPOLE_BUCKET = RegistryKey.of("tadpole_bucket");
 
     RegistryKey<Material> TADPOLE_SPAWN_EGG = RegistryKey.of("tadpole_spawn_egg");
+
+    RegistryKey<Material> TAIGA_VILLAGE_MAP = RegistryKey.of("taiga_village_map");
 
     RegistryKey<Material> TALL_DRY_GRASS = RegistryKey.of("tall_dry_grass");
 
@@ -2772,6 +2988,8 @@ public interface MaterialKeys {
     RegistryKey<Material> WARD_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.of("ward_armor_trim_smithing_template");
 
     RegistryKey<Material> WARDEN_SPAWN_EGG = RegistryKey.of("warden_spawn_egg");
+
+    RegistryKey<Material> WARM_OCEAN_RUINS_MAP = RegistryKey.of("warm_ocean_ruins_map");
 
     RegistryKey<Material> WARPED_BUTTON = RegistryKey.of("warped_button");
 
@@ -2987,6 +3205,12 @@ public interface MaterialKeys {
 
     RegistryKey<Material> WHITE_CONCRETE_POWDER = RegistryKey.of("white_concrete_powder");
 
+    RegistryKey<Material> WHITE_CONCRETE_SLAB = RegistryKey.of("white_concrete_slab");
+
+    RegistryKey<Material> WHITE_CONCRETE_STAIRS = RegistryKey.of("white_concrete_stairs");
+
+    RegistryKey<Material> WHITE_CUSHION = RegistryKey.of("white_cushion");
+
     RegistryKey<Material> WHITE_DYE = RegistryKey.of("white_dye");
 
     RegistryKey<Material> WHITE_GLAZED_TERRACOTTA = RegistryKey.of("white_glazed_terracotta");
@@ -3004,6 +3228,10 @@ public interface MaterialKeys {
     RegistryKey<Material> WHITE_TULIP = RegistryKey.of("white_tulip");
 
     RegistryKey<Material> WHITE_WOOL = RegistryKey.of("white_wool");
+
+    RegistryKey<Material> WHITE_WOOL_SLAB = RegistryKey.of("white_wool_slab");
+
+    RegistryKey<Material> WHITE_WOOL_STAIRS = RegistryKey.of("white_wool_stairs");
 
     RegistryKey<Material> WILD_ARMOR_TRIM_SMITHING_TEMPLATE = RegistryKey.of("wild_armor_trim_smithing_template");
 
@@ -3037,6 +3265,8 @@ public interface MaterialKeys {
 
     RegistryKey<Material> WOODEN_SWORD = RegistryKey.of("wooden_sword");
 
+    RegistryKey<Material> WOODLAND_MANSION_MAP = RegistryKey.of("woodland_mansion_map");
+
     RegistryKey<Material> WRITABLE_BOOK = RegistryKey.of("writable_book");
 
     RegistryKey<Material> WRITTEN_BOOK = RegistryKey.of("written_book");
@@ -3055,11 +3285,19 @@ public interface MaterialKeys {
 
     RegistryKey<Material> YELLOW_CONCRETE_POWDER = RegistryKey.of("yellow_concrete_powder");
 
+    RegistryKey<Material> YELLOW_CONCRETE_SLAB = RegistryKey.of("yellow_concrete_slab");
+
+    RegistryKey<Material> YELLOW_CONCRETE_STAIRS = RegistryKey.of("yellow_concrete_stairs");
+
+    RegistryKey<Material> YELLOW_CUSHION = RegistryKey.of("yellow_cushion");
+
     RegistryKey<Material> YELLOW_DYE = RegistryKey.of("yellow_dye");
 
     RegistryKey<Material> YELLOW_GLAZED_TERRACOTTA = RegistryKey.of("yellow_glazed_terracotta");
 
     RegistryKey<Material> YELLOW_HARNESS = RegistryKey.of("yellow_harness");
+
+    RegistryKey<Material> YELLOW_POPLAR_LEAVES = RegistryKey.of("yellow_poplar_leaves");
 
     RegistryKey<Material> YELLOW_SHULKER_BOX = RegistryKey.of("yellow_shulker_box");
 
@@ -3070,6 +3308,10 @@ public interface MaterialKeys {
     RegistryKey<Material> YELLOW_TERRACOTTA = RegistryKey.of("yellow_terracotta");
 
     RegistryKey<Material> YELLOW_WOOL = RegistryKey.of("yellow_wool");
+
+    RegistryKey<Material> YELLOW_WOOL_SLAB = RegistryKey.of("yellow_wool_slab");
+
+    RegistryKey<Material> YELLOW_WOOL_STAIRS = RegistryKey.of("yellow_wool_stairs");
 
     RegistryKey<Material> ZOGLIN_SPAWN_EGG = RegistryKey.of("zoglin_spawn_egg");
 

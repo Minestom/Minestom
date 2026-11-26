@@ -107,6 +107,7 @@ public final class EntityUtils {
             EntityType.MANGROVE_CHEST_BOAT,
             EntityType.OAK_CHEST_BOAT,
             EntityType.PALE_OAK_CHEST_BOAT,
+            EntityType.POPLAR_CHEST_BOAT,
             EntityType.SPRUCE_CHEST_BOAT
     );
 

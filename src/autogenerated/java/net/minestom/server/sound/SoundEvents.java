@@ -991,6 +991,14 @@ sealed interface SoundEvents permits SoundEvent {
 
     SoundEvent ITEM_CROSSBOW_SHOOT = BuiltinSoundEvent.get(SoundEventKeys.ITEM_CROSSBOW_SHOOT);
 
+    SoundEvent ENTITY_CUSHION_BREAK = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CUSHION_BREAK);
+
+    SoundEvent ENTITY_CUSHION_PLACE = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CUSHION_PLACE);
+
+    SoundEvent ENTITY_CUSHION_SIT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CUSHION_SIT);
+
+    SoundEvent ENTITY_CUSHION_GET_UP = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_CUSHION_GET_UP);
+
     SoundEvent BLOCK_DEADBUSH_IDLE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DEADBUSH_IDLE);
 
     SoundEvent BLOCK_DECORATED_POT_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_DECORATED_POT_BREAK);
@@ -3942,4 +3950,42 @@ sealed interface SoundEvents permits SoundEvent {
     SoundEvent ENTITY_SMALL_SULFUR_CUBE_SQUISH = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SMALL_SULFUR_CUBE_SQUISH);
 
     SoundEvent ENTITY_SMALL_SULFUR_CUBE_EAT = BuiltinSoundEvent.get(SoundEventKeys.ENTITY_SMALL_SULFUR_CUBE_EAT);
+
+    SoundEvent BLOCK_SHELF_MUSHROOM_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SHELF_MUSHROOM_BREAK);
+
+    SoundEvent BLOCK_SHELF_MUSHROOM_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SHELF_MUSHROOM_FALL);
+
+    SoundEvent BLOCK_SHELF_MUSHROOM_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SHELF_MUSHROOM_PLACE);
+
+    SoundEvent BLOCK_SHELF_MUSHROOM_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SHELF_MUSHROOM_STEP);
+
+    SoundEvent BLOCK_SHELF_MUSHROOM_BOUNCE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_SHELF_MUSHROOM_BOUNCE);
+
+    SoundEvent BLOCK_POPLAR_LEAVES_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POPLAR_LEAVES_BREAK);
+
+    SoundEvent BLOCK_POPLAR_LEAVES_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POPLAR_LEAVES_HIT);
+
+    SoundEvent BLOCK_POPLAR_LEAVES_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POPLAR_LEAVES_FALL);
+
+    SoundEvent BLOCK_POPLAR_LEAVES_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POPLAR_LEAVES_PLACE);
+
+    SoundEvent BLOCK_POPLAR_LEAVES_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POPLAR_LEAVES_STEP);
+
+    SoundEvent BLOCK_POPLAR_LEAVES_AMBIENT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_POPLAR_LEAVES_AMBIENT);
+
+    SoundEvent BLOCK_STRAW_BED_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_STRAW_BED_BREAK);
+
+    SoundEvent BLOCK_STRAW_BED_BREAK_LEAVE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_STRAW_BED_BREAK_LEAVE);
+
+    SoundEvent BLOCK_STRAW_BED_STEP = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_STRAW_BED_STEP);
+
+    SoundEvent BLOCK_STRAW_BED_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_STRAW_BED_PLACE);
+
+    SoundEvent BLOCK_STRAW_BED_HIT = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_STRAW_BED_HIT);
+
+    SoundEvent BLOCK_STRAW_BED_FALL = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_STRAW_BED_FALL);
+
+    SoundEvent BLOCK_RED_SHRUB_BREAK = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_RED_SHRUB_BREAK);
+
+    SoundEvent BLOCK_RED_SHRUB_PLACE = BuiltinSoundEvent.get(SoundEventKeys.BLOCK_RED_SHRUB_PLACE);
 }

@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class BlockStateMapCodecTest {
     @Test
     public void testEquivalence() throws IOException {
-        String particleString = "{Properties:{lit:\"true\"},Name:\"copper_bulb\"}";
+        String particleString = "{properties:{lit:\"true\"},id:\"copper_bulb\"}";
         CompoundBinaryTag nbt = MinestomAdventure.NBT_CODEC.decode(particleString);
         Block block = STATE_STRUCT_CODEC.decode(Transcoder.NBT,nbt).orElseThrow();
         assertEquals("true", block.getProperty("lit"));
@@ -33,7 +33,7 @@ public class BlockStateMapCodecTest {
         Block block = Block.SPRUCE_STAIRS.withProperty("facing", defaultFacing);
         BinaryTag nbt = STATE_STRUCT_CODEC.encode(Transcoder.NBT, block).orElseThrow();
         String nbtString = MinestomAdventure.NBT_CODEC.encode((CompoundBinaryTag) nbt);
-        assertEquals("{Name:\"spruce_stairs\"}", nbtString);
+        assertEquals("{id:\"spruce_stairs\"}", nbtString);
     }
 
     @Test
@@ -41,6 +41,6 @@ public class BlockStateMapCodecTest {
         Block block = Block.SPRUCE_STAIRS.withProperty("facing", "south");
         BinaryTag nbt = STATE_STRUCT_CODEC.encode(Transcoder.NBT, block).orElseThrow();
         String nbtString = MinestomAdventure.NBT_CODEC.encode((CompoundBinaryTag) nbt);
-        assertEquals("{Properties:{facing:\"south\"},Name:\"spruce_stairs\"}", nbtString);
+        assertEquals("{properties:{facing:\"south\"},id:\"spruce_stairs\"}", nbtString);
     }
 }

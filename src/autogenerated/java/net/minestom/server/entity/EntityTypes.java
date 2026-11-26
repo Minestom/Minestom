@@ -73,6 +73,8 @@ sealed interface EntityTypes permits EntityType {
 
     EntityType CREEPER = EntityTypeImpl.get(EntityTypeKeys.CREEPER);
 
+    EntityType CUSHION = EntityTypeImpl.get(EntityTypeKeys.CUSHION);
+
     EntityType DARK_OAK_BOAT = EntityTypeImpl.get(EntityTypeKeys.DARK_OAK_BOAT);
 
     EntityType DARK_OAK_CHEST_BOAT = EntityTypeImpl.get(EntityTypeKeys.DARK_OAK_CHEST_BOAT);
@@ -216,6 +218,10 @@ sealed interface EntityTypes permits EntityType {
     EntityType PILLAGER = EntityTypeImpl.get(EntityTypeKeys.PILLAGER);
 
     EntityType POLAR_BEAR = EntityTypeImpl.get(EntityTypeKeys.POLAR_BEAR);
+
+    EntityType POPLAR_BOAT = EntityTypeImpl.get(EntityTypeKeys.POPLAR_BOAT);
+
+    EntityType POPLAR_CHEST_BOAT = EntityTypeImpl.get(EntityTypeKeys.POPLAR_CHEST_BOAT);
 
     EntityType SPLASH_POTION = EntityTypeImpl.get(EntityTypeKeys.SPLASH_POTION);
 

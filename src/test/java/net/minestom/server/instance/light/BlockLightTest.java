@@ -203,6 +203,51 @@ public class BlockLightTest {
                 entry(new Vec(3, 0, 3), 12)));
     }
 
+    @Test
+    public void glassPassesLight() {
+        var palette = enclosedGlowstone(Block.GLASS);
+        assertLight(palette, Map.of(
+                new Vec(4, 1, 5), 14,
+                new Vec(4, 1, 6), 13));
+    }
+
+    @Test
+    public void tintedGlassBlocksLight() {
+        var palette = enclosedGlowstone(Block.TINTED_GLASS);
+        assertLight(palette, Map.of(
+                new Vec(4, 1, 5), 0,
+                new Vec(4, 1, 6), 0));
+    }
+
+    @Test
+    public void carpetPassesLightDown() {
+        var palette = Palette.blocks();
+        palette.set(4, 2, 4, Block.GLOWSTONE.stateId());
+        palette.set(3, 2, 4, Block.STONE.stateId());
+        palette.set(5, 2, 4, Block.STONE.stateId());
+        palette.set(4, 2, 3, Block.STONE.stateId());
+        palette.set(4, 2, 5, Block.STONE.stateId());
+        palette.set(4, 3, 4, Block.STONE.stateId());
+        palette.set(4, 1, 4, Block.WHITE_CARPET.stateId());
+
+        assertLight(palette, Map.of(
+                new Vec(4, 1, 4), 14,
+                // Straight through the carpet, not around it
+                new Vec(4, 0, 4), 13));
+    }
+
+    private static Palette enclosedGlowstone(Block opening) {
+        var palette = Palette.blocks();
+        palette.set(4, 1, 4, Block.GLOWSTONE.stateId());
+        palette.set(3, 1, 4, Block.STONE.stateId());
+        palette.set(5, 1, 4, Block.STONE.stateId());
+        palette.set(4, 1, 3, Block.STONE.stateId());
+        palette.set(4, 2, 4, Block.STONE.stateId());
+        palette.set(4, 0, 4, Block.STONE.stateId());
+        palette.set(4, 1, 5, opening.stateId());
+        return palette;
+    }
+
     void assertLight(Palette palette, Map<Vec, Integer> expectedLights) {
         byte[] result = LightCompute.compute(palette, BlockLight.buildInternalQueue(palette));
         List<String> errors = new ArrayList<>();

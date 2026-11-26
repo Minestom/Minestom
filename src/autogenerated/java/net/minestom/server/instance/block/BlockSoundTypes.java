@@ -175,9 +175,13 @@ sealed interface BlockSoundTypes permits BlockSoundType {
 
     BlockSoundType POLISHED_TUFF = BlockSoundImpl.get(BlockSoundTypeKeys.POLISHED_TUFF);
 
+    BlockSoundType POPLAR_LEAVES = BlockSoundImpl.get(BlockSoundTypeKeys.POPLAR_LEAVES);
+
     BlockSoundType POTENT_SULFUR = BlockSoundImpl.get(BlockSoundTypeKeys.POTENT_SULFUR);
 
     BlockSoundType POWDER_SNOW = BlockSoundImpl.get(BlockSoundTypeKeys.POWDER_SNOW);
+
+    BlockSoundType RED_SHRUB = BlockSoundImpl.get(BlockSoundTypeKeys.RED_SHRUB);
 
     BlockSoundType RESIN = BlockSoundImpl.get(BlockSoundTypeKeys.RESIN);
 
@@ -203,6 +207,8 @@ sealed interface BlockSoundTypes permits BlockSoundType {
 
     BlockSoundType SHELF = BlockSoundImpl.get(BlockSoundTypeKeys.SHELF);
 
+    BlockSoundType SHELF_MUSHROOM = BlockSoundImpl.get(BlockSoundTypeKeys.SHELF_MUSHROOM);
+
     BlockSoundType SHROOMLIGHT = BlockSoundImpl.get(BlockSoundTypeKeys.SHROOMLIGHT);
 
     BlockSoundType SLIME_BLOCK = BlockSoundImpl.get(BlockSoundTypeKeys.SLIME_BLOCK);
@@ -226,6 +232,8 @@ sealed interface BlockSoundTypes permits BlockSoundType {
     BlockSoundType STEM = BlockSoundImpl.get(BlockSoundTypeKeys.STEM);
 
     BlockSoundType STONE = BlockSoundImpl.get(BlockSoundTypeKeys.STONE);
+
+    BlockSoundType STRAW_BED = BlockSoundImpl.get(BlockSoundTypeKeys.STRAW_BED);
 
     BlockSoundType SULFUR = BlockSoundImpl.get(BlockSoundTypeKeys.SULFUR);
 

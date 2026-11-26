@@ -39,6 +39,11 @@ public class RegistryIntegrationTest {
     }
 
     @Test
+    void everyVanillaEntryEncodesWhenNoKnownPackMatches(Env env) {
+        assertDoesNotThrow(() -> Registries.registryDataPackets(env.process(), false));
+    }
+
+    @Test
     void testDifferentPacksInterlaced(Env env) {
         DynamicRegistry<DimensionType> dimensionRegistry = env.process().dimensionType();
         DimensionType dimensionType = DimensionType.builder()

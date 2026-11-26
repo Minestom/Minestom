@@ -1,5 +1,6 @@
 package net.minestom.server.item.armor;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
@@ -12,18 +13,14 @@ import net.minestom.server.registry.Registries;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public sealed interface TrimMaterial extends Holder.Direct<TrimMaterial>, TrimMaterials permits TrimMaterialImpl {
     NetworkBuffer.Type<TrimMaterial> REGISTRY_NETWORK_TYPE = NetworkBufferTemplate.template(
-            NetworkBuffer.STRING, TrimMaterial::assetName,
-            NetworkBuffer.STRING.mapValue(NetworkBuffer.STRING), TrimMaterial::overrideArmorMaterials,
+            NetworkBuffer.KEY, TrimMaterial::paletteId,
             NetworkBuffer.COMPONENT, TrimMaterial::description,
             TrimMaterial::create);
     Codec<TrimMaterial> REGISTRY_CODEC = StructCodec.struct(
-            "asset_name", Codec.STRING, TrimMaterial::assetName,
-            "override_armor_materials", Codec.STRING.mapValue(Codec.STRING).optional(Map.of()), TrimMaterial::overrideArmorMaterials,
+            "palette_id", Codec.KEY, TrimMaterial::paletteId,
             "description", Codec.COMPONENT, TrimMaterial::description,
             TrimMaterial::create);
 
@@ -31,11 +28,10 @@ public sealed interface TrimMaterial extends Holder.Direct<TrimMaterial>, TrimMa
     Codec<Holder<TrimMaterial>> CODEC = Holder.codec(Registries::trimMaterial, REGISTRY_CODEC);
 
     static TrimMaterial create(
-            String assetName,
-            Map<String, String> overrideArmorMaterials,
+            Key paletteId,
             Component description
     ) {
-        return new TrimMaterialImpl(assetName, overrideArmorMaterials, description);
+        return new TrimMaterialImpl(paletteId, description);
     }
 
     static Builder builder() {
@@ -52,35 +48,20 @@ public sealed interface TrimMaterial extends Holder.Direct<TrimMaterial>, TrimMa
         return DynamicRegistry.create(BuiltinRegistries.TRIM_MATERIAL, REGISTRY_CODEC);
     }
 
-    String assetName();
-
-    Map<String, String> overrideArmorMaterials();
+    Key paletteId();
 
     Component description();
 
     final class Builder {
-        private String assetName;
-        private final Map<String, String> overrideArmorMaterials = new HashMap<>();
+        private Key paletteId;
         private Component description;
 
         private Builder() {
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public Builder assetName(String assetName) {
-            this.assetName = assetName;
-            return this;
-        }
-
-        @Contract(value = "_ -> this", pure = true)
-        public Builder overrideArmorMaterials(Map<String, String> overrideArmorMaterials) {
-            this.overrideArmorMaterials.putAll(overrideArmorMaterials);
-            return this;
-        }
-
-        @Contract(value = "_, _ -> this", pure = true)
-        public Builder overrideArmorMaterial(String slot, String material) {
-            this.overrideArmorMaterials.put(slot, material);
+        public Builder paletteId(Key paletteId) {
+            this.paletteId = paletteId;
             return this;
         }
 
@@ -92,7 +73,7 @@ public sealed interface TrimMaterial extends Holder.Direct<TrimMaterial>, TrimMa
 
         @Contract(pure = true)
         public TrimMaterial build() {
-            return new TrimMaterialImpl(assetName, overrideArmorMaterials, description);
+            return new TrimMaterialImpl(paletteId, description);
         }
     }
 

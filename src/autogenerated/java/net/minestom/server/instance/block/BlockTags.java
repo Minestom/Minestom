@@ -63,6 +63,20 @@ public interface BlockTags {
 
     TagKey<Block> BIRCH_LOGS = TagKey.of("birch_logs");
 
+    TagKey<Block> BLOCKS_DOLPHIN_JUMP = TagKey.of("blocks_dolphin_jump");
+
+    TagKey<Block> BLOCKS_FLUID_FLOW = TagKey.of("blocks_fluid_flow");
+
+    TagKey<Block> BLOCKS_LAVA_FIRE_SPREAD = TagKey.of("blocks_lava_fire_spread");
+
+    TagKey<Block> BLOCKS_MOTION = TagKey.of("blocks_motion");
+
+    TagKey<Block> BLOCKS_MOTION_IN_HEIGHTMAP = TagKey.of("blocks_motion_in_heightmap");
+
+    TagKey<Block> BLOCKS_MOTION_IN_HEIGHTMAP_NO_LEAVES = TagKey.of("blocks_motion_in_heightmap_no_leaves");
+
+    TagKey<Block> BLOCKS_MOTION_NO_LEAVES = TagKey.of("blocks_motion_no_leaves");
+
     TagKey<Block> BLOCKS_WIND_CHARGE_EXPLOSIONS = TagKey.of("blocks_wind_charge_explosions");
 
     TagKey<Block> BUTTONS = TagKey.of("buttons");
@@ -79,6 +93,8 @@ public interface BlockTags {
 
     TagKey<Block> CANDLES = TagKey.of("candles");
 
+    TagKey<Block> CANNOT_PLACE_BASALT_PILLAR_ON = TagKey.of("cannot_place_basalt_pillar_on");
+
     TagKey<Block> CANNOT_REPLACE_BELOW_TREE_TRUNK = TagKey.of("cannot_replace_below_tree_trunk");
 
     TagKey<Block> CANNOT_SUPPORT_KELP = TagKey.of("cannot_support_kelp");
@@ -87,11 +103,19 @@ public interface BlockTags {
 
     TagKey<Block> CANNOT_SUPPORT_SNOW_LAYER = TagKey.of("cannot_support_snow_layer");
 
+    TagKey<Block> CAT_DOES_NOT_TELEPORT_TO = TagKey.of("cat_does_not_teleport_to");
+
+    TagKey<Block> CATS_CAN_LIE_ON = TagKey.of("cats_can_lie_on");
+
+    TagKey<Block> CATS_CAN_SIT_ON = TagKey.of("cats_can_sit_on");
+
     TagKey<Block> CAULDRONS = TagKey.of("cauldrons");
 
     TagKey<Block> CAUSES_CONTINUOUS_GEYSER_ERUPTIONS = TagKey.of("causes_continuous_geyser_eruptions");
 
     TagKey<Block> CAUSES_PERIODIC_GEYSER_ERUPTIONS = TagKey.of("causes_periodic_geyser_eruptions");
+
+    TagKey<Block> CAUSES_SUFFOCATION = TagKey.of("causes_suffocation");
 
     TagKey<Block> CAVE_VINES = TagKey.of("cave_vines");
 
@@ -113,7 +137,13 @@ public interface BlockTags {
 
     TagKey<Block> CONCRETE_POWDERS = TagKey.of("concrete_powders");
 
-    TagKey<Block> CONVERTABLE_TO_MUD = TagKey.of("convertable_to_mud");
+    TagKey<Block> CONCRETE_SLABS = TagKey.of("concrete_slabs");
+
+    TagKey<Block> CONCRETE_STAIRS = TagKey.of("concrete_stairs");
+
+    TagKey<Block> CONDUIT_EFFECT_BLOCK = TagKey.of("conduit_effect_block");
+
+    TagKey<Block> CONVERTIBLE_TO_MUD = TagKey.of("convertible_to_mud");
 
     TagKey<Block> COPPER = TagKey.of("copper");
 
@@ -135,7 +165,11 @@ public interface BlockTags {
 
     TagKey<Block> CRYSTAL_SOUND_BLOCKS = TagKey.of("crystal_sound_blocks");
 
+    TagKey<Block> CUSHION_USES_COLLISION_SHAPE = TagKey.of("cushion_uses_collision_shape");
+
     TagKey<Block> DAMPENS_VIBRATIONS = TagKey.of("dampens_vibrations");
+
+    TagKey<Block> DANGEROUS_FOR_TELEPORTATION = TagKey.of("dangerous_for_teleportation");
 
     TagKey<Block> DARK_OAK_LOGS = TagKey.of("dark_oak_logs");
 
@@ -169,7 +203,11 @@ public interface BlockTags {
 
     TagKey<Block> ENCHANTMENT_POWER_TRANSMITTER = TagKey.of("enchantment_power_transmitter");
 
+    TagKey<Block> ENDERMAN_DOES_NOT_TELEPORT_TO = TagKey.of("enderman_does_not_teleport_to");
+
     TagKey<Block> ENDERMAN_HOLDABLE = TagKey.of("enderman_holdable");
+
+    TagKey<Block> ENTITIES_CAN_TELEPORT_TO = TagKey.of("entities_can_teleport_to");
 
     TagKey<Block> FALL_DAMAGE_RESETTING = TagKey.of("fall_damage_resetting");
 
@@ -211,6 +249,8 @@ public interface BlockTags {
 
     TagKey<Block> HAPPY_GHAST_AVOIDS = TagKey.of("happy_ghast_avoids");
 
+    TagKey<Block> HEIGHT_SPECIFIC_ORE_REPLACEABLES = TagKey.of("height_specific_ore_replaceables");
+
     TagKey<Block> HOGLIN_REPELLENTS = TagKey.of("hoglin_repellents");
 
     TagKey<Block> HUGE_BROWN_MUSHROOM_CAN_PLACE_ON = TagKey.of("huge_brown_mushroom_can_place_on");
@@ -218,6 +258,8 @@ public interface BlockTags {
     TagKey<Block> HUGE_RED_MUSHROOM_CAN_PLACE_ON = TagKey.of("huge_red_mushroom_can_place_on");
 
     TagKey<Block> ICE = TagKey.of("ice");
+
+    TagKey<Block> ICE_MELTS_WHEN_DESTROYED_ABOVE = TagKey.of("ice_melts_when_destroyed_above");
 
     TagKey<Block> ICE_SPIKE_REPLACEABLE = TagKey.of("ice_spike_replaceable");
 
@@ -299,7 +341,7 @@ public interface BlockTags {
 
     TagKey<Block> NEEDS_STONE_TOOL = TagKey.of("needs_stone_tool");
 
-    TagKey<Block> NETHER_CARVER_REPLACEABLES = TagKey.of("nether_carver_replaceables");
+    TagKey<Block> NETHER_PORTAL_FRAME = TagKey.of("nether_portal_frame");
 
     TagKey<Block> NYLIUM = TagKey.of("nylium");
 
@@ -307,9 +349,9 @@ public interface BlockTags {
 
     TagKey<Block> OCCLUDES_VIBRATION_SIGNALS = TagKey.of("occludes_vibration_signals");
 
-    TagKey<Block> OVERRIDES_MUSHROOM_LIGHT_REQUIREMENT = TagKey.of("overrides_mushroom_light_requirement");
+    TagKey<Block> ORES = TagKey.of("ores");
 
-    TagKey<Block> OVERWORLD_CARVER_REPLACEABLES = TagKey.of("overworld_carver_replaceables");
+    TagKey<Block> OVERRIDES_MUSHROOM_LIGHT_REQUIREMENT = TagKey.of("overrides_mushroom_light_requirement");
 
     TagKey<Block> OVERWORLD_NATURAL_LOGS = TagKey.of("overworld_natural_logs");
 
@@ -324,6 +366,8 @@ public interface BlockTags {
     TagKey<Block> POLAR_BEAR_IMMUNE_TO = TagKey.of("polar_bear_immune_to");
 
     TagKey<Block> POLAR_BEARS_SPAWNABLE_ON_ALTERNATE = TagKey.of("polar_bears_spawnable_on_alternate");
+
+    TagKey<Block> POPLAR_LOGS = TagKey.of("poplar_logs");
 
     TagKey<Block> PORTALS = TagKey.of("portals");
 
@@ -345,9 +389,13 @@ public interface BlockTags {
 
     TagKey<Block> REPLACEABLE_BY_TREES = TagKey.of("replaceable_by_trees");
 
+    TagKey<Block> REQUIRED_FOR_POPLAR_LEAF_AMBIENCE = TagKey.of("required_for_poplar_leaf_ambience");
+
     TagKey<Block> SAND = TagKey.of("sand");
 
     TagKey<Block> SAPLINGS = TagKey.of("saplings");
+
+    TagKey<Block> SCULK_GROWTH_INHIBITORS = TagKey.of("sculk_growth_inhibitors");
 
     TagKey<Block> SCULK_REPLACEABLE = TagKey.of("sculk_replaceable");
 
@@ -361,7 +409,11 @@ public interface BlockTags {
 
     TagKey<Block> SHULKER_BOXES = TagKey.of("shulker_boxes");
 
+    TagKey<Block> SHULKER_DOES_NOT_TELEPORT_TO = TagKey.of("shulker_does_not_teleport_to");
+
     TagKey<Block> SIGNS = TagKey.of("signs");
+
+    TagKey<Block> SKULLS = TagKey.of("skulls");
 
     TagKey<Block> SLABS = TagKey.of("slabs");
 
@@ -382,6 +434,8 @@ public interface BlockTags {
     TagKey<Block> SOUL_FIRE_BASE_BLOCKS = TagKey.of("soul_fire_base_blocks");
 
     TagKey<Block> SOUL_SPEED_BLOCKS = TagKey.of("soul_speed_blocks");
+
+    TagKey<Block> SPEEDS_UP_ZOMBIE_VILLAGER_CURING = TagKey.of("speeds_up_zombie_villager_curing");
 
     TagKey<Block> SPELEOTHEMS = TagKey.of("speleothems");
 
@@ -489,6 +543,12 @@ public interface BlockTags {
 
     TagKey<Block> TRIGGERS_AMBIENT_DRIED_GHAST_BLOCK_SOUNDS = TagKey.of("triggers_ambient_dried_ghast_block_sounds");
 
+    TagKey<Block> TURNS_INTO_DIRT_PATH = TagKey.of("turns_into_dirt_path");
+
+    TagKey<Block> TURNS_INTO_FARMLAND = TagKey.of("turns_into_farmland");
+
+    TagKey<Block> UNCARVABLE = TagKey.of("uncarvable");
+
     TagKey<Block> UNDERWATER_BONEMEALS = TagKey.of("underwater_bonemeals");
 
     TagKey<Block> UNSTABLE_BOTTOM_CENTER = TagKey.of("unstable_bottom_center");
@@ -496,6 +556,10 @@ public interface BlockTags {
     TagKey<Block> VALID_SPAWN = TagKey.of("valid_spawn");
 
     TagKey<Block> VIBRATION_RESONATORS = TagKey.of("vibration_resonators");
+
+    TagKey<Block> VILLAGER_BABIES_CAN_JUMP_ON_BED = TagKey.of("villager_babies_can_jump_on_bed");
+
+    TagKey<Block> VILLAGERS_CAN_SLEEP_ON_BED = TagKey.of("villagers_can_sleep_on_bed");
 
     TagKey<Block> WALL_CORALS = TagKey.of("wall_corals");
 
@@ -510,6 +574,8 @@ public interface BlockTags {
     TagKey<Block> WARPED_STEMS = TagKey.of("warped_stems");
 
     TagKey<Block> WART_BLOCKS = TagKey.of("wart_blocks");
+
+    TagKey<Block> WASHED_AWAY_BY_FLUIDS = TagKey.of("washed_away_by_fluids");
 
     TagKey<Block> WITHER_IMMUNE = TagKey.of("wither_immune");
 
@@ -540,4 +606,8 @@ public interface BlockTags {
     TagKey<Block> WOOL = TagKey.of("wool");
 
     TagKey<Block> WOOL_CARPETS = TagKey.of("wool_carpets");
+
+    TagKey<Block> WOOL_SLABS = TagKey.of("wool_slabs");
+
+    TagKey<Block> WOOL_STAIRS = TagKey.of("wool_stairs");
 }

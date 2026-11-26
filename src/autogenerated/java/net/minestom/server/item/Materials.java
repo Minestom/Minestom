@@ -151,6 +151,8 @@ sealed interface Materials permits Material {
 
     Material MANGROVE_PLANKS = MaterialImpl.get(MaterialKeys.MANGROVE_PLANKS);
 
+    Material POPLAR_PLANKS = MaterialImpl.get(MaterialKeys.POPLAR_PLANKS);
+
     Material BAMBOO_PLANKS = MaterialImpl.get(MaterialKeys.BAMBOO_PLANKS);
 
     Material CRIMSON_PLANKS = MaterialImpl.get(MaterialKeys.CRIMSON_PLANKS);
@@ -176,6 +178,8 @@ sealed interface Materials permits Material {
     Material PALE_OAK_SAPLING = MaterialImpl.get(MaterialKeys.PALE_OAK_SAPLING);
 
     Material MANGROVE_PROPAGULE = MaterialImpl.get(MaterialKeys.MANGROVE_PROPAGULE);
+
+    Material POPLAR_SAPLING = MaterialImpl.get(MaterialKeys.POPLAR_SAPLING);
 
     Material BEDROCK = MaterialImpl.get(MaterialKeys.BEDROCK);
 
@@ -347,6 +351,8 @@ sealed interface Materials permits Material {
 
     Material MANGROVE_LOG = MaterialImpl.get(MaterialKeys.MANGROVE_LOG);
 
+    Material POPLAR_LOG = MaterialImpl.get(MaterialKeys.POPLAR_LOG);
+
     Material MANGROVE_ROOTS = MaterialImpl.get(MaterialKeys.MANGROVE_ROOTS);
 
     Material MUDDY_MANGROVE_ROOTS = MaterialImpl.get(MaterialKeys.MUDDY_MANGROVE_ROOTS);
@@ -375,6 +381,8 @@ sealed interface Materials permits Material {
 
     Material STRIPPED_MANGROVE_LOG = MaterialImpl.get(MaterialKeys.STRIPPED_MANGROVE_LOG);
 
+    Material STRIPPED_POPLAR_LOG = MaterialImpl.get(MaterialKeys.STRIPPED_POPLAR_LOG);
+
     Material STRIPPED_CRIMSON_STEM = MaterialImpl.get(MaterialKeys.STRIPPED_CRIMSON_STEM);
 
     Material STRIPPED_WARPED_STEM = MaterialImpl.get(MaterialKeys.STRIPPED_WARPED_STEM);
@@ -396,6 +404,8 @@ sealed interface Materials permits Material {
     Material STRIPPED_PALE_OAK_WOOD = MaterialImpl.get(MaterialKeys.STRIPPED_PALE_OAK_WOOD);
 
     Material STRIPPED_MANGROVE_WOOD = MaterialImpl.get(MaterialKeys.STRIPPED_MANGROVE_WOOD);
+
+    Material STRIPPED_POPLAR_WOOD = MaterialImpl.get(MaterialKeys.STRIPPED_POPLAR_WOOD);
 
     Material STRIPPED_CRIMSON_HYPHAE = MaterialImpl.get(MaterialKeys.STRIPPED_CRIMSON_HYPHAE);
 
@@ -421,6 +431,8 @@ sealed interface Materials permits Material {
 
     Material MANGROVE_WOOD = MaterialImpl.get(MaterialKeys.MANGROVE_WOOD);
 
+    Material POPLAR_WOOD = MaterialImpl.get(MaterialKeys.POPLAR_WOOD);
+
     Material CRIMSON_HYPHAE = MaterialImpl.get(MaterialKeys.CRIMSON_HYPHAE);
 
     Material WARPED_HYPHAE = MaterialImpl.get(MaterialKeys.WARPED_HYPHAE);
@@ -442,6 +454,12 @@ sealed interface Materials permits Material {
     Material PALE_OAK_LEAVES = MaterialImpl.get(MaterialKeys.PALE_OAK_LEAVES);
 
     Material MANGROVE_LEAVES = MaterialImpl.get(MaterialKeys.MANGROVE_LEAVES);
+
+    Material RED_POPLAR_LEAVES = MaterialImpl.get(MaterialKeys.RED_POPLAR_LEAVES);
+
+    Material ORANGE_POPLAR_LEAVES = MaterialImpl.get(MaterialKeys.ORANGE_POPLAR_LEAVES);
+
+    Material YELLOW_POPLAR_LEAVES = MaterialImpl.get(MaterialKeys.YELLOW_POPLAR_LEAVES);
 
     Material AZALEA_LEAVES = MaterialImpl.get(MaterialKeys.AZALEA_LEAVES);
 
@@ -470,6 +488,8 @@ sealed interface Materials permits Material {
     Material FERN = MaterialImpl.get(MaterialKeys.FERN);
 
     Material BUSH = MaterialImpl.get(MaterialKeys.BUSH);
+
+    Material RED_SHRUB = MaterialImpl.get(MaterialKeys.RED_SHRUB);
 
     Material AZALEA = MaterialImpl.get(MaterialKeys.AZALEA);
 
@@ -519,6 +539,70 @@ sealed interface Materials permits Material {
 
     Material BLACK_WOOL = MaterialImpl.get(MaterialKeys.BLACK_WOOL);
 
+    Material WHITE_WOOL_STAIRS = MaterialImpl.get(MaterialKeys.WHITE_WOOL_STAIRS);
+
+    Material ORANGE_WOOL_STAIRS = MaterialImpl.get(MaterialKeys.ORANGE_WOOL_STAIRS);
+
+    Material MAGENTA_WOOL_STAIRS = MaterialImpl.get(MaterialKeys.MAGENTA_WOOL_STAIRS);
+
+    Material LIGHT_BLUE_WOOL_STAIRS = MaterialImpl.get(MaterialKeys.LIGHT_BLUE_WOOL_STAIRS);
+
+    Material YELLOW_WOOL_STAIRS = MaterialImpl.get(MaterialKeys.YELLOW_WOOL_STAIRS);
+
+    Material LIME_WOOL_STAIRS = MaterialImpl.get(MaterialKeys.LIME_WOOL_STAIRS);
+
+    Material PINK_WOOL_STAIRS = MaterialImpl.get(MaterialKeys.PINK_WOOL_STAIRS);
+
+    Material GRAY_WOOL_STAIRS = MaterialImpl.get(MaterialKeys.GRAY_WOOL_STAIRS);
+
+    Material LIGHT_GRAY_WOOL_STAIRS = MaterialImpl.get(MaterialKeys.LIGHT_GRAY_WOOL_STAIRS);
+
+    Material CYAN_WOOL_STAIRS = MaterialImpl.get(MaterialKeys.CYAN_WOOL_STAIRS);
+
+    Material PURPLE_WOOL_STAIRS = MaterialImpl.get(MaterialKeys.PURPLE_WOOL_STAIRS);
+
+    Material BLUE_WOOL_STAIRS = MaterialImpl.get(MaterialKeys.BLUE_WOOL_STAIRS);
+
+    Material BROWN_WOOL_STAIRS = MaterialImpl.get(MaterialKeys.BROWN_WOOL_STAIRS);
+
+    Material GREEN_WOOL_STAIRS = MaterialImpl.get(MaterialKeys.GREEN_WOOL_STAIRS);
+
+    Material RED_WOOL_STAIRS = MaterialImpl.get(MaterialKeys.RED_WOOL_STAIRS);
+
+    Material BLACK_WOOL_STAIRS = MaterialImpl.get(MaterialKeys.BLACK_WOOL_STAIRS);
+
+    Material WHITE_WOOL_SLAB = MaterialImpl.get(MaterialKeys.WHITE_WOOL_SLAB);
+
+    Material ORANGE_WOOL_SLAB = MaterialImpl.get(MaterialKeys.ORANGE_WOOL_SLAB);
+
+    Material MAGENTA_WOOL_SLAB = MaterialImpl.get(MaterialKeys.MAGENTA_WOOL_SLAB);
+
+    Material LIGHT_BLUE_WOOL_SLAB = MaterialImpl.get(MaterialKeys.LIGHT_BLUE_WOOL_SLAB);
+
+    Material YELLOW_WOOL_SLAB = MaterialImpl.get(MaterialKeys.YELLOW_WOOL_SLAB);
+
+    Material LIME_WOOL_SLAB = MaterialImpl.get(MaterialKeys.LIME_WOOL_SLAB);
+
+    Material PINK_WOOL_SLAB = MaterialImpl.get(MaterialKeys.PINK_WOOL_SLAB);
+
+    Material GRAY_WOOL_SLAB = MaterialImpl.get(MaterialKeys.GRAY_WOOL_SLAB);
+
+    Material LIGHT_GRAY_WOOL_SLAB = MaterialImpl.get(MaterialKeys.LIGHT_GRAY_WOOL_SLAB);
+
+    Material CYAN_WOOL_SLAB = MaterialImpl.get(MaterialKeys.CYAN_WOOL_SLAB);
+
+    Material PURPLE_WOOL_SLAB = MaterialImpl.get(MaterialKeys.PURPLE_WOOL_SLAB);
+
+    Material BLUE_WOOL_SLAB = MaterialImpl.get(MaterialKeys.BLUE_WOOL_SLAB);
+
+    Material BROWN_WOOL_SLAB = MaterialImpl.get(MaterialKeys.BROWN_WOOL_SLAB);
+
+    Material GREEN_WOOL_SLAB = MaterialImpl.get(MaterialKeys.GREEN_WOOL_SLAB);
+
+    Material RED_WOOL_SLAB = MaterialImpl.get(MaterialKeys.RED_WOOL_SLAB);
+
+    Material BLACK_WOOL_SLAB = MaterialImpl.get(MaterialKeys.BLACK_WOOL_SLAB);
+
     Material DANDELION = MaterialImpl.get(MaterialKeys.DANDELION);
 
     Material GOLDEN_DANDELION = MaterialImpl.get(MaterialKeys.GOLDEN_DANDELION);
@@ -560,6 +644,8 @@ sealed interface Materials permits Material {
     Material BROWN_MUSHROOM = MaterialImpl.get(MaterialKeys.BROWN_MUSHROOM);
 
     Material RED_MUSHROOM = MaterialImpl.get(MaterialKeys.RED_MUSHROOM);
+
+    Material SHELF_MUSHROOM = MaterialImpl.get(MaterialKeys.SHELF_MUSHROOM);
 
     Material CRIMSON_FUNGUS = MaterialImpl.get(MaterialKeys.CRIMSON_FUNGUS);
 
@@ -620,6 +706,8 @@ sealed interface Materials permits Material {
     Material PALE_OAK_SLAB = MaterialImpl.get(MaterialKeys.PALE_OAK_SLAB);
 
     Material MANGROVE_SLAB = MaterialImpl.get(MaterialKeys.MANGROVE_SLAB);
+
+    Material POPLAR_SLAB = MaterialImpl.get(MaterialKeys.POPLAR_SLAB);
 
     Material BAMBOO_SLAB = MaterialImpl.get(MaterialKeys.BAMBOO_SLAB);
 
@@ -688,6 +776,8 @@ sealed interface Materials permits Material {
     Material JUNGLE_SHELF = MaterialImpl.get(MaterialKeys.JUNGLE_SHELF);
 
     Material MANGROVE_SHELF = MaterialImpl.get(MaterialKeys.MANGROVE_SHELF);
+
+    Material POPLAR_SHELF = MaterialImpl.get(MaterialKeys.POPLAR_SHELF);
 
     Material OAK_SHELF = MaterialImpl.get(MaterialKeys.OAK_SHELF);
 
@@ -768,6 +858,8 @@ sealed interface Materials permits Material {
     Material PALE_OAK_FENCE = MaterialImpl.get(MaterialKeys.PALE_OAK_FENCE);
 
     Material MANGROVE_FENCE = MaterialImpl.get(MaterialKeys.MANGROVE_FENCE);
+
+    Material POPLAR_FENCE = MaterialImpl.get(MaterialKeys.POPLAR_FENCE);
 
     Material BAMBOO_FENCE = MaterialImpl.get(MaterialKeys.BAMBOO_FENCE);
 
@@ -962,6 +1054,8 @@ sealed interface Materials permits Material {
     Material PALE_OAK_STAIRS = MaterialImpl.get(MaterialKeys.PALE_OAK_STAIRS);
 
     Material MANGROVE_STAIRS = MaterialImpl.get(MaterialKeys.MANGROVE_STAIRS);
+
+    Material POPLAR_STAIRS = MaterialImpl.get(MaterialKeys.POPLAR_STAIRS);
 
     Material BAMBOO_STAIRS = MaterialImpl.get(MaterialKeys.BAMBOO_STAIRS);
 
@@ -1323,6 +1417,70 @@ sealed interface Materials permits Material {
 
     Material BLACK_CONCRETE = MaterialImpl.get(MaterialKeys.BLACK_CONCRETE);
 
+    Material WHITE_CONCRETE_STAIRS = MaterialImpl.get(MaterialKeys.WHITE_CONCRETE_STAIRS);
+
+    Material ORANGE_CONCRETE_STAIRS = MaterialImpl.get(MaterialKeys.ORANGE_CONCRETE_STAIRS);
+
+    Material MAGENTA_CONCRETE_STAIRS = MaterialImpl.get(MaterialKeys.MAGENTA_CONCRETE_STAIRS);
+
+    Material LIGHT_BLUE_CONCRETE_STAIRS = MaterialImpl.get(MaterialKeys.LIGHT_BLUE_CONCRETE_STAIRS);
+
+    Material YELLOW_CONCRETE_STAIRS = MaterialImpl.get(MaterialKeys.YELLOW_CONCRETE_STAIRS);
+
+    Material LIME_CONCRETE_STAIRS = MaterialImpl.get(MaterialKeys.LIME_CONCRETE_STAIRS);
+
+    Material PINK_CONCRETE_STAIRS = MaterialImpl.get(MaterialKeys.PINK_CONCRETE_STAIRS);
+
+    Material GRAY_CONCRETE_STAIRS = MaterialImpl.get(MaterialKeys.GRAY_CONCRETE_STAIRS);
+
+    Material LIGHT_GRAY_CONCRETE_STAIRS = MaterialImpl.get(MaterialKeys.LIGHT_GRAY_CONCRETE_STAIRS);
+
+    Material CYAN_CONCRETE_STAIRS = MaterialImpl.get(MaterialKeys.CYAN_CONCRETE_STAIRS);
+
+    Material PURPLE_CONCRETE_STAIRS = MaterialImpl.get(MaterialKeys.PURPLE_CONCRETE_STAIRS);
+
+    Material BLUE_CONCRETE_STAIRS = MaterialImpl.get(MaterialKeys.BLUE_CONCRETE_STAIRS);
+
+    Material BROWN_CONCRETE_STAIRS = MaterialImpl.get(MaterialKeys.BROWN_CONCRETE_STAIRS);
+
+    Material GREEN_CONCRETE_STAIRS = MaterialImpl.get(MaterialKeys.GREEN_CONCRETE_STAIRS);
+
+    Material RED_CONCRETE_STAIRS = MaterialImpl.get(MaterialKeys.RED_CONCRETE_STAIRS);
+
+    Material BLACK_CONCRETE_STAIRS = MaterialImpl.get(MaterialKeys.BLACK_CONCRETE_STAIRS);
+
+    Material WHITE_CONCRETE_SLAB = MaterialImpl.get(MaterialKeys.WHITE_CONCRETE_SLAB);
+
+    Material ORANGE_CONCRETE_SLAB = MaterialImpl.get(MaterialKeys.ORANGE_CONCRETE_SLAB);
+
+    Material MAGENTA_CONCRETE_SLAB = MaterialImpl.get(MaterialKeys.MAGENTA_CONCRETE_SLAB);
+
+    Material LIGHT_BLUE_CONCRETE_SLAB = MaterialImpl.get(MaterialKeys.LIGHT_BLUE_CONCRETE_SLAB);
+
+    Material YELLOW_CONCRETE_SLAB = MaterialImpl.get(MaterialKeys.YELLOW_CONCRETE_SLAB);
+
+    Material LIME_CONCRETE_SLAB = MaterialImpl.get(MaterialKeys.LIME_CONCRETE_SLAB);
+
+    Material PINK_CONCRETE_SLAB = MaterialImpl.get(MaterialKeys.PINK_CONCRETE_SLAB);
+
+    Material GRAY_CONCRETE_SLAB = MaterialImpl.get(MaterialKeys.GRAY_CONCRETE_SLAB);
+
+    Material LIGHT_GRAY_CONCRETE_SLAB = MaterialImpl.get(MaterialKeys.LIGHT_GRAY_CONCRETE_SLAB);
+
+    Material CYAN_CONCRETE_SLAB = MaterialImpl.get(MaterialKeys.CYAN_CONCRETE_SLAB);
+
+    Material PURPLE_CONCRETE_SLAB = MaterialImpl.get(MaterialKeys.PURPLE_CONCRETE_SLAB);
+
+    Material BLUE_CONCRETE_SLAB = MaterialImpl.get(MaterialKeys.BLUE_CONCRETE_SLAB);
+
+    Material BROWN_CONCRETE_SLAB = MaterialImpl.get(MaterialKeys.BROWN_CONCRETE_SLAB);
+
+    Material GREEN_CONCRETE_SLAB = MaterialImpl.get(MaterialKeys.GREEN_CONCRETE_SLAB);
+
+    Material RED_CONCRETE_SLAB = MaterialImpl.get(MaterialKeys.RED_CONCRETE_SLAB);
+
+    Material BLACK_CONCRETE_SLAB = MaterialImpl.get(MaterialKeys.BLACK_CONCRETE_SLAB);
+
     Material WHITE_CONCRETE_POWDER = MaterialImpl.get(MaterialKeys.WHITE_CONCRETE_POWDER);
 
     Material ORANGE_CONCRETE_POWDER = MaterialImpl.get(MaterialKeys.ORANGE_CONCRETE_POWDER);
@@ -1583,6 +1741,8 @@ sealed interface Materials permits Material {
 
     Material MANGROVE_BUTTON = MaterialImpl.get(MaterialKeys.MANGROVE_BUTTON);
 
+    Material POPLAR_BUTTON = MaterialImpl.get(MaterialKeys.POPLAR_BUTTON);
+
     Material BAMBOO_BUTTON = MaterialImpl.get(MaterialKeys.BAMBOO_BUTTON);
 
     Material CRIMSON_BUTTON = MaterialImpl.get(MaterialKeys.CRIMSON_BUTTON);
@@ -1615,6 +1775,8 @@ sealed interface Materials permits Material {
 
     Material MANGROVE_PRESSURE_PLATE = MaterialImpl.get(MaterialKeys.MANGROVE_PRESSURE_PLATE);
 
+    Material POPLAR_PRESSURE_PLATE = MaterialImpl.get(MaterialKeys.POPLAR_PRESSURE_PLATE);
+
     Material BAMBOO_PRESSURE_PLATE = MaterialImpl.get(MaterialKeys.BAMBOO_PRESSURE_PLATE);
 
     Material CRIMSON_PRESSURE_PLATE = MaterialImpl.get(MaterialKeys.CRIMSON_PRESSURE_PLATE);
@@ -1640,6 +1802,8 @@ sealed interface Materials permits Material {
     Material PALE_OAK_DOOR = MaterialImpl.get(MaterialKeys.PALE_OAK_DOOR);
 
     Material MANGROVE_DOOR = MaterialImpl.get(MaterialKeys.MANGROVE_DOOR);
+
+    Material POPLAR_DOOR = MaterialImpl.get(MaterialKeys.POPLAR_DOOR);
 
     Material BAMBOO_DOOR = MaterialImpl.get(MaterialKeys.BAMBOO_DOOR);
 
@@ -1683,6 +1847,8 @@ sealed interface Materials permits Material {
 
     Material MANGROVE_TRAPDOOR = MaterialImpl.get(MaterialKeys.MANGROVE_TRAPDOOR);
 
+    Material POPLAR_TRAPDOOR = MaterialImpl.get(MaterialKeys.POPLAR_TRAPDOOR);
+
     Material BAMBOO_TRAPDOOR = MaterialImpl.get(MaterialKeys.BAMBOO_TRAPDOOR);
 
     Material CRIMSON_TRAPDOOR = MaterialImpl.get(MaterialKeys.CRIMSON_TRAPDOOR);
@@ -1722,6 +1888,8 @@ sealed interface Materials permits Material {
     Material PALE_OAK_FENCE_GATE = MaterialImpl.get(MaterialKeys.PALE_OAK_FENCE_GATE);
 
     Material MANGROVE_FENCE_GATE = MaterialImpl.get(MaterialKeys.MANGROVE_FENCE_GATE);
+
+    Material POPLAR_FENCE_GATE = MaterialImpl.get(MaterialKeys.POPLAR_FENCE_GATE);
 
     Material BAMBOO_FENCE_GATE = MaterialImpl.get(MaterialKeys.BAMBOO_FENCE_GATE);
 
@@ -1824,6 +1992,10 @@ sealed interface Materials permits Material {
     Material MANGROVE_BOAT = MaterialImpl.get(MaterialKeys.MANGROVE_BOAT);
 
     Material MANGROVE_CHEST_BOAT = MaterialImpl.get(MaterialKeys.MANGROVE_CHEST_BOAT);
+
+    Material POPLAR_BOAT = MaterialImpl.get(MaterialKeys.POPLAR_BOAT);
+
+    Material POPLAR_CHEST_BOAT = MaterialImpl.get(MaterialKeys.POPLAR_CHEST_BOAT);
 
     Material BAMBOO_RAFT = MaterialImpl.get(MaterialKeys.BAMBOO_RAFT);
 
@@ -2057,6 +2229,8 @@ sealed interface Materials permits Material {
 
     Material MANGROVE_SIGN = MaterialImpl.get(MaterialKeys.MANGROVE_SIGN);
 
+    Material POPLAR_SIGN = MaterialImpl.get(MaterialKeys.POPLAR_SIGN);
+
     Material BAMBOO_SIGN = MaterialImpl.get(MaterialKeys.BAMBOO_SIGN);
 
     Material CRIMSON_SIGN = MaterialImpl.get(MaterialKeys.CRIMSON_SIGN);
@@ -2080,6 +2254,8 @@ sealed interface Materials permits Material {
     Material PALE_OAK_HANGING_SIGN = MaterialImpl.get(MaterialKeys.PALE_OAK_HANGING_SIGN);
 
     Material MANGROVE_HANGING_SIGN = MaterialImpl.get(MaterialKeys.MANGROVE_HANGING_SIGN);
+
+    Material POPLAR_HANGING_SIGN = MaterialImpl.get(MaterialKeys.POPLAR_HANGING_SIGN);
 
     Material BAMBOO_HANGING_SIGN = MaterialImpl.get(MaterialKeys.BAMBOO_HANGING_SIGN);
 
@@ -2170,6 +2346,38 @@ sealed interface Materials permits Material {
     Material RED_BUNDLE = MaterialImpl.get(MaterialKeys.RED_BUNDLE);
 
     Material BLACK_BUNDLE = MaterialImpl.get(MaterialKeys.BLACK_BUNDLE);
+
+    Material WHITE_CUSHION = MaterialImpl.get(MaterialKeys.WHITE_CUSHION);
+
+    Material ORANGE_CUSHION = MaterialImpl.get(MaterialKeys.ORANGE_CUSHION);
+
+    Material MAGENTA_CUSHION = MaterialImpl.get(MaterialKeys.MAGENTA_CUSHION);
+
+    Material LIGHT_BLUE_CUSHION = MaterialImpl.get(MaterialKeys.LIGHT_BLUE_CUSHION);
+
+    Material YELLOW_CUSHION = MaterialImpl.get(MaterialKeys.YELLOW_CUSHION);
+
+    Material LIME_CUSHION = MaterialImpl.get(MaterialKeys.LIME_CUSHION);
+
+    Material PINK_CUSHION = MaterialImpl.get(MaterialKeys.PINK_CUSHION);
+
+    Material GRAY_CUSHION = MaterialImpl.get(MaterialKeys.GRAY_CUSHION);
+
+    Material LIGHT_GRAY_CUSHION = MaterialImpl.get(MaterialKeys.LIGHT_GRAY_CUSHION);
+
+    Material CYAN_CUSHION = MaterialImpl.get(MaterialKeys.CYAN_CUSHION);
+
+    Material PURPLE_CUSHION = MaterialImpl.get(MaterialKeys.PURPLE_CUSHION);
+
+    Material BLUE_CUSHION = MaterialImpl.get(MaterialKeys.BLUE_CUSHION);
+
+    Material BROWN_CUSHION = MaterialImpl.get(MaterialKeys.BROWN_CUSHION);
+
+    Material GREEN_CUSHION = MaterialImpl.get(MaterialKeys.GREEN_CUSHION);
+
+    Material RED_CUSHION = MaterialImpl.get(MaterialKeys.RED_CUSHION);
+
+    Material BLACK_CUSHION = MaterialImpl.get(MaterialKeys.BLACK_CUSHION);
 
     Material FISHING_ROD = MaterialImpl.get(MaterialKeys.FISHING_ROD);
 
@@ -2269,11 +2477,45 @@ sealed interface Materials permits Material {
 
     Material BLACK_BED = MaterialImpl.get(MaterialKeys.BLACK_BED);
 
+    Material STRAW_BED = MaterialImpl.get(MaterialKeys.STRAW_BED);
+
     Material COOKIE = MaterialImpl.get(MaterialKeys.COOKIE);
 
     Material CRAFTER = MaterialImpl.get(MaterialKeys.CRAFTER);
 
     Material FILLED_MAP = MaterialImpl.get(MaterialKeys.FILLED_MAP);
+
+    Material OCEAN_MONUMENT_MAP = MaterialImpl.get(MaterialKeys.OCEAN_MONUMENT_MAP);
+
+    Material WOODLAND_MANSION_MAP = MaterialImpl.get(MaterialKeys.WOODLAND_MANSION_MAP);
+
+    Material BURIED_TRIAL_CHAMBERS_MAP = MaterialImpl.get(MaterialKeys.BURIED_TRIAL_CHAMBERS_MAP);
+
+    Material JUNGLE_PYRAMID_MAP = MaterialImpl.get(MaterialKeys.JUNGLE_PYRAMID_MAP);
+
+    Material SWAMP_HUT_MAP = MaterialImpl.get(MaterialKeys.SWAMP_HUT_MAP);
+
+    Material DESERT_VILLAGE_MAP = MaterialImpl.get(MaterialKeys.DESERT_VILLAGE_MAP);
+
+    Material PLAINS_VILLAGE_MAP = MaterialImpl.get(MaterialKeys.PLAINS_VILLAGE_MAP);
+
+    Material SAVANNA_VILLAGE_MAP = MaterialImpl.get(MaterialKeys.SAVANNA_VILLAGE_MAP);
+
+    Material SNOWY_VILLAGE_MAP = MaterialImpl.get(MaterialKeys.SNOWY_VILLAGE_MAP);
+
+    Material TAIGA_VILLAGE_MAP = MaterialImpl.get(MaterialKeys.TAIGA_VILLAGE_MAP);
+
+    Material BURIED_TREASURE_MAP = MaterialImpl.get(MaterialKeys.BURIED_TREASURE_MAP);
+
+    Material BURIED_ANCIENT_CITY_MAP = MaterialImpl.get(MaterialKeys.BURIED_ANCIENT_CITY_MAP);
+
+    Material BURIED_MINESHAFT_MAP = MaterialImpl.get(MaterialKeys.BURIED_MINESHAFT_MAP);
+
+    Material DESERT_PYRAMID_MAP = MaterialImpl.get(MaterialKeys.DESERT_PYRAMID_MAP);
+
+    Material ABANDONED_CAMP_MAP = MaterialImpl.get(MaterialKeys.ABANDONED_CAMP_MAP);
+
+    Material WARM_OCEAN_RUINS_MAP = MaterialImpl.get(MaterialKeys.WARM_OCEAN_RUINS_MAP);
 
     Material SHEARS = MaterialImpl.get(MaterialKeys.SHEARS);
 

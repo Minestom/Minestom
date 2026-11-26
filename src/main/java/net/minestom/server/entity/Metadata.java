@@ -1,6 +1,7 @@
 package net.minestom.server.entity;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.color.DyeColor;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.animal.ArmadilloMeta;
@@ -174,6 +175,10 @@ public final class Metadata {
         return OPT_GLOBAL_POSITION.entry(value);
     }
 
+    public static Entry<DyeColor> DyeColor(DyeColor value) {
+        return DYE_COLOR.entry(value);
+    }
+
     public static Entry<Holder<PaintingVariant>> PaintingVariant(Holder<PaintingVariant> value) {
         return PAINTING_VARIANT.entry(value);
     }
@@ -267,6 +272,7 @@ public final class Metadata {
     private static final Type<float[]> QUATERNION = type(NetworkBuffer.QUATERNION, new float[]{0, 0, 0, 0});
     private static final Type<ResolvableProfile> RESOLVABLE_PROFILE = type(ResolvableProfile.NETWORK_TYPE, ResolvableProfile.EMPTY);
     private static final Type<MainHand> MAIN_HAND = type(MainHand.NETWORK_TYPE, MainHand.RIGHT);
+    private static final Type<DyeColor> DYE_COLOR = type(DyeColor.NETWORK_TYPE, DyeColor.WHITE);
 
     public static final byte TYPE_BYTE = id(BYTE);
     public static final byte TYPE_VARINT = id(VAR_INT);
@@ -311,6 +317,7 @@ public final class Metadata {
     public static final byte TYPE_QUATERNION = id(QUATERNION);
     public static final byte TYPE_RESOLVABLE_PROFILE = id(RESOLVABLE_PROFILE);
     public static final byte TYPE_MAIN_HAND = id(MAIN_HAND);
+    public static final byte TYPE_DYE_COLOR = id(DYE_COLOR);
 
     private static <T extends @UnknownNullability Object> Type<T> type(NetworkBuffer.Type<T> serializer, T defaultValue) {
         final int id = nextId();

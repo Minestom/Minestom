@@ -22,9 +22,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.Objects;
 
-import static net.minestom.server.instance.block.Block.STATE_STRUCT_CODEC;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 import static net.minestom.server.network.NetworkBuffer.VECTOR3D;
+import static net.minestom.server.particle.ParticleImpl.BLOCK_STATE_CODEC;
 
 public sealed interface Particle extends StaticProtocolObject<Particle>, Particles {
 
@@ -111,7 +111,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
     record Block(Key key, int id, net.minestom.server.instance.block.Block block) implements Particle {
         public static final StructCodec<Block> CODEC = StructCodec.struct(
                 "type", Codec.KEY, Block::key,
-                "block_state", STATE_STRUCT_CODEC, Block::block,
+                "block_state", BLOCK_STATE_CODEC, Block::block,
                 (key, block) -> ParticleImpl.<Block>get(key).withBlock(block));
 
         @Contract(pure = true)
@@ -141,7 +141,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
     record BlockMarker(Key key, int id, net.minestom.server.instance.block.Block block) implements Particle {
         public static final StructCodec<BlockMarker> CODEC = StructCodec.struct(
                 "type", Codec.KEY, BlockMarker::key,
-                "block_state", STATE_STRUCT_CODEC, BlockMarker::block,
+                "block_state", BLOCK_STATE_CODEC, BlockMarker::block,
                 (key, block) -> ParticleImpl.<BlockMarker>get(key).withBlock(block));
 
         @Contract(pure = true)
@@ -264,7 +264,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
     record DustPillar(Key key, int id, net.minestom.server.instance.block.Block block) implements Particle {
         public static final StructCodec<DustPillar> CODEC = StructCodec.struct(
                 "type", Codec.KEY, DustPillar::key,
-                "block_state", STATE_STRUCT_CODEC, DustPillar::block,
+                "block_state", BLOCK_STATE_CODEC, DustPillar::block,
                 (key, block) -> ParticleImpl.<DustPillar>get(key).withBlock(block));
 
         @Contract(pure = true)
@@ -294,7 +294,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
     record FallingDust(Key key, int id, net.minestom.server.instance.block.Block block) implements Particle {
         public static final StructCodec<FallingDust> CODEC = StructCodec.struct(
                 "type", Codec.KEY, FallingDust::key,
-                "block_state", STATE_STRUCT_CODEC, FallingDust::block,
+                "block_state", BLOCK_STATE_CODEC, FallingDust::block,
                 (key, block) -> ParticleImpl.<FallingDust>get(key).withBlock(block));
 
         @Contract(pure = true)
@@ -549,7 +549,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
     record BlockCrumble(Key key, int id, net.minestom.server.instance.block.Block block) implements Particle {
         public static final StructCodec<BlockCrumble> CODEC = StructCodec.struct(
                 "type", Codec.KEY, BlockCrumble::key,
-                "block_state", STATE_STRUCT_CODEC, BlockCrumble::block,
+                "block_state", BLOCK_STATE_CODEC, BlockCrumble::block,
                 (key, block) -> ParticleImpl.<BlockCrumble>get(key).withBlock(block));
 
         @Contract(pure = true)
