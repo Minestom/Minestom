@@ -118,6 +118,11 @@ public class WindowListener {
         if (openInventory == null) {
             translatedSlot = PlayerInventoryUtils.convertWindow0SlotToMinestomSlot(rawSlot);
             if (translatedSlot > player.getInventory().getSize() || translatedSlot < 0) {
+                // A bundle that stops being hovered sends index -1. If its window has
+                // already closed, the slot no longer maps to the player inventory.
+                if (selectedItemIndex == -1) {
+                    return;
+                }
                 throw new IllegalArgumentException("Slot index " + rawSlot + " is out of bounds for player inventory");
             }
             targetInventory = player.getInventory();

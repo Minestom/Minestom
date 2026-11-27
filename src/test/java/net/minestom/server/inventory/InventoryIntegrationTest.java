@@ -306,6 +306,24 @@ public class InventoryIntegrationTest {
     }
 
     @Test
+    public void bundleDeselectAfterInventoryCloseDoesNotThrow(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+        final var inventory = new Inventory(InventoryType.CHEST_6_ROW, "title");
+        player.openInventory(inventory);
+
+        var listener = env.trackEvent(InventoryBundleItemSelectEvent.class, EventFilter.PLAYER, player);
+        player.closeInventory();
+        // The client sends the old window slot and -1 when the hovered bundle is
+        // deselected by the close.
+        player.addPacketToQueue(new ClientSelectBundleItemPacket(47, -1));
+        player.interpretPacketQueue();
+
+        listener.assertEmpty();
+    }
+
+    @Test
     public void bundleActivateTestInventorySizeSlot(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
