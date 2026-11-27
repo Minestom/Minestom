@@ -11,6 +11,7 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.color.Color;
 import net.minestom.server.color.TeamColor;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentEnum;
@@ -77,6 +78,26 @@ public class ArgumentTypeTest {
         var arg = ArgumentType.TeamColor("color");
         assertInvalidArg(arg, "invalid_color");
         assertArg(arg, TeamColor.DARK_PURPLE, "dark_purple");
+    }
+
+    @Test
+    public void testArgumentHexColor() {
+        var arg = ArgumentType.HexColor("color");
+        assertArg(arg, new Color(0xff5050), "ff5050");
+        assertArg(arg, new Color(0xff5050), "FF5050");
+        assertArg(arg, new Color(0x123abc), "123abc");
+        assertArg(arg, new Color(0xff0000), "f00");
+        assertArg(arg, new Color(0xff0000), "F00");
+        assertArg(arg, new Color(0x112233), "123");
+        assertInvalidArg(arg, "#ff5050");
+        assertInvalidArg(arg, "#f00");
+        assertInvalidArg(arg, "red");
+        assertInvalidArg(arg, "dark_blue");
+        assertInvalidArg(arg, "12345");
+        assertInvalidArg(arg, "1234567");
+        assertInvalidArg(arg, "gggggg");
+        assertInvalidArg(arg, "ggg");
+        assertInvalidArg(arg, "invalid_color");
     }
 
     @Test

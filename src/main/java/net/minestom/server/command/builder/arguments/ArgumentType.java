@@ -4,6 +4,7 @@ import net.minestom.server.command.builder.arguments.minecraft.ArgumentBlockStat
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentComponent;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentFloatRange;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentHexColor;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentIntRange;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentItemStack;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentKey;
@@ -153,6 +154,15 @@ public class ArgumentType {
      */
     public static ArgumentTeamColor TeamColor(String id) {
         return new ArgumentTeamColor(id);
+    }
+
+    /**
+     * Creates a new {@link ArgumentHexColor}.
+     *
+     * @see ArgumentHexColor
+     */
+    public static ArgumentHexColor HexColor(String id) {
+        return new ArgumentHexColor(id);
     }
 
     /**

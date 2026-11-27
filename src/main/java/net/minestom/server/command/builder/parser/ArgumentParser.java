@@ -12,6 +12,7 @@ import net.minestom.server.command.builder.arguments.minecraft.ArgumentBlockStat
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentComponent;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentFloatRange;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentHexColor;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentIntRange;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentItemStack;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentKey;
@@ -56,6 +57,7 @@ public class ArgumentParser {
         ARGUMENT_FUNCTION_MAP.put("command", ArgumentCommand::new);
         // TODO enum
         ARGUMENT_FUNCTION_MAP.put("color", ArgumentTeamColor::new);
+        ARGUMENT_FUNCTION_MAP.put("hexcolor", ArgumentHexColor::new);
         ARGUMENT_FUNCTION_MAP.put("time", ArgumentTime::new);
         ARGUMENT_FUNCTION_MAP.put("particle", ArgumentParticle::new);
         ARGUMENT_FUNCTION_MAP.put("key", ArgumentKey::new);
