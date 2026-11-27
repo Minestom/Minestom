@@ -25,6 +25,7 @@ import net.minestom.testing.EnvTest;
 import net.minestom.testing.TestConnection;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -74,7 +75,7 @@ public class PlayerMovementIntegrationTest {
         final Instance flatInstance = env.createFlatInstance();
         final int viewDiameter = (ServerProperties.CHUNK_VIEW_DISTANCE.get() + 1) * 2 + 1;
         // Preload all possible chunks to avoid issues due to async loading
-        Set<CompletableFuture<Chunk>> chunks = new HashSet<>();
+        ArrayList<CompletableFuture<Chunk>> chunks = new ArrayList<>();
         ChunkRange.chunksInRange(0, 0, viewDiameter + 2, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
         CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).join();
         final TestConnection connection = env.createConnection();
@@ -129,7 +130,7 @@ public class PlayerMovementIntegrationTest {
         var connection = env.createConnection();
         Player player = connection.connect(flatInstance, new Pos(0.5, 40, 0.5));
         // Preload all possible chunks to avoid issues due to async loading
-        Set<CompletableFuture<Chunk>> chunks = new HashSet<>();
+        ArrayList<CompletableFuture<Chunk>> chunks = new ArrayList<>();
         ChunkRange.chunksInRange(10, 10, viewDistance + 3, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
         CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).join();
         player.refreshSettings(new ClientSettings(

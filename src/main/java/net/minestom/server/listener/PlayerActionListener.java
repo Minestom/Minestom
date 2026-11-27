@@ -35,25 +35,24 @@ public final class PlayerActionListener {
         if (instance == null) return;
 
         DiggingResult diggingResult = null;
-        if (status == ClientPlayerActionPacket.Status.STARTED_DIGGING) {
-            if (!instance.isChunkLoaded(blockPosition)) return;
-            diggingResult = startDigging(player, instance, blockPosition, packet.blockFace());
-        } else if (status == ClientPlayerActionPacket.Status.CANCELLED_DIGGING) {
-            if (!instance.isChunkLoaded(blockPosition)) return;
-            diggingResult = cancelDigging(player, instance, blockPosition);
-        } else if (status == ClientPlayerActionPacket.Status.FINISHED_DIGGING) {
-            if (!instance.isChunkLoaded(blockPosition)) return;
-            diggingResult = finishDigging(player, instance, blockPosition, packet.blockFace());
-        } else if (status == ClientPlayerActionPacket.Status.DROP_ITEM_STACK) {
-            dropStack(player);
-        } else if (status == ClientPlayerActionPacket.Status.DROP_ITEM) {
-            dropSingle(player);
-        } else if (status == ClientPlayerActionPacket.Status.UPDATE_ITEM_STATE) {
-            updateItemState(player);
-        } else if (status == ClientPlayerActionPacket.Status.SWAP_ITEM_HAND) {
-            swapItemHand(player);
-        } else if (status == ClientPlayerActionPacket.Status.STAB) {
-            stab(player);
+        switch (status) {
+            case STARTED_DIGGING -> {
+                if (!instance.isChunkLoaded(blockPosition)) return;
+                diggingResult = startDigging(player, instance, blockPosition, packet.blockFace());
+            }
+            case CANCELLED_DIGGING -> {
+                if (!instance.isChunkLoaded(blockPosition)) return;
+                diggingResult = cancelDigging(player, instance, blockPosition);
+            }
+            case FINISHED_DIGGING -> {
+                if (!instance.isChunkLoaded(blockPosition)) return;
+                diggingResult = finishDigging(player, instance, blockPosition, packet.blockFace());
+            }
+            case DROP_ITEM_STACK -> dropStack(player);
+            case DROP_ITEM -> dropSingle(player);
+            case UPDATE_ITEM_STATE -> updateItemState(player);
+            case SWAP_ITEM_HAND -> swapItemHand(player);
+            case STAB -> stab(player);
         }
         // Acknowledge start/cancel/finish digging status
         if (diggingResult != null) {
