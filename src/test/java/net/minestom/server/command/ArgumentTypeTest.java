@@ -83,13 +83,20 @@ public class ArgumentTypeTest {
     @Test
     public void testArgumentHexColor() {
         var arg = ArgumentType.HexColor("color");
-        assertArg(arg, new Color(0xff5555), "#ff5555");
-        assertArg(arg, new Color(0x123abc), "#123abc");
-        assertArg(arg, new Color(255, 85, 85), "red");
-        assertArg(arg, new Color(0, 0, 170), "dark_blue");
-        assertInvalidArg(arg, "#12345");
-        assertInvalidArg(arg, "#1234567");
-        assertInvalidArg(arg, "#gggggg");
+        assertArg(arg, new Color(0xff5050), "ff5050");
+        assertArg(arg, new Color(0xff5050), "FF5050");
+        assertArg(arg, new Color(0x123abc), "123abc");
+        assertArg(arg, new Color(0xff0000), "f00");
+        assertArg(arg, new Color(0xff0000), "F00");
+        assertArg(arg, new Color(0x112233), "123");
+        assertInvalidArg(arg, "#ff5050");
+        assertInvalidArg(arg, "#f00");
+        assertInvalidArg(arg, "red");
+        assertInvalidArg(arg, "dark_blue");
+        assertInvalidArg(arg, "12345");
+        assertInvalidArg(arg, "1234567");
+        assertInvalidArg(arg, "gggggg");
+        assertInvalidArg(arg, "ggg");
         assertInvalidArg(arg, "invalid_color");
     }
 
